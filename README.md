@@ -4,6 +4,7 @@ Quickly and easily access a thrilling dungeon-crawling experience at any time. W
 
 ## Links
 
+- [Play in your Browser](https://thomaspeissl.github.io/quick-dungeon-crawler-rpg-od/)
 - [Github](https://github.com/thomaspeissl/quick-dungeon-crawler-rpg-od)
 
 ## Gameplay Mechanics
