@@ -1,4 +1,4 @@
-# Quick Dungeon Crawler On Demand!
+# Quick Dungeon Crawler on Demand!
 
 Quickly and easily access a thrilling dungeon-crawling experience at any time. With a simple click of a button, players can enter a fully-realized, randomly generated dungeon filled with monsters and diablo inspired equipment looting system!
 
