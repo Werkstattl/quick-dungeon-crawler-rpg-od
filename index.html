@@ -124,5 +124,10 @@
     <script src="./assets/js/dungeon.js"></script>
     <script src="./assets/js/enemy.js"></script>
     <script src="./assets/js/main.js"></script>
+<script>
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('./assets/js/sw.js')
+  }
+</script>
 </body>
 </html>
