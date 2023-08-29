@@ -12,7 +12,7 @@ Quickly and easily access a thrilling dungeon-crawling experience at any time. W
 - Roguelite gameplay where the progress is reset when the player dies, but equipment is carried over.
 - Players navigate through the dungeon by climbing the floors that features randomized events.
 - Players can upgrade their stats upon level up, choosing 3 possible upgrades and 2 reroll chances per level.
-- Players has 6 slots of equipment that they can equip.
+- Players have 6 (MOBA style, 6 daggers or 6 shields are possible) slots of equipment that they can equip.
 - There are 6 equipment rarities which are Common, Uncommon, Rare, Epic, Legendary, and Heirloom.
 
 ## In-game Stats
