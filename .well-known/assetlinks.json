@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.thomaspeissl.quick_dungeon_crawler_od.twa",
+        "sha256_cert_fingerprints": ["84:52:BC:F6:D8:FB:BA:D3:03:BA:D5:79:92:29:74:B7:F4:C7:C3:3A:97:6A:41:6C:A8:9F:37:F9:B6:BB:BB:DD"]
+      }
+    }]
