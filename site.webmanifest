@@ -24,5 +24,19 @@
     ],
     "theme_color": "#000000",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "id": "com.thomaspeissl.quick-dungeon-crawler-rpg-od",
+    "lang": "en",
+    "scope": "https://quick-dungeon-crawler-od.thomaspeissl.com",
+    "dir": "ltr",
+    "orientation": "portrait",
+    "display_override": [
+      "standalone",
+      "fullscreen",
+      "minimal-ui",
+      "window-controls-overlay"
+    ],
+    "categories": [
+      "games"
+    ]
 }
