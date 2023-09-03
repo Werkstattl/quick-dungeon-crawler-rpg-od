@@ -31,8 +31,9 @@
     "dir": "ltr",
     "orientation": "portrait",
     "display_override": [
+      "window-controls-overlay",
       "standalone",
-      "fullscreen"
+      "browser"  
     ],
     "categories": [
       "games"
