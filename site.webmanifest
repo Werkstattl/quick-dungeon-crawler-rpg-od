@@ -7,7 +7,8 @@
         {
             "src": "/android-chrome-192x192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/android-chrome-512x512.png",
@@ -21,6 +22,23 @@
             "type": "image/png",
             "purpose": "maskable"
         }
+    ],
+    "screenshots" : [
+      {
+        "src": "/assets/screenshots/combat.webp",
+        "sizes": "1080x2400",
+        "type": "image/webp"
+      },
+      {
+        "src": "/assets/screenshots/lvlup.wepb",
+        "sizes": "1080x2400",
+        "type": "image/webp"
+      },
+ 	  {
+         "src": "/assets/screenshots/exploring.webp",
+         "sizes": "1080x2400",
+         "type": "image/webp"
+      }
     ],
     "theme_color": "#000000",
     "background_color": "#000000",
