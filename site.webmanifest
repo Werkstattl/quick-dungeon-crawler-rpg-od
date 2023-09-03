@@ -29,7 +29,7 @@
     "lang": "en",
     "scope": "https://quick-dungeon-crawler-od.thomaspeissl.com",
     "dir": "ltr",
-    "orientation": "portrait",
+    "orientation": "portrait-primary",
     "display_override": [
       "window-controls-overlay",
       "standalone",
