@@ -40,5 +40,9 @@
     ],
     "edge_side_panel": {
       "preferred_width": 420
+    },
+    "handle_links": "not-preferred",
+    "launch_handler": {
+        "client_mode": ["focus-existing, auto"]
     }
 }
