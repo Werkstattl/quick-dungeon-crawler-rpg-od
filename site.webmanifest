@@ -62,5 +62,7 @@
     "handle_links": "not-preferred",
     "launch_handler": {
         "client_mode": ["focus-existing, auto"]
-    }
+    },
+    "iarc_rating_id": "0c278702-0a74-488b-a0bb-4d02a3d62ef5",
+    "prefer_related_applications": false
 }
