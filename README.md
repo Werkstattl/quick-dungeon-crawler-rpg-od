@@ -4,6 +4,7 @@ Quickly and easily access a thrilling dungeon-crawling experience at any time. W
 
 ## Links
 
+- [Google Play](https://play.google.com/store/apps/details?id=com.thomaspeissl.quick_dungeon_crawler_od.twa)
 - [Play in your Browser](https://quick-dungeon-crawler-od.thomaspeissl.com/)
 - [Github](https://github.com/thomaspeissl/quick-dungeon-crawler-rpg-od)
 
