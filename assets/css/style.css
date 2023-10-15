@@ -824,3 +824,7 @@ header button i {
         -o-transform: scale(1.5);
     }
 }
+
+#title-screen img {
+	max-width: 50vw;
+}
