@@ -68,12 +68,18 @@
     "file_handlers": [],
     "protocol_handlers": [],
     "widgets": [],
-    "shortcuts": [],
+    "shortcuts": [
+        {
+          "name": "Play",
+          "url": "/",
+          "description": "Explore the dungeon"
+        }
+    ],
     "share_target": {},
     "scope_extensions": [],
     "related_applications": [
       {
-        "platform": "android",
+        "platform": "play",
         "url": "https://play.google.com/store/apps/details?id=com.thomaspeissl.quick_dungeon_crawler_od.twa",
         "id": "com.thomaspeissl.quick_dungeon_crawler_od.twa"
       }
