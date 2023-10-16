@@ -557,10 +557,10 @@ const importData = (importedData) => {
 // Player Stat Allocation
 const allocationPopup = () => {
     let allocation = {
-        hp: 5,
-        atk: 5,
-        def: 5,
-        atkSpd: 5
+        hp: 10,
+        atk: 10,
+        def: 10,
+        atkSpd: 10
     }
     const updateStats = () => {
         stats = {
@@ -571,7 +571,7 @@ const allocationPopup = () => {
         }
     }
     updateStats();
-    let points = 20;
+    let points = 0;
     const loadContent = function () {
         defaultModalElement.innerHTML = `
         <div class="content" id="allocate-stats">
@@ -604,7 +604,7 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p><i class="ra ra-plain-dagger"></i><span id="atkSpdDisplay">ATK.SPD: ${stats.atkSpd}</span></p>
+                <p><i class="ra ra-plain-dagger"></i><span id="atkSpdDisplay">ATK.SPD: ${stats.atkSpd.toFixed(2)}</span></p>
                 <div class="row">
                     <button id="atkSpdMin">-</button>
                     <span id="atkSpdAllo">${allocation.atkSpd}</span>
