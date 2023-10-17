@@ -50,8 +50,7 @@
     "orientation": "portrait-primary",
     "display_override": [
       "window-controls-overlay",
-      "standalone",
-      "browser"  
+      "fullscreen"
     ],
     "categories": [
       "games"
