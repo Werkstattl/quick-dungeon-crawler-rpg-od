@@ -42,7 +42,7 @@
     ],
     "theme_color": "#000000",
     "background_color": "#000000",
-    "display": "standalone",
+    "display": "fullscreen",
     "id": "com.thomaspeissl.quick-dungeon-crawler-rpg-od",
     "lang": "en",
     "scope": "https://quick-dungeon-crawler-od.thomaspeissl.com",
