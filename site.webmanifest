@@ -2,7 +2,7 @@
     "name": "Quick Dungeon Crawler on Demand",
     "short_name": "Dungeon Crawler",
     "description": "Quick dungeon crawler experience on demand with diablo inspired looting system!",
-    "start_url": "/",
+    "start_url": "/?homescreen=1",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -43,7 +43,7 @@
     "theme_color": "#000000",
     "background_color": "#000000",
     "display": "fullscreen",
-    "id": "com.thomaspeissl.quick-dungeon-crawler-rpg-od",
+    "id": "/?homescreen=1",
     "lang": "en",
     "scope": "/",
     "dir": "ltr",
