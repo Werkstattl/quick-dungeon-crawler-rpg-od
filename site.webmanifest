@@ -45,7 +45,7 @@
     "display": "fullscreen",
     "id": "com.thomaspeissl.quick-dungeon-crawler-rpg-od",
     "lang": "en",
-    "scope": "https://quick-dungeon-crawler-od.thomaspeissl.com",
+    "scope": "/",
     "dir": "ltr",
     "orientation": "portrait-primary",
     "display_override": [
