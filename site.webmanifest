@@ -1,7 +1,7 @@
 {
     "name": "Quick Dungeon Crawler on Demand",
     "short_name": "Dungeon Crawler",
-    "description": "Quick dungeon crawler experience on demand with diablo inspired looting system!",
+    "description": "Quick dungeon crawler experience on demand with MOBA inspired inventory slots!",
     "start_url": "/?homescreen=1",
     "icons": [
         {
