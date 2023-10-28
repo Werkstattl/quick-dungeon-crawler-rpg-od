@@ -612,7 +612,7 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p id="alloPts">Stat Points: ${points}</p>
+                <p id="alloPts">Stat Points: ${points}/20</p>
                 <button id="allocate-reset">Reset</button>
             </div>
             <div class="row">
@@ -648,7 +648,7 @@ const allocationPopup = () => {
                 updateStats();
                 document.querySelector(`#${stat}Display`).innerHTML = `${stat.replace(/([A-Z])/g, ' $1').trim().replace(/ /g, '.').toUpperCase()}: ${stats[stat].toFixed(2).replace(rx, "$1")}`;
                 document.querySelector(`#${stat}Allo`).innerHTML = allocation[stat];
-                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}`;
+                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
             } else {
                 sfxDeny.play();
             }
@@ -661,7 +661,7 @@ const allocationPopup = () => {
                 updateStats();
                 document.querySelector(`#${stat}Display`).innerHTML = `${stat.replace(/([A-Z])/g, ' $1').trim().replace(/ /g, '.').toUpperCase()}: ${stats[stat].toFixed(2).replace(rx, "$1")}`;
                 document.querySelector(`#${stat}Allo`).innerHTML = allocation[stat];
-                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}`;
+                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
             } else {
                 sfxDeny.play();
             }
@@ -793,7 +793,7 @@ const allocationPopup = () => {
         document.querySelector(`#atkAllo`).innerHTML = allocation.atk;
         document.querySelector(`#defAllo`).innerHTML = allocation.def;
         document.querySelector(`#atkSpdAllo`).innerHTML = allocation.atkSpd;
-        document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}`;
+        document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
     }
     close.onclick = function () {
         sfxDecline.play();
