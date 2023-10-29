@@ -576,7 +576,6 @@ const allocationPopup = () => {
         defaultModalElement.innerHTML = `
         <div class="content" id="allocate-stats">
             <div class="content-head">
-<h3><button>Change Name</button><br></h3>
                 <h3>Allocate Stats</h3>
                 <p id="allocate-close"><i class="fa fa-xmark"></i></p>
             </div>
