@@ -141,7 +141,7 @@ window.addEventListener("load", function () {
             dimTarget.style.filter = "brightness(100%)";
         };
     });
-
+    
     document.querySelector("#menu-btn").addEventListener("click", function () {
         closeInventory();
 
@@ -187,6 +187,7 @@ window.addEventListener("load", function () {
                 <p>Kills: ${nFormatter(player.kills)}</p>
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
                 <p>Playtime: ${playTime}</p>
+                <button id="change-name">Change Name</button>
             </div>`;
             let profileTab = document.querySelector('#profile-tab');
             profileTab.style.width = "15rem";
@@ -196,6 +197,10 @@ window.addEventListener("load", function () {
                 defaultModalElement.style.display = "none";
                 defaultModalElement.innerHTML = "";
                 menuModalElement.style.display = "flex";
+            };
+            let changeName = document.querySelector('#change-name');
+            changeName.onclick = function () {
+				runLoad("character-creation", "flex");
             };
         };
 
@@ -576,6 +581,7 @@ const allocationPopup = () => {
         defaultModalElement.innerHTML = `
         <div class="content" id="allocate-stats">
             <div class="content-head">
+<h3><button>Change Name</button><br></h3>
                 <h3>Allocate Stats</h3>
                 <p id="allocate-close"><i class="fa fa-xmark"></i></p>
             </div>

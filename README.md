@@ -27,6 +27,10 @@ Quickly and easily access a thrilling dungeon-crawling experience at any time. W
 - C.RATE (Crit Rate) - Chance to land a critical hit.
 - C.DMG (Crit Damage) - Amount of bonus damage dealt upon landing a critical hit.
 
+## How Quick Dungeon Crawler on Demand optimizes your gaming experience by downloading and caching sounds and images on demand
+
+Quick Dungeon Crawler on Demand is a web app that you can play on your browser without installing anything. It can also work offline and has some cool features like native apps. However, to save your data and storage, it does not download all the sounds at once. Instead, it only downloads the sounds you need when you use them, and then saves them on your device for later use. This makes the game faster and more efficient. However, there is a small downside to this approach. Sometimes, when you use a feature that requires a sound for the first time, there might be a slight delay before the sound plays. This is because the sound has to be downloaded first and then cached on your device. But don’t worry, this only happens once for each sound, and the next time you use it, it will play instantly. It is the same with images. I hope this helps you understand how Dungeon Crawler on Demand works. Thank you for playing it! 😊
+
 ## Credits
 
 - [Red Pangilinan](https://github.com/redpangilinan) - Original Creator
