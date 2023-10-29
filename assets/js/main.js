@@ -187,7 +187,6 @@ window.addEventListener("load", function () {
                 <p>Kills: ${nFormatter(player.kills)}</p>
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
                 <p>Playtime: ${playTime}</p>
-                <button id="change-name">Change Name</button>
             </div>`;
             let profileTab = document.querySelector('#profile-tab');
             profileTab.style.width = "15rem";
@@ -197,10 +196,6 @@ window.addEventListener("load", function () {
                 defaultModalElement.style.display = "none";
                 defaultModalElement.innerHTML = "";
                 menuModalElement.style.display = "flex";
-            };
-            let changeName = document.querySelector('#change-name');
-            changeName.onclick = function () {
-				runLoad("character-creation", "flex");
             };
         };
 
