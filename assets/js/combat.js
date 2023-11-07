@@ -20,7 +20,18 @@ const hpValidation = () => {
             dimDungeon.style.display = "none";
             combatPanel.style.display = "none";
             runLoad("title-screen", "flex");
-
+            clearInterval(dungeonTimer);
+            clearInterval(playTimer);
+            progressReset();
+        });
+        document.querySelector("#battleButton2").addEventListener("click", function () {
+            sfxConfirm.play();
+            playerDead = false;
+            let dimDungeon = document.querySelector('#dungeon-main');
+            dimDungeon.style.filter = "brightness(100%)";
+            dimDungeon.style.display = "none";
+            combatPanel.style.display = "none";
+	        runLoad("character-creation", "flex");
             clearInterval(dungeonTimer);
             clearInterval(playTimer);
             progressReset();
@@ -254,6 +265,10 @@ const updateCombatLog = () => {
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Back to Menu</button>`;
         combatLogBox.appendChild(button);
+        let button2 = document.createElement("div");
+        button2.className = "decision-panel";
+        button2.innerHTML = `<button id="battleButton2">Change name</button>`;
+        combatLogBox.appendChild(button2);        
     }
 
     combatLogBox.scrollTop = combatLogBox.scrollHeight;

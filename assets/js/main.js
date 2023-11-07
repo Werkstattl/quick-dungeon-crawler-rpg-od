@@ -33,6 +33,7 @@ window.addEventListener("load", function () {
             if (playerName.length < 3 || playerName.length > 15) {
                 document.querySelector("#alert").innerHTML = "Name should be between 3-15 characters!";
             } else {
+			    if (player === null) {
                 player = {
                     name: playerName,
                     lvl: 1,
@@ -98,6 +99,8 @@ window.addEventListener("load", function () {
                     deaths: 0,
                     inCombat: false
                 };
+                }
+                player.name = playerName;
                 calculateStats();
                 player.stats.hp = player.stats.hpMax;
                 saveData();
