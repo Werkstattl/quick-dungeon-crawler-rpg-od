@@ -4,12 +4,19 @@ let playerDead = false;
 
 // ========== Validation ==========
 const hpValidation = () => {
+    const deathMessages = [
+        "But don’t worry, you still have your <b>inventory</b> and <b>gold</b>. Try again!",
+        "That’s unfortunate, but not the end. Your <b>inventory</b> and <b>gold</b> are safe with you. Go for another round!",
+        "It’s a tough world out there, but you’re tougher. You keep your <b>inventory</b> and <b>gold</b> even after death. Don’t give up!",
+        "But death is not the final destination. You retain your <b>inventory</b> and <b>gold</b> as you respawn. Keep exploring!",
+        "That’s a setback, but not a failure. Your <b>inventory</b> and <b>gold</b> remain intact. You can do better!"
+    ];
     // Prioritizes player death before the enemy
     if (player.stats.hp < 1) {
         player.stats.hp = 0;
         playerDead = true;
         player.deaths++;
-        addCombatLog(`You died!`);
+        addCombatLog('You died! ' + deathMessages[Math.floor(Math.random() * deathMessages.length)]);
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
@@ -263,12 +270,8 @@ const updateCombatLog = () => {
     if (playerDead) {
         let button = document.createElement("div");
         button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton">Back to Menu</button>`;
+        button.innerHTML = `<button id="battleButton">Start new Run</button><button id="battleButton2">Change name</button>`;
         combatLogBox.appendChild(button);
-        let button2 = document.createElement("div");
-        button2.className = "decision-panel";
-        button2.innerHTML = `<button id="battleButton2">Change name</button>`;
-        combatLogBox.appendChild(button2);        
     }
 
     combatLogBox.scrollTop = combatLogBox.scrollHeight;
