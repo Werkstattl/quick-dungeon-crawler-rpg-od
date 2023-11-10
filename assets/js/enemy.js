@@ -15,7 +15,6 @@ let enemy = {
     },
     image: {
         name: null,
-        type: null,
         size: null
     },
     rewards: {
@@ -338,7 +337,6 @@ const setEnemyStats = (type, condition) => {
 
 const setEnemyImg = () => {
     // Apply monster image
-    enemy.image.type = '.png';
     switch (enemy.name) {
         // Goblins
         case 'Goblin':
