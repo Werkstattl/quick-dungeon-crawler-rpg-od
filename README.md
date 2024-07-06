@@ -1,7 +1,7 @@
 ![Logo](assets/icon/logo.webp)
 # Quick Dungeon Crawler on Demand!
 
-Quickly and easily access a thrilling dungeon-crawling experience at any time. With a simple click of a button, players can enter a fully-realized, randomly generated dungeon filled with monsters and MOBA inspired inventory slots!
+Quickly and easily access a thrilling dungeon-crawling experience at any time. With a simple click of a button, players can enter a randomly generated dungeon filled with monsters and MOBA inspired inventory slots!
 
 ## Links
 
