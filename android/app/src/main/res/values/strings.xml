@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Quick Dungeon Crawler on Demand!</string>
+    <string name="title_activity_main">Quick Dungeon Crawler on Demand!</string>
+    <string name="package_name">com.thomaspeissl.quick_dungeon_crawler_od.twa</string>
+    <string name="custom_url_scheme">com.thomaspeissl.quick_dungeon_crawler_od.twa</string>
+</resources>
