@@ -730,6 +730,10 @@ const allocationPopup = () => {
     let reset = document.querySelector("#allocate-reset");
     let close = document.querySelector("#allocate-close");
     confirm.onclick = function () {
+        if (points > 0) {
+            sfxDeny.play();
+            return;
+        }
         // Set allocated stats to player base stats
         player.baseStats = {
             hp: stats.hp,
