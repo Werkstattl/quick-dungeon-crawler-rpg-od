@@ -248,6 +248,44 @@ const generateLvlStats = (rerolls, percentages) => {
 
             let p = document.createElement("p");
             p.innerHTML = `Increase bonus ${selectedStats[i].replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()} by ${percentages[selectedStats[i]]}%.`;
+            
+            //Append the string with the marginal value of the stat.
+            try{
+                let marginalValue = 0.0;
+                if(selectedStats[i]=="hp"){
+                    let statFinal = Math.round(player.baseStats.hp + player.baseStats.hp * (player.bonusStats.hp + percentages["hp"]) / 100 + player.equippedStats.hp);
+                    let statInitial = player.stats.hpMax;
+                    marginalValue = (statFinal-statInitial) / statInitial;
+                } else if(selectedStats[i]=="atk"){
+                    let statFinal = Math.round(player.baseStats.atk + player.baseStats.atk * (player.bonusStats.atk + percentages["atk"]) / 100 + player.equippedStats.atk);
+                    let statInitial = player.stats.atk;
+                    marginalValue = (statFinal-statInitial) / statInitial;
+                } else if(selectedStats[i]=="def"){
+                    let statFinal = Math.round(player.baseStats.def + player.baseStats.def * (player.bonusStats.def + percentages["def"]) / 100 + player.equippedStats.def);
+                    let statInitial = player.stats.def;
+                    marginalValue = (statFinal-statInitial) / statInitial;
+                } else if(selectedStats[i]=="atkSpd"){
+                    let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
+                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * (player.bonusStats.atkSpd+percentages["atkSpd"]) / 100 + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
+                    let statInitial = player.stats.atkSpd;
+                    marginalValue = (statFinal-statInitial) / statInitial;
+                } else if(selectedStats[i]=="vamp"){
+                    let statFinal = percentages["vamp"] + player.stats.vamp;
+                    let statInitial = player.stats.vamp;
+                    marginalValue = (statFinal-statInitial) / statInitial;
+                } else if(selectedStats[i]=="critRate"){
+                    let statFinal = Math.min(percentages["critRate"] + player.stats.critRate, 100)+100;
+                    let statInitial = Math.min(player.stats.critRate, 100)+100;
+                    marginalValue = (statFinal-statInitial)/statInitial * player.stats.critDmg/100;
+                } else if(selectedStats[i]=="critDmg"){
+                    let statFinal = percentages["critDmg"] + player.stats.critDmg;
+                    let statInitial = player.stats.critDmg;
+                    marginalValue = (statFinal-statInitial)/statInitial * Math.min(player.stats.critRate/100, 1);
+                }
+                if (Number.isFinite(marginalValue)) {
+                	p.innerHTML += ` (+${Math.round(1000*marginalValue)/10.0}%)`;
+                }
+            } catch (err) {}
             button.appendChild(p);
 
             // Increase the selected stat for player
