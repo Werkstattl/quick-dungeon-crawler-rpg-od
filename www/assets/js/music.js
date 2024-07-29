@@ -141,3 +141,10 @@ document.querySelector("#title-screen").addEventListener("click", function () {
     setVolume();
     sfxOpen.play();
 });
+
+document.addEventListener("visibilitychange", function () {
+	bgmDungeon.stop();
+	bgmBattleMain.stop();
+	bgmBattleGuardian.stop();
+	bgmBattleBoss.stop();
+});
