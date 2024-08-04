@@ -1,7 +1,7 @@
 {
     "name": "Quick Dungeon Crawler on Demand",
     "short_name": "Dungeon Crawler",
-    "description": "Quick dungeon crawler experience on demand with MOBA inspired inventory slots!",
+    "description": "Quick dungeon crawler experience on demand!",
     "start_url": "/?homescreen=1",
     "icons": [
         {
@@ -69,7 +69,7 @@
         "client_mode": ["focus-existing, auto"]
     },
     "iarc_rating_id": "0c278702-0a74-488b-a0bb-4d02a3d62ef5",
-    "prefer_related_applications": false,
+    "prefer_related_applications": true,
     "file_handlers": [],
     "protocol_handlers": [],
     "widgets": [],
