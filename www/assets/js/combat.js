@@ -47,12 +47,14 @@ const hpValidation = () => {
             clearInterval(playTimer);
             progressReset();
         });
-        document.querySelector("#battleButton3").addEventListener("click", function () {
-        	adConsumed = true;
-			playerDead = false;
-			player.stats.hp = player.stats.hpMax;
-			startCombat(currentBattleMusic);
-        });
+        if ( !adConsumed ) {
+            document.querySelector("#battleButton3").addEventListener("click", function () {
+                adConsumed = true;
+                playerDead = false;
+                player.stats.hp = player.stats.hpMax;
+                startCombat(currentBattleMusic);
+            });
+        }
         endCombat();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button
@@ -278,12 +280,15 @@ const updateCombatLog = () => {
     }
 
     if (playerDead) {
+		if ( !adConsumed ) {
+            let button2 = document.createElement("div");
+            button2.className = "decision-panel";
+            button2.innerHTML = `<button id="battleButton3">Watch an ad for a one-time resurrection.</button>`
+            combatLogBox.appendChild(button2);
+        }
         let button = document.createElement("div");
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Start new Run</button><button id="battleButton2">Change name</button>`;
-		if ( !adConsumed ) {
-        	button.innerHTML = `<button id="battleButton3">Watch ad for rescurrection</button>` + button.innerHTML
-        }
         combatLogBox.appendChild(button);
     }
 
