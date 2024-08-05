@@ -1,6 +1,8 @@
 const combatPanel = document.querySelector("#combatPanel")
 let enemyDead = false;
 let playerDead = false;
+let currentBattleMusic = false;
+let adConsumed = false;
 
 // ========== Validation ==========
 const hpValidation = () => {
@@ -20,6 +22,7 @@ const hpValidation = () => {
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
+            adConsumed = false;
 
             // Reset all the necessary stats and return to menu
             let dimDungeon = document.querySelector('#dungeon-main');
@@ -34,6 +37,7 @@ const hpValidation = () => {
         document.querySelector("#battleButton2").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
+            adConsumed = false;
             let dimDungeon = document.querySelector('#dungeon-main');
             dimDungeon.style.filter = "brightness(100%)";
             dimDungeon.style.display = "none";
@@ -42,6 +46,12 @@ const hpValidation = () => {
             clearInterval(dungeonTimer);
             clearInterval(playTimer);
             progressReset();
+        });
+        document.querySelector("#battleButton3").addEventListener("click", function () {
+        	adConsumed = true;
+			playerDead = false;
+			player.stats.hp = player.stats.hpMax;
+			startCombat(currentBattleMusic);
         });
         endCombat();
     } else if (enemy.stats.hp < 1) {
@@ -271,6 +281,9 @@ const updateCombatLog = () => {
         let button = document.createElement("div");
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Start new Run</button><button id="battleButton2">Change name</button>`;
+		if ( !adConsumed ) {
+        	button.innerHTML = `<button id="battleButton3">Watch ad for rescurrection</button>` + button.innerHTML
+        }
         combatLogBox.appendChild(button);
     }
 
@@ -281,9 +294,11 @@ const updateCombatLog = () => {
 let combatSeconds = 0;
 
 const startCombat = (battleMusic) => {
+	currentBattleMusic = battleMusic;
     bgmDungeon.pause();
     sfxEncounter.play();
-    battleMusic.play();
+//    battleMusic.play();
+	currentBattleMusic.play();
     player.inCombat = true;
 
     // Starts the timer for player and enemy attacks along with combat timer
@@ -302,9 +317,10 @@ const startCombat = (battleMusic) => {
 }
 
 const endCombat = () => {
-    bgmBattleMain.stop();
-    bgmBattleGuardian.stop();
-    bgmBattleBoss.stop();
+    //bgmBattleMain.stop();
+    //bgmBattleGuardian.stop();
+    //bgmBattleBoss.stop();
+    currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;
     // Skill validation
