@@ -59,7 +59,7 @@ const playerLoadStats = () => {
     player.exp.expPercent = Number((player.exp.expCurrLvl / player.exp.expMaxLvl) * 100).toFixed(2).replace(rx, "$1");
 
     // Generate battle info for player if in combat
-    if (player.inCombat || playerDead) {
+    if (player.inCombat || (typeof playerDead !== 'undefined' && playerDead)) {
         const playerCombatHpElement = document.querySelector('#player-hp-battle');
         const playerHpDamageElement = document.querySelector('#player-hp-dmg');
         const playerExpElement = document.querySelector('#player-exp-bar');
