@@ -4,4 +4,5 @@
     <string name="title_activity_main">Quick Dungeon Crawler on Demand!</string>
     <string name="package_name">com.thomaspeissl.quick_dungeon_crawler_od.twa</string>
     <string name="custom_url_scheme">com.thomaspeissl.quick_dungeon_crawler_od.twa</string>
+    <string name="admob_app_id">ca-app-pub-4928248831407961~9898960459</string>
 </resources>
