@@ -283,7 +283,7 @@ const updateCombatLog = () => {
 		if ( !adConsumed ) {
             let button2 = document.createElement("div");
             button2.className = "decision-panel";
-            button2.innerHTML = `<button id="battleButton3">Watch an ad for a one-time resurrection.</button>`
+            button2.innerHTML = `<button style="display:none" id="battleButton3">Watch an ad for a one-time resurrection.</button>`
             combatLogBox.appendChild(button2);
         }
         let button = document.createElement("div");
