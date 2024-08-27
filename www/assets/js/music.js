@@ -143,8 +143,16 @@ document.querySelector("#title-screen").addEventListener("click", function () {
 });
 
 document.addEventListener("visibilitychange", function () {
-	bgmDungeon.stop();
-	bgmBattleMain.stop();
-	bgmBattleGuardian.stop();
-	bgmBattleBoss.stop();
+    if (bgmDungeon != undefined) {
+        bgmDungeon.stop();
+    }
+    if (bgmBattleMain != undefined) {
+        bgmBattleMain.stop();
+    }
+    if (bgmBattleBoss != undefined) {
+        bgmBattleBoss.stop();
+    }
+    if (bgmBattleGuardian != undefined) {
+        bgmBattleGuardian.stop();
+    }
 });
