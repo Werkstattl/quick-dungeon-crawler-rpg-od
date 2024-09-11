@@ -1,4 +1,7 @@
-![Logo](www/assets/icon/logo.webp)
+<div align="center">
+<img alt="dungeon crawler" src="./www/assets/icon/logo.webp" height="200px" ></img> 
+</div>
+
 # Quick Dungeon Crawler on Demand!
 
 Quickly and easily access a thrilling dungeon-crawling experience at any time. With a simple click of a button, players can enter a randomly generated dungeon filled with monsters and MOBA inspired inventory slots!
