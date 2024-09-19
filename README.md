@@ -53,12 +53,9 @@ If you encounter any issues or have any questions or suggestions, please open an
 - v1.1.3: Implemented player passive skills
 - v1.1.3: Rebalanced player bonus stat growth, level up growth, and divine blessings
 
-## How Quick Dungeon Crawler on Demand optimizes your gaming experience by downloading and caching sounds and images on demand
+## Quick Dungeon Crawler on Demand: How It Works
 
-Quick Dungeon Crawler on Demand is a web app that you can play on your browser without installing anything. It can also work offline with the assets that were already downloaded. However, to save your data and storage, it does not download all the assets at once. Instead, it only downloads the assets when they appear for the first time, and then saves them on your device for later use. This makes the game faster and more efficient. However, there is a small downside to this approach. Sometimes, when a sound should be played or you see an enemy for the first time, there might be a slight delay before the sound plays or the image shows up. This is because the sound or image has to be downloaded first and gets then cached on your device. But don’t worry, this only happens once for each sound and image, and the next time you use it, it will play or show up instantly. 
-Please note that the Google Play version is not affected by this. 
-I hope this helps you understand how Quick Dungeon Crawler on Demand works. 
-Thank you for playing it! 😊
+This browser-based game downloads sounds and images only when first needed, then caches them for future use. This saves data but may cause brief delays with new elements. After that, everything loads instantly. The Google Play version isn’t affected. Thanks for playing!
 
 ## Credits
 
