@@ -41,7 +41,7 @@ If you encounter any issues or have any questions or suggestions, please open an
 
 - v2.2: Fixed JavaScript music errors
 - v2.1: Stop bgm if the game is not visible
-- v2.1: Show the value of an upgrade, thanks @Taklaminon
+- v2.1: Show the value of an upgrade, thanks [@Taklaminon](https://github.com/redpangilinan/dungeon-crawler-rpg-od/issues/3)
 - v2.0: Internal change to capacitor to directly support Android
 - v1.2: Optimized game assets and re-enabled bgm
 - v1.2: Added name change feature
