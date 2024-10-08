@@ -385,3 +385,13 @@ const showCombatInfo = () => {
     </div>
     `;
 }
+
+document.addEventListener("visibilitychange", () => {
+	if (!player.inCombat) {
+		return
+	}
+    if (document.hidden) {
+    	alert("Paused")
+    }
+});
+

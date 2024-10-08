@@ -39,6 +39,7 @@ If you encounter any issues or have any questions or suggestions, please open an
 
 ## Recent Changelog
 
+- v2.3: Pause game if hidden
 - v2.2: Fixed JavaScript music errors
 - v2.1: Stop bgm if the game is not visible
 - v2.1: Show the value of an upgrade, thanks [@Taklaminon](https://github.com/redpangilinan/dungeon-crawler-rpg-od/issues/3)
