@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="dungeon crawler" src="./www/assets/icon/logo.webp" height="200px" ></img> 
+<img alt="dungeon crawler" src="./assets/icon/logo.webp" height="200px" ></img> 
 </div>
 
 # Quick Dungeon Crawler on Demand!
