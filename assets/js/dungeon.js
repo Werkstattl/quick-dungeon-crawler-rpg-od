@@ -483,9 +483,3 @@ const addDungeonLog = (message, choices) => {
     dungeon.backlog.push(message);
     updateDungeonLog(choices);
 }
-
-// Evaluate a dungeon difficulty
-const evaluateDungeon = () => {
-    let base = 500;
-    // Work in Progress
-}
