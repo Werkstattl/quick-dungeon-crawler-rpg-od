@@ -94,7 +94,6 @@ function initCompanions() {
         // Find active companion
         activeCompanion = playerCompanions.find(comp => comp.isActive) || null;
     } else {
-        console.log("No companions found in localStorage. Creating default companion.");
         // Give player a starter companion
         giveCompanion(1);
     }
@@ -106,7 +105,6 @@ function initCompanions() {
 function giveCompanion(companionId) {
     // Check if player already has this companion
     if (playerCompanions.some(c => c.id === companionId)) {
-        addDungeonLog("You already have this companion!");
         return null;
     }
 
@@ -135,7 +133,7 @@ function updateCompanionUI() {
     const summonBtn = document.getElementById('summon-companion');
     
     if (activeCompanion) {
-        companionName.textContent = `${activeCompanion.name} Lv. ${activeCompanion.level}`;
+        companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
         summonBtn.textContent = "Change";
@@ -228,17 +226,18 @@ function saveCompanions() {
 function findCompanionAfterCombat(enemyLevel) {
     // 10% chance to find a companion after combat
     if (Math.random() < 0.1) {
-        console.log("in rand.");
         // Determine rarity based on enemy level
         let rarityPool;
-        if (enemyLevel > 50) {
-            rarityPool = [3, 4, 5]; // Rare, Epic, Legendary
-        } else if (enemyLevel > 30) {
-            rarityPool = [2, 3, 4]; // Uncommon, Rare, Epic
-        } else if (enemyLevel > 10) {
-            rarityPool = [1, 2, 3]; // Common, Uncommon, Rare
+        if (enemyLevel > 70) {
+            rarityPool = [3, 4, 5];
+        } else if (enemyLevel > 50) {
+            rarityPool = [2, 3, 4];
+        } else if (enemyLevel > 35) {
+            rarityPool = [2, 3];
+        } else if (enemyLevel > 25) {
+            rarityPool = [1, 2];
         } else {
-            rarityPool = [1, 2];    // Common, Uncommon
+            rarityPool = [1];
         }
         
         // Create rarity map for lookups
@@ -257,12 +256,8 @@ function findCompanionAfterCombat(enemyLevel) {
         });
         
         if (availableCompanions.length > 0) {
-            console.log("Companion found!");
             const selectedType = availableCompanions[Math.floor(Math.random() * availableCompanions.length)];
             giveCompanion(selectedType.id);
-        } else {
-            // All companions of applicable rarities have been collected
-            console.log("No new companions available to find");
         }
     }
 }
