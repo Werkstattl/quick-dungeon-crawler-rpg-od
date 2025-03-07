@@ -63,6 +63,13 @@
                     <p><i class="ra ra-focused-lightning"></i>C.DMG: <span id="player-cdmg"></span></p>
                 </div>
                 <div class="box" id="bonus-stats"></div>
+                <!-- Add companion panel -->
+                <div class="box" id="companion-panel">
+                    <h4>Companion</h4>
+                    <p id="companion-name">None</p>
+                    <p><i class="ra ra-sword"></i>ATK: <span id="companion-atk">0</span></p>
+                    <button id="summon-companion" class="hidden">Summon</button>
+                </div>
             </div>
             <div class="dungeon-head">
                 <p id="dungeonTime"></p>
@@ -121,6 +128,16 @@
         <div class="modal-container" id="defaultModal"></div>
         <div class="modal-container" id="menuModal"></div>
         <div class="modal-container" id="confirmationModal"></div>
+        <!-- Add companion modal -->
+        <div class="modal-container" id="companionModal">
+            <div class="content">
+                <div class="content-head">
+                    <h3>Companions</h3>
+                    <p onclick="closeCompanionModal()"><i class="fa fa-xmark"></i></p>
+                </div>
+                <div class="companion-list" id="available-companions"></div>
+            </div>
+        </div>
     </main>
 	<script src="./assets/js/howler.min.js"></script>
     <script src="./assets/js/utility.js"></script>
@@ -128,6 +145,7 @@
     <script src="./assets/js/music.js"></script>
     <script src="./assets/js/player.js"></script>
     <script src="./assets/js/equipment.js"></script>
+    <script src="./assets/js/companion.js"></script>
     <script src="./assets/js/combat.js"></script>
     <script src="./assets/js/dungeon.js"></script>
     <script src="./assets/js/enemy.js"></script>

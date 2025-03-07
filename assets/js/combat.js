@@ -2,7 +2,6 @@ const combatPanel = document.querySelector("#combatPanel")
 let enemyDead = false;
 let playerDead = false;
 let currentBattleMusic = false;
-let adConsumed = false;
 
 // ========== Validation ==========
 const hpValidation = () => {
@@ -22,7 +21,6 @@ const hpValidation = () => {
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
-            adConsumed = false;
 
             // Reset all the necessary stats and return to menu
             let dimDungeon = document.querySelector('#dungeon-main');
@@ -37,7 +35,6 @@ const hpValidation = () => {
         document.querySelector("#battleButton2").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
-            adConsumed = false;
             let dimDungeon = document.querySelector('#dungeon-main');
             dimDungeon.style.filter = "brightness(100%)";
             dimDungeon.style.display = "none";
@@ -47,14 +44,6 @@ const hpValidation = () => {
             clearInterval(playTimer);
             progressReset();
         });
-        if ( !adConsumed ) {
-            document.querySelector("#battleButton3").addEventListener("click", function () {
-                adConsumed = true;
-                playerDead = false;
-                player.stats.hp = player.stats.hpMax;
-                startCombat(currentBattleMusic);
-            });
-        }
         endCombat();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button
@@ -65,6 +54,9 @@ const hpValidation = () => {
         addCombatLog(`${enemy.name} died! (${new Date(combatSeconds * 1000).toISOString().substring(14, 19)})`);
         addCombatLog(`You earned ${nFormatter(enemy.rewards.exp)} exp.`)
         playerExpGain();
+        if (activeCompanion && activeCompanion.isActive) {
+            activeCompanion.gainExperience(enemy.rewards.exp);
+        }
         addCombatLog(`${enemy.name} dropped <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(enemy.rewards.gold)} gold.`)
         player.gold += enemy.rewards.gold;
         playerLoadStats();
@@ -89,6 +81,7 @@ const hpValidation = () => {
             combatPanel.style.display = "none";
             enemyDead = false;
             combatBacklog.length = 0;
+            findCompanionAfterCombat(enemy.lvl);
         });
         endCombat();
     }
@@ -192,6 +185,56 @@ const playerAttack = () => {
     }
 }
 
+// Companion Attack
+const companionAttack = () => {
+    if (!player.inCombat) {
+        return;
+    }
+    if (player.inCombat) {
+        sfxAttack.play();
+    }
+
+    // Calculates the damage and attacks the enemy
+    let crit;
+    let damage = activeCompanion.atk * (activeCompanion.atk / (activeCompanion.atk + enemy.stats.def));
+    // Randomizes the damage by 90% - 110%
+    let dmgRange = 0.9 + Math.random() * 0.2;
+    damage = damage * dmgRange;
+    // Check if the attack is a critical hit
+    if (Math.floor(Math.random() * 100) < activeCompanion.critRate) {
+        crit = true;
+        dmgtype = "crit damage";
+        damage = Math.round(damage * (1 + (activeCompanion.critDmg / 100)));
+    } else {
+        crit = false;
+        dmgtype = "damage";
+        damage = Math.round(damage);
+    }
+
+    // Apply the calculations to combat
+    enemy.stats.hp -= damage;
+    addCombatLog(`${activeCompanion.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+    hpValidation();
+    playerLoadStats();
+    enemyLoadStats();
+
+    // Damage effect
+    let enemySprite = document.querySelector("#enemy-sprite");
+    enemySprite.classList.add("animation-shake");
+    setTimeout(() => {
+        enemySprite.classList.remove("animation-shake");
+    }, 200);
+
+    // Attack Timer
+    if (player.inCombat) {
+        setTimeout(() => {
+            if (player.inCombat) {
+                companionAttack();
+            }
+        }, (1000 / activeCompanion.atkSpd));
+    }
+}
+
 const enemyAttack = () => {
     if (!player.inCombat) {
         return;
@@ -280,12 +323,6 @@ const updateCombatLog = () => {
     }
 
     if (playerDead) {
-		if ( !adConsumed ) {
-            let button2 = document.createElement("div");
-            button2.className = "decision-panel";
-            button2.innerHTML = `<button style="display:none" id="battleButton3">Watch an ad for a one-time resurrection.</button>`
-            combatLogBox.appendChild(button2);
-        }
         let button = document.createElement("div");
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Start new Run</button><button id="battleButton2">Change name</button>`;
@@ -305,6 +342,12 @@ const startCombat = (battleMusic) => {
 //    battleMusic.play();
 	currentBattleMusic.play();
     player.inCombat = true;
+
+    // Add companion involvement
+    if (activeCompanion && activeCompanion.isActive) {
+        addCombatLog(`${activeCompanion.name} joins the battle!`);
+        setTimeout(companionAttack, (1000 / activeCompanion.atkSpd));
+    }
 
     // Starts the timer for player and enemy attacks along with combat timer
     setTimeout(playerAttack, (1000 / player.stats.atkSpd));

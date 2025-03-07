@@ -56,6 +56,7 @@ const initialDungeonLoad = () => {
     dungeonTime.innerHTML = "00:00:00";
     dungeonTimer = setInterval(dungeonEvent, 1000);
     playTimer = setInterval(dungeonCounter, 1000);
+    initCompanions();
 }
 
 // Start and Pause Functionality

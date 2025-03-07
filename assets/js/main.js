@@ -499,6 +499,9 @@ const progressReset = () => {
     dungeon.action = 0;
     dungeon.statistics.runtime = 0;
     combatBacklog.length = 0;
+    playerCompanions = [];
+    activeCompanion = null;
+    saveCompanions();
     saveData();
 }
 
