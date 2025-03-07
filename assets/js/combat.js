@@ -55,7 +55,7 @@ const hpValidation = () => {
         addCombatLog(`You earned ${nFormatter(enemy.rewards.exp)} exp.`)
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
-            activeCompanion.gainExperience(enemy.rewards.exp);
+            activeCompanion.gainExperience(enemy.rewards.exp / 10);
         }
         addCombatLog(`${enemy.name} dropped <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(enemy.rewards.gold)} gold.`)
         player.gold += enemy.rewards.gold;
