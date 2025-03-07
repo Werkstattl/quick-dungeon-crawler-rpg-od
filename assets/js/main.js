@@ -387,6 +387,7 @@ window.addEventListener("load", function () {
             dimDungeon.style.filter = "brightness(100%)";
         };
     });
+    ratingSystem.init();
 });
 
 // Loading Screen

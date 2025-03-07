@@ -200,6 +200,7 @@ const lvlupPopup = () => {
         "critRate": 1,
         "critDmg": 6
     };
+    ratingSystem.checkAndPrompt();
     generateLvlStats(2, percentages);
 }
 
