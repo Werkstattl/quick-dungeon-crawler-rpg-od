@@ -32,9 +32,6 @@ const randomizeDecimal = (min, max) => {
 const ratingSystem = {
     // Configuration for when to show rating dialog
     config: {
-        minPlaytime: 600, // 10 minutes in seconds
-        minFloor: 5,      // Minimum floor reached
-        cooldownDays: 7,  // Don't ask again for 7 days if user selects "Later"
         lastPromptDate: null,
         hasRated: false
     },
@@ -51,22 +48,27 @@ const ratingSystem = {
     // Check if we should show rating prompt
     shouldPrompt() {
         // Don't prompt if user has already rated
-        if (this.config.hasRated) return false;
-        
+        if (this.config.hasRated) { 
+            return false;
+        }
         // Check if cooldown period has passed
         if (this.config.lastPromptDate) {
             const lastPrompt = new Date(this.config.lastPromptDate);
             const now = new Date();
             const daysSinceLastPrompt = (now - lastPrompt) / (1000 * 60 * 60 * 24);
-            if (daysSinceLastPrompt < this.config.cooldownDays) return false;
+            console.log(`Days since last prompt: ${daysSinceLastPrompt}`);
+            if (daysSinceLastPrompt < 7) {
+                return false;
+            }
         }
-        
         // Check if player has played enough
-        if (player.playtime < this.config.minPlaytime) return false;
-        
+        if (player.playtime < 600) {
+            return false;
+        }
         // Check if player has progressed far enough
-        if (dungeon.progress.floor < this.config.minFloor) return false;
-        
+        if (dungeon.progress.floor < 5) {
+            return false;
+        }
         return true;
     },
     
