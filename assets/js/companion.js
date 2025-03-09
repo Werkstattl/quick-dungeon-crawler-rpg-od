@@ -119,7 +119,7 @@ function giveCompanion(companionId) {
         );
         playerCompanions.push(newCompanion);
         saveCompanions();
-        addDungeonLog(`You found a ${newCompanion.name}!`);
+        addDungeonLog(`You found a <span class="${newCompanion.rarity}">${newCompanion.name}</span>!`);
         return newCompanion;
     }
     return null;
