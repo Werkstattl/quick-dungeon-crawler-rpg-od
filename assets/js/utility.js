@@ -127,10 +127,6 @@ const ratingSystem = {
         if (isAndroid) {
             const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
             window.open(`market://details?id=${packageName}`, '_system');
-            // Fallback in case market:// URL doesn't work
-            setTimeout(() => {
-                window.open(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
-            }, 500);
         } else {
             window.open(`https://github.com/Werkstattl/quick-dungeon-crawler-rpg-od`, '_system');
         }
