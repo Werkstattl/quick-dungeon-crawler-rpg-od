@@ -405,6 +405,7 @@ const enterDungeon = () => {
     sfxConfirm.play();
     document.querySelector("#title-screen").style.display = "none";
     runLoad("dungeon-main", "flex");
+    initCompanions();
     if (player.inCombat) {
         enemy = JSON.parse(localStorage.getItem("enemyData"));
         showCombatInfo();
