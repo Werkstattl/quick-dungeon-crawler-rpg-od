@@ -121,14 +121,13 @@ const ratingSystem = {
     
     // Open the app store for rating
     openStoreForRating() {
-        // Check if we're on Android
         const isAndroid = /Android/i.test(navigator.userAgent);
-        
+        const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
         if (isAndroid) {
-            const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
             window.open(`market://details?id=${packageName}`, '_system');
         } else {
-            window.open(`https://github.com/Werkstattl/quick-dungeon-crawler-rpg-od`, '_system');
+            window.open(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
+            // window.open(`https://github.com/Werkstattl/quick-dungeon-crawler-rpg-od`, '_system');
         }
     },
     
