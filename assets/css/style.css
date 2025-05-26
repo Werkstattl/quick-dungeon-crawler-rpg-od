@@ -1,3 +1,9 @@
+/* CSS Custom Properties for Font Size Scaling */
+:root {
+    --font-scale: 1;
+    --base-font-size: 1rem;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -17,27 +23,27 @@
 }
 
 h1 {
-    font-size: 2em;
+    font-size: calc(2em * var(--font-scale));
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: calc(1.5em * var(--font-scale));
 }
 
 h3 {
-    font-size: 1.3em;
+    font-size: calc(1.3em * var(--font-scale));
 }
 
 h4 {
-    font-size: 1em;
+    font-size: calc(1em * var(--font-scale));
 }
 
 h5 {
-    font-size: 0.8em;
+    font-size: calc(0.8em * var(--font-scale));
 }
 
 h6 {
-    font-size: 0.7em;
+    font-size: calc(0.7em * var(--font-scale));
 }
 
 h1,
@@ -55,7 +61,7 @@ i {
 }
 
 input {
-    font-size: 1rem;
+    font-size: calc(1rem * var(--font-scale));
     padding: 0.4rem;
     margin: 1rem 0 0.5rem 0;
     background: transparent;
@@ -69,7 +75,7 @@ input {
 
 select {
     cursor: pointer;
-    font-size: 1rem;
+    font-size: calc(1rem * var(--font-scale));
     width: 100%;
     padding: 0.4rem;
     background: transparent;
@@ -100,7 +106,7 @@ body {
     background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     font-family: Futura, Trebuchet MS, Arial, sans-serif;
-    font-size: 1rem;
+    font-size: calc(var(--base-font-size) * var(--font-scale));
     color: white;
     height: 100vh;
 }
@@ -254,7 +260,7 @@ button {
     text-align: center;
     background-color: transparent;
     color: white;
-    font-size: 1rem;
+    font-size: calc(1rem * var(--font-scale));
     padding: 0.4rem 1rem;
     border-radius: 0.3rem;
     border: solid 1px;
@@ -443,7 +449,7 @@ button:focus {
 
 /* Battle Bars */
 .battle-bar {
-    font-size: 0.8rem;
+    font-size: calc(0.8rem * var(--font-scale));
     border-radius: 0.3rem;
     -webkit-border-radius: 0.3rem;
     -moz-border-radius: 0.3rem;
@@ -502,7 +508,7 @@ button:focus {
 
 #title-screen h1 {
     font-family: 'Rubik Vinyl';
-    font-size: 2.5rem;
+    font-size: calc(2.5rem * var(--font-scale));
     font-weight: 400;
     margin: 0 1rem;
 }
@@ -789,7 +795,7 @@ header button i {
 
 .dmg-numbers {
     color: white;
-    font-size: 1.8em;
+    font-size: calc(1.8em * var(--font-scale));
     font-weight: 500;
     animation: dmg-numbers 0.7s;
     -webkit-animation: dmg-numbers 0.7s;

@@ -10,6 +10,21 @@ if (JSON.parse(localStorage.getItem("volumeData")) == undefined) {
     volume = JSON.parse(localStorage.getItem("volumeData"));
 }
 
+// Font size settings
+let fontSize;
+if (JSON.parse(localStorage.getItem("fontSizeData")) == undefined) {
+    fontSize = {
+        scale: 1.0
+    }
+} else {
+    fontSize = JSON.parse(localStorage.getItem("fontSizeData"));
+}
+
+// Apply font size on load
+const applyFontSize = () => {
+    document.documentElement.style.setProperty('--font-scale', fontSize.scale);
+}
+
 
 // BGM
 let bgmDungeon;

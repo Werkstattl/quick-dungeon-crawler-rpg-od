@@ -1,4 +1,7 @@
 window.addEventListener("load", function () {
+    // Apply saved font size on page load
+    applyFontSize();
+    
     if (player === null) {
         runLoad("character-creation", "flex");
     } else {
@@ -162,7 +165,7 @@ window.addEventListener("load", function () {
             </div>
             <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
             <button id="stats">Current Run</button>
-            <button id="volume-btn">Volume Settings</button>
+            <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
             <button id="quit-run">Abandon</button>
         </div>`;
@@ -277,12 +280,13 @@ window.addEventListener("load", function () {
             let master = volume.master * 100;
             let bgm = (volume.bgm * 100) * 2;
             let sfx = volume.sfx * 100;
+            let fontScale = Math.round(fontSize.scale * 100);
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
             <div class="content" id="volume-tab">
                 <div class="content-head">
-                    <h3>Volume</h3>
+                    <h3>Settings</h3>
                     <p id="volume-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <label id="master-label" for="master-volume">Master (${master}%)</label>
@@ -291,11 +295,14 @@ window.addEventListener("load", function () {
                 <input type="range" id="bgm-volume" min="0" max="100" value="${bgm}">
                 <label id="sfx-label" for="sfx-volume">SFX (${sfx}%)</label>
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
+                <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
+                <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
                 <button id="apply-volume">Apply</button>
             </div>`;
             let masterVol = document.querySelector('#master-volume');
             let bgmVol = document.querySelector('#bgm-volume');
             let sfxVol = document.querySelector('#sfx-volume');
+            let fontSizeSlider = document.querySelector('#font-size');
             let applyVol = document.querySelector('#apply-volume');
             let volumeTab = document.querySelector('#volume-tab');
             volumeTab.style.width = "15rem";
@@ -323,14 +330,22 @@ window.addEventListener("load", function () {
                 document.querySelector('#sfx-label').innerHTML = `SFX (${sfx}%)`;
             };
 
+            fontSizeSlider.oninput = function () {
+                let fontScale = this.value;
+                document.querySelector('#font-label').innerHTML = `Font Size (${fontScale}%)`;
+            };
+
             applyVol.onclick = function () {
                 volume.master = master / 100;
                 volume.bgm = (bgm / 100) / 2;
                 volume.sfx = sfx / 100;
+                fontSize.scale = fontSizeSlider.value / 100;
                 bgmDungeon.stop();
                 setVolume();
+                applyFontSize();
                 bgmDungeon.play();
                 saveData();
+                localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
             };
         };
 
