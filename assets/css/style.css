@@ -864,3 +864,27 @@ header button i {
 #summon-companion {
     margin-top: 5px;
 }
+.fa-heart {
+    color: #e74c3c;
+}
+.ra-sword {
+    color: #c0392b;
+}
+.ra-round-shield {
+    color: #95a5a6;
+}
+.ra-plain-dagger {
+    color: #f39c12;
+}
+.ra-dripping-blade {
+    color: #8e44ad;
+}
+.ra-lightning-bolt {
+    color: #f1c40f;
+}
+.ra-focused-lightning {
+    color: #e67e22;
+}
+.fa-user {
+    color: #3498db;
+}
