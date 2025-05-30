@@ -623,7 +623,43 @@ header button i {
     width: 60%;
 }
 #companion-panel {
-    width: 80%;
+    width: 90%;
+}
+@media (min-width: 380px) {
+    #companion-panel {
+        width: 85%;
+    }
+}
+@media (min-width: 400px) {
+    #bonus-stats {
+        width: 55%;
+    }
+    #companion-panel {
+        width: 80%;
+    }
+}
+@media (min-width: 420px) {
+    #companion-panel {
+        width: 70%;
+    }
+}
+@media (min-width: 450px) {
+    #companion-panel {
+        width: 60%;
+    }
+}
+@media (min-width: 480px) {
+    #bonus-stats {
+        width: 50%;
+    }
+    #companion-panel {
+        width: 55%;
+    }
+}
+@media (min-width: 520px) {
+    #companion-panel {
+        width: 50%;
+    }
 }
 
 /* Decision Panel */
