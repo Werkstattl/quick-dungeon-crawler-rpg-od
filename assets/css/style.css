@@ -619,6 +619,10 @@ header button i {
     font-weight: bold;
 }
 
+#bonus-stats, #companion-panel {
+    width: 60%;
+}
+
 /* Decision Panel */
 .decision-panel {
     display: flex;

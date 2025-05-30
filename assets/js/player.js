@@ -87,14 +87,14 @@ const playerLoadStats = () => {
 
     // Player Bonus Stats
     document.querySelector("#bonus-stats").innerHTML = `
-    <h4>Bonus Stats</h4>
-    <p><i class="fas fa-heart"></i>HP+${player.bonusStats.hp.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-sword"></i>ATK+${player.bonusStats.atk.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-round-shield"></i>DEF+${player.bonusStats.def.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-plain-dagger"></i>ATK.SPD+${player.bonusStats.atkSpd.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-dripping-blade"></i>VAMP+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-lightning-bolt"></i>C.RATE+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-focused-lightning"></i>C.DMG+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>`;
+    <h4>Bonus</h4>
+    <p><i class="fas fa-heart"></i>+${player.bonusStats.hp.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-sword"></i>+${player.bonusStats.atk.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-round-shield"></i>+${player.bonusStats.def.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-plain-dagger"></i>+${player.bonusStats.atkSpd.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-dripping-blade"></i>+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-lightning-bolt"></i>+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>`;
 }
 
 // Opens inventory
