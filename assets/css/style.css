@@ -507,7 +507,6 @@ button:focus {
 }
 
 #title-screen h1 {
-    font-family: 'Rubik Vinyl';
     font-size: calc(2.5rem * var(--font-scale));
     font-weight: 400;
     margin: 0 1rem;
