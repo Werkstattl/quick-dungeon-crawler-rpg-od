@@ -39,6 +39,7 @@ If you encounter any issues or have any questions or suggestions, please open an
 
 ## Recent Changelog
 
+- v2.4.2: Styling improvements for small screens
 - v2.4.1: Add Font size setting
 - v2.4: Add companions
 - v2.3: Pause game if hidden
