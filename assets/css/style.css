@@ -619,6 +619,13 @@ header button i {
     font-weight: bold;
 }
 
+/* Allow companion names to wrap to multiple lines */
+#companion-panel p {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 #bonus-stats {
     width: 60%;
 }
