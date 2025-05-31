@@ -34,6 +34,17 @@ let dungeon = {
         atkSpd: 0,
         currentFloor: 1,
     },
+    // Add resting system properties
+    resting: {
+        duration: 0,
+        healthRegenRate: 0.5, // HP per second while resting
+        meditationProgress: 0,
+        meditationCost: 100,
+        restingBonusActive: false,
+        restingBonusType: null,
+        restingBonusValue: 0,
+        restingBonusDuration: 0,
+    },
     backlog: [],
     action: 0,
 };
@@ -53,6 +64,21 @@ const initialDungeonLoad = () => {
             paused: true,
             event: false,
         };
+        
+        // Initialize resting system if it doesn't exist
+        if (!dungeon.resting) {
+            dungeon.resting = {
+                duration: 0,
+                healthRegenRate: 0.5,
+                meditationProgress: 0,
+                meditationCost: 100,
+                restingBonusActive: false,
+                restingBonusType: null,
+                restingBonusValue: 0,
+                restingBonusDuration: 0,
+            };
+        }
+        
         updateDungeonLog();
     }
     
@@ -66,7 +92,7 @@ const initialDungeonLoad = () => {
     
     loadDungeonProgress();
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    dungeonAction.innerHTML = "Resting...";
+    updateRestingDisplay();
     dungeonActivity.innerHTML = "Explore";
     dungeonTime.innerHTML = "00:00:00";
     dungeonTimer = setInterval(dungeonEvent, 1000);
@@ -78,7 +104,7 @@ const dungeonStartPause = () => {
     if (!dungeon.status.paused) {
         sfxPause.play();
 
-        dungeonAction.innerHTML = "Resting...";
+        updateRestingDisplay();
         dungeonActivity.innerHTML = "Explore";
         dungeon.status.exploring = false;
         dungeon.status.paused = true;
@@ -89,6 +115,9 @@ const dungeonStartPause = () => {
         dungeonActivity.innerHTML = "Pause";
         dungeon.status.exploring = true;
         dungeon.status.paused = false;
+        
+        // Reset resting duration when starting exploration
+        dungeon.resting.duration = 0;
     }
 }
 
@@ -321,6 +350,9 @@ const dungeonEvent = () => {
                     nothingEvent();
                 }
         }
+    } else if (dungeon.status.paused && !dungeon.status.event) {
+        // Handle resting activities
+        processRestingActivities();
     }
 }
 
@@ -596,4 +628,199 @@ const updateDungeonLog = (choices) => {
 const addDungeonLog = (message, choices) => {
     dungeon.backlog.push(message);
     updateDungeonLog(choices);
+}
+
+// ========= Resting System ==========
+// Process all resting activities while paused
+const processRestingActivities = () => {
+    dungeon.resting.duration++;
+    
+    // Passive health regeneration
+    if (player.stats.hp < player.stats.hpMax) {
+        const regenAmount = dungeon.resting.healthRegenRate;
+        const oldHp = player.stats.hp;
+        player.stats.hp = Math.min(player.stats.hpMax, player.stats.hp + regenAmount);
+        
+        // Log health regeneration every 10 seconds
+        if (dungeon.resting.duration % 10 === 0 && player.stats.hp > oldHp) {
+            const actualRegen = Math.round((player.stats.hp - oldHp) * 10);
+            addDungeonLog(`<span class="Epic">Restored ${actualRegen} HP while resting.</span>`);
+        }
+    }
+    
+    // Meditation progress
+    if (dungeon.resting.duration % 30 === 0) { // Every 30 seconds
+        dungeon.resting.meditationProgress++;
+        if (dungeon.resting.meditationProgress >= 3) { // 90 seconds of meditation
+            offerMeditation();
+        }
+    }
+    
+    // Temporary resting bonus generation
+    if (dungeon.resting.duration % 120 === 0) { // Every 2 minutes
+        generateRestingBonus();
+    }
+    
+    // Update resting bonus duration
+    if (dungeon.resting.restingBonusActive) {
+        dungeon.resting.restingBonusDuration--;
+        if (dungeon.resting.restingBonusDuration <= 0) {
+            expireRestingBonus();
+        }
+    }
+    
+    updateRestingDisplay();
+    playerLoadStats();
+}
+
+// Update the resting display
+const updateRestingDisplay = () => {
+    let restingMessage = "Resting";
+    
+    if (dungeon.resting.duration > 0) {
+        const minutes = Math.floor(dungeon.resting.duration / 60);
+        const seconds = dungeon.resting.duration % 60;
+        restingMessage += ` (${minutes}:${seconds.toString().padStart(2, '0')})`;
+    }
+    
+    // Add active bonus indicator
+    if (dungeon.resting.restingBonusActive) {
+        restingMessage += ` <span style="color: #FFD700;">✨</span>`;
+    }
+    
+    // Add health regen indicator
+    if (player.stats.hp < player.stats.hpMax) {
+        restingMessage += ` <span style="color: #4CAF50;">❤️</span>`;
+    }
+    
+    // Add meditation indicator
+    if (dungeon.resting.meditationProgress > 0) {
+        restingMessage += ` <span style="color: #9C27B0;">🧘</span>`;
+    }
+    
+    dungeonAction.innerHTML = restingMessage + "...";
+}
+
+// Offer meditation for permanent bonuses
+const offerMeditation = () => {
+    dungeon.status.event = true;
+    const cost = dungeon.resting.meditationCost * (Math.floor(dungeon.resting.meditationProgress / 3));
+    
+    const choices = `
+        <div class="decision-panel">
+            <button id="choice1">Meditate</button>
+            <button id="choice2">Continue resting</button>
+        </div>`;
+    
+    addDungeonLog(`<span class="Legendary">Your mind feels clear and focused. You can enter deep meditation for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span> to gain permanent inner strength.</span>`, choices);
+    
+    document.querySelector("#choice1").onclick = function () {
+        if (player.gold < cost) {
+            sfxDeny.play();
+            addDungeonLog("You need more gold to focus your mind properly.");
+        } else {
+            player.gold -= cost;
+            sfxBuff.play();
+            performMeditation();
+        }
+        dungeon.status.event = false;
+        dungeon.resting.meditationProgress = 0;
+    }
+    
+    document.querySelector("#choice2").onclick = function () {
+        sfxConfirm.play();
+        addDungeonLog("You decide to continue resting peacefully.");
+        dungeon.status.event = false;
+        dungeon.resting.meditationProgress = 0;
+    };
+}
+
+// Perform meditation and grant permanent bonus
+const performMeditation = () => {
+    const bonusTypes = ["hp", "atk", "def", "atkSpd", "vamp", "critRate"];
+    const selectedBonus = bonusTypes[Math.floor(Math.random() * bonusTypes.length)];
+    let value;
+    
+    switch (selectedBonus) {
+        case "hp":
+            value = 3;
+            player.bonusStats.hp += value;
+            break;
+        case "atk":
+            value = 2;
+            player.bonusStats.atk += value;
+            break;
+        case "def":
+            value = 2;
+            player.bonusStats.def += value;
+            break;
+        case "atkSpd":
+            value = 1;
+            player.bonusStats.atkSpd += value;
+            break;
+        case "vamp":
+            value = 0.3;
+            player.bonusStats.vamp += value;
+            break;
+        case "critRate":
+            value = 0.5;
+            player.bonusStats.critRate += value;
+            break;
+    }
+    
+    addDungeonLog(`<span class="Legendary">Through deep meditation, you permanently gained +${value}% ${selectedBonus.replace(/([A-Z])/g, " $1").toUpperCase()}. Your spirit feels stronger.</span>`);
+    dungeon.resting.meditationCost = Math.round(dungeon.resting.meditationCost * 1.5);
+    saveData();
+}
+
+// Generate temporary resting bonuses
+const generateRestingBonus = () => {
+    if (dungeon.resting.restingBonusActive) return; // Already have an active bonus
+    
+    const bonusTypes = ["focus", "vitality", "serenity", "preparation"];
+    const selectedType = bonusTypes[Math.floor(Math.random() * bonusTypes.length)];
+    
+    dungeon.resting.restingBonusActive = true;
+    dungeon.resting.restingBonusType = selectedType;
+    dungeon.resting.restingBonusDuration = 300; // 5 minutes
+    
+    switch (selectedType) {
+        case "focus":
+            dungeon.resting.restingBonusValue = 10;
+            applyFloorBuff("atkSpd", 10);
+            addDungeonLog(`<span style="color: #FFD700;">🧠 You feel mentally focused! (+10% ATK.SPD for the next 5 minutes)</span>`);
+            break;
+        case "vitality":
+            dungeon.resting.restingBonusValue = 15;
+            applyFloorBuff("atk", 15);
+            addDungeonLog(`<span style="color: #FF5722;">💪 You feel physically energized! (+15% ATK for the next 5 minutes)</span>`);
+            break;
+        case "serenity":
+            dungeon.resting.restingBonusValue = 12;
+            applyFloorBuff("def", 12);
+            addDungeonLog(`<span style="color: #2196F3;">🛡️ You feel inner peace! (+12% DEF for the next 5 minutes)</span>`);
+            break;
+        case "preparation":
+            dungeon.resting.restingBonusValue = 8;
+            // Increase health regen rate temporarily
+            dungeon.resting.healthRegenRate = 1.0;
+            addDungeonLog(`<span style="color: #4CAF50;">⚡ You feel well-prepared! (Double health regeneration for the next 5 minutes)</span>`);
+            break;
+    }
+}
+
+// Expire resting bonus
+const expireRestingBonus = () => {
+    const bonusType = dungeon.resting.restingBonusType;
+    
+    dungeon.resting.restingBonusActive = false;
+    dungeon.resting.restingBonusType = null;
+    dungeon.resting.restingBonusValue = 0;
+    dungeon.resting.restingBonusDuration = 0;
+    
+    if (bonusType === "preparation") {
+        dungeon.resting.healthRegenRate = 0.5; // Reset to normal
+    }
+    
+    addDungeonLog(`<span class="Common">The effects of your restful ${bonusType} have faded.</span>`);
 }
