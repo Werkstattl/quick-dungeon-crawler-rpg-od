@@ -138,7 +138,6 @@ const ratingSystem = {
     
     // Check conditions and show prompt if appropriate
     checkAndPrompt() {
-        console.log("Checking rating conditions...");
         if (this.shouldPrompt()) {
             this.showPrompt();
         }
