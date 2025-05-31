@@ -101,7 +101,7 @@ const dungeonEvent = () => {
         dungeon.action++;
         let choices;
         let eventRoll;
-        let eventTypes = ["blessing", "curse", "treasure", "enemy", "enemy", "nothing", "nothing", "nothing", "nothing", "monarch"];
+        let eventTypes = ["blessing", "curse", "treasure", "enemy", "enemy", "nothing", "nothing", "nothing", "nothing", "monarch", "shrine", "shrine", "shrine", "shrine", "shrine", "shrine"];
         if (dungeon.action > 2 && dungeon.action < 6) {
             eventTypes.push("nextroom");
         } else if (dungeon.action > 5) {
@@ -273,6 +273,35 @@ const dungeonEvent = () => {
                 } else {
                     nothingEvent();
                 }
+                break;
+            case "shrine":
+                eventRoll = randomizeNum(1, 3);
+                if (eventRoll == 1) {
+                    dungeon.status.event = true;
+                    let healCost = Math.round(player.stats.hpMax * 0.1) + (dungeon.progress.floor * 10);
+                    choices = `
+                            <div class="decision-panel">
+                                <button id="choice1">Pray (Heal)</button>
+                                <button id="choice2">Ignore</button>
+                            </div>`;
+                    addDungeonLog(`<span class="Epic">You discovered an ancient healing shrine. The air shimmers with restorative magic. Pray for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to restore your health?</span>`, choices);
+                    document.querySelector("#choice1").onclick = function () {
+                        if (player.gold < healCost) {
+                            sfxDeny.play();
+                            addDungeonLog("You don't have enough gold to make an offering.");
+                        } else {
+                            player.gold -= healCost;
+                            sfxBuff.play();
+                            shrineHealing();
+                        }
+                        dungeon.status.event = false;
+                    }
+                    document.querySelector("#choice2").onclick = function () {
+                        ignoreEvent();
+                    };
+                } else {
+                    nothingEvent();
+                }
         }
     }
 }
@@ -425,6 +454,31 @@ const cursedTotem = (curseLvl) => {
     sfxBuff.play();
     dungeon.settings.enemyScaling += 0.1;
     addDungeonLog(`The monsters in the dungeon became stronger and the loot quality improved. (Curse Lv.${curseLvl} > Curse Lv.${curseLvl + 1})`);
+    saveData();
+}
+
+// Shrine healing offering
+const shrineHealing = () => {
+    let healAmount = Math.round(player.stats.hpMax * (0.25 + Math.random() * 0.5)); // 25-75% healing
+    let actualHeal = Math.min(healAmount, player.stats.hpMax - player.stats.hp);
+    
+    if (player.stats.hp >= player.stats.hpMax) {
+        addDungeonLog("The shrine's magic flows through you, but you are already at full health. The divine energy grants you a temporary blessing instead!");
+        // Give a small temporary buff since they're already full health
+        let buffRoll = randomizeNum(1, 3);
+        if (buffRoll == 1) {
+            addDungeonLog("You feel your reflexes sharpen! (+2% ATK.SPD for this floor)");
+        } else if (buffRoll == 2) {
+            addDungeonLog("Your weapons gleam with holy light! (+5 ATK for this floor)");
+        } else {
+            addDungeonLog("Your armor feels lighter yet stronger! (+3 DEF for this floor)");
+        }
+    } else {
+        player.stats.hp += actualHeal;
+        addDungeonLog(`The shrine's divine light washes over you, healing you for <span class="Epic">${actualHeal} HP</span>. You feel renewed and blessed.`);
+    }
+    
+    playerLoadStats();
     saveData();
 }
 
