@@ -788,17 +788,17 @@ const generateRestingBonus = () => {
         case "focus":
             dungeon.resting.restingBonusValue = 10;
             applyFloorBuff("atkSpd", 10);
-            addDungeonLog(`<span style="color: #FFD700;">🧠 You feel mentally focused! (+10% ATK.SPD for the next 5 minutes)</span>`);
+            addDungeonLog(`<span style="color: #FFD700;">🧠 You feel mentally focused! (+10% ATK.SPD until next floor)</span>`);
             break;
         case "vitality":
             dungeon.resting.restingBonusValue = 15;
             applyFloorBuff("atk", 15);
-            addDungeonLog(`<span style="color: #FF5722;">💪 You feel physically energized! (+15% ATK for the next 5 minutes)</span>`);
+            addDungeonLog(`<span style="color: #FF5722;">💪 You feel physically energized! (+15% ATK until next floor)</span>`);
             break;
         case "serenity":
             dungeon.resting.restingBonusValue = 12;
             applyFloorBuff("def", 12);
-            addDungeonLog(`<span style="color: #2196F3;">🛡️ You feel inner peace! (+12% DEF for the next 5 minutes)</span>`);
+            addDungeonLog(`<span style="color: #2196F3;">🛡️ You feel inner peace! (+12% DEF until next floor)</span>`);
             break;
         case "preparation":
             dungeon.resting.restingBonusValue = 8;
