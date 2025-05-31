@@ -18,7 +18,7 @@ Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
 
 ## Credits
 
-This game started as a fork after the original creator stated that he would no longer continue development and was open to someone else taking it forward.
+This game began as a fork after the original developer announced they would no longer continue development and were open to someone else taking over.
 
 - [Red Pangilinan](https://github.com/redpangilinan) - Original Creator
 - [Aekashics](https://aekashics.itch.io/) - Monster Sprites
