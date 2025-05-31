@@ -39,7 +39,7 @@ let dungeon = {
         duration: 0,
         healthRegenRate: 0.5, // HP per second while resting
         meditationProgress: 0,
-        meditationCost: 100,
+        meditationCost: 1000,
         restingBonusActive: false,
         restingBonusType: null,
         restingBonusValue: 0,
@@ -769,7 +769,7 @@ const performMeditation = () => {
     }
     
     addDungeonLog(`<span class="Legendary">Through deep meditation, you permanently gained +${value}% ${selectedBonus.replace(/([A-Z])/g, " $1").toUpperCase()}. Your spirit feels stronger.</span>`);
-    dungeon.resting.meditationCost = Math.round(dungeon.resting.meditationCost * 1.5);
+    dungeon.resting.meditationCost = Math.round(dungeon.resting.meditationCost * 2.0);
     saveData();
 }
 
