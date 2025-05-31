@@ -28,6 +28,12 @@ let dungeon = {
         kills: 0,
         runtime: 0,
     },
+    floorBuffs: {
+        atk: 0,
+        def: 0,
+        atkSpd: 0,
+        currentFloor: 1,
+    },
     backlog: [],
     action: 0,
 };
@@ -49,6 +55,15 @@ const initialDungeonLoad = () => {
         };
         updateDungeonLog();
     }
+    
+    // Initialize floor buffs system
+    initializeFloorBuffs();
+    
+    // Check if we need to clear floor buffs due to floor advancement
+    if (dungeon.floorBuffs.currentFloor < dungeon.progress.floor) {
+        clearFloorBuffs();
+    }
+    
     loadDungeonProgress();
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
     dungeonAction.innerHTML = "Resting...";
@@ -90,6 +105,9 @@ const loadDungeonProgress = () => {
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
+        
+        // Clear floor buffs when advancing to next floor
+        clearFloorBuffs();
     }
     floorCount.innerHTML = `Floor ${dungeon.progress.floor}`;
     roomCount.innerHTML = `Room ${dungeon.progress.room}`;
@@ -464,14 +482,17 @@ const shrineHealing = () => {
     
     if (player.stats.hp >= player.stats.hpMax) {
         addDungeonLog("The shrine's magic flows through you, but you are already at full health. The divine energy grants you a temporary blessing instead!");
-        // Give a small temporary buff since they're already full health
+        // Give a random temporary buff since they're already full health
         let buffRoll = randomizeNum(1, 3);
         if (buffRoll == 1) {
+            applyFloorBuff("atkSpd", 2);
             addDungeonLog("You feel your reflexes sharpen! (+2% ATK.SPD for this floor)");
         } else if (buffRoll == 2) {
-            addDungeonLog("Your weapons gleam with holy light! (+5 ATK for this floor)");
+            applyFloorBuff("atk", 5);
+            addDungeonLog("Your weapons gleam with holy light! (+5% ATK for this floor)");
         } else {
-            addDungeonLog("Your armor feels lighter yet stronger! (+3 DEF for this floor)");
+            applyFloorBuff("def", 3);
+            addDungeonLog("Your armor feels lighter yet stronger! (+3% DEF for this floor)");
         }
     } else {
         player.stats.hp += actualHeal;
@@ -506,6 +527,45 @@ const blessingUp = () => {
 const blessingValidation = () => {
     if (player.blessing == undefined) {
         player.blessing = 1;
+    }
+}
+
+// ========= Floor Buff System ==========
+// Initialize floor buffs if they don't exist
+const initializeFloorBuffs = () => {
+    if (dungeon.floorBuffs == undefined) {
+        dungeon.floorBuffs = {
+            atk: 0,
+            def: 0,
+            atkSpd: 0,
+            currentFloor: dungeon.progress.floor,
+        };
+    }
+}
+
+// Apply a temporary floor buff
+const applyFloorBuff = (statType, value) => {
+    initializeFloorBuffs();
+    dungeon.floorBuffs[statType] += value;
+    dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
+    saveData();
+}
+
+// Clear floor buffs when advancing to next floor
+const clearFloorBuffs = () => {
+    initializeFloorBuffs();
+    if (dungeon.floorBuffs.currentFloor < dungeon.progress.floor) {
+        let hadBuffs = dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0;
+        
+        if (hadBuffs) {
+            addDungeonLog("<span class='Common'>The temporary shrine blessings fade as you enter the new floor.</span>");
+        }
+        
+        dungeon.floorBuffs.atk = 0;
+        dungeon.floorBuffs.def = 0;
+        dungeon.floorBuffs.atkSpd = 0;
+        dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
+        saveData();
     }
 }
 

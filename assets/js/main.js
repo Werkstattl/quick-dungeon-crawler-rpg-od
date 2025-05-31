@@ -458,10 +458,20 @@ const calculateStats = () => {
     let playerCRateBase = player.baseStats.critRate;
     let playerCDmgBase = player.baseStats.critDmg;
 
+    // Initialize floor buffs if they don't exist
+    if (dungeon.floorBuffs == undefined) {
+        dungeon.floorBuffs = {
+            atk: 0,
+            def: 0,
+            atkSpd: 0,
+            currentFloor: dungeon.progress.floor,
+        };
+    }
+
     player.stats.hpMax = Math.round((playerHpBase + playerHpBase * (player.bonusStats.hp / 100)) + player.equippedStats.hp);
-    player.stats.atk = Math.round((playerAtkBase + playerAtkBase * (player.bonusStats.atk / 100)) + player.equippedStats.atk);
-    player.stats.def = Math.round((playerDefBase + playerDefBase * (player.bonusStats.def / 100)) + player.equippedStats.def);
-    player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (player.bonusStats.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
+    player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (player.bonusStats.atk / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)));
+    player.stats.def = Math.round(((playerDefBase + playerDefBase * (player.bonusStats.def / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
+    player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (player.bonusStats.atkSpd / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
     player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp;
     player.stats.critRate = playerCRateBase + player.bonusStats.critRate + player.equippedStats.critRate;
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
@@ -508,6 +518,12 @@ const progressReset = () => {
         enemyLvlGap: 5,
         enemyBaseStats: 1,
         enemyScaling: 1.1,
+    };
+    dungeon.floorBuffs = {
+        atk: 0,
+        def: 0,
+        atkSpd: 0,
+        currentFloor: 1,
     };
     delete dungeon.enemyMultipliers;
     delete player.allocated;

@@ -86,7 +86,7 @@ const playerLoadStats = () => {
     playerCdmgElement.innerHTML = (player.stats.critDmg).toFixed(2).replace(rx, "$1") + "%";
 
     // Player Bonus Stats
-    document.querySelector("#bonus-stats").innerHTML = `
+    let bonusStatsHTML = `
     <h4>Bonus</h4>
     <p><i class="fas fa-heart"></i>+${player.bonusStats.hp.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-sword"></i>+${player.bonusStats.atk.toFixed(2).replace(rx, "$1")}%</p>
@@ -95,6 +95,22 @@ const playerLoadStats = () => {
     <p><i class="ra ra-dripping-blade"></i>+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-lightning-bolt"></i>+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>`;
+
+    // Add floor buffs display if any are active
+    if (dungeon.floorBuffs && (dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0)) {
+        bonusStatsHTML += `<h4 style="color: #FFD700;">Floor Buffs</h4>`;
+        if (dungeon.floorBuffs.atk > 0) {
+            bonusStatsHTML += `<p style="color: #FFD700;"><i class="ra ra-sword"></i>+${dungeon.floorBuffs.atk}%</p>`;
+        }
+        if (dungeon.floorBuffs.def > 0) {
+            bonusStatsHTML += `<p style="color: #FFD700;"><i class="ra ra-round-shield"></i>+${dungeon.floorBuffs.def}%</p>`;
+        }
+        if (dungeon.floorBuffs.atkSpd > 0) {
+            bonusStatsHTML += `<p style="color: #FFD700;"><i class="ra ra-plain-dagger"></i>+${dungeon.floorBuffs.atkSpd.toFixed(2).replace(rx, "$1")}%</p>`;
+        }
+    }
+
+    document.querySelector("#bonus-stats").innerHTML = bonusStatsHTML;
 }
 
 // Opens inventory
