@@ -72,11 +72,8 @@ const ratingSystem = {
         return true;
     },
     
-    // Show the rating prompt
     showPrompt() {
         this.config.lastPromptDate = new Date().toISOString();
-        
-        // Create modal content for rating request
         const modalContent = `
             <div class="content">
                 <div class="content-head">
@@ -84,9 +81,9 @@ const ratingSystem = {
                     <p onclick="closeDefaultModal()"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="modal-body">
-                    <p>Would you like to rate our game?</p>
                     <div class="decision-panel">
-                        <button id="rate-now-btn">Rate Now</button>
+                        <button id="rate-googleplay-btn">Rate on Google Play</button>
+                        <button id="rate-itchio-btn">Rate on Itch.io</button>
                         <button id="rate-later-btn">Later</button>
                         <button id="rate-never-btn">No Thanks</button>
                     </div>
@@ -94,14 +91,19 @@ const ratingSystem = {
             </div>
         `;
         
-        // Show the modal
         const defaultModal = document.getElementById('defaultModal');
         defaultModal.innerHTML = modalContent;
         defaultModal.style.display = "flex";
         
-        // Add event listeners
-        document.getElementById('rate-now-btn').addEventListener('click', () => {
-            this.openStoreForRating();
+        document.getElementById('rate-googleplay-btn').addEventListener('click', () => {
+            this.openGooglePlayForRating();
+            this.config.hasRated = true;
+            this.saveConfig();
+            closeDefaultModal();
+        });
+        
+        document.getElementById('rate-itchio-btn').addEventListener('click', () => {
+            this.openItchioForRating();
             this.config.hasRated = true;
             this.saveConfig();
             closeDefaultModal();
@@ -119,24 +121,24 @@ const ratingSystem = {
         });
     },
     
-    // Open the app store for rating
-    openStoreForRating() {
+    openGooglePlayForRating() {
         const isAndroid = /Android/i.test(navigator.userAgent);
         const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
         if (isAndroid) {
             window.open(`market://details?id=${packageName}`, '_system');
         } else {
             window.open(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
-            // window.open(`https://github.com/Werkstattl/quick-dungeon-crawler-rpg-od`, '_system');
         }
     },
     
-    // Save the current config to localStorage
+    openItchioForRating() {
+        window.open('https://7underlines.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
+    },
+    
     saveConfig() {
         localStorage.setItem('ratingConfig', JSON.stringify(this.config));
     },
     
-    // Check conditions and show prompt if appropriate
     checkAndPrompt() {
         if (this.shouldPrompt()) {
             this.showPrompt();
@@ -144,7 +146,6 @@ const ratingSystem = {
     }
 };
 
-// Function to close the default modal
 function closeDefaultModal() {
     const defaultModal = document.getElementById('defaultModal');
     defaultModal.style.display = "none";
