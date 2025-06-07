@@ -424,6 +424,7 @@ const executeForging = () => {
     
     // Show confirmation dialog
     defaultModalElement.style.display = "flex";
+    defaultModalElement.style.zIndex = "2"; // Ensure it appears above forge modal
     defaultModalElement.innerHTML = `
         <div class="content">
             <h3>Confirm Forging</h3>
@@ -474,6 +475,7 @@ const executeForging = () => {
     cancel.onclick = function () {
         sfxDecline.play();
         defaultModalElement.style.display = "none";
+        defaultModalElement.style.zIndex = "1"; // Reset z-index
         defaultModalElement.innerHTML = "";
     };
 };

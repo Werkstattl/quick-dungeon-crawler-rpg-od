@@ -149,4 +149,5 @@ const ratingSystem = {
 function closeDefaultModal() {
     const defaultModal = document.getElementById('defaultModal');
     defaultModal.style.display = "none";
+    defaultModal.style.zIndex = "1"; // Reset z-index when closing
 }
