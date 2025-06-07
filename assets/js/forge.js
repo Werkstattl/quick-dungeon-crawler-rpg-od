@@ -275,7 +275,8 @@ const createForgedEquipment = (item1, item2) => {
         tier: null,
         value: null,
         stats: [],
-        forged: true // Mark as forged item
+        forged: true, // Mark as forged item
+        baseCategory: null // Store original category for icon purposes
     };
     
     // Determine type (favor higher tier item)
@@ -283,6 +284,7 @@ const createForgedEquipment = (item1, item2) => {
     const secondaryItem = item1.tier >= item2.tier ? item2 : item1;
     
     forgedEquipment.category = generateForgedName(primaryItem.category, secondaryItem.category);
+    forgedEquipment.baseCategory = primaryItem.category; // Store original category for icons
     forgedEquipment.attribute = primaryItem.attribute;
     forgedEquipment.type = primaryItem.type;
     
@@ -384,7 +386,7 @@ const displayForgeResult = () => {
     resultItem.innerHTML = `
         <div class="forged-equipment ${forgeResult.rarity}">
             <h4 class="${forgeResult.rarity}">
-                ${equipmentIcon(forgeResult.category)}${forgeResult.rarity} ${forgeResult.category}
+                ${equipmentIcon(forgeResult.baseCategory || forgeResult.category)}${forgeResult.rarity} ${forgeResult.category}
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeResult.lvl} Tier ${forgeResult.tier}</h5>
             <ul>

@@ -387,7 +387,7 @@ const showInventory = () => {
 
         // Create an element to display the item's name
         let itemDiv = document.createElement('div');
-        let icon = equipmentIcon(item.category);
+        let icon = equipmentIcon(item.baseCategory || item.category);
         itemDiv.className = "items";
         itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${item.rarity} ${item.category}</p>`;
         itemDiv.addEventListener('click', function () {
@@ -416,7 +416,7 @@ const showEquipment = () => {
 
         // Create an element to display the item's name
         let equipDiv = document.createElement('div');
-        let icon = equipmentIcon(item.category);
+        let icon = equipmentIcon(item.baseCategory || item.category);
         equipDiv.className = "items";
         equipDiv.innerHTML = `<button class="${item.rarity}">${icon}</button>`;
         equipDiv.addEventListener('click', function () {
