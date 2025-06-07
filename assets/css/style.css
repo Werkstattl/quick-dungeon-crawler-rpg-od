@@ -941,7 +941,7 @@ header button i {
 /* ===== The Forge System ===== */
 #forgeModal .content {
     width: 90%;
-    max-width: 45rem;
+    max-width: 35rem;
     min-height: 40rem;
     max-height: 90vh;
     overflow-y: auto;
