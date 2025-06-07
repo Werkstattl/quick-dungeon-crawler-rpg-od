@@ -940,7 +940,6 @@ header button i {
 
 /* ===== The Forge System ===== */
 #forgeModal .content {
-    width: 90%;
     max-width: 35rem;
     min-height: 40rem;
     max-height: 90vh;
@@ -1189,7 +1188,6 @@ header button i {
     }
     
     #forgeModal .content {
-        width: 95%;
         margin: 0.25rem;
     }
 }
