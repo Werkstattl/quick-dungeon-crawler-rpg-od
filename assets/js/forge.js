@@ -124,14 +124,14 @@ const loadForgeEquipment = () => {
     const equipmentGrid = document.querySelector('#forge-equipment-grid');
     equipmentGrid.innerHTML = "";
     
-    // Only show Rare and above equipment
+    // Only show Rare and above equipment that hasn't been forged already
     const forgeableEquipment = player.inventory.equipment.filter(equipStr => {
         const equip = JSON.parse(equipStr);
-        return ['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity);
+        return ['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged;
     });
     
     if (forgeableEquipment.length === 0) {
-        equipmentGrid.innerHTML = "<p>No forgeable equipment available. You need Rare quality or better equipment.</p>";
+        equipmentGrid.innerHTML = "<p>No forgeable equipment available. You need Rare quality or better equipment that hasn't been forged already.</p>";
         return;
     }
     
