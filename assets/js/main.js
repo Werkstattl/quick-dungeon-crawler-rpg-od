@@ -668,6 +668,9 @@ const allocationPopup = () => {
             <div class="row primary-panel pad">
                 <p id="skill-desc">Attacks deal extra 8% of enemies' current health on hit.</p>
             </div>
+            <div class="row" id="forge-button-row" style="margin-top: 15px; display: none">
+                <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> The Forge</button>
+            </div>
             <button id="allocate-confirm">Confirm</button>
         </div>`;
     }
@@ -765,6 +768,14 @@ const allocationPopup = () => {
     let confirm = document.querySelector("#allocate-confirm");
     let reset = document.querySelector("#allocate-reset");
     let close = document.querySelector("#allocate-close");
+    let forgeBtn = document.querySelector("#open-forge-btn");
+    
+    // The Forge button click function (only if forge button exists)
+    if (forgeBtn) {
+        forgeBtn.onclick = function () {
+            openForgeModal();
+        };
+    }
     confirm.onclick = function () {
         if (points > 0) {
             sfxDeny.play();

@@ -138,6 +138,50 @@
                 <div class="companion-list" id="available-companions"></div>
             </div>
         </div>
+        <!-- Add forge modal -->
+        <div class="modal-container" id="forgeModal">
+            <div class="content">
+                <div class="content-head">
+                    <h3><i class="ra ra-anvil"></i> The Forge</h3>
+                    <p onclick="closeForgeModal()"><i class="fa fa-xmark"></i></p>
+                </div>
+                <div class="forge-description">
+                    <p>Combine two of your best equipment pieces to create something even more powerful!</p>
+                </div>
+                <div class="forge-slots">
+                    <div class="forge-slot-container">
+                        <h4>Material 1</h4>
+                        <div class="forge-slot" id="forge-slot-1">
+                            <p>Select equipment</p>
+                        </div>
+                    </div>
+                    <div class="forge-plus">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="forge-slot-container">
+                        <h4>Material 2</h4>
+                        <div class="forge-slot" id="forge-slot-2">
+                            <p>Select equipment</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="forge-result" id="forge-result" style="display: none;">
+                    <h4>Result Preview</h4>
+                    <div class="forge-result-item" id="forge-result-item"></div>
+                    <div class="forge-cost">
+                        <p>Cost: <i class="fas fa-coins" style="color: #FFD700;"></i><span id="forge-cost-amount">0</span> gold</p>
+                    </div>
+                </div>
+                <div class="forge-equipment-list" id="forge-equipment-list">
+                    <h4>Available Equipment</h4>
+                    <div class="forge-equipment-grid" id="forge-equipment-grid"></div>
+                </div>
+                <div class="forge-buttons">
+                    <button id="forge-confirm" disabled>Forge Equipment</button>
+                    <button id="forge-clear">Clear Selection</button>
+                </div>
+            </div>
+        </div>
     </main>
 	<script src="./assets/js/howler.min.js"></script>
     <script src="./assets/js/utility.js"></script>
@@ -145,6 +189,7 @@
     <script src="./assets/js/music.js"></script>
     <script src="./assets/js/player.js"></script>
     <script src="./assets/js/equipment.js"></script>
+    <script src="./assets/js/forge.js"></script>
     <script src="./assets/js/companion.js"></script>
     <script src="./assets/js/combat.js"></script>
     <script src="./assets/js/dungeon.js"></script>
