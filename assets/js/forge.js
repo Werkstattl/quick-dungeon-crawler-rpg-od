@@ -173,6 +173,14 @@ const loadForgeEquipment = () => {
 const selectForgeEquipment = (equipmentStr, index) => {
     const equipment = JSON.parse(equipmentStr);
     
+    // Check if this item is already selected in either slot
+    if ((selectedForgeItems[0] && selectedForgeItems[0].index === index) ||
+        (selectedForgeItems[1] && selectedForgeItems[1].index === index)) {
+        // Item already selected, play deny sound and return
+        sfxDeny.play();
+        return;
+    }
+    
     // Find first empty slot
     if (selectedForgeItems[0] === null) {
         selectedForgeItems[0] = { equipment, index };
