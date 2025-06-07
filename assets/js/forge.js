@@ -35,7 +35,6 @@ const purchaseForgeAccess = () => {
             <div class="forge-features">
                 <p>✓ Combine any two equipment pieces</p>
                 <p>✓ Create gear with higher tier and stats</p>
-                <p>✓ Unique forge-exclusive equipment names</p>
                 <p>✓ Permanent unlock across all runs</p>
             </div>
             <p><strong>Price: $${cost}</strong></p>
@@ -62,7 +61,7 @@ const purchaseForgeAccess = () => {
             defaultModalElement.innerHTML = `
                 <div class="content">
                     <h3>🎉 The Forge Unlocked!</h3>
-                    <p>You can now access The Forge from the main menu to combine your equipment into powerful new gear!</p>
+                    <p>You can now access The Forge to combine your equipment into powerful new gear!</p>
                     <button onclick="closeDefaultModal()">Awesome!</button>
                 </div>`;
         }, 500);
