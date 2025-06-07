@@ -139,11 +139,27 @@ const loadForgeEquipment = () => {
         const equip = JSON.parse(equipStr);
         const equipDiv = document.createElement('div');
         equipDiv.className = `forge-equipment-item ${equip.rarity}`;
+        
+        // Format stats display
+        let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+        const statsHtml = equip.stats.map(stat => {
+            const statName = Object.keys(stat)[0];
+            const statValue = stat[statName];
+            if (["critRate", "critDmg", "atkSpd", "vamp"].includes(statName)) {
+                return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
+            } else {
+                return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
+            }
+        }).join('');
+        
         equipDiv.innerHTML = `
             <div class="equipment-icon">${equipmentIcon(equip.category)}</div>
             <div class="equipment-info">
                 <p class="${equip.rarity}">${equip.category}</p>
                 <p>Lv.${equip.lvl} T${equip.tier}</p>
+                <ul class="equipment-stats">
+                    ${statsHtml}
+                </ul>
                 <p class="equipment-value">Value: ${nFormatter(equip.value)}</p>
             </div>
         `;
