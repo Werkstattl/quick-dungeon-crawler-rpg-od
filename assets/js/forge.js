@@ -173,8 +173,8 @@ const selectForgeEquipment = (equipmentStr, index) => {
     const equipment = JSON.parse(equipmentStr);
     
     // Check if this item is already selected in either slot
-    if ((selectedForgeItems[0] && selectedForgeItems[0].index === index) ||
-        (selectedForgeItems[1] && selectedForgeItems[1].index === index)) {
+    if ((selectedForgeItems[0] && selectedForgeItems[0].equipmentStr === equipmentStr) ||
+        (selectedForgeItems[1] && selectedForgeItems[1].equipmentStr === equipmentStr)) {
         // Item already selected, play deny sound and return
         sfxDeny.play();
         return;
@@ -182,14 +182,14 @@ const selectForgeEquipment = (equipmentStr, index) => {
     
     // Find first empty slot
     if (selectedForgeItems[0] === null) {
-        selectedForgeItems[0] = { equipment, index };
+        selectedForgeItems[0] = { equipment, equipmentStr };
         sfxEquip.play();
     } else if (selectedForgeItems[1] === null) {
-        selectedForgeItems[1] = { equipment, index };
+        selectedForgeItems[1] = { equipment, equipmentStr };
         sfxEquip.play();
     } else {
         // Both slots full, replace first item
-        selectedForgeItems[0] = { equipment, index };
+        selectedForgeItems[0] = { equipment, equipmentStr };
         sfxEquip.play();
     }
     
@@ -463,15 +463,21 @@ const executeForging = () => {
     let cancel = document.querySelector('#forge-cancel-confirm');
     
     execute.onclick = function () {
-        // Remove input items from inventory
-        const item1Index = selectedForgeItems[0].index;
-        const item2Index = selectedForgeItems[1].index;
+        // Remove input items from inventory by finding their exact matches
+        const item1String = selectedForgeItems[0].equipmentStr;
+        const item2String = selectedForgeItems[1].equipmentStr;
         
-        // Remove items (sort indices in descending order to avoid index shifting)
-        const indicesToRemove = [item1Index, item2Index].sort((a, b) => b - a);
-        indicesToRemove.forEach(index => {
-            player.inventory.equipment.splice(index, 1);
-        });
+        // Find and remove the first item
+        const item1Index = player.inventory.equipment.indexOf(item1String);
+        if (item1Index !== -1) {
+            player.inventory.equipment.splice(item1Index, 1);
+        }
+        
+        // Find and remove the second item (search again since indices may have shifted)
+        const item2Index = player.inventory.equipment.indexOf(item2String);
+        if (item2Index !== -1) {
+            player.inventory.equipment.splice(item2Index, 1);
+        }
         
         // Deduct gold
         player.gold -= forgeCost;
