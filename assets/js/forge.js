@@ -69,9 +69,7 @@ const purchaseForgeAccess = () => {
     
     cancel.onclick = function () {
         sfxDecline.play();
-        defaultModalElement.style.display = "none";
-        defaultModalElement.innerHTML = "";
-        menuModalElement.style.display = "flex";
+        allocationPopup();
     };
 };
 
