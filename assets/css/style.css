@@ -1106,10 +1106,8 @@ header button i {
 
 .forge-equipment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
-    max-height: 25rem;
-    overflow-y: auto;
     padding: 0.5rem;
 }
 
@@ -1153,7 +1151,6 @@ header button i {
     margin-top: 0.3rem;
     font-weight: bold;
     color: #4CAF50;
-    text-align: center;
     font-size: calc(0.8rem * var(--font-scale)) !important;
 }
 
@@ -1178,26 +1175,6 @@ header button i {
 #forge-confirm:disabled:hover {
     background-color: transparent;
     color: white;
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 600px) {
-    .forge-slots {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .forge-plus {
-        transform: rotate(90deg);
-    }
-    
-    .forge-equipment-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    #forgeModal .content {
-        margin: 0.25rem;
-    }
 }
 
 /* Anvil icon styling */
