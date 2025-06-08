@@ -546,7 +546,7 @@ const executeForging = () => {
                 <div class="forged-result">
                     <p class="${forgeResult.rarity}">Created: ${forgeResult.rarity} ${forgeResult.category}</p>
                 </div>
-                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null]; forgeResult = null; forgeCost = 0; updateForgeDisplay();">Continue</button>
+                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null]; forgeResult = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
             </div>`;
     };
     
