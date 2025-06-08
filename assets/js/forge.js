@@ -152,6 +152,14 @@ const loadForgeEquipment = () => {
         return;
     }
     
+    // Sort equipment by rarity (highest to lowest)
+    const rarityOrder = ['Heirloom', 'Legendary', 'Epic', 'Rare'];
+    forgeableEquipment.sort((a, b) => {
+        const rarityA = rarityOrder.indexOf(a.equip.rarity);
+        const rarityB = rarityOrder.indexOf(b.equip.rarity);
+        return rarityA - rarityB;
+    });
+    
     forgeableEquipment.forEach((item, index) => {
         const { equipStr, equip, source } = item;
         const equipDiv = document.createElement('div');
