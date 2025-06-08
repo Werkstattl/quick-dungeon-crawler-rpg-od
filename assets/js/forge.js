@@ -33,7 +33,7 @@ const purchaseForgeAccess = () => {
             <h3><i class="ra ra-anvil"></i> Unlock The Forge</h3>
             <p>The Forge is a powerful late-game feature that allows you to combine your best equipment into even more powerful gear!</p>
             <div class="forge-features">
-                <p>✓ Combine any two equipment pieces</p>
+                <p>✓ Combine two  equipment pieces</p>
                 <p>✓ Create gear with higher tier and stats</p>
                 <p>✓ Permanent unlock across all runs</p>
             </div>
