@@ -341,7 +341,12 @@ const createForgedEquipment = (item1, item2) => {
     
     // Apply forge bonus (20% increase)
     Object.keys(combinedStats).forEach(statName => {
-        combinedStats[statName] = Math.round(combinedStats[statName] * 1.2 * 100) / 100;
+        // Round HP, ATK, DEF to whole numbers, keep decimals for percentage stats
+        if (["hp", "atk", "def"].includes(statName)) {
+            combinedStats[statName] = Math.round(combinedStats[statName] * 1.2);
+        } else {
+            combinedStats[statName] = Math.round(combinedStats[statName] * 1.2 * 100) / 100;
+        }
         forgedEquipment.stats.push({ [statName]: combinedStats[statName] });
     });
     
