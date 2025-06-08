@@ -121,10 +121,30 @@ const loadForgeEquipment = () => {
     const equipmentGrid = document.querySelector('#forge-equipment-grid');
     equipmentGrid.innerHTML = "";
     
-    // Only show Rare and above equipment that hasn't been forged already
-    const forgeableEquipment = player.inventory.equipment.filter(equipStr => {
+    // Collect forgeable equipment from both inventory and equipped items
+    const forgeableEquipment = [];
+    
+    // Add inventory equipment
+    player.inventory.equipment.forEach(equipStr => {
         const equip = JSON.parse(equipStr);
-        return ['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged;
+        if (['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged) {
+            forgeableEquipment.push({
+                equipStr,
+                equip,
+                source: 'inventory'
+            });
+        }
+    });
+    
+    // Add equipped items
+    player.equipped.forEach(equip => {
+        if (['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged) {
+            forgeableEquipment.push({
+                equipStr: JSON.stringify(equip),
+                equip,
+                source: 'equipped'
+            });
+        }
     });
     
     if (forgeableEquipment.length === 0) {
@@ -132,8 +152,8 @@ const loadForgeEquipment = () => {
         return;
     }
     
-    forgeableEquipment.forEach((equipStr, index) => {
-        const equip = JSON.parse(equipStr);
+    forgeableEquipment.forEach((item, index) => {
+        const { equipStr, equip, source } = item;
         const equipDiv = document.createElement('div');
         equipDiv.className = `forge-equipment-item ${equip.rarity}`;
         
@@ -158,16 +178,17 @@ const loadForgeEquipment = () => {
                     ${statsHtml}
                 </ul>
                 <p class="equipment-value">Value: ${nFormatter(equip.value)}</p>
+                ${source === 'equipped' ? '<p class="equipped-indicator">⚔️ Equipped</p>' : ''}
             </div>
         `;
         
-        equipDiv.addEventListener('click', () => selectForgeEquipment(equipStr, index));
+        equipDiv.addEventListener('click', () => selectForgeEquipment(equipStr, index, source));
         equipmentGrid.appendChild(equipDiv);
     });
 };
 
 // Select equipment for forging
-const selectForgeEquipment = (equipmentStr, index) => {
+const selectForgeEquipment = (equipmentStr, index, source = 'inventory') => {
     const equipment = JSON.parse(equipmentStr);
     
     // Check if this item is already selected in either slot
@@ -180,14 +201,14 @@ const selectForgeEquipment = (equipmentStr, index) => {
     
     // Find first empty slot
     if (selectedForgeItems[0] === null) {
-        selectedForgeItems[0] = { equipment, equipmentStr };
+        selectedForgeItems[0] = { equipment, equipmentStr, source };
         sfxEquip.play();
     } else if (selectedForgeItems[1] === null) {
-        selectedForgeItems[1] = { equipment, equipmentStr };
+        selectedForgeItems[1] = { equipment, equipmentStr, source };
         sfxEquip.play();
     } else {
         // Both slots full, replace first item
-        selectedForgeItems[0] = { equipment, equipmentStr };
+        selectedForgeItems[0] = { equipment, equipmentStr, source };
         sfxEquip.play();
     }
     
@@ -466,21 +487,31 @@ const executeForging = () => {
     let cancel = document.querySelector('#forge-cancel-confirm');
     
     execute.onclick = function () {
-        // Remove input items from inventory by finding their exact matches
-        const item1String = selectedForgeItems[0].equipmentStr;
-        const item2String = selectedForgeItems[1].equipmentStr;
+        // Remove input items from their respective sources
+        const item1 = selectedForgeItems[0];
+        const item2 = selectedForgeItems[1];
         
-        // Find and remove the first item
-        const item1Index = player.inventory.equipment.indexOf(item1String);
-        if (item1Index !== -1) {
-            player.inventory.equipment.splice(item1Index, 1);
-        }
+        // Helper function to remove item from appropriate source
+        const removeItem = (item) => {
+            if (item.source === 'inventory') {
+                const itemIndex = player.inventory.equipment.indexOf(item.equipmentStr);
+                if (itemIndex !== -1) {
+                    player.inventory.equipment.splice(itemIndex, 1);
+                }
+            } else if (item.source === 'equipped') {
+                // Find and remove from equipped array
+                const equippedIndex = player.equipped.findIndex(equipped => 
+                    JSON.stringify(equipped) === item.equipmentStr
+                );
+                if (equippedIndex !== -1) {
+                    player.equipped.splice(equippedIndex, 1);
+                }
+            }
+        };
         
-        // Find and remove the second item (search again since indices may have shifted)
-        const item2Index = player.inventory.equipment.indexOf(item2String);
-        if (item2Index !== -1) {
-            player.inventory.equipment.splice(item2Index, 1);
-        }
+        // Remove both items
+        removeItem(item1);
+        removeItem(item2);
         
         // Deduct gold
         player.gold -= forgeCost;

@@ -1149,6 +1149,14 @@ header button i {
     font-size: calc(0.8rem * var(--font-scale)) !important;
 }
 
+.equipped-indicator {
+    margin-top: 0.3rem;
+    font-weight: bold;
+    color: #4CAF50;
+    text-align: center;
+    font-size: calc(0.8rem * var(--font-scale)) !important;
+}
+
 .forge-buttons {
     display: flex;
     justify-content: center;
