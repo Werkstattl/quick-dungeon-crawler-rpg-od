@@ -55,14 +55,14 @@ const purchaseForgeAccess = () => {
         defaultModalElement.style.display = "none";
         defaultModalElement.innerHTML = "";
         
-        // Show success message
+        // Show success message and then open forge
         setTimeout(() => {
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
                 <div class="content">
                     <h3>🎉 The Forge Unlocked!</h3>
                     <p>You can now access The Forge to combine your equipment into powerful new gear!</p>
-                    <button onclick="closeDefaultModal()">Awesome!</button>
+                    <button onclick="closeDefaultModal(); setTimeout(() => { openForgeModal(); }, 100);">Open The Forge</button>
                 </div>`;
         }, 500);
     };
