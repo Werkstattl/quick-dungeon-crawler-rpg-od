@@ -10,7 +10,7 @@ The game is available for Android and Desktop platforms. You can find official r
 
 [![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.thomaspeissl.quick_dungeon_crawler_od.twa)
 
-[![Play on itch.io](https://img.shields.io/badge/Play%20on-itch.io-red?logo=itch-io)](https://7underlines.itch.io/quick-dungeon-crawler-on-demand)
+[![Play on itch.io](https://img.shields.io/badge/Play%20on-itch.io-red?logo=itch-io)](https://werkstattl.itch.io/quick-dungeon-crawler-on-demand)
 
 [![Play in Browser](https://img.shields.io/badge/Play%20in-Browser-blue?logo=google-chrome&logoColor=white)](https://dungeon.werkstattl.com/)
 
