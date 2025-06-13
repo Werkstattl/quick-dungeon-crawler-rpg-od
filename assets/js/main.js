@@ -168,6 +168,7 @@ window.addEventListener("load", function () {
             <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
             <button id="quit-run">Abandon</button>
+            <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
         </div>`;
 
         let close = document.querySelector('#close-menu');
@@ -176,6 +177,11 @@ window.addEventListener("load", function () {
         let quitRun = document.querySelector('#quit-run');
         let exportImport = document.querySelector('#export-import');
         let volumeSettings = document.querySelector('#volume-btn');
+        let redditLink = document.querySelector('#reddit-link');
+        // Reddit button click function
+        redditLink.onclick = function () {
+            window.open('https://www.reddit.com/r/QuickDungeonCrawler/', '_blank');
+        }
 
         // Player profile click function
         playerMenu.onclick = function () {
