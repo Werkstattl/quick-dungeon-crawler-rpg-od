@@ -82,8 +82,8 @@ const ratingSystem = {
                 </div>
                 <div class="modal-body">
                     <div class="decision-panel">
-                        <button id="rate-googleplay-btn">Rate on Google Play</button>
-                        <button id="rate-itchio-btn">Rate on Itch.io</button>
+                        <button id="rate-googleplay-btn">Rate Now</button>
+                        <button id="rate-itchio-btn" style="display: none">Rate on Itch.io</button>
                         <button id="rate-later-btn">Later</button>
                         <button id="rate-never-btn">No Thanks</button>
                     </div>
@@ -132,7 +132,7 @@ const ratingSystem = {
     },
     
     openItchioForRating() {
-        window.open('https://7underlines.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
+        window.open('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
     },
     
     saveConfig() {
