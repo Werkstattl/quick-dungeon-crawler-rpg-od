@@ -65,7 +65,7 @@ class Companion {
 
 // Available companions list
 const companionTypes = [
-    {id: 1, name: "Wolf Pup", rarity: "Common", baseHp: 20, baseAtk: 70},
+    {id: 1, name: "Wolf Pup", rarity: "Common", baseHp: 20, baseAtk: 80},
     {id: 2, name: "Fairy Helper", rarity: "Uncommon", baseHp: 15, baseAtk: 150},
     {id: 3, name: "Mini Dragon", rarity: "Rare", baseHp: 30, baseAtk: 280},
     {id: 4, name: "Shadow Cat", rarity: "Epic", baseHp: 40, baseAtk: 450},
