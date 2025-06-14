@@ -83,7 +83,7 @@ const ratingSystem = {
                 <div class="modal-body">
                     <div class="decision-panel">
                         <button id="rate-googleplay-btn">Rate Now</button>
-                        <button id="rate-itchio-btn" style="display: none">Rate on Itch.io</button>
+                        <button id="rate-itchio-btn" style="display: none">Rate Now</button>
                         <button id="rate-later-btn">Later</button>
                         <button id="rate-never-btn">No Thanks</button>
                     </div>
