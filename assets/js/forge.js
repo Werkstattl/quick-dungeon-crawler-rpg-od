@@ -13,7 +13,6 @@ const initializeForge = () => {
     // Initialize forge unlock status if not exists
     if (player.forgeUnlocked === undefined) {
         player.forgeUnlocked = false;
-        saveData();
     }
 };
 
