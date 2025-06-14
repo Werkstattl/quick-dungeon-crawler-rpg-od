@@ -19,6 +19,10 @@ If you like this game, please consider [supporting me on GitGub Sponsors](https:
 Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
 
 
+## Community
+
+- [Official Subreddit](https://www.reddit.com/r/QuickDungeonCrawler/)
+
 ## Credits
 
 This game began as a fork after the original developer announced they would no longer continue development and were open to someone else taking over.
