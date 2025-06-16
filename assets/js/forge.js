@@ -1,5 +1,6 @@
 // ========== The Forge System ==========
 // Late game feature for combining equipment
+import { registerForgeUnlock, buyForgeUnlock } from './InAppPurchaseHelper.js';
 
 let forgeModalElement = null;
 let selectedForgeItems = [null, null];
@@ -21,10 +22,18 @@ const canAccessForge = () => {
     return player.forgeUnlocked; // Late game requirement
 };
 
-// Purchase forge access (simulate in-app purchase)
+// Call this during app/game initialization
+registerForgeUnlock(() => {
+    player.forgeUnlocked = true;
+    saveData();
+    // Optionally show success UI
+}, (err) => {
+    // Optionally show error UI
+    alert('Payment failed: ' + err.message);
+});
+
+// Purchase forge access (real in-app purchase)
 const purchaseForgeAccess = () => {
-    const cost = 4.99; // Simulated price
-    
     // Show purchase confirmation
     defaultModalElement.style.display = "flex";
     defaultModalElement.innerHTML = `
@@ -36,7 +45,6 @@ const purchaseForgeAccess = () => {
                 <p>✓ Create gear with higher tier and stats</p>
                 <p>✓ Permanent unlock across all runs</p>
             </div>
-            <p><strong>Price: $${cost}</strong></p>
             <div class="button-container">
                 <button id="purchase-confirm">Purchase</button>
                 <button id="purchase-cancel">Cancel</button>
@@ -47,23 +55,9 @@ const purchaseForgeAccess = () => {
     let cancel = document.querySelector('#purchase-cancel');
     
     confirm.onclick = function () {
-        sfxConfirm.play();
-        player.forgeUnlocked = true;
-        saveData();
-        
+        buyForgeUnlock();
         defaultModalElement.style.display = "none";
         defaultModalElement.innerHTML = "";
-        
-        // Show success message and then open forge
-        setTimeout(() => {
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
-                <div class="content">
-                    <h3>🎉 The Forge Unlocked!</h3>
-                    <p>You can now access The Forge to combine your equipment into powerful new gear!</p>
-                    <button onclick="closeDefaultModal(); setTimeout(() => { openForgeModal(); }, 100);">Open The Forge</button>
-                </div>`;
-        }, 500);
     };
     
     cancel.onclick = function () {
