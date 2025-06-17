@@ -1,6 +1,5 @@
 // ========== The Forge System ==========
 // Late game feature for combining equipment
-import { registerForgeUnlock, buyForgeUnlock } from './InAppPurchaseHelper.js';
 
 let forgeModalElement = null;
 let selectedForgeItems = [null, null];
@@ -15,26 +14,27 @@ const initializeForge = () => {
     if (player.forgeUnlocked === undefined) {
         player.forgeUnlocked = false;
     }
+    if (player.forgeUnlocked) {
+        return;
+    }
+    // Call this during app/game initialization
+    window.registerForgeUnlock(() => {
+        player.forgeUnlocked = true;
+        saveData();
+        // Optionally show success UI
+    }, (err) => {
+        // Optionally show error UI
+        alert('Payment failed: ' + err.message);
+    });
 };
 
 // Check if player can access the forge
 const canAccessForge = () => {
-    return player.forgeUnlocked; // Late game requirement
+    return player.forgeUnlocked;
 };
 
-// Call this during app/game initialization
-registerForgeUnlock(() => {
-    player.forgeUnlocked = true;
-    saveData();
-    // Optionally show success UI
-}, (err) => {
-    // Optionally show error UI
-    alert('Payment failed: ' + err.message);
-});
-
-// Purchase forge access (real in-app purchase)
+// Show purchase confirmation
 const purchaseForgeAccess = () => {
-    // Show purchase confirmation
     defaultModalElement.style.display = "flex";
     defaultModalElement.innerHTML = `
         <div class="content">
@@ -55,9 +55,13 @@ const purchaseForgeAccess = () => {
     let cancel = document.querySelector('#purchase-cancel');
     
     confirm.onclick = function () {
-        buyForgeUnlock();
-        defaultModalElement.style.display = "none";
-        defaultModalElement.innerHTML = "";
+        if (window.cordova && window.InAppPurchase2) {
+            window.buyForgeUnlock();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+        } else {
+            alert('The Forge is currently only available in the Google Play version of "Quick Dungeon Crawler". Please download the app to unlock this feature.');
+        }
     };
     
     cancel.onclick = function () {
@@ -550,8 +554,3 @@ const executeForging = () => {
         defaultModalElement.innerHTML = "";
     };
 };
-
-// Initialize forge when page loads
-window.addEventListener('load', () => {
-    setTimeout(initializeForge, 100);
-});

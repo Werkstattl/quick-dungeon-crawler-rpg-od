@@ -418,7 +418,7 @@ const runLoad = (id, display) => {
     setTimeout(async () => {
         loader.style.display = "none";
         document.querySelector(`#${id}`).style.display = `${display}`;
-    }, 1000);
+    }, 100);
 }
 
 // Start the game
@@ -674,7 +674,7 @@ const allocationPopup = () => {
             <div class="row primary-panel pad">
                 <p id="skill-desc">Attacks deal extra 8% of enemies' current health on hit.</p>
             </div>
-            <div class="row" id="forge-button-row" style="margin-top: 15px; display: none">
+            <div class="row" id="forge-button-row" style="margin-top: 15px;">
                 <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> The Forge</button>
             </div>
             <button id="allocate-confirm">Confirm</button>
@@ -861,6 +861,7 @@ const allocationPopup = () => {
         defaultModalElement.innerHTML = "";
         document.querySelector("#title-screen").style.filter = "brightness(100%)";
     }
+    initializeForge();
 }
 
 const objectValidation = () => {
