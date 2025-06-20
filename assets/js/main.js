@@ -1,6 +1,5 @@
 window.addEventListener("load", function () {
     // Apply saved font size on page load
-    applyFontSize();
     
     if (player === null) {
         runLoad("character-creation", "flex");
@@ -8,6 +7,7 @@ window.addEventListener("load", function () {
         let target = document.querySelector("#title-screen");
         target.style.display = "flex";
     }
+    nativeInit();
 
     // Title Screen Validation
     document.querySelector("#title-screen").addEventListener("click", function () {
@@ -408,6 +408,7 @@ window.addEventListener("load", function () {
             dimDungeon.style.filter = "brightness(100%)";
         };
     });
+    applyFontSize();
     ratingSystem.init();
 });
 

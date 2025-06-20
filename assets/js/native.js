@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+async function nativeInit() {
   const waitForCapacitor = () => {
     const maxAttempts = 100;
     let attempts = 0;
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   await waitForCapacitor();
   if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-    await new Promise(resolve => setTimeout(resolve, 200));
     if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
       await window.Capacitor.Plugins.SplashScreen.hide();
     }
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (CdvPurchase && CdvPurchase.store) {  
     initializePurchases();
   }
-});
+}
 
 function initializePurchases() {
   // CdvPurchase.store.register([{
