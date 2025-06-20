@@ -5,26 +5,23 @@ let forgeModalElement = null;
 let selectedForgeItems = [null, null];
 let forgeResult = null;
 let forgeCost = 0;
+let forgeUnlocked = false;
 
 const FORGE_PRODUCT_ID = 'forge_unlock_premium';
 
 // Initialize forge system
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
-    
-    // Initialize forge unlock status if not exists
-    if (player.forgeUnlocked === undefined) {
-        player.forgeUnlocked = false;
-    }
-    if (player.forgeUnlocked) {
-        return;
-    }
 };
 
 // Check if player can access the forge
 const canAccessForge = () => {
-    return player.forgeUnlocked;
+    return forgeUnlocked;
 };
+
+function unlockForge() {
+    forgeUnlocked = true;
+}
 
 // Show purchase confirmation
 const purchaseForgeAccess = () => {
@@ -61,14 +58,10 @@ const purchaseForgeAccess = () => {
     };
 };
 
-// Open forge modal
 const openForgeModal = () => {
     if (!canAccessForge()) {
-        // Show unlock prompt if not accessible
-        if (!player.forgeUnlocked) {
-            purchaseForgeAccess();
-            return;
-        }
+        purchaseForgeAccess();
+        return;
     }
     
     sfxOpen.play();

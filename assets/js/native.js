@@ -4,13 +4,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     let attempts = 0;
     return new Promise((resolve, reject) => {
       const checkCapacitor = () => {
-        console.log('Checking for Capacitor...');
         if (window.Capacitor) {
           resolve();
         } else if (++attempts >= maxAttempts) {
           resolve();
         } else {
-          setTimeout(checkCapacitor, 150);
+          setTimeout(checkCapacitor, 300);
         }
       };
       checkCapacitor();
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   await waitForCapacitor();
   if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 200));
     if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
       await window.Capacitor.Plugins.SplashScreen.hide();
     }
@@ -43,9 +42,7 @@ function initializePurchases() {
   }]);
   CdvPurchase.store.when()
     .approved(transaction => {
-      defaultModalElement.style.display = "none";
-      defaultModalElement.innerHTML = "";
-      player.forgeUnlocked = true;
+      unlockForge();
       transaction.finish();
     });
   // CdvPurchase.store.initialize([
@@ -57,6 +54,9 @@ function initializePurchases() {
 }
 
 function buyForgeUnlock() {
+  defaultModalElement.style.display = "none";
+  defaultModalElement.innerHTML = "";
+  document.querySelector("#title-screen").style.filter = "brightness(100%)";
   // CdvPurchase.store.get('test-non-consumable').getOffer().order();
   CdvPurchase.store.get(FORGE_PRODUCT_ID).getOffer().order();
 }
