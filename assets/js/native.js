@@ -43,7 +43,6 @@ function initializePurchases() {
   }]);
   CdvPurchase.store.when()
     .approved(transaction => {
-      alert('Purchase approved');
       defaultModalElement.style.display = "none";
       defaultModalElement.innerHTML = "";
       player.forgeUnlocked = true;
