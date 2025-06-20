@@ -6,6 +6,8 @@ let selectedForgeItems = [null, null];
 let forgeResult = null;
 let forgeCost = 0;
 
+const FORGE_PRODUCT_ID = 'forge_unlock_premium';
+
 // Initialize forge system
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
@@ -17,15 +19,6 @@ const initializeForge = () => {
     if (player.forgeUnlocked) {
         return;
     }
-    // Call this during app/game initialization
-    window.registerForgeUnlock(() => {
-        player.forgeUnlocked = true;
-        saveData();
-        // Optionally show success UI
-    }, (err) => {
-        // Optionally show error UI
-        alert('Payment failed: ' + err.message);
-    });
 };
 
 // Check if player can access the forge
@@ -55,10 +48,8 @@ const purchaseForgeAccess = () => {
     let cancel = document.querySelector('#purchase-cancel');
     
     confirm.onclick = function () {
-        if (window.cordova && window.InAppPurchase2) {
-            window.buyForgeUnlock();
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
+        if (window.cordova) {
+            buyForgeUnlock();
         } else {
             alert('The Forge is currently only available in the Google Play version of "Quick Dungeon Crawler". Please download the app to unlock this feature.');
         }
