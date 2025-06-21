@@ -343,8 +343,11 @@ const calculateForgeResult = () => {
     const item2 = selectedForgeItems[1].equipment;
     const item3 = selectedForgeItems[2].equipment;
 
-    // Ensure all items share the same tier
-    if (!(item1.tier === item2.tier && item1.tier === item3.tier)) {
+    // Ensure all items share the same tier and rarity
+    if (!(item1.tier === item2.tier &&
+          item1.tier === item3.tier &&
+          item1.rarity === item2.rarity &&
+          item1.rarity === item3.rarity)) {
         document.querySelector('#forge-result').style.display = 'none';
         forgeCost = 0;
         return;
