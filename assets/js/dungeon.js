@@ -376,12 +376,10 @@ const mimicBattle = (type) => {
 
 // Guardian boss fight
 const guardianBattle = () => {
-    incrementRoom();
     generateRandomEnemy("guardian");
     showCombatInfo();
     startCombat(bgmBattleGuardian);
     addCombatLog(`Floor Guardian ${enemy.name} is blocking your way.`);
-    addDungeonLog("You moved to the next floor.");
 }
 
 // Guardian boss fight
@@ -598,6 +596,7 @@ const clearFloorBuffs = () => {
         dungeon.floorBuffs.atkSpd = 0;
         dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
         saveData();
+        playerLoadStats();
     }
 }
 

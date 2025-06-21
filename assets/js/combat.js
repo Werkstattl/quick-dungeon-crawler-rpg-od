@@ -72,6 +72,12 @@ const hpValidation = () => {
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
 
+            if (enemy.condition === "guardian") {
+                incrementRoom();
+                clearFloorBuffs();
+                addDungeonLog("You moved to the next floor.");
+            }
+
             // Clear combat backlog and transition to dungeon exploration
             let dimDungeon = document.querySelector('#dungeon-main');
             dimDungeon.style.filter = "brightness(100%)";

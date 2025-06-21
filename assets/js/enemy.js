@@ -3,6 +3,7 @@ let enemy = {
     name: null,
     type: null,
     lvl: null,
+    condition: null,
     stats: {
         hp: null,
         hpMax: null,
@@ -25,6 +26,7 @@ let enemy = {
 };
 
 const generateRandomEnemy = (condition) => {
+    enemy.condition = condition;
     // List of possible enemy names
     const enemyNames = [
         // Goblin
