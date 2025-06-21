@@ -351,8 +351,17 @@ const createForgedEquipment = (item1, item2, item3) => {
     // Generate a fresh piece of equipment similar to a normal dungeon drop
     const forgedEquipment = createEquipment(false);
 
-    // Upgrade tier based on input items
-    forgedEquipment.tier = Math.min(10, item1.tier + 1);
+    // Set tier to the same as input items
+    forgedEquipment.tier = item1.tier;
+
+    // Increase rarity by one step if possible
+    const rarityOrder = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom'];
+    let currentRarityIndex = rarityOrder.indexOf(item1.rarity);
+    if (currentRarityIndex < rarityOrder.length - 1) {
+        forgedEquipment.rarity = rarityOrder[currentRarityIndex + 1];
+    } else {
+        forgedEquipment.rarity = item1.rarity; // Already max rarity
+    }
 
     // Mark item as forged
     forgedEquipment.forged = true;
