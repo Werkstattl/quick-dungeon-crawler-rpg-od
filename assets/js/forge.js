@@ -354,6 +354,9 @@ const createForgedEquipment = (item1, item2, item3) => {
     // Set tier to the same as input items
     forgedEquipment.tier = item1.tier;
 
+    // Set level to the average of the input items (rounded)
+    forgedEquipment.lvl = Math.round((item1.lvl + item2.lvl + item3.lvl) / 3);
+
     // Increase rarity by one step if possible
     const rarityOrder = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom'];
     let currentRarityIndex = rarityOrder.indexOf(item1.rarity);
