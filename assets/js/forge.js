@@ -124,13 +124,8 @@ const loadForgeEquipment = () => {
         });
     });
     
-    if (forgeableEquipment.length === 0) {
-        equipmentGrid.innerHTML = "<p>No forgeable equipment available.</p>";
-        return;
-    }
-    
     // Sort equipment by rarity (highest to lowest), then by level (highest to lowest)
-    const rarityOrder = ['Heirloom', 'Legendary', 'Epic', 'Rare'];
+    const rarityOrder = ['Heirloom', 'Legendary', 'Epic', 'Rare', 'Uncommon', 'Common'];
     forgeableEquipment.sort((a, b) => {
         const rarityA = rarityOrder.indexOf(a.equip.rarity);
         const rarityB = rarityOrder.indexOf(b.equip.rarity);
