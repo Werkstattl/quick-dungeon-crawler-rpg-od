@@ -90,20 +90,23 @@ const loadForgeEquipment = () => {
     
     // Sort equipment by rarity (highest to lowest), then by level (highest to lowest)
     const rarityOrder = ['Heirloom', 'Legendary', 'Epic', 'Rare', 'Uncommon', 'Common'];
-    forgeableEquipment.sort((a, b) => {
+    
+    // Filter out equipment that is already selected in any forge slot
+    const selectedStrs = selectedForgeItems.filter(Boolean).map(item => item.equipmentStr);
+    const filteredEquipment = forgeableEquipment.filter(item => !selectedStrs.includes(item.equipStr));
+
+    filteredEquipment.sort((a, b) => {
         const rarityA = rarityOrder.indexOf(a.equip.rarity);
         const rarityB = rarityOrder.indexOf(b.equip.rarity);
-        
         // First sort by rarity
         if (rarityA !== rarityB) {
             return rarityA - rarityB;
         }
-        
         // If same rarity, sort by level (highest to lowest)
         return b.equip.lvl - a.equip.lvl;
     });
     
-    forgeableEquipment.forEach((item, index) => {
+    filteredEquipment.forEach((item, index) => {
         const { equipStr, equip, source } = item;
         const equipDiv = document.createElement('div');
         equipDiv.className = `forge-equipment-item ${equip.rarity}`;
@@ -174,6 +177,7 @@ const selectForgeEquipment = (equipmentStr, index, source = 'inventory') => {
     }
     
     updateForgeDisplay();
+    loadForgeEquipment(); // <-- update equipment list after selection
     calculateForgeResult();
 };
 
@@ -197,6 +201,7 @@ const updateForgeDisplay = () => {
             forgeResult = null;
             forgeCost = 0;
             updateForgeDisplay();
+            loadForgeEquipment(); // update equipment list after removal
             document.querySelector('#forge-result').style.display = 'none';
             sfxUnequip.play();
         };
@@ -223,6 +228,7 @@ const updateForgeDisplay = () => {
             forgeResult = null;
             forgeCost = 0;
             updateForgeDisplay();
+            loadForgeEquipment(); // update equipment list after removal
             document.querySelector('#forge-result').style.display = 'none';
             sfxUnequip.play();
         };
@@ -250,6 +256,7 @@ const updateForgeDisplay = () => {
                 forgeResult = null;
                 forgeCost = 0;
                 updateForgeDisplay();
+                loadForgeEquipment(); // update equipment list after removal
                 document.querySelector('#forge-result').style.display = 'none';
                 sfxUnequip.play();
             };
