@@ -940,7 +940,8 @@ header button i {
 
 /* ===== The Forge System ===== */
 #forgeModal .content {
-    max-width: 35rem;
+    max-width: 32rem;
+    width: 95vw;
     min-height: 40rem;
     max-height: 90vh;
     overflow-y: auto;
@@ -1177,4 +1178,25 @@ header button i {
 /* Anvil icon styling */
 .ra-anvil {
     color: #8B4513;
+}
+
+/* Adjust Forge layout for small screens */
+@media (max-width: 480px) {
+    .forge-equipment-grid {
+        grid-template-columns: 1fr;
+    }
+    .forge-equipment-item {
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+    .equipment-icon {
+        font-size: calc(1.6rem * var(--font-scale));
+    }
+    .equipment-info p {
+        font-size: calc(0.75rem * var(--font-scale));
+    }
+    .forge-buttons button {
+        padding: 0.8rem 0.8rem;
+        min-width: inherit;
+    }
 }
