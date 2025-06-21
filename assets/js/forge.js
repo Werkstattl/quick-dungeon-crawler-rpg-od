@@ -386,7 +386,7 @@ const displayForgeResult = () => {
                 ${forgeResult.icon}${forgeResult.rarity} ${forgeResult.category}
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeResult.lvl} Tier ${forgeResult.tier}</h5>
-            <ul>
+            <ul style="display:none">
                 ${forgeResult.stats.map(stat => {
                     const statName = Object.keys(stat)[0];
                     const statValue = stat[statName];
