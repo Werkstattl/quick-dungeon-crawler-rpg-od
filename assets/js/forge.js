@@ -269,6 +269,17 @@ const updateForgeDisplay = () => {
     
     // Update buttons
     const confirmButton = document.querySelector('#forge-confirm');
+    const clearButton = document.querySelector('#forge-clear');
+
+    clearButton.onclick = () => {
+        selectedForgeItems = [null, null, null];
+        forgeResult = null;
+        forgeCost = 0;
+        updateForgeDisplay();
+        loadForgeEquipment();
+        document.querySelector('#forge-result').style.display = 'none';
+        sfxUnequip.play();
+    };
 
     if (!forgeUnlocked) {
         confirmButton.disabled = false;
@@ -294,17 +305,6 @@ const updateForgeDisplay = () => {
         confirmButton.textContent = 'Select 3 Items';
     }
     
-    // Clear button
-    const clearButton = document.querySelector('#forge-clear');
-    clearButton.onclick = () => {
-        selectedForgeItems = [null, null, null];
-        forgeResult = null;
-        forgeCost = 0;
-        updateForgeDisplay();
-        document.querySelector('#forge-result').style.display = 'none';
-        sfxUnequip.play();
-    };
-
     // Confirm button for unlocked forge
     confirmButton.onclick = () => {
         if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
