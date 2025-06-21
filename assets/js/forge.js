@@ -230,9 +230,18 @@ const updateForgeDisplay = () => {
             </div>
         `;
         slot1.className = 'forge-slot selected';
+        slot1.onclick = () => {
+            selectedForgeItems[0] = null;
+            forgeResult = null;
+            forgeCost = 0;
+            updateForgeDisplay();
+            document.querySelector('#forge-result').style.display = 'none';
+            sfxUnequip.play();
+        };
     } else {
         slot1.innerHTML = '<p>Select equipment</p>';
         slot1.className = 'forge-slot';
+        slot1.onclick = null;
     }
     
     // Update slot 2
@@ -247,9 +256,18 @@ const updateForgeDisplay = () => {
             </div>
         `;
         slot2.className = 'forge-slot selected';
+        slot2.onclick = () => {
+            selectedForgeItems[1] = null;
+            forgeResult = null;
+            forgeCost = 0;
+            updateForgeDisplay();
+            document.querySelector('#forge-result').style.display = 'none';
+            sfxUnequip.play();
+        };
     } else {
         slot2.innerHTML = '<p>Select equipment</p>';
         slot2.className = 'forge-slot';
+        slot2.onclick = null;
     }
 
     // Update slot 3
@@ -265,9 +283,18 @@ const updateForgeDisplay = () => {
             </div>
             `;
             slot3.className = 'forge-slot selected';
+            slot3.onclick = () => {
+                selectedForgeItems[2] = null;
+                forgeResult = null;
+                forgeCost = 0;
+                updateForgeDisplay();
+                document.querySelector('#forge-result').style.display = 'none';
+                sfxUnequip.play();
+            };
         } else {
             slot3.innerHTML = '<p>Select equipment</p>';
             slot3.className = 'forge-slot';
+            slot3.onclick = null;
         }
     }
     
