@@ -16,11 +16,6 @@ const initializeForge = () => {
     forgeGoldElement = document.querySelector('#forge-player-gold');
 };
 
-// Check if player can access the forge
-const canAccessForge = () => {
-    return forgeUnlocked;
-};
-
 function unlockForge() {
     forgeUnlocked = true;
 }
@@ -31,46 +26,7 @@ const updateForgeGold = () => {
     }
 };
 
-// Show purchase confirmation
-const purchaseForgeAccess = () => {
-    defaultModalElement.style.display = "flex";
-    defaultModalElement.innerHTML = `
-        <div class="content">
-            <h3><i class="ra ra-anvil"></i> Unlock The Forge</h3>
-            <p>The Forge is a powerful late-game feature that allows you to combine your best equipment into even more powerful gear!</p>
-            <div class="forge-features">
-                <p>✓ Combine three equipment pieces</p>
-                <p>✓ Create gear with higher tier and stats</p>
-                <p>✓ Permanent unlock across all runs</p>
-            </div>
-            <div class="button-container">
-                <button id="purchase-confirm">Purchase</button>
-                <button id="purchase-cancel">Cancel</button>
-            </div>
-        </div>`;
-    
-    let confirm = document.querySelector('#purchase-confirm');
-    let cancel = document.querySelector('#purchase-cancel');
-    
-    confirm.onclick = function () {
-        if (window.cordova) {
-            buyForgeUnlock();
-        } else {
-            alert('The Forge is currently only available in the Google Play version of "Quick Dungeon Crawler". Please download the app to unlock this feature.');
-        }
-    };
-    
-    cancel.onclick = function () {
-        sfxDecline.play();
-        allocationPopup();
-    };
-};
-
 const openForgeModal = () => {
-    if (!canAccessForge()) {
-        purchaseForgeAccess();
-        return;
-    }
     
     sfxOpen.play();
     closeInventory();
@@ -300,6 +256,20 @@ const updateForgeDisplay = () => {
     
     // Update buttons
     const confirmButton = document.querySelector('#forge-confirm');
+
+    if (!forgeUnlocked) {
+        confirmButton.disabled = false;
+        confirmButton.textContent = window.cordova ? 'Unlock The Forge' : 'Google Play Only';
+        confirmButton.onclick = () => {
+            if (window.cordova) {
+                buyForgeUnlock();
+            } else {
+                alert('The Forge is currently only available in the Google Play version of "Quick Dungeon Crawler". Please download the app to unlock this feature.');
+            }
+        };
+        return;
+    }
+
     if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Forge Equipment';
@@ -321,8 +291,8 @@ const updateForgeDisplay = () => {
         document.querySelector('#forge-result').style.display = 'none';
         sfxUnequip.play();
     };
-    
-    // Confirm button
+
+    // Confirm button for unlocked forge
     confirmButton.onclick = () => {
         if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
             executeForging();
