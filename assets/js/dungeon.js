@@ -577,6 +577,9 @@ const initializeFloorBuffs = () => {
 const applyFloorBuff = (statType, value) => {
     initializeFloorBuffs();
     dungeon.floorBuffs[statType] += value;
+    if (dungeon.floorBuffs[statType] > 50) {
+        dungeon.floorBuffs[statType] = 50;
+    }
     dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
     saveData();
 }
