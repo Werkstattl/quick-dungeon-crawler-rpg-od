@@ -2,7 +2,7 @@
 // Late game feature for combining equipment
 
 let forgeModalElement = null;
-let selectedForgeItems = [null, null];
+let selectedForgeItems = [null, null, null];
 let forgeResult = null;
 let forgeCost = 0;
 let forgeUnlocked = false;
@@ -31,7 +31,7 @@ const purchaseForgeAccess = () => {
             <h3><i class="ra ra-anvil"></i> Unlock The Forge</h3>
             <p>The Forge is a powerful late-game feature that allows you to combine your best equipment into even more powerful gear!</p>
             <div class="forge-features">
-                <p>✓ Combine two  equipment pieces</p>
+                <p>✓ Combine three equipment pieces</p>
                 <p>✓ Create gear with higher tier and stats</p>
                 <p>✓ Permanent unlock across all runs</p>
             </div>
@@ -73,7 +73,7 @@ const openForgeModal = () => {
     dimDungeon.style.filter = "brightness(50%)";
     
     // Reset forge state
-    selectedForgeItems = [null, null];
+    selectedForgeItems = [null, null, null];
     forgeResult = null;
     forgeCost = 0;
     
@@ -89,7 +89,7 @@ const closeForgeModal = () => {
     dimDungeon.style.filter = "brightness(100%)";
     
     // Reset forge state
-    selectedForgeItems = [null, null];
+    selectedForgeItems = [null, null, null];
     forgeResult = null;
     forgeCost = 0;
     updateForgeDisplay();
@@ -104,32 +104,28 @@ const loadForgeEquipment = () => {
     
     // Collect forgeable equipment from both inventory and equipped items
     const forgeableEquipment = [];
-    
+
     // Add inventory equipment
     player.inventory.equipment.forEach(equipStr => {
         const equip = JSON.parse(equipStr);
-        if (['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged) {
-            forgeableEquipment.push({
-                equipStr,
-                equip,
-                source: 'inventory'
-            });
-        }
+        forgeableEquipment.push({
+            equipStr,
+            equip,
+            source: 'inventory'
+        });
     });
-    
+
     // Add equipped items
     player.equipped.forEach(equip => {
-        if (['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(equip.rarity) && !equip.forged) {
-            forgeableEquipment.push({
-                equipStr: JSON.stringify(equip),
-                equip,
-                source: 'equipped'
-            });
-        }
+        forgeableEquipment.push({
+            equipStr: JSON.stringify(equip),
+            equip,
+            source: 'equipped'
+        });
     });
     
     if (forgeableEquipment.length === 0) {
-        equipmentGrid.innerHTML = "<p>No forgeable equipment available. You need Rare quality or better equipment that hasn't been forged already.</p>";
+        equipmentGrid.innerHTML = "<p>No forgeable equipment available.</p>";
         return;
     }
     
@@ -187,14 +183,15 @@ const loadForgeEquipment = () => {
 const selectForgeEquipment = (equipmentStr, index, source = 'inventory') => {
     const equipment = JSON.parse(equipmentStr);
     
-    // Check if this item is already selected in either slot
+    // Check if this item is already selected in any slot
     if ((selectedForgeItems[0] && selectedForgeItems[0].equipmentStr === equipmentStr) ||
-        (selectedForgeItems[1] && selectedForgeItems[1].equipmentStr === equipmentStr)) {
+        (selectedForgeItems[1] && selectedForgeItems[1].equipmentStr === equipmentStr) ||
+        (selectedForgeItems[2] && selectedForgeItems[2].equipmentStr === equipmentStr)) {
         // Item already selected, play deny sound and return
         sfxDeny.play();
         return;
     }
-    
+
     // Find first empty slot
     if (selectedForgeItems[0] === null) {
         selectedForgeItems[0] = { equipment, equipmentStr, source };
@@ -202,8 +199,11 @@ const selectForgeEquipment = (equipmentStr, index, source = 'inventory') => {
     } else if (selectedForgeItems[1] === null) {
         selectedForgeItems[1] = { equipment, equipmentStr, source };
         sfxEquip.play();
+    } else if (selectedForgeItems[2] === null) {
+        selectedForgeItems[2] = { equipment, equipmentStr, source };
+        sfxEquip.play();
     } else {
-        // Both slots full, replace first item
+        // All slots full, replace first item
         selectedForgeItems[0] = { equipment, equipmentStr, source };
         sfxEquip.play();
     }
@@ -247,24 +247,43 @@ const updateForgeDisplay = () => {
         slot2.innerHTML = '<p>Select equipment</p>';
         slot2.className = 'forge-slot';
     }
+
+    // Update slot 3
+    const slot3 = document.querySelector('#forge-slot-3');
+    if (slot3) {
+        if (selectedForgeItems[2]) {
+            const equip3 = selectedForgeItems[2].equipment;
+            slot3.innerHTML = `
+            <div class="selected-equipment ${equip3.rarity}">
+                ${equipmentIcon(equip3.category)}
+                <p>${equip3.category}</p>
+                <p>Lv.${equip3.lvl} T${equip3.tier}</p>
+            </div>
+            `;
+            slot3.className = 'forge-slot selected';
+        } else {
+            slot3.innerHTML = '<p>Select equipment</p>';
+            slot3.className = 'forge-slot';
+        }
+    }
     
     // Update buttons
     const confirmButton = document.querySelector('#forge-confirm');
-    if (selectedForgeItems[0] && selectedForgeItems[1] && player.gold >= forgeCost) {
+    if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Forge Equipment';
-    } else if (selectedForgeItems[0] && selectedForgeItems[1]) {
+    } else if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2]) {
         confirmButton.disabled = true;
         confirmButton.textContent = 'Not Enough Gold';
     } else {
         confirmButton.disabled = true;
-        confirmButton.textContent = 'Select 2 Items';
+        confirmButton.textContent = 'Select 3 Items';
     }
     
     // Clear button
     const clearButton = document.querySelector('#forge-clear');
     clearButton.onclick = () => {
-        selectedForgeItems = [null, null];
+        selectedForgeItems = [null, null, null];
         forgeResult = null;
         forgeCost = 0;
         updateForgeDisplay();
@@ -274,7 +293,7 @@ const updateForgeDisplay = () => {
     
     // Confirm button
     confirmButton.onclick = () => {
-        if (selectedForgeItems[0] && selectedForgeItems[1] && player.gold >= forgeCost) {
+        if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
             executeForging();
         } else {
             sfxDeny.play();
@@ -284,137 +303,46 @@ const updateForgeDisplay = () => {
 
 // Calculate forge result
 const calculateForgeResult = () => {
-    if (!selectedForgeItems[0] || !selectedForgeItems[1]) {
+    if (!selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2]) {
         document.querySelector('#forge-result').style.display = 'none';
         return;
     }
-    
+
     const item1 = selectedForgeItems[0].equipment;
     const item2 = selectedForgeItems[1].equipment;
-    
+    const item3 = selectedForgeItems[2].equipment;
+
+    // Ensure all items share the same tier
+    if (!(item1.tier === item2.tier && item1.tier === item3.tier)) {
+        document.querySelector('#forge-result').style.display = 'none';
+        forgeCost = 0;
+        return;
+    }
+
     // Calculate result equipment
-    forgeResult = createForgedEquipment(item1, item2);
-    
+    forgeResult = createForgedEquipment(item1, item2, item3);
+
     // Calculate cost (based on input item values)
-    forgeCost = Math.round((item1.value + item2.value) * 2.5);
+    forgeCost = Math.round((item1.value + item2.value + item3.value) * 2.5);
     
     // Display result
     displayForgeResult();
 };
 
 // Create forged equipment
-const createForgedEquipment = (item1, item2) => {
-    const forgedEquipment = {
-        category: null,
-        attribute: null,
-        type: null,
-        rarity: null,
-        lvl: null,
-        tier: null,
-        value: null,
-        stats: [],
-        forged: true, // Mark as forged item
-        baseCategory: null // Store original category for icon purposes
-    };
-    
-    // Determine type (favor higher tier item)
-    const primaryItem = item1.tier >= item2.tier ? item1 : item2;
-    const secondaryItem = item1.tier >= item2.tier ? item2 : item1;
-    
-    forgedEquipment.category = generateForgedName(primaryItem.category, secondaryItem.category);
-    forgedEquipment.baseCategory = primaryItem.category; // Store original category for icons
-    forgedEquipment.attribute = primaryItem.attribute;
-    forgedEquipment.type = primaryItem.type;
-    
-    // Upgrade rarity
-    const rarityOrder = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom'];
-    const maxRarityIndex = Math.max(
-        rarityOrder.indexOf(item1.rarity), 
-        rarityOrder.indexOf(item2.rarity)
-    );
-    
-    // Try to upgrade rarity, cap at Heirloom
-    const newRarityIndex = Math.min(maxRarityIndex + 1, rarityOrder.length - 1);
-    forgedEquipment.rarity = rarityOrder[newRarityIndex];
-    
-    // Set level and tier (average + bonus)
-    forgedEquipment.lvl = Math.min(100, Math.round((item1.lvl + item2.lvl) / 2) + 5);
-    forgedEquipment.tier = Math.min(10, Math.round((item1.tier + item2.tier) / 2) + 1);
-    
-    // Combine and enhance stats
-    const combinedStats = {};
-    
-    // Collect stats from both items
-    [...item1.stats, ...item2.stats].forEach(stat => {
-        const statName = Object.keys(stat)[0];
-        const statValue = stat[statName];
-        
-        if (combinedStats[statName]) {
-            combinedStats[statName] += statValue;
-        } else {
-            combinedStats[statName] = statValue;
-        }
-    });
-    
-    // Apply forge bonus (20% increase)
-    Object.keys(combinedStats).forEach(statName => {
-        // Round HP, ATK, DEF to whole numbers, keep decimals for percentage stats
-        if (["hp", "atk", "def"].includes(statName)) {
-            combinedStats[statName] = Math.round(combinedStats[statName] * 1.2);
-        } else {
-            combinedStats[statName] = Math.round(combinedStats[statName] * 1.2 * 100) / 100;
-        }
-        forgedEquipment.stats.push({ [statName]: combinedStats[statName] });
-    });
-    
-    // Calculate value
-    forgedEquipment.value = Math.round((item1.value + item2.value) * 1.8);
-    
+const createForgedEquipment = (item1, item2, item3) => {
+    // Generate a fresh piece of equipment similar to a normal dungeon drop
+    const forgedEquipment = createEquipment(false);
+
+    // Upgrade tier based on input items
+    forgedEquipment.tier = Math.min(10, item1.tier + 1);
+
+    // Mark item as forged
+    forgedEquipment.forged = true;
+
     return forgedEquipment;
 };
 
-// Generate forged equipment names
-const generateForgedName = (name1, name2) => {
-    const forgedNames = {
-        // Weapon combinations
-        'Sword_Axe': 'Blade-Axe',
-        'Sword_Hammer': 'War Blade',
-        'Sword_Dagger': 'Assassin Blade',
-        'Axe_Hammer': 'Devastator',
-        'Axe_Dagger': 'Cleaver',
-        'Hammer_Dagger': 'Spiked Maul',
-        'Sword_Flail': 'Chain Sword',
-        'Sword_Scythe': 'Death Blade',
-        'Axe_Scythe': 'Reaper Axe',
-        'Hammer_Scythe': 'Soul Crusher',
-        
-        // Armor combinations  
-        'Plate_Chain': 'Reinforced Plate',
-        'Plate_Leather': 'Studded Plate',
-        'Chain_Leather': 'Scaled Mail',
-        
-        // Shield combinations
-        'Tower_Kite': 'Guardian Shield',
-        'Tower_Buckler': 'Fortress Guard',
-        'Kite_Buckler': 'Battle Shield',
-        
-        // Helmet combinations
-        'Great Helm_Horned Helm': 'Dragon Helm'
-    };
-    
-    // Try both combinations
-    const combo1 = `${name1}_${name2}`;
-    const combo2 = `${name2}_${name1}`;
-    
-    if (forgedNames[combo1]) {
-        return forgedNames[combo1];
-    } else if (forgedNames[combo2]) {
-        return forgedNames[combo2];
-    } else {
-        // Fallback to enhanced version of primary item
-        return `Forged ${name1}`;
-    }
-};
 
 // Display forge result
 const displayForgeResult = () => {
@@ -429,7 +357,7 @@ const displayForgeResult = () => {
     resultItem.innerHTML = `
         <div class="forged-equipment ${forgeResult.rarity}">
             <h4 class="${forgeResult.rarity}">
-                ${equipmentIcon(forgeResult.baseCategory || forgeResult.category)}${forgeResult.rarity} ${forgeResult.category}
+                ${forgeResult.icon}${forgeResult.rarity} ${forgeResult.category}
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeResult.lvl} Tier ${forgeResult.tier}</h5>
             <ul>
@@ -460,7 +388,7 @@ const displayForgeResult = () => {
 
 // Execute forging
 const executeForging = () => {
-    if (!selectedForgeItems[0] || !selectedForgeItems[1] || player.gold < forgeCost) {
+    if (!selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2] || player.gold < forgeCost) {
         sfxDeny.play();
         return;
     }
@@ -486,6 +414,7 @@ const executeForging = () => {
         // Remove input items from their respective sources
         const item1 = selectedForgeItems[0];
         const item2 = selectedForgeItems[1];
+        const item3 = selectedForgeItems[2];
         
         // Helper function to remove item from appropriate source
         const removeItem = (item) => {
@@ -505,9 +434,10 @@ const executeForging = () => {
             }
         };
         
-        // Remove both items
+        // Remove all items
         removeItem(item1);
         removeItem(item2);
+        removeItem(item3);
         
         // Deduct gold
         player.gold -= forgeCost;
@@ -527,7 +457,7 @@ const executeForging = () => {
                 <div class="forged-result">
                     <p class="${forgeResult.rarity}">Created: ${forgeResult.rarity} ${forgeResult.category}</p>
                 </div>
-                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null]; forgeResult = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
+                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null, null]; forgeResult = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
             </div>`;
     };
     

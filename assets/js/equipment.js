@@ -1,4 +1,4 @@
-const createEquipment = () => {
+const createEquipment = (addToInventory = true) => {
     const equipment = {
         category: null,
         attribute: null,
@@ -198,21 +198,16 @@ const createEquipment = () => {
         }
     }
     equipment.value = Math.round(equipmentValue * 3);
-    player.inventory.equipment.push(JSON.stringify(equipment));
+    equipment.icon = equipmentIcon(equipment.category);
 
-    saveData();
-    showInventory();
-    showEquipment();
-
-    const itemShow = {
-        category: equipment.category,
-        rarity: equipment.rarity,
-        lvl: equipment.lvl,
-        tier: equipment.tier,
-        icon: equipmentIcon(equipment.category),
-        stats: equipment.stats
+    if (addToInventory) {
+        player.inventory.equipment.push(JSON.stringify(equipment));
+        saveData();
+        showInventory();
+        showEquipment();
     }
-    return itemShow;
+
+    return equipment;
 }
 
 const equipmentIcon = (equipment) => {
