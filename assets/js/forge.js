@@ -132,8 +132,14 @@ const loadForgeEquipment = () => {
                 ${source === 'equipped' ? '<p class="equipped-indicator">⚔️ Equipped</p>' : ''}
             </div>
         `;
-        
-        equipDiv.addEventListener('click', () => selectForgeEquipment(equipStr, index, source));
+        // Only allow click if a slot is free
+        equipDiv.addEventListener('click', () => {
+            if (selectedForgeItems[0] === null || selectedForgeItems[1] === null || selectedForgeItems[2] === null) {
+                selectForgeEquipment(equipStr, index, source);
+            } else {
+                sfxDeny.play();
+            }
+        });
         equipmentGrid.appendChild(equipDiv);
     });
 };
