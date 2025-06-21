@@ -2,6 +2,7 @@
 // Late game feature for combining equipment
 
 let forgeModalElement = null;
+let forgeGoldElement = null;
 let selectedForgeItems = [null, null, null];
 let forgeResult = null;
 let forgeCost = 0;
@@ -12,6 +13,7 @@ const FORGE_PRODUCT_ID = 'forge_unlock_premium';
 // Initialize forge system
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
+    forgeGoldElement = document.querySelector('#forge-player-gold');
 };
 
 // Check if player can access the forge
@@ -22,6 +24,12 @@ const canAccessForge = () => {
 function unlockForge() {
     forgeUnlocked = true;
 }
+
+const updateForgeGold = () => {
+    if (forgeGoldElement) {
+        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
+    }
+};
 
 // Show purchase confirmation
 const purchaseForgeAccess = () => {
@@ -209,6 +217,7 @@ const selectForgeEquipment = (equipmentStr, index, source = 'inventory') => {
 
 // Update forge display
 const updateForgeDisplay = () => {
+    updateForgeGold();
     // Update slot 1
     const slot1 = document.querySelector('#forge-slot-1');
     if (selectedForgeItems[0]) {
@@ -379,6 +388,7 @@ const displayForgeResult = () => {
     } else {
         costElement.style.color = '#F44336';
     }
+    updateForgeGold();
 };
 
 // Execute forging
@@ -436,6 +446,7 @@ const executeForging = () => {
         
         // Deduct gold
         player.gold -= forgeCost;
+        updateForgeGold();
         
         // Add forged item to inventory
         player.inventory.equipment.push(JSON.stringify(forgeResult));

@@ -1175,6 +1175,17 @@ header button i {
     color: white;
 }
 
+.forge-current-gold {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: calc(1rem * var(--font-scale));
+}
+
+.forge-current-gold i {
+    margin: 0 0.3rem;
+}
+
 /* Anvil icon styling */
 .ra-anvil {
     color: #8B4513;
