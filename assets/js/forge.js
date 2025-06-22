@@ -5,6 +5,7 @@ let forgeModalElement = null;
 let forgeGoldElement = null;
 let selectedForgeItems = [null, null, null];
 let forgeResult = null;
+let forgeLevelRange = null;
 let forgeCost = 0;
 let forgeUnlocked = false;
 
@@ -39,6 +40,7 @@ const openForgeModal = () => {
     // Reset forge state
     selectedForgeItems = [null, null, null];
     forgeResult = null;
+    forgeLevelRange = null;
     forgeCost = 0;
     
     loadForgeEquipment();
@@ -55,6 +57,7 @@ const closeForgeModal = () => {
     // Reset forge state
     selectedForgeItems = [null, null, null];
     forgeResult = null;
+    forgeLevelRange = null;
     forgeCost = 0;
     updateForgeDisplay();
     
@@ -199,6 +202,7 @@ const updateForgeDisplay = () => {
         slot1.onclick = () => {
             selectedForgeItems[0] = null;
             forgeResult = null;
+            forgeLevelRange = null;
             forgeCost = 0;
             updateForgeDisplay();
             loadForgeEquipment(); // update equipment list after removal
@@ -226,6 +230,7 @@ const updateForgeDisplay = () => {
         slot2.onclick = () => {
             selectedForgeItems[1] = null;
             forgeResult = null;
+            forgeLevelRange = null;
             forgeCost = 0;
             updateForgeDisplay();
             loadForgeEquipment(); // update equipment list after removal
@@ -254,6 +259,7 @@ const updateForgeDisplay = () => {
             slot3.onclick = () => {
                 selectedForgeItems[2] = null;
                 forgeResult = null;
+                forgeLevelRange = null;
                 forgeCost = 0;
                 updateForgeDisplay();
                 loadForgeEquipment(); // update equipment list after removal
@@ -274,6 +280,7 @@ const updateForgeDisplay = () => {
     clearButton.onclick = () => {
         selectedForgeItems = [null, null, null];
         forgeResult = null;
+        forgeLevelRange = null;
         forgeCost = 0;
         updateForgeDisplay();
         loadForgeEquipment();
@@ -336,6 +343,12 @@ const calculateForgeResult = () => {
         return;
     }
 
+    // Determine possible level range
+    const avgLvl = Math.round((item1.lvl + item2.lvl + item3.lvl) / 3);
+    const minLvl = Math.max(1, avgLvl - 2);
+    const maxLvl = Math.min(100, avgLvl + 2);
+    forgeLevelRange = { min: minLvl, max: maxLvl };
+
     // Calculate result equipment
     forgeResult = createForgedEquipment(item1, item2, item3);
 
@@ -391,7 +404,7 @@ const displayForgeResult = () => {
             <h4 class="${forgeResult.rarity}">
                 ${forgeResult.icon}${forgeResult.rarity} ${forgeResult.category}
             </h4>
-            <h5 class="${forgeResult.rarity}">Lv.${forgeResult.lvl} Tier ${forgeResult.tier}</h5>
+            <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} Tier ${forgeResult.tier}</h5>
             <ul style="display:none">
                 ${forgeResult.stats.map(stat => {
                     const statName = Object.keys(stat)[0];
@@ -491,7 +504,7 @@ const executeForging = () => {
                 <div class="forged-result">
                     <p class="${forgeResult.rarity}">Created: ${forgeResult.rarity} ${forgeResult.category}</p>
                 </div>
-                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null, null]; forgeResult = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
+                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null, null]; forgeResult = null; forgeLevelRange = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
             </div>`;
     };
     
