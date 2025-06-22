@@ -1031,7 +1031,7 @@ header button i {
     background-color: rgba(76, 175, 80, 0.1);
 }
 
-.forge-result h4 {
+.forge-result > h4 {
     text-align: center;
     margin-bottom: 1rem;
     color: #4CAF50;
