@@ -822,7 +822,6 @@ const expireRestingBonus = () => {
     
     if (bonusType === "preparation") {
         dungeon.resting.healthRegenRate = 0.5; // Reset to normal
+        addDungeonLog(`<span class="Common">The effects of your restful ${bonusType} have faded.</span>`);
     }
-    
-    addDungeonLog(`<span class="Common">The effects of your restful ${bonusType} have faded.</span>`);
 }
