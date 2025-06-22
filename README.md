@@ -14,7 +14,7 @@ The game is available for Android and Desktop platforms. You can find official r
 
 [![Play in Browser](https://img.shields.io/badge/Play%20in-Browser-blue?logo=google-chrome&logoColor=white)](https://dungeon.werkstattl.com/)
 
-If you like this game, please consider [supporting me on GitGub Sponsors](https://github.com/sponsors/7underlines)!
+If you like this game, please consider [supporting me on GitHub Sponsors](https://github.com/sponsors/7underlines)!
 
 Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
 
