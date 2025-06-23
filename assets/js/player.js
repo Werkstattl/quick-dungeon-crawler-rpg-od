@@ -83,6 +83,11 @@ const playerLoadStats = () => {
     playerAtkSpdElement.innerHTML = player.stats.atkSpd.toFixed(2).replace(rx, "$1");
     playerVampElement.innerHTML = (player.stats.vamp).toFixed(2).replace(rx, "$1") + "%";
     playerCrateElement.innerHTML = (player.stats.critRate).toFixed(2).replace(rx, "$1") + "%";
+    if (player.stats.critRate >= 100) {
+        playerCrateElement.style.color = '#e30b5c';
+    } else {
+        playerCrateElement.style.color = 'white';
+    }
     playerCdmgElement.innerHTML = (player.stats.critDmg).toFixed(2).replace(rx, "$1") + "%";
 
     // Player Bonus Stats

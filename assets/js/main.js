@@ -483,6 +483,9 @@ const calculateStats = () => {
     player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (player.bonusStats.atkSpd / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
     player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp;
     player.stats.critRate = playerCRateBase + player.bonusStats.critRate + player.equippedStats.critRate;
+    if (player.stats.critRate > 100) {
+        player.stats.critRate = 100;
+    }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
 
     // Caps attack speed to 2.5
