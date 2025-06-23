@@ -290,12 +290,12 @@ const updateForgeDisplay = () => {
 
     if (!forgeUnlocked) {
         confirmButton.disabled = false;
-        confirmButton.textContent = window.cordova ? 'Unlock The Forge' : 'Google Play Only';
+        confirmButton.textContent = window.cordova ? 'Unlock The Forge' : 'Get on Google Play';
         confirmButton.onclick = () => {
             if (window.cordova) {
                 buyForgeUnlock();
             } else {
-                alert('The Forge is currently only available in the Google Play version of "Quick Dungeon Crawler". Please download the app to unlock this feature.');
+                ratingSystem.openGooglePlayForRating();
             }
         };
         return;
