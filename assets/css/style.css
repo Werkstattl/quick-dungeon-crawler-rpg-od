@@ -977,7 +977,7 @@ header button i {
 
 .forge-slot {
     width: 6rem;
-    height: 5rem;
+    min-height: 6rem;
     border: 2px dashed #666;
     border-radius: 0.5rem;
     display: flex;
