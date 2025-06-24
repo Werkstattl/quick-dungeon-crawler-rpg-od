@@ -497,7 +497,7 @@ const executeForging = () => {
     // Add forged item to inventory
     player.inventory.equipment.push(JSON.stringify(forgeResult));
 
-    sfxConfirm.play();
+    sfxEquip.play();
     saveData();
     playerLoadStats();
 
