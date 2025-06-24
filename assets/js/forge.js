@@ -309,10 +309,18 @@ const updateForgeDisplay = () => {
         return;
     }
 
-    if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
+    const allSelected = selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2];
+    const sameTier = allSelected &&
+        selectedForgeItems[0].equipment.tier === selectedForgeItems[1].equipment.tier &&
+        selectedForgeItems[0].equipment.tier === selectedForgeItems[2].equipment.tier;
+
+    if (allSelected && !sameTier) {
+        confirmButton.disabled = true;
+        confirmButton.textContent = 'Items Must Share Tier';
+    } else if (allSelected && player.gold >= forgeCost) {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Forge Equipment';
-    } else if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2]) {
+    } else if (allSelected) {
         confirmButton.disabled = true;
         confirmButton.textContent = 'Not Enough Gold';
     } else {
@@ -322,7 +330,12 @@ const updateForgeDisplay = () => {
     
     // Confirm button for unlocked forge
     confirmButton.onclick = () => {
-        if (selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2] && player.gold >= forgeCost) {
+        const allSelectedConfirm = selectedForgeItems[0] && selectedForgeItems[1] && selectedForgeItems[2];
+        const sameTierConfirm = allSelectedConfirm &&
+            selectedForgeItems[0].equipment.tier === selectedForgeItems[1].equipment.tier &&
+            selectedForgeItems[0].equipment.tier === selectedForgeItems[2].equipment.tier;
+
+        if (allSelectedConfirm && sameTierConfirm && player.gold >= forgeCost) {
             executeForging();
         } else {
             sfxDeny.play();
