@@ -210,6 +210,147 @@ const createEquipment = (addToInventory = true) => {
     return equipment;
 }
 
+// Regenerate stats and value for an equipment piece based on its
+// current level, tier and rarity. Used for forged items so they
+// match normal dungeon drops.
+const rerollEquipmentStats = (equipment) => {
+    equipment.stats = [];
+    let equipmentValue = 0;
+
+    // Determine loop count from rarity
+    let loopCount;
+    switch (equipment.rarity) {
+        case "Common":
+            loopCount = 2;
+            break;
+        case "Uncommon":
+            loopCount = 3;
+            break;
+        case "Rare":
+            loopCount = 4;
+            break;
+        case "Epic":
+            loopCount = 5;
+            break;
+        case "Legendary":
+            loopCount = 6;
+            break;
+        case "Heirloom":
+            loopCount = 8;
+            break;
+    }
+
+    // Determine stat pools based on attribute and category
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
+    const defenseStats = ["hp", "hp", "def", "def", "atk"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
+    let statTypes;
+    if (equipment.attribute == "Damage") {
+        if (equipment.category == "Axe" || equipment.category == "Scythe") {
+            statTypes = damageyStats;
+        } else if (equipment.category == "Dagger" || equipment.category == "Flail") {
+            statTypes = speedyStats;
+        } else if (equipment.category == "Hammer") {
+            statTypes = dmgDefStats;
+        } else {
+            statTypes = physicalStats;
+        }
+    } else if (equipment.attribute == "Defense") {
+        statTypes = defenseStats;
+    }
+
+    for (let i = 0; i < loopCount; i++) {
+        let statType = statTypes[Math.floor(Math.random() * statTypes.length)];
+
+        // Scaling based on level and tier
+        let enemyScaling = 1 + (equipment.tier / 10);
+        if (enemyScaling > 2) {
+            enemyScaling = 2;
+        }
+        let statMultiplier = (enemyScaling - 1) * equipment.lvl;
+        let hpScaling = (40 * randomizeDecimal(0.5, 1.5)) + ((40 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+        let atkDefScaling = (16 * randomizeDecimal(0.5, 1.5)) + ((16 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+        let cdAtkSpdScaling = (3 * randomizeDecimal(0.5, 1.5)) + ((3 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+        let crVampScaling = (2 * randomizeDecimal(0.5, 1.5)) + ((2 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+
+        let statValue;
+        if (statType === "hp") {
+            statValue = randomizeNum(hpScaling * 0.5, hpScaling);
+            equipmentValue += statValue;
+        } else if (statType === "atk") {
+            statValue = randomizeNum(atkDefScaling * 0.5, atkDefScaling);
+            equipmentValue += statValue * 2.5;
+        } else if (statType === "def") {
+            statValue = randomizeNum(atkDefScaling * 0.5, atkDefScaling);
+            equipmentValue += statValue * 2.5;
+        } else if (statType === "atkSpd") {
+            statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
+            if (statValue > 15) {
+                statValue = 15 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 8.33;
+        } else if (statType === "vamp") {
+            statValue = randomizeDecimal(crVampScaling * 0.5, crVampScaling);
+            if (statValue > 8) {
+                statValue = 8 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 20.83;
+        } else if (statType === "critRate") {
+            statValue = randomizeDecimal(crVampScaling * 0.5, crVampScaling);
+            if (statValue > 10) {
+                statValue = 10 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 20.83;
+        } else if (statType === "critDmg") {
+            statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
+            equipmentValue += statValue * 8.33;
+        }
+
+        // Cap maximum stat rolls for equipment rarities
+        if (equipment.rarity == "Common" && loopCount > 3) {
+            loopCount--;
+        } else if (equipment.rarity == "Uncommon" && loopCount > 4) {
+            loopCount--;
+        } else if (equipment.rarity == "Rare" && loopCount > 5) {
+            loopCount--;
+        } else if (equipment.rarity == "Epic" && loopCount > 6) {
+            loopCount--;
+        } else if (equipment.rarity == "Legendary" && loopCount > 7) {
+            loopCount--;
+        } else if (equipment.rarity == "Heirloom" && loopCount > 9) {
+            loopCount--;
+        }
+
+        // Merge duplicate stats
+        let statExists = false;
+        for (let j = 0; j < equipment.stats.length; j++) {
+            if (Object.keys(equipment.stats[j])[0] == statType) {
+                statExists = true;
+                break;
+            }
+        }
+
+        if (statExists) {
+            for (let j = 0; j < equipment.stats.length; j++) {
+                if (Object.keys(equipment.stats[j])[0] == statType) {
+                    equipment.stats[j][statType] += statValue;
+                    break;
+                }
+            }
+        } else {
+            equipment.stats.push({ [statType]: statValue });
+        }
+    }
+
+    equipment.value = Math.round(equipmentValue * 3);
+    equipment.icon = equipmentIcon(equipment.category);
+};
+
 const equipmentIcon = (equipment) => {
     if (equipment == "Sword") {
         return '<i class="ra ra-relic-blade"></i>';

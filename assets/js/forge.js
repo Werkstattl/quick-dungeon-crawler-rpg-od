@@ -382,6 +382,9 @@ const createForgedEquipment = (item1, item2, item3) => {
         forgedEquipment.rarity = item1.rarity; // Already max rarity
     }
 
+    // Re-roll stats so the item matches normal drops for its level
+    rerollEquipmentStats(forgedEquipment);
+
     // Mark item as forged
     forgedEquipment.forged = true;
 
