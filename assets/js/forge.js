@@ -439,79 +439,51 @@ const executeForging = () => {
         return;
     }
     
-    // Show confirmation dialog
-    defaultModalElement.style.display = "flex";
-    defaultModalElement.style.zIndex = "2"; // Ensure it appears above forge modal
-    defaultModalElement.innerHTML = `
-        <div class="content">
-            <h3>Confirm Forging</h3>
-            <p>Are you sure you want to forge these items? This action cannot be undone!</p>
-            <p><strong>Cost: <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(forgeCost)} gold</strong></p>
-            <div class="button-container">
-                <button id="forge-execute">Forge!</button>
-                <button id="forge-cancel-confirm">Cancel</button>
-            </div>
-        </div>`;
-    
-    let execute = document.querySelector('#forge-execute');
-    let cancel = document.querySelector('#forge-cancel-confirm');
-    
-    execute.onclick = function () {
-        // Remove input items from their respective sources
-        const item1 = selectedForgeItems[0];
-        const item2 = selectedForgeItems[1];
-        const item3 = selectedForgeItems[2];
-        
-        // Helper function to remove item from appropriate source
-        const removeItem = (item) => {
-            if (item.source === 'inventory') {
-                const itemIndex = player.inventory.equipment.indexOf(item.equipmentStr);
-                if (itemIndex !== -1) {
-                    player.inventory.equipment.splice(itemIndex, 1);
-                }
-            } else if (item.source === 'equipped') {
-                // Find and remove from equipped array
-                const equippedIndex = player.equipped.findIndex(equipped => 
-                    JSON.stringify(equipped) === item.equipmentStr
-                );
-                if (equippedIndex !== -1) {
-                    player.equipped.splice(equippedIndex, 1);
-                }
+    const item1 = selectedForgeItems[0];
+    const item2 = selectedForgeItems[1];
+    const item3 = selectedForgeItems[2];
+
+    // Helper function to remove item from appropriate source
+    const removeItem = (item) => {
+        if (item.source === 'inventory') {
+            const itemIndex = player.inventory.equipment.indexOf(item.equipmentStr);
+            if (itemIndex !== -1) {
+                player.inventory.equipment.splice(itemIndex, 1);
             }
-        };
-        
-        // Remove all items
-        removeItem(item1);
-        removeItem(item2);
-        removeItem(item3);
-        
-        // Deduct gold
-        player.gold -= forgeCost;
-        updateForgeGold();
-        
-        // Add forged item to inventory
-        player.inventory.equipment.push(JSON.stringify(forgeResult));
-        
-        sfxConfirm.play();
-        saveData();
-        playerLoadStats();
-        
-        // Show success message
-        defaultModalElement.innerHTML = `
-            <div class="content">
-                <h3>🎉 Forging Complete!</h3>
-                <p>Your equipment has been successfully forged into a more powerful item!</p>
-                <div class="forged-result">
-                    <p class="${forgeResult.rarity}">Created: ${forgeResult.rarity} ${forgeResult.category}</p>
-                </div>
-                <button onclick="closeDefaultModal(); loadForgeEquipment(); selectedForgeItems = [null, null, null]; forgeResult = null; forgeLevelRange = null; forgeCost = 0; updateForgeDisplay(); document.querySelector('#forge-result').style.display = 'none';">Continue</button>
-            </div>`;
+        } else if (item.source === 'equipped') {
+            // Find and remove from equipped array
+            const equippedIndex = player.equipped.findIndex(equipped =>
+                JSON.stringify(equipped) === item.equipmentStr
+            );
+            if (equippedIndex !== -1) {
+                player.equipped.splice(equippedIndex, 1);
+            }
+        }
     };
-    
-    cancel.onclick = function () {
-        sfxDecline.play();
-        defaultModalElement.style.display = "none";
-        defaultModalElement.style.zIndex = "1"; // Reset z-index
-        defaultModalElement.innerHTML = "";
-    };
+
+    // Remove all items
+    removeItem(item1);
+    removeItem(item2);
+    removeItem(item3);
+
+    // Deduct gold
+    player.gold -= forgeCost;
+    updateForgeGold();
+
+    // Add forged item to inventory
+    player.inventory.equipment.push(JSON.stringify(forgeResult));
+
+    sfxConfirm.play();
+    saveData();
+    playerLoadStats();
+
+    // Reset forge state and UI
+    selectedForgeItems = [null, null, null];
+    forgeResult = null;
+    forgeLevelRange = null;
+    forgeCost = 0;
+    document.querySelector('#forge-result').style.display = 'none';
+    loadForgeEquipment();
+    updateForgeDisplay();
+
 };
