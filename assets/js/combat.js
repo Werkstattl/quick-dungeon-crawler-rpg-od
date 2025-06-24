@@ -3,6 +3,9 @@ let enemyDead = false;
 let playerDead = false;
 let currentBattleMusic = false;
 
+let playerAttackTimeout;
+let enemyAttackTimeout;
+let companionAttackTimeout;
 // ========== Validation ==========
 const hpValidation = () => {
     const deathMessages = [
@@ -183,7 +186,7 @@ const playerAttack = () => {
 
     // Attack Timer
     if (player.inCombat) {
-        setTimeout(() => {
+        playerAttackTimeout = setTimeout(() => {
             if (player.inCombat) {
                 playerAttack();
             }
@@ -233,7 +236,7 @@ const companionAttack = () => {
 
     // Attack Timer
     if (player.inCombat) {
-        setTimeout(() => {
+        companionAttackTimeout = setTimeout(() => {
             if (player.inCombat) {
                 companionAttack();
             }
@@ -293,7 +296,7 @@ const enemyAttack = () => {
 
     // Attack Timer
     if (player.inCombat) {
-        setTimeout(() => {
+        enemyAttackTimeout = setTimeout(() => {
             if (player.inCombat) {
                 enemyAttack();
             }
@@ -348,16 +351,19 @@ const startCombat = (battleMusic) => {
 //    battleMusic.play();
 	currentBattleMusic.play();
     player.inCombat = true;
+    clearTimeout(playerAttackTimeout);
+    clearTimeout(enemyAttackTimeout);
+    clearTimeout(companionAttackTimeout);
 
     // Add companion involvement
     if (activeCompanion && activeCompanion.isActive) {
         addCombatLog(`${activeCompanion.name} joins the battle!`);
-        setTimeout(companionAttack, (1000 / activeCompanion.atkSpd));
+        companionAttackTimeout = setTimeout(companionAttack, (1000 / activeCompanion.atkSpd));
     }
 
     // Starts the timer for player and enemy attacks along with combat timer
-    setTimeout(playerAttack, (1000 / player.stats.atkSpd));
-    setTimeout(enemyAttack, (1000 / enemy.stats.atkSpd));
+    playerAttackTimeout = setTimeout(playerAttack, (1000 / player.stats.atkSpd));
+    enemyAttackTimeout = setTimeout(enemyAttack, (1000 / enemy.stats.atkSpd));
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
 
@@ -377,6 +383,9 @@ const endCombat = () => {
     currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;
+    clearTimeout(playerAttackTimeout);
+    clearTimeout(enemyAttackTimeout);
+    clearTimeout(companionAttackTimeout);
     // Skill validation
     if (player.skills.includes("Rampager")) {
         // Remove Rampager attack buff
