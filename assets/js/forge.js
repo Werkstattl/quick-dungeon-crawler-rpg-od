@@ -19,6 +19,9 @@ const initializeForge = () => {
 
 function unlockForge() {
     forgeUnlocked = true;
+    if (forgeModalElement && forgeModalElement.style.display === 'flex') {
+        updateForgeDisplay();
+    }
 }
 
 const updateForgeGold = () => {

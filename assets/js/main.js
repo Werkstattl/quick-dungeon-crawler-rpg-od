@@ -9,7 +9,6 @@ window.addEventListener("DOMContentLoaded", function () {
         let target = document.querySelector("#title-screen");
         target.style.display = "flex";
     }
-    nativeInit();
 
     // Title Screen Validation
     document.querySelector("#title-screen").addEventListener("click", function () {
@@ -25,6 +24,8 @@ window.addEventListener("DOMContentLoaded", function () {
     document.ondblclick = function (e) {
         e.preventDefault();
     }
+
+    nativeInit();
 
     // Submit Name
     document.querySelector("#name-submit").addEventListener("submit", function (e) {

@@ -9,7 +9,7 @@ async function nativeInit() {
         } else if (++attempts >= maxAttempts) {
           resolve();
         } else {
-          setTimeout(checkCapacitor, 300);
+          setTimeout(checkCapacitor, 50);
         }
       };
       checkCapacitor();
@@ -52,10 +52,7 @@ function initializePurchases() {
   ]);
 }
 
-function buyForgeUnlock() {
-  defaultModalElement.style.display = "none";
-  defaultModalElement.innerHTML = "";
-  document.querySelector("#title-screen").style.filter = "brightness(100%)";
+function buyForgeUnlock() {;
   // CdvPurchase.store.get('test-non-consumable').getOffer().order();
   CdvPurchase.store.get(FORGE_PRODUCT_ID).getOffer().order();
 }
