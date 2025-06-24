@@ -53,14 +53,22 @@ const closeForgeModal = () => {
     forgeModalElement.style.display = "none";
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(100%)";
-    
+
     // Reset forge state
     selectedForgeItems = [null, null, null];
     forgeResult = null;
     forgeLevelRange = null;
     forgeCost = 0;
+    const resultContainer = document.querySelector('#forge-result');
+    if (resultContainer) {
+        resultContainer.style.display = 'none';
+    }
+    const resultItem = document.querySelector('#forge-result-item');
+    if (resultItem) {
+        resultItem.innerHTML = '';
+    }
     updateForgeDisplay();
-    
+
     continueExploring();
 };
 
