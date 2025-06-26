@@ -553,7 +553,6 @@ button:focus {
     width: 18rem;
     max-height: 80vh;
     overflow-y: auto;
-    padding-bottom: 2.5rem; /* Ensure space for button */
 }
 
 /* Header */
