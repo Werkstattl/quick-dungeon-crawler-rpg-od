@@ -78,13 +78,17 @@ const playerLoadStats = () => {
 
     // Player Stats
     playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}`;
-    // Heart icon color for low HP
     const heartIcon = document.getElementById('player-hp-icon');
     if (heartIcon) {
         if (player.stats.hpPercent <= 30) {
             heartIcon.classList.add('low-hp');
+            heartIcon.classList.remove('medium-hp');
+        } else if (player.stats.hpPercent <= 60) {
+            heartIcon.classList.remove('low-hp');
+            heartIcon.classList.add('medium-hp');
         } else {
             heartIcon.classList.remove('low-hp');
+            heartIcon.classList.remove('medium-hp');
         }
     }
     playerAtkElement.innerHTML = nFormatter(player.stats.atk);
