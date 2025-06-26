@@ -966,6 +966,9 @@ header button i {
 #player-hp-icon.high-hp {
     animation: heart-pulse 1s infinite alternate;
 }
+#player-hp-icon.dead {
+    animation: none;
+}
 @keyframes heart-pulse {
     0% { transform: scale(0.9); }
     100% { transform: scale(1); }

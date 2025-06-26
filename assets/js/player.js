@@ -80,20 +80,23 @@ const playerLoadStats = () => {
     playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)} (${player.stats.hpPercent}%)`;
     const heartIcon = document.getElementById('player-hp-icon');
     if (heartIcon) {
-        if (player.stats.hpPercent <= 10) {
+        if (player.stats.hp <= 0 || (typeof playerDead !== 'undefined' && playerDead)) {
+            heartIcon.classList.add('dead');
+            heartIcon.classList.remove('low-hp', 'medium-hp', 'high-hp', 'critical-hp');
+        } else if (player.stats.hpPercent <= 10) {
             heartIcon.classList.add('critical-hp');
-            heartIcon.classList.remove('low-hp', 'medium-hp', 'high-hp');
+            heartIcon.classList.remove('low-hp', 'medium-hp', 'high-hp', 'dead');
         } else if (player.stats.hpPercent <= 30) {
             heartIcon.classList.add('low-hp');
-            heartIcon.classList.remove('critical-hp', 'medium-hp', 'high-hp');
+            heartIcon.classList.remove('critical-hp', 'medium-hp', 'high-hp', 'dead');
         } else if (player.stats.hpPercent <= 60) {
             heartIcon.classList.add('medium-hp');
-            heartIcon.classList.remove('low-hp', 'critical-hp', 'high-hp');
+            heartIcon.classList.remove('low-hp', 'critical-hp', 'high-hp', 'dead');
         } else if (player.stats.hpPercent >= 90) {
             heartIcon.classList.add('high-hp');
-            heartIcon.classList.remove('low-hp', 'medium-hp', 'critical-hp');
+            heartIcon.classList.remove('low-hp', 'medium-hp', 'critical-hp', 'dead');
         } else {
-            heartIcon.classList.remove('low-hp', 'medium-hp', 'high-hp', 'critical-hp');
+            heartIcon.classList.remove('low-hp', 'medium-hp', 'high-hp', 'critical-hp', 'dead');
         }
     }
     playerAtkElement.innerHTML = nFormatter(player.stats.atk);
