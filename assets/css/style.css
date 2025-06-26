@@ -636,9 +636,14 @@ header button i {
 #companion-panel {
     width: 90%;
 }
+@media (min-width: 360px) {
+    #companion-panel {
+        width: 80%;
+    }
+}
 @media (min-width: 380px) {
     #companion-panel {
-        width: 85%;
+        width: 75%;
     }
 }
 @media (min-width: 400px) {
@@ -646,17 +651,30 @@ header button i {
         width: 55%;
     }
     #companion-panel {
-        width: 80%;
+        width: 68%;
     }
 }
 @media (min-width: 420px) {
     #companion-panel {
-        width: 70%;
+        width: 63%;
+    }
+}
+@media (min-width: 430px) {
+    #companion-panel {
+        width: 61%;
+    }
+}
+@media (min-width: 440px) {
+    #bonus-stats {
+        width: 53%;
+    }
+    #companion-panel {
+        width: 58%;
     }
 }
 @media (min-width: 450px) {
     #companion-panel {
-        width: 60%;
+        width: 57%;
     }
 }
 @media (min-width: 480px) {
