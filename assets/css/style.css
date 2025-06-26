@@ -954,7 +954,6 @@ header button i {
     width: 95vw;
     max-height: 80vh;
     overflow-y: auto;
-    padding-bottom: 2.5rem; /* Ensure space for bottom buttons */
 }
 
 .forge-description {
