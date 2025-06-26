@@ -152,6 +152,9 @@ function updateCompanionUI() {
 function openCompanionModal() {
     const modal = document.getElementById('companionModal');
     const companionList = document.getElementById('available-companions');
+    sfxOpen.play();
+    const dimDungeon = document.querySelector('#dungeon-main');
+    dimDungeon.style.filter = 'brightness(50%)';
     
     // Clear previous content
     companionList.innerHTML = '';
@@ -183,7 +186,10 @@ function openCompanionModal() {
 
 // Close companion modal
 function closeCompanionModal() {
+    sfxDecline.play();
     document.getElementById('companionModal').style.display = 'none';
+    const dimDungeon = document.querySelector('#dungeon-main');
+    dimDungeon.style.filter = 'brightness(100%)';
 }
 
 // Select a companion
