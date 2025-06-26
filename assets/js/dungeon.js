@@ -37,7 +37,7 @@ let dungeon = {
     // Add resting system properties
     resting: {
         duration: 0,
-        healthRegenRate: 0.5, // HP per second while resting
+        healthRegenRate: 1.0, // HP per second while resting
         meditationProgress: 0,
         meditationCost: 1000,
         restingBonusActive: false,
@@ -69,7 +69,7 @@ const initialDungeonLoad = () => {
         if (!dungeon.resting) {
             dungeon.resting = {
                 duration: 0,
-                healthRegenRate: 0.5,
+                healthRegenRate: 1.0,
                 meditationProgress: 0,
                 meditationCost: 100,
                 restingBonusActive: false,
@@ -805,7 +805,7 @@ const generateRestingBonus = () => {
         case "preparation":
             dungeon.resting.restingBonusValue = 8;
             // Increase health regen rate temporarily
-            dungeon.resting.healthRegenRate = 1.0;
+            dungeon.resting.healthRegenRate = 2.0;
             addDungeonLog(`<span style="color: #4CAF50;">⚡ You feel well-prepared! (Double health regeneration for the next 5 minutes)</span>`);
             break;
     }
@@ -821,7 +821,7 @@ const expireRestingBonus = () => {
     dungeon.resting.restingBonusDuration = 0;
     
     if (bonusType === "preparation") {
-        dungeon.resting.healthRegenRate = 0.5; // Reset to normal
+        dungeon.resting.healthRegenRate = 1.0; // Reset to normal
         addDungeonLog(`<span class="Common">The effects of your restful ${bonusType} have faded.</span>`);
     }
 }
