@@ -926,6 +926,9 @@ header button i {
 #player-hp-icon {
     animation: heart-pulse 1s infinite alternate;
 }
+#player-hp-icon.medium-hp {
+    animation: heart-pulse 0.9s infinite alternate;
+}
 #player-hp-icon.low-hp {
     color: #b30000 !important;
     animation: heart-pulse 0.8s infinite alternate;

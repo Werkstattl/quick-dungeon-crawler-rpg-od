@@ -77,7 +77,7 @@ const playerLoadStats = () => {
     document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
     // Player Stats
-    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}`;
+    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)} (${player.stats.hpPercent}%)`;
     const heartIcon = document.getElementById('player-hp-icon');
     if (heartIcon) {
         if (player.stats.hpPercent <= 30) {
