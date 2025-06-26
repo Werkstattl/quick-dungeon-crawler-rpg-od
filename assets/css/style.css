@@ -951,9 +951,9 @@ header button i {
 #forgeModal .content {
     max-width: 32rem;
     width: 95vw;
-    min-height: 40rem;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow-y: auto;
+    padding-bottom: 2.5rem; /* Ensure space for bottom buttons */
 }
 
 .forge-description {
