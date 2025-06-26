@@ -549,6 +549,9 @@ button:focus {
 /* Stat Allocation */
 #allocate-stats {
     width: 18rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 2.5rem; /* Ensure space for button */
 }
 
 /* Header */
