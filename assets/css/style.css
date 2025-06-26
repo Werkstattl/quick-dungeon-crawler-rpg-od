@@ -961,6 +961,13 @@ header button i {
     color: #b30000 !important;
     animation: heart-pulse 0.8s infinite alternate;
 }
+#player-hp-icon.critical-hp {
+    color: #ff0000 !important;
+    animation: heart-pulse 0.6s infinite alternate;
+}
+#player-hp-icon.high-hp {
+    animation: heart-pulse 1.2s infinite alternate;
+}
 @keyframes heart-pulse {
     0% { transform: scale(1); }
     100% { transform: scale(1.2); }
