@@ -884,6 +884,12 @@ header button i {
 	max-width: 50vw;
 }
 
+@media (orientation: landscape) {
+  #title-screen img {
+    max-width: 30vw;
+  }
+}
+
 .companion-list {
     display: flex;
     flex-direction: column;
