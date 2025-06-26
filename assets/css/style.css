@@ -381,6 +381,7 @@ button:focus {
     gap: 0;
     height: 35rem;
     width: 16rem;
+    overflow-y: auto;
 }
 
 #inventory .content .inventorySlots {
