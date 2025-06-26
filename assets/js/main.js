@@ -103,7 +103,14 @@ window.addEventListener("DOMContentLoaded", function () {
                     playtime: 0,
                     kills: 0,
                     deaths: 0,
-                    inCombat: false
+                    inCombat: false,
+                    allocationChoices: {
+                        hp: 10,
+                        atk: 10,
+                        def: 10,
+                        atkSpd: 10
+                    },
+                    selectedPassive: "Remnant Razor"
                 };
                 }
                 player.name = playerName;
@@ -516,7 +523,6 @@ const progressReset = () => {
         critRate: 0,
         critDmg: 0
     };
-    player.skills = [];
     player.inCombat = false;
     dungeon.progress.floor = 1;
     dungeon.progress.room = 1;
@@ -608,12 +614,12 @@ const importData = (importedData) => {
 
 // Player Stat Allocation
 const allocationPopup = () => {
-    let allocation = {
+    let allocation = player.allocationChoices ? { ...player.allocationChoices } : {
         hp: 10,
         atk: 10,
         def: 10,
         atkSpd: 10
-    }
+    };
     const updateStats = () => {
         stats = {
             hp: 50 * allocation.hp,
@@ -623,7 +629,8 @@ const allocationPopup = () => {
         }
     }
     updateStats();
-    let points = 0;
+    let points = 40 - (allocation.hp + allocation.atk + allocation.def + allocation.atkSpd);
+    if (points < 0) { points = 0; }
     const loadContent = function () {
         defaultModalElement.innerHTML = `
         <div class="content" id="allocate-stats">
@@ -750,6 +757,7 @@ const allocationPopup = () => {
     // Passive skills
     let selectSkill = document.querySelector("#select-skill");
     let skillDesc = document.querySelector("#skill-desc");
+    selectSkill.value = player.selectedPassive || "Remnant Razor";
     selectSkill.onclick = function () {
         sfxConfirm.play();
     }
@@ -776,6 +784,7 @@ const allocationPopup = () => {
             skillDesc.innerHTML = "Enemies receive 15% of the damage they dealt.";
         }
     }
+    selectSkill.onchange();
 
     // Operation Buttons
     let confirm = document.querySelector("#allocate-confirm");
@@ -806,29 +815,15 @@ const allocationPopup = () => {
             critDmg: 50
         }
 
+        // Save allocation choices
+        player.allocationChoices = { ...allocation };
+        player.selectedPassive = selectSkill.value;
+
         // Set player skill
         objectValidation();
-        if (selectSkill.value == "Remnant Razor") {
-            player.skills.push("Remnant Razor");
-        }
-        if (selectSkill.value == "Titan's Will") {
-            player.skills.push("Titan's Will");
-        }
+        player.skills = [selectSkill.value];
         if (selectSkill.value == "Devastator") {
-            player.skills.push("Devastator");
             player.baseStats.atkSpd = player.baseStats.atkSpd - ((30 * player.baseStats.atkSpd) / 100);
-        }
-        if (selectSkill.value == "Rampager") {
-            player.skills.push("Rampager");
-        }
-        if (selectSkill.value == "Blade Dance") {
-            player.skills.push("Blade Dance");
-        }
-        if (selectSkill.value == "Paladin's Heart") {
-            player.skills.push("Paladin's Heart");
-        }
-        if (selectSkill.value == "Aegis Thorns") {
-            player.skills.push("Aegis Thorns");
         }
 
         // Proceed to dungeon
@@ -836,6 +831,7 @@ const allocationPopup = () => {
         enterDungeon();
         player.stats.hp = player.stats.hpMax;
         playerLoadStats();
+        saveData();
         defaultModalElement.style.display = "none";
         defaultModalElement.innerHTML = "";
         document.querySelector("#title-screen").style.filter = "brightness(100%)";
@@ -874,6 +870,12 @@ const allocationPopup = () => {
 const objectValidation = () => {
     if (player.skills == undefined) {
         player.skills = [];
+    }
+    if (player.allocationChoices == undefined) {
+        player.allocationChoices = { hp: 10, atk: 10, def: 10, atkSpd: 10 };
+    }
+    if (player.selectedPassive == undefined) {
+        player.selectedPassive = "Remnant Razor";
     }
     if (player.tempStats == undefined) {
         player.tempStats = {};
