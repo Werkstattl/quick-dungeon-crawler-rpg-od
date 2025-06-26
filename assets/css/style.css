@@ -176,7 +176,7 @@ main {
 .logBox {
     margin: 0.5rem;
     height: 100%;
-    min-height: 10rem;
+    min-height: 12rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
