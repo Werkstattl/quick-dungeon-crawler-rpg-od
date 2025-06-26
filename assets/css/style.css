@@ -923,6 +923,17 @@ header button i {
 .fa-heart {
     color: #e74c3c;
 }
+#player-hp-icon {
+    animation: heart-pulse 1s infinite alternate;
+}
+#player-hp-icon.low-hp {
+    color: #b30000 !important;
+    animation: heart-pulse 0.8s infinite alternate;
+}
+@keyframes heart-pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
+}
 .ra-sword {
     color: #c0392b;
 }

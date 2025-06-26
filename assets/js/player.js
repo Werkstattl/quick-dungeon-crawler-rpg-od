@@ -77,7 +77,16 @@ const playerLoadStats = () => {
     document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
     // Player Stats
-    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)} (${player.stats.hpPercent}%)`;
+    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}`;
+    // Heart icon color for low HP
+    const heartIcon = document.getElementById('player-hp-icon');
+    if (heartIcon) {
+        if (player.stats.hpPercent <= 30) {
+            heartIcon.classList.add('low-hp');
+        } else {
+            heartIcon.classList.remove('low-hp');
+        }
+    }
     playerAtkElement.innerHTML = nFormatter(player.stats.atk);
     playerDefElement.innerHTML = nFormatter(player.stats.def);
     playerAtkSpdElement.innerHTML = player.stats.atkSpd.toFixed(2).replace(rx, "$1");
