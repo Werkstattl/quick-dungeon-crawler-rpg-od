@@ -370,10 +370,12 @@ window.addEventListener("DOMContentLoaded", function () {
             sfxOpen.play();
             let exportedData = exportData();
             let backups = getBackupExports();
-            let backup1Data = backups[1] ? backups[1].data : "";
-            let backup1Time = backups[1] ? backups[1].playtime : 0;
-            let backup2Data = backups[2] ? backups[2].data : "";
-            let backup2Time = backups[2] ? backups[2].playtime : 0;
+            let backup1Data = backups[0] ? backups[0].data : "";
+            let backup1Time = backups[0] ? backups[0].playtime : 0;
+            let backup2Data = backups[1] ? backups[1].data : "";
+            let backup2Time = backups[1] ? backups[1].playtime : 0;
+            let backup3Data = backups[2] ? backups[2].data : "";
+            let backup3Time = backups[2] ? backups[2].playtime : 0;
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
@@ -394,6 +396,10 @@ window.addEventListener("DOMContentLoaded", function () {
                 <input type="text" id="export-input-2" autocomplete="off" value="${backup2Data}" readonly>
                 <button id="copy-export-2">Copy</button>
                 <br>
+                <h4>Backup Export 3 (${formatPlaytime(backup3Time)})</h4>
+                <input type="text" id="export-input-3" autocomplete="off" value="${backup3Data}" readonly>
+                <button id="copy-export-3">Copy</button>
+                <br>
                 <h4>Import Data</h4>
                 <input type="text" id="import-input" autocomplete="off">
                 <button id="data-import">Import</button>
@@ -404,6 +410,7 @@ window.addEventListener("DOMContentLoaded", function () {
             let copyExport = document.querySelector('#copy-export');
             let copyExport1 = document.querySelector('#copy-export-1');
             let copyExport2 = document.querySelector('#copy-export-2');
+            let copyExport3 = document.querySelector('#copy-export-3');
             let dataImport = document.querySelector('#data-import');
             let importInput = document.querySelector('#import-input');
             const copyToClipboard = (selector, btn) => {
@@ -424,6 +431,10 @@ window.addEventListener("DOMContentLoaded", function () {
             copyExport2.onclick = function () {
                 sfxConfirm.play();
                 copyToClipboard('#export-input-2', copyExport2);
+            }
+            copyExport3.onclick = function () {
+                sfxConfirm.play();
+                copyToClipboard('#export-input-3', copyExport3);
             }
             dataImport.onclick = function () {
                 importData(importInput.value);
@@ -501,12 +512,6 @@ const saveData = () => {
         localStorage.setItem("dungeonData", dungeonData);
         localStorage.setItem("enemyData", enemyData);
         localStorage.setItem("volumeData", volumeData);
-        if (isPlayerDataValid(player)) {
-            let backups = getBackupExports();
-            if (backups.length === 0) {
-                backupPlayerExport(btoa(playerData));
-            }
-        }
     } finally {
         isSaving = false;
     }
