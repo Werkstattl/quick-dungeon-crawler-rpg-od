@@ -126,7 +126,7 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (player.playtime % 3600 === 0 && isPlayerDataValid(player)) {
+    if (player.playtime % 1800 === 0 && isPlayerDataValid(player)) {
         backupPlayerExport(exportData());
     }
     saveData();
