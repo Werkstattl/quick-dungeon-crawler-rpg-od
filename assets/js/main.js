@@ -453,15 +453,22 @@ const enterDungeon = () => {
 }
 
 // Save all the data into local storage
+let isSaving = false;
 const saveData = () => {
-    const playerData = JSON.stringify(player);
-    const dungeonData = JSON.stringify(dungeon);
-    const enemyData = JSON.stringify(enemy);
-    const volumeData = JSON.stringify(volume);
-    localStorage.setItem("playerData", playerData);
-    localStorage.setItem("dungeonData", dungeonData);
-    localStorage.setItem("enemyData", enemyData);
-    localStorage.setItem("volumeData", volumeData);
+    if (isSaving) return; // Prevent overlapping saves
+    isSaving = true;
+    try {
+        const playerData = JSON.stringify(player);
+        const dungeonData = JSON.stringify(dungeon);
+        const enemyData = JSON.stringify(enemy);
+        const volumeData = JSON.stringify(volume);
+        localStorage.setItem("playerData", playerData);
+        localStorage.setItem("dungeonData", dungeonData);
+        localStorage.setItem("enemyData", enemyData);
+        localStorage.setItem("volumeData", volumeData);
+    } finally {
+        isSaving = false;
+    }
 }
 
 // Calculate every player stat
