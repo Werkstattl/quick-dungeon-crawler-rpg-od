@@ -316,10 +316,13 @@ const updateForgeDisplay = () => {
     const sameTier = allSelected &&
         selectedForgeItems[0].equipment.tier === selectedForgeItems[1].equipment.tier &&
         selectedForgeItems[0].equipment.tier === selectedForgeItems[2].equipment.tier;
+    const sameRarity = allSelected &&
+        selectedForgeItems[0].equipment.rarity === selectedForgeItems[1].equipment.rarity &&
+        selectedForgeItems[0].equipment.rarity === selectedForgeItems[2].equipment.rarity;
 
-    if (allSelected && !sameTier) {
+    if (allSelected && (!sameTier || !sameRarity)) {
         confirmButton.disabled = true;
-        confirmButton.textContent = 'Items Must Share Tier';
+        confirmButton.textContent = !sameTier ? 'Items Must Share Tier' : 'Items Must Share Rarity';
     } else if (allSelected && player.gold >= forgeCost) {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Forge Equipment';
@@ -337,8 +340,11 @@ const updateForgeDisplay = () => {
         const sameTierConfirm = allSelectedConfirm &&
             selectedForgeItems[0].equipment.tier === selectedForgeItems[1].equipment.tier &&
             selectedForgeItems[0].equipment.tier === selectedForgeItems[2].equipment.tier;
+        const sameRarityConfirm = allSelectedConfirm &&
+            selectedForgeItems[0].equipment.rarity === selectedForgeItems[1].equipment.rarity &&
+            selectedForgeItems[0].equipment.rarity === selectedForgeItems[2].equipment.rarity;
 
-        if (allSelectedConfirm && sameTierConfirm && player.gold >= forgeCost) {
+        if (allSelectedConfirm && sameTierConfirm && sameRarityConfirm && player.gold >= forgeCost) {
             executeForging();
         } else {
             sfxDeny.play();
