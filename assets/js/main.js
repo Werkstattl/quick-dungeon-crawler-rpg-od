@@ -458,10 +458,18 @@ const saveData = () => {
     if (isSaving) return; // Prevent overlapping saves
     isSaving = true;
     try {
-        const playerData = JSON.stringify(player);
-        const dungeonData = JSON.stringify(dungeon);
-        const enemyData = JSON.stringify(enemy);
-        const volumeData = JSON.stringify(volume);
+        let playerData, dungeonData, enemyData, volumeData;
+        try {
+            playerData = JSON.stringify(player);
+            dungeonData = JSON.stringify(dungeon);
+            enemyData = JSON.stringify(enemy);
+            volumeData = JSON.stringify(volume);
+        } catch (jsonErr) {
+            console.error("Failed to stringify data for saving:", jsonErr);
+            isSaving = false;
+            return;
+        }
+        // Only save if all data is valid JSON
         localStorage.setItem("playerData", playerData);
         localStorage.setItem("dungeonData", dungeonData);
         localStorage.setItem("enemyData", enemyData);
