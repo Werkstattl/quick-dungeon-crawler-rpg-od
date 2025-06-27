@@ -29,12 +29,14 @@ async function nativeInit() {
   } catch (err) {
     console.error('Error during native initialization:', err);
   }
-  if (CdvPurchase && CdvPurchase.store) {  
+  if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {  
     try {
       initializePurchases();
     } catch (err) {
       console.error('Error initializing purchases:', err);
     }
+  } else {
+    console.log('CdvPurchase is not defined. In-app purchases will be disabled.');
   }
 }
 
