@@ -402,6 +402,14 @@ button:focus {
     padding: 0;
 }
 
+.content-ei {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+.content-ei input {
+    margin-top: 0;
+}
+
 /* General Content */
 .content-head {
     display: flex;
@@ -551,7 +559,7 @@ button:focus {
 /* Stat Allocation */
 #allocate-stats {
     width: 18rem;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
 }
 

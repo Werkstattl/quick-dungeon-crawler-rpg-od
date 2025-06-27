@@ -369,10 +369,15 @@ window.addEventListener("DOMContentLoaded", function () {
         exportImport.onclick = function () {
             sfxOpen.play();
             let exportedData = exportData();
+            let backups = getBackupExports();
+            let backup1Data = backups[1] ? backups[1].data : "";
+            let backup1Time = backups[1] ? backups[1].playtime : 0;
+            let backup2Data = backups[2] ? backups[2].data : "";
+            let backup2Time = backups[2] ? backups[2].playtime : 0;
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
-            <div class="content" id="ei-tab">
+            <div class="content content-ei" id="ei-tab">
                 <div class="content-head">
                     <h3>Export/Import Data</h3>
                     <p id="ei-close"><i class="fa fa-xmark"></i></p>
@@ -380,23 +385,45 @@ window.addEventListener("DOMContentLoaded", function () {
                 <h4>Export Data</h4>
                 <input type="text" id="export-input" autocomplete="off" value="${exportedData}" readonly>
                 <button id="copy-export">Copy</button>
+                <br>
+                <h4>Backup Export 1 (${formatPlaytime(backup1Time)})</h4>
+                <input type="text" id="export-input-1" autocomplete="off" value="${backup1Data}" readonly>
+                <button id="copy-export-1">Copy</button>
+                <br>
+                <h4>Backup Export 2 (${formatPlaytime(backup2Time)})</h4>
+                <input type="text" id="export-input-2" autocomplete="off" value="${backup2Data}" readonly>
+                <button id="copy-export-2">Copy</button>
+                <br>
                 <h4>Import Data</h4>
                 <input type="text" id="import-input" autocomplete="off">
                 <button id="data-import">Import</button>
             </div>`;
             let eiTab = document.querySelector('#ei-tab');
-            eiTab.style.width = "15rem";
+            eiTab.style.width = "17rem";
             let eiClose = document.querySelector('#ei-close');
-            let copyExport = document.querySelector('#copy-export')
+            let copyExport = document.querySelector('#copy-export');
+            let copyExport1 = document.querySelector('#copy-export-1');
+            let copyExport2 = document.querySelector('#copy-export-2');
             let dataImport = document.querySelector('#data-import');
             let importInput = document.querySelector('#import-input');
-            copyExport.onclick = function () {
-                sfxConfirm.play();
-                let copyText = document.querySelector('#export-input');
+            const copyToClipboard = (selector, btn) => {
+                let copyText = document.querySelector(selector);
                 copyText.select();
                 copyText.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(copyText.value);
-                copyExport.innerHTML = "Copied!";
+                btn.innerHTML = "Copied!";
+            }
+            copyExport.onclick = function () {
+                sfxConfirm.play();
+                copyToClipboard('#export-input', copyExport);
+            }
+            copyExport1.onclick = function () {
+                sfxConfirm.play();
+                copyToClipboard('#export-input-1', copyExport1);
+            }
+            copyExport2.onclick = function () {
+                sfxConfirm.play();
+                copyToClipboard('#export-input-2', copyExport2);
             }
             dataImport.onclick = function () {
                 importData(importInput.value);
@@ -474,6 +501,12 @@ const saveData = () => {
         localStorage.setItem("dungeonData", dungeonData);
         localStorage.setItem("enemyData", enemyData);
         localStorage.setItem("volumeData", volumeData);
+        if (isPlayerDataValid(player)) {
+            let backups = getBackupExports();
+            if (backups.length === 0) {
+                backupPlayerExport(btoa(playerData));
+            }
+        }
     } finally {
         isSaving = false;
     }
@@ -576,6 +609,33 @@ const exportData = () => {
     const exportedData = btoa(JSON.stringify(player));
     return exportedData;
 }
+
+// Format seconds into HH:MM:SS
+const formatPlaytime = (seconds) => {
+    return new Date(seconds * 1000).toISOString().slice(11, 19);
+}
+
+// Validate player data structure to avoid corrupt exports
+const isPlayerDataValid = (p) => {
+    return p && p.inventory &&
+        Array.isArray(p.inventory.consumables) &&
+        Array.isArray(p.inventory.equipment);
+};
+
+// Store latest verified exports in localStorage (max 3)
+const backupPlayerExport = (exportString) => {
+    let backups = JSON.parse(localStorage.getItem('playerDataBackups') || '[]');
+    if (!backups.length || backups[0].data !== exportString) {
+        backups.unshift({ data: exportString, playtime: player.playtime });
+    }
+    if (backups.length > 3) backups = backups.slice(0, 3);
+    localStorage.setItem('playerDataBackups', JSON.stringify(backups));
+};
+
+// Retrieve stored export backups
+const getBackupExports = () => {
+    return JSON.parse(localStorage.getItem('playerDataBackups') || '[]');
+};
 
 const importData = (importedData) => {
     try {
