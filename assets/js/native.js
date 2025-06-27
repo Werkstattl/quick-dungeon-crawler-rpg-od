@@ -16,15 +16,25 @@ async function nativeInit() {
     });
   };
   await waitForCapacitor();
-  if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-    if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
-      await window.Capacitor.Plugins.SplashScreen.hide();
+  try {
+    if (window.Capacitor && window.Capacitor.isNativePlatform()) {
+      if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
+        try {
+          await window.Capacitor.Plugins.SplashScreen.hide();
+        } catch (err) {
+          console.error('Failed to hide splash screen:', err);
+        }
+      }
     }
-  } else {
-    return;
+  } catch (err) {
+    console.error('Error during native initialization:', err);
   }
   if (CdvPurchase && CdvPurchase.store) {  
-    initializePurchases();
+    try {
+      initializePurchases();
+    } catch (err) {
+      console.error('Error initializing purchases:', err);
+    }
   }
 }
 
