@@ -382,7 +382,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     <h3>Export/Import Data</h3>
                     <p id="ei-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <h4>Export Data</h4>
+                <h4>Export Data (${formatPlaytime(player.playtime)})</h4>
                 <input type="text" id="export-input" autocomplete="off" value="${exportedData}" readonly>
                 <button id="copy-export">Copy</button>
                 <br>
