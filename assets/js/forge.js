@@ -478,12 +478,18 @@ const executeForging = () => {
                 player.inventory.equipment.splice(itemIndex, 1);
             }
         } else if (item.source === 'equipped') {
-            // Find and remove from equipped array
-            const equippedIndex = player.equipped.findIndex(equipped =>
-                JSON.stringify(equipped) === item.equipmentStr
-            );
+            // Prefer reference comparison to avoid JSON order issues
+            const equippedIndex = player.equipped.indexOf(item.equipment);
             if (equippedIndex !== -1) {
                 player.equipped.splice(equippedIndex, 1);
+            } else {
+                // Fallback to string comparison in case reference changed
+                const altIndex = player.equipped.findIndex(eq =>
+                    JSON.stringify(eq) === item.equipmentStr
+                );
+                if (altIndex !== -1) {
+                    player.equipped.splice(altIndex, 1);
+                }
             }
         }
     };
