@@ -37,7 +37,7 @@ let dungeon = {
     // Add resting system properties
     resting: {
         duration: 0,
-        healthRegenRate: 1.0, // HP per second while resting
+        healthRegenRate: 1.0,
         meditationProgress: 0,
         meditationCost: 1000,
         restingBonusActive: false,
@@ -643,14 +643,7 @@ const processRestingActivities = () => {
     // Passive health regeneration
     if (player.stats.hp < player.stats.hpMax) {
         const regenAmount = dungeon.resting.healthRegenRate;
-        const oldHp = player.stats.hp;
         player.stats.hp = Math.min(player.stats.hpMax, player.stats.hp + regenAmount);
-        
-        // Log health regeneration every 10 seconds
-        if (dungeon.resting.duration % 10 === 0 && player.stats.hp > oldHp) {
-            const actualRegen = Math.round((player.stats.hp - oldHp) * 10);
-            addDungeonLog(`<span class="Epic">Restored ${actualRegen} HP while resting.</span>`);
-        }
     }
     
     // Meditation progress
