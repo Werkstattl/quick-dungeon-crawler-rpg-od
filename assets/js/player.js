@@ -77,7 +77,9 @@ const playerLoadStats = () => {
     document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
     // Player Stats
-    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)} (${player.stats.hpPercent}%)`;
+    const hpPercentInt = Math.round(parseFloat(player.stats.hpPercent));
+    const hpPercentText = hpPercentInt >= 100 ? "" : ` (${hpPercentInt}%)`;
+    playerHpElement.innerHTML = `${nFormatter(player.stats.hp)}${hpPercentText}`;
     const heartIcon = document.getElementById('player-hp-icon');
     if (heartIcon) {
         if (player.stats.hp <= 0 || (typeof playerDead !== 'undefined' && playerDead)) {
