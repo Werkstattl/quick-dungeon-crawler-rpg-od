@@ -778,6 +778,14 @@ const allocationPopup = () => {
     document.querySelector("#title-screen").style.filter = "brightness(50%)";
     loadContent();
 
+    // Show forge button if player has any equipment or inventory items
+    if (player.inventory.equipment.length > 0 || player.equipped.length > 0) {
+        const forgeRow = document.querySelector("#forge-button-row");
+        if (forgeRow) {
+            forgeRow.style.display = "flex";
+        }
+    }
+
     // Stat Allocation
     const handleStatButtons = (e) => {
         let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
