@@ -158,16 +158,28 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     });
     
-    document.querySelector("#menu-btn").addEventListener("click", function () {
-        closeInventory();
+    ["#menu-btn", "#title-menu-btn"].forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) btn.addEventListener("click", function(e) {
+            if (id === "#title-menu-btn") e.stopPropagation();
+            openMenu();
+        });
+    });
+    applyFontSize();
+    setVolume();
+    ratingSystem.init();
+});
 
-        dungeon.status.exploring = false;
-        let dimDungeon = document.querySelector('#dungeon-main');
-        dimDungeon.style.filter = "brightness(50%)";
-        menuModalElement.style.display = "flex";
+function openMenu() {
+    closeInventory();
 
-        // Menu tab
-        menuModalElement.innerHTML = `
+    dungeon.status.exploring = false;
+    let dimDungeon = document.querySelector('#dungeon-main');
+    dimDungeon.style.filter = "brightness(50%)";
+    menuModalElement.style.display = "flex";
+
+    // Menu tab
+    menuModalElement.innerHTML = `
         <div class="content">
             <div class="content-head">
                 <h3>Menu</h3>
@@ -181,25 +193,25 @@ window.addEventListener("DOMContentLoaded", function () {
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
         </div>`;
 
-        let close = document.querySelector('#close-menu');
-        let playerMenu = document.querySelector('#player-menu');
-        let runMenu = document.querySelector('#stats');
-        let quitRun = document.querySelector('#quit-run');
-        let exportImport = document.querySelector('#export-import');
-        let volumeSettings = document.querySelector('#volume-btn');
-        let redditLink = document.querySelector('#reddit-link');
-        // Reddit button click function
-        redditLink.onclick = function () {
-            window.open('https://www.reddit.com/r/QuickDungeonCrawler/', '_blank');
-        }
+    let close = document.querySelector('#close-menu');
+    let playerMenu = document.querySelector('#player-menu');
+    let runMenu = document.querySelector('#stats');
+    let quitRun = document.querySelector('#quit-run');
+    let exportImport = document.querySelector('#export-import');
+    let volumeSettings = document.querySelector('#volume-btn');
+    let redditLink = document.querySelector('#reddit-link');
+    // Reddit button click function
+    redditLink.onclick = function () {
+        window.open('https://www.reddit.com/r/QuickDungeonCrawler/', '_blank');
+    }
 
-        // Player profile click function
-        playerMenu.onclick = function () {
-            sfxOpen.play();
-            let playTime = new Date(player.playtime * 1000).toISOString().slice(11, 19);
-            menuModalElement.style.display = "none";
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
+    // Player profile click function
+    playerMenu.onclick = function () {
+        sfxOpen.play();
+        let playTime = new Date(player.playtime * 1000).toISOString().slice(11, 19);
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
             <div class="content" id="profile-tab">
                 <div class="content-head">
                     <h3>Statistics</h3>
@@ -210,24 +222,24 @@ window.addEventListener("DOMContentLoaded", function () {
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
                 <p>Playtime: ${playTime}</p>
             </div>`;
-            let profileTab = document.querySelector('#profile-tab');
-            profileTab.style.width = "15rem";
-            let profileClose = document.querySelector('#profile-close');
-            profileClose.onclick = function () {
-                sfxDecline.play();
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                menuModalElement.style.display = "flex";
-            };
+        let profileTab = document.querySelector('#profile-tab');
+        profileTab.style.width = "15rem";
+        let profileClose = document.querySelector('#profile-close');
+        profileClose.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
         };
+    };
 
-        // Dungeon run click function
-        runMenu.onclick = function () {
-            sfxOpen.play();
-            let runTime = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-            menuModalElement.style.display = "none";
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
+    // Dungeon run click function
+    runMenu.onclick = function () {
+        sfxOpen.play();
+        let runTime = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
             <div class="content" id="run-tab">
                 <div class="content-head">
                     <h3>Current Run</h3>
@@ -239,23 +251,23 @@ window.addEventListener("DOMContentLoaded", function () {
                 <p>Kills: ${nFormatter(dungeon.statistics.kills)}</p>
                 <p>Runtime: ${runTime}</p>
             </div>`;
-            let runTab = document.querySelector('#run-tab');
-            runTab.style.width = "15rem";
-            let runClose = document.querySelector('#run-close');
-            runClose.onclick = function () {
-                sfxDecline.play();
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                menuModalElement.style.display = "flex";
-            };
+        let runTab = document.querySelector('#run-tab');
+        runTab.style.width = "15rem";
+        let runClose = document.querySelector('#run-close');
+        runClose.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
         };
+    };
 
-        // Quit the current run
-        quitRun.onclick = function () {
-            sfxOpen.play();
-            menuModalElement.style.display = "none";
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
+    // Quit the current run
+    quitRun.onclick = function () {
+        sfxOpen.play();
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
             <div class="content">
                 <p>Do you want to abandon this run?</p>
                 <div class="button-container">
@@ -263,43 +275,43 @@ window.addEventListener("DOMContentLoaded", function () {
                     <button id="cancel-quit">Cancel</button>
                 </div>
             </div>`;
-            let quit = document.querySelector('#quit-run');
-            let cancel = document.querySelector('#cancel-quit');
-            quit.onclick = function () {
-                sfxConfirm.play();
-                // Clear out everything, send the player back to meny and clear progress.
-                bgmDungeon.stop();
-                let dimDungeon = document.querySelector('#dungeon-main');
-                dimDungeon.style.filter = "brightness(100%)";
-                dimDungeon.style.display = "none";
-                menuModalElement.style.display = "none";
-                menuModalElement.innerHTML = "";
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                runLoad("title-screen", "flex");
-                clearInterval(dungeonTimer);
-                clearInterval(playTimer);
-                progressReset();
-            };
-            cancel.onclick = function () {
-                sfxDecline.play();
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                menuModalElement.style.display = "flex";
-            };
-        };
-
-        // Opens the volume settings
-        volumeSettings.onclick = function () {
-            sfxOpen.play();
-
-            let master = volume.master * 100;
-            let bgm = (volume.bgm * 100) * 2;
-            let sfx = volume.sfx * 100;
-            let fontScale = Math.round(fontSize.scale * 100);
+        let quit = document.querySelector('#quit-run');
+        let cancel = document.querySelector('#cancel-quit');
+        quit.onclick = function () {
+            sfxConfirm.play();
+            // Clear out everything, send the player back to meny and clear progress.
+            bgmDungeon.stop();
+            let dimDungeon = document.querySelector('#dungeon-main');
+            dimDungeon.style.filter = "brightness(100%)";
+            dimDungeon.style.display = "none";
             menuModalElement.style.display = "none";
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
+            menuModalElement.innerHTML = "";
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            runLoad("title-screen", "flex");
+            clearInterval(dungeonTimer);
+            clearInterval(playTimer);
+            progressReset();
+        };
+        cancel.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
+        };
+    };
+
+    // Opens the volume settings
+    volumeSettings.onclick = function () {
+        sfxOpen.play();
+
+        let master = volume.master * 100;
+        let bgm = (volume.bgm * 100) * 2;
+        let sfx = volume.sfx * 100;
+        let fontScale = Math.round(fontSize.scale * 100);
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
             <div class="content" id="volume-tab">
                 <div class="content-head">
                     <h3>Settings</h3>
@@ -315,70 +327,70 @@ window.addEventListener("DOMContentLoaded", function () {
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
                 <button id="apply-volume">Apply</button>
             </div>`;
-            let masterVol = document.querySelector('#master-volume');
-            let bgmVol = document.querySelector('#bgm-volume');
-            let sfxVol = document.querySelector('#sfx-volume');
-            let fontSizeSlider = document.querySelector('#font-size');
-            let applyVol = document.querySelector('#apply-volume');
-            let volumeTab = document.querySelector('#volume-tab');
-            volumeTab.style.width = "15rem";
-            let volumeClose = document.querySelector('#volume-close');
-            volumeClose.onclick = function () {
-                sfxDecline.play();
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                menuModalElement.style.display = "flex";
-            };
-
-            // Volume Control
-            masterVol.oninput = function () {
-                master = this.value;
-                document.querySelector('#master-label').innerHTML = `Master (${master}%)`;
-            };
-
-            bgmVol.oninput = function () {
-                bgm = this.value;
-                document.querySelector('#bgm-label').innerHTML = `BGM (${bgm}%)`;
-            };
-
-            sfxVol.oninput = function () {
-                sfx = this.value;
-                document.querySelector('#sfx-label').innerHTML = `SFX (${sfx}%)`;
-            };
-
-            fontSizeSlider.oninput = function () {
-                let fontScale = this.value;
-                document.querySelector('#font-label').innerHTML = `Font Size (${fontScale}%)`;
-            };
-
-            applyVol.onclick = function () {
-                volume.master = master / 100;
-                volume.bgm = (bgm / 100) / 2;
-                volume.sfx = sfx / 100;
-                fontSize.scale = fontSizeSlider.value / 100;
-                bgmDungeon.stop();
-                setVolume();
-                applyFontSize();
-                bgmDungeon.play();
-                saveData();
-                localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
-            };
+        let masterVol = document.querySelector('#master-volume');
+        let bgmVol = document.querySelector('#bgm-volume');
+        let sfxVol = document.querySelector('#sfx-volume');
+        let fontSizeSlider = document.querySelector('#font-size');
+        let applyVol = document.querySelector('#apply-volume');
+        let volumeTab = document.querySelector('#volume-tab');
+        volumeTab.style.width = "15rem";
+        let volumeClose = document.querySelector('#volume-close');
+        volumeClose.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
         };
 
-        // Export/Import Save Data
-        exportImport.onclick = function () {
-            sfxOpen.play();
-            let exportedData = exportData();
-            let backups = getBackupExports();
-            let backup1Data = backups[0] ? backups[0].data : "";
-            let backup1Time = backups[0] ? backups[0].playtime : 0;
-            let backup2Data = backups[1] ? backups[1].data : "";
-            let backup2Time = backups[1] ? backups[1].playtime : 0;
-            let backup3Data = backups[2] ? backups[2].data : "";
-            let backup3Time = backups[2] ? backups[2].playtime : 0;
-            menuModalElement.style.display = "none";
-            defaultModalElement.style.display = "flex";
-            defaultModalElement.innerHTML = `
+        // Volume Control
+        masterVol.oninput = function () {
+            master = this.value;
+            document.querySelector('#master-label').innerHTML = `Master (${master}%)`;
+        };
+
+        bgmVol.oninput = function () {
+            bgm = this.value;
+            document.querySelector('#bgm-label').innerHTML = `BGM (${bgm}%)`;
+        };
+
+        sfxVol.oninput = function () {
+            sfx = this.value;
+            document.querySelector('#sfx-label').innerHTML = `SFX (${sfx}%)`;
+        };
+
+        fontSizeSlider.oninput = function () {
+            let fontScale = this.value;
+            document.querySelector('#font-label').innerHTML = `Font Size (${fontScale}%)`;
+        };
+
+        applyVol.onclick = function () {
+            volume.master = master / 100;
+            volume.bgm = (bgm / 100) / 2;
+            volume.sfx = sfx / 100;
+            fontSize.scale = fontSizeSlider.value / 100;
+            bgmDungeon.stop();
+            setVolume();
+            applyFontSize();
+            bgmDungeon.play();
+            saveData();
+            localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
+        };
+    };
+
+    // Export/Import Save Data
+    exportImport.onclick = function () {
+        sfxOpen.play();
+        let exportedData = exportData();
+        let backups = getBackupExports();
+        let backup1Data = backups[0] ? backups[0].data : "";
+        let backup1Time = backups[0] ? backups[0].playtime : 0;
+        let backup2Data = backups[1] ? backups[1].data : "";
+        let backup2Time = backups[1] ? backups[1].playtime : 0;
+        let backup3Data = backups[2] ? backups[2].data : "";
+        let backup3Time = backups[2] ? backups[2].playtime : 0;
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
             <div class="content content-ei" id="ei-tab">
                 <div class="content-head">
                     <h3>Export/Import Data</h3>
@@ -404,61 +416,58 @@ window.addEventListener("DOMContentLoaded", function () {
                 <input type="text" id="import-input" autocomplete="off">
                 <button id="data-import">Import</button>
             </div>`;
-            let eiTab = document.querySelector('#ei-tab');
-            eiTab.style.width = "17rem";
-            let eiClose = document.querySelector('#ei-close');
-            let copyExport = document.querySelector('#copy-export');
-            let copyExport1 = document.querySelector('#copy-export-1');
-            let copyExport2 = document.querySelector('#copy-export-2');
-            let copyExport3 = document.querySelector('#copy-export-3');
-            let dataImport = document.querySelector('#data-import');
-            let importInput = document.querySelector('#import-input');
-            const copyToClipboard = (selector, btn) => {
-                let copyText = document.querySelector(selector);
-                copyText.select();
-                copyText.setSelectionRange(0, 99999);
-                navigator.clipboard.writeText(copyText.value);
-                btn.innerHTML = "Copied!";
-            }
-            copyExport.onclick = function () {
-                sfxConfirm.play();
-                copyToClipboard('#export-input', copyExport);
-            }
-            copyExport1.onclick = function () {
-                sfxConfirm.play();
-                copyToClipboard('#export-input-1', copyExport1);
-            }
-            copyExport2.onclick = function () {
-                sfxConfirm.play();
-                copyToClipboard('#export-input-2', copyExport2);
-            }
-            copyExport3.onclick = function () {
-                sfxConfirm.play();
-                copyToClipboard('#export-input-3', copyExport3);
-            }
-            dataImport.onclick = function () {
-                importData(importInput.value);
-            };
-            eiClose.onclick = function () {
-                sfxDecline.play();
-                defaultModalElement.style.display = "none";
-                defaultModalElement.innerHTML = "";
-                menuModalElement.style.display = "flex";
-            };
+        let eiTab = document.querySelector('#ei-tab');
+        eiTab.style.width = "17rem";
+        let eiClose = document.querySelector('#ei-close');
+        let copyExport = document.querySelector('#copy-export');
+        let copyExport1 = document.querySelector('#copy-export-1');
+        let copyExport2 = document.querySelector('#copy-export-2');
+        let copyExport3 = document.querySelector('#copy-export-3');
+        let dataImport = document.querySelector('#data-import');
+        let importInput = document.querySelector('#import-input');
+        const copyToClipboard = (selector, btn) => {
+            let copyText = document.querySelector(selector);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            btn.innerHTML = "Copied!";
+        }
+        copyExport.onclick = function () {
+            sfxConfirm.play();
+            copyToClipboard('#export-input', copyExport);
+        }
+        copyExport1.onclick = function () {
+            sfxConfirm.play();
+            copyToClipboard('#export-input-1', copyExport1);
+        }
+        copyExport2.onclick = function () {
+            sfxConfirm.play();
+            copyToClipboard('#export-input-2', copyExport2);
+        }
+        copyExport3.onclick = function () {
+            sfxConfirm.play();
+            copyToClipboard('#export-input-3', copyExport3);
+        }
+        dataImport.onclick = function () {
+            importData(importInput.value);
         };
-
-        // Close menu
-        close.onclick = function () {
+        eiClose.onclick = function () {
             sfxDecline.play();
-            continueExploring();
-            menuModalElement.style.display = "none";
-            menuModalElement.innerHTML = "";
-            dimDungeon.style.filter = "brightness(100%)";
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
         };
-    });
-    applyFontSize();
-    ratingSystem.init();
-});
+    };
+
+    // Close menu
+    close.onclick = function () {
+        sfxDecline.play();
+        continueExploring();
+        menuModalElement.style.display = "none";
+        menuModalElement.innerHTML = "";
+        dimDungeon.style.filter = "brightness(100%)";
+    };
+}
 
 // Loading Screen
 const runLoad = (id, display) => {

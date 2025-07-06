@@ -248,6 +248,12 @@ main {
     margin: 0.5rem;
 }
 
+#title-menu-btn {
+    width: 15rem;
+    max-width: calc(100% - 1rem);
+    margin: 0.5rem;
+}
+
 /* Shadows */
 .primary-panel {
     border-radius: 0.3rem;
