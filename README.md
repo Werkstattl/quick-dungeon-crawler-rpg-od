@@ -31,6 +31,8 @@ To try the latest version from source you only need a small HTTP server. You can
 npx serve
 # or
 python3 -m http.server
+# or
+php -S 127.0.0.1:4000
 ```
 
 After running the server, open your browser at the shown address to play locally. This
