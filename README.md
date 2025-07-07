@@ -38,6 +38,17 @@ php -S 127.0.0.1:4000
 After running the server, open your browser at the shown address to play locally. This
 ensures the service worker can cache files correctly for offline play.
 
+## Docker
+
+Alternatively, you can run the game using Docker:
+
+```bash
+docker build -t quick-dungeon-crawler .
+docker run --rm -p 8080:80 quick-dungeon-crawler
+```
+
+Open <http://localhost:8080> in your browser after starting the container.
+
 ## Contributing
 
 Contributions are very welcome! Feel free to open issues and pull requests.
