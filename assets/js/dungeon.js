@@ -329,7 +329,7 @@ const dungeonEvent = () => {
                     let healCost = Math.round(player.stats.hpMax * 0.2) + (dungeon.progress.floor * 60);
                     choices = `
                             <div class="decision-panel">
-                                <button id="choice1">Pray (Heal)</button>
+                                <button id="choice1">Pray</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
                     addDungeonLog(`<span class="Epic">You discovered an ancient healing shrine. The air shimmers with restorative magic. Pray for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to restore your health?</span>`, choices);
