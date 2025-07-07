@@ -626,6 +626,9 @@ const exportData = () => {
 
 // Format seconds into HH:MM:SS
 const formatPlaytime = (seconds) => {
+    if (typeof seconds !== 'number' || !Number.isFinite(seconds)) {
+        return '00:00:00';
+    }
     return new Date(seconds * 1000).toISOString().slice(11, 19);
 }
 
@@ -670,6 +673,9 @@ const importData = (importedData) => {
             let cancel = document.querySelector("#cancel-btn");
             confirm.onclick = function () {
                 sfxConfirm.play();
+                if (typeof playerImport.playtime !== 'number' || !Number.isFinite(playerImport.playtime)) {
+                    playerImport.playtime = 0;
+                }
                 player = playerImport;
                 saveData();
                 bgmDungeon.stop();
