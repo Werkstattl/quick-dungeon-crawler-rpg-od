@@ -162,7 +162,7 @@ window.addEventListener("DOMContentLoaded", function () {
         const btn = document.querySelector(id);
         if (btn) btn.addEventListener("click", function(e) {
             if (id === "#title-menu-btn") e.stopPropagation();
-            openMenu();
+            openMenu(id === "#title-menu-btn");
         });
     });
     applyFontSize();
@@ -170,7 +170,7 @@ window.addEventListener("DOMContentLoaded", function () {
     ratingSystem.init();
 });
 
-function openMenu() {
+function openMenu(isTitle = false) {
     closeInventory();
 
     dungeon.status.exploring = false;
@@ -192,10 +192,10 @@ function openMenu() {
                 <p id="close-menu"><i class="fa fa-xmark"></i></p>
             </div>
             <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
-            <button id="stats">Current Run</button>
+            ${isTitle ? '' : '<button id="stats">Current Run</button>'}
             <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
-            <button id="quit-run">Abandon</button>
+            ${isTitle ? '' : '<button id="quit-run">Abandon</button>'}
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
         </div>`;
 
@@ -240,72 +240,76 @@ function openMenu() {
     };
 
     // Dungeon run click function
-    runMenu.onclick = function () {
-        sfxOpen.play();
-        let runTime = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-        menuModalElement.style.display = "none";
-        defaultModalElement.style.display = "flex";
-        defaultModalElement.innerHTML = `
-            <div class="content" id="run-tab">
-                <div class="content-head">
-                    <h3>Current Run</h3>
-                    <p id="run-close"><i class="fa fa-xmark"></i></p>
-                </div>
-                <p>${player.name} Lv.${player.lvl} (${player.skills})</p>
-                <p>Blessing Lvl.${player.blessing}</p>
-                <p>Curse Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
-                <p>Kills: ${nFormatter(dungeon.statistics.kills)}</p>
-                <p>Runtime: ${runTime}</p>
-            </div>`;
-        let runTab = document.querySelector('#run-tab');
-        runTab.style.width = "15rem";
-        let runClose = document.querySelector('#run-close');
-        runClose.onclick = function () {
-            sfxDecline.play();
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
-            menuModalElement.style.display = "flex";
+    if (runMenu) {
+        runMenu.onclick = function () {
+            sfxOpen.play();
+            let runTime = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
+            menuModalElement.style.display = "none";
+            defaultModalElement.style.display = "flex";
+            defaultModalElement.innerHTML = `
+                <div class="content" id="run-tab">
+                    <div class="content-head">
+                        <h3>Current Run</h3>
+                        <p id="run-close"><i class="fa fa-xmark"></i></p>
+                    </div>
+                    <p>${player.name} Lv.${player.lvl} (${player.skills})</p>
+                    <p>Blessing Lvl.${player.blessing}</p>
+                    <p>Curse Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
+                    <p>Kills: ${nFormatter(dungeon.statistics.kills)}</p>
+                    <p>Runtime: ${runTime}</p>
+                </div>`;
+            let runTab = document.querySelector('#run-tab');
+            runTab.style.width = "15rem";
+            let runClose = document.querySelector('#run-close');
+            runClose.onclick = function () {
+                sfxDecline.play();
+                defaultModalElement.style.display = "none";
+                defaultModalElement.innerHTML = "";
+                menuModalElement.style.display = "flex";
+            };
         };
-    };
+    }
 
     // Quit the current run
-    quitRun.onclick = function () {
-        sfxOpen.play();
-        menuModalElement.style.display = "none";
-        defaultModalElement.style.display = "flex";
-        defaultModalElement.innerHTML = `
-            <div class="content">
-                <p>Do you want to abandon this run?</p>
-                <div class="button-container">
-                    <button id="quit-run">Abandon</button>
-                    <button id="cancel-quit">Cancel</button>
-                </div>
-            </div>`;
-        let quit = document.querySelector('#quit-run');
-        let cancel = document.querySelector('#cancel-quit');
-        quit.onclick = function () {
-            sfxConfirm.play();
-            // Clear out everything, send the player back to meny and clear progress.
-            bgmDungeon.stop();
-            let dimDungeon = document.querySelector('#dungeon-main');
-            dimDungeon.style.filter = "brightness(100%)";
-            dimDungeon.style.display = "none";
+    if (quitRun) {
+        quitRun.onclick = function () {
+            sfxOpen.play();
             menuModalElement.style.display = "none";
-            menuModalElement.innerHTML = "";
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
-            runLoad("title-screen", "flex");
-            clearInterval(dungeonTimer);
-            clearInterval(playTimer);
-            progressReset();
+            defaultModalElement.style.display = "flex";
+            defaultModalElement.innerHTML = `
+                <div class="content">
+                    <p>Do you want to abandon this run?</p>
+                    <div class="button-container">
+                        <button id="quit-run">Abandon</button>
+                        <button id="cancel-quit">Cancel</button>
+                    </div>
+                </div>`;
+            let quit = document.querySelector('#quit-run');
+            let cancel = document.querySelector('#cancel-quit');
+            quit.onclick = function () {
+                sfxConfirm.play();
+                // Clear out everything, send the player back to meny and clear progress.
+                bgmDungeon.stop();
+                let dimDungeon = document.querySelector('#dungeon-main');
+                dimDungeon.style.filter = "brightness(100%)";
+                dimDungeon.style.display = "none";
+                menuModalElement.style.display = "none";
+                menuModalElement.innerHTML = "";
+                defaultModalElement.style.display = "none";
+                defaultModalElement.innerHTML = "";
+                runLoad("title-screen", "flex");
+                clearInterval(dungeonTimer);
+                clearInterval(playTimer);
+                progressReset();
+            };
+            cancel.onclick = function () {
+                sfxDecline.play();
+                defaultModalElement.style.display = "none";
+                defaultModalElement.innerHTML = "";
+                menuModalElement.style.display = "flex";
+            };
         };
-        cancel.onclick = function () {
-            sfxDecline.play();
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
-            menuModalElement.style.display = "flex";
-        };
-    };
+    }
 
     // Opens the volume settings
     volumeSettings.onclick = function () {
