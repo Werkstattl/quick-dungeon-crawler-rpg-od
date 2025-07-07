@@ -697,6 +697,10 @@ const importData = (importedData) => {
                 let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
                 dimDungeon.style.display = "none";
+                let titleScreen = document.querySelector('#title-screen');
+                if (titleScreen) {
+                    titleScreen.style.filter = "brightness(100%)";
+                }
                 menuModalElement.style.display = "none";
                 menuModalElement.innerHTML = "";
                 confirmationModalElement.style.display = "none";
