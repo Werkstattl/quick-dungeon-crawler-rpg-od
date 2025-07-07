@@ -175,7 +175,13 @@ function openMenu() {
 
     dungeon.status.exploring = false;
     let dimDungeon = document.querySelector('#dungeon-main');
-    dimDungeon.style.filter = "brightness(50%)";
+    let dimTitle = document.querySelector('#title-screen');
+    if (dimDungeon && dimDungeon.style.display !== 'none') {
+        dimDungeon.style.filter = "brightness(50%)";
+    }
+    if (dimTitle && dimTitle.style.display !== 'none') {
+        dimTitle.style.filter = "brightness(50%)";
+    }
     menuModalElement.style.display = "flex";
 
     // Menu tab
@@ -465,7 +471,12 @@ function openMenu() {
         continueExploring();
         menuModalElement.style.display = "none";
         menuModalElement.innerHTML = "";
-        dimDungeon.style.filter = "brightness(100%)";
+        if (dimDungeon && dimDungeon.style.display !== 'none') {
+            dimDungeon.style.filter = "brightness(100%)";
+        }
+        if (dimTitle && dimTitle.style.display !== 'none') {
+            dimTitle.style.filter = "brightness(100%)";
+        }
     };
 }
 
