@@ -196,6 +196,7 @@ function openMenu(isTitle = false) {
             <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
             ${isTitle ? '' : '<button id="quit-run">Abandon</button>'}
+            <button id="rate-game"><i class="fas fa-star"></i> Rate Game</button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
         </div>`;
 
@@ -206,9 +207,17 @@ function openMenu(isTitle = false) {
     let exportImport = document.querySelector('#export-import');
     let volumeSettings = document.querySelector('#volume-btn');
     let redditLink = document.querySelector('#reddit-link');
+    let rateGameBtn = document.querySelector('#rate-game');
     // Reddit button click function
     redditLink.onclick = function () {
         window.open('https://www.reddit.com/r/QuickDungeonCrawler/', '_blank');
+    }
+
+    // Rate game button click function
+    rateGameBtn.onclick = function () {
+        ratingSystem.openGooglePlayForRating();
+        ratingSystem.config.hasRated = true;
+        ratingSystem.saveConfig();
     }
 
     // Player profile click function
