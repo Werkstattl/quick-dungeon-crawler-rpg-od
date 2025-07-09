@@ -158,16 +158,21 @@ document.querySelector("#title-screen").addEventListener("click", function () {
 });
 
 document.addEventListener("visibilitychange", function () {
-    if (bgmDungeon != undefined) {
+    if (document.hidden) {
+        Howler.mute(true);
+    } else {
+        Howler.mute(false);
+    }
+    if (bgmDungeon !== undefined) {
         bgmDungeon.stop();
     }
-    if (bgmBattleMain != undefined) {
+    if (bgmBattleMain !== undefined) {
         bgmBattleMain.stop();
     }
-    if (bgmBattleBoss != undefined) {
+    if (bgmBattleBoss !== undefined) {
         bgmBattleBoss.stop();
     }
-    if (bgmBattleGuardian != undefined) {
+    if (bgmBattleGuardian !== undefined) {
         bgmBattleGuardian.stop();
     }
 });

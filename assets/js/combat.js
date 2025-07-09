@@ -444,12 +444,15 @@ const showCombatInfo = () => {
     `;
 }
 
+// Mute combat sounds when the app loses focus
 document.addEventListener("visibilitychange", () => {
-	if (!player.inCombat) {
-		return
-	}
+    if (!player.inCombat) {
+        return;
+    }
     if (document.hidden) {
-    	alert("Paused")
+        Howler.mute(true);
+    } else {
+        Howler.mute(false);
     }
 });
 
