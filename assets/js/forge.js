@@ -516,12 +516,9 @@ const executeForging = () => {
         return;
     }
 
-    // Add forged item to inventory
-    player.inventory.equipment.push(JSON.stringify(forgeResult));
-
+    // Add forged item to inventory or auto equip if slots are available
+    receiveEquipment(forgeResult);
     sfxEquip.play();
-    saveData();
-    playerLoadStats();
 
     // Reset forge state and UI
     selectedForgeItems = [null, null, null];

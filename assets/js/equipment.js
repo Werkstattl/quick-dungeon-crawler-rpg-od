@@ -210,6 +210,19 @@ const createEquipment = (addToInventory = true) => {
     return equipment;
 }
 
+// Add a new equipment item to the player's collection. Automatically equips
+// the item if there are fewer than 6 pieces currently equipped, otherwise it
+// is stored in the inventory.
+const receiveEquipment = (equipment) => {
+    if (player.equipped.length < 6) {
+        player.equipped.push(equipment);
+    } else {
+        player.inventory.equipment.push(JSON.stringify(equipment));
+    }
+    saveData();
+    playerLoadStats();
+};
+
 // Regenerate stats and value for an equipment piece based on its
 // current level, tier and rarity. Used for forged items so they
 // match normal dungeon drops.
@@ -645,7 +658,8 @@ const sellAll = (rarity) => {
 
 const createEquipmentPrint = (condition) => {
     let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    let item = createEquipment();
+    let item = createEquipment(false);
+    receiveEquipment(item);
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
                 <h4 class="${item.rarity}"><b>${item.icon}${item.rarity} ${item.category}</b></h4>
