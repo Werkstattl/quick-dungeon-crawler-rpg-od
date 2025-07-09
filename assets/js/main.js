@@ -25,8 +25,6 @@ window.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
     }
 
-    nativeInit();
-
     // Submit Name
     document.querySelector("#name-submit").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -122,6 +120,8 @@ window.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
+
+    nativeInit();
 
     // Unequip all items
     document.querySelector("#unequip-all").addEventListener("click", function () {

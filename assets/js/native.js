@@ -1,6 +1,6 @@
 async function nativeInit() {
   const waitForCapacitor = () => {
-    const maxAttempts = 100;
+    const maxAttempts = 50;
     let attempts = 0;
     return new Promise((resolve, reject) => {
       const checkCapacitor = () => {
@@ -9,7 +9,7 @@ async function nativeInit() {
         } else if (++attempts >= maxAttempts) {
           resolve();
         } else {
-          setTimeout(checkCapacitor, 50);
+          setTimeout(checkCapacitor, 100);
         }
       };
       checkCapacitor();
@@ -30,11 +30,13 @@ async function nativeInit() {
     console.error('Error during native initialization:', err);
   }
   if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {  
-    try {
-      initializePurchases();
-    } catch (err) {
-      console.error('Error initializing purchases:', err);
-    }
+    setTimeout(() => {
+      try {
+        initializePurchases();
+      } catch (err) {
+        console.error('Error initializing purchases:', err);
+      }
+    }, 1500);
   } else {
     console.log('CdvPurchase is not defined. In-app purchases will be disabled.');
   }
