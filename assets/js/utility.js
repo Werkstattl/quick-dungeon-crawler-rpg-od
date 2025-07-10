@@ -66,7 +66,7 @@ const ratingSystem = {
             return false;
         }
         // Check if player has progressed far enough
-        if (player.monarchsDefeated < 1) {
+        if (dungeon.progress.floor < 5) {
             return false;
         }
         return true;

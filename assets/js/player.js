@@ -1,7 +1,4 @@
 let player = JSON.parse(localStorage.getItem("playerData"));
-if (player && player.monarchsDefeated === undefined) {
-    player.monarchsDefeated = 0;
-}
 let inventoryOpen = false;
 let leveled = false;
 const lvlupSelect = document.querySelector("#lvlupSelect");

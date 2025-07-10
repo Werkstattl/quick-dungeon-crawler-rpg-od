@@ -83,14 +83,6 @@ const hpValidation = () => {
                 clearFloorBuffs();
                 addDungeonLog("You moved to the next floor.");
             }
-            if (enemy.condition === "sboss") {
-                if (player.monarchsDefeated === undefined) {
-                    player.monarchsDefeated = 0;
-                }
-                player.monarchsDefeated++;
-                ratingSystem.checkAndPrompt();
-                saveData();
-            }
 
             // Clear combat backlog and transition to dungeon exploration
             let dimDungeon = document.querySelector('#dungeon-main');
