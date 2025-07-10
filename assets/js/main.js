@@ -101,6 +101,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     playtime: 0,
                     kills: 0,
                     deaths: 0,
+                    monarchsDefeated: 0,
                     inCombat: false,
                     allocationChoices: {
                         hp: 10,
@@ -1017,6 +1018,9 @@ const objectValidation = () => {
     }
     if (player.selectedPassive == undefined) {
         player.selectedPassive = "Remnant Razor";
+    }
+    if (player.monarchsDefeated == undefined) {
+        player.monarchsDefeated = 0;
     }
     if (player.tempStats == undefined) {
         player.tempStats = {};
