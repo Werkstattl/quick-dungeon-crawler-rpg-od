@@ -167,6 +167,7 @@ window.addEventListener("DOMContentLoaded", function () {
     });
     applyFontSize();
     setVolume();
+    loadBestiary();
     ratingSystem.init();
 });
 

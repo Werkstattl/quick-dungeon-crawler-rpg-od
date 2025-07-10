@@ -280,10 +280,14 @@ function findCompanionAfterCombat(enemyLevel) {
         };
 
         // Filter out companions player already has
+        // Also exclude base forms if the player owns their evolutions
+        const evolvedMap = {1: 6, 2: 7, 3: 8, 4: 9, 5: 10};
+        const ownedIds = new Set(playerCompanions.map(pc => pc.id));
         const availableCompanions = companionTypes.filter(c => {
+            if (evolvedMap[c.id] && ownedIds.has(evolvedMap[c.id])) return false;
             return (c.obtainable !== false) &&
                    rarityPool.includes(rarityMap[c.rarity]) &&
-                   !playerCompanions.some(pc => pc.id === c.id);
+                   !ownedIds.has(c.id);
         });
         
         if (availableCompanions.length > 0) {
