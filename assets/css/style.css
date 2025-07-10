@@ -1296,4 +1296,12 @@ header button i {
 }
 .bestiary-list li {
     padding: 0.2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.bestiary-list img {
+    width: 2.5rem;
+    height: auto;
 }
