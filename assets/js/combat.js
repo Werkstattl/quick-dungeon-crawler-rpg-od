@@ -357,9 +357,6 @@ let combatSeconds = 0;
 
 const startCombat = (battleMusic) => {
     currentBattleMusic = battleMusic;
-    if (typeof addToBestiary === 'function') {
-        addToBestiary(enemy.name);
-    }
     bgmDungeon.pause();
     sfxEncounter.play();
 //    battleMusic.play();

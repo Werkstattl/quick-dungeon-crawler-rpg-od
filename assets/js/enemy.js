@@ -181,6 +181,9 @@ const generateRandomEnemy = (condition) => {
         enemy.name = "Door Mimic";
     }
     setEnemyImg();
+    if (typeof addToBestiary === 'function') {
+        addToBestiary(enemy.name);
+    }
 }
 
 // Set a randomly generated stat for the enemy
