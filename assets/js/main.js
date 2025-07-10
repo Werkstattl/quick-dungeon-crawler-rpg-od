@@ -743,6 +743,8 @@ const allocationPopup = () => {
         def: 10,
         atkSpd: 10
     };
+    // track temporary stats during allocation
+    let stats;
     const updateStats = () => {
         stats = {
             hp: 50 * allocation.hp,
