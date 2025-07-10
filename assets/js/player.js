@@ -307,16 +307,16 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.hpMax;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="atk"){
-                    let statFinal = Math.round(player.baseStats.atk + player.baseStats.atk * (player.bonusStats.atk + percentages["atk"]) / 100 + player.equippedStats.atk);
+                    let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)));
                     let statInitial = player.stats.atk;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="def"){
-                    let statFinal = Math.round(player.baseStats.def + player.baseStats.def * (player.bonusStats.def + percentages["def"]) / 100 + player.equippedStats.def);
+                    let statFinal = Math.round(((player.baseStats.def + player.baseStats.def * ((player.bonusStats.def + percentages["def"]) / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
                     let statInitial = player.stats.def;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="atkSpd"){
                     let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
-                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * (player.bonusStats.atkSpd+percentages["atkSpd"]) / 100 + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
+                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd+percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
                     let statInitial = player.stats.atkSpd;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="vamp"){
