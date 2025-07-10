@@ -1,5 +1,6 @@
 // Bestiary system
-let bestiary = [];
+// Structure: { [name]: { encounters: Number, kills: Number } }
+let bestiary = {};
 
 // Mapping of enemy names to sprite file names
 const bestiarySprites = {
@@ -61,8 +62,15 @@ function loadBestiary() {
     if (stored) {
         try {
             bestiary = JSON.parse(stored);
+            if (Array.isArray(bestiary)) {
+                const converted = {};
+                bestiary.forEach(n => {
+                    converted[n] = { encounters: 1, kills: 0 };
+                });
+                bestiary = converted;
+            }
         } catch (e) {
-            bestiary = [];
+            bestiary = {};
         }
     }
 }
@@ -72,20 +80,31 @@ function saveBestiary() {
 }
 
 function addToBestiary(name) {
-    if (!bestiary.includes(name)) {
-        bestiary.push(name);
-        saveBestiary();
+    if (!bestiary[name]) {
+        bestiary[name] = { encounters: 0, kills: 0 };
     }
+    bestiary[name].encounters++;
+    saveBestiary();
+}
+
+function recordBestiaryKill(name) {
+    if (!bestiary[name]) {
+        bestiary[name] = { encounters: 0, kills: 0 };
+    }
+    bestiary[name].kills++;
+    saveBestiary();
 }
 
 function openBestiaryModal() {
     sfxOpen.play();
     menuModalElement.style.display = 'none';
     defaultModalElement.style.display = 'flex';
-    const listItems = bestiary.slice().sort().map(n => {
+    const listItems = Object.keys(bestiary).sort().map(n => {
         const img = bestiarySprites[n];
+        const stats = bestiary[n];
         const imgTag = img ? `<img src="./assets/sprites/${img}.webp" alt="${n}">` : '';
-        return `<li>${imgTag}<span>${n}</span></li>`;
+        const statTag = `<span class="stats">E:${stats.encounters} K:${stats.kills}</span>`;
+        return `<li>${imgTag}<span>${n}</span>${statTag}</li>`;
     }).join('');
     defaultModalElement.innerHTML = `
         <div class="content" id="bestiary-modal">

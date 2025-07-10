@@ -53,6 +53,9 @@ const hpValidation = () => {
         enemy.stats.hp = 0;
         enemyDead = true;
         player.kills++;
+        if (typeof recordBestiaryKill === 'function') {
+            recordBestiaryKill(enemy.name);
+        }
         dungeon.statistics.kills++;
         addCombatLog(`${enemy.name} died! (${new Date(combatSeconds * 1000).toISOString().substring(14, 19)})`);
         addCombatLog(`You earned ${nFormatter(enemy.rewards.exp)} exp.`)

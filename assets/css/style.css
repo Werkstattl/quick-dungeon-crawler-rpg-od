@@ -1305,3 +1305,9 @@ header button i {
     width: 2.5rem;
     height: auto;
 }
+
+.bestiary-list .stats {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #ccc;
+}
