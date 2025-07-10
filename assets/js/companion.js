@@ -15,6 +15,24 @@ class Companion {
         this.critDmg = 1.5;
     }
 
+    checkEvolution() {
+        const current = companionTypes.find(c => c.id === this.id);
+        if (current && current.evolvesTo && this.level >= current.evolveLevel) {
+            const next = companionTypes.find(c => c.id === current.evolvesTo);
+            if (next) {
+                const oldName = this.name;
+                this.id = next.id;
+                this.name = next.name;
+                this.rarity = next.rarity;
+                this.baseHp = next.baseHp;
+                this.baseAtk = next.baseAtk;
+                this.hp = this.calculateHp();
+                this.atk = this.calculateAtk();
+                addCombatLog(`${oldName} evolved into ${this.name}!`);
+            }
+        }
+    }
+
     calculateHp() {
         return Math.floor(this.baseHp * (1 + (this.level - 1) * 0.1));
     }
@@ -38,7 +56,8 @@ class Companion {
         this.experience = 0;
         this.hp = this.calculateHp();
         this.atk = this.calculateAtk();
-        addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`); 
+        addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`);
+        this.checkEvolution();
         updateCompanionUI();
     }
 
@@ -65,11 +84,16 @@ class Companion {
 
 // Available companions list
 const companionTypes = [
-    {id: 1, name: "Wolf Pup", rarity: "Common", baseHp: 20, baseAtk: 80},
-    {id: 2, name: "Fairy Helper", rarity: "Uncommon", baseHp: 15, baseAtk: 150},
-    {id: 3, name: "Mini Dragon", rarity: "Rare", baseHp: 30, baseAtk: 280},
-    {id: 4, name: "Shadow Cat", rarity: "Epic", baseHp: 40, baseAtk: 450},
-    {id: 5, name: "Phoenix Chick", rarity: "Legendary", baseHp: 60, baseAtk: 650},
+    {id: 1, name: "Wolf Pup", rarity: "Common", baseHp: 20, baseAtk: 80, evolvesTo: 6, evolveLevel: 10},
+    {id: 2, name: "Fairy Helper", rarity: "Uncommon", baseHp: 15, baseAtk: 150, evolvesTo: 7, evolveLevel: 10},
+    {id: 3, name: "Mini Dragon", rarity: "Rare", baseHp: 30, baseAtk: 280, evolvesTo: 8, evolveLevel: 10},
+    {id: 4, name: "Shadow Cat", rarity: "Epic", baseHp: 40, baseAtk: 450, evolvesTo: 9, evolveLevel: 10},
+    {id: 5, name: "Phoenix Chick", rarity: "Legendary", baseHp: 60, baseAtk: 650, evolvesTo: 10, evolveLevel: 10},
+    {id: 6, name: "Wolf", rarity: "Uncommon", baseHp: 40, baseAtk: 150, obtainable: false},
+    {id: 7, name: "Fairy Guardian", rarity: "Rare", baseHp: 25, baseAtk: 250, obtainable: false},
+    {id: 8, name: "Young Dragon", rarity: "Epic", baseHp: 60, baseAtk: 420, obtainable: false},
+    {id: 9, name: "Night Panther", rarity: "Legendary", baseHp: 80, baseAtk: 600, obtainable: false},
+    {id: 10, name: "Phoenix", rarity: "Legendary", baseHp: 90, baseAtk: 900, obtainable: false},
 ];
 
 // Player's companions
@@ -257,7 +281,8 @@ function findCompanionAfterCombat(enemyLevel) {
 
         // Filter out companions player already has
         const availableCompanions = companionTypes.filter(c => {
-            return rarityPool.includes(rarityMap[c.rarity]) && 
+            return (c.obtainable !== false) &&
+                   rarityPool.includes(rarityMap[c.rarity]) &&
                    !playerCompanions.some(pc => pc.id === c.id);
         });
         
