@@ -1,21 +1,4 @@
 async function nativeInit() {
-  const waitForCapacitor = () => {
-    const maxAttempts = 50;
-    let attempts = 0;
-    return new Promise((resolve, reject) => {
-      const checkCapacitor = () => {
-        if (window.Capacitor) {
-          resolve();
-        } else if (++attempts >= maxAttempts) {
-          resolve();
-        } else {
-          setTimeout(checkCapacitor, 100);
-        }
-      };
-      checkCapacitor();
-    });
-  };
-  await waitForCapacitor();
   try {
     if (window.Capacitor && window.Capacitor.isNativePlatform()) {
       if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
