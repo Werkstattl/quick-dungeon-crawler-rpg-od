@@ -375,15 +375,15 @@ const mimicBattle = (type) => {
     addDungeonLog(`You encountered ${enemy.name}.`);
 }
 
-// Guardian boss fight
+// boss fight
 const guardianBattle = () => {
     generateRandomEnemy("guardian");
     showCombatInfo();
-    startCombat(bgmBattleGuardian);
+    startCombat(bgmBattleBoss);
     addCombatLog(`Floor Guardian ${enemy.name} is blocking your way.`);
 }
 
-// Guardian boss fight
+// mysterious chamber fight
 const specialBossBattle = () => {
     generateRandomEnemy("sboss");
     showCombatInfo();

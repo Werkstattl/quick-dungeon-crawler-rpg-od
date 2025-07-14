@@ -351,7 +351,6 @@ const startCombat = (battleMusic) => {
     currentBattleMusic = battleMusic;
     bgmDungeon.pause();
     sfxEncounter.play();
-//    battleMusic.play();
 	currentBattleMusic.play();
     player.inCombat = true;
     clearTimeout(playerAttackTimeout);
@@ -380,9 +379,6 @@ const startCombat = (battleMusic) => {
 }
 
 const endCombat = () => {
-    //bgmBattleMain.stop();
-    //bgmBattleGuardian.stop();
-    //bgmBattleBoss.stop();
     currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;

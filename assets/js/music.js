@@ -30,11 +30,11 @@ const applyFontSize = () => {
 let bgmDungeon;
 let bgmBattleMain;
 let bgmBattleBoss;
-let bgmBattleGuardian;
 
 // SFX
 let sfxEncounter;
 let sfxEnemyDeath;
+let sfxCombatEnd;
 let sfxAttack;
 let sfxLvlUp;
 let sfxConfirm;
@@ -65,12 +65,6 @@ const setVolume = () => {
 
     bgmBattleBoss = new Howl({
         src: ['./assets/bgm/battle_boss.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
-
-    bgmBattleGuardian = new Howl({
-        src: ['./assets/bgm/battle_guardian.webm'],
         volume: volume.bgm * volume.master,
         loop: true
     });
@@ -162,17 +156,5 @@ document.addEventListener("visibilitychange", function () {
         Howler.mute(true);
     } else {
         Howler.mute(false);
-    }
-    if (bgmDungeon !== undefined) {
-        bgmDungeon.stop();
-    }
-    if (bgmBattleMain !== undefined) {
-        bgmBattleMain.stop();
-    }
-    if (bgmBattleBoss !== undefined) {
-        bgmBattleBoss.stop();
-    }
-    if (bgmBattleGuardian !== undefined) {
-        bgmBattleGuardian.stop();
     }
 });
