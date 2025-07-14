@@ -206,9 +206,9 @@
     <script src="./assets/js/bestiary.js"></script>
     <script src="./assets/js/main.js"></script>
     <script>
-    if (typeof navigator.serviceWorker !== 'undefined') {
-        navigator.serviceWorker.register('sw.js')
-    }
+        if (typeof navigator.serviceWorker !== 'undefined' && !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
     <script src="./assets/js/native.js"></script>
 </body>
