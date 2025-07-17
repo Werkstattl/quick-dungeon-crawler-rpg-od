@@ -7,7 +7,7 @@
 Quick Dungeon Crawler on Demand is an open-source endless dungeon crawler with randomized floors, enemies and items. It's based on the [source code of Dungeon crawler on Demand](https://github.com/redpangilinan/dungeon-crawler-rpg-od), by [Redpangilinan](https://github.com/redpangilinan).
 
 <div align="center">
-  <img alt="In game screenshot" src="./assets/screenshots/exploring.webp" width="400" />
+  <img alt="In game screenshot" src="./assets/screenshots/combat.webp" width="350" />
 </div>
 
 The game is available for Android and Desktop platforms. You can find official releases of the game on:
