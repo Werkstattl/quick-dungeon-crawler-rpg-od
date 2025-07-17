@@ -403,13 +403,6 @@ function openMenu(isTitle = false) {
     exportImport.onclick = function () {
         sfxOpen.play();
         let exportedData = exportData();
-        let backups = getBackupExports();
-        let backup1Data = backups[0] ? backups[0].data : "";
-        let backup1Time = backups[0] ? backups[0].playtime : 0;
-        let backup2Data = backups[1] ? backups[1].data : "";
-        let backup2Time = backups[1] ? backups[1].playtime : 0;
-        let backup3Data = backups[2] ? backups[2].data : "";
-        let backup3Time = backups[2] ? backups[2].playtime : 0;
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
@@ -418,21 +411,9 @@ function openMenu(isTitle = false) {
                     <h3>Export/Import Data</h3>
                     <p id="ei-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <h4>Export Data (${formatPlaytime(player.playtime)})</h4>
+                <h4>Export Data</h4>
                 <input type="text" id="export-input" autocomplete="off" value="${exportedData}" readonly>
                 <button id="copy-export">Copy</button>
-                <br>
-                <h4>Backup Export 1 (${formatPlaytime(backup1Time)})</h4>
-                <input type="text" id="export-input-1" autocomplete="off" value="${backup1Data}" readonly>
-                <button id="copy-export-1">Copy</button>
-                <br>
-                <h4>Backup Export 2 (${formatPlaytime(backup2Time)})</h4>
-                <input type="text" id="export-input-2" autocomplete="off" value="${backup2Data}" readonly>
-                <button id="copy-export-2">Copy</button>
-                <br>
-                <h4>Backup Export 3 (${formatPlaytime(backup3Time)})</h4>
-                <input type="text" id="export-input-3" autocomplete="off" value="${backup3Data}" readonly>
-                <button id="copy-export-3">Copy</button>
                 <br>
                 <h4>Import Data</h4>
                 <input type="text" id="import-input" autocomplete="off">
@@ -442,9 +423,6 @@ function openMenu(isTitle = false) {
         eiTab.style.width = "17rem";
         let eiClose = document.querySelector('#ei-close');
         let copyExport = document.querySelector('#copy-export');
-        let copyExport1 = document.querySelector('#copy-export-1');
-        let copyExport2 = document.querySelector('#copy-export-2');
-        let copyExport3 = document.querySelector('#copy-export-3');
         let dataImport = document.querySelector('#data-import');
         let importInput = document.querySelector('#import-input');
         const copyToClipboard = (selector, btn) => {
@@ -457,18 +435,6 @@ function openMenu(isTitle = false) {
         copyExport.onclick = function () {
             sfxConfirm.play();
             copyToClipboard('#export-input', copyExport);
-        }
-        copyExport1.onclick = function () {
-            sfxConfirm.play();
-            copyToClipboard('#export-input-1', copyExport1);
-        }
-        copyExport2.onclick = function () {
-            sfxConfirm.play();
-            copyToClipboard('#export-input-2', copyExport2);
-        }
-        copyExport3.onclick = function () {
-            sfxConfirm.play();
-            copyToClipboard('#export-input-3', copyExport3);
         }
         dataImport.onclick = function () {
             importData(importInput.value);
@@ -656,36 +622,6 @@ const exportData = () => {
     return exportedData;
 }
 
-// Format seconds into HH:MM:SS
-const formatPlaytime = (seconds) => {
-    if (typeof seconds !== 'number' || !Number.isFinite(seconds)) {
-        return '00:00:00';
-    }
-    return new Date(seconds * 1000).toISOString().slice(11, 19);
-}
-
-// Validate player data structure to avoid corrupt exports
-const isPlayerDataValid = (p) => {
-    return p && p.inventory &&
-        Array.isArray(p.inventory.consumables) &&
-        Array.isArray(p.inventory.equipment);
-};
-
-// Store latest verified exports in localStorage (max 3)
-const backupPlayerExport = (exportString) => {
-    let backups = JSON.parse(localStorage.getItem('playerDataBackups') || '[]');
-    if (!backups.length || backups[0].data !== exportString) {
-        backups.unshift({ data: exportString, playtime: player.playtime });
-    }
-    if (backups.length > 3) backups = backups.slice(0, 3);
-    localStorage.setItem('playerDataBackups', JSON.stringify(backups));
-};
-
-// Retrieve stored export backups
-const getBackupExports = () => {
-    return JSON.parse(localStorage.getItem('playerDataBackups') || '[]');
-};
-
 const importData = (importedData) => {
     try {
         let playerImport = JSON.parse(atob(importedData));
@@ -751,7 +687,6 @@ const allocationPopup = () => {
         def: 10,
         atkSpd: 10
     };
-    // track temporary stats during allocation
     let stats;
     const updateStats = () => {
         stats = {

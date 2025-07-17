@@ -124,10 +124,9 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (player.playtime % 1800 === 0 && isPlayerDataValid(player)) {
-        backupPlayerExport(exportData());
+    if (dungeon.statistics.runtime % 10 === 0) {
+        saveData();
     }
-    saveData();
 }
 
 // Loads the floor and room count
