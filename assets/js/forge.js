@@ -301,7 +301,10 @@ const updateForgeDisplay = () => {
 
     if (!forgeUnlocked) {
         confirmButton.disabled = false;
-        confirmButton.textContent = window.cordova ? 'Unlock The Forge' : 'Get on Google Play';
+        confirmButton.textContent = 'Unlock The Forge (Premium)';
+        if (!window.cordova) {
+            confirmButton.textContent = 'Get on Google Play (Premium)';
+        }
         confirmButton.onclick = () => {
             if (window.cordova) {
                 buyForgeUnlock();
