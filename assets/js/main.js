@@ -29,6 +29,7 @@ window.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#name-submit").addEventListener("submit", function (e) {
         e.preventDefault();
         let playerName = document.querySelector("#name-input").value;
+        let hardcore = document.querySelector("#hardcore-checkbox").checked;
 
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
         if (format.test(playerName)) {
@@ -108,10 +109,12 @@ window.addEventListener("DOMContentLoaded", function () {
                         def: 10,
                         atkSpd: 10
                     },
+                    hardcore: hardcore,
                     selectedPassive: "Remnant Razor"
                 };
                 }
                 player.name = playerName;
+                player.hardcore = hardcore;
                 calculateStats();
                 player.stats.hp = player.stats.hpMax;
                 saveData();
