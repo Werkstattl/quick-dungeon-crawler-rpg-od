@@ -33,7 +33,7 @@ const hpValidation = () => {
             runLoad("title-screen", "flex");
             clearInterval(dungeonTimer);
             clearInterval(playTimer);
-            progressReset();
+            progressReset(true);
         });
         document.querySelector("#battleButton2").addEventListener("click", function () {
             sfxConfirm.play();
@@ -45,7 +45,7 @@ const hpValidation = () => {
             showCharacterCreation();
             clearInterval(dungeonTimer);
             clearInterval(playTimer);
-            progressReset();
+            progressReset(true);
         });
         endCombat();
     } else if (enemy.stats.hp < 1) {

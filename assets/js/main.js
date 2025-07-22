@@ -508,7 +508,7 @@ const enterDungeon = () => {
         bgmDungeon.play();
     }
     if (player.stats.hp == 0) {
-        progressReset();
+        progressReset(true);
     }
     initialDungeonLoad();
     playerLoadStats();
@@ -579,8 +579,32 @@ const calculateStats = () => {
     }
 }
 
-// Resets the progress back to start
-const progressReset = () => {
+// Resets the progress back to start. If `fromDeath` is true and hardcore mode
+// is enabled, inventory, equipped items and gold are wiped.
+const progressReset = (fromDeath = false) => {
+    if (fromDeath && player.hardcore) {
+        player.inventory = {
+            consumables: [],
+            equipment: []
+        };
+        player.equipped = [];
+        player.equippedStats = {
+            hp: 0,
+            atk: 0,
+            def: 0,
+            pen: 0,
+            atkSpd: 0,
+            vamp: 0,
+            critRate: 0,
+            critDmg: 0,
+            hpPct: 0,
+            atkPct: 0,
+            defPct: 0,
+            penPct: 0,
+        };
+        player.gold = 0;
+        calculateStats();
+    }
     player.stats.hp = player.stats.hpMax;
     player.lvl = 1;
     player.blessing = 1;
