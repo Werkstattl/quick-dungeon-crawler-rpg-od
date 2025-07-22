@@ -486,6 +486,10 @@ const showCharacterCreation = () => {
     if (checkbox) {
         checkbox.checked = !!(player && player.hardcore);
     }
+    const nameInput = document.querySelector("#name-input");
+    if (nameInput && player && player.name) {
+        nameInput.value = player.name;
+    }
     runLoad("character-creation", "flex");
 }
 
