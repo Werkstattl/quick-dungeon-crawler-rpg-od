@@ -239,6 +239,7 @@ function openMenu(isTitle = false) {
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <p>${player.name} Lv.${player.lvl}</p>
+                <p>Hardcore: ${player.hardcore ? 'Enabled' : 'Disabled'}</p>
                 <p>Kills: ${nFormatter(player.kills)}</p>
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
                 <p>Playtime: ${playTime}</p>
