@@ -242,10 +242,10 @@ function openMenu(isTitle = false) {
     dungeon.status.exploring = false;
     let dimDungeon = document.querySelector('#dungeon-main');
     let dimTitle = document.querySelector('#title-screen');
-    if (dimDungeon && dimDungeon.style.display !== 'none') {
+    if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
         dimDungeon.style.filter = "brightness(50%)";
     }
-    if (dimTitle && dimTitle.style.display !== 'none') {
+    if (dimTitle && window.getComputedStyle(dimTitle).display !== 'none') {
         dimTitle.style.filter = "brightness(50%)";
     }
     menuModalElement.style.display = "flex";
@@ -541,10 +541,10 @@ function openMenu(isTitle = false) {
         continueExploring();
         menuModalElement.style.display = "none";
         menuModalElement.innerHTML = "";
-        if (dimDungeon && dimDungeon.style.display !== 'none') {
+        if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
             dimDungeon.style.filter = "brightness(100%)";
         }
-        if (dimTitle && dimTitle.style.display !== 'none') {
+        if (dimTitle && window.getComputedStyle(dimTitle).display !== 'none') {
             dimTitle.style.filter = "brightness(100%)";
         }
     };
