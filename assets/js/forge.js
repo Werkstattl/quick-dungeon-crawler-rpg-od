@@ -303,13 +303,14 @@ const updateForgeDisplay = () => {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Unlock The Forge (Premium)';
         if (!window.cordova) {
-            confirmButton.textContent = 'Get on Google Play (Premium)';
+            confirmButton.textContent = 'Get on Google Play (Premium)'; // disable for itch.io
         }
         confirmButton.onclick = () => {
             if (window.cordova) {
                 buyForgeUnlock();
             } else {
-                ratingSystem.openGooglePlayForRating();
+                ratingSystem.openGooglePlayForRating(); // disable for itch.io
+                // window.open('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
             }
         };
         return;

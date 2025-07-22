@@ -74,6 +74,7 @@ const ratingSystem = {
     
     showPrompt() {
         this.config.lastPromptDate = new Date().toISOString();
+        // disable google play on itch.io
         const modalContent = `
             <div class="content">
                 <div class="content-head">
