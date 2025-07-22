@@ -4,7 +4,7 @@ window.addEventListener("DOMContentLoaded", function () {
     // Apply saved font size on page load
     
     if (player === null) {
-        runLoad("character-creation", "flex");
+        showCharacterCreation();
     } else {
         let target = document.querySelector("#title-screen");
         target.style.display = "flex";
@@ -478,6 +478,15 @@ const runLoad = (id, display) => {
         loader.style.display = "none";
         document.querySelector(`#${id}`).style.display = `${display}`;
     }, 100);
+}
+
+// Display character creation screen and keep hardcore status in sync
+const showCharacterCreation = () => {
+    const checkbox = document.querySelector("#hardcore-checkbox");
+    if (checkbox) {
+        checkbox.checked = !!(player && player.hardcore);
+    }
+    runLoad("character-creation", "flex");
 }
 
 // Start the game

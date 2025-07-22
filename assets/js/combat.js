@@ -42,7 +42,7 @@ const hpValidation = () => {
             dimDungeon.style.filter = "brightness(100%)";
             dimDungeon.style.display = "none";
             combatPanel.style.display = "none";
-	        runLoad("character-creation", "flex");
+            showCharacterCreation();
             clearInterval(dungeonTimer);
             clearInterval(playTimer);
             progressReset();
