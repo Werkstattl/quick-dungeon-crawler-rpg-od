@@ -30,6 +30,7 @@ window.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         let playerName = document.querySelector("#name-input").value;
         let hardcore = document.querySelector("#hardcore-checkbox").checked;
+        let wasHardcore = player ? player.hardcore : false;
 
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
         if (format.test(playerName)) {
@@ -114,6 +115,31 @@ window.addEventListener("DOMContentLoaded", function () {
                 };
                 }
                 player.name = playerName;
+                if (hardcore && !wasHardcore) {
+                    if ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) ||
+                        (player.equipped && player.equipped.length > 0) || player.gold > 0) {
+                        player.inventory = {
+                            consumables: [],
+                            equipment: []
+                        };
+                        player.equipped = [];
+                        player.equippedStats = {
+                            hp: 0,
+                            atk: 0,
+                            def: 0,
+                            pen: 0,
+                            atkSpd: 0,
+                            vamp: 0,
+                            critRate: 0,
+                            critDmg: 0,
+                            hpPct: 0,
+                            atkPct: 0,
+                            defPct: 0,
+                            penPct: 0,
+                        };
+                        player.gold = 0;
+                    }
+                }
                 player.hardcore = hardcore;
                 calculateStats();
                 player.stats.hp = player.stats.hpMax;
