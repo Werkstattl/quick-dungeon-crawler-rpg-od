@@ -262,7 +262,7 @@ function openMenu(isTitle = false) {
             <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
             <button id="bestiary-menu">Bestiary</button>
-            ${isTitle ? '' : '<button id="quit-run">Abandon</button>'}
+            ${isTitle ? '<button id="hero-return">Hero Creation</button>' : '<button id="quit-run">Abandon</button>'}
             <button id="rate-game"><i class="fas fa-star"></i> Rate Game</button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
         </div>`;
@@ -271,6 +271,7 @@ function openMenu(isTitle = false) {
     let playerMenu = document.querySelector('#player-menu');
     let runMenu = document.querySelector('#stats');
     let quitRun = document.querySelector('#quit-run');
+    let heroReturn = document.querySelector('#hero-return');
     let exportImport = document.querySelector('#export-import');
     let bestiaryMenu = document.querySelector('#bestiary-menu');
     let volumeSettings = document.querySelector('#volume-btn');
@@ -513,6 +514,21 @@ function openMenu(isTitle = false) {
             menuModalElement.style.display = "flex";
         };
     };
+
+    // Switch back to character creation from title screen
+    if (heroReturn) {
+        heroReturn.onclick = function () {
+            sfxConfirm.play();
+            menuModalElement.style.display = "none";
+            menuModalElement.innerHTML = "";
+            let dimTitle = document.querySelector('#title-screen');
+            if (dimTitle) {
+                dimTitle.style.filter = "brightness(100%)";
+                dimTitle.style.display = "none";
+            }
+            showCharacterCreation();
+        };
+    }
 
     // Open bestiary modal
     bestiaryMenu.onclick = function () {
