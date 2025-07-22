@@ -8,7 +8,11 @@ let enemyAttackTimeout;
 let companionAttackTimeout;
 // ========== Validation ==========
 const hpValidation = () => {
-    const deathMessages = [
+    const deathMessages = player.hardcore ? [
+        "In <b>hardcore</b> mode, death claims all. Your <b>inventory</b> and <b>gold</b> are lost for good.",
+        "No mercy in <b>hardcore</b>—your <b>inventory</b> and <b>gold</b> vanish as you fall.",
+        "You perish and with you all <b>inventory</b> and <b>gold</b>. Prepare to start anew."
+    ] : [
         "But don’t worry, you still have your <b>inventory</b> and <b>gold</b>. Try again!",
         "That’s unfortunate, but not the end. Your <b>inventory</b> and <b>gold</b> are safe with you. Go for another round!",
         "It’s a tough world out there, but you’re tougher. You keep your <b>inventory</b> and <b>gold</b> even after death. Don’t give up!",
