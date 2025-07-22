@@ -124,6 +124,42 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Warn about hardcore mode enabling if player already has items or gold
+    const hcCheckbox = document.querySelector("#hardcore-checkbox");
+    hcCheckbox.addEventListener("change", function (e) {
+        if (e.target.checked && player && !player.hardcore &&
+            ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) || player.gold > 0)) {
+            sfxOpen.play();
+            let dimTarget = document.querySelector('#character-creation');
+            dimTarget.style.filter = "brightness(50%)";
+            defaultModalElement.style.display = "flex";
+            defaultModalElement.innerHTML = `
+            <div class="content">
+                <p>Enabling <b>hardcore</b> will permanently delete all of your current <b>items</b> and <b>gold</b>. Use the <b>Export/Import Data</b> option to back up your save before continuing.</p>
+                <div class="button-container">
+                    <button id="hc-enable">Enable</button>
+                    <button id="hc-cancel">Cancel</button>
+                </div>
+            </div>`;
+            let confirm = document.querySelector('#hc-enable');
+            let cancel = document.querySelector('#hc-cancel');
+            confirm.onclick = function () {
+                sfxConfirm.play();
+                defaultModalElement.style.display = "none";
+                defaultModalElement.innerHTML = "";
+                dimTarget.style.filter = "brightness(100%)";
+                hcCheckbox.checked = true;
+            };
+            cancel.onclick = function () {
+                sfxDecline.play();
+                defaultModalElement.style.display = "none";
+                defaultModalElement.innerHTML = "";
+                dimTarget.style.filter = "brightness(100%)";
+                hcCheckbox.checked = false;
+            };
+        }
+    });
+
     nativeInit();
 
     // Unequip all items
