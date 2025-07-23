@@ -267,7 +267,7 @@ const lvlupPopup = () => {
         "vamp": 0.5,
         "critRate": 1,
         "critDmg": 6,
-        "dodge": 0.5
+        "dodge": 0.25
     };
     ratingSystem.checkAndPrompt();
     generateLvlStats(2, percentages);
