@@ -274,6 +274,12 @@ const enemyAttack = () => {
         damage = Math.round(damage);
     }
 
+    // Player dodge chance
+    if (Math.random() < player.stats.dodge / 100) {
+        addCombatLog(`${player.name} dodged the attack!`);
+        damage = 0;
+    }
+
     // Skill effects
     if (player.skills.includes("Paladin's Heart")) {
         // You receive 25% less damage

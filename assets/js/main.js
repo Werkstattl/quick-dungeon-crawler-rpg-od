@@ -52,7 +52,8 @@ window.addEventListener("DOMContentLoaded", function () {
                         atkSpd: null,
                         vamp: null,
                         critRate: null,
-                        critDmg: null
+                        critDmg: null,
+                        dodge: null
                     },
                     baseStats: {
                         hp: 500,
@@ -62,7 +63,8 @@ window.addEventListener("DOMContentLoaded", function () {
                         atkSpd: 0.6,
                         vamp: 0,
                         critRate: 0,
-                        critDmg: 50
+                        critDmg: 50,
+                        dodge: 0
                     },
                     equippedStats: {
                         hp: 0,
@@ -73,6 +75,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         vamp: 0,
                         critRate: 0,
                         critDmg: 0,
+                        dodge: 0,
                         hpPct: 0,
                         atkPct: 0,
                         defPct: 0,
@@ -85,7 +88,8 @@ window.addEventListener("DOMContentLoaded", function () {
                         atkSpd: 0,
                         vamp: 0,
                         critRate: 0,
-                        critDmg: 0
+                        critDmg: 0,
+                        dodge: 0
                     },
                     exp: {
                         expCurr: 0,
@@ -132,6 +136,7 @@ window.addEventListener("DOMContentLoaded", function () {
                             vamp: 0,
                             critRate: 0,
                             critDmg: 0,
+                            dodge: 0,
                             hpPct: 0,
                             atkPct: 0,
                             defPct: 0,
@@ -630,6 +635,7 @@ const calculateStats = () => {
     let playerVampBase = player.baseStats.vamp;
     let playerCRateBase = player.baseStats.critRate;
     let playerCDmgBase = player.baseStats.critDmg;
+    let playerDodgeBase = player.baseStats.dodge;
 
     // Initialize floor buffs if they don't exist
     if (dungeon.floorBuffs == undefined) {
@@ -651,6 +657,10 @@ const calculateStats = () => {
         player.stats.critRate = 100;
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
+    player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
+    if (player.stats.dodge > 50) {
+        player.stats.dodge = 50;
+    }
 
     // Caps attack speed to 2.5
     if (player.stats.atkSpd > 2.5) {
@@ -701,7 +711,8 @@ const progressReset = (fromDeath = false) => {
         atkSpd: 0,
         vamp: 0,
         critRate: 0,
-        critDmg: 0
+        critDmg: 0,
+        dodge: 0
     };
     player.inCombat = false;
     dungeon.progress.floor = 1;
@@ -1077,6 +1088,18 @@ const objectValidation = () => {
         player.tempStats = {};
         player.tempStats.atk = 0;
         player.tempStats.atkSpd = 0;
+    }
+    if (player.baseStats && player.baseStats.dodge === undefined) {
+        player.baseStats.dodge = 0;
+    }
+    if (player.stats && player.stats.dodge === undefined) {
+        player.stats.dodge = 0;
+    }
+    if (player.bonusStats && player.bonusStats.dodge === undefined) {
+        player.bonusStats.dodge = 0;
+    }
+    if (player.equippedStats && player.equippedStats.dodge === undefined) {
+        player.equippedStats.dodge = 0;
     }
     saveData();
 }

@@ -1,4 +1,21 @@
-let player = JSON.parse(localStorage.getItem("playerData"));
+let savedPlayer = localStorage.getItem("playerData");
+let player = savedPlayer ? JSON.parse(savedPlayer) : null;
+
+// Ensure newly added dodge stats exist on old saves
+if (player) {
+    if (player.baseStats && player.baseStats.dodge === undefined) {
+        player.baseStats.dodge = 0;
+    }
+    if (player.stats && player.stats.dodge === undefined) {
+        player.stats.dodge = 0;
+    }
+    if (player.equippedStats && player.equippedStats.dodge === undefined) {
+        player.equippedStats.dodge = 0;
+    }
+    if (player.bonusStats && player.bonusStats.dodge === undefined) {
+        player.bonusStats.dodge = 0;
+    }
+}
 let inventoryOpen = false;
 let leveled = false;
 const lvlupSelect = document.querySelector("#lvlupSelect");
@@ -112,6 +129,7 @@ const playerLoadStats = () => {
         playerCrateElement.style.color = 'white';
     }
     playerCdmgElement.innerHTML = (player.stats.critDmg).toFixed(2).replace(rx, "$1") + "%";
+    playerDodgeElement.innerHTML = (player.stats.dodge).toFixed(2).replace(rx, "$1") + "%";
 
     // Player Bonus Stats
     let bonusStatsHTML = `
@@ -122,7 +140,8 @@ const playerLoadStats = () => {
     <p><i class="ra ra-plain-dagger"></i>+${player.bonusStats.atkSpd.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-dripping-blade"></i>+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-lightning-bolt"></i>+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>`;
+    <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>
+    <p><i class="ra ra-footprint"></i>+${player.bonusStats.dodge.toFixed(2).replace(rx, "$1")}%</p>`;
 
     // Add floor buffs display if any are active
     if (dungeon.floorBuffs && (dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0)) {
@@ -247,7 +266,8 @@ const lvlupPopup = () => {
         "atkSpd": 3,
         "vamp": 0.5,
         "critRate": 1,
-        "critDmg": 6
+        "critDmg": 6,
+        "dodge": 1
     };
     ratingSystem.checkAndPrompt();
     generateLvlStats(2, percentages);
@@ -256,7 +276,7 @@ const lvlupPopup = () => {
 // Generates random stats for level up popup
 const generateLvlStats = (rerolls, percentages) => {
     let selectedStats = [];
-    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg"];
+    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
     while (selectedStats.length < 3) {
         let randomIndex = Math.floor(Math.random() * stats.length);
         if (!selectedStats.includes(stats[randomIndex])) {
@@ -331,6 +351,10 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statFinal = percentages["critDmg"] + player.stats.critDmg;
                     let statInitial = player.stats.critDmg;
                     marginalValue = (statFinal-statInitial)/statInitial * Math.min(player.stats.critRate/100, 1);
+                } else if(selectedStats[i]=="dodge"){
+                    let statFinal = percentages["dodge"] + player.stats.dodge;
+                    let statInitial = player.stats.dodge;
+                    marginalValue = (statFinal-statInitial) / statInitial;
                 }
                 if (Number.isFinite(marginalValue)) {
                 	p.innerHTML += ` (+${Math.round(1000*marginalValue)/10.0}%)`;

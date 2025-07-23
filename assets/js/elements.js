@@ -8,6 +8,7 @@ const playerAtkSpdElement = document.querySelector('#player-atkspd');
 const playerVampElement = document.querySelector('#player-vamp');
 const playerCrateElement = document.querySelector('#player-crate');
 const playerCdmgElement = document.querySelector('#player-cdmg');
+const playerDodgeElement = document.querySelector('#player-dodge');
 const defaultModalElement = document.querySelector('#defaultModal');
 const confirmationModalElement = document.querySelector('#confirmationModal');
 const sellAllElement = document.querySelector("#sell-all");
