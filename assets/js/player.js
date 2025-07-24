@@ -351,10 +351,12 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statFinal = percentages["critDmg"] + player.stats.critDmg;
                     let statInitial = player.stats.critDmg;
                     marginalValue = (statFinal-statInitial)/statInitial * Math.min(player.stats.critRate/100, 1);
-                } else if(selectedStats[i]=="dodge"){
+                } else if(selectedStats[i]=="dodge"){ 
                     let statFinal = percentages["dodge"] + player.stats.dodge;
                     let statInitial = player.stats.dodge;
-                    marginalValue = (statFinal-statInitial) / statInitial;
+                    let ehpInitial = 1 / (1 - statInitial / 100);
+                    let ehpFinal = 1 / (1 - statFinal / 100);
+                    marginalValue = (ehpFinal / ehpInitial) - 1;
                 }
                 if (Number.isFinite(marginalValue)) {
                 	p.innerHTML += ` (+${Math.round(1000*marginalValue)/10.0}%)`;
