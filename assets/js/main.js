@@ -658,11 +658,9 @@ const calculateStats = () => {
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
-    if (player.stats.dodge > 50) {
-        player.stats.dodge = 50;
+    if (player.stats.dodge > 75) {
+        player.stats.dodge = 75;
     }
-
-    // Caps attack speed to 2.5
     if (player.stats.atkSpd > 2.5) {
         player.stats.atkSpd = 2.5;
     }
