@@ -458,7 +458,7 @@ const nothingEvent = () => {
 // Random stat buff
 const statBlessing = () => {
     sfxBuff.play();
-    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg"];
+    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
     let buff = stats[Math.floor(Math.random() * stats.length)];
     let value;
     switch (buff) {
@@ -489,6 +489,10 @@ const statBlessing = () => {
         case "critDmg":
             value = 6;
             player.bonusStats.critDmg += value;
+            break;
+        case "dodge":
+            value = 0.3;
+            player.bonusStats.dodge += value;
             break;
     }
     addDungeonLog(`You gained ${value}% bonus ${buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()} from the blessing. (Blessing Lv.${player.blessing} > Blessing Lv.${player.blessing + 1})`);
