@@ -157,9 +157,9 @@ const createEquipment = (addToInventory = true) => {
             statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
             equipmentValue += statValue * 8.33;
         } else if (statType === "dodge") {
-            statValue = randomizeDecimal(crVampScaling * 0.5, crVampScaling);
-            if (statValue > 10) {
-                statValue = 10 * randomizeDecimal(0.5, 1);
+            statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
+            if (statValue > 4) {
+                statValue = 4 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
@@ -330,9 +330,9 @@ const rerollEquipmentStats = (equipment) => {
             statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
             equipmentValue += statValue * 8.33;
         } else if (statType === "dodge") {
-            statValue = randomizeDecimal(crVampScaling * 0.5, crVampScaling);
-            if (statValue > 10) {
-                statValue = 10 * randomizeDecimal(0.5, 1);
+            statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
+            if (statValue > 4) {
+                statValue = 4 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
