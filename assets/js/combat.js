@@ -275,9 +275,11 @@ const enemyAttack = () => {
     }
 
     // Player dodge chance
+    let dodged = false;
     if (Math.random() < player.stats.dodge / 100) {
         addCombatLog(`${player.name} dodged the attack!`);
         damage = 0;
+        dodged = true;
     }
 
     // Skill effects
@@ -295,7 +297,9 @@ const enemyAttack = () => {
         enemy.stats.hp -= Math.round((15 * damage) / 100);
     }
     enemy.stats.hp += lifesteal;
-    addCombatLog(`${enemy.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${player.name}.`);
+    if (!dodged) {
+        addCombatLog(`${enemy.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${player.name}.`);
+    }
     hpValidation();
     playerLoadStats();
     enemyLoadStats();
