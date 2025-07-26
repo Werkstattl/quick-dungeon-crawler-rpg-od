@@ -39,18 +39,6 @@ const hpValidation = () => {
             clearInterval(playTimer);
             progressReset(true);
         });
-        document.querySelector("#battleButton2").addEventListener("click", function () {
-            sfxConfirm.play();
-            playerDead = false;
-            let dimDungeon = document.querySelector('#dungeon-main');
-            dimDungeon.style.filter = "brightness(100%)";
-            dimDungeon.style.display = "none";
-            combatPanel.style.display = "none";
-            showCharacterCreation();
-            clearInterval(dungeonTimer);
-            clearInterval(playTimer);
-            progressReset(true);
-        });
         endCombat();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button
@@ -351,7 +339,7 @@ const updateCombatLog = () => {
     if (playerDead) {
         let button = document.createElement("div");
         button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton">Start new Run</button><button id="battleButton2">Change name</button>`;
+        button.innerHTML = `<button id="battleButton">Start new Run</button>`;
         combatLogBox.appendChild(button);
     }
 
