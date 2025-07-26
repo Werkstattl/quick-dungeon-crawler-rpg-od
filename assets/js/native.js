@@ -1,17 +1,17 @@
 async function nativeInit() {
-  try {
-    if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-      if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
-        try {
-          await window.Capacitor.Plugins.SplashScreen.hide();
-        } catch (err) {
-          console.error('Failed to hide splash screen:', err);
-        }
-      }
-    }
-  } catch (err) {
-    console.error('Error during native initialization:', err);
-  }
+  // try {
+  //   if (window.Capacitor && window.Capacitor.isNativePlatform()) {
+  //     if (window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
+  //       try {
+  //         await window.Capacitor.Plugins.SplashScreen.hide();
+  //       } catch (err) {
+  //         console.error('Failed to hide splash screen:', err);
+  //       }
+  //     }
+  //   }
+  // } catch (err) {
+  //   console.error('Error during native initialization:', err);
+  // }
   if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {  
     setTimeout(() => {
       try {
