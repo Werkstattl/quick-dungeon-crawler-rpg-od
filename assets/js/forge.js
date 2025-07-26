@@ -130,7 +130,7 @@ const loadForgeEquipment = () => {
         const statsHtml = equip.stats.map(stat => {
             const statName = Object.keys(stat)[0];
             const statValue = stat[statName];
-            if (["critRate", "critDmg", "atkSpd", "vamp"].includes(statName)) {
+            if (["critRate", "critDmg", "atkSpd", "vamp", "dodge"].includes(statName)) {
                 return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
             } else {
                 return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
