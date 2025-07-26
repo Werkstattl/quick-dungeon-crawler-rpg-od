@@ -249,9 +249,21 @@ main {
 }
 
 #title-menu-btn {
-    width: 15rem;
-    max-width: calc(100% - 1rem);
-    margin: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    border: 0;
+}
+
+#title-menu-btn:hover {
+    background-color: transparent;
+    color: gray;
+}
+
+#title-menu-btn i {
+    margin: 0;
+    font-size: calc(1.2rem * var(--font-scale));
 }
 
 /* Shadows */
