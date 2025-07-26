@@ -264,9 +264,9 @@ function openMenu(isTitle = false) {
             </div>
             <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
             ${isTitle ? '' : '<button id="stats">Current Run</button>'}
+            <button id="bestiary-menu">Bestiary</button>
             <button id="volume-btn">Settings</button>
             <button id="export-import">Export/Import Data</button>
-            <button id="bestiary-menu">Bestiary</button>
             ${isTitle ? '<button id="hero-return">Hero Creation</button>' : '<button id="quit-run">Abandon</button>'}
             <button id="rate-game"><i class="fas fa-star"></i> Rate Game</button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
