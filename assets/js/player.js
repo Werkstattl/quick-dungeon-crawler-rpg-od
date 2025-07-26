@@ -121,6 +121,11 @@ const playerLoadStats = () => {
     playerAtkElement.innerHTML = nFormatter(player.stats.atk);
     playerDefElement.innerHTML = nFormatter(player.stats.def);
     playerAtkSpdElement.innerHTML = player.stats.atkSpd.toFixed(2).replace(rx, "$1");
+    if (player.stats.atkSpd >= 2.5) {
+        playerAtkSpdElement.style.color = '#e30b5c';
+    } else {
+        playerAtkSpdElement.style.color = 'white';
+    }
     playerVampElement.innerHTML = (player.stats.vamp).toFixed(2).replace(rx, "$1") + "%";
     playerCrateElement.innerHTML = (player.stats.critRate).toFixed(2).replace(rx, "$1") + "%";
     if (player.stats.critRate >= 100) {
@@ -130,6 +135,11 @@ const playerLoadStats = () => {
     }
     playerCdmgElement.innerHTML = (player.stats.critDmg).toFixed(2).replace(rx, "$1") + "%";
     playerDodgeElement.innerHTML = (player.stats.dodge).toFixed(2).replace(rx, "$1") + "%";
+    if (player.stats.dodge >= 75) {
+        playerDodgeElement.style.color = '#e30b5c';
+    } else {
+        playerDodgeElement.style.color = 'white';
+    }
 
     // Player Bonus Stats
     let bonusStatsHTML = `
