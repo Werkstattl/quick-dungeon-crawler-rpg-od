@@ -149,10 +149,21 @@ const playerAttack = () => {
     // Lifesteal formula
     let lifesteal = Math.round(damage * (player.stats.vamp / 100));
 
+    // Enemy dodge chance
+    let dodged = false;
+    if (Math.random() < enemy.stats.dodge / 100) {
+        addCombatLog(`${enemy.name} dodged the attack!`);
+        damage = 0;
+        lifesteal = 0;
+        dodged = true;
+    }
+
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
     player.stats.hp += lifesteal;
-    addCombatLog(`${player.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+    if (!dodged) {
+        addCombatLog(`${player.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+    }
     hpValidation();
     playerLoadStats();
     enemyLoadStats();
@@ -215,9 +226,19 @@ const companionAttack = () => {
         damage = Math.round(damage);
     }
 
+    // Enemy dodge chance
+    let dodged = false;
+    if (Math.random() < enemy.stats.dodge / 100) {
+        addCombatLog(`${enemy.name} dodged ${activeCompanion.name}'s attack!`);
+        damage = 0;
+        dodged = true;
+    }
+
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
-    addCombatLog(`${activeCompanion.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+    if (!dodged) {
+        addCombatLog(`${activeCompanion.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+    }
     hpValidation();
     playerLoadStats();
     enemyLoadStats();

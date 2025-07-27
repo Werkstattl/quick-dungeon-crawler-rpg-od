@@ -1099,5 +1099,8 @@ const objectValidation = () => {
     if (player.equippedStats && player.equippedStats.dodge === undefined) {
         player.equippedStats.dodge = 0;
     }
+    if (enemy.stats && enemy.stats.dodge === undefined) {
+        enemy.stats.dodge = 0;
+    }
     saveData();
 }

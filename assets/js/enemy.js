@@ -12,7 +12,8 @@ let enemy = {
         atkSpd: 0,
         vamp: 0,
         critRate: 0,
-        critDmg: 0
+        critDmg: 0,
+        dodge: 0
     },
     image: {
         name: null,
@@ -197,7 +198,8 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.2, 0.4),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(6.5, 7.5)
+            critDmg: randomizeDecimal(6.5, 7.5),
+            dodge: 0
         };
     } else if (type == "Defensive") {
         enemy.stats = {
@@ -208,7 +210,8 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.1, 0.3),
             vamp: 0,
             critRate: 0,
-            critDmg: 0
+            critDmg: 0,
+            dodge: 0
         };
     } else if (type == "Balanced") {
         enemy.stats = {
@@ -219,7 +222,8 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(0.5, 1.5),
-            critDmg: randomizeDecimal(1, 3)
+            critDmg: randomizeDecimal(1, 3),
+            dodge: 0
         };
     } else if (type == "Quick") {
         enemy.stats = {
@@ -230,7 +234,8 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.35, 0.45),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(3, 6)
+            critDmg: randomizeDecimal(3, 6),
+            dodge: 0
         };
     } else if (type == "Lethal") {
         enemy.stats = {
@@ -241,7 +246,8 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(4, 8),
-            critDmg: randomizeDecimal(6, 9)
+            critDmg: randomizeDecimal(6, 9),
+            dodge: 0
         };
     }
 
@@ -303,6 +309,16 @@ const setEnemyStats = (type, condition) => {
     enemy.stats.critRate = enemy.stats.critRate * dungeon.enemyMultipliers.critRate;
     enemy.stats.critDmg = enemy.stats.critDmg * dungeon.enemyMultipliers.critDmg;
 
+    // Calculate dodge chance based on curse level and enemy level
+    let curseLvl = Math.round((dungeon.settings.enemyScaling - 1) * 10);
+    enemy.stats.dodge = ((curseLvl - 1) * 2) + (enemy.lvl / 10);
+    if (enemy.stats.dodge < 0) {
+        enemy.stats.dodge = 0;
+    }
+    if (enemy.stats.dodge > 50) {
+        enemy.stats.dodge = 50;
+    }
+
     // Calculate exp and gold that the monster gives
     const expYield = [];
 
@@ -312,7 +328,7 @@ const setEnemyStats = (type, condition) => {
             statExp = enemy.stats[stat] + enemy.stats[stat] * 0.5;
         } else if (["atkSpd", "critRate", "critDmg"].includes(stat)) {
             statExp = enemy.stats[stat] + enemy.stats[stat] * 2;
-        } else if (["vamp", "hp"].includes(stat)) {
+        } else if (["vamp", "hp", "dodge"].includes(stat)) {
             statExp = enemy.stats[stat] + enemy.stats[stat] * 1;
         }
         expYield.push(statExp);
