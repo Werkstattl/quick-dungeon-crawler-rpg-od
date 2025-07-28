@@ -1,5 +1,6 @@
 // Enemy
 let enemy = {
+    id: null,
     name: null,
     type: null,
     lvl: null,
@@ -26,170 +27,136 @@ let enemy = {
     }
 };
 
+// Data for all enemies keyed by ID
+const enemyData = {
+    1: { name: 'Goblin', sprite: 'goblin' },
+    2: { name: 'Goblin Rogue', sprite: 'goblin_rogue' },
+    3: { name: 'Goblin Mage', sprite: 'goblin_mage' },
+    4: { name: 'Goblin Archer', sprite: 'goblin_archer' },
+    5: { name: 'Wolf', sprite: 'wolf' },
+    6: { name: 'Black Wolf', sprite: 'wolf_black' },
+    7: { name: 'Winter Wolf', sprite: 'wolf_winter' },
+    8: { name: 'Slime', sprite: 'slime' },
+    9: { name: 'Angel Slime', sprite: 'slime_angel' },
+    10: { name: 'Knight Slime', sprite: 'slime_knight' },
+    11: { name: 'Crusader Slime', sprite: 'slime_crusader' },
+    12: { name: 'Orc Swordsmaster', sprite: 'orc_swordsmaster' },
+    13: { name: 'Orc Axe', sprite: 'orc_axe' },
+    14: { name: 'Orc Archer', sprite: 'orc_archer' },
+    15: { name: 'Orc Mage', sprite: 'orc_mage' },
+    16: { name: 'Spider', sprite: 'spider' },
+    17: { name: 'Red Spider', sprite: 'spider_red' },
+    18: { name: 'Green Spider', sprite: 'spider_green' },
+    19: { name: 'Skeleton Archer', sprite: 'skeleton_archer' },
+    20: { name: 'Skeleton Swordsmaster', sprite: 'skeleton_swordsmaster' },
+    21: { name: 'Skeleton Knight', sprite: 'skeleton_knight' },
+    22: { name: 'Skeleton Mage', sprite: ['skeleton_mage1', 'skeleton_mage2'] },
+    23: { name: 'Skeleton Pirate', sprite: 'skeleton_pirate' },
+    24: { name: 'Skeleton Samurai', sprite: 'skeleton_samurai' },
+    25: { name: 'Skeleton Warrior', sprite: 'skeleton_warrior' },
+    26: { name: 'Mimic', sprite: 'mimic' },
+    27: { name: 'Door Mimic', sprite: 'mimic_door' },
+    28: { name: 'Zaart, the Dominator Goblin', sprite: 'goblin_boss', size: '70%' },
+    29: { name: 'Banshee, Skeleton Lord', sprite: 'skeleton_boss' },
+    30: { name: 'Molten Spider', sprite: 'spider_fire' },
+    31: { name: 'Cerberus Ptolemaios', sprite: 'cerberus_ptolemaios' },
+    32: { name: 'Hellhound Inferni', sprite: 'hellhound' },
+    33: { name: 'Berthelot, the Undead King', sprite: 'berthelot' },
+    34: { name: 'Slime King', sprite: 'slime_boss' },
+    35: { name: 'Zodiac Cancer', sprite: 'zodiac_cancer' },
+    36: { name: 'Alfadriel, the Light Titan', sprite: 'alfadriel' },
+    37: { name: 'Tiamat, the Dragon Knight', sprite: 'tiamat' },
+    38: { name: 'Nameless Fallen King', sprite: 'fallen_king' },
+    39: { name: 'Zodiac Aries', sprite: 'zodiac_aries' },
+    40: { name: 'Llyrrad, the Ant Queen', sprite: 'ant_queen' },
+    41: { name: 'Clockwork Spider', sprite: 'spider_boss' },
+    42: { name: 'Aragorn, the Lethal Wolf', sprite: 'wolf_boss' },
+    43: { name: 'Naizicher, the Spider Dragon', sprite: 'spider_dragon', size: '70%' },
+    44: { name: 'Ulliot, the Deathlord', sprite: 'skeleton_dragon', size: '70%' },
+    45: { name: 'Ifrit', sprite: 'firelord', size: '70%' },
+    46: { name: 'Shiva', sprite: 'icemaiden', size: '70%' },
+    47: { name: 'Behemoth', sprite: 'behemoth', size: '70%' },
+    48: { name: 'Blood Manipulation Feral', sprite: 'bm-feral', size: '70%' },
+    49: { name: 'Thanatos', sprite: 'thanatos', size: '70%' },
+    50: { name: 'Darkness Angel Reaper', sprite: 'da-reaper', size: '70%' },
+    51: { name: 'Zalaras, the Dragon Emperor', sprite: 'zalaras', size: '70%' }
+};
+
+// Map of IDs to enemy names
+const enemyIdMap = Object.keys(enemyData).reduce((acc, id) => {
+    acc[id] = enemyData[id].name;
+    return acc;
+}, {});
+
+// Pools of enemies for each type and condition
+const enemyPools = {
+    Offensive: {
+        base: [3, 4, 5, 6, 7, 10, 12, 13, 14, 15, 17, 19, 20, 22, 23, 24],
+        guardian: [28, 29, 30, 33],
+        sboss: [47, 51]
+    },
+    Defensive: {
+        base: [9, 10, 11, 18, 21, 25],
+        guardian: [34, 35, 36],
+        sboss: [44]
+    },
+    Balanced: {
+        base: [1, 8, 9, 10, 12, 13, 14, 15, 16, 21, 25],
+        guardian: [37, 38, 39],
+        sboss: [45, 46, 49]
+    },
+    Quick: {
+        base: [1, 2, 4, 5, 6, 7, 12, 16, 17, 18, 20, 23, 24],
+        guardian: [40, 41],
+        sboss: [50, 43]
+    },
+    Lethal: {
+        base: [2, 5, 6, 7, 12, 13, 17, 20, 24],
+        guardian: [42, 31, 32],
+        sboss: [48]
+    }
+};
+
 const generateRandomEnemy = (condition) => {
     enemy.condition = condition;
-    // List of possible enemy names
-    const enemyNames = [
-        // Goblin
-        'Goblin', 'Goblin Rogue', 'Goblin Mage', 'Goblin Archer',
-        // Wolf
-        'Wolf', 'Black Wolf', 'Winter Wolf',
-        // Slime
-        'Slime', 'Angel Slime', 'Knight Slime', 'Crusader Slime',
-        // Orc
-        'Orc Swordsmaster', 'Orc Axe', 'Orc Archer', 'Orc Mage',
-        // Spider
-        'Spider', 'Red Spider', 'Green Spider',
-        // Skeleton
-        'Skeleton Archer', 'Skeleton Swordsmaster', 'Skeleton Knight', 'Skeleton Mage', 'Skeleton Pirate', 'Skeleton Samurai', 'Skeleton Warrior',
-        // Bosses
-        'Zaart, the Dominator Goblin', 'Banshee, Skeleton Lord', 'Molten Spider', 'Cerberus Ptolemaios', 'Hellhound Inferni', 'Berthelot, the Undead King', 'Slime King', 'Zodiac Cancer', 'Alfadriel, the Light Titan', 'Tiamat, the Dragon Knight', 'Nameless Fallen King', 'Zodiac Aries', 'Llyrrad, the Ant Queen', 'Clockwork Spider', 'Aragorn, the Lethal Wolf',
-        // Monarch
-        'Naizicher, the Spider Dragon', 'Ulliot, the Deathlord', 'Ifrit', 'Shiva', 'Behemoth', 'Blood Manipulation Feral', 'Thanatos', 'Darkness Angel Reaper', 'Zalaras, the Dragon Emperor'
-    ];
-    const enemyTypes = ['Offensive', 'Defensive', 'Balanced', 'Quick', 'Lethal'];
-    let selectedEnemies = null;
-
-    // Generate enemy type
+    const enemyTypes = Object.keys(enemyPools);
     enemy.type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
 
-    // Calculate enemy level
     const maxLvl = dungeon.progress.floor * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1);
     const minLvl = maxLvl - (dungeon.settings.enemyLvlGap - 1);
-    if (condition == "guardian") {
+    if (condition === 'guardian') {
         enemy.lvl = minLvl;
-    } else if (condition == "sboss") {
+    } else if (condition === 'sboss') {
         enemy.lvl = maxLvl;
     } else {
         enemy.lvl = randomizeNum(minLvl, maxLvl);
     }
 
-    // Generate proper enemy info
-    switch (enemy.type) {
-        case "Offensive":
-            // Select name and apply stats for Offensive enemies
-            if (condition == "guardian") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Zaart, the Dominator Goblin', 'Banshee, Skeleton Lord', 'Molten Spider', 'Berthelot, the Undead King'
-                ].includes(name));
-            } else if (condition == "sboss") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Behemoth', 'Zalaras, the Dragon Emperor'
-                ].includes(name));
-            } else {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Goblin Mage', 'Goblin Archer',
-                    'Wolf', 'Black Wolf', 'Winter Wolf',
-                    'Knight Slime',
-                    'Orc Swordsmaster', 'Orc Axe', 'Orc Archer', 'Orc Mage',
-                    'Red Spider',
-                    'Skeleton Archer', 'Skeleton Swordsmaster', 'Skeleton Mage', 'Skeleton Pirate', 'Skeleton Samurai',
-                ].includes(name));
-            }
-            enemy.name = selectedEnemies[Math.floor(Math.random() * selectedEnemies.length)];
-            setEnemyStats(enemy.type, condition);
-            break;
-        case "Defensive":
-            // Select name and apply stats for Defensive enemies
-            if (condition == "guardian") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Slime King', 'Zodiac Cancer', 'Alfadriel, the Light Titan'
-                ].includes(name));
-            } else if (condition == "sboss") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Ulliot, the Deathlord',
-                ].includes(name));
-            } else {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Angel Slime', 'Knight Slime', 'Crusader Slime',
-                    'Green Spider',
-                    'Skeleton Knight', 'Skeleton Warrior'
-                ].includes(name));
-            }
-            enemy.name = selectedEnemies[Math.floor(Math.random() * selectedEnemies.length)];
-            setEnemyStats(enemy.type, condition);
-            break;
-        case "Balanced":
-            // Select name and apply stats for Balanced enemies
-            if (condition == "guardian") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Tiamat, the Dragon Knight', 'Nameless Fallen King', 'Zodiac Aries'
-                ].includes(name));
-            } else if (condition == "sboss") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Ifrit', 'Shiva', 'Thanatos'
-                ].includes(name));
-            } else {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Goblin',
-                    'Slime', 'Angel Slime', 'Knight Slime',
-                    'Orc Swordsmaster', 'Orc Axe', 'Orc Archer', 'Orc Mage',
-                    'Spider',
-                    'Skeleton Knight', 'Skeleton Warrior'
-                ].includes(name));
-            }
-            enemy.name = selectedEnemies[Math.floor(Math.random() * selectedEnemies.length)];
-            setEnemyStats(enemy.type, condition);
-            break;
-        case "Quick":
-            // Select name and apply stats for Quick enemies
-            if (condition == "guardian") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Llyrrad, the Ant Queen', 'Clockwork Spider'
-                ].includes(name));
-            } else if (condition == "sboss") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Darkness Angel Reaper', 'Naizicher, the Spider Dragon'
-                ].includes(name));
-            } else {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Goblin', 'Goblin Rogue', 'Goblin Archer',
-                    'Wolf', 'Black Wolf', 'Winter Wolf',
-                    'Orc Swordsmaster',
-                    'Spider', 'Red Spider', 'Green Spider',
-                    'Skeleton Swordsmaster', 'Skeleton Pirate', 'Skeleton Samurai'
-                ].includes(name));
-            }
-            enemy.name = selectedEnemies[Math.floor(Math.random() * selectedEnemies.length)];
-            setEnemyStats(enemy.type, condition);
-            break;
-        case "Lethal":
-            // Select name and apply stats for Lethal enemies
-            if (condition == "guardian") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Aragorn, the Lethal Wolf', 'Cerberus Ptolemaios', 'Hellhound Inferni'
-                ].includes(name));
-            } else if (condition == "sboss") {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Blood Manipulation Feral'
-                ].includes(name));
-            } else {
-                selectedEnemies = enemyNames.filter(name => [
-                    'Goblin Rogue',
-                    'Wolf', 'Black Wolf', 'Winter Wolf',
-                    'Orc Swordsmaster', 'Orc Axe',
-                    'Red Spider',
-                    'Skeleton Swordsmaster', 'Skeleton Samurai'
-                ].includes(name));
-            }
-            enemy.name = selectedEnemies[Math.floor(Math.random() * selectedEnemies.length)];
-            setEnemyStats(enemy.type, condition);
-            break;
+    let pool = enemyPools[enemy.type].base;
+    if (condition === 'guardian') {
+        pool = enemyPools[enemy.type].guardian;
+    } else if (condition === 'sboss') {
+        pool = enemyPools[enemy.type].sboss;
     }
-    if (condition == "chest") {
-        enemy.name = "Mimic";
-    } else if (condition == "door") {
-        enemy.name = "Door Mimic";
+    enemy.id = pool[Math.floor(Math.random() * pool.length)];
+    setEnemyStats(enemy.type, condition);
+
+    if (condition === 'chest') {
+        enemy.id = 26;
+    } else if (condition === 'door') {
+        enemy.id = 27;
     }
+
+    enemy.name = enemyIdMap[enemy.id];
     setEnemyImg();
     if (typeof addToBestiary === 'function') {
-        addToBestiary(enemy.name);
+        addToBestiary(enemy.id);
     }
-}
+};
 
 // Set a randomly generated stat for the enemy
 const setEnemyStats = (type, condition) => {
-    if (type == "Offensive") {
+    if (type == 'Offensive') {
         enemy.stats = {
             hp: 0,
             hpMax: randomizeNum(300, 370),
@@ -201,7 +168,7 @@ const setEnemyStats = (type, condition) => {
             critDmg: randomizeDecimal(6.5, 7.5),
             dodge: 0
         };
-    } else if (type == "Defensive") {
+    } else if (type == 'Defensive') {
         enemy.stats = {
             hp: 0,
             hpMax: randomizeNum(400, 500),
@@ -213,7 +180,7 @@ const setEnemyStats = (type, condition) => {
             critDmg: 0,
             dodge: 0
         };
-    } else if (type == "Balanced") {
+    } else if (type == 'Balanced') {
         enemy.stats = {
             hp: 0,
             hpMax: randomizeNum(320, 420),
@@ -225,7 +192,7 @@ const setEnemyStats = (type, condition) => {
             critDmg: randomizeDecimal(1, 3),
             dodge: 0
         };
-    } else if (type == "Quick") {
+    } else if (type == 'Quick') {
         enemy.stats = {
             hp: 0,
             hpMax: randomizeNum(300, 370),
@@ -237,7 +204,7 @@ const setEnemyStats = (type, condition) => {
             critDmg: randomizeDecimal(3, 6),
             dodge: 0
         };
-    } else if (type == "Lethal") {
+    } else if (type == 'Lethal') {
         enemy.stats = {
             hp: 0,
             hpMax: randomizeNum(300, 370),
@@ -279,7 +246,7 @@ const setEnemyStats = (type, condition) => {
     }
 
     // Stat multiplier for floor guardians
-    if (condition == "guardian") {
+    if (condition == 'guardian') {
         enemy.stats.hpMax = enemy.stats.hpMax * 1.5;
         enemy.stats.atk = enemy.stats.atk * 1.3;
         enemy.stats.def = enemy.stats.def * 1.3;
@@ -288,7 +255,7 @@ const setEnemyStats = (type, condition) => {
     }
 
     // Stat multiplier for monarchs
-    if (condition == "sboss") {
+    if (condition == 'sboss') {
         enemy.stats.hpMax = enemy.stats.hpMax * 6;
         enemy.stats.atk = enemy.stats.atk * 2;
         enemy.stats.def = enemy.stats.def * 2;
@@ -319,9 +286,7 @@ const setEnemyStats = (type, condition) => {
         enemy.stats.dodge = 50;
     }
 
-    // Calculate exp and gold that the monster gives
     const expYield = [];
-
     for (const stat in enemy.stats) {
         let statExp;
         if (["hpMax", "atk", "def"].includes(stat)) {
@@ -340,255 +305,28 @@ const setEnemyStats = (type, condition) => {
         enemy.rewards.exp = 1000000 * randomizeDecimal(0.9, 1.1);
     }
     enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.5);
-    enemy.rewards.drop = randomizeNum(1, 3);
-    if (enemy.rewards.drop == 1) {
-        enemy.rewards.drop = true;
-    } else {
-        enemy.rewards.drop = false;
-    }
+    enemy.rewards.drop = randomizeNum(1, 3) == 1;
 
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
 
-    // Caps attack speed to 2.5
     if (enemy.stats.atkSpd > 2.5) {
         enemy.stats.atkSpd = 2.5;
     }
-}
+};
 
 const setEnemyImg = () => {
-    // Apply monster image
-    switch (enemy.name) {
-        // Goblins
-        case 'Goblin':
-            enemy.image.name = 'goblin';
-            enemy.image.size = '50%';
-            break;
-        case 'Goblin Rogue':
-            enemy.image.name = 'goblin_rogue';
-            enemy.image.size = '50%';
-            break;
-        case 'Goblin Archer':
-            enemy.image.name = 'goblin_archer';
-            enemy.image.size = '50%';
-            break;
-        case 'Goblin Mage':
-            enemy.image.name = 'goblin_mage';
-            enemy.image.size = '50%';
-            break;
-
-        // Wolf
-        case 'Wolf':
-            enemy.image.name = 'wolf';
-            enemy.image.size = '50%';
-            break;
-        case 'Black Wolf':
-            enemy.image.name = 'wolf_black';
-            enemy.image.size = '50%';
-            break;
-        case 'Winter Wolf':
-            enemy.image.name = 'wolf_winter';
-            enemy.image.size = '50%';
-            break;
-
-        // Slime
-        case 'Slime':
-            enemy.image.name = 'slime';
-            enemy.image.size = '50%';
-            break;
-        case 'Angel Slime':
-            enemy.image.name = 'slime_angel';
-            enemy.image.size = '50%';
-            break;
-        case 'Knight Slime':
-            enemy.image.name = 'slime_knight';
-            enemy.image.size = '50%';
-            break;
-        case 'Crusader Slime':
-            enemy.image.name = 'slime_crusader';
-            enemy.image.size = '50%';
-            break;
-
-        // Orc
-        case 'Orc Swordsmaster':
-            enemy.image.name = 'orc_swordsmaster';
-            enemy.image.size = '50%';
-            break;
-        case 'Orc Axe':
-            enemy.image.name = 'orc_axe';
-            enemy.image.size = '50%';
-            break;
-        case 'Orc Archer':
-            enemy.image.name = 'orc_archer';
-            enemy.image.size = '50%';
-            break;
-        case 'Orc Mage':
-            enemy.image.name = 'orc_mage';
-            enemy.image.size = '50%';
-            break;
-
-        // Spider
-        case 'Spider':
-            enemy.image.name = 'spider';
-            enemy.image.size = '50%';
-            break;
-        case 'Red Spider':
-            enemy.image.name = 'spider_red';
-            enemy.image.size = '50%';
-            break;
-        case 'Green Spider':
-            enemy.image.name = 'spider_green';
-            enemy.image.size = '50%';
-            break;
-
-        // Skeleton
-        case 'Skeleton Archer':
-            enemy.image.name = 'skeleton_archer';
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Swordsmaster':
-            enemy.image.name = 'skeleton_swordsmaster';
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Knight':
-            enemy.image.name = 'skeleton_knight';
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Mage':
-            if (randomizeNum(1, 2) == 1) {
-                enemy.image.name = 'skeleton_mage1';
-            } else {
-                enemy.image.name = 'skeleton_mage2';
-            }
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Pirate':
-            enemy.image.name = 'skeleton_pirate';
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Samurai':
-            enemy.image.name = 'skeleton_samurai';
-            enemy.image.size = '50%';
-            break;
-        case 'Skeleton Warrior':
-            enemy.image.name = 'skeleton_warrior';
-            enemy.image.size = '50%';
-            break;
-
-        // Mimic
-        case 'Mimic':
-            enemy.image.name = 'mimic';
-            enemy.image.size = '50%';
-            break;
-        case 'Door Mimic':
-            enemy.image.name = 'mimic_door';
-            enemy.image.size = '50%';
-            break;
-
-        // Bosses
-        case 'Zaart, the Dominator Goblin':
-            enemy.image.name = 'goblin_boss';
-            enemy.image.size = '70%';
-            break;
-        case 'Banshee, Skeleton Lord':
-            enemy.image.name = 'skeleton_boss';
-            enemy.image.size = '50%';
-            break;
-        case 'Molten Spider':
-            enemy.image.name = 'spider_fire';
-            enemy.image.size = '50%';
-            break;
-        case 'Cerberus Ptolemaios':
-            enemy.image.name = 'cerberus_ptolemaios';
-            enemy.image.size = '50%';
-            break;
-        case 'Hellhound Inferni':
-            enemy.image.name = 'hellhound';
-            enemy.image.size = '50%';
-            break;
-        case 'Berthelot, the Undead King':
-            enemy.image.name = 'berthelot';
-            enemy.image.size = '50%';
-            break;
-        case 'Slime King':
-            enemy.image.name = 'slime_boss';
-            enemy.image.size = '50%';
-            break;
-        case 'Zodiac Cancer':
-            enemy.image.name = 'zodiac_cancer';
-            enemy.image.size = '50%';
-            break;
-        case 'Alfadriel, the Light Titan':
-            enemy.image.name = 'alfadriel';
-            enemy.image.size = '50%';
-            break;
-        case 'Tiamat, the Dragon Knight':
-            enemy.image.name = 'tiamat';
-            enemy.image.size = '50%';
-            break;
-        case 'Nameless Fallen King':
-            enemy.image.name = 'fallen_king';
-            enemy.image.size = '50%';
-            break;
-        case 'Zodiac Aries':
-            enemy.image.name = 'zodiac_aries';
-            enemy.image.size = '50%';
-            break;
-        case 'Clockwork Spider':
-            enemy.image.name = 'spider_boss';
-            enemy.image.size = '50%';
-            break;
-        case 'Llyrrad, the Ant Queen':
-            enemy.image.name = 'ant_queen';
-            enemy.image.size = '50%';
-            break;
-        case 'Aragorn, the Lethal Wolf':
-            enemy.image.name = 'wolf_boss';
-            enemy.image.size = '50%';
-            break;
-
-        // Special Boss
-        case 'Naizicher, the Spider Dragon':
-            enemy.image.name = 'spider_dragon';
-            enemy.image.size = '70%';
-            break;
-        case 'Ulliot, the Deathlord':
-            enemy.image.name = 'skeleton_dragon';
-            enemy.image.size = '70%';
-            break;
-        case 'Ifrit':
-            enemy.image.name = 'firelord';
-            enemy.image.size = '70%';
-            break;
-        case 'Shiva':
-            enemy.image.name = 'icemaiden';
-            enemy.image.size = '70%';
-            break;
-        case 'Behemoth':
-            enemy.image.name = 'behemoth';
-            enemy.image.size = '70%';
-            break;
-        case 'Blood Manipulation Feral':
-            enemy.image.name = 'bm-feral';
-            enemy.image.size = '70%';
-            break;
-        case 'Thanatos':
-            enemy.image.name = 'thanatos';
-            enemy.image.size = '70%';
-            break;
-        case 'Darkness Angel Reaper':
-            enemy.image.name = 'da-reaper';
-            enemy.image.size = '70%';
-            break;
-        case 'Zalaras, the Dragon Emperor':
-            enemy.image.name = 'zalaras';
-            enemy.image.size = '70%';
-            break;
-    };
-}
+    const data = enemyData[enemy.id];
+    if (!data) return;
+    let sprite = data.sprite;
+    if (Array.isArray(sprite)) {
+        sprite = sprite[Math.floor(Math.random() * sprite.length)];
+    }
+    enemy.image.name = sprite;
+    enemy.image.size = data.size || '50%';
+};
 
 const enemyLoadStats = () => {
-    // Shows proper percentage for respective stats
     let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     if (enemy.stats.hp > enemy.stats.hpMax) {
         enemy.stats.hp = enemy.stats.hpMax;
@@ -600,4 +338,4 @@ const enemyLoadStats = () => {
     enemyHpElement.innerHTML = `&nbsp${nFormatter(enemy.stats.hp)}/${nFormatter(enemy.stats.hpMax)}<br>(${enemy.stats.hpPercent}%)`;
     enemyHpElement.style.width = `${enemy.stats.hpPercent}%`;
     enemyHpDamageElement.style.width = `${enemy.stats.hpPercent}%`;
-}
+};

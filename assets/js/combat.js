@@ -46,7 +46,7 @@ const hpValidation = () => {
         enemyDead = true;
         player.kills++;
         if (typeof recordBestiaryKill === 'function') {
-            recordBestiaryKill(enemy.name);
+            recordBestiaryKill(enemy.id);
         }
         dungeon.statistics.kills++;
         addCombatLog(`${enemy.name} died! (${new Date(combatSeconds * 1000).toISOString().substring(14, 19)})`);

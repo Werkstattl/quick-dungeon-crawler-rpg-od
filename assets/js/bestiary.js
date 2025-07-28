@@ -1,61 +1,13 @@
 // Bestiary system
-// Structure: { [name]: { encounters: Number, kills: Number } }
+// Structure: { [id]: { encounters: Number, kills: Number } }
 let bestiary = {};
 
-// Mapping of enemy names to sprite file names
-const bestiarySprites = {
-    'Goblin': 'goblin',
-    'Goblin Rogue': 'goblin_rogue',
-    'Goblin Archer': 'goblin_archer',
-    'Goblin Mage': 'goblin_mage',
-    'Wolf': 'wolf',
-    'Black Wolf': 'wolf_black',
-    'Winter Wolf': 'wolf_winter',
-    'Slime': 'slime',
-    'Angel Slime': 'slime_angel',
-    'Knight Slime': 'slime_knight',
-    'Crusader Slime': 'slime_crusader',
-    'Orc Swordsmaster': 'orc_swordsmaster',
-    'Orc Axe': 'orc_axe',
-    'Orc Archer': 'orc_archer',
-    'Orc Mage': 'orc_mage',
-    'Spider': 'spider',
-    'Red Spider': 'spider_red',
-    'Green Spider': 'spider_green',
-    'Skeleton Archer': 'skeleton_archer',
-    'Skeleton Swordsmaster': 'skeleton_swordsmaster',
-    'Skeleton Knight': 'skeleton_knight',
-    'Skeleton Mage': 'skeleton_mage1',
-    'Skeleton Pirate': 'skeleton_pirate',
-    'Skeleton Samurai': 'skeleton_samurai',
-    'Skeleton Warrior': 'skeleton_warrior',
-    'Mimic': 'mimic',
-    'Door Mimic': 'mimic_door',
-    'Zaart, the Dominator Goblin': 'goblin_boss',
-    'Banshee, Skeleton Lord': 'skeleton_boss',
-    'Molten Spider': 'spider_fire',
-    'Cerberus Ptolemaios': 'cerberus_ptolemaios',
-    'Hellhound Inferni': 'hellhound',
-    'Berthelot, the Undead King': 'berthelot',
-    'Slime King': 'slime_boss',
-    'Zodiac Cancer': 'zodiac_cancer',
-    'Alfadriel, the Light Titan': 'alfadriel',
-    'Tiamat, the Dragon Knight': 'tiamat',
-    'Nameless Fallen King': 'fallen_king',
-    'Zodiac Aries': 'zodiac_aries',
-    'Clockwork Spider': 'spider_boss',
-    'Llyrrad, the Ant Queen': 'ant_queen',
-    'Aragorn, the Lethal Wolf': 'wolf_boss',
-    'Naizicher, the Spider Dragon': 'spider_dragon',
-    'Ulliot, the Deathlord': 'skeleton_dragon',
-    'Ifrit': 'firelord',
-    'Shiva': 'icemaiden',
-    'Behemoth': 'behemoth',
-    'Blood Manipulation Feral': 'bm-feral',
-    'Thanatos': 'thanatos',
-    'Darkness Angel Reaper': 'da-reaper',
-    'Zalaras, the Dragon Emperor': 'zalaras'
-};
+// Mapping of enemy IDs to sprite file names
+const bestiarySprites = {};
+for (const id in enemyData) {
+    const spriteInfo = enemyData[id].sprite;
+    bestiarySprites[id] = Array.isArray(spriteInfo) ? spriteInfo[0] : spriteInfo;
+}
 
 function loadBestiary() {
     const stored = localStorage.getItem('playerBestiary');
@@ -64,9 +16,20 @@ function loadBestiary() {
             bestiary = JSON.parse(stored);
             if (Array.isArray(bestiary)) {
                 const converted = {};
-                bestiary.forEach(n => {
-                    converted[n] = { encounters: 1, kills: 0 };
-                });
+                bestiary.forEach(n => { converted[n] = { encounters: 1, kills: 0 }; });
+                bestiary = converted;
+            } else {
+                const converted = {};
+                for (const key in bestiary) {
+                    if (/^\d+$/.test(key)) {
+                        converted[key] = bestiary[key];
+                    } else {
+                        const id = Object.keys(enemyIdMap).find(i => enemyIdMap[i] === key);
+                        if (id) {
+                            converted[id] = bestiary[key];
+                        }
+                    }
+                }
                 bestiary = converted;
             }
         } catch (e) {
@@ -79,19 +42,21 @@ function saveBestiary() {
     localStorage.setItem('playerBestiary', JSON.stringify(bestiary));
 }
 
-function addToBestiary(name) {
-    if (!bestiary[name]) {
-        bestiary[name] = { encounters: 0, kills: 0 };
+function addToBestiary(id) {
+    const key = String(id);
+    if (!bestiary[key]) {
+        bestiary[key] = { encounters: 0, kills: 0 };
     }
-    bestiary[name].encounters++;
+    bestiary[key].encounters++;
     saveBestiary();
 }
 
-function recordBestiaryKill(name) {
-    if (!bestiary[name]) {
-        bestiary[name] = { encounters: 0, kills: 0 };
+function recordBestiaryKill(id) {
+    const key = String(id);
+    if (!bestiary[key]) {
+        bestiary[key] = { encounters: 0, kills: 0 };
     }
-    bestiary[name].kills++;
+    bestiary[key].kills++;
     saveBestiary();
 }
 
@@ -99,12 +64,13 @@ function openBestiaryModal() {
     sfxOpen.play();
     menuModalElement.style.display = 'none';
     defaultModalElement.style.display = 'flex';
-    const listItems = Object.keys(bestiary).sort().map(n => {
-        const img = bestiarySprites[n];
-        const stats = bestiary[n];
-        const imgTag = img ? `<img src="./assets/sprites/${img}.webp" alt="${n}">` : '';
+    const listItems = Object.keys(bestiary).sort((a,b) => a - b).map(id => {
+        const img = bestiarySprites[id];
+        const stats = bestiary[id];
+        const name = enemyIdMap[id] || id;
+        const imgTag = img ? `<img src="./assets/sprites/${img}.webp" alt="${name}">` : '';
         const statTag = `<span class="stats">E:${stats.encounters} K:${stats.kills}</span>`;
-        return `<li>${imgTag}<span>${n}</span>${statTag}</li>`;
+        return `<li>${imgTag}<span>${name}</span>${statTag}</li>`;
     }).join('');
     defaultModalElement.innerHTML = `
         <div class="content" id="bestiary-modal">
