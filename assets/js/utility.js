@@ -56,7 +56,6 @@ const ratingSystem = {
             const lastPrompt = new Date(this.config.lastPromptDate);
             const now = new Date();
             const daysSinceLastPrompt = (now - lastPrompt) / (1000 * 60 * 60 * 24);
-            console.log(`Days since last prompt: ${daysSinceLastPrompt}`);
             if (daysSinceLastPrompt < 7) {
                 return false;
             }

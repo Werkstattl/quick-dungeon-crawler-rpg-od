@@ -7,8 +7,6 @@ async function nativeInit() {
         console.error('Error initializing purchases:', err);
       }
     }, 1500);
-  } else {
-    console.log('CdvPurchase is not defined. In-app purchases will be disabled.');
   }
 }
 
