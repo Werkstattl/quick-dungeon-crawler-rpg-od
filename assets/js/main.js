@@ -877,7 +877,6 @@ const allocationPopup = () => {
                     <option value="Remnant Razor">Remnant Razor</option>
                     <option value="Titan's Will">Titan's Will</option>
                     <option value="Devastator">Devastator</option>
-                    <option value="Blade Dance">Blade Dance</option>
                     <option value="Paladin's Heart">Paladin's Heart</option>
                     <option value="Aegis Thorns">Aegis Thorns</option>
                 </select>
@@ -978,9 +977,6 @@ const allocationPopup = () => {
         }
         if (selectSkill.value == "Rampager") {
             skillDesc.innerHTML = "Increase attack by 5 after each hit. Stack resets after battle.";
-        }
-        if (selectSkill.value == "Blade Dance") {
-            skillDesc.innerHTML = "Gain increased attack speed after each hit. Stack resets after battle.";
         }
         if (selectSkill.value == "Paladin's Heart") {
             skillDesc.innerHTML = "You receive 25% less damage permanently.";

@@ -138,13 +138,6 @@ const playerAttack = () => {
         player.tempStats.atk += 5;
         saveData();
     }
-    if (player.skills.includes("Blade Dance")) {
-        // Gain increased attack speed after each hit. Stack resets after battle
-        player.baseStats.atkSpd += 0.01;
-        objectValidation();
-        player.tempStats.atkSpd += 0.01;
-        saveData();
-    }
 
     // Lifesteal formula
     let lifesteal = Math.round(damage * (player.stats.vamp / 100));
@@ -414,13 +407,6 @@ const endCombat = () => {
         objectValidation();
         player.baseStats.atk -= player.tempStats.atk;
         player.tempStats.atk = 0;
-        saveData();
-    }
-    if (player.skills.includes("Blade Dance")) {
-        // Remove Blade Dance attack speed buff
-        objectValidation();
-        player.baseStats.atkSpd -= player.tempStats.atkSpd;
-        player.tempStats.atkSpd = 0;
         saveData();
     }
 
