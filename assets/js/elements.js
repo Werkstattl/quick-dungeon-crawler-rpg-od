@@ -14,3 +14,19 @@ const confirmationModalElement = document.querySelector('#confirmationModal');
 const sellAllElement = document.querySelector("#sell-all");
 const sellRarityElement = document.querySelector('#sell-rarity');
 const menuModalElement = document.querySelector('#menuModal');
+
+// Frequently accessed elements
+const dungeonMainElement = document.querySelector('#dungeon-main');
+const lvlupSelectElement = document.querySelector('#lvlupSelect');
+const lvlupPanelElement = document.querySelector('#lvlupPanel');
+const playerHpDamageElement = document.querySelector('#player-hp-dmg');
+const playerExpBarElement = document.querySelector('#player-exp-bar');
+const playerInfoElement = document.querySelector('#player-combat-info');
+const playerExpHeaderElement = document.querySelector('#player-exp');
+const playerGoldElement = document.querySelector('#player-gold');
+const playerInventoryListElement = document.getElementById('playerInventory');
+const playerEquipmentListElement = document.getElementById('playerEquipment');
+const companionPanelElement = document.getElementById('companion-panel');
+const combatLogBoxElement = document.getElementById('combatLogBox');
+const inventoryElement = document.querySelector('#inventory');
+

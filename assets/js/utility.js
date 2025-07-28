@@ -1,20 +1,23 @@
 // Format large numbers
+const numberLookup = [
+    { value: 1, symbol: "" },
+    { value: 1e3, symbol: "k" },
+    { value: 1e6, symbol: "M" },
+    { value: 1e9, symbol: "B" },
+    { value: 1e12, symbol: "T" },
+    { value: 1e15, symbol: "P" },
+    { value: 1e18, symbol: "E" }
+];
+const numberFormatRx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+
 const nFormatter = (num) => {
-    let lookup = [
-        { value: 1, symbol: "" },
-        { value: 1e3, symbol: "k" },
-        { value: 1e6, symbol: "M" },
-        { value: 1e9, symbol: "B" },
-        { value: 1e12, symbol: "T" },
-        { value: 1e15, symbol: "P" },
-        { value: 1e18, symbol: "E" }
-    ];
-    let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    let item = lookup.slice().reverse().find(function (item) {
-        return num >= item.value;
-    });
-    return item ? (num / item.value).toFixed(2).replace(rx, "$1") + item.symbol : "0";
-}
+    for (let i = numberLookup.length - 1; i >= 0; i--) {
+        if (num >= numberLookup[i].value) {
+            return (num / numberLookup[i].value).toFixed(2).replace(numberFormatRx, "$1") + numberLookup[i].symbol;
+        }
+    }
+    return "0";
+};
 
 // Get a randomized number between 2 integers
 const randomizeNum = (min, max) => {

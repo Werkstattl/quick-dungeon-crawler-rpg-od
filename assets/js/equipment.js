@@ -417,7 +417,7 @@ const showItemInfo = (item, icon, type, i) => {
     dungeon.status.exploring = false;
     let itemInfo = document.querySelector("#equipmentInfo");
     let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    let dimContainer = document.querySelector(`#inventory`);
+    let dimContainer = inventoryElement;
     if (item.tier == undefined) {
         item.tier = 1;
     }
@@ -538,7 +538,7 @@ const showItemInfo = (item, icon, type, i) => {
 // Show inventory
 const showInventory = () => {
     // Clear the inventory container
-    let playerInventoryList = document.getElementById("playerInventory");
+    let playerInventoryList = playerInventoryListElement;
     playerInventoryList.innerHTML = "";
 
     if (player.inventory.equipment.length == 0) {
@@ -566,7 +566,7 @@ const showInventory = () => {
 // Show equipment
 const showEquipment = () => {
     // Clear the inventory container
-    let playerEquipmentList = document.getElementById("playerEquipment");
+    let playerEquipmentList = playerEquipmentListElement;
     playerEquipmentList.innerHTML = "";
 
     // Show a message if a player has no equipment
