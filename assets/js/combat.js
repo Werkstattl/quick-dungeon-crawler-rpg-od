@@ -131,13 +131,6 @@ const playerAttack = () => {
         // Deal 30% more damage but you lose 30% base attack speed
         damage = Math.round(damage + ((30 * damage) / 100));
     }
-    if (player.skills.includes("Rampager")) {
-        // Increase base attack by 5 after each hit. Stack resets after battle.
-        player.baseStats.atk += 5;
-        objectValidation();
-        player.tempStats.atk += 5;
-        saveData();
-    }
 
     // Lifesteal formula
     let lifesteal = Math.round(damage * (player.stats.vamp / 100));
@@ -402,13 +395,6 @@ const endCombat = () => {
     clearTimeout(enemyAttackTimeout);
     clearTimeout(companionAttackTimeout);
     // Skill validation
-    if (player.skills.includes("Rampager")) {
-        // Remove Rampager attack buff
-        objectValidation();
-        player.baseStats.atk -= player.tempStats.atk;
-        player.tempStats.atk = 0;
-        saveData();
-    }
 
     // Stops every timer in combat
     clearInterval(combatTimer);

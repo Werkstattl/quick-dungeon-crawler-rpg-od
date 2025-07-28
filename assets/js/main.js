@@ -975,9 +975,6 @@ const allocationPopup = () => {
         if (selectSkill.value == "Devastator") {
             skillDesc.innerHTML = "Deal 30% more damage but you lose 30% base attack speed.";
         }
-        if (selectSkill.value == "Rampager") {
-            skillDesc.innerHTML = "Increase attack by 5 after each hit. Stack resets after battle.";
-        }
         if (selectSkill.value == "Paladin's Heart") {
             skillDesc.innerHTML = "You receive 25% less damage permanently.";
         }
