@@ -463,10 +463,15 @@ function openMenu(isTitle = false) {
             volume.bgm = (bgm / 100) / 2;
             volume.sfx = sfx / 100;
             fontSize.scale = fontSizeSlider.value / 100;
-            bgmDungeon.stop();
+            let wasPlaying = bgmDungeon && bgmDungeon.playing();
+            if (wasPlaying) {
+                bgmDungeon.stop();
+            }
             setVolume();
             applyFontSize();
-//            bgmDungeon.play();
+            if (wasPlaying) {
+                bgmDungeon.play();
+            }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
         };
