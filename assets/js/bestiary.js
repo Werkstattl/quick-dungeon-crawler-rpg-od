@@ -61,30 +61,96 @@ function recordBestiaryKill(id) {
 }
 
 function openBestiaryModal() {
-    sfxOpen.play();
-    menuModalElement.style.display = 'none';
-    defaultModalElement.style.display = 'flex';
-    const listItems = Object.keys(bestiary).sort((a,b) => a - b).map(id => {
-        const img = bestiarySprites[id];
-        const stats = bestiary[id];
-        const name = enemyIdMap[id] || id;
-        const imgTag = img ? `<img src="./assets/sprites/${img}.webp" alt="${name}">` : '';
-        const statTag = `<span class="stats">E:${stats.encounters} K:${stats.kills}</span>`;
-        return `<li>${imgTag}<span>${name}</span>${statTag}</li>`;
-    }).join('');
-    defaultModalElement.innerHTML = `
-        <div class="content" id="bestiary-modal">
-            <div class="content-head">
-                <h3>Bestiary</h3>
-                <p id="bestiary-close"><i class="fa fa-xmark"></i></p>
-            </div>
-            <ul class="bestiary-list">${listItems}</ul>
-        </div>`;
-    const closeBtn = document.querySelector('#bestiary-close');
-    closeBtn.onclick = function () {
-        sfxDecline.play();
-        defaultModalElement.style.display = 'none';
-        defaultModalElement.innerHTML = '';
-        menuModalElement.style.display = 'flex';
-    };
+  sfxOpen.play();
+  menuModalElement.style.display = 'none';
+  defaultModalElement.style.display = 'flex';
+  defaultModalElement.innerHTML = `
+    <div class="content" id="bestiary-modal">
+      <div class="content-head">
+        <h3>Bestiary</h3>
+        <p id="bestiary-close"><i class="fa fa-xmark"></i></p>
+      </div>
+      <ul class="bestiary-list" id="bestiary-list"></ul>
+      <button id="bestiary-load-more">Load more</button>
+    </div>`;
+
+  const closeBtn = document.querySelector('#bestiary-close');
+  const listEl = document.querySelector('#bestiary-list');
+  const loadMoreBtn = document.querySelector('#bestiary-load-more');
+
+  closeBtn.onclick = () => {
+    sfxDecline.play();
+    // Clean up aggressively
+    if (imgObserver) imgObserver.disconnect();
+    defaultModalElement.style.display = 'none';
+    defaultModalElement.replaceChildren(); // drop references to nodes quickly
+    menuModalElement.style.display = 'flex';
+  };
+
+  const ids = Object.keys(bestiary).sort((a, b) => Number(a) - Number(b));
+  const BATCH = 10;
+  let index = 0;
+
+  // Lazy image loader (assign src only when in view)
+  const imgObserver = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        const img = e.target;
+        if (img.dataset.src && !img.src) {
+          img.src = img.dataset.src;
+        }
+        imgObserver.unobserve(img);
+      }
+    }
+  }, { root: listEl, rootMargin: '200px' });
+
+  function renderBatch() {
+    const frag = document.createDocumentFragment();
+    const end = Math.min(index + BATCH, ids.length);
+
+    for (; index < end; index++) {
+      const id = ids[index];
+      const li = document.createElement('li');
+
+      // Name (use textContent to avoid injection and layout thrash)
+      const name = enemyIdMap[id] || id;
+      const nameEl = document.createElement('span');
+      nameEl.textContent = name;
+
+      // Stats
+      const stats = bestiary[id];
+      const statEl = document.createElement('span');
+      statEl.className = 'stats';
+      statEl.textContent = `E:${stats.encounters} K:${stats.kills}`;
+
+      // Image - lazy + async decode + explicit size (use thumbnails if possible)
+      const sprite = bestiarySprites[id];
+      if (sprite) {
+        const img = document.createElement('img');
+        img.loading = 'lazy';     // browser native lazy load
+        img.decoding = 'async';
+        img.alt = name;
+        img.width = 64;           // set real thumbnail dims if you have them
+        img.height = 64;
+        // Prefer a small thumbnail path if available:
+        // img.dataset.src = `./assets/sprites/thumbs/${sprite}.webp`;
+        img.dataset.src = `./assets/sprites/${sprite}.webp`;
+        imgObserver.observe(img);
+        li.appendChild(img);
+      }
+
+      li.appendChild(nameEl);
+      li.appendChild(statEl);
+      frag.appendChild(li);
+    }
+
+    listEl.appendChild(frag);
+
+    if (index >= ids.length) {
+      loadMoreBtn.style.display = 'none';
+    }
+  }
+
+  loadMoreBtn.onclick = renderBatch;
+  renderBatch(); // first chunk
 }
