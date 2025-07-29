@@ -466,9 +466,8 @@ function openMenu(isTitle = false) {
             bgmDungeon.stop();
             setVolume();
             applyFontSize();
-            bgmDungeon.play();
+//            bgmDungeon.play();
             localStorage.setItem("volumeData", JSON.stringify(volume));
-            saveData();
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
         };
     };
