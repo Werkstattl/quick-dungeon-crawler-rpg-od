@@ -1,5 +1,5 @@
 // Bestiary system
-// Structure: { [id]: { encounters: Number, kills: Number } }
+// Structure: { [id]: { e: Number, k: Number } }
 let bestiary = {};
 
 // Mapping of enemy IDs to sprite file names
@@ -16,7 +16,7 @@ function loadBestiary() {
             bestiary = JSON.parse(stored);
             if (Array.isArray(bestiary)) {
                 const converted = {};
-                bestiary.forEach(n => { converted[n] = { encounters: 1, kills: 0 }; });
+                bestiary.forEach(n => { converted[n] = { e: 1, k: 0 }; });
                 bestiary = converted;
             } else {
                 const converted = {};
@@ -45,18 +45,18 @@ function saveBestiary() {
 function addToBestiary(id) {
     const key = String(id);
     if (!bestiary[key]) {
-        bestiary[key] = { encounters: 0, kills: 0 };
+        bestiary[key] = { e: 0, k: 0 };
     }
-    bestiary[key].encounters++;
+    bestiary[key].e++;
     saveBestiary();
 }
 
 function recordBestiaryKill(id) {
     const key = String(id);
     if (!bestiary[key]) {
-        bestiary[key] = { encounters: 0, kills: 0 };
+        bestiary[key] = { e: 0, k: 0 };
     }
-    bestiary[key].kills++;
+    bestiary[key].k++;
     saveBestiary();
 }
 
@@ -121,7 +121,7 @@ function openBestiaryModal() {
       const stats = bestiary[id];
       const statEl = document.createElement('span');
       statEl.className = 'stats';
-      statEl.textContent = `E:${stats.encounters} K:${stats.kills}`;
+      statEl.textContent = `E:${stats.e} K:${stats.k}`;
 
       // Image - lazy + async decode + explicit size (use thumbnails if possible)
       const sprite = bestiarySprites[id];
