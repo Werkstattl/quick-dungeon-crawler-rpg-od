@@ -467,6 +467,7 @@ function openMenu(isTitle = false) {
             setVolume();
             applyFontSize();
             bgmDungeon.play();
+            localStorage.setItem("volumeData", JSON.stringify(volume));
             saveData();
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
         };
@@ -604,12 +605,11 @@ const saveData = () => {
     if (isSaving) return; // Prevent overlapping saves
     isSaving = true;
     try {
-        let playerData, dungeonData, enemyData, volumeData;
+        let playerData, dungeonData, enemyData;
         try {
             playerData = JSON.stringify(player);
             dungeonData = JSON.stringify(dungeon);
             enemyData = JSON.stringify(enemy);
-            volumeData = JSON.stringify(volume);
         } catch (jsonErr) {
             console.error("Failed to stringify data for saving:", jsonErr);
             isSaving = false;
@@ -619,7 +619,6 @@ const saveData = () => {
         localStorage.setItem("playerData", playerData);
         localStorage.setItem("dungeonData", dungeonData);
         localStorage.setItem("enemyData", enemyData);
-        localStorage.setItem("volumeData", volumeData);
     } finally {
         isSaving = false;
     }
