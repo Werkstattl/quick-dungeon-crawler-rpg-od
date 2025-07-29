@@ -107,6 +107,10 @@ const dungeonStartPause = () => {
         dungeon.status.exploring = false;
         dungeon.status.paused = true;
     } else {
+         if (!checkInventoryLimit(true)) {
+            sfxDeny.play();
+            return;
+        }
         sfxUnpause.play();
 
         dungeonAction.innerHTML = "Exploring...";

@@ -541,6 +541,11 @@ const showInventory = () => {
     let playerInventoryList = document.getElementById("playerInventory");
     playerInventoryList.innerHTML = "";
 
+    const header = document.querySelector('#inventory .content-head h3');
+    if (header) {
+        header.textContent = `Inventory (${player.inventory.equipment.length}/${MAX_INVENTORY_ITEMS})`;
+    }
+    
     if (player.inventory.equipment.length == 0) {
         playerInventoryList.innerHTML = "There are no items available.";
     }
@@ -693,8 +698,10 @@ const createEquipmentPrint = (condition) => {
     if (condition == "combat") {
         addCombatLog(`
         ${enemy.name} dropped <span class="${item.rarity}">${item.rarity} ${item.category}</span>.<br>${panel}`);
+        checkInventoryLimit(true);
     } else if (condition == "dungeon") {
         addDungeonLog(`
         You got <span class="${item.rarity}">${item.rarity} ${item.category}</span>.<br>${panel}`);
+        checkInventoryLimit(true);
     }
 }

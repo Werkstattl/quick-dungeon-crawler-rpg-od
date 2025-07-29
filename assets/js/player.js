@@ -18,6 +18,26 @@ if (player) {
 }
 let inventoryOpen = false;
 let leveled = false;
+
+const MAX_INVENTORY_ITEMS = 2;
+
+const inventoryItemCount = () => {
+    const consumables = player.inventory && player.inventory.consumables ? player.inventory.consumables.length : 0;
+    const equipment = player.inventory && player.inventory.equipment ? player.inventory.equipment.length : 0;
+    return consumables + equipment;
+};
+
+const checkInventoryLimit = (logMessage = false) => {
+    if (inventoryItemCount() > MAX_INVENTORY_ITEMS) {
+        dungeon.status.exploring = false;
+        if (logMessage && typeof addDungeonLog === 'function') {
+            addDungeonLog(`<span class='Common'>Inventory limit reached. Sell equipment to continue exploring.</span>`);
+        }
+        return false;
+    }
+    return true;
+};
+
 const lvlupSelect = document.querySelector("#lvlupSelect");
 const lvlupPanel = document.querySelector("#lvlupPanel");
 
@@ -245,14 +265,14 @@ const closeInventory = () => {
     openInv.style.display = "none";
     dimDungeon.style.filter = "brightness(100%)";
     inventoryOpen = false;
-    if (!dungeon.status.paused) {
+    if (!dungeon.status.paused && checkInventoryLimit()) {
         dungeon.status.exploring = true;
     }
 }
 
 // Continue exploring if inventory is not open and the game is not paused
 const continueExploring = () => {
-    if (!inventoryOpen && !dungeon.status.paused) {
+    if (!inventoryOpen && !dungeon.status.paused && checkInventoryLimit()) {
         dungeon.status.exploring = true;
     }
 }
