@@ -2,6 +2,35 @@
 // Structure: { [id]: { e: Number, k: Number } }
 let bestiary = {};
 
+const BESTIARY_DB = 'qdc';
+const BESTIARY_STORE = 'bestiary';
+let bestiaryDB;
+
+function openBestiaryDB() {
+  if (bestiaryDB) return Promise.resolve(bestiaryDB);
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(BESTIARY_DB, 1);
+    request.onupgradeneeded = function (e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(BESTIARY_STORE)) {
+        db.createObjectStore(BESTIARY_STORE, { keyPath: 'id' });
+      }
+    };
+    request.onsuccess = function () {
+      bestiaryDB = request.result;
+      resolve(bestiaryDB);
+    };
+    request.onerror = function () { reject(request.error); };
+  });
+}
+
+function idbRequest(req) {
+  return new Promise((resolve, reject) => {
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
 // Mapping of enemy IDs to sprite file names
 const bestiarySprites = {};
 for (const id in enemyData) {
@@ -9,37 +38,34 @@ for (const id in enemyData) {
     bestiarySprites[id] = Array.isArray(spriteInfo) ? spriteInfo[0] : spriteInfo;
 }
 
-function loadBestiary() {
-    const stored = localStorage.getItem('playerBestiary');
-    if (stored) {
-        try {
-            bestiary = JSON.parse(stored);
-            if (Array.isArray(bestiary)) {
-                const converted = {};
-                bestiary.forEach(n => { converted[n] = { e: 1, k: 0 }; });
-                bestiary = converted;
-            } else {
-                const converted = {};
-                for (const key in bestiary) {
-                    if (/^\d+$/.test(key)) {
-                        converted[key] = bestiary[key];
-                    } else {
-                        const id = Object.keys(enemyIdMap).find(i => enemyIdMap[i] === key);
-                        if (id) {
-                            converted[id] = bestiary[key];
-                        }
-                    }
-                }
-                bestiary = converted;
-            }
-        } catch (e) {
-            bestiary = {};
+async function loadBestiary() {
+    bestiary = {};
+    try {
+        const db = await openBestiaryDB();
+        const tx = db.transaction(BESTIARY_STORE, 'readonly');
+        const records = await idbRequest(tx.objectStore(BESTIARY_STORE).getAll());
+        for (const r of records) {
+            bestiary[String(r.id)] = { e: r.e, k: r.k };
         }
+        await idbRequest(tx);
+    } catch (e) {
+        bestiary = {};
     }
 }
 
-function saveBestiary() {
-    localStorage.setItem('playerBestiary', JSON.stringify(bestiary));
+async function saveBestiary() {
+    try {
+        const db = await openBestiaryDB();
+        const tx = db.transaction(BESTIARY_STORE, 'readwrite');
+        const store = tx.objectStore(BESTIARY_STORE);
+        for (const id in bestiary) {
+            const entry = bestiary[id];
+            store.put({ id: Number(id), e: entry.e, k: entry.k });
+        }
+        await idbRequest(tx);
+    } catch (e) {
+        // ignore
+    }
 }
 
 function addToBestiary(id) {

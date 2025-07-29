@@ -1,6 +1,6 @@
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("DOMContentLoaded", async function () {
     // Apply saved font size on page load
     
     if (player === null) {
@@ -237,7 +237,7 @@ window.addEventListener("DOMContentLoaded", function () {
     });
     applyFontSize();
     setVolume();
-    loadBestiary();
+    await loadBestiary();
     ratingSystem.init();
 });
 
