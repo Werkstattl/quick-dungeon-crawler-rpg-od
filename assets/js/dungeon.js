@@ -4,6 +4,9 @@ const dungeonTime = document.querySelector("#dungeonTime");
 const floorCount = document.querySelector("#floorCount");
 const roomCount = document.querySelector("#roomCount");
 
+// Maximum number of entries to keep in the dungeon log backlog
+const DUNGEON_BACKLOG_LIMIT = 40;
+
 let dungeon = {
     rating: 500,
     grade: "E",
@@ -617,8 +620,8 @@ const updateDungeonLog = (choices) => {
     let dungeonLog = document.querySelector("#dungeonLog");
     dungeonLog.innerHTML = "";
 
-    // Display the recent 50 dungeon logs
-    for (let message of dungeon.backlog.slice(-50)) {
+    // Display the recent dungeon logs
+    for (let message of dungeon.backlog.slice(-DUNGEON_BACKLOG_LIMIT)) {
         let logElement = document.createElement("p");
         logElement.innerHTML = message;
         dungeonLog.appendChild(logElement);
@@ -637,6 +640,9 @@ const updateDungeonLog = (choices) => {
 // Add a log to the dungeon backlog
 const addDungeonLog = (message, choices) => {
     dungeon.backlog.push(message);
+    if (dungeon.backlog.length > DUNGEON_BACKLOG_LIMIT) {
+        dungeon.backlog.shift();
+    }
     updateDungeonLog(choices);
 }
 
