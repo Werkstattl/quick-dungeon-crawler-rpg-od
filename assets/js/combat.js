@@ -317,12 +317,16 @@ const enemyAttack = () => {
 }
 
 // ========== Combat Backlog ==========
+const MAX_COMBAT_LOGS = 50
 const combatBacklog = [];
 
 // Add a log to the combat backlog
 const addCombatLog = (message) => {
-    combatBacklog.push(message);
-    updateCombatLog();
+    combatBacklog.push(message)
+    if (combatBacklog.length > MAX_COMBAT_LOGS) {
+        combatBacklog.shift()
+    }
+    updateCombatLog()
 }
 
 // Displays every combat activity
