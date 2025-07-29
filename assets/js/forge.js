@@ -71,8 +71,6 @@ const closeForgeModal = () => {
         resultItem.innerHTML = '';
     }
     updateForgeDisplay();
-
-    continueExploring();
 };
 
 // Load available equipment for forging
