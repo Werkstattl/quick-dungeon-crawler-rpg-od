@@ -30,7 +30,7 @@ const hpValidation = () => {
             playerDead = false;
 
             // Reset all the necessary stats and return to menu
-            let dimDungeon = dungeonMainElement;
+            let dimDungeon = document.querySelector('#dungeon-main');
             dimDungeon.style.filter = "brightness(100%)";
             dimDungeon.style.display = "none";
             combatPanel.style.display = "none";
@@ -77,7 +77,7 @@ const hpValidation = () => {
             }
 
             // Clear combat backlog and transition to dungeon exploration
-            let dimDungeon = dungeonMainElement;
+            let dimDungeon = document.querySelector('#dungeon-main');
             dimDungeon.style.filter = "brightness(100%)";
             bgmDungeon.play();
 
@@ -327,7 +327,7 @@ const addCombatLog = (message) => {
 
 // Displays every combat activity
 const updateCombatLog = () => {
-    let combatLogBox = combatLogBoxElement;
+    let combatLogBox = document.getElementById("combatLogBox");
     combatLogBox.innerHTML = "";
 
     for (let message of combatBacklog) {
@@ -375,7 +375,7 @@ const startCombat = (battleMusic) => {
     // Starts the timer for player and enemy attacks along with combat timer
     playerAttackTimeout = setTimeout(playerAttack, (1000 / player.stats.atkSpd));
     enemyAttackTimeout = setTimeout(enemyAttack, (1000 / enemy.stats.atkSpd));
-    let dimDungeon = dungeonMainElement;
+    let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
 
     playerLoadStats();

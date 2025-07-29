@@ -18,8 +18,8 @@ if (player) {
 }
 let inventoryOpen = false;
 let leveled = false;
-const lvlupSelect = lvlupSelectElement;
-const lvlupPanel = lvlupPanelElement;
+const lvlupSelect = document.querySelector("#lvlupSelect");
+const lvlupPanel = document.querySelector("#lvlupPanel");
 
 const playerExpGain = () => {
     player.exp.expCurr += enemy.rewards.exp;
@@ -77,17 +77,21 @@ const playerLoadStats = () => {
 
     // Generate battle info for player if in combat
     if (player.inCombat || (typeof playerDead !== 'undefined' && playerDead)) {
+        const playerCombatHpElement = document.querySelector('#player-hp-battle');
+        const playerHpDamageElement = document.querySelector('#player-hp-dmg');
+        const playerExpElement = document.querySelector('#player-exp-bar');
+        const playerInfoElement = document.querySelector('#player-combat-info');
         playerCombatHpElement.innerHTML = `&nbsp${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}(${player.stats.hpPercent}%)`;
         playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
         playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
-        playerExpBarElement.style.width = `${player.exp.expPercent}%`;
+        playerExpElement.style.width = `${player.exp.expPercent}%`;
         playerInfoElement.innerHTML = `${player.name} Lv.${player.lvl} (${player.exp.expPercent}%)`;
     }
 
     // Header
-    playerNameElement.innerHTML = `<i class="fas fa-user"></i>${player.name} Lv.${player.lvl}`;
-    playerExpHeaderElement.innerHTML = `<p>Exp</p> ${nFormatter(player.exp.expCurr)}/${nFormatter(player.exp.expMax)} (${player.exp.expPercent}%)`;
-    playerGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
+    document.querySelector("#player-name").innerHTML = `<i class="fas fa-user"></i>${player.name} Lv.${player.lvl}`;
+    document.querySelector("#player-exp").innerHTML = `<p>Exp</p> ${nFormatter(player.exp.expCurr)}/${nFormatter(player.exp.expMax)} (${player.exp.expPercent}%)`;
+    document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
     // Player Stats
     const hpPercentInt = Math.round(parseFloat(player.stats.hpPercent));
@@ -177,8 +181,8 @@ const openInventory = () => {
 
     dungeon.status.exploring = false;
     inventoryOpen = true;
-    let openInv = inventoryElement;
-    let dimDungeon = dungeonMainElement;
+    let openInv = document.querySelector('#inventory');
+    let dimDungeon = document.querySelector('#dungeon-main');
     openInv.style.display = "flex";
     dimDungeon.style.filter = "brightness(50%)";
 
@@ -236,8 +240,8 @@ const openInventory = () => {
 const closeInventory = () => {
     sfxDecline.play();
 
-    let openInv = inventoryElement;
-    let dimDungeon = dungeonMainElement;
+    let openInv = document.querySelector('#inventory');
+    let dimDungeon = document.querySelector('#dungeon-main');
     openInv.style.display = "none";
     dimDungeon.style.filter = "brightness(100%)";
     inventoryOpen = false;

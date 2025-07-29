@@ -151,7 +151,7 @@ function giveCompanion(companionId) {
 
 // Update companion UI elements
 function updateCompanionUI() {
-    const companionPanel = companionPanelElement;
+    const companionPanel = document.getElementById('companion-panel');
     const companionName = document.getElementById('companion-name');
     const companionAtk = document.getElementById('companion-atk');
     const summonBtn = document.getElementById('summon-companion');
@@ -177,7 +177,7 @@ function openCompanionModal() {
     const modal = document.getElementById('companionModal');
     const companionList = document.getElementById('available-companions');
     sfxOpen.play();
-    const dimDungeon = dungeonMainElement;
+    const dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = 'brightness(50%)';
     
     // Clear previous content
@@ -212,7 +212,7 @@ function openCompanionModal() {
 function closeCompanionModal() {
     sfxDecline.play();
     document.getElementById('companionModal').style.display = 'none';
-    const dimDungeon = dungeonMainElement;
+    const dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = 'brightness(100%)';
 }
 

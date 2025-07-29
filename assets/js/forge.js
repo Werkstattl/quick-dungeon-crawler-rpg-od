@@ -37,7 +37,7 @@ const openForgeModal = () => {
     menuModalElement.style.display = "none";
     
     forgeModalElement.style.display = "flex";
-    let dimDungeon = dungeonMainElement;
+    let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
     
     // Reset forge state
@@ -54,7 +54,7 @@ const openForgeModal = () => {
 const closeForgeModal = () => {
     sfxDecline.play();
     forgeModalElement.style.display = "none";
-    let dimDungeon = dungeonMainElement;
+    let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(100%)";
 
     // Reset forge state

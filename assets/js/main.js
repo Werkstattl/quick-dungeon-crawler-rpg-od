@@ -198,7 +198,7 @@ window.addEventListener("DOMContentLoaded", function () {
         sfxOpen.play();
 
         dungeon.status.exploring = false;
-        let dimTarget = inventoryElement;
+        let dimTarget = document.querySelector('#inventory');
         dimTarget.style.filter = "brightness(50%)";
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
@@ -245,7 +245,7 @@ function openMenu(isTitle = false) {
     closeInventory();
 
     dungeon.status.exploring = false;
-    let dimDungeon = dungeonMainElement;
+    let dimDungeon = document.querySelector('#dungeon-main');
     let dimTitle = document.querySelector('#title-screen');
     if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
         dimDungeon.style.filter = "brightness(50%)";
@@ -375,7 +375,7 @@ function openMenu(isTitle = false) {
                 sfxConfirm.play();
                 // Clear out everything, send the player back to meny and clear progress.
                 bgmDungeon.stop();
-                let dimDungeon = dungeonMainElement;
+                let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
                 dimDungeon.style.display = "none";
                 menuModalElement.style.display = "none";
@@ -776,7 +776,7 @@ const importData = (importedData) => {
                 player = playerImport;
                 saveData();
                 bgmDungeon.stop();
-                let dimDungeon = dungeonMainElement;
+                let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
                 dimDungeon.style.display = "none";
                 let titleScreen = document.querySelector('#title-screen');
