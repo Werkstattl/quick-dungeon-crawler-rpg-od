@@ -2,9 +2,9 @@
 let volume;
 if (JSON.parse(localStorage.getItem("volumeData")) == undefined) {
     volume = {
-        master: 100 / 100,
-        bgm: (80 / 100) / 2,
-        sfx: 100 / 100
+        master: 1,
+        bgm: 0.4,
+        sfx: 1
     }
 } else {
     volume = JSON.parse(localStorage.getItem("volumeData"));
