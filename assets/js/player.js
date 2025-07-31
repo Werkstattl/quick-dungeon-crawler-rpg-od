@@ -19,7 +19,7 @@ if (player) {
 let inventoryOpen = false;
 let leveled = false;
 
-const MAX_INVENTORY_ITEMS = 40;
+const MAX_INVENTORY_ITEMS = 99;
 
 const inventoryItemCount = () => {
     const consumables = player.inventory && player.inventory.consumables ? player.inventory.consumables.length : 0;
