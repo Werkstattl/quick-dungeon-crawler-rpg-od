@@ -154,17 +154,20 @@ function updateCompanionUI() {
     const companionPanel = document.getElementById('companion-panel');
     const companionName = document.getElementById('companion-name');
     const companionAtk = document.getElementById('companion-atk');
+    const companionAtkSpd = document.getElementById('companion-atkspd');
     const summonBtn = document.getElementById('summon-companion');
     
     if (activeCompanion) {
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
+        companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
         summonBtn.textContent = "Change";
     } else {
         companionName.textContent = "None";
         companionName.className = "";
         companionAtk.textContent = "0";
+        companionAtkSpd.textContent = "0";
         summonBtn.textContent = "Summon";
     }
     
@@ -200,6 +203,7 @@ function openCompanionModal() {
             <h4>${companion.name}</h4>
             <p>Level: ${companion.level}</p>
             <p>ATK: ${companion.atk}</p>
+            <p>APS: ${companion.atkSpd.toFixed(2)}</p>
         `;
         option.onclick = () => selectCompanion(companion.id);
         companionList.appendChild(option);
