@@ -293,7 +293,7 @@ const lvlupPopup = () => {
         "hp": 10,
         "atk": 8,
         "def": 8,
-        "atkSpd": 3,
+        "atkSpd": 3.5,
         "vamp": 0.5,
         "critRate": 1,
         "critDmg": 6,
