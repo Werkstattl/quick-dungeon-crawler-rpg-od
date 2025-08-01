@@ -364,7 +364,7 @@ const dungeonEvent = () => {
                 eventRoll = randomizeNum(1, 3);
                 if (eventRoll == 1) {
                     dungeon.status.event = true;
-                    let healCost = Math.round(player.stats.hpMax * 0.3) + (dungeon.progress.floor * 70);
+                    let healCost = Math.round(player.stats.hpMax * 0.4) + (dungeon.progress.floor * 70);
                     choices = `
                             <div class="decision-panel">
                                 <button id="choice1">Pray</button>
