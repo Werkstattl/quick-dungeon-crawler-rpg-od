@@ -77,7 +77,7 @@ const playerLvlUp = () => {
     player.bonusStats.hp += 4;
     player.bonusStats.atk += 2;
     player.bonusStats.def += 2;
-    player.bonusStats.atkSpd += 0.16;
+    player.bonusStats.atkSpd += 0.15;
     player.bonusStats.critRate += 0.1;
     player.bonusStats.critDmg += 0.25;
 }
