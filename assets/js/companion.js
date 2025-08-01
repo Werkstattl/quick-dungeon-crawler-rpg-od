@@ -11,7 +11,7 @@ class Companion {
         this.atk = this.calculateAtk();
         this.isActive = false;
         this.atkSpd = this.calculateAtkSpd();
-        this.critRate = 0.1;
+        this.critRate = 0.25;
         this.critDmg = 1.5;
         // Bonus attack percentage granted to the player when this companion is active
         this.evolutionBonus = 0;
@@ -31,9 +31,9 @@ class Companion {
                 this.hp = this.calculateHp();
                 this.atk = this.calculateAtk();
                 this.atkSpd = this.calculateAtkSpd();
-                this.evolutionBonus += 5;
+                this.evolutionBonus += 2;
                 if (this.isActive) {
-                    player.bonusStats.atk += 5;
+                    player.companionBonus += 2;
                     calculateStats();
                     if (typeof playerLoadStats === 'function') playerLoadStats();
                 }
@@ -89,7 +89,7 @@ class Companion {
         this.isActive = true;
         // Apply evolution bonus when companion is active
         if (this.evolutionBonus) {
-            player.bonusStats.atk += this.evolutionBonus;
+            player.companionBonus += this.evolutionBonus;
             calculateStats();
             if (typeof playerLoadStats === 'function') playerLoadStats();
         }
@@ -101,7 +101,7 @@ class Companion {
         this.isActive = false;
         // Remove evolution bonus when companion is inactive
         if (this.evolutionBonus) {
-            player.bonusStats.atk -= this.evolutionBonus;
+            player.companionBonus -= this.evolutionBonus;
             calculateStats();
             if (typeof playerLoadStats === 'function') playerLoadStats();
         }
@@ -147,7 +147,7 @@ function initCompanions() {
         // Find active companion
         activeCompanion = playerCompanions.find(comp => comp.isActive) || null;
         if (activeCompanion && activeCompanion.evolutionBonus) {
-            player.bonusStats.atk += activeCompanion.evolutionBonus;
+            player.companionBonus += activeCompanion.evolutionBonus;
             calculateStats();
             if (typeof playerLoadStats === 'function') playerLoadStats();
         }

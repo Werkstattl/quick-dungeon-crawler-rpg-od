@@ -15,6 +15,9 @@ if (player) {
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
     }
+    if (player.companionBonus === undefined) {
+        player.companionBonus = 0;
+    }
 }
 let inventoryOpen = false;
 let leveled = false;
@@ -101,11 +104,13 @@ const playerLoadStats = () => {
         const playerHpDamageElement = document.querySelector('#player-hp-dmg');
         const playerExpElement = document.querySelector('#player-exp-bar');
         const playerInfoElement = document.querySelector('#player-combat-info');
-        playerCombatHpElement.innerHTML = `&nbsp${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}(${player.stats.hpPercent}%)`;
-        playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
-        playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
-        playerExpElement.style.width = `${player.exp.expPercent}%`;
-        playerInfoElement.innerHTML = `${player.name} Lv.${player.lvl} (${player.exp.expPercent}%)`;
+        if (playerCombatHpElement && playerHpDamageElement && playerExpElement && playerInfoElement) {
+            playerCombatHpElement.innerHTML = `&nbsp${nFormatter(player.stats.hp)}/${nFormatter(player.stats.hpMax)}(${player.stats.hpPercent}%)`;
+            playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
+            playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
+            playerExpElement.style.width = `${player.exp.expPercent}%`;
+            playerInfoElement.innerHTML = `${player.name} Lv.${player.lvl} (${player.exp.expPercent}%)`;
+        }
     }
 
     // Header

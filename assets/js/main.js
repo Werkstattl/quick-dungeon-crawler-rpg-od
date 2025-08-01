@@ -108,6 +108,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                     kills: 0,
                     deaths: 0,
                     inCombat: false,
+                    companionBonus: 0,
                     allocationChoices: {
                         hp: 10,
                         atk: 10,
@@ -655,7 +656,7 @@ const calculateStats = () => {
     }
 
     player.stats.hpMax = Math.round((playerHpBase + playerHpBase * (player.bonusStats.hp / 100)) + player.equippedStats.hp);
-    player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (player.bonusStats.atk / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)));
+    player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (player.bonusStats.atk / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (player.companionBonus / 100)));
     player.stats.def = Math.round(((playerDefBase + playerDefBase * (player.bonusStats.def / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
     player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (player.bonusStats.atkSpd / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
     player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp;
@@ -720,6 +721,7 @@ const progressReset = (fromDeath = false) => {
         dodge: 0
     };
     player.inCombat = false;
+    player.companionBonus = 0;
     dungeon.progress.floor = 1;
     dungeon.progress.room = 1;
     dungeon.statistics.kills = 0;
