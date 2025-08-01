@@ -29,6 +29,9 @@ const autoDecline = () => {
 // Maximum number of entries to keep in the dungeon log backlog
 const DUNGEON_BACKLOG_LIMIT = 40;
 
+// Holds the type of the currently active event
+let currentEvent = null;
+
 let dungeon = {
     rating: 500,
     grade: "E",
@@ -71,6 +74,8 @@ let dungeon = {
     },
     backlog: [],
     action: 0,
+    // Tracks how often the player ignored door events
+    nothingBias: 0,
 };
 
 // ===== Dungeon Setup =====
@@ -101,7 +106,12 @@ const initialDungeonLoad = () => {
                 restingBonusDuration: 0,
             };
         }
-        
+
+        // Ensure new properties exist on older saves
+        if (dungeon.nothingBias === undefined) {
+            dungeon.nothingBias = 0;
+        }
+
         updateDungeonLog();
     }
     
@@ -177,13 +187,17 @@ const dungeonEvent = () => {
         dungeon.action++;
         let choices;
         let eventRoll;
-        let eventTypes = ["blessing", "curse", "treasure", "enemy", "enemy", "nothing", "nothing", "nothing", "nothing", "shrine"];
+        let eventTypes = ["blessing", "curse", "treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
+        for (let i = 0; i < dungeon.nothingBias; i++) {
+            eventTypes.push("nothing");
+        }
         if (dungeon.action > 2 && dungeon.action < 6) {
             eventTypes.push("nextroom");
         } else if (dungeon.action > 5) {
             eventTypes = ["nextroom"];
         }
         const event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        currentEvent = event;
 
         switch (event) {
             case "nextroom":
@@ -200,6 +214,8 @@ const dungeonEvent = () => {
                 }
                 document.querySelector("#choice1").onclick = function () {
                     sfxConfirm.play();
+                    dungeon.nothingBias = 0;
+                    currentEvent = null;
                     if (dungeon.progress.room == dungeon.progress.roomLimit) {
                         guardianBattle();
                     } else {
@@ -210,6 +226,7 @@ const dungeonEvent = () => {
                             addDungeonLog("You moved to the next floor.");
                         } else if (eventRoll == 2) {
                             incrementRoom();
+                            currentEvent = "treasure";
                             choices = `
                                 <div class="decision-panel">
                                     <button id="choice1">Open the chest</button>
@@ -580,7 +597,13 @@ const shrineHealing = () => {
 // Ignore event and proceed exploring
 const ignoreEvent = () => {
     sfxConfirm.play();
+    if (currentEvent === "nextroom") {
+        if (dungeon.nothingBias < 40) {
+            dungeon.nothingBias++;
+        }
+    }
     dungeon.status.event = false;
+    currentEvent = null;
     addDungeonLog("You ignored it and decided to move on.");
 }
 
