@@ -10,7 +10,7 @@ class Companion {
         this.hp = this.calculateHp();
         this.atk = this.calculateAtk();
         this.isActive = false;
-        this.atkSpd = 0.3;
+        this.atkSpd = this.calculateAtkSpd();
         this.critRate = 0.1;
         this.critDmg = 1.5;
         // Bonus attack percentage granted to the player when this companion is active
@@ -30,6 +30,7 @@ class Companion {
                 this.baseAtk = next.baseAtk;
                 this.hp = this.calculateHp();
                 this.atk = this.calculateAtk();
+                this.atkSpd = this.calculateAtkSpd();
                 this.evolutionBonus += 5;
                 if (this.isActive) {
                     player.bonusStats.atk += 5;
@@ -49,6 +50,11 @@ class Companion {
         return Math.floor(this.baseAtk * (1 + (this.level - 1) * 0.1));
     }
 
+    calculateAtkSpd() {
+        // Increase attack speed slightly with each level
+        return Math.min(2.5, 0.4 + (this.level - 1) * 0.02);
+    }
+
     gainExperience(amount) {
         this.experience += amount;
         addCombatLog(`${this.name} gained ${amount} exp.`);
@@ -64,6 +70,7 @@ class Companion {
         this.experience = 0;
         this.hp = this.calculateHp();
         this.atk = this.calculateAtk();
+        this.atkSpd = this.calculateAtkSpd();
         addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`);
         this.checkEvolution();
         updateCompanionUI();
@@ -131,6 +138,7 @@ function initCompanions() {
             comp.experience = data.experience;
             comp.hp = comp.calculateHp();
             comp.atk = comp.calculateAtk();
+            comp.atkSpd = comp.calculateAtkSpd();
             comp.isActive = data.isActive;
             comp.evolutionBonus = data.evolutionBonus || 0;
             return comp;
@@ -182,7 +190,7 @@ function updateCompanionUI() {
     const companionName = document.getElementById('companion-name');
     const companionAtk = document.getElementById('companion-atk');
     const companionBonus = document.getElementById('companion-bonus');
-    // const companionAtkSpd = document.getElementById('companion-atkspd');
+    const companionAtkSpd = document.getElementById('companion-atkspd');
     const summonBtn = document.getElementById('summon-companion');
 
     if (activeCompanion) {
@@ -190,14 +198,14 @@ function updateCompanionUI() {
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
         companionBonus.innerHTML = activeCompanion.evolutionBonus ? `<h4>Bonus</h4> <i class="ra ra-sword"></i>+${activeCompanion.evolutionBonus}%` : '';
-        // companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
+        companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
         summonBtn.textContent = "Change";
     } else {
         companionName.textContent = "None";
         companionName.className = "";
         companionAtk.textContent = "0";
         companionBonus.textContent = '';
-        // companionAtkSpd.textContent = "0";
+        companionAtkSpd.textContent = "0";
         summonBtn.textContent = "Summon";
     }
     
