@@ -13,6 +13,8 @@ class Companion {
         this.atkSpd = 0.3;
         this.critRate = 0.1;
         this.critDmg = 1.5;
+        // Bonus attack percentage granted to the player when this companion is active
+        this.evolutionBonus = 0;
     }
 
     checkEvolution() {
@@ -28,6 +30,12 @@ class Companion {
                 this.baseAtk = next.baseAtk;
                 this.hp = this.calculateHp();
                 this.atk = this.calculateAtk();
+                this.evolutionBonus += 5;
+                if (this.isActive) {
+                    player.bonusStats.atk += 5;
+                    calculateStats();
+                    if (typeof playerLoadStats === 'function') playerLoadStats();
+                }
                 addCombatLog(`${oldName} evolved into ${this.name}!`);
             }
         }
@@ -72,12 +80,24 @@ class Companion {
 
     activate() {
         this.isActive = true;
+        // Apply evolution bonus when companion is active
+        if (this.evolutionBonus) {
+            player.bonusStats.atk += this.evolutionBonus;
+            calculateStats();
+            if (typeof playerLoadStats === 'function') playerLoadStats();
+        }
         // addDungeonLog(`${this.name} joins the battle!`);
         updateCompanionUI();
     }
 
     deactivate() {
         this.isActive = false;
+        // Remove evolution bonus when companion is inactive
+        if (this.evolutionBonus) {
+            player.bonusStats.atk -= this.evolutionBonus;
+            calculateStats();
+            if (typeof playerLoadStats === 'function') playerLoadStats();
+        }
         updateCompanionUI();
     }
 }
@@ -112,16 +132,22 @@ function initCompanions() {
             comp.hp = comp.calculateHp();
             comp.atk = comp.calculateAtk();
             comp.isActive = data.isActive;
+            comp.evolutionBonus = data.evolutionBonus || 0;
             return comp;
         });
-        
+
         // Find active companion
         activeCompanion = playerCompanions.find(comp => comp.isActive) || null;
+        if (activeCompanion && activeCompanion.evolutionBonus) {
+            player.bonusStats.atk += activeCompanion.evolutionBonus;
+            calculateStats();
+            if (typeof playerLoadStats === 'function') playerLoadStats();
+        }
     } else {
         // Give player a starter companion
         giveCompanion(1);
     }
-    
+
     updateCompanionUI();
 }
 
@@ -141,6 +167,7 @@ function giveCompanion(companionId) {
             template.baseHp,
             template.baseAtk
         );
+        newCompanion.evolutionBonus = 0;
         playerCompanions.push(newCompanion);
         saveCompanions();
         addDungeonLog(`You found a <span class="${newCompanion.rarity}">${newCompanion.name}</span>!`);
@@ -154,20 +181,23 @@ function updateCompanionUI() {
     const companionPanel = document.getElementById('companion-panel');
     const companionName = document.getElementById('companion-name');
     const companionAtk = document.getElementById('companion-atk');
-    const companionAtkSpd = document.getElementById('companion-atkspd');
+    const companionBonus = document.getElementById('companion-bonus');
+    // const companionAtkSpd = document.getElementById('companion-atkspd');
     const summonBtn = document.getElementById('summon-companion');
-    
+
     if (activeCompanion) {
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
-        companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
+        companionBonus.innerHTML = activeCompanion.evolutionBonus ? `<h4>Bonus</h4> <i class="ra ra-sword"></i>+${activeCompanion.evolutionBonus}%` : '';
+        // companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
         summonBtn.textContent = "Change";
     } else {
         companionName.textContent = "None";
         companionName.className = "";
         companionAtk.textContent = "0";
-        companionAtkSpd.textContent = "0";
+        companionBonus.textContent = '';
+        // companionAtkSpd.textContent = "0";
         summonBtn.textContent = "Summon";
     }
     
