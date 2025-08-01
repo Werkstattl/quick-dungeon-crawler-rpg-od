@@ -421,7 +421,7 @@ function openMenu(isTitle = false) {
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
                 <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoMode ? 'checked' : ''}> Auto Mode</label>
-                <button id="apply-volume">Apply</button>
+                <br><button id="apply-volume">Apply</button>
             </div>`;
         let masterVol = document.querySelector('#master-volume');
         let bgmVol = document.querySelector('#bgm-volume');

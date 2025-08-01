@@ -235,7 +235,11 @@ const dungeonEvent = () => {
                     dungeon.action = 0;
                     ignoreEvent();
                 };
-                autoConfirm();
+                if (dungeon.progress.room == dungeon.progress.roomLimit) {
+                    autoDecline();
+                } else {
+                    autoConfirm();
+                }
                 break;
             case "treasure":
                 dungeon.status.event = true;
@@ -300,6 +304,7 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
+                    autoDecline();
                 } else {
                     nothingEvent();
                 }
@@ -359,7 +364,7 @@ const dungeonEvent = () => {
                 eventRoll = randomizeNum(1, 3);
                 if (eventRoll == 1) {
                     dungeon.status.event = true;
-                    let healCost = Math.round(player.stats.hpMax * 0.2) + (dungeon.progress.floor * 60);
+                    let healCost = Math.round(player.stats.hpMax * 0.3) + (dungeon.progress.floor * 70);
                     choices = `
                             <div class="decision-panel">
                                 <button id="choice1">Pray</button>
@@ -380,6 +385,7 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
+                    autoConfirm();
                 } else {
                     nothingEvent();
                 }
