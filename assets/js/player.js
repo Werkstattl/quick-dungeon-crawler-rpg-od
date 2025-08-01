@@ -362,7 +362,7 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.hpMax;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="atk"){
-                    let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)));
+                    let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (player.companionBonus / 100)));
                     let statInitial = player.stats.atk;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="def"){

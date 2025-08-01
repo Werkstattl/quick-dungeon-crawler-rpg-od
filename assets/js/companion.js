@@ -11,8 +11,8 @@ class Companion {
         this.atk = this.calculateAtk();
         this.isActive = false;
         this.atkSpd = this.calculateAtkSpd();
-        this.critRate = 0.25;
-        this.critDmg = 1.5;
+        this.critRate = 50;
+        this.critDmg = 50;
         // Bonus attack percentage granted to the player when this companion is active
         this.evolutionBonus = 0;
     }
