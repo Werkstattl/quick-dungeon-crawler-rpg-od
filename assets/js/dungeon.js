@@ -223,6 +223,7 @@ const dungeonEvent = () => {
                                 dungeon.action = 0;
                                 ignoreEvent();
                             };
+                            autoConfirm();
                         } else {
                             dungeon.status.event = false;
                             incrementRoom();
