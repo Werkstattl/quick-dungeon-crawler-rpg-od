@@ -4,6 +4,19 @@ const dungeonTime = document.querySelector("#dungeonTime");
 const floorCount = document.querySelector("#floorCount");
 const roomCount = document.querySelector("#roomCount");
 
+// Auto mode toggle - stored in localStorage
+let autoMode = localStorage.getItem("autoMode") === "true";
+
+const autoConfirm = () => {
+    if (autoMode) {
+        // Slight delay to ensure button exists
+        setTimeout(() => {
+            const btn = document.querySelector('#choice1');
+            if (btn) btn.click();
+        }, 100);
+    }
+};
+
 // Maximum number of entries to keep in the dungeon log backlog
 const DUNGEON_BACKLOG_LIMIT = 40;
 
@@ -212,6 +225,7 @@ const dungeonEvent = () => {
                     dungeon.action = 0;
                     ignoreEvent();
                 };
+                autoConfirm();
                 break;
             case "treasure":
                 dungeon.status.event = true;
@@ -227,6 +241,7 @@ const dungeonEvent = () => {
                 document.querySelector("#choice2").onclick = function () {
                     ignoreEvent();
                 };
+                autoConfirm();
                 break;
             case "nothing":
                 nothingEvent();
@@ -247,6 +262,7 @@ const dungeonEvent = () => {
                 document.querySelector("#choice2").onclick = function () {
                     fleeBattle();
                 }
+                autoConfirm();
                 break;
             case "blessing":
                 eventRoll = randomizeNum(1, 2);

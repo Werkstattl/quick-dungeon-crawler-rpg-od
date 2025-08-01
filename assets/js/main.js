@@ -420,12 +420,14 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoMode ? 'checked' : ''}> Auto Mode</label>
                 <button id="apply-volume">Apply</button>
             </div>`;
         let masterVol = document.querySelector('#master-volume');
         let bgmVol = document.querySelector('#bgm-volume');
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
+        let autoToggle = document.querySelector('#auto-mode-toggle');
         let applyVol = document.querySelector('#apply-volume');
         let volumeTab = document.querySelector('#volume-tab');
         volumeTab.style.width = "15rem";
@@ -463,6 +465,7 @@ function openMenu(isTitle = false) {
             volume.bgm = (bgm / 100) / 2;
             volume.sfx = sfx / 100;
             fontSize.scale = fontSizeSlider.value / 100;
+            autoMode = autoToggle.checked;
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();
@@ -474,6 +477,7 @@ function openMenu(isTitle = false) {
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
+            localStorage.setItem("autoMode", autoMode);
         };
     };
 
