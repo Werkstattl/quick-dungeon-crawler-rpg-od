@@ -450,8 +450,8 @@ const specialBossBattle = () => {
 
 // Flee from the monster
 const fleeBattle = () => {
-    let eventRoll = randomizeNum(1, 2);
-    if (eventRoll == 1) {
+    let eventRoll = randomizeNum(1, 10);
+    if (eventRoll <= 9) {
         sfxConfirm.play();
         addDungeonLog(`You managed to flee.`);
         player.inCombat = false;
