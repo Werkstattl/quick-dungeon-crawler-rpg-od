@@ -345,6 +345,7 @@ const updateCombatLog = () => {
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Claim</button>`;
         combatLogBox.appendChild(button);
+        autoClaim();
     }
 
     if (playerDead) {

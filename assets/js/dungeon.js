@@ -26,6 +26,15 @@ const autoDecline = () => {
     }
 };
 
+const autoClaim = () => {
+    if (autoMode) {
+        setTimeout(() => {
+            const btn = document.querySelector('#battleButton');
+            if (btn) btn.click();
+        }, 100);
+    }
+};
+
 // Maximum number of entries to keep in the dungeon log backlog
 const DUNGEON_BACKLOG_LIMIT = 40;
 
