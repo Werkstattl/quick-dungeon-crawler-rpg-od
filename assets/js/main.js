@@ -285,7 +285,7 @@ function openMenu(isTitle = false) {
     let rateGameBtn = document.querySelector('#rate-game');
     // Reddit button click function
     redditLink.onclick = function () {
-        window.open('https://www.reddit.com/r/QuickDungeonCrawler/', '_blank');
+        openExternal('https://www.reddit.com/r/QuickDungeonCrawler/');
     }
 
     // Rate game button click function

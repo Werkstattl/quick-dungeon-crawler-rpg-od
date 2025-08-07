@@ -125,14 +125,14 @@ const ratingSystem = {
         const isAndroid = /Android/i.test(navigator.userAgent);
         const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
         if (isAndroid) {
-            window.open(`market://details?id=${packageName}`, '_system');
+            openExternal(`market://details?id=${packageName}`, '_system');
         } else {
-            window.open(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
+            openExternal(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
         }
     },
     
     openItchioForRating() {
-        window.open('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
+        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
     },
     
     saveConfig() {
@@ -150,4 +150,12 @@ function closeDefaultModal() {
     const defaultModal = document.getElementById('defaultModal');
     defaultModal.style.display = "none";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
+}
+
+function openExternal(url) {
+    if ( window.__TAURI__ === undefined ) {
+        window.open(url, '_system');
+    } else {
+        window.__TAURI__.opener.openUrl(url);
+    }
 }

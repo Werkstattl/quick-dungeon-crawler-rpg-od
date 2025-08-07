@@ -308,7 +308,7 @@ const updateForgeDisplay = () => {
                 buyForgeUnlock();
             } else {
                 ratingSystem.openGooglePlayForRating(); // disable for itch.io
-                // window.open('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+                // openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
             }
         };
         return;
