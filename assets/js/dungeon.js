@@ -172,7 +172,7 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (dungeon.statistics.runtime % 15 === 0) {
+    if (Date.now() - lastSaveTime >= 5000) {
         saveData();
     }
 }

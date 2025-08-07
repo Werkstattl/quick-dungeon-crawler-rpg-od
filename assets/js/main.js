@@ -610,6 +610,7 @@ const enterDungeon = () => {
 
 // Save all the data into local storage
 let isSaving = false;
+let lastSaveTime = Date.now();
 const saveData = () => {
     if (isSaving) return; // Prevent overlapping saves
     isSaving = true;
@@ -628,6 +629,7 @@ const saveData = () => {
         localStorage.setItem("playerData", playerData);
         localStorage.setItem("dungeonData", dungeonData);
         localStorage.setItem("enemyData", enemyData);
+        lastSaveTime = Date.now();
     } finally {
         isSaving = false;
     }
