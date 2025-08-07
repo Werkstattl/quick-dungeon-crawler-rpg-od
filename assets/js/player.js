@@ -51,7 +51,7 @@ const playerExpGain = () => {
     while (player.exp.expCurr >= player.exp.expMax) {
         playerLvlUp();
     }
-    if (leveled) {
+    if (leveled && lvlupPanel.style.display !== "flex") {
         lvlupPopup();
     }
 
@@ -72,6 +72,7 @@ const playerLvlUp = () => {
     player.exp.expMaxLvl = expMaxIncrease;
 
     // Increase player level and maximum exp
+    const previousLvl = player.lvl;
     player.lvl++;
     player.exp.lvlGained++;
     player.exp.expMax += expMaxIncrease;
@@ -83,6 +84,21 @@ const playerLvlUp = () => {
     player.bonusStats.atkSpd += 0.15;
     player.bonusStats.critRate += 0.1;
     player.bonusStats.critDmg += 0.25;
+
+    // Play level up effects
+    sfxLvlUp.play();
+    addCombatLog(`You leveled up! (Lv.${previousLvl} > Lv.${player.lvl})`);
+
+    // Recover 20% extra hp on level up
+    player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);
+
+    // Update remaining level count if popup is open
+    if (lvlupPanel.style.display === "flex") {
+        const remainingHeader = document.querySelector("#lvlupSelect h4");
+        if (remainingHeader) {
+            remainingHeader.textContent = `Remaining: ${player.exp.lvlGained}`;
+        }
+    }
 }
 
 // Refresh the player stats
@@ -284,13 +300,6 @@ const continueExploring = () => {
 
 // Shows the level up popup
 const lvlupPopup = () => {
-    sfxLvlUp.play();
-    addCombatLog(`You leveled up! (Lv.${player.lvl - player.exp.lvlGained} > Lv.${player.lvl})`);
-
-    // Recover 20% extra hp on level up
-    player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);
-    playerLoadStats();
-
     // Show popup choices
     lvlupPanel.style.display = "flex";
     combatPanel.style.filter = "brightness(50%)";
