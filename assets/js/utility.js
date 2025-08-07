@@ -125,14 +125,14 @@ const ratingSystem = {
         const isAndroid = /Android/i.test(navigator.userAgent);
         const packageName = "com.thomaspeissl.quick_dungeon_crawler_od.twa";
         if (isAndroid) {
-            openExternal(`market://details?id=${packageName}`, '_system');
+            openExternal(`market://details?id=${packageName}`);
         } else {
-            openExternal(`https://play.google.com/store/apps/details?id=${packageName}`, '_system');
+            openExternal(`https://play.google.com/store/apps/details?id=${packageName}`);
         }
     },
     
     openItchioForRating() {
-        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game', '_system');
+        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game');
     },
     
     saveConfig() {
