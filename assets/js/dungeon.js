@@ -232,7 +232,6 @@ const dungeonEvent = () => {
                         if (eventRoll == 1) {
                             incrementRoom();
                             mimicBattle("door");
-                            addDungeonLog("You moved to the next floor.");
                         } else if (eventRoll == 2) {
                             incrementRoom();
                             currentEvent = "treasure";

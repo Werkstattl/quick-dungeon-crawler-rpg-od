@@ -74,6 +74,8 @@ const hpValidation = () => {
                 incrementRoom();
                 clearFloorBuffs();
                 addDungeonLog("You moved to the next floor.");
+            } else if (enemy.condition === "door") {
+                addDungeonLog("You moved to the next floor.");
             }
 
             // Clear combat backlog and transition to dungeon exploration
