@@ -298,17 +298,23 @@ const updateForgeDisplay = () => {
     };
 
     if (!forgeUnlocked) {
+        const isAndroid = /Android/i.test(navigator.userAgent);
         confirmButton.disabled = false;
         confirmButton.textContent = 'Unlock The Forge (Premium)';
         if (!isCordova()) {
-            confirmButton.textContent = 'Get on Google Play (Premium)'; // disable for itch.io
+            if (isAndroid) {
+                confirmButton.textContent = 'Get on Google Play (Premium)';
+            }
         }
         confirmButton.onclick = () => {
             if (isCordova()) {
                 buyForgeUnlock();
             } else {
-                ratingSystem.openGooglePlayForRating(); // disable for itch.io
-                // openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+                if (isAndroid) {
+                    ratingSystem.openGooglePlayForRating();
+                } else {
+                    openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+                }
             }
         };
         return;
