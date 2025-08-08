@@ -300,11 +300,11 @@ const updateForgeDisplay = () => {
     if (!forgeUnlocked) {
         confirmButton.disabled = false;
         confirmButton.textContent = 'Unlock The Forge (Premium)';
-        if (!window.cordova) {
+        if (!isCordova()) {
             confirmButton.textContent = 'Get on Google Play (Premium)'; // disable for itch.io
         }
         confirmButton.onclick = () => {
-            if (window.cordova) {
+            if (isCordova()) {
                 buyForgeUnlock();
             } else {
                 ratingSystem.openGooglePlayForRating(); // disable for itch.io

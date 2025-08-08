@@ -1,8 +1,9 @@
 function isPremium() {
-    if ( window.__TAURI__ === undefined ) {
-        return false;
-    }
-    return true;
+  return typeof window.__TAURI__ !== 'undefined';
+}
+
+function isCordova() {
+  return typeof window.cordova !== 'undefined';
 }
 
 async function nativeInit() {
