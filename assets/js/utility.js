@@ -151,11 +151,3 @@ function closeDefaultModal() {
     defaultModal.style.display = "none";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
 }
-
-function openExternal(url) {
-    if ( window.__TAURI__ === undefined ) {
-        window.open(url, '_system');
-    } else {
-        window.__TAURI__.opener.openUrl(url);
-    }
-}

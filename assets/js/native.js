@@ -1,4 +1,15 @@
+function isPremium() {
+    if ( window.__TAURI__ === undefined ) {
+        return false;
+    }
+    return true;
+}
+
 async function nativeInit() {
+  if ( isPremium() ) {
+    unlockForge();
+    return;
+  }
   if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {  
     setTimeout(() => {
       try {
@@ -38,3 +49,13 @@ function buyForgeUnlock() {;
   // CdvPurchase.store.get('test-non-consumable').getOffer().order();
   CdvPurchase.store.get(FORGE_PRODUCT_ID).getOffer().order();
 }
+
+function openExternal(url) {
+    if ( isPremium() ) {
+        window.__TAURI__.opener.openUrl(url);
+    } else {
+        window.open(url, '_system');
+    }
+}
+
+
