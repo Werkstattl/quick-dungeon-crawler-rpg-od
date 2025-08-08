@@ -73,7 +73,6 @@ const ratingSystem = {
     
     showPrompt() {
         this.config.lastPromptDate = new Date().toISOString();
-        // disable google play on itch.io
         const modalContent = `
             <div class="content">
                 <div class="content-head">
@@ -82,8 +81,7 @@ const ratingSystem = {
                 </div>
                 <div class="modal-body">
                     <div class="decision-panel">
-                        <button id="rate-googleplay-btn">Rate Now</button>
-                        <button id="rate-itchio-btn" style="display: none">Rate Now</button>
+                        <button id="rate-btn">Rate Now</button>
                         <button id="rate-later-btn">Later</button>
                         <button id="rate-never-btn">No Thanks</button>
                     </div>
@@ -94,16 +92,9 @@ const ratingSystem = {
         const defaultModal = document.getElementById('defaultModal');
         defaultModal.innerHTML = modalContent;
         defaultModal.style.display = "flex";
-        
-        document.getElementById('rate-googleplay-btn').addEventListener('click', () => {
-            this.openGooglePlayForRating();
-            this.config.hasRated = true;
-            this.saveConfig();
-            closeDefaultModal();
-        });
-        
-        document.getElementById('rate-itchio-btn').addEventListener('click', () => {
-            this.openItchioForRating();
+
+        document.getElementById('rate-btn').addEventListener('click', () => {
+            this.openRating();
             this.config.hasRated = true;
             this.saveConfig();
             closeDefaultModal();
@@ -134,7 +125,15 @@ const ratingSystem = {
     openItchioForRating() {
         openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game');
     },
-    
+
+    openRating() {
+        if (isCordova()) {
+            this.openGooglePlayForRating();
+        } else {
+            this.openItchioForRating();
+        }
+    },
+
     saveConfig() {
         localStorage.setItem('ratingConfig', JSON.stringify(this.config));
     },

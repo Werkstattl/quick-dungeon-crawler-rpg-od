@@ -290,8 +290,7 @@ function openMenu(isTitle = false) {
 
     // Rate game button click function
     rateGameBtn.onclick = function () {
-        ratingSystem.openGooglePlayForRating(); // disable for itch.io
-        // ratingSystem.openItchioForRating();
+        ratingSystem.openRating();
         ratingSystem.config.hasRated = true;
         ratingSystem.saveConfig();
     }
