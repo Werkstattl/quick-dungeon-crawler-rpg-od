@@ -89,6 +89,7 @@ const hpValidation = () => {
             combatBacklog.length = 0;
             findCompanionAfterCombat(enemy.lvl);
         });
+        autoClaim();
         endCombat();
     }
 }
@@ -347,7 +348,6 @@ const updateCombatLog = () => {
         button.className = "decision-panel";
         button.innerHTML = `<button id="battleButton">Claim</button>`;
         combatLogBox.appendChild(button);
-        autoClaim();
     }
 
     if (playerDead) {
