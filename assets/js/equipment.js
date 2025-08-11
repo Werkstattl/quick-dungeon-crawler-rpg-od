@@ -535,6 +535,28 @@ const showItemInfo = (item, icon, type, i) => {
     };
 }
 
+// Sort inventory
+const sortInventory = (type) => {
+    if (type === 'rarity') {
+        const order = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom'];
+        player.inventory.equipment.sort((a, b) => {
+            const itemA = JSON.parse(a);
+            const itemB = JSON.parse(b);
+            return order.indexOf(itemA.rarity) - order.indexOf(itemB.rarity);
+        });
+    } else if (type === 'category') {
+        player.inventory.equipment.sort((a, b) => {
+            const itemA = JSON.parse(a);
+            const itemB = JSON.parse(b);
+            const nameA = (itemA.baseCategory || itemA.category).toLowerCase();
+            const nameB = (itemB.baseCategory || itemB.category).toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+    }
+    saveData();
+    showInventory();
+};
+
 // Show inventory
 const showInventory = () => {
     // Clear the inventory container

@@ -227,6 +227,11 @@ const openInventory = () => {
     openInv.style.display = "flex";
     dimDungeon.style.filter = "brightness(50%)";
 
+    sortInventoryElement.value = 'none';
+    sortInventoryElement.onchange = function () {
+        sortInventory(this.value);
+    };
+
     sellAllElement.onclick = function () {
         sfxOpen.play();
         openInv.style.filter = "brightness(50%)";
