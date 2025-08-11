@@ -750,20 +750,21 @@ const addDungeonLog = (message, choices) => {
 // ========= Resting System ==========
 // Process all resting activities while paused
 const processRestingActivities = () => {
+    if (player.inCombat) return;
+
     dungeon.resting.duration++;
-    
+
     // Passive health regeneration (percentage based)
     if (player.stats.hp < player.stats.hpMax) {
         const regenAmount = Math.round(player.stats.hpMax * (dungeon.resting.healthRegenRate / 100));
         player.stats.hp = Math.min(player.stats.hpMax, player.stats.hp + regenAmount);
     }
-    
-    
+
     // Temporary resting bonus generation
     if (dungeon.resting.duration % 120 === 0) { // Every 2 minutes
         generateRestingBonus();
     }
-    
+
     // Update resting bonus duration
     if (dungeon.resting.restingBonusActive) {
         dungeon.resting.restingBonusDuration--;
@@ -771,7 +772,7 @@ const processRestingActivities = () => {
             expireRestingBonus();
         }
     }
-    
+
     updateRestingDisplay();
     playerLoadStats();
 }
