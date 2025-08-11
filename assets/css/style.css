@@ -621,6 +621,15 @@ header button i {
     margin: 0.2rem 1rem;
 }
 
+#auto-mode-btn {
+    padding-right: 0.7rem;
+}
+
+#auto-mode-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
 /* Stat Panel */
 .stat-panel {
     display: flex;

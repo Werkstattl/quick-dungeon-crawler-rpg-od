@@ -93,6 +93,26 @@ dungeonActivity.addEventListener('click', function () {
     dungeonStartPause();
 });
 
+
+const autoModeBtn = document.querySelector("#auto-mode-btn");
+
+const updateAutoModeBtn = () => {
+    if (autoMode) {
+        autoModeBtn.classList.add("active");
+    } else {
+        autoModeBtn.classList.remove("active");
+    }
+};
+
+autoModeBtn.addEventListener('click', function () {
+    autoMode = !autoMode;
+    updateAutoModeBtn();
+    localStorage.setItem("autoMode", autoMode);
+    if (autoMode && dungeon.status.paused) {
+        dungeonStartPause();
+    }
+});
+
 // Sets up the initial dungeon
 const initialDungeonLoad = () => {
     if (localStorage.getItem("dungeonData") !== null) {
