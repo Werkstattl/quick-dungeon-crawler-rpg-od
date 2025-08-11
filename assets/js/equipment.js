@@ -552,6 +552,12 @@ const sortInventory = (type) => {
             const nameB = (itemB.baseCategory || itemB.category).toLowerCase();
             return nameA.localeCompare(nameB);
         });
+    } else if (type === 'tier') {
+        player.inventory.equipment.sort((a, b) => {
+            const itemA = JSON.parse(a);
+            const itemB = JSON.parse(b);
+            return (itemA.tier || 0) - (itemB.tier || 0);
+        });
     }
     saveData();
     showInventory();
