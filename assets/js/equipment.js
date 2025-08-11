@@ -558,6 +558,12 @@ const sortInventory = (type) => {
             const itemB = JSON.parse(b);
             return (itemA.tier || 0) - (itemB.tier || 0);
         });
+    } else if (type === 'level') {
+        player.inventory.equipment.sort((a, b) => {
+            const itemA = JSON.parse(a);
+            const itemB = JSON.parse(b);
+            return (itemA.lvl || 0) - (itemB.lvl || 0);
+        });
     }
     saveData();
     showInventory();
