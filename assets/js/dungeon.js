@@ -6,6 +6,7 @@ const roomCount = document.querySelector("#roomCount");
 
 // Auto mode toggle - stored in localStorage
 let autoMode = localStorage.getItem("autoMode") === "true";
+let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
 
 const autoConfirm = () => {
     if (autoMode) {
@@ -104,6 +105,19 @@ const updateAutoModeBtn = () => {
     }
 };
 
+const updateAutoModeBtnVisibility = () => {
+    if (autoModeBtnVisible) {
+        autoModeBtn.classList.remove("hidden");
+    } else {
+        autoModeBtn.classList.add("hidden");
+        if (autoMode) {
+            autoMode = false;
+            localStorage.setItem("autoMode", autoMode);
+            updateAutoModeBtn();
+        }
+    }
+};
+
 autoModeBtn.addEventListener('click', function () {
     autoMode = !autoMode;
     updateAutoModeBtn();
@@ -112,6 +126,9 @@ autoModeBtn.addEventListener('click', function () {
         dungeonStartPause();
     }
 });
+
+updateAutoModeBtnVisibility();
+updateAutoModeBtn();
 
 // Sets up the initial dungeon
 const initialDungeonLoad = () => {

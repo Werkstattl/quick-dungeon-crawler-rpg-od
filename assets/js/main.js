@@ -420,7 +420,7 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
-                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoMode ? 'checked' : ''}> Auto Mode</label>
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible ? 'checked' : ''}> Auto Mode</label>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
         let masterVol = document.querySelector('#master-volume');
@@ -465,7 +465,10 @@ function openMenu(isTitle = false) {
             volume.bgm = (bgm / 100) / 2;
             volume.sfx = sfx / 100;
             fontSize.scale = fontSizeSlider.value / 100;
-            autoMode = autoToggle.checked;
+            autoModeBtnVisible = autoToggle.checked;
+            if (!autoModeBtnVisible) {
+                autoMode = false;
+            }
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();
@@ -478,6 +481,9 @@ function openMenu(isTitle = false) {
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
             localStorage.setItem("autoMode", autoMode);
+            localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
+            updateAutoModeBtnVisibility();
+            updateAutoModeBtn();
         };
     };
 
