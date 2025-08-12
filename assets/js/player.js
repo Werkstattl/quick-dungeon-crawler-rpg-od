@@ -34,7 +34,7 @@ const checkInventoryLimit = (logMessage = false) => {
     if (inventoryItemCount() > MAX_INVENTORY_ITEMS) {
         dungeon.status.exploring = false;
         if (logMessage && typeof addDungeonLog === 'function') {
-            addDungeonLog(`<span class='Common'>Inventory limit reached. Sell equipment to continue exploring.</span>`);
+            addDungeonLog(`<span class='Common'><i class="fas fa-box-open"></i> Inventory limit reached. Sell equipment to continue exploring.</span>`);
         }
         return false;
     }
