@@ -538,31 +538,35 @@ const showItemInfo = (item, icon, type, i) => {
 // Sort inventory
 const sortInventory = (type) => {
     if (type === 'rarity') {
-        const order = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom'];
+        // Sort by rarity from highest to lowest
+        const order = ['Heirloom', 'Legendary', 'Epic', 'Rare', 'Uncommon', 'Common'];
         player.inventory.equipment.sort((a, b) => {
             const itemA = JSON.parse(a);
             const itemB = JSON.parse(b);
             return order.indexOf(itemA.rarity) - order.indexOf(itemB.rarity);
         });
     } else if (type === 'category') {
+        // Sort categories in reverse alphabetical order
         player.inventory.equipment.sort((a, b) => {
             const itemA = JSON.parse(a);
             const itemB = JSON.parse(b);
             const nameA = (itemA.baseCategory || itemA.category).toLowerCase();
             const nameB = (itemB.baseCategory || itemB.category).toLowerCase();
-            return nameA.localeCompare(nameB);
+            return nameB.localeCompare(nameA);
         });
     } else if (type === 'tier') {
+        // Sort tier from highest to lowest
         player.inventory.equipment.sort((a, b) => {
             const itemA = JSON.parse(a);
             const itemB = JSON.parse(b);
-            return (itemA.tier || 0) - (itemB.tier || 0);
+            return (itemB.tier || 0) - (itemA.tier || 0);
         });
     } else if (type === 'level') {
+        // Sort level from highest to lowest
         player.inventory.equipment.sort((a, b) => {
             const itemA = JSON.parse(a);
             const itemB = JSON.parse(b);
-            return (itemA.lvl || 0) - (itemB.lvl || 0);
+            return (itemB.lvl || 0) - (itemA.lvl || 0);
         });
     }
     saveData();
