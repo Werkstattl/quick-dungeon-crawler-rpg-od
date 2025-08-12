@@ -239,6 +239,21 @@ const companionAttack = () => {
         enemySprite.classList.remove("animation-shake");
     }, 200);
 
+    // Damage numbers
+    const dmgContainer = document.querySelector("#dmg-container");
+    const dmgNumber = document.createElement("p");
+    dmgNumber.classList.add("dmg-numbers");
+    if (crit) {
+        dmgNumber.style.color = "gold";
+        dmgNumber.innerHTML = nFormatter(damage) + "!";
+    } else {
+        dmgNumber.innerHTML = nFormatter(damage);
+    }
+    dmgContainer.appendChild(dmgNumber);
+    setTimeout(() => {
+        dmgContainer.removeChild(dmgContainer.lastElementChild);
+    }, 370);
+
     // Attack Timer
     if (player.inCombat) {
         companionAttackTimeout = setTimeout(() => {
