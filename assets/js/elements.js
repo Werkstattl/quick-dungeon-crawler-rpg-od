@@ -11,7 +11,6 @@ const playerCdmgElement = document.querySelector('#player-cdmg');
 const playerDodgeElement = document.querySelector('#player-dodge');
 const defaultModalElement = document.querySelector('#defaultModal');
 const confirmationModalElement = document.querySelector('#confirmationModal');
-const sellAllElement = document.querySelector("#sell-all");
 const sellRarityElement = document.querySelector('#sell-rarity');
 const menuModalElement = document.querySelector('#menuModal');
 const sortInventoryElement = document.querySelector('#sort-inventory');

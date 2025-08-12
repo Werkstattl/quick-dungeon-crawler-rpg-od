@@ -232,10 +232,15 @@ const openInventory = () => {
         sortInventory(this.value);
     };
 
-    sellAllElement.onclick = function () {
+    sellRarityElement.value = 'none';
+    sellRarityElement.className = '';
+    sellRarityElement.onchange = function () {
+        let rarity = sellRarityElement.value;
+        sellRarityElement.className = rarity === 'none' ? '' : rarity;
+        if (rarity === 'none') { return; }
+
         sfxOpen.play();
         openInv.style.filter = "brightness(50%)";
-        let rarity = sellRarityElement.value;
 
         defaultModalElement.style.display = "flex";
         if (rarity == "All") {
@@ -265,20 +270,17 @@ const openInventory = () => {
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
             openInv.style.filter = "brightness(100%)";
+            sellRarityElement.value = 'none';
+            sellRarityElement.className = '';
         };
         cancel.onclick = function () {
             sfxDecline.play();
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
             openInv.style.filter = "brightness(100%)";
+            sellRarityElement.value = 'none';
+            sellRarityElement.className = '';
         };
-    };
-    sellRarityElement.onclick = function () {
-        sfxOpen.play();
-    };
-    sellRarityElement.onchange = function () {
-        let rarity = sellRarityElement.value;
-        sellRarityElement.className = rarity;
     };
 }
 
