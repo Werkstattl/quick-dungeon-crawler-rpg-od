@@ -431,8 +431,8 @@ const useSpecialAbility = () => {
     const damage = Math.round(player.stats.atk * 2);
     enemy.stats.hp -= damage;
     addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
-    enemyLoadStats();
     hpValidation();
+    enemyLoadStats();
 
     // Damage effect
     let enemySprite = document.querySelector("#enemy-sprite");
