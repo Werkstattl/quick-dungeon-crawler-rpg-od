@@ -617,8 +617,6 @@ const shrineHealing = () => {
     let actualHeal = Math.min(healAmount, player.stats.hpMax - player.stats.hp);
     
     if (player.stats.hp >= player.stats.hpMax) {
-        addDungeonLog("The shrine's magic flows through you, but you are already at full health. The divine energy grants you a temporary blessing instead!");
-        // Give a random temporary buff since they're already full health
         let buffRoll = randomizeNum(1, 3);
         if (buffRoll == 1) {
             applyFloorBuff("atkSpd", 2);
@@ -632,7 +630,7 @@ const shrineHealing = () => {
         }
     } else {
         player.stats.hp += actualHeal;
-        addDungeonLog(`The shrine's divine light washes over you, healing you for <span class="Epic">${actualHeal} HP</span>. You feel renewed and blessed.`);
+        addDungeonLog(`The shrine's divine light washes over you, healing you for <span class="Epic">${actualHeal} HP</span>.`);
     }
     
     playerLoadStats();
