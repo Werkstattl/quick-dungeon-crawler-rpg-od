@@ -466,6 +466,15 @@ button:focus {
     align-items: center;
 }
 
+#special-ability-btn {
+    margin-top: 0.5rem;
+}
+
+#special-ability-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 #lvlupPanel .content {
     width: 100%;
     max-width: 24em;

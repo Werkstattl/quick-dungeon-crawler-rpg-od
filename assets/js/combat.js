@@ -6,6 +6,8 @@ let currentBattleMusic = false;
 let playerAttackTimeout;
 let enemyAttackTimeout;
 let companionAttackTimeout;
+let specialAbilityTimeout;
+let specialAbilityCooldown = false;
 // ========== Validation ==========
 const hpValidation = () => {
     const deathMessages = player.hardcore ? [
@@ -382,11 +384,13 @@ const startCombat = (battleMusic) => {
     currentBattleMusic = battleMusic;
     bgmDungeon.pause();
     sfxEncounter.play();
-	currentBattleMusic.play();
+        currentBattleMusic.play();
     player.inCombat = true;
     clearTimeout(playerAttackTimeout);
     clearTimeout(enemyAttackTimeout);
     clearTimeout(companionAttackTimeout);
+    clearTimeout(specialAbilityTimeout);
+    specialAbilityCooldown = false;
 
     // Add companion involvement
     if (activeCompanion && activeCompanion.isActive) {
@@ -416,6 +420,8 @@ const endCombat = () => {
     clearTimeout(playerAttackTimeout);
     clearTimeout(enemyAttackTimeout);
     clearTimeout(companionAttackTimeout);
+    clearTimeout(specialAbilityTimeout);
+    specialAbilityCooldown = false;
     // Skill validation
 
     // Stops every timer in combat
@@ -427,7 +433,36 @@ const combatCounter = () => {
     combatSeconds++;
 }
 
+const useSpecialAbility = () => {
+    if (!player.inCombat || specialAbilityCooldown) {
+        return;
+    }
+    const damage = Math.round(player.stats.atk * 2);
+    enemy.stats.hp -= damage;
+    addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
+    enemyLoadStats();
+    hpValidation();
+    specialAbilityCooldown = true;
+    const btn = document.querySelector('#special-ability-btn');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Cooling...';
+    }
+    specialAbilityTimeout = setTimeout(() => {
+        specialAbilityCooldown = false;
+        const btn = document.querySelector('#special-ability-btn');
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Special Ability';
+        }
+    }, 10000);
+}
+
 const showCombatInfo = () => {
+    if (!player.inCombat) {
+        clearTimeout(specialAbilityTimeout);
+        specialAbilityCooldown = false;
+    }
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
@@ -452,12 +487,14 @@ const showCombatInfo = () => {
             <div class="battle-bar empty-bar bb-xb">
                 <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
             </div>
+            <button id="special-ability-btn" ${specialAbilityCooldown ? 'disabled' : ''}>${specialAbilityCooldown ? 'Cooling...' : 'Special Ability'}</button>
         </div>
         <div class="logBox primary-panel">
             <div id="combatLogBox"></div>
         </div>
     </div>
     `;
+    document.querySelector('#special-ability-btn').addEventListener('click', useSpecialAbility);
 }
 
 // Mute combat sounds when the app loses focus
