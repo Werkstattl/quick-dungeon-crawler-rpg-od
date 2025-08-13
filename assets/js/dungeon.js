@@ -254,9 +254,9 @@ const dungeonEvent = () => {
                         <button id="choice2">Ignore</button>
                     </div>`;
                 if (dungeon.progress.room == dungeon.progress.roomLimit) {
-                    addDungeonLog(`<span class="Heirloom">You found the door to the boss room.</span>`, choices);
+                    addDungeonLog(`<span class="Heirloom">Boss room door discovered.</span>`, choices);
                 } else {
-                    addDungeonLog("You found a door.", choices);
+                    addDungeonLog("A door blocks your path.", choices);
                 }
                 document.querySelector("#choice1").onclick = function () {
                     sfxConfirm.play();
@@ -277,7 +277,7 @@ const dungeonEvent = () => {
                                     <button id="choice1">Open the chest</button>
                                     <button id="choice2">Ignore</button>
                                 </div>`;
-                            addDungeonLog(`You moved to the next room and found a treasure chamber. There is a <i class="fa fa-toolbox"></i>Chest inside.`, choices);
+                            addDungeonLog(`You entered a treasure chamber with a <i class="fa fa-toolbox"></i>Chest.`, choices);
                             document.querySelector("#choice1").onclick = function () {
                                 chestEvent();
                             }
@@ -310,7 +310,7 @@ const dungeonEvent = () => {
                         <button id="choice1">Open the chest</button>
                         <button id="choice2">Ignore</button>
                     </div>`;
-                addDungeonLog(`You found a treasure chamber. There is a <i class="fa fa-toolbox"></i>Chest inside.`, choices);
+                addDungeonLog(`Treasure chamber found with a <i class="fa fa-toolbox"></i>Chest.`, choices);
                 document.querySelector("#choice1").onclick = function () {
                     chestEvent();
                 }
@@ -351,7 +351,7 @@ const dungeonEvent = () => {
                             <button id="choice1">Offer</button>
                             <button id="choice2">Ignore</button>
                         </div>`;
-                    addDungeonLog(`<span class="Legendary">You found a Statue of Blessing. Do you want to offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span> to gain blessings? (Blessing Lv.${player.blessing})</span>`, choices);
+                    addDungeonLog(`<span class="Legendary">Statue of Blessing: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span> for blessings? (Lv.${player.blessing})</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < cost) {
                             sfxDeny.play();
@@ -382,7 +382,7 @@ const dungeonEvent = () => {
                                 <button id="choice1">Offer</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
-                    addDungeonLog(`<span class="Heirloom">You found a Cursed Totem. Do you want to offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span>? This will strengthen the monsters but will also improve the loot quality. (Curse Lv.${curseLvl})</span>`, choices);
+                    addDungeonLog(`<span class="Heirloom">Cursed Totem: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span>? Monsters grow stronger, loot improves. (Lv.${curseLvl})</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < cost) {
                             sfxDeny.play();
@@ -411,7 +411,7 @@ const dungeonEvent = () => {
                                 <button id="choice1">Enter</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
-                    addDungeonLog(`<span class="Heirloom">You found a mysterious chamber. It seems like there is something sleeping inside.</span>`, choices);
+                    addDungeonLog(`<span class="Heirloom">Mysterious chamber; something sleeps inside.</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         specialBossBattle();
                     }
@@ -432,7 +432,7 @@ const dungeonEvent = () => {
                                 <button id="choice1">Pray</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
-                    addDungeonLog(`<span class="Epic">You discovered an ancient healing shrine. The air shimmers with restorative magic. Pray for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to restore your health?</span>`, choices);
+                    addDungeonLog(`<span class="Epic">Healing shrine: pray for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to restore health?</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < healCost) {
                             sfxDeny.play();

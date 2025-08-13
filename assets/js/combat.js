@@ -10,23 +10,15 @@ let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 // ========== Validation ==========
 const hpValidation = () => {
-    const deathMessages = player.hardcore ? [
-        "In <b>hardcore</b> mode, death claims all. Your <b>inventory</b> and <b>gold</b> are lost for good.",
-        "No mercy in <b>hardcore</b>—your <b>inventory</b> and <b>gold</b> vanish as you fall.",
-        "You perish and with you all <b>inventory</b> and <b>gold</b>. Prepare to start anew."
-    ] : [
-        "But don’t worry, you still have your <b>inventory</b> and <b>gold</b>. Try again!",
-        "That’s unfortunate, but not the end. Your <b>inventory</b> and <b>gold</b> are safe with you. Go for another round!",
-        "It’s a tough world out there, but you’re tougher. You keep your <b>inventory</b> and <b>gold</b> even after death. Don’t give up!",
-        "But death is not the final destination. You retain your <b>inventory</b> and <b>gold</b> as you respawn. Keep exploring!",
-        "That’s a setback, but not a failure. Your <b>inventory</b> and <b>gold</b> remain intact. You can do better!"
-    ];
+    const deathMessage = player.hardcore
+        ? "Hardcore mode: you lose all <b>inventory</b> and <b>gold</b>."
+        : "You keep your <b>inventory</b> and <b>gold</b>.";
     // Prioritizes player death before the enemy
     if (player.stats.hp < 1) {
         player.stats.hp = 0;
         playerDead = true;
         player.deaths++;
-        addCombatLog('You died! ' + deathMessages[Math.floor(Math.random() * deathMessages.length)]);
+        addCombatLog('You died! ' + deathMessage);
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
@@ -51,13 +43,12 @@ const hpValidation = () => {
             recordBestiaryKill(enemy.id);
         }
         dungeon.statistics.kills++;
-        addCombatLog(`${enemy.name} died! (${new Date(combatSeconds * 1000).toISOString().substring(14, 19)})`);
-        addCombatLog(`You earned ${nFormatter(enemy.rewards.exp)} exp.`)
+        const timeStamp = new Date(combatSeconds * 1000).toISOString().substring(14, 19);
+        addCombatLog(`${enemy.name} defeated: +${nFormatter(enemy.rewards.exp)} exp, <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(enemy.rewards.gold)} gold (${timeStamp})`);
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
             activeCompanion.gainExperience(enemy.rewards.exp / 10);
         }
-        addCombatLog(`${enemy.name} dropped <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(enemy.rewards.gold)} gold.`)
         player.gold += enemy.rewards.gold;
         playerLoadStats();
         if (enemy.rewards.drop) {
