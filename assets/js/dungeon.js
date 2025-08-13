@@ -432,7 +432,7 @@ const dungeonEvent = () => {
                                 <button id="choice1">Pray</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
-                    addDungeonLog(`<span class="Epic">Healing shrine: pray for <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to restore health?</span>`, choices);
+                    addDungeonLog(`<span class="Epic">Healing shrine: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to heal?</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < healCost) {
                             sfxDeny.play();
@@ -620,17 +620,17 @@ const shrineHealing = () => {
         let buffRoll = randomizeNum(1, 3);
         if (buffRoll == 1) {
             applyFloorBuff("atkSpd", 2);
-            addDungeonLog("You feel your reflexes sharpen! (+2% ATK.SPD for this floor)");
+            addDungeonLog("Reflexes sharpen! (+2% ATK.SPD this floor)");
         } else if (buffRoll == 2) {
             applyFloorBuff("atk", 5);
-            addDungeonLog("Your weapons gleam with holy light! (+5% ATK for this floor)");
+            addDungeonLog("Weapons glow! (+5% ATK this floor)");
         } else {
             applyFloorBuff("def", 3);
-            addDungeonLog("Your armor feels lighter yet stronger! (+3% DEF for this floor)");
+            addDungeonLog("Armor fortifies! (+3% DEF this floor)");
         }
     } else {
         player.stats.hp += actualHeal;
-        addDungeonLog(`The shrine's divine light washes over you, healing you for <span class="Epic">${actualHeal} HP</span>.`);
+        addDungeonLog(`Divine light heals <span class="Epic">${actualHeal} HP</span>.`);
     }
     
     playerLoadStats();
@@ -701,7 +701,7 @@ const clearFloorBuffs = () => {
         let hadBuffs = dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0;
         
         if (hadBuffs) {
-            addDungeonLog("<span class='Common'>The temporary shrine blessings fade as you enter the new floor.</span>");
+            addDungeonLog("<span class='Common'>Shrine blessings fade on the new floor.</span>");
         }
         
         dungeon.floorBuffs.atk = 0;
