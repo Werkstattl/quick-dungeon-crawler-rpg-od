@@ -433,6 +433,24 @@ const useSpecialAbility = () => {
     addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
     enemyLoadStats();
     hpValidation();
+
+    // Damage effect
+    let enemySprite = document.querySelector("#enemy-sprite");
+    enemySprite.classList.add("animation-shake");
+    setTimeout(() => {
+        enemySprite.classList.remove("animation-shake");
+    }, 200);
+
+    // Damage numbers
+    const dmgContainer = document.querySelector("#dmg-container");
+    const dmgNumber = document.createElement("p");
+    dmgNumber.classList.add("dmg-numbers");
+    dmgNumber.innerHTML = nFormatter(damage);
+    dmgContainer.appendChild(dmgNumber);
+    setTimeout(() => {
+        dmgContainer.removeChild(dmgContainer.lastElementChild);
+    }, 370);
+
     specialAbilityCooldown = true;
     const btn = document.querySelector('#special-ability-btn');
     if (btn) {
