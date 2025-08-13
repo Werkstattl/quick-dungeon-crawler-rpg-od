@@ -385,7 +385,7 @@ const startCombat = (battleMusic) => {
 
     // Add companion involvement
     if (activeCompanion && activeCompanion.isActive) {
-        addCombatLog(`${activeCompanion.name} joins the battle!`);
+//        addCombatLog(`${activeCompanion.name} joins the battle!`);
         companionAttackTimeout = setTimeout(companionAttack, (1000 / activeCompanion.atkSpd));
     }
 
