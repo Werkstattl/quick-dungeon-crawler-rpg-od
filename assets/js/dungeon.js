@@ -366,7 +366,7 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
-                    autoDecline();
+                    autoConfirm();
                 } else {
                     nothingEvent();
                 }
