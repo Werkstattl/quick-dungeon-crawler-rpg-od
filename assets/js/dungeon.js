@@ -256,7 +256,7 @@ const dungeonEvent = () => {
                 if (dungeon.progress.room == dungeon.progress.roomLimit) {
                     addDungeonLog(`<span class="Heirloom">Boss room door discovered.</span>`, choices);
                 } else {
-                    addDungeonLog("A door blocks your path.", choices);
+                    addDungeonLog("You found a door.", choices);
                 }
                 document.querySelector("#choice1").onclick = function () {
                     sfxConfirm.play();
