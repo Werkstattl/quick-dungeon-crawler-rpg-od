@@ -192,7 +192,7 @@ const playerLoadStats = () => {
     <p><i class="ra ra-dripping-blade"></i>+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-lightning-bolt"></i>+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-footprint"></i>+${player.bonusStats.dodge.toFixed(2).replace(rx, "$1")}%</p>`;
+    <p><i class="ra ra-player-dodge"></i>+${player.bonusStats.dodge.toFixed(2).replace(rx, "$1")}%</p>`;
 
     // Add floor buffs display if any are active
     if (dungeon.floorBuffs && (dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0)) {
