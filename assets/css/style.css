@@ -1040,6 +1040,9 @@ header button i {
 .ra-focused-lightning {
     color: #e67e22;
 }
+.ra-player-dodge {
+    color: #1abc9c;
+}
 .fa-user {
     color: #3498db;
 }
