@@ -57,7 +57,6 @@ class Companion {
 
     gainExperience(amount) {
         this.experience += amount;
-        addCombatLog(`${this.name} gained ${amount} exp.`);
         const expRequired = this.level * 100;
         if (this.experience >= expRequired) {
             this.levelUp();
