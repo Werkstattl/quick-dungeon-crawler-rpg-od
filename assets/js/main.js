@@ -228,7 +228,14 @@ window.addEventListener("DOMContentLoaded", async function () {
             dimTarget.style.filter = "brightness(100%)";
         };
     });
-    
+
+    const equipBestBtn = document.querySelector("#equip-best");
+    if (equipBestBtn) {
+        equipBestBtn.addEventListener("click", function () {
+            equipBest();
+        });
+    }
+
     ["#menu-btn", "#title-menu-btn"].forEach(id => {
         const btn = document.querySelector(id);
         if (btn) btn.addEventListener("click", function(e) {

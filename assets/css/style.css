@@ -760,6 +760,11 @@ header button i {
     margin-bottom: 0.5em;
 }
 
+.box-head div {
+    display: flex;
+    gap: 0.5em;
+}
+
 .box-head i {
     margin: 0;
 }

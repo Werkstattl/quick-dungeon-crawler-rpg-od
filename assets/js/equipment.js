@@ -670,7 +670,24 @@ const unequipAll = () => {
     }
     playerLoadStats();
     saveData();
-}
+};
+
+const equipBest = () => {
+    if (player.inventory.equipment.length === 0 && player.equipped.length === 0) {
+        if (typeof sfxDeny !== 'undefined') sfxDeny.play();
+        return;
+    }
+    if (typeof sfxEquip !== 'undefined') sfxEquip.play();
+    const allItems = [...player.equipped];
+    for (const eq of player.inventory.equipment) {
+        allItems.push(JSON.parse(eq));
+    }
+    allItems.sort((a, b) => b.value - a.value);
+    player.equipped = allItems.slice(0, 6);
+    player.inventory.equipment = allItems.slice(6).map(item => JSON.stringify(item));
+    playerLoadStats();
+    saveData();
+};
 
 const sellAll = (rarity) => {
     if (rarity == "All") {
