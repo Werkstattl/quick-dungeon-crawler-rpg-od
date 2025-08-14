@@ -79,11 +79,11 @@ const createEquipment = (addToInventory = true) => {
     }
 
     // Generate and append random stats to the stats array
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "dodge"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "dodge"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
     const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "dodge"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
@@ -261,11 +261,11 @@ const rerollEquipmentStats = (equipment) => {
     }
 
     // Determine stat pools based on attribute and category
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "dodge"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "dodge"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
     const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "dodge"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
