@@ -451,6 +451,18 @@ const useSpecialAbility = () => {
         dmgContainer.removeChild(dmgContainer.lastElementChild);
     }, 370);
 
+    // If the special ability kills the enemy, reset the cooldown immediately
+    if (enemy.stats.hp <= 0 || enemyDead) {
+        clearTimeout(specialAbilityTimeout);
+        specialAbilityCooldown = false;
+        const btn = document.querySelector('#special-ability-btn');
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Special Ability';
+        }
+        return;
+    }
+
     specialAbilityCooldown = true;
     const btn = document.querySelector('#special-ability-btn');
     if (btn) {
