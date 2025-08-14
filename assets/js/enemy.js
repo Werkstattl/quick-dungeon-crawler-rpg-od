@@ -307,7 +307,7 @@ const setEnemyStats = (type, condition) => {
     if (enemy.rewards.exp > 1000000) {
         enemy.rewards.exp = 1000000 * randomizeDecimal(0.9, 1.1);
     }
-    enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.5);
+    enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.3);
     enemy.rewards.drop = randomizeNum(1, 3) == 1;
 
     enemy.stats.hp = enemy.stats.hpMax;
