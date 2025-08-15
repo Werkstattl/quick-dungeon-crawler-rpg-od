@@ -437,6 +437,11 @@ button:focus {
     gap: 0.3rem;
 }
 
+.content-head div {
+    display: flex;
+    gap: 0.5rem;
+}
+
 .content .content-head i {
     margin: 0;
 }
