@@ -209,7 +209,7 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (Date.now() - lastSaveTime >= 5000) {
+    if (Date.now() - lastSaveTime >= 2000) {
         saveData();
     }
 }
@@ -600,7 +600,6 @@ const statBlessing = () => {
     addDungeonLog(`You gained ${value}% bonus ${buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()} from the blessing. (Blessing Lv.${player.blessing} > Blessing Lv.${player.blessing + 1})`);
     blessingUp();
     playerLoadStats();
-    saveData();
 }
 
 // Cursed totem offering
@@ -608,7 +607,6 @@ const cursedTotem = (curseLvl) => {
     sfxBuff.play();
     dungeon.settings.enemyScaling += 0.1;
     addDungeonLog(`The monsters in the dungeon became stronger and the loot quality improved. (Curse Lv.${curseLvl} > Curse Lv.${curseLvl + 1})`);
-    saveData();
 }
 
 // Shrine healing offering
@@ -634,7 +632,6 @@ const shrineHealing = () => {
     }
     
     playerLoadStats();
-    saveData();
 }
 
 // Ignore event and proceed exploring
@@ -691,7 +688,6 @@ const applyFloorBuff = (statType, value) => {
         dungeon.floorBuffs[statType] = 50;
     }
     dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
-    saveData();
 }
 
 // Clear floor buffs when advancing to next floor
@@ -708,7 +704,6 @@ const clearFloorBuffs = () => {
         dungeon.floorBuffs.def = 0;
         dungeon.floorBuffs.atkSpd = 0;
         dungeon.floorBuffs.currentFloor = dungeon.progress.floor;
-        saveData();
         playerLoadStats();
     }
 }

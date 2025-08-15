@@ -431,7 +431,6 @@ const generateLvlStats = (rerolls, percentages) => {
                 }
 
                 playerLoadStats();
-                saveData();
             });
 
             lvlupSelect.appendChild(button);

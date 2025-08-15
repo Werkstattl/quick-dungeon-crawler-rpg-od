@@ -1088,34 +1088,46 @@ const allocationPopup = () => {
 }
 
 const objectValidation = () => {
+    let changed = false;
     if (player.skills == undefined) {
         player.skills = [];
+        changed = true;
     }
     if (player.allocationChoices == undefined) {
         player.allocationChoices = { hp: 10, atk: 10, def: 10, atkSpd: 10 };
+        changed = true;
     }
     if (player.selectedPassive == undefined) {
         player.selectedPassive = "Remnant Razor";
+        changed = true;
     }
     if (player.tempStats == undefined) {
         player.tempStats = {};
         player.tempStats.atk = 0;
         player.tempStats.atkSpd = 0;
+        changed = true;
     }
     if (player.baseStats && player.baseStats.dodge === undefined) {
         player.baseStats.dodge = 0;
+        changed = true;
     }
     if (player.stats && player.stats.dodge === undefined) {
         player.stats.dodge = 0;
+        changed = true;
     }
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
+        changed = true;
     }
     if (player.equippedStats && player.equippedStats.dodge === undefined) {
         player.equippedStats.dodge = 0;
+        changed = true;
     }
     if (enemy.stats && enemy.stats.dodge === undefined) {
         enemy.stats.dodge = 0;
+        changed = true;
     }
-    saveData();
+    if (changed && !player.inCombat) {
+        saveData();
+    }
 }

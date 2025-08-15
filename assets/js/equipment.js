@@ -461,7 +461,6 @@ const showItemInfo = (item, icon, type, i) => {
                 itemInfo.style.display = "none";
                 dimContainer.style.filter = "brightness(100%)";
                 playerLoadStats();
-                saveData();
                 continueExploring();
             }
         } else if (type == "Unequip") {
@@ -474,7 +473,6 @@ const showItemInfo = (item, icon, type, i) => {
             itemInfo.style.display = "none";
             dimContainer.style.filter = "brightness(100%)";
             playerLoadStats();
-            saveData();
             continueExploring();
         }
     };
@@ -512,7 +510,6 @@ const showItemInfo = (item, icon, type, i) => {
             defaultModalElement.innerHTML = "";
             dimContainer.style.filter = "brightness(100%)";
             playerLoadStats();
-            saveData();
             continueExploring();
         }
         cancel.onclick = function () {
@@ -569,7 +566,6 @@ const sortInventory = (type) => {
             return (itemB.lvl || 0) - (itemA.lvl || 0);
         });
     }
-    saveData();
     showInventory();
 };
 
@@ -669,7 +665,6 @@ const unequipAll = () => {
         player.inventory.equipment.push(JSON.stringify(item));
     }
     playerLoadStats();
-    saveData();
 };
 
 const equipBest = () => {
@@ -686,7 +681,6 @@ const equipBest = () => {
     player.equipped = allItems.slice(0, 6);
     player.inventory.equipment = allItems.slice(6).map(item => JSON.stringify(item));
     playerLoadStats();
-    saveData();
 };
 
 const sellAll = (rarity) => {
@@ -700,7 +694,6 @@ const sellAll = (rarity) => {
                 i--;
             }
             playerLoadStats();
-            saveData();
         } else {
             sfxDeny.play();
         }
@@ -724,7 +717,6 @@ const sellAll = (rarity) => {
                 }
             }
             playerLoadStats();
-            saveData();
         } else {
             sfxDeny.play();
         }
