@@ -1,5 +1,8 @@
 function isPremium() {
-  return typeof window.__TAURI__ !== 'undefined';
+  if ( window.__TAURI__ || window.electronAPI ) {
+    return true;
+  }
+  return false;
 }
 
 function isCordova() {
@@ -52,11 +55,11 @@ function buyForgeUnlock() {;
 }
 
 function openExternal(url) {
-    if ( isPremium() ) {
+    if (window.__TAURI__ && window.__TAURI__.opener?.openUrl) {
         window.__TAURI__.opener.openUrl(url);
+    } else if (window.electronAPI && typeof window.electronAPI.openExternal === 'function') {
+        window.electronAPI.openExternal(url);
     } else {
         window.open(url, '_system');
     }
 }
-
-
