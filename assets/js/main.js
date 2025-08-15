@@ -1085,7 +1085,6 @@ const allocationPopup = () => {
         defaultModalElement.innerHTML = "";
         document.querySelector("#title-screen").style.filter = "brightness(100%)";
     }
-    initializeForge();
 }
 
 const objectValidation = () => {

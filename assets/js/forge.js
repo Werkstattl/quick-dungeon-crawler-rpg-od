@@ -31,14 +31,17 @@ const updateForgeGold = () => {
 };
 
 const openForgeModal = () => {
-    
+    if (!forgeModalElement) initializeForge();
+
     sfxOpen.play();
     closeInventory();
     menuModalElement.style.display = "none";
-    
+
     forgeModalElement.style.display = "flex";
     let dimDungeon = document.querySelector('#dungeon-main');
-    dimDungeon.style.filter = "brightness(50%)";
+    if (dimDungeon) {
+        dimDungeon.style.filter = "brightness(50%)";
+    }
     
     // Reset forge state
     selectedForgeItems = [null, null, null];
@@ -55,7 +58,9 @@ const closeForgeModal = () => {
     sfxDecline.play();
     forgeModalElement.style.display = "none";
     let dimDungeon = document.querySelector('#dungeon-main');
-    dimDungeon.style.filter = "brightness(100%)";
+    if (dimDungeon) {
+        dimDungeon.style.filter = "brightness(100%)";
+    }
 
     // Reset forge state
     selectedForgeItems = [null, null, null];
