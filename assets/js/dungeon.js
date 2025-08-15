@@ -7,6 +7,8 @@ const roomCount = document.querySelector("#roomCount");
 // Auto mode toggle - stored in localStorage
 let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
+// Whether auto mode should automatically purchase blessings
+let autoBlessings = localStorage.getItem("autoBlessings") !== "false";
 
 const autoConfirm = () => {
     if (autoMode) {
@@ -366,7 +368,11 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
-                    autoConfirm();
+                    if (autoBlessings) {
+                        autoConfirm();
+                    } else {
+                        autoDecline();
+                    }
                 } else {
                     nothingEvent();
                 }

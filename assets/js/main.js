@@ -428,6 +428,7 @@ function openMenu(isTitle = false) {
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
                 <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible ? 'checked' : ''}> Auto Mode</label>
+                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Auto Blessings</label>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
         let masterVol = document.querySelector('#master-volume');
@@ -435,6 +436,7 @@ function openMenu(isTitle = false) {
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
         let autoToggle = document.querySelector('#auto-mode-toggle');
+        let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let applyVol = document.querySelector('#apply-volume');
         let volumeTab = document.querySelector('#volume-tab');
         volumeTab.style.width = "15rem";
@@ -476,6 +478,7 @@ function openMenu(isTitle = false) {
             if (!autoModeBtnVisible) {
                 autoMode = false;
             }
+            autoBlessings = autoBlessToggle.checked;
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();
@@ -489,6 +492,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
             localStorage.setItem("autoMode", autoMode);
             localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
+            localStorage.setItem("autoBlessings", autoBlessings);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
         };
