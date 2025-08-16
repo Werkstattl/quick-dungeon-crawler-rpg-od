@@ -274,6 +274,7 @@ function openMenu(isTitle = false) {
             ${isTitle ? '' : '<button id="stats">Current Run</button>'}
             <button id="bestiary-menu">Bestiary</button>
             <button id="volume-btn">Settings</button>
+            <button id="auto-mode-settings">Auto Mode</button>
             <button id="export-import">Export/Import Data</button>
             ${isTitle ? '<button id="hero-return">Hero Creation</button>' : '<button id="quit-run">Abandon</button>'}
             <button id="rate-game"><i class="fas fa-star"></i> Rate Game</button>
@@ -288,6 +289,7 @@ function openMenu(isTitle = false) {
     let exportImport = document.querySelector('#export-import');
     let bestiaryMenu = document.querySelector('#bestiary-menu');
     let volumeSettings = document.querySelector('#volume-btn');
+    let autoModeSettings = document.querySelector('#auto-mode-settings');
     let redditLink = document.querySelector('#reddit-link');
     let rateGameBtn = document.querySelector('#rate-game');
     // Reddit button click function
@@ -427,18 +429,12 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
-                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible ? 'checked' : ''}> Auto Mode</label>
-                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Auto Blessings</label>
-                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Auto Heal</label>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
         let masterVol = document.querySelector('#master-volume');
         let bgmVol = document.querySelector('#bgm-volume');
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
-        let autoToggle = document.querySelector('#auto-mode-toggle');
-        let autoBlessToggle = document.querySelector('#auto-bless-toggle');
-        let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let applyVol = document.querySelector('#apply-volume');
         let volumeTab = document.querySelector('#volume-tab');
         volumeTab.style.width = "15rem";
@@ -476,12 +472,6 @@ function openMenu(isTitle = false) {
             volume.bgm = (bgm / 100) / 2;
             volume.sfx = sfx / 100;
             fontSize.scale = fontSizeSlider.value / 100;
-            autoModeBtnVisible = autoToggle.checked;
-            if (!autoModeBtnVisible) {
-                autoMode = false;
-            }
-            autoBlessings = autoBlessToggle.checked;
-            autoHeal = autoHealToggle.checked;
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();
@@ -493,6 +483,47 @@ function openMenu(isTitle = false) {
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
+        };
+    };
+
+    // Opens auto mode settings
+    autoModeSettings.onclick = function () {
+        sfxOpen.play();
+
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
+            <div class="content" id="auto-tab">
+                <div class="content-head">
+                    <h3>Auto Mode</h3>
+                    <p id="auto-close"><i class="fa fa-xmark"></i></p>
+                </div>
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible ? 'checked' : ''}> Auto Mode Button</label>
+                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Auto Blessings</label>
+                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Auto Heal</label>
+                <br><button id="apply-auto">Apply</button>
+            </div>`;
+        let autoToggle = document.querySelector('#auto-mode-toggle');
+        let autoBlessToggle = document.querySelector('#auto-bless-toggle');
+        let autoHealToggle = document.querySelector('#auto-heal-toggle');
+        let applyAuto = document.querySelector('#apply-auto');
+        let autoTab = document.querySelector('#auto-tab');
+        autoTab.style.width = "15rem";
+        let autoClose = document.querySelector('#auto-close');
+        autoClose.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
+        };
+
+        applyAuto.onclick = function () {
+            autoModeBtnVisible = autoToggle.checked;
+            if (!autoModeBtnVisible) {
+                autoMode = false;
+            }
+            autoBlessings = autoBlessToggle.checked;
+            autoHeal = autoHealToggle.checked;
             localStorage.setItem("autoMode", autoMode);
             localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
             localStorage.setItem("autoBlessings", autoBlessings);
