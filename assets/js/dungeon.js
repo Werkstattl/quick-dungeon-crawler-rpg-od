@@ -9,6 +9,8 @@ let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
 // Whether auto mode should automatically purchase blessings
 let autoBlessings = localStorage.getItem("autoBlessings") !== "false";
+// Whether auto mode should automatically purchase healing
+let autoHeal = localStorage.getItem("autoHeal") !== "false";
 
 const autoConfirm = () => {
     if (autoMode) {
@@ -453,7 +455,11 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
-                    autoConfirm();
+                    if (autoHeal) {
+                        autoConfirm();
+                    } else {
+                        autoDecline();
+                    }
                 } else {
                     nothingEvent();
                 }
