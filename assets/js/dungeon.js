@@ -4,13 +4,10 @@ const dungeonTime = document.querySelector("#dungeonTime");
 const floorCount = document.querySelector("#floorCount");
 const roomCount = document.querySelector("#roomCount");
 
-// Auto mode toggle - stored in localStorage
 let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
-// Whether auto mode should automatically purchase blessings
-let autoBlessings = localStorage.getItem("autoBlessings") !== "false";
-// Whether auto mode should automatically purchase healing
-let autoHeal = localStorage.getItem("autoHeal") !== "false";
+let autoBlessings = localStorage.getItem("autoBlessings") === "true";
+let autoHeal = localStorage.getItem("autoHeal") === "true";
 
 const autoConfirm = () => {
     if (autoMode) {
