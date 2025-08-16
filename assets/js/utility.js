@@ -127,7 +127,9 @@ const ratingSystem = {
     },
 
     openRating() {
-        if (isCordova()) {
+        if ( isPremium() ) {
+            this.openItchioForRating();
+        } else if (isCordova()) {
             this.openGooglePlayForRating();
         } else {
             this.openItchioForRating();
