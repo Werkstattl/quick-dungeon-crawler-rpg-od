@@ -2,6 +2,7 @@ let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
 let autoBlessings = localStorage.getItem("autoBlessings") === "true";
 let autoHeal = localStorage.getItem("autoHeal") === "true";
+let autoBossDoors = localStorage.getItem("autoBossDoors") === "true"; // open boss doors automatically
 let autoModeUnlocked = autoModeBtnVisible;
 
 if ( !autoModeUnlocked ) {

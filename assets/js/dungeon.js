@@ -230,7 +230,11 @@ const dungeonEvent = () => {
                     ignoreEvent();
                 };
                 if (dungeon.progress.room == dungeon.progress.roomLimit) {
-                    autoDecline();
+                    if (autoBossDoors) {
+                        autoConfirm();
+                    } else {
+                        autoDecline();
+                    }
                 } else {
                     autoConfirm();
                 }

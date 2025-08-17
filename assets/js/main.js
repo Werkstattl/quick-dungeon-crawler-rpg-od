@@ -503,11 +503,13 @@ function openMenu(isTitle = false) {
                 <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> Active</label>
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Blessings</label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Heal</label>
+        <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> Boss Doors</label>
                 <br><button id="apply-auto">Apply</button>
             </div>`;
         let autoToggle = document.querySelector('#auto-mode-toggle');
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
+    let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
         autoTab.style.width = "15rem";
@@ -543,12 +545,14 @@ function openMenu(isTitle = false) {
             }
             autoBlessings = autoBlessToggle.checked;
             autoHeal = autoHealToggle.checked;
+            autoBossDoors = autoBossDoorToggle.checked;
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
             }
             localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
             localStorage.setItem("autoBlessings", autoBlessings);
             localStorage.setItem("autoHeal", autoHeal);
+            localStorage.setItem("autoBossDoors", autoBossDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
         };
