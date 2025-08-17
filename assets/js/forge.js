@@ -525,7 +525,6 @@ const executeForging = () => {
     // Validate forgeResult before adding to inventory
     if (!forgeResult || typeof forgeResult !== 'object' || Array.isArray(forgeResult) || !forgeResult.category || !forgeResult.rarity || !forgeResult.stats) {
         sfxDeny.play();
-        alert('Forge failed: Invalid forged item. Please restart the game and try again.');
         return;
     }
 
