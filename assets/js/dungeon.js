@@ -236,7 +236,11 @@ const dungeonEvent = () => {
                         autoDecline();
                     }
                 } else {
-                    autoConfirm();
+                    if (dungeon.nothingBias < autoIgnoreDoors) {
+                        autoDecline();
+                    } else {
+                        autoConfirm();
+                    }
                 }
                 break;
             case "treasure":

@@ -504,12 +504,25 @@ function openMenu(isTitle = false) {
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Blessings</label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Heal</label>
         <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> Boss Doors</label>
+                <label id="auto-doorignore-label">Ignore Doors <select id="auto-doorignore-select">
+                    <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
+                    <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
+                    <option value="2" ${autoIgnoreDoors === 2 ? 'selected' : ''}>2</option>
+                    <option value="3" ${autoIgnoreDoors === 3 ? 'selected' : ''}>3</option>
+                    <option value="4" ${autoIgnoreDoors === 4 ? 'selected' : ''}>4</option>
+                    <option value="5" ${autoIgnoreDoors === 5 ? 'selected' : ''}>5</option>
+                    <option value="6" ${autoIgnoreDoors === 6 ? 'selected' : ''}>6</option>
+                    <option value="7" ${autoIgnoreDoors === 7 ? 'selected' : ''}>7</option>
+                    <option value="8" ${autoIgnoreDoors === 8 ? 'selected' : ''}>8</option>
+                    <option value="9" ${autoIgnoreDoors === 9 ? 'selected' : ''}>9</option>
+                </select></label>
                 <br><button id="apply-auto">Apply</button>
             </div>`;
         let autoToggle = document.querySelector('#auto-mode-toggle');
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
     let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
+        let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
         autoTab.style.width = "15rem";
@@ -546,6 +559,7 @@ function openMenu(isTitle = false) {
             autoBlessings = autoBlessToggle.checked;
             autoHeal = autoHealToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
+            autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
             }
@@ -553,6 +567,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoBlessings", autoBlessings);
             localStorage.setItem("autoHeal", autoHeal);
             localStorage.setItem("autoBossDoors", autoBossDoors);
+            localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
         };
