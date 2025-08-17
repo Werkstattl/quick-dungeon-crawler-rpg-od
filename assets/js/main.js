@@ -270,13 +270,13 @@ function openMenu(isTitle = false) {
                 <h3>Menu</h3>
                 <p id="close-menu"><i class="fa fa-xmark"></i></p>
             </div>
-            <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
-            ${isTitle ? '' : '<button id="stats">Current Run</button>'}
-            <button id="bestiary-menu">Bestiary</button>
-            <button id="volume-btn">Settings</button>
-            <button id="auto-mode-settings">Auto Mode</button>
-            <button id="export-import">Export/Import Data</button>
-            ${isTitle ? '<button id="hero-return">Hero Creation</button>' : '<button id="quit-run">Abandon</button>'}
+			<button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
+			${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> Current Run</button>'}
+            <button id="bestiary-menu"><i class="fas fa-book"></i> Bestiary</button>
+            <button id="volume-btn"><i class="fas fa-cog"></i> Settings</button>
+            <button id="auto-mode-settings"><i class="fas fa-play"></i> Auto Mode</button>
+            <button id="export-import"><i class="fas fa-file-export"></i> Export/Import Data</button>
+            ${isTitle ? '<button id="hero-return"><i class="fas fa-user-circle"></i> Hero Creation</button>' : '<button id="quit-run"><i class="fas fa-door-open"></i> Abandon</button>'}
             <button id="rate-game"><i class="fas fa-star"></i> Rate Game <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
         </div>`;
