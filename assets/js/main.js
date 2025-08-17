@@ -277,8 +277,8 @@ function openMenu(isTitle = false) {
             <button id="auto-mode-settings">Auto Mode</button>
             <button id="export-import">Export/Import Data</button>
             ${isTitle ? '<button id="hero-return">Hero Creation</button>' : '<button id="quit-run">Abandon</button>'}
-            <button id="rate-game"><i class="fas fa-star"></i> Rate Game</button>
-            <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit</button>
+            <button id="rate-game"><i class="fas fa-star"></i> Rate Game <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
+            <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
         </div>`;
 
     let close = document.querySelector('#close-menu');
@@ -498,9 +498,11 @@ function openMenu(isTitle = false) {
                     <h3>Auto Mode</h3>
                     <p id="auto-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible ? 'checked' : ''}> Auto Mode Button</label>
-                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Auto Blessings</label>
-                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Auto Heal</label>
+                <p>Automatically engage enemies, claim loot and open doors.</p>
+                ${!autoModeUnlocked ? '<button id="unlock-auto">Unlock Auto Mode (Premium)</button>' : ''}
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> Active</label>
+                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Blessings</label>
+                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Heal</label>
                 <br><button id="apply-auto">Apply</button>
             </div>`;
         let autoToggle = document.querySelector('#auto-mode-toggle');
@@ -517,8 +519,25 @@ function openMenu(isTitle = false) {
             menuModalElement.style.display = "flex";
         };
 
+        if (!autoModeUnlocked) {
+            let unlockAuto = document.querySelector('#unlock-auto');
+            unlockAuto.onclick = function () {
+                const isAndroid = /Android/i.test(navigator.userAgent);
+                if (isCordova()) {
+                    buyAutoModeUnlock();
+                } else {
+                    if (isAndroid) {
+                        ratingSystem.openGooglePlayForRating();
+                    } else {
+                        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+                    }
+                }
+            };
+        }
+
         applyAuto.onclick = function () {
-            autoModeBtnVisible = autoToggle.checked;
+            sfxConfirm.play();
+            autoModeBtnVisible = autoModeUnlocked && autoToggle.checked;
             if (!autoModeBtnVisible) {
                 autoMode = false;
             }

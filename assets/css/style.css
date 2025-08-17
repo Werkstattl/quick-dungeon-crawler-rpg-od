@@ -1354,3 +1354,9 @@ header button i {
     font-size: 0.8rem;
     color: #ccc;
 }
+
+/* Icon for external links in menu */
+.external-link-icon {
+    margin-left: 0.3rem;
+    margin-right: 0;
+}

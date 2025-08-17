@@ -2,6 +2,14 @@ let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
 let autoBlessings = localStorage.getItem("autoBlessings") === "true";
 let autoHeal = localStorage.getItem("autoHeal") === "true";
+let autoModeUnlocked = false;
+
+const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
+
+function unlockAutoMode() {
+    autoModeUnlocked = true;
+    updateAutoModeBtnVisibility();
+}
 
 const autoConfirm = () => {
     if (autoMode) {
@@ -42,7 +50,7 @@ const updateAutoModeBtn = () => {
 };
 
 const updateAutoModeBtnVisibility = () => {
-    if (autoModeBtnVisible) {
+    if (autoModeBtnVisible && autoModeUnlocked) {
         autoModeBtn.classList.remove("hidden");
     } else {
         autoModeBtn.classList.add("hidden");
