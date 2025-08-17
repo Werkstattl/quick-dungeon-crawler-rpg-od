@@ -6,6 +6,9 @@ let autoModeUnlocked = autoModeBtnVisible;
 
 if ( !autoModeUnlocked ) {
     old = localStorage.getItem("autoMode");
+    if ( old !== null ) {
+        autoModeUnlocked = true;
+    }
     console.log("old automode value", old)
     console.log("visible:", autoModeBtnVisible)
     console.log("unlocked:", autoModeUnlocked)
