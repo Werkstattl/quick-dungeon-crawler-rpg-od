@@ -543,7 +543,9 @@ function openMenu(isTitle = false) {
             }
             autoBlessings = autoBlessToggle.checked;
             autoHeal = autoHealToggle.checked;
-            localStorage.setItem("autoMode", autoMode);
+            if ( autoModeUnlocked ) {
+                localStorage.setItem("autoMode", autoMode);
+            }
             localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
             localStorage.setItem("autoBlessings", autoBlessings);
             localStorage.setItem("autoHeal", autoHeal);
