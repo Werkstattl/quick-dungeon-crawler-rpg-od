@@ -59,12 +59,13 @@ function isCordova() {
     ]);
   }
 
-  function buyForgeUnlock() {;
+  function buyForgeUnlock() {
     // CdvPurchase.store.get('test-non-consumable').getOffer().order();
     CdvPurchase.store.get(FORGE_PRODUCT_ID).getOffer().order();
   }
 
-  function buyAutoModeUnlock() {;
+  function buyAutoModeUnlock() {
+    // CdvPurchase.store.get('test-non-consumable').getOffer().order();
     CdvPurchase.store.get(AUTO_MODE_PRODUCT_ID).getOffer().order();
   }
 
