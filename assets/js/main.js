@@ -486,8 +486,8 @@ function openMenu(isTitle = false) {
         };
     };
 
-    // Opens auto mode settings
-    autoModeSettings.onclick = function () {
+    // Function to render the auto mode settings modal
+    window.renderAutoModeSettingsModal = function () {
         sfxOpen.play();
 
         menuModalElement.style.display = "none";
@@ -553,6 +553,9 @@ function openMenu(isTitle = false) {
             updateAutoModeBtn();
         };
     };
+
+    // Opens auto mode settings
+    autoModeSettings.onclick = window.renderAutoModeSettingsModal;
 
     // Export/Import Save Data
     exportImport.onclick = function () {

@@ -16,6 +16,9 @@ const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
 function unlockAutoMode() {
     autoModeUnlocked = true;
     updateAutoModeBtnVisibility();
+    if (typeof window.renderAutoModeSettingsModal === 'function') {
+        window.renderAutoModeSettingsModal();
+    }
 }
 
 const autoConfirm = () => {
