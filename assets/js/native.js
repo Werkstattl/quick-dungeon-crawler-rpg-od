@@ -44,11 +44,13 @@ function isCordova() {
     ]);
     CdvPurchase.store.when()
       .approved(transaction => {
-        if (transaction.productId === FORGE_PRODUCT_ID) {
-          unlockForge();
-        } else if (transaction.productId === AUTO_MODE_PRODUCT_ID) {
-          unlockAutoMode();
-        }
+        transaction.products.forEach(product => {
+          if (product.id === FORGE_PRODUCT_ID) {
+            unlockForge();
+          } else if (product.id === AUTO_MODE_PRODUCT_ID) {
+            unlockAutoMode();
+          }
+        });
         transaction.finish();
       });
     // CdvPurchase.store.initialize([
