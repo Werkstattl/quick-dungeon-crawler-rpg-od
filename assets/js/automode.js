@@ -9,9 +9,6 @@ if ( !autoModeUnlocked ) {
     if ( old !== null ) {
         autoModeUnlocked = true;
     }
-    console.log("old automode value", old)
-    console.log("visible:", autoModeBtnVisible)
-    console.log("unlocked:", autoModeUnlocked)
 }
 
 const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
