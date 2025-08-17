@@ -73,6 +73,11 @@ const updateAutoModeBtnVisibility = () => {
 };
 
 autoModeBtn.addEventListener('click', function () {
+    if (autoMode) {
+        sfxUnpause.play();
+    } else {
+        sfxPause.play();
+    }
     autoMode = !autoMode;
     updateAutoModeBtn();
     localStorage.setItem("autoMode", autoMode);
