@@ -3,7 +3,8 @@ let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
 let autoBlessings = localStorage.getItem("autoBlessings") === "true";
 let autoHeal = localStorage.getItem("autoHeal") === "true";
 let autoBossDoors = localStorage.getItem("autoBossDoors") === "true"; // open boss doors automatically
-let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10) || 1;
+let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
+if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoModeUnlocked = autoModeBtnVisible;
 
 if ( !autoModeUnlocked ) {
