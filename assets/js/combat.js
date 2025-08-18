@@ -429,39 +429,48 @@ const useSpecialAbility = () => {
         return;
     }
     sfxAttack.play();
-    const damage = Math.round(player.stats.atk * 2);
-    enemy.stats.hp -= damage;
-    addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
-    hpValidation();
-    enemyLoadStats();
 
-    // Damage effect
-    let enemySprite = document.querySelector("#enemy-sprite");
-    enemySprite.classList.add("animation-shake");
-    setTimeout(() => {
-        enemySprite.classList.remove("animation-shake");
-    }, 200);
+    if (player.selectedClass === "Paladin") {
+        const healAmount = Math.round(player.stats.hpMax * 0.3);
+        player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
+        addCombatLog(`${player.name} used a special ability and healed ${nFormatter(healAmount)} HP!`);
+        hpValidation();
+        playerLoadStats();
+    } else {
+        const damage = Math.round(player.stats.atk * 2);
+        enemy.stats.hp -= damage;
+        addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
+        hpValidation();
+        enemyLoadStats();
 
-    // Damage numbers
-    const dmgContainer = document.querySelector("#dmg-container");
-    const dmgNumber = document.createElement("p");
-    dmgNumber.classList.add("dmg-numbers");
-    dmgNumber.innerHTML = nFormatter(damage);
-    dmgContainer.appendChild(dmgNumber);
-    setTimeout(() => {
-        dmgContainer.removeChild(dmgContainer.lastElementChild);
-    }, 370);
+        // Damage effect
+        let enemySprite = document.querySelector("#enemy-sprite");
+        enemySprite.classList.add("animation-shake");
+        setTimeout(() => {
+            enemySprite.classList.remove("animation-shake");
+        }, 200);
 
-    // If the special ability kills the enemy, reset the cooldown immediately
-    if (enemy.stats.hp <= 0 || enemyDead) {
-        clearTimeout(specialAbilityTimeout);
-        specialAbilityCooldown = false;
-        const btn = document.querySelector('#special-ability-btn');
-        if (btn) {
-            btn.disabled = false;
-            btn.textContent = 'Special Ability';
+        // Damage numbers
+        const dmgContainer = document.querySelector("#dmg-container");
+        const dmgNumber = document.createElement("p");
+        dmgNumber.classList.add("dmg-numbers");
+        dmgNumber.innerHTML = nFormatter(damage);
+        dmgContainer.appendChild(dmgNumber);
+        setTimeout(() => {
+            dmgContainer.removeChild(dmgContainer.lastElementChild);
+        }, 370);
+
+        // If the special ability kills the enemy, reset the cooldown immediately
+        if (enemy.stats.hp <= 0 || enemyDead) {
+            clearTimeout(specialAbilityTimeout);
+            specialAbilityCooldown = false;
+            const btn = document.querySelector('#special-ability-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Special Ability';
+            }
+            return;
         }
-        return;
     }
 
     specialAbilityCooldown = true;
