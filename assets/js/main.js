@@ -763,6 +763,9 @@ const calculateStats = () => {
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
+    if (player.skills && player.skills.includes("Evasion Mastery")) {
+        player.stats.dodge += 15;
+    }
     if (player.stats.dodge > 75) {
         player.stats.dodge = 75;
     }
@@ -995,6 +998,7 @@ const allocationPopup = () => {
                     <option value="Devastator">Devastator</option>
                     <option value="Paladin's Heart">Paladin's Heart</option>
                     <option value="Aegis Thorns">Aegis Thorns</option>
+                    <option value="Evasion Mastery">Evasion Mastery</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
@@ -1096,6 +1100,9 @@ const allocationPopup = () => {
         }
         if (selectSkill.value == "Aegis Thorns") {
             skillDesc.innerHTML = "Enemies receive 15% of the damage they dealt.";
+        }
+        if (selectSkill.value == "Evasion Mastery") {
+            skillDesc.innerHTML = "Increase your dodge chance by 15%.";
         }
     }
     selectSkill.onchange();
