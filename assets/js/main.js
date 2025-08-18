@@ -925,13 +925,21 @@ const allocationPopup = () => {
         def: 10,
         atkSpd: 10
     };
+
+    const classBaseStats = {
+        "Knight": { hp: 0, atk: 20, def: 0, atkSpd: 0 },
+        "Paladin": { hp: 100, atk: 0, def: 20, atkSpd: 0 }
+    };
+
+    let currentClass = player.selectedClass || "Knight";
     let stats;
     const updateStats = () => {
+        const bonus = classBaseStats[currentClass] || { hp: 0, atk: 0, def: 0, atkSpd: 0 };
         stats = {
-            hp: 50 * allocation.hp,
-            atk: 10 * allocation.atk,
-            def: 10 * allocation.def,
-            atkSpd: 0.4 + (0.02 * allocation.atkSpd)
+            hp: 50 * allocation.hp + bonus.hp,
+            atk: 10 * allocation.atk + bonus.atk,
+            def: 10 * allocation.def + bonus.def,
+            atkSpd: 0.4 + (0.02 * allocation.atkSpd) + bonus.atkSpd
         }
     }
     updateStats();
@@ -1106,21 +1114,28 @@ const allocationPopup = () => {
         }
     }
     selectSkill.onchange();
-    
+
         // Class selection
         let selectClass = document.querySelector("#select-class");
         let classDesc = document.querySelector("#class-desc");
-        selectClass.value = player.selectedClass || "Knight";
+        selectClass.value = currentClass;
         selectClass.onclick = function () {
             sfxConfirm.play();
         }
         selectClass.onchange = function () {
+            currentClass = selectClass.value;
             if (selectClass.value == "Knight") {
                 classDesc.innerHTML = "Special ability to deal 2x ATK as direct dmg.";
             }
             if (selectClass.value == "Paladin") {
                 classDesc.innerHTML = "Special ability to heal yourself.";
             }
+            updateStats();
+            let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+            document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
         }
         selectClass.onchange();
     
@@ -1187,10 +1202,11 @@ const allocationPopup = () => {
         updateStats();
 
         // Display Reset
-        document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp}`;
-        document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk}`;
-        document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def}`;
-        document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd}`;
+        let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+        document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
         document.querySelector(`#hpAllo`).innerHTML = allocation.hp;
         document.querySelector(`#atkAllo`).innerHTML = allocation.atk;
         document.querySelector(`#defAllo`).innerHTML = allocation.def;
