@@ -116,12 +116,12 @@ const playerAttack = () => {
     // Skill effects
     objectValidation();
     if (player.skills.includes("Remnant Razor")) {
-        // Attacks deal extra 8% of enemies' current health on hit
-        damage += Math.round((8 * enemy.stats.hp) / 100);
+        // Attacks deal extra 9% of enemies' current health on hit
+        damage += Math.round((9 * enemy.stats.hp) / 100);
     }
     if (player.skills.includes("Titan's Will")) {
-        // Attacks deal extra 4% of your maximum health on hit
-        damage += Math.round((4 * player.stats.hpMax) / 100);
+        // Attacks deal extra 4.5% of your maximum health on hit
+        damage += Math.round((4.5 * player.stats.hpMax) / 100);
     }
     if (player.skills.includes("Devastator")) {
         // Deal 30% more damage but you lose 30% base attack speed
@@ -299,8 +299,8 @@ const enemyAttack = () => {
     // Aegis Thorns skill
     objectValidation();
     if (player.skills.includes("Aegis Thorns")) {
-        // Enemies receive 15% of the damage they dealt
-        enemy.stats.hp -= Math.round((15 * damage) / 100);
+        // Enemies receive 20% of the damage they dealt
+        enemy.stats.hp -= Math.round((20 * damage) / 100);
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {

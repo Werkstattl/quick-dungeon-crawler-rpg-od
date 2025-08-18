@@ -1002,7 +1002,7 @@ const allocationPopup = () => {
                 </select>
             </div>
             <div class="row primary-panel pad">
-                <p id="skill-desc">Attacks deal extra 8% of enemies' current health on hit.</p>
+                <p id="skill-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
             </div>
             <div class="row" id="forge-button-row" style="margin-top: 15px;display:none">
                 <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> The Forge</button>
@@ -1087,10 +1087,10 @@ const allocationPopup = () => {
     }
     selectSkill.onchange = function () {
         if (selectSkill.value == "Remnant Razor") {
-            skillDesc.innerHTML = "Attacks deal extra 8% of enemies' current health on hit.";
+            skillDesc.innerHTML = "Attacks deal extra 9% of enemies' current health on hit.";
         }
         if (selectSkill.value == "Titan's Will") {
-            skillDesc.innerHTML = "Attacks deal extra 4% of your maximum health on hit.";
+            skillDesc.innerHTML = "Attacks deal extra 4.5% of your maximum health on hit.";
         }
         if (selectSkill.value == "Devastator") {
             skillDesc.innerHTML = "Deal 30% more damage but you lose 30% base attack speed.";
@@ -1099,7 +1099,7 @@ const allocationPopup = () => {
             skillDesc.innerHTML = "You receive 25% less damage permanently.";
         }
         if (selectSkill.value == "Aegis Thorns") {
-            skillDesc.innerHTML = "Enemies receive 15% of the damage they dealt.";
+            skillDesc.innerHTML = "Enemies receive 20% of the damage they dealt.";
         }
         if (selectSkill.value == "Evasion Mastery") {
             skillDesc.innerHTML = "Increase your dodge chance by 15%.";
