@@ -271,7 +271,7 @@ function openMenu(isTitle = false) {
                 <h3>Menu</h3>
                 <p id="close-menu"><i class="fa fa-xmark"></i></p>
             </div>
-			<button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
+                        <button id="player-menu"><i class="fas fa-user"></i>${player.name} (${player.selectedClass})</button>
 			${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> Current Run</button>'}
             <button id="bestiary-menu"><i class="fas fa-book"></i> Bestiary</button>
             <button id="volume-btn"><i class="fas fa-cog"></i> Settings</button>
@@ -317,7 +317,7 @@ function openMenu(isTitle = false) {
                     <h3>Statistics</h3>
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <p>${player.name} Lv.${player.lvl}</p>
+                <p>${player.name} the ${player.selectedClass} Lv.${player.lvl}</p>
                 <p>Hardcore: ${player.hardcore ? 'Enabled' : 'Disabled'}</p>
                 <p>Kills: ${nFormatter(player.kills)}</p>
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
@@ -347,7 +347,7 @@ function openMenu(isTitle = false) {
                         <h3>Current Run</h3>
                         <p id="run-close"><i class="fa fa-xmark"></i></p>
                     </div>
-                    <p>${player.name} Lv.${player.lvl} (${player.skills})</p>
+                    <p>${player.name} the ${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
                     <p>Blessing Lvl.${player.blessing}</p>
                     <p>Curse Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
                     <p>Kills: ${nFormatter(dungeon.statistics.kills)}</p>
