@@ -116,7 +116,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         atkSpd: 10
                     },
                     hardcore: hardcore,
-                    selectedPassive: "Remnant Razor"
+                    selectedPassive: "Remnant Razor",
+                    selectedClass: "Knight"
                 };
                 }
                 player.name = playerName;
@@ -941,6 +942,16 @@ const allocationPopup = () => {
                 <p id="allocate-close"><i class="fa fa-xmark"></i></p>
             </div>
             <div class="row">
+            	<p>Class</p>
+                            <select id="select-class">
+                                <option value="Knight">Knight</option>
+                                <option value="Paladin">Paladin</option>
+                            </select>
+            </div>
+            <div class="row primary-panel pad">
+                            <p id="class-desc">Special ability to deal 2x ATK as dmg.</p>
+                        </div>
+            <div class="row">
                 <p><i class="fas fa-heart"></i><span id="hpDisplay">HP: ${stats.hp}</span></p>
                 <div class="row">
                     <button id="hpMin">-</button>
@@ -1088,6 +1099,24 @@ const allocationPopup = () => {
         }
     }
     selectSkill.onchange();
+    
+        // Class selection
+        let selectClass = document.querySelector("#select-class");
+        let classDesc = document.querySelector("#class-desc");
+        selectClass.value = player.selectedClass || "Knight";
+        selectClass.onclick = function () {
+            sfxConfirm.play();
+        }
+        selectClass.onchange = function () {
+            if (selectClass.value == "Knight") {
+                classDesc.innerHTML = "Special ability to deal 2x ATK as dmg.";
+            }
+            if (selectClass.value == "Paladin") {
+                classDesc.innerHTML = "Special ability to heal himself.";
+            }
+        }
+        selectClass.onchange();
+    
 
     // Operation Buttons
     let confirm = document.querySelector("#allocate-confirm");
@@ -1121,7 +1150,7 @@ const allocationPopup = () => {
         // Save allocation choices
         player.allocationChoices = { ...allocation };
         player.selectedPassive = selectSkill.value;
-
+		player.selectedClass = selectClass.value;
         // Set player skill
         objectValidation();
         player.skills = [selectSkill.value];
@@ -1182,6 +1211,10 @@ const objectValidation = () => {
     if (player.selectedPassive == undefined) {
         player.selectedPassive = "Remnant Razor";
         changed = true;
+    }
+    if (player.selectedClass == undefined) {
+            player.selectedClass = "Knight";
+            changed = true;
     }
     if (player.tempStats == undefined) {
         player.tempStats = {};
