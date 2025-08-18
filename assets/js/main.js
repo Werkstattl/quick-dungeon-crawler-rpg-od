@@ -1116,10 +1116,10 @@ const allocationPopup = () => {
         }
         selectClass.onchange = function () {
             if (selectClass.value == "Knight") {
-                classDesc.innerHTML = "Special ability to deal 2x ATK as dmg.";
+                classDesc.innerHTML = "Special ability to deal 2x ATK as direct dmg.";
             }
             if (selectClass.value == "Paladin") {
-                classDesc.innerHTML = "Special ability to heal himself.";
+                classDesc.innerHTML = "Special ability to heal yourself.";
             }
         }
         selectClass.onchange();
