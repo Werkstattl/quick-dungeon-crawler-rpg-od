@@ -428,15 +428,15 @@ const useSpecialAbility = () => {
     if (!player.inCombat || specialAbilityCooldown) {
         return;
     }
-    sfxAttack.play();
-
     if (player.selectedClass === "Paladin") {
+        sfxBuff.play();
         const healAmount = Math.round(player.stats.hpMax * 0.3);
         player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
         addCombatLog(`${player.name} used a special ability and healed ${nFormatter(healAmount)} HP!`);
         hpValidation();
         playerLoadStats();
     } else {
+        sfxAttack.play();
         const damage = Math.round(player.stats.atk * 2);
         enemy.stats.hp -= damage;
         addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
