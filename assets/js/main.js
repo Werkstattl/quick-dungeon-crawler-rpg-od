@@ -997,6 +997,7 @@ const allocationPopup = () => {
             <div class="row">
                 <p id="alloPts">Stat Points: ${points}/20</p>
                 <button id="allocate-reset">Reset</button>
+                <button id="allocate-auto">Auto</button>
             </div>
             <div class="row">
                 <p>Passive</p>
@@ -1143,6 +1144,7 @@ const allocationPopup = () => {
     // Operation Buttons
     let confirm = document.querySelector("#allocate-confirm");
     let reset = document.querySelector("#allocate-reset");
+    let autoAlloc = document.querySelector("#allocate-auto");
     let close = document.querySelector("#allocate-close");
     let forgeBtn = document.querySelector("#open-forge-btn");
     
@@ -1212,6 +1214,32 @@ const allocationPopup = () => {
         document.querySelector(`#defAllo`).innerHTML = allocation.def;
         document.querySelector(`#atkSpdAllo`).innerHTML = allocation.atkSpd;
         document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+    }
+    autoAlloc.onclick = function () {
+        if (points > 0) {
+            sfxConfirm.play();
+            const order = ["hp", "atk", "def", "atkSpd"];
+            while (points > 0) {
+                for (let stat of order) {
+                    if (points === 0) break;
+                    allocation[stat]++;
+                    points--;
+                }
+            }
+            updateStats();
+            let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+            document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#hpAllo`).innerHTML = allocation.hp;
+            document.querySelector(`#atkAllo`).innerHTML = allocation.atk;
+            document.querySelector(`#defAllo`).innerHTML = allocation.def;
+            document.querySelector(`#atkSpdAllo`).innerHTML = allocation.atkSpd;
+            document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+        } else {
+            sfxDeny.play();
+        }
     }
     close.onclick = function () {
         sfxDecline.play();
