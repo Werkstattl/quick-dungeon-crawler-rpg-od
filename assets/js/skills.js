@@ -30,6 +30,10 @@ const openSkillTree = () => {
     dungeon.status.exploring = false;
     skillTreeOpen = true;
     const modal = document.querySelector('#skillTreeModal');
+    const dimDungeon = document.querySelector('#dungeon-main');
+    const combatPanel = document.querySelector('#combat-panel');
+    if (dimDungeon) dimDungeon.style.filter = "brightness(50%)";
+    if (combatPanel) combatPanel.style.filter = "brightness(50%)";
     renderSkillTree();
     modal.style.display = 'flex';
 };
@@ -40,6 +44,10 @@ const closeSkillTree = () => {
     const modal = document.querySelector('#skillTreeModal');
     modal.style.display = 'none';
     skillTreeOpen = false;
+    const dimDungeon = document.querySelector('#dungeon-main');
+    const combatPanel = document.querySelector('#combat-panel');
+    if (dimDungeon) dimDungeon.style.filter = "brightness(100%)";
+    if (combatPanel) combatPanel.style.filter = "brightness(100%)";
     continueExploring();
 };
 
