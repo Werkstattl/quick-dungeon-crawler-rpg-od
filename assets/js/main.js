@@ -271,7 +271,7 @@ function openMenu(isTitle = false) {
                 <h3>Menu</h3>
                 <p id="close-menu"><i class="fa fa-xmark"></i></p>
             </div>
-                        <button id="player-menu"><i class="fas fa-user"></i>${player.name} (${player.selectedClass})</button>
+                        <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
 			${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> Current Run</button>'}
             <button id="bestiary-menu"><i class="fas fa-book"></i> Bestiary</button>
             <button id="volume-btn"><i class="fas fa-cog"></i> Settings</button>
