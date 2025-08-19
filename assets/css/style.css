@@ -1360,3 +1360,23 @@ header button i {
     margin-left: 0.3rem;
     margin-right: 0;
 }
+
+/* Skill Tree */
+.skill-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.skill-item {
+    border: 1px solid #fff;
+    padding: 0.5rem;
+}
+
+.skill-item.unlocked {
+    opacity: 0.5;
+}
+
+.skill-item button {
+    margin-top: 0.3rem;
+}
