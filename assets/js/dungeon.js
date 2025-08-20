@@ -376,7 +376,7 @@ const dungeonEvent = () => {
                                 <button id="choice1">Pray</button>
                                 <button id="choice2">Ignore</button>
                             </div>`;
-                    addDungeonLog(`<span class="Epic">Healing shrine: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> to heal?</span>`, choices);
+                    addDungeonLog(`<span class="Epic">Healing shrine: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> for healing and a blessing?</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < healCost) {
                             sfxDeny.play();
@@ -562,21 +562,20 @@ const shrineHealing = () => {
     let healAmount = Math.round(player.stats.hpMax * (0.25 + Math.random() * 0.5)); // 25-75% healing
     let actualHeal = Math.min(healAmount, player.stats.hpMax - player.stats.hp);
     
-    if (player.stats.hp >= player.stats.hpMax) {
-        let buffRoll = randomizeNum(1, 3);
-        if (buffRoll == 1) {
-            applyFloorBuff("atkSpd", 2);
-            addDungeonLog("Reflexes sharpen! (+2% ATK.SPD this floor)");
-        } else if (buffRoll == 2) {
-            applyFloorBuff("atk", 5);
-            addDungeonLog("Weapons glow! (+5% ATK this floor)");
-        } else {
-            applyFloorBuff("def", 3);
-            addDungeonLog("Armor fortifies! (+3% DEF this floor)");
-        }
-    } else {
+    if (actualHeal > 0) {
         player.stats.hp += actualHeal;
         addDungeonLog(`Divine light heals <span class="Epic">${actualHeal} HP</span>.`);
+    }
+    let buffRoll = randomizeNum(1, 3);
+    if (buffRoll == 1) {
+        applyFloorBuff("atkSpd", 2);
+        addDungeonLog("Reflexes sharpen! (+2% ATK.SPD this floor)");
+    } else if (buffRoll == 2) {
+        applyFloorBuff("atk", 5);
+        addDungeonLog("Weapons glow! (+5% ATK this floor)");
+    } else {
+        applyFloorBuff("def", 3);
+        addDungeonLog("Armor fortifies! (+3% DEF this floor)");
     }
     
     playerLoadStats();
