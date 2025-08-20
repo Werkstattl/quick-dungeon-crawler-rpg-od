@@ -18,16 +18,9 @@ if (player) {
     if (player.companionBonus === undefined) {
         player.companionBonus = 0;
     }
-    if (player.skillPoints === undefined) {
-        player.skillPoints = 0;
-    }
-    if (!Array.isArray(player.skills)) {
-        player.skills = [];
-    }
 }
 let inventoryOpen = false;
 let leveled = false;
-let skillTreeOpen = false;
 
 const MAX_INVENTORY_ITEMS = 100;
 
@@ -82,7 +75,6 @@ const playerLvlUp = () => {
     const previousLvl = player.lvl;
     player.lvl++;
     player.exp.lvlGained++;
-    player.skillPoints = (player.skillPoints || 0) + 1;
     player.exp.expMax += expMaxIncrease;
 
     // Increase player bonus stats per level
@@ -308,7 +300,7 @@ const closeInventory = () => {
 
 // Continue exploring if inventory is not open and the game is not paused
 const continueExploring = () => {
-    if (!inventoryOpen && !skillTreeOpen && !dungeon.status.paused && checkInventoryLimit()) {
+    if (!inventoryOpen && !dungeon.status.paused && checkInventoryLimit()) {
         dungeon.status.exploring = true;
     }
 }

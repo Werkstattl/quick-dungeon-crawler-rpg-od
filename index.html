@@ -47,10 +47,7 @@
                 <p id="player-name"></p>
                 <p id="player-exp"></p>
                 <p id="player-gold"></p>
-                <div>
-                    <button onclick="openSkillTree()" aria-label="Open skill tree"><i class="fas fa-sitemap" style="font-size: calc(1.3rem * var(--font-scale));"></i></button>
-                    <button onclick="openInventory()" aria-label="Open inventory menu"><i class="fas fa-bars" style="font-size: calc(1.3rem * var(--font-scale));"></i></button>
-                </div>
+                <button onclick="openInventory()" aria-label="Open inventory menu"><i class="fas fa-bars" style="font-size: calc(1.3rem * var(--font-scale));"></i></button>
             </header>
             <div class="stat-panel">
                 <div class="box">
@@ -140,16 +137,6 @@
         <div class="modal-container" id="lvlupPanel">
             <div class="content" id="lvlupSelect"></div>
         </div>
-        <div class="modal-container" id="skillTreeModal">
-            <div class="content">
-                <div class="content-head">
-                    <h3>Skill Tree</h3>
-                    <p onclick="closeSkillTree()"><i class="fa fa-xmark"></i></p>
-                </div>
-                <p>Skill Points: <span id="skill-points"></span></p>
-                <div id="skill-list" class="skill-tree"></div>
-            </div>
-        </div>
         <div class="modal-container" id="defaultModal"></div>
         <div class="modal-container" id="menuModal"></div>
         <div class="modal-container" id="confirmationModal"></div>
@@ -218,7 +205,6 @@
     <script src="./assets/js/elements.js"></script>
     <script src="./assets/js/music.js"></script>
     <script src="./assets/js/player.js"></script>
-    <script src="./assets/js/skills.js"></script>
     <script src="./assets/js/equipment.js"></script>
     <script src="./assets/js/forge.js"></script>
     <script src="./assets/js/companion.js"></script>

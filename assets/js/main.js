@@ -117,9 +117,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                     },
                     hardcore: hardcore,
                     selectedPassive: "Remnant Razor",
-                    selectedClass: "Knight",
-                    skills: [],
-                    skillPoints: 0
+                    selectedClass: "Knight"
                 };
                 }
                 player.name = playerName;
