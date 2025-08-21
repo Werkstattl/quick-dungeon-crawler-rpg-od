@@ -434,6 +434,7 @@ function openMenu(isTitle = false) {
                 <select id="language-select">
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
+                    <option value="ja">日本語</option>
                 </select>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
