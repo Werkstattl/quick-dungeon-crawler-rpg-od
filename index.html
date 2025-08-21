@@ -34,12 +34,12 @@
         </section>
         <section id="character-creation" class="game-container">
             <form id="name-submit">
-                <h1>What is your name?</h1>
+                <h1 data-i18n="what-is-your-name">What is your name?</h1>
                 <input type="text" id="name-input" autocomplete="off" value="Hero">
                 <p id="alert"></p>
-                <label><input type="checkbox" id="hardcore-checkbox" style="width:inherit;position:relative;top:1px"> Hardcore</label>
+                <label><input type="checkbox" id="hardcore-checkbox" style="width:inherit;position:relative;top:1px"> <span data-i18n="hardcore">Hardcore</span></label>
                 <br>
-                <button type="submit">Confirm</button>
+                <button type="submit" data-i18n="confirm">Confirm</button>
             </form>
         </section>
         <section id="dungeon-main" class="game-container scrollable">
@@ -51,24 +51,24 @@
             </header>
             <div class="stat-panel">
                 <div class="box">
-                    <h4>Stats</h4>
-                    <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i>HP: <span id="player-hp"></span></p>
-                    <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i>ATK: <span id="player-atk"></span></p>
-                    <p title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i>DEF: <span id="player-def"></span></p>
-                    <p title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i>APS: <span id="player-atkspd"></span></p>
-                    <p title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i>VAMP: <span id="player-vamp"></span></p>
-                    <p title="Critical hit chance"><i class="ra ra-lightning-bolt"></i>C.RATE: <span id="player-crate"></span></p>
-                    <p title="Critical damage bonus"><i class="ra ra-focused-lightning"></i>C.DMG: <span id="player-cdmg"></span></p>
-                    <p title="Chance to evade attacks"><i class="ra ra-player-dodge"></i>DODGE: <span id="player-dodge"></span></p>
+                    <h4 data-i18n="stats">Stats</h4>
+                    <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
+                    <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
+                    <p title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="player-def"></span></p>
+                    <p title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="player-atkspd"></span></p>
+                    <p title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i><span data-i18n="vamp">VAMP:</span> <span id="player-vamp"></span></p>
+                    <p title="Critical hit chance"><i class="ra ra-lightning-bolt"></i><span data-i18n="c-rate">C.RATE:</span> <span id="player-crate"></span></p>
+                    <p title="Critical damage bonus"><i class="ra ra-focused-lightning"></i><span data-i18n="c-dmg">C.DMG:</span> <span id="player-cdmg"></span></p>
+                    <p title="Chance to evade attacks"><i class="ra ra-player-dodge"></i><span data-i18n="dodge">DODGE:</span> <span id="player-dodge"></span></p>
                 </div>
                 <div class="box" id="bonus-stats"></div>
                 <div class="box" id="companion-panel">
-                    <h4>Companion</h4>
-                    <p id="companion-name">None</p>
-                    <p><i class="ra ra-sword"></i>ATK: <span id="companion-atk">0</span></p>
-                    <p><i class="ra ra-plain-dagger"></i>APS: <span id="companion-atkspd">0</span></p>
+                    <h4 data-i18n="companion">Companion</h4>
+                    <p id="companion-name" data-i18n="none">None</p>
+                    <p><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="companion-atk">0</span></p>
+                    <p><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="companion-atkspd">0</span></p>
                     <p id="companion-bonus"></p>
-                    <button id="summon-companion" class="hidden">Summon</button>
+                    <button id="summon-companion" class="hidden" data-i18n="summon">Summon</button>
                 </div>
             </div>
             <div class="dungeon-head">
@@ -91,36 +91,36 @@
         <div class="modal-container" id="inventory">
             <div class="content">
                 <div class="content-head">
-                    <h3>Inventory</h3>
+                      <h3 data-i18n="inventory">Inventory</h3>
                     <div>
                         <p onclick="openForgeModal()" role="button" aria-label="Open forge"><i class="ra ra-anvil"></i></p>
                         <p onclick="closeInventory()" role="button" aria-label="Close inventory"><i class="fa fa-xmark"></i></p>
                     </div>
                 </div>
                 <div class="content-head">
-                    <select id="sell-rarity">
-                        <option value="none">Sell</option>
-                        <option class="Common" value="Common">Common</option>
-                        <option class="Uncommon" value="Uncommon">Uncommon</option>
-                        <option class="Rare" value="Rare">Rare</option>
-                        <option class="Epic" value="Epic">Epic</option>
-                        <option class="Legendary" value="Legendary">Legendary</option>
-                        <option class="Heirloom" value="Heirloom">Heirloom</option>
-                        <option class="Common" value="All">All</option>
-                    </select>
-                    <select id="sort-inventory">
-                        <option value="none">Sort</option>
-                        <option value="category">Category</option>
-                        <option value="level">Level</option>
-                        <option value="rarity">Rarity</option>
-                        <option value="tier">Tier</option>
-                    </select>
-                </div>
+                      <select id="sell-rarity">
+                          <option value="none" data-i18n="sell">Sell</option>
+                          <option class="Common" value="Common" data-i18n="common">Common</option>
+                          <option class="Uncommon" value="Uncommon" data-i18n="uncommon">Uncommon</option>
+                          <option class="Rare" value="Rare" data-i18n="rare">Rare</option>
+                          <option class="Epic" value="Epic" data-i18n="epic">Epic</option>
+                          <option class="Legendary" value="Legendary" data-i18n="legendary">Legendary</option>
+                          <option class="Heirloom" value="Heirloom" data-i18n="heirloom">Heirloom</option>
+                          <option class="Common" value="All" data-i18n="all">All</option>
+                      </select>
+                      <select id="sort-inventory">
+                          <option value="none" data-i18n="sort">Sort</option>
+                          <option value="category" data-i18n="category">Category</option>
+                          <option value="level" data-i18n="level">Level</option>
+                          <option value="rarity" data-i18n="rarity">Rarity</option>
+                          <option value="tier" data-i18n="tier">Tier</option>
+                      </select>
+                  </div>
                 <div class="inventorySlots" id="playerInventory"></div>
                 <div class="stat-panel">
                     <div class="box">
                         <div class="box-head">
-                            <h4>Equipment</h4>
+                              <h4 data-i18n="equipment">Equipment</h4>
                             <div>
                                 <p id="equip-best"><i class="fa fa-arrows-rotate"></i></p>
                                 <p id="unequip-all"><i class="fa fa-circle-xmark"></i></p>
@@ -129,7 +129,7 @@
                         <div id="playerEquipment"></div>
                     </div>
                 </div>
-                <button id="menu-btn">Menu</button>
+                <button id="menu-btn" data-i18n="menu">Menu</button>
             </div>
         </div>
         <div class="modal-container" id="equipmentInfo"></div>
@@ -143,7 +143,7 @@
         <div class="modal-container" id="companionModal">
             <div class="content">
                 <div class="content-head">
-                    <h3>Companions</h3>
+                      <h3 data-i18n="companions">Companions</h3>
                     <p onclick="closeCompanionModal()"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="companion-list" id="available-companions"></div>
@@ -152,50 +152,50 @@
         <div class="modal-container" id="forgeModal">
             <div class="content">
                 <div class="content-head">
-                    <h3><i class="ra ra-anvil"></i> The Forge</h3>
+                      <h3><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></h3>
                     <p onclick="closeForgeModal()"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="forge-description">
-                    <p>Combine three items of the same tier and rarity to forge one of the next rarity!</p>
+                      <p data-i18n="combine-three-items-of-the-same-tier-and-rarity-to-forge-one-of-the-next-rarity">Combine three items of the same tier and rarity to forge one of the next rarity!</p>
                     <p id="forge-player-gold" class="forge-current-gold"></p>
                 </div>
                 <div class="forge-slots">
                     <div class="forge-slot-container">
-                        <h4>Material 1</h4>
-                        <div class="forge-slot" id="forge-slot-1">
-                            <p>Select equipment</p>
-                        </div>
+                          <h4 data-i18n="material-1">Material 1</h4>
+                          <div class="forge-slot" id="forge-slot-1">
+                            <p data-i18n="select-equipment">Select equipment</p>
+                          </div>
                     </div>
                     <div class="forge-slot-container">
-                        <h4>Material 2</h4>
-                        <div class="forge-slot" id="forge-slot-2">
-                            <p>Select equipment</p>
-                        </div>
+                          <h4 data-i18n="material-2">Material 2</h4>
+                          <div class="forge-slot" id="forge-slot-2">
+                            <p data-i18n="select-equipment">Select equipment</p>
+                          </div>
                     </div>
                     <div class="forge-plus">
                         <i class="fas fa-plus"></i>
                     </div>
                     <div class="forge-slot-container">
-                        <h4>Material 3</h4>
-                        <div class="forge-slot" id="forge-slot-3">
-                            <p>Select equipment</p>
-                        </div>
+                          <h4 data-i18n="material-3">Material 3</h4>
+                          <div class="forge-slot" id="forge-slot-3">
+                            <p data-i18n="select-equipment">Select equipment</p>
+                          </div>
                     </div>
                 </div>
                 <div class="forge-result" id="forge-result" style="display: none;">
-                    <h4>Result Preview</h4>
+                      <h4 data-i18n="result-preview">Result Preview</h4>
                     <div class="forge-result-item" id="forge-result-item"></div>
                     <div class="forge-cost">
-                        <p>Cost: <i class="fas fa-coins" style="color: #FFD700;"></i><span id="forge-cost-amount">0</span> gold</p>
+                          <p><span data-i18n="cost">Cost:</span> <i class="fas fa-coins" style="color: #FFD700;"></i><span id="forge-cost-amount">0</span> <span data-i18n="gold">gold</span></p>
                     </div>
                 </div>
                 <div class="forge-equipment-list" id="forge-equipment-list">
-                    <h4>Available Equipment</h4>
+                      <h4 data-i18n="available-equipment">Available Equipment</h4>
                     <div class="forge-equipment-grid" id="forge-equipment-grid"></div>
                 </div>
                 <div class="forge-buttons">
-                    <button id="forge-confirm" disabled>Forge Equipment</button>
-                    <button id="forge-clear">Clear Selection</button>
+                      <button id="forge-confirm" disabled data-i18n="forge-equipment">Forge Equipment</button>
+                      <button id="forge-clear" data-i18n="clear-selection">Clear Selection</button>
                 </div>
             </div>
         </div>
