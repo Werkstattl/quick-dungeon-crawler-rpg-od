@@ -1128,7 +1128,7 @@ const allocationPopup = () => {
         if (selectSkill.value == "Evasion Mastery") {
             skillDesc.setAttribute('data-i18n', 'evasion-mastery-desc');
         }
-        applyTranslations(skillDesc, true);
+        applyTranslations(defaultModalElement);
     }
     selectSkill.onchange();
 
@@ -1147,7 +1147,7 @@ const allocationPopup = () => {
             if (selectClass.value == "Paladin") {
                 classDesc.setAttribute('data-i18n', 'paladin-class-description');
             }
-            applyTranslations(classDesc, true);
+            applyTranslations(defaultModalElement);
             updateStats();
             let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
             document.querySelector(`#hpDisplay`).textContent = `${stats.hp.toFixed(2).replace(rx, "$1")}`;
