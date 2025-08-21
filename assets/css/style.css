@@ -679,6 +679,11 @@ header button i {
     overflow-wrap: break-word;
 }
 
+#summon-companion {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
 #bonus-stats {
     width: 60%;
 }
