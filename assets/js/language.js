@@ -35,7 +35,10 @@ function applyTranslations(root = document, force = false) {
     if (params) {
       try { parsed = JSON.parse(params); } catch {}
     }
-    el.textContent = t(key, parsed);
+    const text = t(key, parsed);
+    if (text !== key) {
+      el.textContent = text;
+    }
   });
 
   // Attributes (placeholder, title, aria-label, etc.)
