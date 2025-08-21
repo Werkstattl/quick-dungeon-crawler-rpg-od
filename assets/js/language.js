@@ -1,55 +1,95 @@
-const translations = {
-    en: {
-        'tap-to-explore': 'Tap to explore the dungeon',
-        'language': 'Language'
-    }
-};
+const SUPPORTED = ['en','de'];
+const DEFAULT_LANG = 'en';
 
-let currentLanguage = 'en';
+const dictionaries = Object.create(null); // in-memory cache
+let currentLanguage = DEFAULT_LANG;
 
-function applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        const translation = translations[currentLanguage] && translations[currentLanguage][key];
-        if (translation) {
-            el.textContent = translation;
-        }
-    });
+function pathGet(obj, path) {
+  return path.split('.').reduce((o, p) => (o && o[p] != null ? o[p] : null), obj);
 }
 
-function setLanguage(lang) {
-    if (!translations[lang]) {
-        lang = 'en';
+function formatParams(str, vars) {
+  if (!vars) return str;
+  return str.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`));
+}
+
+function t(key, vars) {
+  const dict = dictionaries[currentLanguage] || {};
+  let str = pathGet(dict, key);
+  if (str == null) {
+    const fallback = dictionaries[DEFAULT_LANG] || {};
+    str = pathGet(fallback, key);
+  }
+  return str != null ? formatParams(str, vars) : key;
+}
+
+function applyTranslations(root = document) {
+  // Text content
+  root.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const params = el.getAttribute('data-i18n-params');
+    let parsed = null;
+    if (params) {
+      try { parsed = JSON.parse(params); } catch {}
     }
-    currentLanguage = lang;
-    document.documentElement.lang = lang;
-    localStorage.setItem('lang', lang);
-    applyTranslations();
+    el.textContent = t(key, parsed);
+  });
+
+  // Attributes (placeholder, title, aria-label, etc.)
+  root.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    // data-i18n-attr="placeholder:ui.search,title:ui.tooltip"
+    const pairs = el.getAttribute('data-i18n-attr').split(',').map(s => s.trim());
+    for (const pair of pairs) {
+      const [attr, key] = pair.split(':').map(s => s.trim());
+      if (attr && key) el.setAttribute(attr, t(key));
+    }
+  });
+}
+
+async function loadLanguage(lang) {
+  if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
+  if (dictionaries[lang]) return lang;
+  try {
+    const res = await fetch(`./assets/locales/${lang}.json`, { cache: 'force-cache' });
+    const data = await res.json();
+    dictionaries[lang] = data;
+  } catch (e) {
+    // Fallback to default on error
+    if (!dictionaries[DEFAULT_LANG]) {
+      const res = await fetch(`./assets/locales/${DEFAULT_LANG}.json`, { cache: 'force-cache' });
+      dictionaries[DEFAULT_LANG] = await res.json();
+    }
+    lang = DEFAULT_LANG;
+  }
+  return lang;
+}
+
+async function setLanguage(lang) {
+  const loaded = await loadLanguage(lang);
+  currentLanguage = loaded;
+  document.documentElement.lang = loaded;
+  localStorage.setItem('lang', loaded);
+  applyTranslations();
+}
+
+function translateElements(root) {
+  applyTranslations(root);
 }
 
 (function initLanguage() {
-    const saved = localStorage.getItem('lang');
-    const savedClean = saved && saved.trim() ? saved : null;
-
-    if (savedClean) {
-        // If there's a saved language, use it (setLanguage will validate)
-        setLanguage(savedClean);
-        return;
-    }
-
-    // No saved language: try the browser/system language and ensure we have a translation
-    let detected = null;
+  const saved = (localStorage.getItem('lang') || '').trim();
+  const browser = (() => {
+    let d = null;
     try {
-        if (typeof navigator !== 'undefined') {
-            detected = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || null;
-            if (detected) detected = String(detected).split('-')[0];
-        }
-    } catch (e) {
-        detected = null;
-    }
+      d = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || null;
+      if (d) d = String(d).split('-')[0];
+    } catch {}
+    return d;
+  })();
 
-    if (detected && translations[detected]) {
-        setLanguage(detected);
-    }
+  const initial = saved || (SUPPORTED.includes(browser) ? browser : DEFAULT_LANG);
+
+  // Preload default for fallback; then load chosen language; then apply.
+  loadLanguage(DEFAULT_LANG)
+    .then(() => setLanguage(initial));
 })();
-
