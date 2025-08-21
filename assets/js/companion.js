@@ -227,25 +227,37 @@ function openCompanionModal() {
     if (activeCompanion) {
         const dismissOption = document.createElement('div');
         dismissOption.className = 'companion-option';
-        dismissOption.innerHTML = `<h4>Dismiss Companion</h4><p>Send ${activeCompanion.name} away</p>`;
+
+        const dismissHeader = document.createElement('h4');
+        dismissHeader.setAttribute('data-i18n', 'dismiss-companion');
+        dismissHeader.textContent = 'Dismiss Companion';
+
+        const dismissText = document.createElement('p');
+        dismissText.setAttribute('data-i18n', 'send-away');
+        dismissText.setAttribute('data-i18n-params', JSON.stringify({ name: activeCompanion.name }));
+        dismissText.textContent = `Send ${activeCompanion.name} away`;
+
+        dismissOption.appendChild(dismissHeader);
+        dismissOption.appendChild(dismissText);
         dismissOption.onclick = dismissCompanion;
         companionList.appendChild(dismissOption);
     }
-    
+
     // Add each companion as an option
     playerCompanions.forEach(companion => {
         const option = document.createElement('div');
         option.className = `companion-option ${companion.rarity}`;
         option.innerHTML = `
             <h4>${companion.name}</h4>
-            <p>Level: ${companion.level}</p>
-            <p>ATK: ${companion.atk}</p>
-            <p>APS: ${companion.atkSpd.toFixed(2)}</p>
+            <p><span data-i18n="level">Level</span>: ${companion.level}</p>
+            <p><span data-i18n="atk">ATK:</span> ${companion.atk}</p>
+            <p><span data-i18n="aps">APS:</span> ${companion.atkSpd.toFixed(2)}</p>
         `;
         option.onclick = () => selectCompanion(companion.id);
         companionList.appendChild(option);
     });
-    
+
+    translateElements(companionList);
     modal.style.display = 'flex';
 }
 
