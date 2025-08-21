@@ -29,6 +29,27 @@ function setLanguage(lang) {
 
 (function initLanguage() {
     const saved = localStorage.getItem('lang');
-    setLanguage(saved || 'en');
+    const savedClean = saved && saved.trim() ? saved : null;
+
+    if (savedClean) {
+        // If there's a saved language, use it (setLanguage will validate)
+        setLanguage(savedClean);
+        return;
+    }
+
+    // No saved language: try the browser/system language and ensure we have a translation
+    let detected = null;
+    try {
+        if (typeof navigator !== 'undefined') {
+            detected = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || null;
+            if (detected) detected = String(detected).split('-')[0];
+        }
+    } catch (e) {
+        detected = null;
+    }
+
+    if (detected && translations[detected]) {
+        setLanguage(detected);
+    }
 })();
 
