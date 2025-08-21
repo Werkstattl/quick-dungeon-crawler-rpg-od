@@ -963,21 +963,21 @@ const allocationPopup = () => {
         defaultModalElement.innerHTML = `
         <div class="content" id="allocate-stats">
             <div class="content-head">
-                <h3>Allocate Stats</h3>
+                <h3 data-i18n="allocate-stats">Allocate Stats</h3>
                 <p id="allocate-close"><i class="fa fa-xmark"></i></p>
             </div>
             <div class="row">
-            	<p>Class</p>
-                            <select id="select-class">
-                                <option value="Knight">Knight</option>
-                                <option value="Paladin">Paladin</option>
-                            </select>
+                <p data-i18n="class">Class</p>
+                <select id="select-class">
+                    <option value="Knight" data-i18n="knight">Knight</option>
+                    <option value="Paladin" data-i18n="paladin">Paladin</option>
+                </select>
             </div>
             <div class="row primary-panel pad">
-                            <p id="class-desc">Special ability to deal 2x ATK as dmg.</p>
-                        </div>
+                <p id="class-desc" data-i18n="knight-class-description">Special ability to deal 2x ATK as dmg.</p>
+            </div>
             <div class="row">
-                <p><i class="fas fa-heart"></i><span id="hpDisplay">HP: ${stats.hp}</span></p>
+                <p><i class="fas fa-heart"></i><span data-i18n="hp">HP:</span> <span id="hpDisplay">${stats.hp}</span></p>
                 <div class="row">
                     <button id="hpMin">-</button>
                     <span id="hpAllo">${allocation.hp}</span>
@@ -985,7 +985,7 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p><i class="ra ra-sword"></i><span id="atkDisplay">ATK: ${stats.atk}</span></p>
+                <p><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="atkDisplay">${stats.atk}</span></p>
                 <div class="row">
                     <button id="atkMin">-</button>
                     <span id="atkAllo">${allocation.atk}</span>
@@ -993,7 +993,7 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p><i class="ra ra-round-shield"></i><span id="defDisplay">DEF: ${stats.def}</span></p>
+                <p><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="defDisplay">${stats.def}</span></p>
                 <div class="row">
                     <button id="defMin">-</button>
                     <span id="defAllo">${allocation.def}</span>
@@ -1001,7 +1001,7 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p><i class="ra ra-plain-dagger"></i><span id="atkSpdDisplay">ATK.SPD: ${stats.atkSpd.toFixed(2)}</span></p>
+                <p><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="atkSpdDisplay">${stats.atkSpd.toFixed(2)}</span></p>
                 <div class="row">
                     <button id="atkSpdMin">-</button>
                     <span id="atkSpdAllo">${allocation.atkSpd}</span>
@@ -1009,33 +1009,34 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p id="alloPts">Stat Points: ${points}/20</p>
-                <button id="allocate-reset">Reset</button>
-                <button id="allocate-auto">Auto</button>
+                <p id="alloPts"><span data-i18n="stat-points">Stat Points:</span> <span id="ptsLeft">${points}/20</span></p>
+                <button id="allocate-reset" data-i18n="reset">Reset</button>
+                <button id="allocate-auto" data-i18n="auto">Auto</button>
             </div>
             <div class="row">
-                <p>Passive</p>
+                <p data-i18n="passive">Passive</p>
                 <select id="select-skill">
-                    <option value="Remnant Razor">Remnant Razor</option>
-                    <option value="Titan's Will">Titan's Will</option>
-                    <option value="Devastator">Devastator</option>
-                    <option value="Paladin's Heart">Paladin's Heart</option>
-                    <option value="Aegis Thorns">Aegis Thorns</option>
-                    <option value="Evasion Mastery">Evasion Mastery</option>
+                    <option value="Remnant Razor" data-i18n="remnant-razor">Remnant Razor</option>
+                    <option value="Titan's Will" data-i18n="titans-will">Titan's Will</option>
+                    <option value="Devastator" data-i18n="devastator">Devastator</option>
+                    <option value="Paladin's Heart" data-i18n="paladins-heart">Paladin's Heart</option>
+                    <option value="Aegis Thorns" data-i18n="aegis-thorns">Aegis Thorns</option>
+                    <option value="Evasion Mastery" data-i18n="evasion-mastery">Evasion Mastery</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
-                <p id="skill-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
+                <p id="skill-desc" data-i18n="remnant-razor-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
             </div>
             <div class="row" id="forge-button-row" style="margin-top: 15px;display:none">
-                <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> The Forge</button>
+                <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></button>
             </div>
-            <button id="allocate-confirm">Confirm</button>
+            <button id="allocate-confirm" data-i18n="confirm">Confirm</button>
         </div>`;
     }
     defaultModalElement.style.display = "flex";
     document.querySelector("#title-screen").style.filter = "brightness(50%)";
     loadContent();
+    applyTranslations(defaultModalElement);
 
     // Show forge button if player has any equipment or inventory items
     if (player.inventory.equipment.length > 0 || player.equipped.length > 0) {
@@ -1055,9 +1056,9 @@ const allocationPopup = () => {
                 allocation[stat]++;
                 points--;
                 updateStats();
-                document.querySelector(`#${stat}Display`).innerHTML = `${stat.replace(/([A-Z])/g, ' $1').trim().replace(/ /g, '.').toUpperCase()}: ${stats[stat].toFixed(2).replace(rx, "$1")}`;
+                document.querySelector(`#${stat}Display`).textContent = `${stats[stat].toFixed(2).replace(rx, "$1")}`;
                 document.querySelector(`#${stat}Allo`).innerHTML = allocation[stat];
-                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+                document.querySelector(`#ptsLeft`).textContent = `${points}/20`;
             } else {
                 sfxDeny.play();
             }
@@ -1068,9 +1069,9 @@ const allocationPopup = () => {
                 allocation[stat]--;
                 points++;
                 updateStats();
-                document.querySelector(`#${stat}Display`).innerHTML = `${stat.replace(/([A-Z])/g, ' $1').trim().replace(/ /g, '.').toUpperCase()}: ${stats[stat].toFixed(2).replace(rx, "$1")}`;
+                document.querySelector(`#${stat}Display`).textContent = `${stats[stat].toFixed(2).replace(rx, "$1")}`;
                 document.querySelector(`#${stat}Allo`).innerHTML = allocation[stat];
-                document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+                document.querySelector(`#ptsLeft`).textContent = `${points}/20`;
             } else {
                 sfxDeny.play();
             }
@@ -1110,23 +1111,24 @@ const allocationPopup = () => {
     }
     selectSkill.onchange = function () {
         if (selectSkill.value == "Remnant Razor") {
-            skillDesc.innerHTML = "Attacks deal extra 9% of enemies' current health on hit.";
+            skillDesc.setAttribute('data-i18n', 'remnant-razor-desc');
         }
         if (selectSkill.value == "Titan's Will") {
-            skillDesc.innerHTML = "Attacks deal extra 4.5% of your maximum health on hit.";
+            skillDesc.setAttribute('data-i18n', 'titans-will-desc');
         }
         if (selectSkill.value == "Devastator") {
-            skillDesc.innerHTML = "Deal 30% more damage but you lose 30% base attack speed.";
+            skillDesc.setAttribute('data-i18n', 'devastator-desc');
         }
         if (selectSkill.value == "Paladin's Heart") {
-            skillDesc.innerHTML = "You receive 25% less damage permanently.";
+            skillDesc.setAttribute('data-i18n', 'paladins-heart-desc');
         }
         if (selectSkill.value == "Aegis Thorns") {
-            skillDesc.innerHTML = "Enemies receive 20% of the damage they dealt.";
+            skillDesc.setAttribute('data-i18n', 'aegis-thorns-desc');
         }
         if (selectSkill.value == "Evasion Mastery") {
-            skillDesc.innerHTML = "Increase your dodge chance by 15%.";
+            skillDesc.setAttribute('data-i18n', 'evasion-mastery-desc');
         }
+        applyTranslations(skillDesc, true);
     }
     selectSkill.onchange();
 
@@ -1140,17 +1142,18 @@ const allocationPopup = () => {
         selectClass.onchange = function () {
             currentClass = selectClass.value;
             if (selectClass.value == "Knight") {
-                classDesc.innerHTML = "Special ability to deal 2x ATK as direct dmg.";
+                classDesc.setAttribute('data-i18n', 'knight-class-description');
             }
             if (selectClass.value == "Paladin") {
-                classDesc.innerHTML = "Special ability to heal yourself.";
+                classDesc.setAttribute('data-i18n', 'paladin-class-description');
             }
+            applyTranslations(classDesc, true);
             updateStats();
             let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-            document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#hpDisplay`).textContent = `${stats.hp.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkDisplay`).textContent = `${stats.atk.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#defDisplay`).textContent = `${stats.def.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkSpdDisplay`).textContent = `${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
         }
         selectClass.onchange();
     
@@ -1219,15 +1222,15 @@ const allocationPopup = () => {
 
         // Display Reset
         let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-        document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
-        document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
-        document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
-        document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#hpDisplay`).textContent = `${stats.hp.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#atkDisplay`).textContent = `${stats.atk.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#defDisplay`).textContent = `${stats.def.toFixed(2).replace(rx, "$1")}`;
+        document.querySelector(`#atkSpdDisplay`).textContent = `${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
         document.querySelector(`#hpAllo`).innerHTML = allocation.hp;
         document.querySelector(`#atkAllo`).innerHTML = allocation.atk;
         document.querySelector(`#defAllo`).innerHTML = allocation.def;
         document.querySelector(`#atkSpdAllo`).innerHTML = allocation.atkSpd;
-        document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+        document.querySelector(`#ptsLeft`).textContent = `${points}/20`;
     }
     autoAlloc.onclick = function () {
         if (points > 0) {
@@ -1242,15 +1245,15 @@ const allocationPopup = () => {
             }
             updateStats();
             let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-            document.querySelector(`#hpDisplay`).innerHTML = `HP: ${stats.hp.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#atkDisplay`).innerHTML = `ATK: ${stats.atk.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#defDisplay`).innerHTML = `DEF: ${stats.def.toFixed(2).replace(rx, "$1")}`;
-            document.querySelector(`#atkSpdDisplay`).innerHTML = `ATK.SPD: ${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#hpDisplay`).textContent = `${stats.hp.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkDisplay`).textContent = `${stats.atk.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#defDisplay`).textContent = `${stats.def.toFixed(2).replace(rx, "$1")}`;
+            document.querySelector(`#atkSpdDisplay`).textContent = `${stats.atkSpd.toFixed(2).replace(rx, "$1")}`;
             document.querySelector(`#hpAllo`).innerHTML = allocation.hp;
             document.querySelector(`#atkAllo`).innerHTML = allocation.atk;
             document.querySelector(`#defAllo`).innerHTML = allocation.def;
             document.querySelector(`#atkSpdAllo`).innerHTML = allocation.atkSpd;
-            document.querySelector(`#alloPts`).innerHTML = `Stat Points: ${points}/20`;
+            document.querySelector(`#ptsLeft`).textContent = `${points}/20`;
         } else {
             sfxDeny.play();
         }
