@@ -767,26 +767,13 @@ const generateRestingBonus = () => {
             applyFloorBuff("def", 12);
             addDungeonLog(`<span style="color: #2196F3;">🛡️ You feel inner peace! (+12% DEF until next floor)</span>`);
             break;
-        case "preparation":
-            dungeon.resting.restingBonusValue = 8;
-            // Increase health regen rate temporarily
-            dungeon.resting.healthRegenRate = 2.0;
-       //     addDungeonLog(`<span style="color: #4CAF50;">⚡ You feel well-prepared! (Double health regeneration for the next 5 minutes)</span>`);
-            break;
     }
 }
 
 // Expire resting bonus
-const expireRestingBonus = () => {
-    const bonusType = dungeon.resting.restingBonusType;
-    
+const expireRestingBonus = () => {    
     dungeon.resting.restingBonusActive = false;
     dungeon.resting.restingBonusType = null;
     dungeon.resting.restingBonusValue = 0;
     dungeon.resting.restingBonusDuration = 0;
-    
-    if (bonusType === "preparation") {
-        dungeon.resting.healthRegenRate = 1.0; // Reset to normal
-        addDungeonLog(`<span class="Common">The effects of your restful ${bonusType} have faded.</span>`);
-    }
 }
