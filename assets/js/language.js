@@ -2,10 +2,6 @@ const translations = {
     en: {
         'tap-to-explore': 'Tap to explore the dungeon',
         'language': 'Language'
-    },
-    es: {
-        'tap-to-explore': 'Toca para explorar la mazmorra',
-        'language': 'Idioma'
     }
 };
 

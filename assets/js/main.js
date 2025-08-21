@@ -433,7 +433,6 @@ function openMenu(isTitle = false) {
                 <label id="language-label" for="language-select" data-i18n="language">Language</label>
                 <select id="language-select">
                     <option value="en">English</option>
-                    <option value="es">Español</option>
                 </select>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
