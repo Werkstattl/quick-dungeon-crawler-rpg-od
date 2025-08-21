@@ -44,5 +44,15 @@
   "gold": "gold",
   "available-equipment": "Available Equipment",
   "forge-equipment": "Forge Equipment",
-  "clear-selection": "Clear Selection"
+  "clear-selection": "Clear Selection",
+  "change": "Change",
+  "dismiss-companion": "Dismiss Companion",
+  "send-away": "Send {name} away",
+  "equipped-indicator": "⚔️ Equipped",
+  "unlock-the-forge-premium": "Unlock The Forge (Premium)",
+  "get-on-google-play-premium": "Get on Google Play (Premium)",
+  "items-must-share-tier": "Items Must Share Tier",
+  "items-must-share-rarity": "Items Must Share Rarity",
+  "not-enough-gold": "Not Enough Gold",
+  "select-3-items": "Select 3 Items"
 }
