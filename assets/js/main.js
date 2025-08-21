@@ -430,12 +430,24 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
+                <label id="language-label" for="language-select" data-i18n="language">Language</label>
+                <select id="language-select">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
                 <br><button id="apply-volume">Apply</button>
             </div>`;
+        applyTranslations();
         let masterVol = document.querySelector('#master-volume');
         let bgmVol = document.querySelector('#bgm-volume');
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
+        let languageSelect = document.querySelector('#language-select');
+        let selectedLang = localStorage.getItem('lang') || 'en';
+        languageSelect.value = selectedLang;
+        languageSelect.onchange = function () {
+            selectedLang = this.value;
+        };
         let applyVol = document.querySelector('#apply-volume');
         let volumeTab = document.querySelector('#volume-tab');
         volumeTab.style.width = "15rem";
@@ -484,6 +496,7 @@ function openMenu(isTitle = false) {
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
+            setLanguage(selectedLang);
         };
     };
 
