@@ -104,7 +104,8 @@ const initialDungeonLoad = () => {
     loadDungeonProgress();
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
     updateRestingDisplay();
-    dungeonActivity.innerHTML = "Explore";
+    dungeonActivity.setAttribute('data-i18n', 'explore');
+    dungeonActivity.textContent = t('explore');
     dungeonTime.innerHTML = "00:00:00";
     dungeonTimer = setInterval(dungeonEvent, 1000);
     playTimer = setInterval(dungeonCounter, 1000);
@@ -116,7 +117,8 @@ const dungeonStartPause = () => {
         sfxPause.play();
 
         updateRestingDisplay();
-        dungeonActivity.innerHTML = "Explore";
+        dungeonActivity.setAttribute('data-i18n', 'explore');
+        dungeonActivity.textContent = t('explore');
         dungeon.status.exploring = false;
         dungeon.status.paused = true;
     } else {
@@ -127,7 +129,8 @@ const dungeonStartPause = () => {
         sfxUnpause.play();
 
         dungeonAction.innerHTML = "Exploring...";
-        dungeonActivity.innerHTML = "Pause";
+        dungeonActivity.textContent = "Pause";
+        dungeonActivity.removeAttribute('data-i18n');
         dungeon.status.exploring = true;
         dungeon.status.paused = false;
         
@@ -155,8 +158,12 @@ const loadDungeonProgress = () => {
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
     }
-    floorCount.innerHTML = `Floor ${dungeon.progress.floor}`;
-    roomCount.innerHTML = `Room ${dungeon.progress.room}`;
+    floorCount.setAttribute('data-i18n', 'floor-count');
+    floorCount.setAttribute('data-i18n-params', JSON.stringify({ floor: dungeon.progress.floor }));
+    floorCount.textContent = t('floor-count', { floor: dungeon.progress.floor });
+    roomCount.setAttribute('data-i18n', 'room-count');
+    roomCount.setAttribute('data-i18n-params', JSON.stringify({ room: dungeon.progress.room }));
+    roomCount.textContent = t('room-count', { room: dungeon.progress.room });
 }
 
 // ========== Events in the Dungeon ==========
