@@ -23,10 +23,7 @@ function t(key, vars) {
   return str != null ? formatParams(str, vars) : key;
 }
 
-function applyTranslations(root = document, force = false) {
-    if (currentLanguage == 'en' && !force) {
-        return;
-    }
+function applyTranslations(root = document) {
   // Text content
   root.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -75,7 +72,7 @@ async function setLanguage(lang) {
   currentLanguage = loaded;
   document.documentElement.lang = loaded;
   localStorage.setItem('lang', loaded);
-  applyTranslations(document, true);
+  applyTranslations(document);
 }
 
 function translateElements(root) {
