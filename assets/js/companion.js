@@ -257,7 +257,7 @@ function openCompanionModal() {
         companionList.appendChild(option);
     });
 
-    translateElements(companionList);
+    applyTranslations(companionList);
     modal.style.display = 'flex';
 }
 

@@ -75,10 +75,6 @@ async function setLanguage(lang) {
   applyTranslations(document);
 }
 
-function translateElements(root) {
-  applyTranslations(root);
-}
-
 (function initLanguage() {
   const saved = (localStorage.getItem('lang') || '').trim();
   const browser = (() => {
