@@ -268,20 +268,20 @@ function openMenu(isTitle = false) {
     menuModalElement.innerHTML = `
         <div class="content">
             <div class="content-head">
-                <h3>Menu</h3>
+                <h3 data-i18n="menu">Menu</h3>
                 <p id="close-menu"><i class="fa fa-xmark"></i></p>
             </div>
-                        <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
-			${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> Current Run</button>'}
-            <button id="bestiary-menu"><i class="fas fa-book"></i> Bestiary</button>
-            <button id="volume-btn"><i class="fas fa-cog"></i> Settings</button>
-            <button id="auto-mode-settings"><i class="fas fa-play"></i> Auto Mode</button>
-            <button id="export-import"><i class="fas fa-file-export"></i> Export/Import Data</button>
-            ${isTitle ? '<button id="hero-return"><i class="fas fa-user-circle"></i> Hero Creation</button>' : '<button id="quit-run"><i class="fas fa-door-open"></i> Abandon</button>'}
-            <button id="rate-game"><i class="fas fa-star"></i> Rate Game <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
-            <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> Subreddit <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
+            <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
+            ${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> <span data-i18n="current-run">Current Run</span></button>'}
+            <button id="bestiary-menu"><i class="fas fa-book"></i> <span data-i18n="bestiary">Bestiary</span></button>
+            <button id="volume-btn"><i class="fas fa-cog"></i> <span data-i18n="settings">Settings</span></button>
+            <button id="auto-mode-settings"><i class="fas fa-play"></i> <span data-i18n="auto-mode">Auto Mode</span></button>
+            <button id="export-import"><i class="fas fa-file-export"></i> <span data-i18n="export-import-data">Export/Import Data</span></button>
+            ${isTitle ? '<button id="hero-return"><i class="fas fa-user-circle"></i> <span data-i18n="hero-creation">Hero Creation</span></button>' : '<button id="quit-run"><i class="fas fa-door-open"></i> <span data-i18n="abandon">Abandon</span></button>'}
+            <button id="rate-game"><i class="fas fa-star"></i> <span data-i18n="rate-game">Rate Game</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
+            <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> <span data-i18n="subreddit">Subreddit</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
         </div>`;
-
+    applyTranslations();
     let close = document.querySelector('#close-menu');
     let playerMenu = document.querySelector('#player-menu');
     let runMenu = document.querySelector('#stats');
