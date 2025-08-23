@@ -53,13 +53,13 @@ async function loadLanguage(lang) {
   if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
   if (dictionaries[lang]) return lang;
   try {
-    const res = await fetch(`./assets/locales/${lang}.json`, { cache: 'force-cache' });
+    const res = await fetch(`./assets/locales/${lang}.json`);
     const data = await res.json();
     dictionaries[lang] = data;
   } catch (e) {
     // Fallback to default on error
     if (!dictionaries[DEFAULT_LANG]) {
-      const res = await fetch(`./assets/locales/${DEFAULT_LANG}.json`, { cache: 'force-cache' });
+      const res = await fetch(`./assets/locales/${DEFAULT_LANG}.json`);
       dictionaries[DEFAULT_LANG] = await res.json();
     }
     lang = DEFAULT_LANG;
