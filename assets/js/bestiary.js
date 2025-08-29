@@ -93,13 +93,13 @@ function openBestiaryModal() {
   defaultModalElement.innerHTML = `
     <div class="content" id="bestiary-modal">
       <div class="content-head">
-        <h3>Bestiary</h3>
+        <h3 data-i18n="bestiary">Bestiary</h3>
         <p id="bestiary-close"><i class="fa fa-xmark"></i></p>
       </div>
       <ul class="bestiary-list" id="bestiary-list"></ul>
-      <button id="bestiary-load-more">Load more</button>
+      <button id="bestiary-load-more" data-i18n="load-more">Load more</button>
     </div>`;
-
+  applyTranslations();
   const closeBtn = document.querySelector('#bestiary-close');
   const listEl = document.querySelector('#bestiary-list');
   const loadMoreBtn = document.querySelector('#bestiary-load-more');

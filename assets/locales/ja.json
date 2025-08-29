@@ -1,5 +1,6 @@
 {
   "language": "言語",
+  "apply": "適用",
   "tap-to-explore": "ダンジョンを探索するにはタップ",
   "what-is-your-name": "あなたの名前は？",
   "hardcore": "ハードコア",
@@ -38,6 +39,7 @@
   "menu": "メニュー",
   "current-run": "現在のラン",
   "bestiary": "モンスター図鑑",
+  "load-more": "もっと読み込む",
   "settings": "設定",
   "auto-mode": "オートモード",
   "export-import-data": "データのエクスポート/インポート",

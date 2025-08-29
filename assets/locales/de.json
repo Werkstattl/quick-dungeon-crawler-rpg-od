@@ -1,5 +1,6 @@
 {
   "language": "Sprache",
+  "apply": "Anwenden",
   "tap-to-explore": "Tippe, um den Dungeon zu erkunden",
   "what-is-your-name": "Wie lautet dein Name?",
   "hardcore": "Hardcore",
@@ -38,6 +39,7 @@
   "menu": "Menü",
   "current-run": "Aktueller Lauf",
   "bestiary": "Bestiarium",
+  "load-more": "Mehr laden",
   "settings": "Einstellungen",
   "auto-mode": "Auto-Modus",
   "export-import-data": "Daten exportieren/importieren",

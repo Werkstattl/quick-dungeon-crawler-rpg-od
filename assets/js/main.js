@@ -419,7 +419,7 @@ function openMenu(isTitle = false) {
         defaultModalElement.innerHTML = `
             <div class="content" id="volume-tab">
                 <div class="content-head">
-                    <h3>Settings</h3>
+                    <h3 data-i18n="settings">Settings</h3>
                     <p id="volume-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <label id="master-label" for="master-volume">Master (${master}%)</label>
@@ -436,7 +436,7 @@ function openMenu(isTitle = false) {
                     <option value="de">Deutsch</option>
                     <option value="ja">日本語</option>
                 </select>
-                <br><button id="apply-volume">Apply</button>
+                <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations();
         let masterVol = document.querySelector('#master-volume');

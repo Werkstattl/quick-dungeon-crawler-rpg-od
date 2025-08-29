@@ -1,5 +1,6 @@
 {
   "language": "Language",
+  "apply": "Apply",
   "tap-to-explore": "Tap to explore the dungeon",
   "what-is-your-name": "What is your name?",
   "hardcore": "Hardcore",
@@ -38,6 +39,7 @@
   "menu": "Menu",
   "current-run": "Current Run",
   "bestiary": "Bestiary",
+  "load-more": "Load more",
   "settings": "Settings",
   "auto-mode": "Auto Mode",
   "export-import-data": "Export/Import Data",
