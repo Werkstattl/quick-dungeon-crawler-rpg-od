@@ -602,17 +602,18 @@ function openMenu(isTitle = false) {
         defaultModalElement.innerHTML = `
             <div class="content content-ei" id="ei-tab">
                 <div class="content-head">
-                    <h3>Export/Import Data</h3>
+                    <h3 data-i18n="export-import-data">Export/Import Data</h3>
                     <p id="ei-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <h4>Export Data</h4>
+                <h4 data-i18n="export-data">Export Data</h4>
                 <input type="text" id="export-input" autocomplete="off" value="${exportedData}" readonly>
-                <button id="copy-export">Copy</button>
+                <button id="copy-export" data-i18n="copy">Copy</button>
                 <br>
-                <h4>Import Data</h4>
+                <h4 data-i18n="import-data">Import Data</h4>
                 <input type="text" id="import-input" autocomplete="off">
-                <button id="data-import">Import</button>
+                <button id="data-import" data-i18n="import">Import</button>
             </div>`;
+        applyTranslations(defaultModalElement);
         let eiTab = document.querySelector('#ei-tab');
         eiTab.style.width = "17rem";
         let eiClose = document.querySelector('#ei-close');
