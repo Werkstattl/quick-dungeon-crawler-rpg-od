@@ -575,9 +575,10 @@ const showInventory = () => {
     let playerInventoryList = document.getElementById("playerInventory");
     playerInventoryList.innerHTML = "";
 
-    const header = document.querySelector('#inventory .content-head h3');
-    if (header) {
-        header.textContent = `Inventory (${player.inventory.equipment.length}/${MAX_INVENTORY_ITEMS})`;
+    const countSpan = document.getElementById('inventory-item-count');
+    const totalItems = (typeof inventoryItemCount === 'function') ? inventoryItemCount() : (player.inventory && player.inventory.equipment ? player.inventory.equipment.length : 0);
+    if (countSpan) {
+        countSpan.textContent = totalItems;
     }
     
     if (player.inventory.equipment.length == 0) {
