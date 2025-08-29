@@ -430,7 +430,7 @@ const useSpecialAbility = () => {
     }
     if (player.selectedClass === "Paladin") {
         sfxBuff.play();
-        const healAmount = Math.round(player.stats.hpMax * 0.3);
+        const healAmount = Math.round(player.stats.hpMax);
         player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
         addCombatLog(`${player.name} used a special ability and healed ${nFormatter(healAmount)} HP!`);
         hpValidation();
