@@ -59,6 +59,7 @@
   "export-import-data": "データのエクスポート/インポート",
   "export-data": "データをエクスポート",
   "copy": "コピー",
+  "copied": "コピーしました！",
   "import-data": "データをインポート",
   "import": "インポート",
   "hero-creation": "ヒーロー作成",
