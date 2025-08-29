@@ -429,7 +429,7 @@ function openMenu(isTitle = false) {
                 <input type="range" id="bgm-volume" min="0" max="100" value="${bgm}">
                 <label id="sfx-label" for="sfx-volume">SFX (${sfx}%)</label>
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
-                <label id="font-label" for="font-size">Font Size (${fontScale}%)</label>
+                <label id="font-label" for="font-size"><span data-i18n="font-size">Font Size</span> (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
                 <label id="language-label" for="language-select" data-i18n="language">Language</label>
                 <select id="language-select">
