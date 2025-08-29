@@ -72,7 +72,7 @@
   "class": "Klasse",
   "knight": "Ritter",
   "paladin": "Paladin",
-  "knight-class-description": "Spezialfähigkeit, um 2x ATK als direkten Schaden zuzufügen.",
+  "knight-class-description": "Spezialfähigkeit, die 1,5x ATK Schaden verursacht.",
   "paladin-class-description": "Spezialfähigkeit, um sich selbst zu heilen.",
   "stat-points": "Stat-Punkte:",
   "reset": "Reset",

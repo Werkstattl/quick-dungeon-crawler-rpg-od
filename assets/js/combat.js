@@ -437,10 +437,60 @@ const useSpecialAbility = () => {
         playerLoadStats();
     } else {
         sfxAttack.play();
-        const damage = Math.round(player.stats.atk * 2);
+
+        let crit;
+        const baseAtk = player.stats.atk * 1.5;
+        let damage = baseAtk * (baseAtk / (baseAtk + enemy.stats.def));
+        // Randomize the damage by 90% - 110%
+        let dmgRange = 0.9 + Math.random() * 0.2;
+        damage = damage * dmgRange;
+
+        // Check if the attack is a critical hit
+        if (Math.floor(Math.random() * 100) < player.stats.critRate) {
+            crit = true;
+            dmgtype = "crit damage";
+            damage = Math.round(damage * (1 + (player.stats.critDmg / 100)));
+        } else {
+            crit = false;
+            dmgtype = "damage";
+            damage = Math.round(damage);
+        }
+
+        // Skill effects
+        objectValidation();
+        if (player.skills.includes("Remnant Razor")) {
+            // Attacks deal extra 9% of enemies' current health on hit
+            damage += Math.round((9 * enemy.stats.hp) / 100);
+        }
+        if (player.skills.includes("Titan's Will")) {
+            // Attacks deal extra 4.5% of your maximum health on hit
+            damage += Math.round((4.5 * player.stats.hpMax) / 100);
+        }
+        if (player.skills.includes("Devastator")) {
+            // Deal 30% more damage but you lose 30% base attack speed
+            damage = Math.round(damage + ((30 * damage) / 100));
+        }
+
+        // Lifesteal formula
+        let lifesteal = Math.round(damage * (player.stats.vamp / 100));
+
+        // Enemy dodge chance
+        let dodged = false;
+        if (Math.random() < enemy.stats.dodge / 100) {
+            addCombatLog(`${enemy.name} dodged the attack!`);
+            damage = 0;
+            lifesteal = 0;
+            dodged = true;
+        }
+
+        // Apply calculations
         enemy.stats.hp -= damage;
-        addCombatLog(`${player.name} unleashed a special ability for ${nFormatter(damage)} damage!`);
+        player.stats.hp += lifesteal;
+        if (!dodged) {
+            addCombatLog(`${player.name} unleashed a special ability for ` + nFormatter(damage) + ` ${dmgtype}!`);
+        }
         hpValidation();
+        playerLoadStats();
         enemyLoadStats();
 
         // Damage effect
@@ -454,7 +504,12 @@ const useSpecialAbility = () => {
         const dmgContainer = document.querySelector("#dmg-container");
         const dmgNumber = document.createElement("p");
         dmgNumber.classList.add("dmg-numbers");
-        dmgNumber.innerHTML = nFormatter(damage);
+        if (crit) {
+            dmgNumber.style.color = "gold";
+            dmgNumber.innerHTML = nFormatter(damage) + "!";
+        } else {
+            dmgNumber.innerHTML = nFormatter(damage);
+        }
         dmgContainer.appendChild(dmgNumber);
         setTimeout(() => {
             dmgContainer.removeChild(dmgContainer.lastElementChild);

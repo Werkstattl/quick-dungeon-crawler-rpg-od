@@ -974,7 +974,7 @@ const allocationPopup = () => {
                 </select>
             </div>
             <div class="row primary-panel pad">
-                <p id="class-desc" data-i18n="knight-class-description">Special ability to deal 2x ATK as dmg.</p>
+                <p id="class-desc" data-i18n="knight-class-description">Special ability to deal 1.5x ATK damage.</p>
             </div>
             <div class="row">
                 <p><i class="fas fa-heart"></i><span data-i18n="hp">HP:</span> <span id="hpDisplay">${stats.hp}</span></p>

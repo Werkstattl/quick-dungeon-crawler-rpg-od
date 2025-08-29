@@ -72,7 +72,7 @@
   "class": "Class",
   "knight": "Knight",
   "paladin": "Paladin",
-  "knight-class-description": "Special ability to deal 2x ATK as direct dmg.",
+  "knight-class-description": "Special ability to deal 1.5x ATK damage.",
   "paladin-class-description": "Special ability to heal yourself.",
   "stat-points": "Stat Points:",
   "reset": "Reset",
