@@ -317,11 +317,11 @@ function openMenu(isTitle = false) {
                     <h3 data-i18n="statistics">Statistics</h3>
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <p>${player.name} the ${player.selectedClass} Lv.${player.lvl}</p>
-                <p>Hardcore: ${player.hardcore ? 'Enabled' : 'Disabled'}</p>
-                <p>Kills: ${nFormatter(player.kills)}</p>
-                <p>Deaths: ${nFormatter(player.deaths)}</p>
-                <p>Playtime: ${playTime}</p>
+                <p>${player.name}</p>
+                <p><span data-i18n="hardcore">Hardcore</span>: ${player.hardcore ? '<span data-i18n="yes">Yes</span>' : '<span data-i18n="no">No</span>'}</p>
+                <p><span data-i18n="kills">Kills</span>: ${nFormatter(player.kills)}</p>
+                <p><span data-i18n="deaths">Deaths</span>: ${nFormatter(player.deaths)}</p>
+                <p><span data-i18n="playtime">Playtime</span>: ${playTime}</p>
             </div>`;
         applyTranslations(defaultModalElement);
         let profileTab = document.querySelector('#profile-tab');
