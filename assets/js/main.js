@@ -511,16 +511,16 @@ function openMenu(isTitle = false) {
         defaultModalElement.innerHTML = `
             <div class="content" id="auto-tab">
                 <div class="content-head">
-                    <h3>Auto Mode</h3>
+                    <h3 data-i18n="auto-mode">Auto Mode</h3>
                     <p id="auto-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <p>Automatically engage enemies, claim loot and open doors.</p>
-                ${!autoModeUnlocked ? '<button id="unlock-auto">Unlock Auto Mode (Premium)</button>' : ''}
-                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> Active</label>
-                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> Blessings</label>
-                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> Heal</label>
-        <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> Boss Doors</label>
-                <label id="auto-doorignore-label">Ignore Doors <select id="auto-doorignore-select">
+                <p data-i18n="auto-mode-description">Automatically engage enemies, claim loot and open doors.</p>
+                ${!autoModeUnlocked ? '<button id="unlock-auto" data-i18n="auto-mode-unlock">Unlock Auto Mode (Premium)</button>' : ''}
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> <span data-i18n="active">Active</span></label>
+                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
+                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
+        <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
+                <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Ignore Doors</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
                     <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
                     <option value="2" ${autoIgnoreDoors === 2 ? 'selected' : ''}>2</option>
@@ -532,8 +532,9 @@ function openMenu(isTitle = false) {
                     <option value="8" ${autoIgnoreDoors === 8 ? 'selected' : ''}>8</option>
                     <option value="9" ${autoIgnoreDoors === 9 ? 'selected' : ''}>9</option>
                 </select></label>
-                <br><button id="apply-auto">Apply</button>
+                <br><button id="apply-auto" data-i18n="apply">Apply</button>
             </div>`;
+        applyTranslations(defaultModalElement);
         let autoToggle = document.querySelector('#auto-mode-toggle');
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
