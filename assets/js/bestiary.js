@@ -99,7 +99,7 @@ function openBestiaryModal() {
       <ul class="bestiary-list" id="bestiary-list"></ul>
       <button id="bestiary-load-more" data-i18n="load-more">Load more</button>
     </div>`;
-  applyTranslations();
+  applyTranslations(defaultModalElement);
   const closeBtn = document.querySelector('#bestiary-close');
   const listEl = document.querySelector('#bestiary-list');
   const loadMoreBtn = document.querySelector('#bestiary-load-more');

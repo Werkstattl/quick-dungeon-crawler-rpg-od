@@ -314,7 +314,7 @@ function openMenu(isTitle = false) {
         defaultModalElement.innerHTML = `
             <div class="content" id="profile-tab">
                 <div class="content-head">
-                    <h3>Statistics</h3>
+                    <h3 data-i18n="statistics">Statistics</h3>
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <p>${player.name} the ${player.selectedClass} Lv.${player.lvl}</p>
@@ -323,6 +323,7 @@ function openMenu(isTitle = false) {
                 <p>Deaths: ${nFormatter(player.deaths)}</p>
                 <p>Playtime: ${playTime}</p>
             </div>`;
+        applyTranslations(defaultModalElement);
         let profileTab = document.querySelector('#profile-tab');
         profileTab.style.width = "15rem";
         let profileClose = document.querySelector('#profile-close');
