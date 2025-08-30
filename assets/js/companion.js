@@ -183,9 +183,7 @@ function giveCompanion(companionId) {
     return null;
 }
 
-// Update companion UI elements
 function updateCompanionUI() {
-    const companionPanel = document.getElementById('companion-panel');
     const companionName = document.getElementById('companion-name');
     const companionAtk = document.getElementById('companion-atk');
     const companionBonus = document.getElementById('companion-bonus');
@@ -198,14 +196,14 @@ function updateCompanionUI() {
         companionAtk.textContent = activeCompanion.atk;
         companionBonus.innerHTML = activeCompanion.evolutionBonus ? `<h4>Bonus</h4> <i class="ra ra-sword"></i>+${activeCompanion.evolutionBonus}%` : '';
         companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
-        summonBtn.textContent = "Change";
+        summonBtn.textContent = t('change');
     } else {
-        companionName.textContent = "None";
+        companionName.textContent = t('none');
         companionName.className = "";
         companionAtk.textContent = "0";
         companionBonus.textContent = '';
         companionAtkSpd.textContent = "0";
-        summonBtn.textContent = "Summon";
+        summonBtn.textContent = t('summon');
     }
     
     summonBtn.classList.remove('hidden');
