@@ -180,4 +180,15 @@
   ,"level-up": "レベルアップ!"
   ,"remaining": "残り: {count}"
   ,"reroll-button": "リロール {remaining}/{total}"
+
+  ,"level-up-option": {
+    "hp": { "title": "HP UP", "desc": "ボーナスHPが{value}%増加する。" },
+    "atk": { "title": "ATK UP", "desc": "ボーナスATKが{value}%増加する。" },
+    "def": { "title": "DEF UP", "desc": "ボーナスDEFが{value}%増加する。" },
+    "atkSpd": { "title": "ATK.SPD UP", "desc": "ボーナスATK.SPDが{value}%増加する。" },
+    "vamp": { "title": "VAMP UP", "desc": "ボーナスVAMPが{value}%増加する。" },
+    "critRate": { "title": "C.RATE UP", "desc": "ボーナスC.RATEが{value}%増加する。" },
+    "critDmg": { "title": "C.DMG UP", "desc": "ボーナスC.DMGが{value}%増加する。" },
+    "dodge": { "title": "DODGE UP", "desc": "ボーナスDODGEが{value}%増加する。" }
+  }
 }

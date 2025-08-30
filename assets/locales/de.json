@@ -180,5 +180,16 @@
   ,"level-up": "Level Up!"
   ,"remaining": "Verbleibend: {count}"
   ,"reroll-button": "Neu würfeln {remaining}/{total}"
-  
+
+  ,"level-up-option": {
+    "hp": { "title": "HP UP", "desc": "Erhöhe Bonus-HP um {value}%." },
+    "atk": { "title": "ATK UP", "desc": "Erhöhe Bonus-ATK um {value}%." },
+    "def": { "title": "DEF UP", "desc": "Erhöhe Bonus-DEF um {value}%." },
+    "atkSpd": { "title": "ATK.GES UP", "desc": "Erhöhe Bonus-ATK.GES um {value}%." },
+    "vamp": { "title": "VAMP UP", "desc": "Erhöhe Bonus-VAMP um {value}%." },
+    "critRate": { "title": "C.RATE UP", "desc": "Erhöhe Bonus-C.RATE um {value}%." },
+    "critDmg": { "title": "C.DMG UP", "desc": "Erhöhe Bonus-C.DMG um {value}%." },
+    "dodge": { "title": "DODGE UP", "desc": "Erhöhe Bonus-DODGE um {value}%." }
+  }
+
 }

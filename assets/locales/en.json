@@ -181,4 +181,15 @@
   ,"remaining": "Remaining: {count}"
   ,"reroll-button": "Reroll {remaining}/{total}"
 
+  ,"level-up-option": {
+    "hp": { "title": "HP UP", "desc": "Increase bonus HP by {value}%." },
+    "atk": { "title": "ATK UP", "desc": "Increase bonus ATK by {value}%." },
+    "def": { "title": "DEF UP", "desc": "Increase bonus DEF by {value}%." },
+    "atkSpd": { "title": "ATK.SPD UP", "desc": "Increase bonus ATK.SPD by {value}%." },
+    "vamp": { "title": "VAMP UP", "desc": "Increase bonus VAMP by {value}%." },
+    "critRate": { "title": "C.RATE UP", "desc": "Increase bonus C.RATE by {value}%." },
+    "critDmg": { "title": "C.DMG UP", "desc": "Increase bonus C.DMG by {value}%." },
+    "dodge": { "title": "DODGE UP", "desc": "Increase bonus DODGE by {value}%." }
+  }
+
 }

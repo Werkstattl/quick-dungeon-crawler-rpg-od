@@ -359,16 +359,17 @@ const generateLvlStats = (rerolls, percentages) => {
     });
 
     try {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < selectedStats.length; i++) {
             let button = document.createElement("button");
             button.id = "lvlSlot" + i;
 
+            let stat = selectedStats[i];
             let h3 = document.createElement("h3");
-            h3.innerHTML = selectedStats[i].replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase() + " UP";
+            h3.innerHTML = t(`level-up-option.${stat}.title`);
             button.appendChild(h3);
 
             let p = document.createElement("p");
-            p.innerHTML = `Increase bonus ${selectedStats[i].replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()} by ${percentages[selectedStats[i]]}%.`;
+            p.innerHTML = t(`level-up-option.${stat}.desc`, { value: percentages[stat] });
             
             //Append the string with the marginal value of the stat.
             try{
