@@ -184,7 +184,7 @@ const playerLoadStats = () => {
 
     // Player Bonus Stats
     let bonusStatsHTML = `
-    <h4>Bonus</h4>
+    <h4>${t('bonus')}</h4>
     <p><i class="fas fa-heart"></i>+${player.bonusStats.hp.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-sword"></i>+${player.bonusStats.atk.toFixed(2).replace(rx, "$1")}%</p>
     <p><i class="ra ra-round-shield"></i>+${player.bonusStats.def.toFixed(2).replace(rx, "$1")}%</p>
