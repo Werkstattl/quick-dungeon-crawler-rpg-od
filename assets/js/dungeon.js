@@ -726,7 +726,7 @@ const processRestingActivities = () => {
 
 // Update the resting display
 const updateRestingDisplay = () => {
-    let restingMessage = "Resting";
+    let restingMessage = t('resting');
     
     if (dungeon.resting.duration > 0) {
         const minutes = Math.floor(dungeon.resting.duration / 60);
