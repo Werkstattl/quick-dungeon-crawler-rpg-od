@@ -198,7 +198,7 @@ const playerLoadStats = () => {
     if (dungeon.floorBuffs && (dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0)) {
         const normalColor = '#FFD700';
         const maxColor = '#e30b5c';
-        bonusStatsHTML += `<h4 style="color: ${normalColor};">Floor Buffs</h4>`;
+        bonusStatsHTML += `<h4 style="color: ${normalColor};">${t('floor-buffs')}</h4>`;
         if (dungeon.floorBuffs.atk > 0) {
             let color = dungeon.floorBuffs.atk >= 50 ? maxColor : normalColor;
             bonusStatsHTML += `<p style="color: ${color};"><i class="ra ra-sword"></i>+${dungeon.floorBuffs.atk}%</p>`;
