@@ -12,6 +12,7 @@
   "confirm": "Confirm",
   "bonus": "Bonus",
   "explore": "Explore",
+  "exploring": "Exploring...",
   "floor-buffs": "Floor Buffs",
   "floor-count": "Floor {floor}",
   "room-count": "Room {room}",

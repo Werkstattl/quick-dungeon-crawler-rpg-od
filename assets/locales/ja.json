@@ -12,6 +12,7 @@
   "confirm": "決定",
   "bonus": "ボーナス",
   "explore": "探索",
+  "exploring": "探索中...",
   "floor-buffs": "フローバフ",
   "floor-count": "{floor}階",
   "room-count": "{room}部屋",

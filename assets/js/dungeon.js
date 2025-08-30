@@ -128,7 +128,7 @@ const dungeonStartPause = () => {
         }
         sfxUnpause.play();
 
-        dungeonAction.innerHTML = "Exploring...";
+        dungeonAction.innerHTML = t("exploring");
         dungeonActivity.textContent = "Pause";
         dungeonActivity.removeAttribute('data-i18n');
         dungeon.status.exploring = true;
