@@ -295,14 +295,14 @@ const dungeonEvent = () => {
                     let cost = player.blessing * (500 * (player.blessing * 0.5)) + 750;
                     choices = `
                         <div class="decision-panel">
-                            <button id="choice1">Offer</button>
-                            <button id="choice2">Ignore</button>
+                            <button id="choice1">${t('offer')}</button>
+                            <button id="choice2">${t('ignore')}</button>
                         </div>`;
-                    addDungeonLog(`<span class="Legendary">Statue of Blessing: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span> for blessings? (Lv.${player.blessing})</span>`, choices);
+                    addDungeonLog(`<span class="Legendary">${t('statue-of-blessing-offer', { cost: nFormatter(cost), level: player.blessing })}</span>`, choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < cost) {
                             sfxDeny.play();
-                            addDungeonLog("You don't have enough gold.");
+                            addDungeonLog(t('not-enough-gold'));
                         } else {
                             player.gold -= cost;
                             sfxConfirm.play();

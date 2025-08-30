@@ -135,7 +135,6 @@
   "cursed-totem-offer": "<span class='Heirloom'>Verfluchtes Totem: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>? Monster werden stärker, Beute verbessert sich. (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Geheimnisvolle Kammer; etwas schläft darin.</span>",
   "healing-shrine-offer": "<span class='Epic'>Heilschrein: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Heilung und einen Segen opfern?</span>",
-  "not-enough-gold-offering": "Du hast nicht genug Gold, um ein Opfer zu bringen.",
   "enemy-awoken": "Dungeon-Monarch {enemy} ist erwacht.",
   "flee-success": "Du konntest fliehen.",
   "flee-failure": "Du konntest nicht entkommen!",

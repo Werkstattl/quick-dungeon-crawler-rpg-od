@@ -135,7 +135,6 @@
   "cursed-totem-offer": "<span class='Heirloom'>Cursed Totem: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>? Monsters grow stronger, loot improves. (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mysterious chamber; something sleeps inside.</span>",
   "healing-shrine-offer": "<span class='Epic'>Healing shrine: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for healing and a blessing?</span>",
-  "not-enough-gold-offering": "You don't have enough gold to make an offering.",
   "enemy-awoken": "Dungeon Monarch {enemy} has awoken.",
   "flee-success": "You managed to flee.",
   "flee-failure": "You failed to escape!",

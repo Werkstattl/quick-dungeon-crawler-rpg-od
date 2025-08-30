@@ -135,7 +135,6 @@
   "cursed-totem-offer": "<span class='Heirloom'>呪われたトーテム: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？ モンスターは強くなり、戦利品が良くなる。(Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>謎めいた部屋; 何かが眠っている。</span>",
   "healing-shrine-offer": "<span class='Epic'>癒しの祭壇: 回復と祝福のために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？</span>",
-  "not-enough-gold-offering": "奉納するゴールドが足りない。",
   "enemy-awoken": "ダンジョンの君主{enemy}が目を覚ました。",
   "flee-success": "逃走に成功した。",
   "flee-failure": "逃走に失敗した！",
