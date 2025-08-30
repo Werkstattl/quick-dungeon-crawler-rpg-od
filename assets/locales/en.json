@@ -27,6 +27,7 @@
   "summon": "Summon",
   "inventory": "Inventory",
   "open-inventory": "Open inventory",
+  "there-are-no-items-available": "There are no items available.",
   "sell": "Sell",
   "common": "Common",
   "uncommon": "Uncommon",

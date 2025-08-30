@@ -625,11 +625,7 @@ function openMenu(isTitle = false) {
             copyText.select();
             copyText.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(copyText.value);
-            try {
-                btn.innerHTML = t('copied');
-            } catch (e) {
-                btn.innerHTML = "Copied!";
-            }
+            btn.innerHTML = t('copied');
         }
         copyExport.onclick = function () {
             sfxConfirm.play();

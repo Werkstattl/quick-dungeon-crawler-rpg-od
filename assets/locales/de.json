@@ -27,6 +27,7 @@
   "summon": "Beschwöre",
   "inventory": "Inventar",
   "open-inventory": "Inventar öffnen",
+  "there-are-no-items-available": "Es sind keine Gegenstände verfügbar.",
   "sell": "Verkaufen",
   "common": "Gewöhnlich",
   "uncommon": "Ungewöhnlich",

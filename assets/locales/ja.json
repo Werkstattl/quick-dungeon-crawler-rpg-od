@@ -27,6 +27,7 @@
   "summon": "召喚",
   "inventory": "インベントリ",
   "open-inventory": "インベントリを開く",
+  "there-are-no-items-available": "アイテムはありません。",
   "sell": "売却",
   "common": "コモン",
   "uncommon": "アンコモン",

@@ -582,7 +582,7 @@ const showInventory = () => {
     }
     
     if (player.inventory.equipment.length == 0) {
-        playerInventoryList.innerHTML = "There are no items available.";
+        playerInventoryList.innerHTML = t('there-are-no-items-available');
     }
 
     for (let i = 0; i < player.inventory.equipment.length; i++) {
