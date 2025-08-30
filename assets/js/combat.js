@@ -18,7 +18,11 @@ const hpValidation = () => {
         player.stats.hp = 0;
         playerDead = true;
         player.deaths++;
-        addCombatLog('You died! ' + deathMessage);
+        if (player.hardcore) {
+            addCombatLog(t('you-died-hardcore'));
+        } else {
+            addCombatLog(t('you-died-softcore'));
+        }
         document.querySelector("#battleButton").addEventListener("click", function () {
             sfxConfirm.play();
             playerDead = false;
@@ -44,7 +48,7 @@ const hpValidation = () => {
         }
         dungeon.statistics.kills++;
         const timeStamp = new Date(combatSeconds * 1000).toISOString().substring(14, 19);
-        addCombatLog(`${enemy.name} defeated: +${nFormatter(enemy.rewards.exp)} exp, <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(enemy.rewards.gold)} gold (${timeStamp})`);
+    addCombatLog(t('enemy-defeated-reward', { enemy: enemy.name, exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
             activeCompanion.gainExperience(enemy.rewards.exp / 10);
@@ -105,11 +109,11 @@ const playerAttack = () => {
     // Check if the attack is a critical hit
     if (Math.floor(Math.random() * 100) < player.stats.critRate) {
         crit = true;
-        dmgtype = "crit damage";
+        dmgtype = t('crit-damage');
         damage = Math.round(damage * (1 + (player.stats.critDmg / 100)));
     } else {
         crit = false;
-        dmgtype = "damage";
+        dmgtype = t('damage');
         damage = Math.round(damage);
     }
 
@@ -134,7 +138,7 @@ const playerAttack = () => {
     // Enemy dodge chance
     let dodged = false;
     if (Math.random() < enemy.stats.dodge / 100) {
-        addCombatLog(`${enemy.name} dodged the attack!`);
+        addCombatLog(t('dodged-attack-enemy', { enemy: enemy.name }));
         damage = 0;
         lifesteal = 0;
         dodged = true;
@@ -144,7 +148,7 @@ const playerAttack = () => {
     enemy.stats.hp -= damage;
     player.stats.hp += lifesteal;
     if (!dodged) {
-        addCombatLog(`${player.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+        addCombatLog(t('player-attack-hit', { player: player.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
     }
     hpValidation();
     playerLoadStats();
@@ -200,18 +204,18 @@ const companionAttack = () => {
     // Check if the attack is a critical hit
     if (Math.floor(Math.random() * 100) < activeCompanion.critRate) {
         crit = true;
-        dmgtype = "crit damage";
+        dmgtype = t('crit-damage');
         damage = Math.round(damage * (1 + (activeCompanion.critDmg / 100)));
     } else {
         crit = false;
-        dmgtype = "damage";
+        dmgtype = t('damage');
         damage = Math.round(damage);
     }
 
     // Enemy dodge chance
     let dodged = false;
     if (Math.random() < enemy.stats.dodge / 100) {
-        addCombatLog(`${enemy.name} dodged ${activeCompanion.name}'s attack!`);
+        addCombatLog(t('dodged-attack-companion', { enemy: enemy.name, companion: activeCompanion.name }));
         damage = 0;
         dodged = true;
     }
@@ -219,7 +223,7 @@ const companionAttack = () => {
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
     if (!dodged) {
-        addCombatLog(`${activeCompanion.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${enemy.name}.`);
+        addCombatLog(t('companion-attack-hit', { companion: activeCompanion.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
     }
     hpValidation();
     playerLoadStats();
@@ -273,17 +277,17 @@ const enemyAttack = () => {
     damage = damage * dmgRange;
     // Check if the attack is a critical hit
     if (Math.floor(Math.random() * 100) < enemy.stats.critRate) {
-        dmgtype = "crit damage";
+        dmgtype = t('crit-damage');
         damage = Math.round(damage * (1 + (enemy.stats.critDmg / 100)));
     } else {
-        dmgtype = "damage";
+        dmgtype = t('damage');
         damage = Math.round(damage);
     }
 
     // Player dodge chance
     let dodged = false;
     if (Math.random() < player.stats.dodge / 100) {
-        addCombatLog(`${player.name} dodged the attack!`);
+        addCombatLog(t('dodged-attack-player', { player: player.name }));
         damage = 0;
         dodged = true;
     }
@@ -304,7 +308,7 @@ const enemyAttack = () => {
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {
-        addCombatLog(`${enemy.name} dealt ` + nFormatter(damage) + ` ${dmgtype} to ${player.name}.`);
+        addCombatLog(t('enemy-attack-hit', { enemy: enemy.name, player: player.name, value: nFormatter(damage), type: dmgtype }));
     }
     hpValidation();
     playerLoadStats();
@@ -354,14 +358,14 @@ const updateCombatLog = () => {
     if (enemyDead) {
         let button = document.createElement("div");
         button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton">Claim</button>`;
+        button.innerHTML = `<button id="battleButton" data-i18n="claim">${t('claim')}</button>`;
         combatLogBox.appendChild(button);
     }
 
     if (playerDead) {
         let button = document.createElement("div");
         button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton">Start new Run</button>`;
+        button.innerHTML = `<button id="battleButton" data-i18n="start-new-run">${t('start-new-run')}</button>`;
         combatLogBox.appendChild(button);
     }
 
@@ -432,7 +436,7 @@ const useSpecialAbility = () => {
         sfxBuff.play();
         const healAmount = Math.round(player.stats.hpMax);
         player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
-        addCombatLog(`${player.name} used a special ability and healed ${nFormatter(healAmount)} HP!`);
+    addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(healAmount) }));
         hpValidation();
         playerLoadStats();
     } else {
@@ -448,11 +452,11 @@ const useSpecialAbility = () => {
         // Check if the attack is a critical hit
         if (Math.floor(Math.random() * 100) < player.stats.critRate) {
             crit = true;
-            dmgtype = "crit damage";
+            dmgtype = t('crit-damage');
             damage = Math.round(damage * (1 + (player.stats.critDmg / 100)));
         } else {
             crit = false;
-            dmgtype = "damage";
+            dmgtype = t('damage');
             damage = Math.round(damage);
         }
 
@@ -477,7 +481,7 @@ const useSpecialAbility = () => {
         // Enemy dodge chance
         let dodged = false;
         if (Math.random() < enemy.stats.dodge / 100) {
-            addCombatLog(`${enemy.name} dodged the attack!`);
+            addCombatLog(t('dodged-attack-enemy', { enemy: enemy.name }));
             damage = 0;
             lifesteal = 0;
             dodged = true;
@@ -487,7 +491,7 @@ const useSpecialAbility = () => {
         enemy.stats.hp -= damage;
         player.stats.hp += lifesteal;
         if (!dodged) {
-            addCombatLog(`${player.name} unleashed a special ability for ` + nFormatter(damage) + ` ${dmgtype}!`);
+            addCombatLog(t('special-ability-attack-hit', { player: player.name, value: nFormatter(damage), type: dmgtype }));
         }
         hpValidation();
         playerLoadStats();
@@ -522,7 +526,7 @@ const useSpecialAbility = () => {
             const btn = document.querySelector('#special-ability-btn');
             if (btn) {
                 btn.disabled = false;
-                btn.textContent = 'Special Ability';
+                btn.textContent = t('special-ability');
             }
             return;
         }
@@ -532,14 +536,14 @@ const useSpecialAbility = () => {
     const btn = document.querySelector('#special-ability-btn');
     if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Cooling...';
+        btn.textContent = t('cooling');
     }
     specialAbilityTimeout = setTimeout(() => {
         specialAbilityCooldown = false;
         const btn = document.querySelector('#special-ability-btn');
         if (btn) {
             btn.disabled = false;
-            btn.textContent = 'Special Ability';
+            btn.textContent = t('special-ability');
         }
     }, 10000);
 }
@@ -573,7 +577,7 @@ const showCombatInfo = () => {
             <div class="battle-bar empty-bar bb-xb">
                 <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
             </div>
-            <button id="special-ability-btn" ${specialAbilityCooldown ? 'disabled' : ''}>${specialAbilityCooldown ? 'Cooling...' : 'Special Ability'}</button>
+            <button id="special-ability-btn" ${specialAbilityCooldown ? 'disabled' : ''}>${specialAbilityCooldown ? t('cooling') : t('special-ability')}</button>
         </div>
         <div class="logBox primary-panel">
             <div id="combatLogBox"></div>
