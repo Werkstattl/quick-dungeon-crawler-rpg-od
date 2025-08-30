@@ -387,7 +387,7 @@ const dungeonEvent = () => {
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < healCost) {
                             sfxDeny.play();
-                            addDungeonLog("You don't have enough gold to make an offering.");
+                            addDungeonLog(t('not-enough-gold'));
                         } else {
                             player.gold -= healCost;
                             sfxBuff.play();
