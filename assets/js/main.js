@@ -348,7 +348,7 @@ function openMenu(isTitle = false) {
                         <h3 data-i18n="current-run">Current Run</h3>
                         <p id="run-close"><i class="fa fa-xmark"></i></p>
                     </div>
-                    <p>${player.name} - ${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
+                    <p>${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
                     <p>${t('blessings')}: Lvl.${player.blessing}</p>
                     <p>${t('curse')}: Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
                     <p>${t('kills')}: ${nFormatter(dungeon.statistics.kills)}</p>
