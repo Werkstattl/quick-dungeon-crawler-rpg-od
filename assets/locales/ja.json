@@ -176,6 +176,7 @@
   ,"start-new-run": "新しいランを開始"
   ,"special-ability": "必殺技"
   ,"cooling": "冷却中..."
+  ,"you-leveled-up": "レベルアップ！ (Lv.{previousLvl} > Lv.{newLvl})"
   ,"level-up": "レベルアップ!"
   ,"remaining": "残り: {count}"
   ,"reroll-button": "リロール {remaining}/{total}"

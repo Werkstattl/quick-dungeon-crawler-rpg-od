@@ -176,6 +176,7 @@
   ,"start-new-run": "Neuen Lauf starten"
   ,"special-ability": "Spezialfähigkeit"
   ,"cooling": "Abkühlung..."
+  ,"you-leveled-up": "Du bist aufgestiegen! (Lv.{previousLvl} > Lv.{newLvl})"
   ,"level-up": "Level Up!"
   ,"remaining": "Verbleibend: {count}"
   ,"reroll-button": "Neu würfeln {remaining}/{total}"

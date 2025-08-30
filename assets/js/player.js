@@ -87,7 +87,7 @@ const playerLvlUp = () => {
 
     // Play level up effects
     sfxLvlUp.play();
-    addCombatLog(`You leveled up! (Lv.${previousLvl} > Lv.${player.lvl})`);
+    addCombatLog(t('you-leveled-up', { previousLvl, newLvl: player.lvl }));
 
     // Recover 20% extra hp on level up
     player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);

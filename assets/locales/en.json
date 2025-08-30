@@ -176,6 +176,7 @@
     ,"start-new-run": "Start new Run"
   ,"special-ability": "Special Ability"
   ,"cooling": "Cooling..."
+  ,"you-leveled-up": "You leveled up! (Lv.{previousLvl} > Lv.{newLvl})"
   ,"level-up": "Level Up!"
   ,"remaining": "Remaining: {count}"
   ,"reroll-button": "Reroll {remaining}/{total}"
