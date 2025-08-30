@@ -345,15 +345,16 @@ function openMenu(isTitle = false) {
             defaultModalElement.innerHTML = `
                 <div class="content" id="run-tab">
                     <div class="content-head">
-                        <h3>Current Run</h3>
+                        <h3 data-i18n="current-run">Current Run</h3>
                         <p id="run-close"><i class="fa fa-xmark"></i></p>
                     </div>
-                    <p>${player.name} the ${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
-                    <p>Blessing Lvl.${player.blessing}</p>
-                    <p>Curse Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
-                    <p>Kills: ${nFormatter(dungeon.statistics.kills)}</p>
-                    <p>Runtime: ${runTime}</p>
+                    <p>${player.name} - ${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
+                    <p>${t('blessings')}: Lvl.${player.blessing}</p>
+                    <p>${t('curse')}: Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
+                    <p>${t('kills')}: ${nFormatter(dungeon.statistics.kills)}</p>
+                    <p>${t('runtime')}: ${runTime}</p>
                 </div>`;
+            applyTranslations(defaultModalElement);
             let runTab = document.querySelector('#run-tab');
             runTab.style.width = "15rem";
             let runClose = document.querySelector('#run-close');
