@@ -611,7 +611,7 @@ const showEquipment = () => {
 
     // Show a message if a player has no equipment
     if (player.equipped.length == 0) {
-        playerEquipmentList.innerHTML = "Nothing equipped.";
+        playerEquipmentList.innerHTML = t('nothing-equipped');
     }
 
     for (let i = 0; i < player.equipped.length; i++) {
