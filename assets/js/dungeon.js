@@ -330,10 +330,10 @@ const dungeonEvent = () => {
                     let cost = curseLvl * (10000 * (curseLvl * 0.5)) + 5000;
                     choices = `
                             <div class="decision-panel">
-                                <button id="choice1">Offer</button>
-                                <button id="choice2">Ignore</button>
+                                <button id="choice1">${t('offer')}</button>
+                                <button id="choice2">${t('ignore')}</button>
                             </div>`;
-                    addDungeonLog(`<span class="Heirloom">Cursed Totem: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(cost)}</span>? Monsters grow stronger, loot improves. (Lv.${curseLvl})</span>`, choices);
+                    addDungeonLog(t('cursed-totem-offer', { cost: nFormatter(cost), level: curseLvl }), choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < cost) {
                             sfxDeny.play();
