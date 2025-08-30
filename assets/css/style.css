@@ -682,6 +682,8 @@ header button i {
 #summon-companion {
     white-space: normal;
     overflow-wrap: anywhere;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 #bonus-stats {
