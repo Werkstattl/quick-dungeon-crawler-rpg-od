@@ -273,11 +273,11 @@ const dungeonEvent = () => {
                 dungeon.status.event = true;
                 choices = `
                     <div class="decision-panel">
-                        <button id="choice1">Engage</button>
-                        <button id="choice2">Flee</button>
+                        <button id="choice1" data-i18n="engage">${t('engage')}</button>
+                        <button id="choice2" data-i18n="flee">${t('flee')}</button>
                     </div>`;
                 generateRandomEnemy();
-                addDungeonLog(`You encountered ${enemy.name}.`, choices);
+                addDungeonLog(t('encountered-enemy', { enemy: enemy.name }), choices);
                 player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {
                     engageBattle();
