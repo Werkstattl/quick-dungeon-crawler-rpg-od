@@ -254,10 +254,10 @@ const dungeonEvent = () => {
                 dungeon.status.event = true;
                 choices = `
                     <div class="decision-panel">
-                        <button id="choice1">Open the chest</button>
-                        <button id="choice2">Ignore</button>
+                        <button id="choice1">${t('open-the-chest')}</button>
+                        <button id="choice2">${t('ignore')}</button>
                     </div>`;
-                addDungeonLog(`Treasure chamber found with a <i class="fa fa-toolbox"></i>Chest.`, choices);
+                addDungeonLog(t('treasure-chamber-found'), choices);
                 document.querySelector("#choice1").onclick = function () {
                     chestEvent();
                 }
