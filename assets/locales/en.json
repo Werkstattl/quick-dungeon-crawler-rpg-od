@@ -129,6 +129,7 @@
   "door-found": "You found a door.",
   "treasure-chamber-entered": "You entered a treasure chamber with a <i class='fa fa-toolbox'></i>Chest.",
   "moved-to-next-room": "You moved to the next room.",
+  "moved-to-next-floor": "You moved to the next floor.",
   "treasure-chamber-found": "Treasure chamber found with a <i class='fa fa-toolbox'></i>Chest.",
   "encountered-enemy": "You encountered {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue of Blessing: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for blessings? (Lv.{level})</span>",

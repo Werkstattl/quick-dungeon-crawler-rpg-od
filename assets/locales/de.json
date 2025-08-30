@@ -129,6 +129,7 @@
   "door-found": "Du hast eine Tür gefunden.",
   "treasure-chamber-entered": "Du hast eine Schatzkammer mit einer <i class='fa fa-toolbox'></i>Truhe betreten.",
   "moved-to-next-room": "Du bist in den nächsten Raum gegangen.",
+  "moved-to-next-floor": "Du bist in die nächste Etage gegangen.",
   "treasure-chamber-found": "Schatzkammer mit einer <i class='fa fa-toolbox'></i>Truhe gefunden.",
   "encountered-enemy": "Du bist {enemy} begegnet.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue des Segens: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Segen opfern? (Lv.{level})</span>",

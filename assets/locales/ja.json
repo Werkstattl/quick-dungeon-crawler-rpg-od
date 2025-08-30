@@ -129,6 +129,7 @@
   "door-found": "扉を見つけた。",
   "treasure-chamber-entered": "宝箱<i class='fa fa-toolbox'></i>のある宝物庫に入った。",
   "moved-to-next-room": "次の部屋へ移動した。",
+  "moved-to-next-floor": "次の階へ移動した。",
   "treasure-chamber-found": "<i class='fa fa-toolbox'></i>宝箱のある宝物庫を見つけた。",
   "encountered-enemy": "{enemy}と遭遇した。",
   "statue-of-blessing-offer": "<span class='Legendary'>祝福の像: 祝福を得るために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？ (Lv.{level})</span>",

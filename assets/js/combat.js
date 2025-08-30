@@ -66,9 +66,9 @@ const hpValidation = () => {
             if (enemy.condition === "guardian") {
                 incrementRoom();
                 clearFloorBuffs();
-                addDungeonLog("You moved to the next floor.");
+                addDungeonLog(t('moved-to-next-floor'));
             } else if (enemy.condition === "door") {
-                addDungeonLog("You moved to the next floor.");
+                addDungeonLog(t('moved-to-next-floor'));
             }
 
             // Clear combat backlog and transition to dungeon exploration
