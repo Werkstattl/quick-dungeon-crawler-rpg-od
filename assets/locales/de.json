@@ -153,7 +153,7 @@
   "weapons-glow": "Waffen glühen! (+5% ATK auf dieser Etage)",
   "armor-fortifies": "Rüstung verstärkt sich! (+3% DEF auf dieser Etage)",
   "ignored-move-on": "Du hast es ignoriert und bist weitergegangen.",
-  "shrine-blessings-fade": "<span class='Common'>Schreinsegen verblassen auf der neuen Etage.</span>",
+  "shrine-blessings-fade": "<span class='Common'>Etagen-Buffs verblassen auf der neuen Etage.</span>",
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Du fühlst dich geistig fokussiert! (+10% ATK.GES bis zur nächsten Etage)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Du fühlst dich körperlich energiegeladen! (+15% ATK bis zur nächsten Etage)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Du fühlst inneren Frieden! (+12% DEF bis zur nächsten Etage)</span>"

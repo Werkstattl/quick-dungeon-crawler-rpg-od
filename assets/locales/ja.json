@@ -153,7 +153,7 @@
   "weapons-glow": "武器が輝いた！ (この階でATK+5%)",
   "armor-fortifies": "鎧が強化された！ (この階でDEF+3%)",
   "ignored-move-on": "無視して先へ進むことにした。",
-  "shrine-blessings-fade": "<span class='Common'>新しい階では祭壇の祝福が消える。</span>",
+  "shrine-blessings-fade": "<span class='Common'>エリアのバフが新しい階で消える。</span>",
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 精神が集中した！ (次の階までATK.SPD+10%)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 体が活力に満ちた！ (次の階までATK+15%)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ 心が安らいだ！ (次の階までDEF+12%)</span>"
