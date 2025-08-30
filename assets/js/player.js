@@ -96,7 +96,7 @@ const playerLvlUp = () => {
     if (lvlupPanel.style.display === "flex") {
         const remainingHeader = document.querySelector("#lvlupSelect h4");
         if (remainingHeader) {
-            remainingHeader.textContent = `Remaining: ${player.exp.lvlGained}`;
+            remainingHeader.textContent = t('remaining', { count: player.exp.lvlGained });
         }
     }
 }
@@ -337,10 +337,10 @@ const generateLvlStats = (rerolls, percentages) => {
 
     const loadLvlHeader = () => {
         lvlupSelect.innerHTML = `
-            <h1>Level Up!</h1>
+            <h1>${t('level-up')}</h1>
             <div class="content-head">
-                <h4>Remaining: ${player.exp.lvlGained}</h4>
-                <button id="lvlReroll">Reroll ${rerolls}/2</button>
+                <h4>${t('remaining', { count: player.exp.lvlGained })}</h4>
+                <button id="lvlReroll">${t('reroll-button', { remaining: rerolls, total: 2 })}</button>
             </div>
         `;
     }

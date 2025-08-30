@@ -176,4 +176,8 @@
   ,"start-new-run": "Neuen Lauf starten"
   ,"special-ability": "Spezialfähigkeit"
   ,"cooling": "Abkühlung..."
+  ,"level-up": "Level Up!"
+  ,"remaining": "Verbleibend: {count}"
+  ,"reroll-button": "Neu würfeln {remaining}/{total}"
+  
 }
