@@ -189,13 +189,13 @@ const dungeonEvent = () => {
                 dungeon.status.event = true;
                 choices = `
                     <div class="decision-panel">
-                        <button id="choice1">Enter</button>
-                        <button id="choice2">Ignore</button>
+                        <button id="choice1" data-i18n="enter">${t('enter')}</button>
+                        <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                     </div>`;
                 if (dungeon.progress.room == dungeon.progress.roomLimit) {
-                    addDungeonLog(`<span class="Heirloom">Boss room door discovered.</span>`, choices);
+                    addDungeonLog(t('boss-room-door-discovered'), choices);
                 } else {
-                    addDungeonLog("You found a door.", choices);
+                    addDungeonLog(t('door-found'), choices);
                 }
                 document.querySelector("#choice1").onclick = function () {
                     sfxConfirm.play();
@@ -213,10 +213,10 @@ const dungeonEvent = () => {
                             currentEvent = "treasure";
                             choices = `
                                 <div class="decision-panel">
-                                    <button id="choice1">Open the chest</button>
-                                    <button id="choice2">Ignore</button>
+                                    <button id="choice1" data-i18n="open-the-chest">${t('open-the-chest')}</button>
+                                    <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                                 </div>`;
-                            addDungeonLog(`You entered a treasure chamber with a <i class="fa fa-toolbox"></i>Chest.`, choices);
+                            addDungeonLog(t('treasure-chamber-entered'), choices);
                             document.querySelector("#choice1").onclick = function () {
                                 chestEvent();
                             }
@@ -228,7 +228,7 @@ const dungeonEvent = () => {
                         } else {
                             dungeon.status.event = false;
                             incrementRoom();
-                            addDungeonLog("You moved to the next room.");
+                            addDungeonLog(t('moved-to-next-room'));
                         }
                     }
                 };
@@ -298,7 +298,7 @@ const dungeonEvent = () => {
                             <button id="choice1">${t('offer')}</button>
                             <button id="choice2">${t('ignore')}</button>
                         </div>`;
-                    addDungeonLog(`<span class="Legendary">${t('statue-of-blessing-offer', { cost: nFormatter(cost), level: player.blessing })}</span>`, choices);
+                    addDungeonLog(t('statue-of-blessing-offer', { cost: nFormatter(cost), level: player.blessing }), choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < cost) {
                             sfxDeny.play();
@@ -359,10 +359,10 @@ const dungeonEvent = () => {
                     dungeon.status.event = true;
                     choices = `
                             <div class="decision-panel">
-                                <button id="choice1">Enter</button>
-                                <button id="choice2">Ignore</button>
+                                <button id="choice1" data-i18n="enter">${t('enter')}</button>
+                                <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                             </div>`;
-                    addDungeonLog(`<span class="Heirloom">Mysterious chamber; something sleeps inside.</span>`, choices);
+                    addDungeonLog(t('mysterious-chamber'), choices);
                     document.querySelector("#choice1").onclick = function () {
                         specialBossBattle();
                     }
@@ -380,10 +380,10 @@ const dungeonEvent = () => {
                     let healCost = Math.round(player.stats.hpMax * 0.4) + (dungeon.progress.floor * 70);
                     choices = `
                             <div class="decision-panel">
-                                <button id="choice1">Pray</button>
-                                <button id="choice2">Ignore</button>
+                                <button id="choice1" data-i18n="pray">${t('pray')}</button>
+                                <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                             </div>`;
-                    addDungeonLog(`<span class="Epic">Healing shrine: offer <i class="fas fa-coins" style="color: #FFD700;"></i><span class="Common">${nFormatter(healCost)}</span> for healing and a blessing?</span>`, choices);
+                    addDungeonLog(t('healing-shrine-offer', { cost: nFormatter(healCost) }), choices);
                     document.querySelector("#choice1").onclick = function () {
                         if (player.gold < healCost) {
                             sfxDeny.play();
@@ -418,7 +418,7 @@ const dungeonEvent = () => {
 const engageBattle = () => {
     showCombatInfo();
     startCombat(bgmBattleMain);
-    addCombatLog(`You encountered ${enemy.name}.`);
+    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
     updateDungeonLog();
 }
 
@@ -427,8 +427,8 @@ const mimicBattle = (type) => {
     generateRandomEnemy(type);
     showCombatInfo();
     startCombat(bgmBattleMain);
-    addCombatLog(`You encountered ${enemy.name}.`);
-    addDungeonLog(`You encountered ${enemy.name}.`);
+    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
+    addDungeonLog(t('encountered-enemy', { enemy: enemy.name }));
 }
 
 // boss fight
@@ -436,7 +436,7 @@ const guardianBattle = () => {
     generateRandomEnemy("guardian");
     showCombatInfo();
     startCombat(bgmBattleBoss);
-    addCombatLog(`Floor Guardian ${enemy.name} is blocking your way.`);
+    addCombatLog(t('guardian-blocking-way', { enemy: enemy.name }));
 }
 
 // mysterious chamber fight
@@ -444,8 +444,8 @@ const specialBossBattle = () => {
     generateRandomEnemy("sboss");
     showCombatInfo();
     startCombat(bgmBattleBoss);
-    addCombatLog(`Dungeon Monarch ${enemy.name} has awoken.`);
-    addDungeonLog(`Dungeon Monarch ${enemy.name} has awoken.`);
+    addCombatLog(t('enemy-awoken', { enemy: enemy.name }));
+    addDungeonLog(t('enemy-awoken', { enemy: enemy.name }));
 }
 
 // Flee from the monster
@@ -453,15 +453,15 @@ const fleeBattle = () => {
     let eventRoll = randomizeNum(1, 10);
     if (eventRoll <= 9) {
         sfxConfirm.play();
-        addDungeonLog(`You managed to flee.`);
+    addDungeonLog(t('flee-success'));
         player.inCombat = false;
         dungeon.status.event = false;
     } else {
-        addDungeonLog(`You failed to escape!`);
+    addDungeonLog(t('flee-failure'));
         showCombatInfo();
         startCombat(bgmBattleMain);
-        addCombatLog(`You encountered ${enemy.name}.`);
-        addCombatLog(`You failed to escape!`);
+    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
+    addCombatLog(t('flee-failure'));
     }
 }
 
@@ -482,7 +482,7 @@ const chestEvent = () => {
         goldDrop();
         dungeon.status.event = false;
     } else {
-        addDungeonLog("The chest is empty.");
+    addDungeonLog(t('chest-empty'));
         dungeon.status.event = false;
     }
 }
@@ -491,7 +491,7 @@ const chestEvent = () => {
 const goldDrop = () => {
     sfxSell.play();
     let goldValue = randomizeNum(50, 500) * dungeon.progress.floor;
-    addDungeonLog(`You found <i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(goldValue)}.`);
+    addDungeonLog(t('gold-found', { gold: nFormatter(goldValue) }));
     player.gold += goldValue;
     playerLoadStats();
 }
@@ -500,15 +500,15 @@ const goldDrop = () => {
 const nothingEvent = () => {
     let eventRoll = randomizeNum(1, 5);
     if (eventRoll == 1) {
-        addDungeonLog("You explored and found nothing.");
+    addDungeonLog(t('explored-found-nothing'));
     } else if (eventRoll == 2) {
-        addDungeonLog("You found an empty chest.");
+    addDungeonLog(t('found-empty-chest'));
     } else if (eventRoll == 3) {
-        addDungeonLog("You found a monster corpse.");
+    addDungeonLog(t('found-monster-corpse'));
     } else if (eventRoll == 4) {
-        addDungeonLog("You found a corpse.");
+    addDungeonLog(t('found-corpse'));
     } else if (eventRoll == 5) {
-        addDungeonLog("There is nothing in this area.");
+    addDungeonLog(t('nothing-here'));
     }
 }
 
@@ -552,7 +552,7 @@ const statBlessing = () => {
             player.bonusStats.dodge += value;
             break;
     }
-    addDungeonLog(`You gained ${value}% bonus ${buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()} from the blessing. (Blessing Lv.${player.blessing} > Blessing Lv.${player.blessing + 1})`);
+    addDungeonLog(t('blessing-gain', { value: value, stat: buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase(), old: player.blessing, new: player.blessing + 1 }));
     blessingUp();
     playerLoadStats();
 }
@@ -561,7 +561,7 @@ const statBlessing = () => {
 const cursedTotem = (curseLvl) => {
     sfxBuff.play();
     dungeon.settings.enemyScaling += 0.1;
-    addDungeonLog(`The monsters in the dungeon became stronger and the loot quality improved. (Curse Lv.${curseLvl} > Curse Lv.${curseLvl + 1})`);
+    addDungeonLog(t('curse-powered', { old: curseLvl, new: curseLvl + 1 }));
 }
 
 // Shrine healing offering
@@ -571,18 +571,18 @@ const shrineHealing = () => {
     
     if (actualHeal > 0) {
         player.stats.hp += actualHeal;
-        addDungeonLog(`Divine light heals <span class="Epic">${actualHeal} HP</span>.`);
+    addDungeonLog(t('divine-light-heals', { hp: actualHeal }));
     }
     let buffRoll = randomizeNum(1, 3);
     if (buffRoll == 1) {
         applyFloorBuff("atkSpd", 2);
-        addDungeonLog("Reflexes sharpen! (+2% ATK.SPD this floor)");
+    addDungeonLog(t('reflexes-sharpen'));
     } else if (buffRoll == 2) {
         applyFloorBuff("atk", 5);
-        addDungeonLog("Weapons glow! (+5% ATK this floor)");
+    addDungeonLog(t('weapons-glow'));
     } else {
         applyFloorBuff("def", 3);
-        addDungeonLog("Armor fortifies! (+3% DEF this floor)");
+    addDungeonLog(t('armor-fortifies'));
     }
     
     playerLoadStats();
@@ -598,7 +598,7 @@ const ignoreEvent = () => {
     }
     dungeon.status.event = false;
     currentEvent = null;
-    addDungeonLog("You ignored it and decided to move on.");
+    addDungeonLog(t('ignored-move-on'));
 }
 
 // Increase room or floor accordingly
@@ -651,7 +651,7 @@ const clearFloorBuffs = () => {
         let hadBuffs = dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0;
         
         if (hadBuffs) {
-            addDungeonLog("<span class='Common'>Shrine blessings fade on the new floor.</span>");
+            addDungeonLog(t('shrine-blessings-fade'));
         }
         
         dungeon.floorBuffs.atk = 0;
@@ -762,17 +762,17 @@ const generateRestingBonus = () => {
         case "focus":
             dungeon.resting.restingBonusValue = 10;
             applyFloorBuff("atkSpd", 10);
-            addDungeonLog(`<span style="color: #FFD700;">🧠 You feel mentally focused! (+10% ATK.SPD until next floor)</span>`);
+            addDungeonLog(t('resting-bonus-focus'));
             break;
         case "vitality":
             dungeon.resting.restingBonusValue = 15;
             applyFloorBuff("atk", 15);
-            addDungeonLog(`<span style="color: #FF5722;">💪 You feel physically energized! (+15% ATK until next floor)</span>`);
+            addDungeonLog(t('resting-bonus-vitality'));
             break;
         case "serenity":
             dungeon.resting.restingBonusValue = 12;
             applyFloorBuff("def", 12);
-            addDungeonLog(`<span style="color: #2196F3;">🛡️ You feel inner peace! (+12% DEF until next floor)</span>`);
+            addDungeonLog(t('resting-bonus-serenity'));
             break;
     }
 }

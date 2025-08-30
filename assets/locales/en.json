@@ -156,4 +156,6 @@
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 You feel mentally focused! (+10% ATK.SPD until next floor)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 You feel physically energized! (+15% ATK until next floor)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ You feel inner peace! (+12% DEF until next floor)</span>"
+  ,"pray": "Pray"
+  ,"guardian-blocking-way": "Floor Guardian {enemy} is blocking your way."
 }

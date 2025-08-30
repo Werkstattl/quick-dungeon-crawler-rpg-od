@@ -156,4 +156,6 @@
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 精神が集中した！ (次の階までATK.SPD+10%)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 体が活力に満ちた！ (次の階までATK+15%)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ 心が安らいだ！ (次の階までDEF+12%)</span>"
+  ,"pray": "祈る"
+  ,"guardian-blocking-way": "階のガーディアン{enemy}が行く手を阻んでいる。"
 }
