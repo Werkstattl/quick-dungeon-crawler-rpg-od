@@ -1016,6 +1016,10 @@ header button i {
     animation: summon-wiggle 10s ease-in-out infinite;
     -webkit-animation: summon-wiggle 10s ease-in-out infinite;
 }
+#dungeonActivity.attention {
+    animation: summon-wiggle 10s ease-in-out infinite;
+    -webkit-animation: summon-wiggle 10s ease-in-out infinite;
+}
 .fa-heart {
     color: #e74c3c;
 }

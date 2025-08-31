@@ -62,6 +62,14 @@ dungeonActivity.addEventListener('click', function () {
     dungeonStartPause();
 });
 
+const updateExploreButtonAttention = () => {
+    if (player && player.stats.hp >= player.stats.hpMax && !dungeon.status.exploring) {
+        dungeonActivity.classList.add('attention');
+    } else {
+        dungeonActivity.classList.remove('attention');
+    }
+};
+
 // Sets up the initial dungeon
 const initialDungeonLoad = () => {
     if (localStorage.getItem("dungeonData") !== null) {
@@ -106,6 +114,7 @@ const initialDungeonLoad = () => {
     updateRestingDisplay();
     dungeonActivity.setAttribute('data-i18n', 'explore');
     dungeonActivity.textContent = t('explore');
+    updateExploreButtonAttention();
     dungeonTime.innerHTML = "00:00:00";
     dungeonTimer = setInterval(dungeonEvent, 1000);
     playTimer = setInterval(dungeonCounter, 1000);
@@ -137,6 +146,7 @@ const dungeonStartPause = () => {
         // Reset resting duration when starting exploration
         dungeon.resting.duration = 0;
     }
+    updateExploreButtonAttention();
 }
 
 // Counts the total time for the current run and total playtime

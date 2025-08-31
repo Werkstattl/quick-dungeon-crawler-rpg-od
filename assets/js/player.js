@@ -214,6 +214,9 @@ const playerLoadStats = () => {
     }
 
     document.querySelector("#bonus-stats").innerHTML = bonusStatsHTML;
+    if (typeof updateExploreButtonAttention === 'function') {
+        updateExploreButtonAttention();
+    }
 }
 
 // Opens inventory
