@@ -503,10 +503,10 @@ const showItemInfo = (item, icon, action, i) => {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>Sell <span class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</span>?</p>
+            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</span>` })}</p>
             <div class="button-container">
-                <button id="sell-confirm">Sell</button>
-                <button id="sell-cancel">Cancel</button>
+                <button id="sell-confirm" data-i18n="sell">${t('sell')}</button>
+                <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
             </div>
         </div>`;
 

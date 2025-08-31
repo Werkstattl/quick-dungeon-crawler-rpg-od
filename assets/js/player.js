@@ -249,19 +249,19 @@ const openInventory = () => {
         if (rarity == "All") {
             defaultModalElement.innerHTML = `
             <div class="content">
-                <p>Sell all of your equipment?</p>
+                <p data-i18n="sell-all-question">${t('sell-all-question')}</p>
                 <div class="button-container">
-                    <button id="sell-confirm">Sell All</button>
-                    <button id="sell-cancel">Cancel</button>
+                    <button id="sell-confirm" data-i18n="sell-all">${t('sell-all')}</button>
+                    <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
                 </div>
             </div>`;
         } else {
             defaultModalElement.innerHTML = `
             <div class="content">
-                <p>Sell all <span class="${rarity}">${rarityName(rarity)}</span> equipment?</p>
+                <p>${t('sell-all-rarity-question', { rarity: `<span class="${rarity}">${rarityName(rarity)}</span>` })}</p>
                 <div class="button-container">
-                    <button id="sell-confirm">Sell All</button>
-                    <button id="sell-cancel">Cancel</button>
+                    <button id="sell-confirm" data-i18n="sell-all">${t('sell-all')}</button>
+                    <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
                 </div>
             </div>`;
         }
