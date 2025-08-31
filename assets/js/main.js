@@ -719,6 +719,10 @@ const enterDungeon = () => {
     }
     initialDungeonLoad();
     playerLoadStats();
+    if (!localStorage.getItem('introHintShown')) {
+        addDungeonLog(t('summon-explore-hint'));
+        localStorage.setItem('introHintShown', true);
+    }
 }
 
 // Save all the data into local storage
