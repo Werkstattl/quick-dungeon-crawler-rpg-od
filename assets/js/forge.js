@@ -148,8 +148,8 @@ const loadForgeEquipment = () => {
                 <ul class="equipment-stats">
                     ${statsHtml}
                 </ul>
-                <p class="equipment-value">Value: ${nFormatter(equip.value)}</p>
-                ${source === 'equipped' ? '<p class="equipped-indicator">⚔️ Equipped</p>' : ''}
+                <p class="equipment-value">${t('value')}: ${nFormatter(equip.value)}</p>
+                ${source === 'equipped' ? `<p class="equipped-indicator">⚔️ ${t('equipped')}</p>` : ''}
             </div>
         `;
         // Only allow click if a slot is free
@@ -332,16 +332,25 @@ const updateForgeDisplay = () => {
 
     if (allSelected && (!sameTier || !sameRarity)) {
         confirmButton.disabled = true;
-        confirmButton.textContent = !sameTier ? 'Items Must Share Tier' : 'Items Must Share Rarity';
+        if (!sameTier) {
+            confirmButton.setAttribute('data-i18n', 'items-must-share-tier');
+            confirmButton.textContent = `${t('items-must-share-tier')}`;
+        } else {
+            confirmButton.setAttribute('data-i18n', 'items-must-share-rarity');
+            confirmButton.textContent = `${t('items-must-share-rarity')}`;
+        }
     } else if (allSelected && player.gold >= forgeCost) {
         confirmButton.disabled = false;
-        confirmButton.textContent = 'Forge Equipment';
+        confirmButton.setAttribute('data-i18n', 'forge-equipment');
+        confirmButton.textContent = `${t('forge-equipment')}`;
     } else if (allSelected) {
         confirmButton.disabled = true;
-        confirmButton.textContent = 'Not Enough Gold';
+        confirmButton.setAttribute('data-i18n', 'not-enough-gold');
+        confirmButton.textContent = `${t('not-enough-gold')}`;
     } else {
         confirmButton.disabled = true;
-        confirmButton.textContent = 'Select 3 Items';
+        confirmButton.setAttribute('data-i18n', 'select-3-items');
+        confirmButton.textContent = `${t('select-3-items')}`;
     }
     
     // Confirm button for unlocked forge
@@ -447,7 +456,7 @@ const displayForgeResult = () => {
             <h4 class="${forgeResult.rarity}">
                 ${forgeResult.icon}${rarityName(forgeResult.rarity, forgeResult.category)} ${equipmentName(forgeResult.category)}
             </h4>
-            <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} Tier ${forgeResult.tier}</h5>
+            <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} ${t('tier')} ${forgeResult.tier}</h5>
             <ul style="display:none">
                 ${forgeResult.stats.map(stat => {
                     const statName = Object.keys(stat)[0];
@@ -459,7 +468,7 @@ const displayForgeResult = () => {
                     }
                 }).join('')}
             </ul>
-            <p class="forged-indicator">⚒️ Forged Equipment</p>
+            <p class="forged-indicator">⚒️ ${t('forged-equipment')}</p>
         </div>
     `;
     
