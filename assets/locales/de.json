@@ -161,6 +161,8 @@
   "flee-failure": "Du konntest nicht entkommen!",
   "chest-empty": "Die Truhe ist leer.",
   "gold-found": "Du hast <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} gefunden.",
+  "enemy-dropped-item": "{enemy} ließ {item} fallen.",
+  "you-got-item": "Du hast {item} erhalten.",
   "explored-found-nothing": "Du hast erkundet und nichts gefunden.",
   "found-empty-chest": "Du hast eine leere Truhe gefunden.",
   "found-monster-corpse": "Du hast eine Monsterleiche gefunden.",

@@ -161,6 +161,8 @@
   "flee-failure": "逃走に失敗した！",
   "chest-empty": "宝箱は空だった。",
   "gold-found": "<i class='fas fa-coins' style='color: #FFD700;'></i>{gold}を見つけた。",
+  "enemy-dropped-item": "{enemy}が{item}を落とした。",
+  "you-got-item": "あなたは{item}を手に入れた。",
   "explored-found-nothing": "探索したが何も見つからなかった。",
   "found-empty-chest": "空の宝箱を見つけた。",
   "found-monster-corpse": "モンスターの死体を見つけた。",

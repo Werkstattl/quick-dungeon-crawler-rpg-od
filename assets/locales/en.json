@@ -161,6 +161,8 @@
   "flee-failure": "You failed to escape!",
   "chest-empty": "The chest is empty.",
   "gold-found": "You found <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",
+  "enemy-dropped-item": "{enemy} dropped {item}.",
+  "you-got-item": "You got {item}.",
   "explored-found-nothing": "You explored and found nothing.",
   "found-empty-chest": "You found an empty chest.",
   "found-monster-corpse": "You found a monster corpse.",

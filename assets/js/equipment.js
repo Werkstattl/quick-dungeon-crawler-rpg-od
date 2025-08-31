@@ -779,13 +779,14 @@ const createEquipmentPrint = (condition) => {
     }).join('')}
             </ul>
         </div>`;
+    const itemLabel = `<span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>`;
     if (condition == "combat") {
-        addCombatLog(`
-        ${enemy.name} dropped <span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        const msg = typeof t === 'function' ? t('enemy-dropped-item', { enemy: enemy.name, item: itemLabel }) : `${enemy.name} dropped ${itemLabel}.`;
+        addCombatLog(`${msg}<br>${panel}`);
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {
-        addDungeonLog(`
-        You got <span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        const msg = typeof t === 'function' ? t('you-got-item', { item: itemLabel }) : `You got ${itemLabel}.`;
+        addDungeonLog(`${msg}<br>${panel}`);
         checkInventoryLimit(true);
     }
 }
