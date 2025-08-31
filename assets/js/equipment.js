@@ -386,11 +386,31 @@ const equipmentName = (category) => {
     return category;
 };
 
-const rarityName = (rarity) => {
+const equipmentGender = (category) => {
+    const key = category.toLowerCase().replace(/\s+/g, '-');
+    if (typeof t === 'function') {
+        const gender = t(`equipment-genders.${key}`);
+        return gender === `equipment-genders.${key}` ? null : gender;
+    }
+    return null;
+};
+
+const rarityName = (rarity, category) => {
     if (typeof t === 'function') {
         const key = rarity.toLowerCase();
-        const translated = t(key);
-        return translated === key ? rarity : translated;
+        let translated = t(key);
+        if (translated !== key) {
+            if (typeof currentLanguage !== 'undefined' && currentLanguage === 'de' && category) {
+                const adjectival = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+                if (adjectival.includes(key)) {
+                    const gender = equipmentGender(category);
+                    if (gender === 'm') translated += 'er';
+                    else if (gender === 'f') translated += 'e';
+                    else if (gender === 'n') translated += 'es';
+                }
+            }
+            return translated;
+        }
     }
     return rarity;
 };
@@ -443,7 +463,7 @@ const showItemInfo = (item, icon, action, i) => {
     const actionLabel = t(action);
     itemInfo.innerHTML = `
             <div class="content">
-                <h3 class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</h3>
+                <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
                 <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
@@ -503,7 +523,7 @@ const showItemInfo = (item, icon, action, i) => {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</span>` })}</p>
+            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>` })}</p>
             <div class="button-container">
                 <button id="sell-confirm" data-i18n="sell">${t('sell')}</button>
                 <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
@@ -610,7 +630,7 @@ const showInventory = () => {
         let itemDiv = document.createElement('div');
         let icon = equipmentIcon(item.baseCategory || item.category);
         itemDiv.className = "items";
-        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</p>`;
+        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</p>`;
         itemDiv.addEventListener('click', function () {
             showItemInfo(item, icon, 'equip', i);
         });
@@ -746,7 +766,7 @@ const createEquipmentPrint = (condition) => {
     receiveEquipment(item);
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
-                <h4 class="${item.rarity}"><b>${item.icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</b></h4>
+                <h4 class="${item.rarity}"><b>${item.icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</b></h4>
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
@@ -761,11 +781,11 @@ const createEquipmentPrint = (condition) => {
         </div>`;
     if (condition == "combat") {
         addCombatLog(`
-        ${enemy.name} dropped <span class="${item.rarity}">${rarityName(item.rarity)} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        ${enemy.name} dropped <span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>.<br>${panel}`);
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {
         addDungeonLog(`
-        You got <span class="${item.rarity}">${rarityName(item.rarity)} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        You got <span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>.<br>${panel}`);
         checkInventoryLimit(true);
     }
 }

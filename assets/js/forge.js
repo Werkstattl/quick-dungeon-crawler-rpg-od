@@ -445,7 +445,7 @@ const displayForgeResult = () => {
     resultItem.innerHTML = `
         <div class="forged-equipment ${forgeResult.rarity}">
             <h4 class="${forgeResult.rarity}">
-                ${forgeResult.icon}${rarityName(forgeResult.rarity)} ${equipmentName(forgeResult.category)}
+                ${forgeResult.icon}${rarityName(forgeResult.rarity, forgeResult.category)} ${equipmentName(forgeResult.category)}
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} Tier ${forgeResult.tier}</h5>
             <ul style="display:none">

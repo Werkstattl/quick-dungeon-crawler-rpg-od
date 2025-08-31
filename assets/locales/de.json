@@ -218,6 +218,23 @@
     "horned-helm": "Hornhelm"
   }
 
+  ,"equipment-genders": {
+    "sword": "n",
+    "axe": "f",
+    "hammer": "m",
+    "dagger": "m",
+    "flail": "m",
+    "scythe": "f",
+    "plate": "f",
+    "chain": "f",
+    "leather": "n",
+    "tower": "m",
+    "kite": "m",
+    "buckler": "m",
+    "great-helm": "m",
+    "horned-helm": "m"
+  }
+
   ,"level-up-option": {
     "hp": { "title": "HP UP", "desc": "Erhöhe Bonus-HP um {value}%." },
     "atk": { "title": "ATK UP", "desc": "Erhöhe Bonus-ATK um {value}%." },
