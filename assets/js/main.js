@@ -207,8 +207,8 @@ window.addEventListener("DOMContentLoaded", async function () {
         <div class="content">
             <p>Unequip all your items?</p>
             <div class="button-container">
-                <button id="unequip-confirm">Unequip</button>
-                <button id="unequip-cancel">Cancel</button>
+                <button id="unequip-confirm">${t('unequip')}</button>
+                <button id="unequip-cancel">${t('close')}</button>
             </div>
         </div>`;
         let confirm = document.querySelector('#unequip-confirm');

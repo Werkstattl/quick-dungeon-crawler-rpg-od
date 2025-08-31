@@ -411,7 +411,7 @@ const equipmentIcon = (equipment) => {
 }
 
 // Show full detail of the item
-const showItemInfo = (item, icon, type, i) => {
+const showItemInfo = (item, icon, action, i) => {
     sfxOpen.play();
 
     dungeon.status.exploring = false;
@@ -423,6 +423,7 @@ const showItemInfo = (item, icon, type, i) => {
     }
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
+    const actionLabel = t(action);
     itemInfo.innerHTML = `
             <div class="content">
                 <h3 class="${item.rarity}">${icon}${item.rarity} ${item.category}</h3>
@@ -438,16 +439,16 @@ const showItemInfo = (item, icon, type, i) => {
     }).join('')}
                 </ul>
                 <div class="button-container">
-                    <button id="un-equip">${type}</button>
+                    <button id="un-equip">${actionLabel}</button>
                     <button id="sell-equip"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
-                    <button id="close-item-info">Close</button>
+                    <button id="close-item-info">${t('close')}</button>
                 </div>
             </div>`;
 
     // Equip/Unequip button for the item
     let unEquip = document.querySelector("#un-equip");
     unEquip.onclick = function () {
-        if (type == "Equip") {
+        if (action === "equip") {
             // Remove the item from the inventory and add it to the equipment
             if (player.equipped.length >= 6) {
                 sfxDeny.play();
@@ -463,7 +464,7 @@ const showItemInfo = (item, icon, type, i) => {
                 playerLoadStats();
                 continueExploring();
             }
-        } else if (type == "Unequip") {
+        } else if (action === "unequip") {
             sfxUnequip.play();
 
             // Remove the item from the equipment and add it to the inventory
@@ -498,10 +499,10 @@ const showItemInfo = (item, icon, type, i) => {
             sfxSell.play();
 
             // Sell the equipment
-            if (type == "Equip") {
+            if (action === "equip") {
                 player.gold += item.value;
                 player.inventory.equipment.splice(i, 1);
-            } else if (type == "Unequip") {
+            } else if (action === "unequip") {
                 player.gold += item.value;
                 player.equipped.splice(i, 1);
             }
@@ -594,8 +595,7 @@ const showInventory = () => {
         itemDiv.className = "items";
         itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${item.rarity} ${item.category}</p>`;
         itemDiv.addEventListener('click', function () {
-            let type = "Equip";
-            showItemInfo(item, icon, type, i);
+            showItemInfo(item, icon, 'equip', i);
         });
 
         // Add the itemDiv to the inventory container
@@ -623,8 +623,7 @@ const showEquipment = () => {
         equipDiv.className = "items";
         equipDiv.innerHTML = `<button class="${item.rarity}">${icon}</button>`;
         equipDiv.addEventListener('click', function () {
-            let type = "Unequip";
-            showItemInfo(item, icon, type, i);
+            showItemInfo(item, icon, 'unequip', i);
         });
 
         // Add the equipDiv to the inventory container
