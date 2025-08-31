@@ -1016,7 +1016,7 @@ header button i {
     animation: summon-wiggle 10s ease-in-out infinite;
     -webkit-animation: summon-wiggle 10s ease-in-out infinite;
 }
-#dungeonActivity.attention {
+#dungeonActivity.attention, #choice1 {
     animation: summon-wiggle 10s ease-in-out infinite;
     -webkit-animation: summon-wiggle 10s ease-in-out infinite;
 }
