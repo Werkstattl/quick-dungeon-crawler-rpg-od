@@ -197,6 +197,7 @@ function updateCompanionUI() {
         companionBonus.innerHTML = activeCompanion.evolutionBonus ? `<h4>Bonus</h4> <i class="ra ra-sword"></i>+${activeCompanion.evolutionBonus}%` : '';
         companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
         summonBtn.textContent = t('change');
+        summonBtn.classList.remove('attention');
     } else {
         companionName.textContent = t('none');
         companionName.className = "";
@@ -204,6 +205,7 @@ function updateCompanionUI() {
         companionBonus.textContent = '';
         companionAtkSpd.textContent = "0";
         summonBtn.textContent = t('summon');
+        summonBtn.classList.add('attention');
     }
     
     summonBtn.classList.remove('hidden');

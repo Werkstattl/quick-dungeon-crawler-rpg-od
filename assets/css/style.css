@@ -1012,6 +1012,10 @@ header button i {
 #summon-companion {
     margin-top: 5px;
 }
+#summon-companion.attention {
+    animation: summon-wiggle 10s ease-in-out infinite;
+    -webkit-animation: summon-wiggle 10s ease-in-out infinite;
+}
 .fa-heart {
     color: #e74c3c;
 }
@@ -1036,6 +1040,23 @@ header button i {
 @keyframes heart-pulse {
     0% { transform: scale(0.9); }
     100% { transform: scale(1); }
+}
+@keyframes summon-wiggle {
+    0%, 95%, 100% {
+        transform: rotate(0deg);
+    }
+    96% {
+        transform: rotate(-5deg);
+    }
+    97% {
+        transform: rotate(5deg);
+    }
+    98% {
+        transform: rotate(-3deg);
+    }
+    99% {
+        transform: rotate(3deg);
+    }
 }
 .ra-sword {
     color: #c0392b;
