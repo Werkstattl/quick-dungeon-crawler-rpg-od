@@ -386,6 +386,15 @@ const equipmentName = (category) => {
     return category;
 };
 
+const rarityName = (rarity) => {
+    if (typeof t === 'function') {
+        const key = rarity.toLowerCase();
+        const translated = t(key);
+        return translated === key ? rarity : translated;
+    }
+    return rarity;
+};
+
 const equipmentIcon = (equipment) => {
     if (equipment == "Sword") {
         return '<i class="ra ra-relic-blade"></i>';
@@ -434,7 +443,7 @@ const showItemInfo = (item, icon, action, i) => {
     const actionLabel = t(action);
     itemInfo.innerHTML = `
             <div class="content">
-                <h3 class="${item.rarity}">${icon}${item.rarity} ${equipmentName(item.category)}</h3>
+                <h3 class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</h3>
                 <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
@@ -494,7 +503,7 @@ const showItemInfo = (item, icon, action, i) => {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>Sell <span class="${item.rarity}">${icon}${item.rarity} ${equipmentName(item.category)}</span>?</p>
+            <p>Sell <span class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</span>?</p>
             <div class="button-container">
                 <button id="sell-confirm">Sell</button>
                 <button id="sell-cancel">Cancel</button>
@@ -601,7 +610,7 @@ const showInventory = () => {
         let itemDiv = document.createElement('div');
         let icon = equipmentIcon(item.baseCategory || item.category);
         itemDiv.className = "items";
-        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${item.rarity} ${equipmentName(item.category)}</p>`;
+        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</p>`;
         itemDiv.addEventListener('click', function () {
             showItemInfo(item, icon, 'equip', i);
         });
@@ -737,7 +746,7 @@ const createEquipmentPrint = (condition) => {
     receiveEquipment(item);
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
-                <h4 class="${item.rarity}"><b>${item.icon}${item.rarity} ${equipmentName(item.category)}</b></h4>
+                <h4 class="${item.rarity}"><b>${item.icon}${rarityName(item.rarity)} ${equipmentName(item.category)}</b></h4>
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
@@ -752,11 +761,11 @@ const createEquipmentPrint = (condition) => {
         </div>`;
     if (condition == "combat") {
         addCombatLog(`
-        ${enemy.name} dropped <span class="${item.rarity}">${item.rarity} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        ${enemy.name} dropped <span class="${item.rarity}">${rarityName(item.rarity)} ${equipmentName(item.category)}</span>.<br>${panel}`);
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {
         addDungeonLog(`
-        You got <span class="${item.rarity}">${item.rarity} ${equipmentName(item.category)}</span>.<br>${panel}`);
+        You got <span class="${item.rarity}">${rarityName(item.rarity)} ${equipmentName(item.category)}</span>.<br>${panel}`);
         checkInventoryLimit(true);
     }
 }

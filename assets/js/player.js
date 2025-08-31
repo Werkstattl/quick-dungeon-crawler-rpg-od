@@ -258,7 +258,7 @@ const openInventory = () => {
         } else {
             defaultModalElement.innerHTML = `
             <div class="content">
-                <p>Sell all <span class="${rarity}">${rarity}</span> equipment?</p>
+                <p>Sell all <span class="${rarity}">${rarityName(rarity)}</span> equipment?</p>
                 <div class="button-container">
                     <button id="sell-confirm">Sell All</button>
                     <button id="sell-cancel">Cancel</button>
