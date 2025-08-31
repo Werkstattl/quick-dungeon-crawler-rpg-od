@@ -305,12 +305,9 @@ const updateForgeDisplay = () => {
     if (!forgeUnlocked) {
         const isAndroid = /Android/i.test(navigator.userAgent);
         confirmButton.disabled = false;
-        confirmButton.textContent = 'Unlock The Forge (Premium)';
-        if (!isCordova()) {
-            if (isAndroid) {
-                confirmButton.textContent = 'Get on Google Play (Premium)';
-            }
-        }
+        const i18nKey = (!isCordova() && isAndroid) ? 'get-on-google-play-premium' : 'unlock-the-forge-premium';
+        confirmButton.setAttribute('data-i18n', i18nKey);
+        confirmButton.textContent = t(i18nKey);
         confirmButton.onclick = () => {
             if (isCordova()) {
                 buyForgeUnlock();
