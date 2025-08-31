@@ -73,6 +73,7 @@ async function setLanguage(lang) {
   document.documentElement.lang = loaded;
   localStorage.setItem('lang', loaded);
   applyTranslations(document);
+  if (typeof updateCompanionUI === 'function') updateCompanionUI();
 }
 
 (function initLanguage() {
