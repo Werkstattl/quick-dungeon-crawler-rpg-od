@@ -437,6 +437,7 @@ function openMenu(isTitle = false) {
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
                     <option value="ja">日本語</option>
+                    <option value="es">Español</option>
                 </select>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
