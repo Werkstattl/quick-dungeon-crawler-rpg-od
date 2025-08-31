@@ -688,6 +688,9 @@ header button i {
 
 #bonus-stats {
     width: 60%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 #companion-panel {
     width: 90%;
