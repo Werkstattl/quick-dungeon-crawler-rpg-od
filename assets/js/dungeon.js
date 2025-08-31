@@ -287,6 +287,10 @@ const dungeonEvent = () => {
                         <button id="choice2" data-i18n="flee">${t('flee')}</button>
                     </div>`;
                 generateRandomEnemy();
+                // Ensure name reflects current language
+                // if (typeof getEnemyTranslatedName === 'function') {
+                    enemy.name = getEnemyTranslatedName(enemy.id);
+                // }
                 addDungeonLog(t('encountered-enemy', { enemy: enemy.name }), choices);
                 player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {

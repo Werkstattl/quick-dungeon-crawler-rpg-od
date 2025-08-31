@@ -553,6 +553,10 @@ const showCombatInfo = () => {
         clearTimeout(specialAbilityTimeout);
         specialAbilityCooldown = false;
     }
+    // Re-evaluate enemy name in case language changed after spawn
+    // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
+        enemy.name = getEnemyTranslatedName(enemy.id);
+    // }
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">

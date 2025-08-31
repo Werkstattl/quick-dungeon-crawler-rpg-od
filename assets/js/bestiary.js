@@ -139,7 +139,12 @@ function openBestiaryModal() {
       const li = document.createElement('li');
 
       // Name (use textContent to avoid injection and layout thrash)
-      const name = enemyIdMap[id] || id;
+      // let name = enemyIdMap[id] || id;
+      let name = getEnemyTranslatedName(id)
+      // if (typeof getEnemyTranslatedName === 'function') {
+        // const translated = getEnemyTranslatedName(id);
+      //   if (translated) name = translated;
+      // }
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
 
