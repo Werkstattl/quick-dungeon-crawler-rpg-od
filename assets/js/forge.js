@@ -224,7 +224,7 @@ const updateForgeDisplay = () => {
             sfxUnequip.play();
         };
     } else {
-        slot1.innerHTML = '<p>Select equipment</p>';
+        slot1.innerHTML = `<p data-i18n="select-equipment">${t('select-equipment')}</p>`;
         slot1.className = 'forge-slot';
         slot1.onclick = null;
     }
@@ -252,7 +252,7 @@ const updateForgeDisplay = () => {
             sfxUnequip.play();
         };
     } else {
-        slot2.innerHTML = '<p>Select equipment</p>';
+        slot2.innerHTML = `<p data-i18n="select-equipment">${t('select-equipment')}</p>`;
         slot2.className = 'forge-slot';
         slot2.onclick = null;
     }
@@ -281,7 +281,7 @@ const updateForgeDisplay = () => {
                 sfxUnequip.play();
             };
         } else {
-            slot3.innerHTML = '<p>Select equipment</p>';
+            slot3.innerHTML = `<p data-i18n="select-equipment">${t('select-equipment')}</p>`;
             slot3.className = 'forge-slot';
             slot3.onclick = null;
         }
