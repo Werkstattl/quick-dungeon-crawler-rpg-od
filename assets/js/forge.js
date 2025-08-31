@@ -143,7 +143,7 @@ const loadForgeEquipment = () => {
         equipDiv.innerHTML = `
             <div class="equipment-icon">${equipmentIcon(equip.category)}</div>
             <div class="equipment-info">
-                <p class="${equip.rarity}">${equip.category}</p>
+                <p class="${equip.rarity}">${equipmentName(equip.category)}</p>
                 <p>Lv.${equip.lvl} T${equip.tier}</p>
                 <ul class="equipment-stats">
                     ${statsHtml}
@@ -208,7 +208,7 @@ const updateForgeDisplay = () => {
         slot1.innerHTML = `
             <div class="selected-equipment ${equip.rarity}">
                 ${equipmentIcon(equip.category)}
-                <p>${equip.category}</p>
+                <p>${equipmentName(equip.category)}</p>
                 <p>Lv.${equip.lvl} T${equip.tier}</p>
             </div>
         `;
@@ -236,7 +236,7 @@ const updateForgeDisplay = () => {
         slot2.innerHTML = `
             <div class="selected-equipment ${equip.rarity}">
                 ${equipmentIcon(equip.category)}
-                <p>${equip.category}</p>
+                <p>${equipmentName(equip.category)}</p>
                 <p>Lv.${equip.lvl} T${equip.tier}</p>
             </div>
         `;
@@ -265,7 +265,7 @@ const updateForgeDisplay = () => {
             slot3.innerHTML = `
             <div class="selected-equipment ${equip3.rarity}">
                 ${equipmentIcon(equip3.category)}
-                <p>${equip3.category}</p>
+                <p>${equipmentName(equip3.category)}</p>
                 <p>Lv.${equip3.lvl} T${equip3.tier}</p>
             </div>
             `;
@@ -445,7 +445,7 @@ const displayForgeResult = () => {
     resultItem.innerHTML = `
         <div class="forged-equipment ${forgeResult.rarity}">
             <h4 class="${forgeResult.rarity}">
-                ${forgeResult.icon}${forgeResult.rarity} ${forgeResult.category}
+                ${forgeResult.icon}${forgeResult.rarity} ${equipmentName(forgeResult.category)}
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} Tier ${forgeResult.tier}</h5>
             <ul style="display:none">

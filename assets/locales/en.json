@@ -195,6 +195,23 @@
   ,"remaining": "Remaining: {count}"
   ,"reroll-button": "Reroll {remaining}/{total}"
 
+  ,"equipment-names": {
+    "sword": "Sword",
+    "axe": "Axe",
+    "hammer": "Hammer",
+    "dagger": "Dagger",
+    "flail": "Flail",
+    "scythe": "Scythe",
+    "plate": "Plate",
+    "chain": "Chain",
+    "leather": "Leather",
+    "tower": "Tower",
+    "kite": "Kite",
+    "buckler": "Buckler",
+    "great-helm": "Great Helm",
+    "horned-helm": "Horned Helm"
+  }
+
   ,"level-up-option": {
     "hp": { "title": "HP UP", "desc": "Increase bonus HP by {value}%." },
     "atk": { "title": "ATK UP", "desc": "Increase bonus ATK by {value}%." },

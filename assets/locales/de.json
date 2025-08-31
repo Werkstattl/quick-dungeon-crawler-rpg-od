@@ -195,6 +195,23 @@
   ,"remaining": "Verbleibend: {count}"
   ,"reroll-button": "Neu würfeln {remaining}/{total}"
 
+  ,"equipment-names": {
+    "sword": "Schwert",
+    "axe": "Axt",
+    "hammer": "Hammer",
+    "dagger": "Dolch",
+    "flail": "Flegel",
+    "scythe": "Sense",
+    "plate": "Platte",
+    "chain": "Kette",
+    "leather": "Leder",
+    "tower": "Turm",
+    "kite": "Drachen",
+    "buckler": "Buckler",
+    "great-helm": "Großhelm",
+    "horned-helm": "Hornhelm"
+  }
+
   ,"level-up-option": {
     "hp": { "title": "HP UP", "desc": "Erhöhe Bonus-HP um {value}%." },
     "atk": { "title": "ATK UP", "desc": "Erhöhe Bonus-ATK um {value}%." },

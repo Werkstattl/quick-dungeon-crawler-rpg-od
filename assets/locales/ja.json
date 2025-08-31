@@ -195,6 +195,23 @@
   ,"remaining": "残り: {count}"
   ,"reroll-button": "リロール {remaining}/{total}"
 
+  ,"equipment-names": {
+    "sword": "剣",
+    "axe": "斧",
+    "hammer": "ハンマー",
+    "dagger": "短剣",
+    "flail": "フレイル",
+    "scythe": "鎌",
+    "plate": "プレート",
+    "chain": "チェイン",
+    "leather": "レザー",
+    "tower": "タワー",
+    "kite": "カイト",
+    "buckler": "バックラー",
+    "great-helm": "グレートヘルム",
+    "horned-helm": "ホーンヘルム"
+  }
+
   ,"level-up-option": {
     "hp": { "title": "HP UP", "desc": "ボーナスHPが{value}%増加する。" },
     "atk": { "title": "ATK UP", "desc": "ボーナスATKが{value}%増加する。" },
