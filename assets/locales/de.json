@@ -37,6 +37,7 @@
   "sell": "Verkaufen",
   "equip": "Ausrüsten",
   "unequip": "Ablegen",
+  "unequip-all-items": "Alle deine Gegenstände ablegen?",
   "close": "Schließen",
   "common": "Gewöhnlich",
   "uncommon": "Ungewöhnlich",

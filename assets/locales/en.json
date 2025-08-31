@@ -37,6 +37,7 @@
   "sell": "Sell",
   "equip": "Equip",
   "unequip": "Unequip",
+  "unequip-all-items": "Unequip all your items?",
   "close": "Close",
   "common": "Common",
   "uncommon": "Uncommon",

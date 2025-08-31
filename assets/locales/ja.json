@@ -37,6 +37,7 @@
   "sell": "売却",
   "equip": "装備する",
   "unequip": "装備を外す",
+  "unequip-all-items": "すべてのアイテムを外しますか？",
   "close": "閉じる",
   "common": "コモン",
   "uncommon": "アンコモン",

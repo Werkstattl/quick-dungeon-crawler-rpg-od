@@ -205,7 +205,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>Unequip all your items?</p>
+            <p>${t('unequip-all-items')}</p>
             <div class="button-container">
                 <button id="unequip-confirm">${t('unequip')}</button>
                 <button id="unequip-cancel">${t('close')}</button>
