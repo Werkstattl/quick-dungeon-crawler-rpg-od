@@ -65,7 +65,7 @@ const ratingSystem = {
             return false;
         }
         // Check if player has progressed far enough
-        if (dungeon.progress.floor < 20) {
+        if (dungeon.progress.floor < 15) {
             return false;
         }
         return true;
