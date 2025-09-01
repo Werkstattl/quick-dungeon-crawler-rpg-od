@@ -154,8 +154,12 @@ const createEquipment = (addToInventory = true) => {
             }
             equipmentValue += statValue * 20.83;
         } else if (statType === "critDmg") {
-            statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
-            equipmentValue += statValue * 8.33;
+            statValue = randomizeDecimal(cdAtkSpdScaling * 0.1, cdAtkSpdScaling * 0.2);
+            if (statValue > 25) {
+                statValue = 25 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 20.83;
         } else if (statType === "dodge") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 4) {
@@ -327,8 +331,12 @@ const rerollEquipmentStats = (equipment) => {
             }
             equipmentValue += statValue * 20.83;
         } else if (statType === "critDmg") {
-            statValue = randomizeDecimal(cdAtkSpdScaling * 0.5, cdAtkSpdScaling);
-            equipmentValue += statValue * 8.33;
+            statValue = randomizeDecimal(cdAtkSpdScaling * 0.1, cdAtkSpdScaling * 0.2);
+            if (statValue > 25) {
+                statValue = 25 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 20.83;
         } else if (statType === "dodge") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 4) {
