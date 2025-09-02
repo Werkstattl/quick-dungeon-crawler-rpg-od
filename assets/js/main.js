@@ -1036,7 +1036,7 @@ const allocationPopup = () => {
             <div class="row primary-panel pad">
                 <p id="skill-desc" data-i18n="remnant-razor-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
             </div>
-            <div class="row" id="forge-button-row" style="margin-top: 15px;display:none">
+            <div class="row" id="forge-button-row" style="margin-top: 15px">
                 <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></button>
             </div>
             <button id="allocate-confirm" data-i18n="confirm">Confirm</button>
@@ -1046,14 +1046,6 @@ const allocationPopup = () => {
     document.querySelector("#title-screen").style.filter = "brightness(50%)";
     loadContent();
     applyTranslations(defaultModalElement);
-
-    // Show forge button if player has any equipment or inventory items
-    if (player.inventory.equipment.length > 0 || player.equipped.length > 0) {
-        const forgeRow = document.querySelector("#forge-button-row");
-        if (forgeRow) {
-            forgeRow.style.display = "flex";
-        }
-    }
 
     // Stat Allocation
     const handleStatButtons = (e) => {
