@@ -455,6 +455,16 @@ const equipmentIcon = (equipment) => {
     }
 }
 
+// Close equipment info modal helper (used by click-away)
+function closeEquipmentInfo() {
+    const itemInfo = document.querySelector('#equipmentInfo');
+    const dimContainer = document.querySelector('#inventory');
+    if (typeof sfxDecline !== 'undefined' && sfxDecline && typeof sfxDecline.play === 'function') sfxDecline.play();
+    if (itemInfo) itemInfo.style.display = 'none';
+    if (dimContainer) dimContainer.style.filter = 'brightness(100%)';
+    if (typeof continueExploring === 'function') continueExploring();
+}
+
 // Show full detail of the item
 const showItemInfo = (item, icon, action, i) => {
     sfxOpen.play();
