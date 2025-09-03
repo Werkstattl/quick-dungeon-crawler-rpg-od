@@ -15,6 +15,13 @@ const FORGE_PRODUCT_ID = 'forge_unlock_premium';
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
     forgeGoldElement = document.querySelector('#forge-player-gold');
+
+    // Add event listener to close modal when clicking outside
+    forgeModalElement.addEventListener('click', (event) => {
+        if (event.target === forgeModalElement) {
+            closeForgeModal();
+        }
+    });
 };
 
 function unlockForge() {
