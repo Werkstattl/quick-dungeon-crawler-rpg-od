@@ -439,17 +439,17 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size"><span data-i18n="font-size">Font Size</span> (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
+                <label id="logflow-label" for="logflow-select" data-i18n="log-flow">Log Flow</label>
+                <select id="logflow-select" ${!canChangeLogFlow ? 'disabled' : ''}>
+                    <option value="bottom" ${logFlow === 'bottom' ? 'selected' : ''} data-i18n="log-flow-bottom-to-top">Bottom to top (newest last)</option>
+                    <option value="top" ${logFlow === 'top' ? 'selected' : ''} data-i18n="log-flow-top-to-bottom">Top to bottom (newest first)</option>
+                </select>
                 <label id="language-label" for="language-select" data-i18n="language">Language</label>
                 <select id="language-select">
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
                     <option value="ja">日本語</option>
                     <option value="es">Español</option>
-                </select>
-                <label id="logflow-label" for="logflow-select">Log Flow</label>
-                <select id="logflow-select" ${!canChangeLogFlow ? 'disabled' : ''}>
-                    <option value="bottom" ${logFlow === 'bottom' ? 'selected' : ''}>Bottom to top (newest last)</option>
-                    <option value="top" ${logFlow === 'top' ? 'selected' : ''}>Top to bottom (newest first)</option>
                 </select>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
