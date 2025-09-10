@@ -682,8 +682,13 @@ const updateDungeonLog = (choices) => {
     let dungeonLog = document.querySelector("#dungeonLog");
     dungeonLog.innerHTML = "";
 
-    // Display the recent dungeon logs
-    for (let message of dungeon.backlog.slice(-DUNGEON_BACKLOG_LIMIT)) {
+    // Determine log flow direction (default: bottom)
+    const logFlow = (localStorage.getItem('logFlow') || 'bottom');
+    const recent = dungeon.backlog.slice(-DUNGEON_BACKLOG_LIMIT);
+    const messages = (logFlow === 'top') ? [...recent].reverse() : recent;
+
+    // Display the recent dungeon logs in the chosen order
+    for (let message of messages) {
         let logElement = document.createElement("p");
         logElement.innerHTML = message;
         dungeonLog.appendChild(logElement);
@@ -693,10 +698,24 @@ const updateDungeonLog = (choices) => {
     if (typeof choices !== 'undefined') {
         let eventChoices = document.createElement("div");
         eventChoices.innerHTML = choices;
-        dungeonLog.appendChild(eventChoices);
+        if (logFlow === 'top') {
+            // Insert choices right after the newest log (which is the first child)
+            if (dungeonLog.firstChild) {
+                dungeonLog.insertBefore(eventChoices, dungeonLog.children[1] || null);
+            } else {
+                dungeonLog.appendChild(eventChoices);
+            }
+        } else {
+            dungeonLog.appendChild(eventChoices);
+        }
     }
 
-    dungeonLog.scrollTop = dungeonLog.scrollHeight;
+    // Adjust scroll position based on flow
+    if (logFlow === 'top') {
+        dungeonLog.scrollTop = 0;
+    } else {
+        dungeonLog.scrollTop = dungeonLog.scrollHeight;
+    }
 }
 
 // Add a log to the dungeon backlog

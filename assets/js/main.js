@@ -408,7 +408,7 @@ function openMenu(isTitle = false) {
         };
     }
 
-    // Opens the volume settings
+    // Opens the volume/settings modal
     volumeSettings.onclick = function () {
         sfxOpen.play();
 
@@ -416,6 +416,8 @@ function openMenu(isTitle = false) {
         let bgm = (volume.bgm * 100) * 2;
         let sfx = volume.sfx * 100;
         let fontScale = Math.round(fontSize.scale * 100);
+        // Log flow setting
+        let logFlow = (localStorage.getItem('logFlow') || 'bottom');
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
@@ -439,6 +441,11 @@ function openMenu(isTitle = false) {
                     <option value="ja">日本語</option>
                     <option value="es">Español</option>
                 </select>
+                <label id="logflow-label" for="logflow-select">Log Flow</label>
+                <select id="logflow-select">
+                    <option value="bottom" ${logFlow === 'bottom' ? 'selected' : ''}>Bottom to top (newest last)</option>
+                    <option value="top" ${logFlow === 'top' ? 'selected' : ''}>Top to bottom (newest first)</option>
+                </select>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations();
@@ -447,10 +454,14 @@ function openMenu(isTitle = false) {
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
         let languageSelect = document.querySelector('#language-select');
+        let logFlowSelect = document.querySelector('#logflow-select');
         let selectedLang = localStorage.getItem('lang') || 'en';
         languageSelect.value = selectedLang;
         languageSelect.onchange = function () {
             selectedLang = this.value;
+        };
+        logFlowSelect.onchange = function () {
+            logFlow = this.value;
         };
         let applyVol = document.querySelector('#apply-volume');
         let volumeTab = document.querySelector('#volume-tab');
@@ -500,6 +511,13 @@ function openMenu(isTitle = false) {
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
+            if (logFlow === 'top' || logFlow === 'bottom') {
+                localStorage.setItem('logFlow', logFlow);
+                if (typeof updateDungeonLog === 'function') {
+                    // Refresh the current log rendering to reflect flow setting
+                    try { updateDungeonLog(); } catch {}
+                }
+            }
             setLanguage(selectedLang);
         };
     };
