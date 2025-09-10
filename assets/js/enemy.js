@@ -321,7 +321,14 @@ const setEnemyStats = (type, condition) => {
         enemy.rewards.exp = 1000000 * randomizeDecimal(0.9, 1.1);
     }
     enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.3);
-    enemy.rewards.drop = randomizeNum(1, 3) == 1;
+    // Calculate equipment drop chance. Base 33%, increased by player's Luck (equipment only).
+    // Luck is additive multiplier on base chance and capped to avoid guaranteed drops.
+    const baseDropChance = 1 / 3; // ~33%
+    const playerLuck = (player && player.equippedStats && Number.isFinite(player.equippedStats.luck)) ? player.equippedStats.luck : 0;
+    let dropChance = baseDropChance * (1 + (playerLuck / 100));
+    // Cap maximum chance for balance
+    if (dropChance > 0.8) dropChance = 0.8;
+    enemy.rewards.drop = Math.random() < dropChance;
 
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;

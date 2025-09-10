@@ -79,11 +79,11 @@ const createEquipment = (addToInventory = true) => {
     }
 
     // Generate and append random stats to the stats array
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
-    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "luck"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "luck"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "luck"];
+    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge", "luck"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
@@ -159,11 +159,18 @@ const createEquipment = (addToInventory = true) => {
                 statValue = 25 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
-            equipmentValue += statValue * 20.83;
+            equipmentValue += statValue * 10.83;
         } else if (statType === "dodge") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 4) {
                 statValue = 4 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 33.33;
+        } else if (statType === "luck") {
+            statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
+            if (statValue > 8) {
+                statValue = 8 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
@@ -265,11 +272,11 @@ const rerollEquipmentStats = (equipment) => {
     }
 
     // Determine stat pools based on attribute and category
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
-    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "luck"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "luck"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "luck"];
+    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge", "luck"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
@@ -336,11 +343,18 @@ const rerollEquipmentStats = (equipment) => {
                 statValue = 25 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
-            equipmentValue += statValue * 20.83;
+            equipmentValue += statValue * 10.83;
         } else if (statType === "dodge") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 4) {
                 statValue = 4 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 20.83;
+        } else if (statType === "luck") {
+            statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
+            if (statValue > 8) {
+                statValue = 8 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
@@ -485,7 +499,7 @@ const showItemInfo = (item, icon, action, i) => {
                 <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
-        if (Object.keys(stat)[0] === "critRate" || Object.keys(stat)[0] === "critDmg" || Object.keys(stat)[0] === "atkSpd" || Object.keys(stat)[0] === "vamp" || Object.keys(stat)[0] === "dodge") {
+        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
             return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
         }
         else {
@@ -697,7 +711,8 @@ const applyEquipmentStats = () => {
         vamp: 0,
         critRate: 0,
         critDmg: 0,
-        dodge: 0
+        dodge: 0,
+        luck: 0
     };
 
     for (let i = 0; i < player.equipped.length; i++) {
@@ -788,7 +803,7 @@ const createEquipmentPrint = (condition) => {
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
-        if (Object.keys(stat)[0] === "critRate" || Object.keys(stat)[0] === "critDmg" || Object.keys(stat)[0] === "atkSpd" || Object.keys(stat)[0] === "vamp" || Object.keys(stat)[0] === "dodge") {
+        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
             return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
         }
         else {

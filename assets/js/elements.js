@@ -9,6 +9,7 @@ const playerVampElement = document.querySelector('#player-vamp');
 const playerCrateElement = document.querySelector('#player-crate');
 const playerCdmgElement = document.querySelector('#player-cdmg');
 const playerDodgeElement = document.querySelector('#player-dodge');
+const playerLuckElement = document.querySelector('#player-luck');
 const defaultModalElement = document.querySelector('#defaultModal');
 const confirmationModalElement = document.querySelector('#confirmationModal');
 const sellRarityElement = document.querySelector('#sell-rarity');

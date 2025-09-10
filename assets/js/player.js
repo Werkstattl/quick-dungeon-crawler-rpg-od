@@ -9,8 +9,15 @@ if (player) {
     if (player.stats && player.stats.dodge === undefined) {
         player.stats.dodge = 0;
     }
+    // Backfill Luck on old saves
+    if (player.stats && player.stats.luck === undefined) {
+        player.stats.luck = 0;
+    }
     if (player.equippedStats && player.equippedStats.dodge === undefined) {
         player.equippedStats.dodge = 0;
+    }
+    if (player.equippedStats && player.equippedStats.luck === undefined) {
+        player.equippedStats.luck = 0;
     }
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
@@ -180,6 +187,10 @@ const playerLoadStats = () => {
         playerDodgeElement.style.color = '#e30b5c';
     } else {
         playerDodgeElement.style.color = 'white';
+    }
+    if (typeof playerLuckElement !== 'undefined' && playerLuckElement) {
+        const luckVal = (player.stats && Number.isFinite(player.stats.luck)) ? player.stats.luck : 0;
+        playerLuckElement.innerHTML = (luckVal).toFixed(2).replace(rx, "$1") + "%";
     }
 
     // Player Bonus Stats

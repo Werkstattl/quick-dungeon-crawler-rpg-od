@@ -53,7 +53,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         vamp: null,
                         critRate: null,
                         critDmg: null,
-                        dodge: null
+                        dodge: null,
+                        luck: 0
                     },
                     baseStats: {
                         hp: 500,
@@ -76,6 +77,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                         critRate: 0,
                         critDmg: 0,
                         dodge: 0,
+                        luck: 0,
                         hpPct: 0,
                         atkPct: 0,
                         defPct: 0,
@@ -139,6 +141,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                             critRate: 0,
                             critDmg: 0,
                             dodge: 0,
+                            luck: 0,
                             hpPct: 0,
                             atkPct: 0,
                             defPct: 0,
@@ -826,6 +829,8 @@ const calculateStats = () => {
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
+    // Luck is only available via equipment
+    player.stats.luck = player.equippedStats.luck || 0;
     if (player.skills && player.skills.includes("Evasion Mastery")) {
         player.stats.dodge += 15;
     }
@@ -855,6 +860,8 @@ const progressReset = (fromDeath = false) => {
             vamp: 0,
             critRate: 0,
             critDmg: 0,
+            dodge: 0,
+            luck: 0,
             hpPct: 0,
             atkPct: 0,
             defPct: 0,
@@ -1339,12 +1346,20 @@ const objectValidation = () => {
         player.stats.dodge = 0;
         changed = true;
     }
+    if (player.stats && player.stats.luck === undefined) {
+        player.stats.luck = 0;
+        changed = true;
+    }
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
         changed = true;
     }
     if (player.equippedStats && player.equippedStats.dodge === undefined) {
         player.equippedStats.dodge = 0;
+        changed = true;
+    }
+    if (player.equippedStats && player.equippedStats.luck === undefined) {
+        player.equippedStats.luck = 0;
         changed = true;
     }
     if (enemy.stats && enemy.stats.dodge === undefined) {
