@@ -347,29 +347,51 @@ const addCombatLog = (message) => {
 // Displays every combat activity
 const updateCombatLog = () => {
     let combatLogBox = document.getElementById("combatLogBox");
+    if (!combatLogBox) return;
+
     combatLogBox.innerHTML = "";
 
-    for (let message of combatBacklog) {
+    // Determine log flow direction (default: bottom)
+    const logFlow = (localStorage.getItem('logFlow') || 'bottom');
+    const messages = (logFlow === 'top') ? [...combatBacklog].reverse() : combatBacklog;
+
+    for (let message of messages) {
         let logElement = document.createElement("p");
         logElement.innerHTML = message;
         combatLogBox.appendChild(logElement);
     }
 
+    // Append decision button according to flow preference
+    const appendDecisionPanel = (html) => {
+        let panel = document.createElement("div");
+        panel.className = "decision-panel";
+        panel.innerHTML = html;
+        if (logFlow === 'top') {
+            // Insert right after the newest log (first child)
+            if (combatLogBox.firstChild) {
+                combatLogBox.insertBefore(panel, combatLogBox.children[1] || null);
+            } else {
+                combatLogBox.appendChild(panel);
+            }
+        } else {
+            combatLogBox.appendChild(panel);
+        }
+    };
+
     if (enemyDead) {
-        let button = document.createElement("div");
-        button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton" data-i18n="claim">${t('claim')}</button>`;
-        combatLogBox.appendChild(button);
+        appendDecisionPanel(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
     }
 
     if (playerDead) {
-        let button = document.createElement("div");
-        button.className = "decision-panel";
-        button.innerHTML = `<button id="battleButton" data-i18n="start-new-run">${t('start-new-run')}</button>`;
-        combatLogBox.appendChild(button);
+        appendDecisionPanel(`<button id="battleButton" data-i18n="start-new-run">${t('start-new-run')}</button>`);
     }
 
-    combatLogBox.scrollTop = combatLogBox.scrollHeight;
+    // Adjust scroll to match flow
+    if (logFlow === 'top') {
+        combatLogBox.scrollTop = 0;
+    } else {
+        combatLogBox.scrollTop = combatLogBox.scrollHeight;
+    }
 }
 
 // Combat Timer
@@ -602,4 +624,3 @@ document.addEventListener("visibilitychange", () => {
         Howler.mute(false);
     }
 });
-
