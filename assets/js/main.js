@@ -418,6 +418,11 @@ function openMenu(isTitle = false) {
         let fontScale = Math.round(fontSize.scale * 100);
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
+        // Only allow changing logFlow while resting with no open choices
+        const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+        const dimTitle = document.querySelector('#title-screen');
+        const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
+        const canChangeLogFlow = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
@@ -442,7 +447,7 @@ function openMenu(isTitle = false) {
                     <option value="es">Español</option>
                 </select>
                 <label id="logflow-label" for="logflow-select">Log Flow</label>
-                <select id="logflow-select">
+                <select id="logflow-select" ${!canChangeLogFlow ? 'disabled' : ''}>
                     <option value="bottom" ${logFlow === 'bottom' ? 'selected' : ''}>Bottom to top (newest last)</option>
                     <option value="top" ${logFlow === 'top' ? 'selected' : ''}>Top to bottom (newest first)</option>
                 </select>
@@ -461,6 +466,16 @@ function openMenu(isTitle = false) {
             selectedLang = this.value;
         };
         logFlowSelect.onchange = function () {
+            // Guard: only allow change if resting and no choices are open
+            const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+            const dimTitle = document.querySelector('#title-screen');
+            const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
+            const canChange = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
+            if (!canChange) {
+                // Revert UI selection to the stored value
+                this.value = (localStorage.getItem('logFlow') || 'bottom');
+                return;
+            }
             logFlow = this.value;
         };
         let applyVol = document.querySelector('#apply-volume');
@@ -511,11 +526,18 @@ function openMenu(isTitle = false) {
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
-            if (logFlow === 'top' || logFlow === 'bottom') {
-                localStorage.setItem('logFlow', logFlow);
-                if (typeof updateDungeonLog === 'function') {
-                    // Refresh the current log rendering to reflect flow setting
-                    try { updateDungeonLog(); } catch {}
+            // Apply log flow if allowed and valid
+            if ((logFlow === 'top' || logFlow === 'bottom')) {
+                const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+                const dimTitle = document.querySelector('#title-screen');
+                const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
+                const canChange = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
+                if (canChange) {
+                    localStorage.setItem('logFlow', logFlow);
+                    if (typeof updateDungeonLog === 'function') {
+                        // Refresh the current log rendering to reflect flow setting
+                        try { updateDungeonLog(); } catch {}
+                    }
                 }
             }
             setLanguage(selectedLang);
