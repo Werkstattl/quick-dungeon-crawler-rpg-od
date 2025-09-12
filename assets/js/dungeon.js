@@ -362,7 +362,13 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
-                    autoDecline();
+                    // Auto-buy cursed totem if below target level
+                    const curseTarget = typeof autoCurseTotemsUntil === 'number' ? autoCurseTotemsUntil : 0;
+                    if (curseTarget > 0 && curseLvl < curseTarget && player.gold >= cost) {
+                        autoConfirm();
+                    } else {
+                        autoDecline();
+                    }
                 } else {
                     nothingEvent();
                 }

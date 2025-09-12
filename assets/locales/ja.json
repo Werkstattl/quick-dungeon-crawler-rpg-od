@@ -75,6 +75,7 @@
   "heal": "ヒール",
   "boss-doors": "ボスの扉",
   "ignore-doors": "扉を無視",
+  "curse-totems-until": "呪われたトーテム 上限",
   "log-flow": "ログの表示順",
   "log-flow-bottom-to-top": "下から上（最新が最後）",
   "log-flow-top-to-bottom": "上から下（最新が最初）",

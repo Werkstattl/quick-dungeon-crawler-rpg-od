@@ -5,6 +5,8 @@ let autoHeal = localStorage.getItem("autoHeal") === "true";
 let autoBossDoors = localStorage.getItem("autoBossDoors") === "true"; // open boss doors automatically
 let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
 if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
+let autoCurseTotemsUntil = parseInt(localStorage.getItem("autoCurseTotemsUntil"), 10);
+if (Number.isNaN(autoCurseTotemsUntil)) autoCurseTotemsUntil = 1;
 let autoModeUnlocked = autoModeBtnVisible;
 
 if ( !autoModeUnlocked ) {
