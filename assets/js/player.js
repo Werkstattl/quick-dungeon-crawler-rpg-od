@@ -193,17 +193,23 @@ const playerLoadStats = () => {
         playerLuckElement.innerHTML = (luckVal).toFixed(2).replace(rx, "$1") + "%";
     }
 
-    // Player Bonus Stats
-    let bonusStatsHTML = `
-    <h4>${t('bonus')}</h4>
-    <p><i class="fas fa-heart"></i>+${player.bonusStats.hp.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-sword"></i>+${player.bonusStats.atk.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-round-shield"></i>+${player.bonusStats.def.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-plain-dagger"></i>+${player.bonusStats.atkSpd.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-dripping-blade"></i>+${player.bonusStats.vamp.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-lightning-bolt"></i>+${player.bonusStats.critRate.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-focused-lightning"></i>+${player.bonusStats.critDmg.toFixed(2).replace(rx, "$1")}%</p>
-    <p><i class="ra ra-player-dodge"></i>+${player.bonusStats.dodge.toFixed(2).replace(rx, "$1")}%</p>`;
+    // Player Bonus Stats (hide 0% entries)
+    let bonusStatsHTML = `<h4>${t('bonus')}</h4>`;
+    const bonusEntries = [
+        { val: player.bonusStats.hp, icon: '<i class="fas fa-heart"></i>' },
+        { val: player.bonusStats.atk, icon: '<i class="ra ra-sword"></i>' },
+        { val: player.bonusStats.def, icon: '<i class="ra ra-round-shield"></i>' },
+        { val: player.bonusStats.atkSpd, icon: '<i class="ra ra-plain-dagger"></i>' },
+        { val: player.bonusStats.vamp, icon: '<i class="ra ra-dripping-blade"></i>' },
+        { val: player.bonusStats.critRate, icon: '<i class="ra ra-lightning-bolt"></i>' },
+        { val: player.bonusStats.critDmg, icon: '<i class="ra ra-focused-lightning"></i>' },
+        { val: player.bonusStats.dodge, icon: '<i class="ra ra-player-dodge"></i>' }
+    ];
+    bonusEntries.forEach(({ val, icon }) => {
+        if (Number(val) > 0) {
+            bonusStatsHTML += `<p>${icon}+${Number(val).toFixed(2).replace(rx, '$1')}%</p>`;
+        }
+    });
 
     // Add floor buffs display if any are active
     if (dungeon.floorBuffs && (dungeon.floorBuffs.atk > 0 || dungeon.floorBuffs.def > 0 || dungeon.floorBuffs.atkSpd > 0)) {
