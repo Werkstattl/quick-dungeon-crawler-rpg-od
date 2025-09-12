@@ -565,7 +565,7 @@ function openMenu(isTitle = false) {
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
         <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
-                <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Ignore Doors</span> <select id="auto-doorignore-select">
+                <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
                     <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
                     <option value="2" ${autoIgnoreDoors === 2 ? 'selected' : ''}>2</option>
@@ -577,7 +577,7 @@ function openMenu(isTitle = false) {
                     <option value="8" ${autoIgnoreDoors === 8 ? 'selected' : ''}>8</option>
                     <option value="9" ${autoIgnoreDoors === 9 ? 'selected' : ''}>9</option>
                 </select></label>
-                <label id="auto-curse-label"><span data-i18n="curse-totems-until">Curse Totems Until</span> <select id="auto-curse-select">
+                <label id="auto-curse-label"><span data-i18n="curse-totems-until">Target Curse Level</span> <select id="auto-curse-select">
                     <option value="1" ${autoCurseTotemsUntil === 1 ? 'selected' : ''}>1</option>
                     <option value="2" ${autoCurseTotemsUntil === 2 ? 'selected' : ''}>2</option>
                     <option value="3" ${autoCurseTotemsUntil === 3 ? 'selected' : ''}>3</option>
