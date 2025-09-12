@@ -225,7 +225,8 @@
     "kite": "Drachen",
     "buckler": "Buckler",
     "great-helm": "Großhelm",
-    "horned-helm": "Hornhelm"
+    "horned-helm": "Hornhelm",
+    "mask": "Maske"
   }
 
   ,"enemy-names": {
@@ -296,7 +297,8 @@
     "kite": "m",
     "buckler": "m",
     "great-helm": "m",
-    "horned-helm": "m"
+    "horned-helm": "m",
+    "mask": "f"
   }
 
   ,"level-up-option": {

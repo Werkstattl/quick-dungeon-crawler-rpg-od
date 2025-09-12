@@ -20,7 +20,7 @@ const createEquipment = (addToInventory = true) => {
         equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
         equipment.type = "Weapon";
     } else if (equipment.attribute == "Defense") {
-        const equipmentTypes = ["Armor", "Shield", "Helmet"];
+        const equipmentTypes = ["Armor", "Shield", "Helmet", "Mask"];
         equipment.type = equipmentTypes[Math.floor(Math.random() * equipmentTypes.length)];
         if (equipment.type == "Armor") {
             const equipmentCategories = ["Plate", "Chain", "Leather"];
@@ -31,6 +31,8 @@ const createEquipment = (addToInventory = true) => {
         } else if (equipment.type == "Helmet") {
             const equipmentCategories = ["Great Helm", "Horned Helm"];
             equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
+        } else if (equipment.type == "Mask") {
+            equipment.category = "Mask";
         }
     }
 
@@ -79,11 +81,12 @@ const createEquipment = (addToInventory = true) => {
     }
 
     // Generate and append random stats to the stats array
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "luck"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "luck"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "luck"];
-    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge", "luck"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
+    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
+    const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
@@ -96,7 +99,12 @@ const createEquipment = (addToInventory = true) => {
             statTypes = physicalStats;
         }
     } else if (equipment.attribute == "Defense") {
-        statTypes = defenseStats;
+        // Special-case Masks to favor Dodge/Luck
+        if (equipment.type == "Mask" || equipment.category == "Mask") {
+            statTypes = evasiveStats;
+        } else {
+            statTypes = defenseStats;
+        }
     }
     let equipmentValue = 0;
     for (let i = 0; i < loopCount; i++) {
@@ -289,7 +297,11 @@ const rerollEquipmentStats = (equipment) => {
             statTypes = physicalStats;
         }
     } else if (equipment.attribute == "Defense") {
-        statTypes = defenseStats;
+        if (equipment.type == "Mask" || equipment.category == "Mask") {
+            statTypes = evasiveStats;
+        } else {
+            statTypes = defenseStats;
+        }
     }
 
     for (let i = 0; i < loopCount; i++) {
@@ -466,6 +478,8 @@ const equipmentIcon = (equipment) => {
         return '<i class="ra ra-knight-helmet"></i>';
     } else if (equipment == "Horned Helm") {
         return '<i class="ra ra-helmet"></i>';
+    } else if (equipment == "Mask") {
+        return '<i class="ra ra-arcane-mask"></i>';
     }
 }
 

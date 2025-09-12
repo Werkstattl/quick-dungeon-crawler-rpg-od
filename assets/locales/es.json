@@ -225,7 +225,8 @@
     "kite": "Cometa",
     "buckler": "Rodela",
     "great-helm": "Gran yelmo",
-    "horned-helm": "Yelmo con cuernos"
+    "horned-helm": "Yelmo con cuernos",
+    "mask": "Máscara"
   },
 
   "enemy-names": {
