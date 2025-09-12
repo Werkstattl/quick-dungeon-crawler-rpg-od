@@ -86,7 +86,7 @@ const createEquipment = (addToInventory = true) => {
     const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
     const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
     const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg"];
+    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
@@ -99,7 +99,6 @@ const createEquipment = (addToInventory = true) => {
             statTypes = physicalStats;
         }
     } else if (equipment.attribute == "Defense") {
-        // Special-case Masks to favor Dodge/Luck
         if (equipment.type == "Mask" || equipment.category == "Mask") {
             statTypes = evasiveStats;
         } else {
@@ -280,10 +279,11 @@ const rerollEquipmentStats = (equipment) => {
     }
 
     // Determine stat pools based on attribute and category
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg", "luck"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg", "luck"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg", "luck"];
-    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge", "luck"];
+    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
+    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
+    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
+    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
+    const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
     const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
@@ -362,7 +362,7 @@ const rerollEquipmentStats = (equipment) => {
                 statValue = 4 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
-            equipmentValue += statValue * 20.83;
+            equipmentValue += statValue * 33.33;
         } else if (statType === "luck") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 8) {
