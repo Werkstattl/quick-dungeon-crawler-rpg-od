@@ -672,6 +672,26 @@ header button i {
     font-weight: bold;
 }
 
+.stat-panel .key-stats p {
+    margin: 0.1rem 0;
+}
+
+/* Advanced stats collapsible */
+.stat-panel details.advanced-stats {
+    margin-top: 0.2rem;
+}
+.stat-panel details.advanced-stats > summary {
+    cursor: pointer;
+    opacity: 0.8;
+    list-style: none;
+}
+.stat-panel details.advanced-stats[open] > summary {
+    opacity: 1;
+}
+.stat-panel details.advanced-stats > div {
+    margin-top: 0.3rem;
+}
+
 /* Allow companion names to wrap to multiple lines */
 #companion-panel p {
     white-space: normal;

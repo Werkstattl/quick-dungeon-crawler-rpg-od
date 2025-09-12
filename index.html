@@ -53,14 +53,21 @@
                 <div class="box">
                     <h4 data-i18n="stats">Stats</h4>
                     <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
-                    <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
-                    <p title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="player-def"></span></p>
-                    <p title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="player-atkspd"></span></p>
-                    <p title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i><span data-i18n="vamp">VAMP:</span> <span id="player-vamp"></span></p>
-                    <p title="Critical hit chance"><i class="ra ra-lightning-bolt"></i><span data-i18n="c-rate">C.RATE:</span> <span id="player-crate"></span></p>
-                    <p title="Critical damage bonus"><i class="ra ra-focused-lightning"></i><span data-i18n="c-dmg">C.DMG:</span> <span id="player-cdmg"></span></p>
-                    <p title="Chance to evade attacks"><i class="ra ra-player-dodge"></i><span data-i18n="dodge">DODGE:</span> <span id="player-dodge"></span></p>
-                    <p title="Increases equipment drop chance"><i class="ra ra-perspective-dice-one"></i><span>LUCK:</span> <span id="player-luck"></span></p>
+                    <div class="key-stats" aria-label="Core stats">
+                        <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
+                        <p title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="player-def"></span></p>
+                        <p title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="player-atkspd"></span></p>
+                    </div>
+                    <details class="advanced-stats" id="advanced-stats">
+                        <summary><span data-i18n="more">More</span></summary>
+                        <div>
+                            <p title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i><span data-i18n="vamp">VAMP:</span> <span id="player-vamp"></span></p>
+                            <p title="Critical hit chance"><i class="ra ra-lightning-bolt"></i><span data-i18n="c-rate">C.RATE:</span> <span id="player-crate"></span></p>
+                            <p title="Critical damage bonus"><i class="ra ra-focused-lightning"></i><span data-i18n="c-dmg">C.DMG:</span> <span id="player-cdmg"></span></p>
+                            <p title="Chance to evade attacks"><i class="ra ra-player-dodge"></i><span data-i18n="dodge">DODGE:</span> <span id="player-dodge"></span></p>
+                            <p title="Increases equipment drop chance"><i class="ra ra-perspective-dice-one"></i><span>LUCK:</span> <span id="player-luck"></span></p>
+                        </div>
+                    </details>
                 </div>
                 <div class="box" id="bonus-stats"></div>
                 <div class="box" id="companion-panel">
