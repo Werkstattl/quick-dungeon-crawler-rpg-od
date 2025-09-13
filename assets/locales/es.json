@@ -27,6 +27,7 @@
   "c-rate": "T.CRIT:",
   "c-dmg": "D.CRIT:",
   "dodge": "ESQ:",
+  "luck": "SUERTE:",
   "companion": "Compañero",
   "none": "Ninguno",
   "summon": "Invocar",
