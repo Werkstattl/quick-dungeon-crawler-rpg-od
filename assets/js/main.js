@@ -847,6 +847,9 @@ const calculateStats = () => {
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
     // Luck from bonus (level-ups) and equipment
     player.stats.luck = (player.bonusStats.luck || 0) + (player.equippedStats.luck || 0);
+    if (player.stats.luck > 140) {
+        player.stats.luck = 140;
+    }
     if (player.skills && player.skills.includes("Evasion Mastery")) {
         player.stats.dodge += 15;
     }

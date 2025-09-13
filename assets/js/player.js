@@ -194,6 +194,12 @@ const playerLoadStats = () => {
     if (typeof playerLuckElement !== 'undefined' && playerLuckElement) {
         const luckVal = (player.stats && Number.isFinite(player.stats.luck)) ? player.stats.luck : 0;
         playerLuckElement.innerHTML = (luckVal).toFixed(2).replace(rx, "$1") + "%";
+        // Highlight when reaching max effective luck (~140% for 80% cap from 33% base)
+        if (luckVal >= 140) {
+            playerLuckElement.style.color = '#e30b5c';
+        } else {
+            playerLuckElement.style.color = 'white';
+        }
     }
 
     // Player Bonus Stats (hide 0% entries)
