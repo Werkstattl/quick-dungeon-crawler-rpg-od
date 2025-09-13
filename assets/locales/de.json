@@ -309,7 +309,8 @@
     "vamp": { "title": "VAMP UP", "desc": "Erhöhe Bonus-VAMP um {value}%." },
     "critRate": { "title": "C.RATE UP", "desc": "Erhöhe Bonus-C.RATE um {value}%." },
     "critDmg": { "title": "C.DMG UP", "desc": "Erhöhe Bonus-C.DMG um {value}%." },
-    "dodge": { "title": "DODGE UP", "desc": "Erhöhe Bonus-DODGE um {value}%." }
+    "dodge": { "title": "DODGE UP", "desc": "Erhöhe Bonus-DODGE um {value}%." },
+    "luck": { "title": "LUCK UP", "desc": "Erhöhe Bonus-LUCK um {value}%." }
   }
 
 }

@@ -291,6 +291,7 @@
     "vamp": { "title": "VAMP UP", "desc": "ボーナスVAMPが{value}%増加する。" },
     "critRate": { "title": "C.RATE UP", "desc": "ボーナスC.RATEが{value}%増加する。" },
     "critDmg": { "title": "C.DMG UP", "desc": "ボーナスC.DMGが{value}%増加する。" },
-    "dodge": { "title": "DODGE UP", "desc": "ボーナスDODGEが{value}%増加する。" }
+    "dodge": { "title": "DODGE UP", "desc": "ボーナスDODGEが{value}%増加する。" },
+    "luck": { "title": "LUCK UP", "desc": "ボーナスLUCKが{value}%増加する。" }
   }
 }

@@ -22,6 +22,9 @@ if (player) {
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
     }
+    if (player.bonusStats && player.bonusStats.luck === undefined) {
+        player.bonusStats.luck = 0;
+    }
     if (player.companionBonus === undefined) {
         player.companionBonus = 0;
     }
@@ -203,7 +206,8 @@ const playerLoadStats = () => {
         { val: player.bonusStats.vamp, icon: '<i class="ra ra-dripping-blade"></i>' },
         { val: player.bonusStats.critRate, icon: '<i class="ra ra-lightning-bolt"></i>' },
         { val: player.bonusStats.critDmg, icon: '<i class="ra ra-focused-lightning"></i>' },
-        { val: player.bonusStats.dodge, icon: '<i class="ra ra-player-dodge"></i>' }
+        { val: player.bonusStats.dodge, icon: '<i class="ra ra-player-dodge"></i>' },
+        { val: player.bonusStats.luck, icon: '<i class="ra ra-perspective-dice-one"></i>' }
     ];
     bonusEntries.forEach(({ val, icon }) => {
         if (Number(val) > 0) {
@@ -338,7 +342,8 @@ const lvlupPopup = () => {
         "vamp": 0.5,
         "critRate": 1,
         "critDmg": 6,
-        "dodge": 0.3
+        "dodge": 0.3,
+        "luck": 1
     };
     ratingSystem.checkAndPrompt();
     generateLvlStats(2, percentages);
@@ -347,7 +352,7 @@ const lvlupPopup = () => {
 // Generates random stats for level up popup
 const generateLvlStats = (rerolls, percentages) => {
     let selectedStats = [];
-    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
+    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
     while (selectedStats.length < 3) {
         let randomIndex = Math.floor(Math.random() * stats.length);
         if (!selectedStats.includes(stats[randomIndex])) {
@@ -429,6 +434,14 @@ const generateLvlStats = (rerolls, percentages) => {
                     let ehpInitial = 1 / (1 - statInitial / 100);
                     let ehpFinal = 1 / (1 - statFinal / 100);
                     marginalValue = (ehpFinal / ehpInitial) - 1;
+                } else if(selectedStats[i]=="luck"){
+                    // Estimate marginal value as relative increase in drop chance
+                    let add = percentages["luck"];
+                    let currentLuck = (player.stats && Number.isFinite(player.stats.luck)) ? player.stats.luck : 0;
+                    let baseDrop = 1/3;
+                    let initial = baseDrop * (1 + currentLuck/100);
+                    let final = baseDrop * (1 + (currentLuck + add)/100);
+                    marginalValue = (final - initial) / initial;
                 }
                 if (Number.isFinite(marginalValue)) {
                 	p.innerHTML += ` (+${Math.round(1000*marginalValue)/10.0}%)`;

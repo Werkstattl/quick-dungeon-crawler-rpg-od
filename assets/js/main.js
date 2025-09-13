@@ -91,7 +91,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         vamp: 0,
                         critRate: 0,
                         critDmg: 0,
-                        dodge: 0
+                        dodge: 0,
+                        luck: 0
                     },
                     exp: {
                         expCurr: 0,
@@ -844,8 +845,8 @@ const calculateStats = () => {
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg;
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge;
-    // Luck is only available via equipment
-    player.stats.luck = player.equippedStats.luck || 0;
+    // Luck from bonus (level-ups) and equipment
+    player.stats.luck = (player.bonusStats.luck || 0) + (player.equippedStats.luck || 0);
     if (player.skills && player.skills.includes("Evasion Mastery")) {
         player.stats.dodge += 15;
     }
@@ -903,7 +904,8 @@ const progressReset = (fromDeath = false) => {
         vamp: 0,
         critRate: 0,
         critDmg: 0,
-        dodge: 0
+        dodge: 0,
+        luck: 0
     };
     player.inCombat = false;
     player.companionBonus = 0;
@@ -1367,6 +1369,10 @@ const objectValidation = () => {
     }
     if (player.bonusStats && player.bonusStats.dodge === undefined) {
         player.bonusStats.dodge = 0;
+        changed = true;
+    }
+    if (player.bonusStats && player.bonusStats.luck === undefined) {
+        player.bonusStats.luck = 0;
         changed = true;
     }
     if (player.equippedStats && player.equippedStats.dodge === undefined) {

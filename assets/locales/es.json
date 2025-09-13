@@ -291,6 +291,7 @@
     "vamp": { "title": "VAMP +", "desc": "Incrementa el VAMP adicional en {value}%." },
     "critRate": { "title": "T.CRIT +", "desc": "Incrementa la T.CRIT adicional en {value}%." },
     "critDmg": { "title": "D.CRIT +", "desc": "Incrementa el D.CRIT adicional en {value}%." },
-    "dodge": { "title": "ESQ +", "desc": "Incrementa la ESQ adicional en {value}%." }
+    "dodge": { "title": "ESQ +", "desc": "Incrementa la ESQ adicional en {value}%." },
+    "luck": { "title": "SUERTE +", "desc": "Incrementa la SUERTE adicional en {value}%." }
   }
 }
