@@ -228,6 +228,9 @@ window.addEventListener("DOMContentLoaded", async function () {
             }
         } else if (isChoice2Key) {
             targetButton = document.querySelector('#choice2');
+            if (!targetButton) {
+                targetButton = document.querySelector('#special-ability-btn');
+            }
         }
 
         if (targetButton && !targetButton.disabled) {
