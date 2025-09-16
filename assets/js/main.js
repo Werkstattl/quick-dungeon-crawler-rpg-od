@@ -199,6 +199,40 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     nativeInit();
 
+    // Keyboard shortcuts for the primary choice buttons
+    const isTypingElement = function (element) {
+        if (!element) {
+            return false;
+        }
+        const tag = element.tagName;
+        return tag === 'INPUT' || tag === 'TEXTAREA' || element.isContentEditable;
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+        }
+
+        if (isTypingElement(document.activeElement)) {
+            return;
+        }
+
+        let targetButton = null;
+        const isChoice1Key = !event.shiftKey && (event.key === '1' || event.code === 'Digit1' || event.code === 'Numpad1');
+        const isChoice2Key = !event.shiftKey && (event.key === '2' || event.code === 'Digit2' || event.code === 'Numpad2');
+
+        if (isChoice1Key) {
+            targetButton = document.querySelector('#choice1');
+        } else if (isChoice2Key) {
+            targetButton = document.querySelector('#choice2');
+        }
+
+        if (targetButton && !targetButton.disabled) {
+            targetButton.click();
+            event.preventDefault();
+        }
+    });
+
     // Unequip all items
     document.querySelector("#unequip-all").addEventListener("click", function () {
         sfxOpen.play();
