@@ -457,6 +457,7 @@ const guardianBattle = () => {
     showCombatInfo();
     startCombat(bgmBattleBoss);
     addCombatLog(t('guardian-blocking-way', { enemy: enemy.name }));
+    updateDungeonLog();
 }
 
 // mysterious chamber fight
