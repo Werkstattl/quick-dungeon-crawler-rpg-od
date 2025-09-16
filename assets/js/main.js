@@ -223,6 +223,9 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         if (isChoice1Key) {
             targetButton = document.querySelector('#choice1');
+            if (!targetButton) {
+                targetButton = document.querySelector('#battleButton');
+            }
         } else if (isChoice2Key) {
             targetButton = document.querySelector('#choice2');
         }
