@@ -222,6 +222,14 @@ window.addEventListener("DOMContentLoaded", async function () {
         const isChoice2Key = !event.shiftKey && (event.key === '2' || event.code === 'Digit2' || event.code === 'Numpad2');
 
         if (isChoice1Key) {
+            const lvlupPanel = document.querySelector('#lvlupPanel');
+            if (lvlupPanel && lvlupPanel.style.display === 'flex') {
+                const firstLevelUpOption = lvlupPanel.querySelector('[id^="lvlSlot"]');
+                if (firstLevelUpOption) {
+                    event.preventDefault();
+                    return;
+                }
+            }
             targetButton = document.querySelector('#choice1');
             if (!targetButton) {
                 targetButton = document.querySelector('#battleButton');
