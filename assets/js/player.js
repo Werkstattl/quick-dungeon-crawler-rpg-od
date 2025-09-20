@@ -28,6 +28,19 @@ if (player) {
     if (player.companionBonus === undefined) {
         player.companionBonus = 0;
     }
+    if (player.companionStats === undefined) {
+        player.companionStats = {
+            hp: 0,
+            atk: 0,
+            def: 0,
+            atkSpd: 0,
+            vamp: 0,
+            critRate: 0,
+            critDmg: 0,
+            dodge: 0,
+            luck: 0,
+        };
+    }
 }
 let inventoryOpen = false;
 let leveled = false;

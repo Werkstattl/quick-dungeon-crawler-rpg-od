@@ -1,5 +1,92 @@
+const defaultCompanionStats = () => ({
+    hp: 0,
+    atk: 0,
+    def: 0,
+    atkSpd: 0,
+    vamp: 0,
+    critRate: 0,
+    critDmg: 0,
+    dodge: 0,
+    luck: 0,
+});
+
+const getCompanionOptionsFromTemplate = (template = {}) => ({
+    passives: template.passives || [],
+    passiveDescriptionKey: template.passiveDescriptionKey || null,
+    baseCritRate: template.baseCritRate,
+    baseCritDmg: template.baseCritDmg,
+    atkSpdBase: template.atkSpdBase,
+    atkSpdGrowth: template.atkSpdGrowth,
+});
+
+const COMPANION_STAT_ORDER = ['atk', 'hp', 'def', 'atkSpd', 'critRate', 'critDmg', 'dodge', 'vamp', 'luck'];
+const COMPANION_STAT_CONFIG = {
+    atk: { labelKey: 'companion-stat-atk', suffix: '%', precision: 1 },
+    hp: { labelKey: 'companion-stat-hp', suffix: '%', precision: 1 },
+    def: { labelKey: 'companion-stat-def', suffix: '%', precision: 1 },
+    atkSpd: { labelKey: 'companion-stat-atkspd', suffix: '%', precision: 1 },
+    critRate: { labelKey: 'companion-stat-critRate', suffix: '%', precision: 1 },
+    critDmg: { labelKey: 'companion-stat-critDmg', suffix: '%', precision: 1 },
+    dodge: { labelKey: 'companion-stat-dodge', suffix: '%', precision: 1 },
+    vamp: { labelKey: 'companion-stat-vamp', suffix: '%', precision: 1 },
+    luck: { labelKey: 'companion-stat-luck', suffix: '', precision: 0 },
+};
+
+const formatBonusValue = (value, precision = 1) => {
+    const fixed = value.toFixed(precision);
+    return fixed.replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
+};
+
+const buildCompanionBonusList = (companion) => {
+    if (!companion) {
+        return { html: '', hasBonuses: false };
+    }
+    const bonuses = companion.calculateBonuses();
+    const lines = [];
+
+    COMPANION_STAT_ORDER.forEach(stat => {
+        const config = COMPANION_STAT_CONFIG[stat];
+        if (!config) return;
+        const rawValue = Number(bonuses[stat] || 0);
+        if (Math.abs(rawValue) < 0.001) return;
+        const precision = config.precision !== undefined ? config.precision : (Math.abs(rawValue) >= 10 ? 0 : 1);
+        const valueStr = formatBonusValue(rawValue, precision);
+        const suffix = config.suffix || '';
+        const label = typeof t === 'function' ? t(config.labelKey) : config.labelKey;
+        lines.push(`<li><span class="bonus-value">+${valueStr}${suffix}</span> ${label}</li>`);
+    });
+
+    if (!lines.length) {
+        return { html: '', hasBonuses: false };
+    }
+
+    return {
+        html: `<ul class="companion-bonus-list">${lines.join('')}</ul>`,
+        hasBonuses: true,
+    };
+};
+
+function applyActiveCompanionBonuses(companion) {
+    if (!player) {
+        return;
+    }
+
+    const emptyStats = defaultCompanionStats();
+    let bonuses = emptyStats;
+
+    if (companion) {
+        bonuses = { ...emptyStats, ...companion.calculateBonuses() };
+    }
+
+    player.companionStats = { ...emptyStats, ...bonuses };
+    player.companionBonus = bonuses.atk || 0;
+
+    calculateStats();
+    if (typeof playerLoadStats === 'function') playerLoadStats();
+}
+
 class Companion {
-    constructor(id, nameKey, rarity, baseHp, baseAtk) {
+    constructor(id, nameKey, rarity, baseHp, baseAtk, options = {}) {
         this.id = id;
         this.nameKey = nameKey;
         this.rarity = rarity;
@@ -7,12 +94,18 @@ class Companion {
         this.experience = 0;
         this.baseHp = baseHp;
         this.baseAtk = baseAtk;
+        this.passives = options.passives || [];
+        this.passiveDescriptionKey = options.passiveDescriptionKey || null;
+        this.baseCritRate = options.baseCritRate ?? 50;
+        this.baseCritDmg = options.baseCritDmg ?? 50;
+        this.atkSpdBase = options.atkSpdBase ?? 0.4;
+        this.atkSpdGrowth = options.atkSpdGrowth ?? 0.02;
         this.hp = this.calculateHp();
         this.atk = this.calculateAtk();
         this.isActive = false;
         this.atkSpd = this.calculateAtkSpd();
-        this.critRate = 50;
-        this.critDmg = 50;
+        this.critRate = this.baseCritRate;
+        this.critDmg = this.baseCritDmg;
         // Bonus attack percentage granted to the player when this companion is active
         this.evolutionBonus = 0;
     }
@@ -28,21 +121,42 @@ class Companion {
             if (next) {
                 const oldName = this.name;
                 this.id = next.id;
-                this.nameKey = next.nameKey;
-                this.rarity = next.rarity;
-                this.baseHp = next.baseHp;
-                this.baseAtk = next.baseAtk;
+                this.applyTemplate(next);
                 this.hp = this.calculateHp();
                 this.atk = this.calculateAtk();
                 this.atkSpd = this.calculateAtkSpd();
                 this.evolutionBonus += 2;
                 if (this.isActive) {
-                    player.companionBonus += 2;
-                    calculateStats();
-                    if (typeof playerLoadStats === 'function') playerLoadStats();
+                    applyActiveCompanionBonuses(this);
                 }
                 addCombatLog(`${oldName} evolved into ${this.name}!`);
             }
+        }
+    }
+
+    applyTemplate(template) {
+        if (!template) {
+            return;
+        }
+        this.nameKey = template.nameKey;
+        this.rarity = template.rarity;
+        this.baseHp = template.baseHp;
+        this.baseAtk = template.baseAtk;
+        this.passives = template.passives || this.passives || [];
+        this.passiveDescriptionKey = template.passiveDescriptionKey || this.passiveDescriptionKey || null;
+        if (template.baseCritRate !== undefined) {
+            this.baseCritRate = template.baseCritRate;
+            this.critRate = this.baseCritRate;
+        }
+        if (template.baseCritDmg !== undefined) {
+            this.baseCritDmg = template.baseCritDmg;
+            this.critDmg = this.baseCritDmg;
+        }
+        if (template.atkSpdBase !== undefined) {
+            this.atkSpdBase = template.atkSpdBase;
+        }
+        if (template.atkSpdGrowth !== undefined) {
+            this.atkSpdGrowth = template.atkSpdGrowth;
         }
     }
 
@@ -56,26 +170,34 @@ class Companion {
 
     calculateAtkSpd() {
         // Increase attack speed slightly with each level
-        return Math.min(2.5, 0.4 + (this.level - 1) * 0.02);
+        return Math.min(2.5, this.atkSpdBase + (this.level - 1) * this.atkSpdGrowth);
     }
 
     gainExperience(amount) {
         this.experience += amount;
-        const expRequired = this.level * 100;
-        if (this.experience >= expRequired) {
+        let expRequired = this.getExperienceRequired();
+        while (this.experience >= expRequired) {
+            this.experience -= expRequired;
             this.levelUp();
+            expRequired = this.getExperienceRequired();
         }
         saveCompanions();
     }
 
+    getExperienceRequired() {
+        return this.level * 100;
+    }
+
     levelUp() {
         this.level += 1;
-        this.experience = 0;
         this.hp = this.calculateHp();
         this.atk = this.calculateAtk();
         this.atkSpd = this.calculateAtkSpd();
         addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`);
         this.checkEvolution();
+        if (this.isActive) {
+            applyActiveCompanionBonuses(this);
+        }
         updateCompanionUI();
     }
 
@@ -90,40 +212,216 @@ class Companion {
 
     activate() {
         this.isActive = true;
-        // Apply evolution bonus when companion is active
-        if (this.evolutionBonus) {
-            player.companionBonus += this.evolutionBonus;
-            calculateStats();
-            if (typeof playerLoadStats === 'function') playerLoadStats();
-        }
-        // addDungeonLog(`${this.name} joins the battle!`);
+        applyActiveCompanionBonuses(this);
         updateCompanionUI();
     }
 
     deactivate() {
         this.isActive = false;
-        // Remove evolution bonus when companion is inactive
-        if (this.evolutionBonus) {
-            player.companionBonus -= this.evolutionBonus;
-            calculateStats();
-            if (typeof playerLoadStats === 'function') playerLoadStats();
-        }
+        applyActiveCompanionBonuses(null);
         updateCompanionUI();
+    }
+
+    calculateBonuses() {
+        const totals = defaultCompanionStats();
+        this.passives.forEach(passive => {
+            if (!passive || !passive.stat) return;
+            const perLevel = passive.perLevel || 0;
+            const base = passive.base || 0;
+            let value = base + perLevel * (this.level - 1);
+            if (typeof passive.max === 'number') {
+                value = Math.min(value, passive.max);
+            }
+            const stat = passive.stat;
+            totals[stat] = (totals[stat] || 0) + value;
+        });
+
+        if (this.evolutionBonus) {
+            totals.atk = (totals.atk || 0) + this.evolutionBonus;
+        }
+
+        return totals;
     }
 }
 
 // Available companions list
 const companionTypes = [
-    {id: 1, nameKey: "companion-wolf-pup", rarity: "Common", baseHp: 20, baseAtk: 80, evolvesTo: 6, evolveLevel: 10},
-    {id: 2, nameKey: "companion-fairy-helper", rarity: "Uncommon", baseHp: 15, baseAtk: 150, evolvesTo: 7, evolveLevel: 10},
-    {id: 3, nameKey: "companion-mini-dragon", rarity: "Rare", baseHp: 30, baseAtk: 280, evolvesTo: 8, evolveLevel: 10},
-    {id: 4, nameKey: "companion-shadow-cat", rarity: "Epic", baseHp: 40, baseAtk: 450, evolvesTo: 9, evolveLevel: 10},
-    {id: 5, nameKey: "companion-phoenix-chick", rarity: "Legendary", baseHp: 60, baseAtk: 650, evolvesTo: 10, evolveLevel: 10},
-    {id: 6, nameKey: "companion-wolf", rarity: "Uncommon", baseHp: 40, baseAtk: 150, obtainable: false},
-    {id: 7, nameKey: "companion-fairy-guardian", rarity: "Rare", baseHp: 25, baseAtk: 250, obtainable: false},
-    {id: 8, nameKey: "companion-young-dragon", rarity: "Epic", baseHp: 60, baseAtk: 420, obtainable: false},
-    {id: 9, nameKey: "companion-night-panther", rarity: "Legendary", baseHp: 80, baseAtk: 600, obtainable: false},
-    {id: 10, nameKey: "companion-phoenix", rarity: "Legendary", baseHp: 90, baseAtk: 900, obtainable: false},
+    {
+        id: 1,
+        nameKey: "companion-wolf-pup",
+        rarity: "Common",
+        baseHp: 20,
+        baseAtk: 80,
+        evolvesTo: 6,
+        evolveLevel: 10,
+        passives: [
+            { stat: 'atk', base: 2.5, perLevel: 0.4 },
+            { stat: 'critRate', base: 1, perLevel: 0.2 }
+        ],
+        passiveDescriptionKey: 'companion-passive-wolf-pup',
+        baseCritRate: 35,
+        baseCritDmg: 60,
+        atkSpdBase: 0.55,
+        atkSpdGrowth: 0.022,
+    },
+    {
+        id: 2,
+        nameKey: "companion-fairy-helper",
+        rarity: "Uncommon",
+        baseHp: 15,
+        baseAtk: 150,
+        evolvesTo: 7,
+        evolveLevel: 10,
+        passives: [
+            { stat: 'hp', base: 3.5, perLevel: 0.5 },
+            { stat: 'vamp', base: 0.5, perLevel: 0.15 },
+        ],
+        passiveDescriptionKey: 'companion-passive-fairy-helper',
+        baseCritRate: 25,
+        baseCritDmg: 50,
+        atkSpdBase: 0.48,
+        atkSpdGrowth: 0.018,
+    },
+    {
+        id: 3,
+        nameKey: "companion-mini-dragon",
+        rarity: "Rare",
+        baseHp: 30,
+        baseAtk: 280,
+        evolvesTo: 8,
+        evolveLevel: 10,
+        passives: [
+            { stat: 'atk', base: 3.5, perLevel: 0.45 },
+            { stat: 'critDmg', base: 5, perLevel: 0.6 },
+        ],
+        passiveDescriptionKey: 'companion-passive-mini-dragon',
+        baseCritRate: 45,
+        baseCritDmg: 65,
+        atkSpdBase: 0.5,
+        atkSpdGrowth: 0.02,
+    },
+    {
+        id: 4,
+        nameKey: "companion-shadow-cat",
+        rarity: "Epic",
+        baseHp: 40,
+        baseAtk: 450,
+        evolvesTo: 9,
+        evolveLevel: 10,
+        passives: [
+            { stat: 'atkSpd', base: 2, perLevel: 0.25 },
+            { stat: 'dodge', base: 2.5, perLevel: 0.35 },
+        ],
+        passiveDescriptionKey: 'companion-passive-shadow-cat',
+        baseCritRate: 40,
+        baseCritDmg: 60,
+        atkSpdBase: 0.6,
+        atkSpdGrowth: 0.024,
+    },
+    {
+        id: 5,
+        nameKey: "companion-phoenix-chick",
+        rarity: "Legendary",
+        baseHp: 60,
+        baseAtk: 650,
+        evolvesTo: 10,
+        evolveLevel: 10,
+        passives: [
+            { stat: 'hp', base: 4.5, perLevel: 0.65 },
+            { stat: 'luck', base: 5, perLevel: 0.4 },
+        ],
+        passiveDescriptionKey: 'companion-passive-phoenix-chick',
+        baseCritRate: 30,
+        baseCritDmg: 70,
+        atkSpdBase: 0.46,
+        atkSpdGrowth: 0.02,
+    },
+    {
+        id: 6,
+        nameKey: "companion-wolf",
+        rarity: "Uncommon",
+        baseHp: 40,
+        baseAtk: 150,
+        obtainable: false,
+        passives: [
+            { stat: 'atk', base: 6, perLevel: 0.6 },
+            { stat: 'critRate', base: 2.5, perLevel: 0.25 },
+        ],
+        passiveDescriptionKey: 'companion-passive-wolf',
+        baseCritRate: 40,
+        baseCritDmg: 70,
+        atkSpdBase: 0.65,
+        atkSpdGrowth: 0.026,
+    },
+    {
+        id: 7,
+        nameKey: "companion-fairy-guardian",
+        rarity: "Rare",
+        baseHp: 25,
+        baseAtk: 250,
+        obtainable: false,
+        passives: [
+            { stat: 'hp', base: 6, perLevel: 0.55 },
+            { stat: 'vamp', base: 1, perLevel: 0.2 },
+        ],
+        passiveDescriptionKey: 'companion-passive-fairy-guardian',
+        baseCritRate: 30,
+        baseCritDmg: 55,
+        atkSpdBase: 0.52,
+        atkSpdGrowth: 0.02,
+    },
+    {
+        id: 8,
+        nameKey: "companion-young-dragon",
+        rarity: "Epic",
+        baseHp: 60,
+        baseAtk: 420,
+        obtainable: false,
+        passives: [
+            { stat: 'atk', base: 7, perLevel: 0.7 },
+            { stat: 'critDmg', base: 12, perLevel: 0.8 },
+        ],
+        passiveDescriptionKey: 'companion-passive-young-dragon',
+        baseCritRate: 50,
+        baseCritDmg: 80,
+        atkSpdBase: 0.58,
+        atkSpdGrowth: 0.024,
+    },
+    {
+        id: 9,
+        nameKey: "companion-night-panther",
+        rarity: "Legendary",
+        baseHp: 80,
+        baseAtk: 600,
+        obtainable: false,
+        passives: [
+            { stat: 'atkSpd', base: 3.5, perLevel: 0.35 },
+            { stat: 'dodge', base: 4.5, perLevel: 0.45 },
+        ],
+        passiveDescriptionKey: 'companion-passive-night-panther',
+        baseCritRate: 45,
+        baseCritDmg: 75,
+        atkSpdBase: 0.7,
+        atkSpdGrowth: 0.028,
+    },
+    {
+        id: 10,
+        nameKey: "companion-phoenix",
+        rarity: "Legendary",
+        baseHp: 90,
+        baseAtk: 900,
+        obtainable: false,
+        passives: [
+            { stat: 'hp', base: 8, perLevel: 0.8 },
+            { stat: 'atk', base: 4, perLevel: 0.5 },
+            { stat: 'luck', base: 8, perLevel: 0.45 },
+        ],
+        passiveDescriptionKey: 'companion-passive-phoenix',
+        baseCritRate: 35,
+        baseCritDmg: 85,
+        atkSpdBase: 0.6,
+        atkSpdGrowth: 0.025,
+    },
 ];
 
 // Player's companions
@@ -137,7 +435,14 @@ function initCompanions() {
         const parsedCompanions = JSON.parse(savedCompanions);
         playerCompanions = parsedCompanions.map(data => {
             const type = companionTypes.find(c => c.id === data.id) || {};
-            const comp = new Companion(data.id, data.nameKey || type.nameKey, data.rarity, data.baseHp, data.baseAtk);
+            const comp = new Companion(
+                data.id,
+                data.nameKey || type.nameKey,
+                data.rarity || type.rarity,
+                data.baseHp ?? type.baseHp,
+                data.baseAtk ?? type.baseAtk,
+                getCompanionOptionsFromTemplate(type)
+            );
             comp.level = data.level;
             comp.experience = data.experience;
             comp.hp = comp.calculateHp();
@@ -145,16 +450,15 @@ function initCompanions() {
             comp.atkSpd = comp.calculateAtkSpd();
             comp.isActive = data.isActive;
             comp.evolutionBonus = data.evolutionBonus || 0;
+            if (Array.isArray(data.passives) && data.passives.length && !type.passives) {
+                comp.passives = data.passives;
+            }
             return comp;
         });
 
         // Find active companion
         activeCompanion = playerCompanions.find(comp => comp.isActive) || null;
-        if (activeCompanion && activeCompanion.evolutionBonus) {
-            player.companionBonus += activeCompanion.evolutionBonus;
-            calculateStats();
-            if (typeof playerLoadStats === 'function') playerLoadStats();
-        }
+        applyActiveCompanionBonuses(activeCompanion);
     } else {
         // Give player a starter companion
         giveCompanion(1);
@@ -177,7 +481,8 @@ function giveCompanion(companionId) {
             template.nameKey,
             template.rarity,
             template.baseHp,
-            template.baseAtk
+            template.baseAtk,
+            getCompanionOptionsFromTemplate(template)
         );
         newCompanion.evolutionBonus = 0;
         playerCompanions.push(newCompanion);
@@ -199,15 +504,24 @@ function updateCompanionUI() {
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
-        companionBonus.innerHTML = activeCompanion.evolutionBonus ? `<h4>Bonus</h4> <i class="ra ra-sword"></i>+${activeCompanion.evolutionBonus}%` : '';
         companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
+        const bonusSummary = buildCompanionBonusList(activeCompanion);
+        const passiveKey = activeCompanion.passiveDescriptionKey;
+        if (bonusSummary.hasBonuses || passiveKey) {
+            const header = `<h4 data-i18n="companion-bond"></h4>`;
+            const passiveHtml = passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : '';
+            companionBonus.innerHTML = `${header}${bonusSummary.html}${passiveHtml}`;
+            applyTranslations(companionBonus);
+        } else {
+            companionBonus.innerHTML = '';
+        }
         summonBtn.textContent = t('change');
         summonBtn.classList.remove('attention');
     } else {
         companionName.textContent = t('none');
         companionName.className = "";
         companionAtk.textContent = "0";
-        companionBonus.textContent = '';
+        companionBonus.innerHTML = '';
         companionAtkSpd.textContent = "0";
         summonBtn.textContent = t('summon');
         summonBtn.classList.add('attention');
@@ -252,12 +566,19 @@ function openCompanionModal() {
     playerCompanions.forEach(companion => {
         const option = document.createElement('div');
         option.className = `companion-option ${companion.rarity}`;
+        const bonusSummary = buildCompanionBonusList(companion);
+        const passiveKey = companion.passiveDescriptionKey;
         option.innerHTML = `
             <h4>${companion.name}</h4>
             <p><span data-i18n="level">Level</span>: ${companion.level}</p>
             <p><span data-i18n="atk">ATK:</span> ${companion.atk}</p>
             <p><span data-i18n="aps">APS:</span> ${companion.atkSpd.toFixed(2)}</p>
+            ${bonusSummary.html}
+            ${passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : ''}
         `;
+        if (companion.isActive) {
+            option.classList.add('active-companion');
+        }
         option.onclick = () => selectCompanion(companion.id);
         companionList.appendChild(option);
     });
@@ -312,8 +633,13 @@ function saveCompanions() {
 
 // Find companion after combat
 function findCompanionAfterCombat(enemyLevel) {
-    // 10% chance to find a companion after combat
-    if (Math.random() < 0.1) {
+    const baseChance = 0.08;
+    const luckValue = player && player.stats ? (player.stats.luck || 0) : 0;
+    const luckBonus = Math.min(0.12, luckValue / 400);
+    const rosterBonus = Math.max(0, (3 - playerCompanions.length) * 0.02);
+    const chance = Math.min(0.3, baseChance + luckBonus + rosterBonus);
+
+    if (Math.random() < chance) {
         // Determine rarity based on enemy level
         let rarityPool;
         if (enemyLevel > 70) {

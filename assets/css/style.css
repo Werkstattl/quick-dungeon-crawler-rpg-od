@@ -699,6 +699,37 @@ header button i {
     overflow-wrap: break-word;
 }
 
+.companion-bonus-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.3rem 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.companion-bonus-list li {
+    display: flex;
+    gap: 0.35rem;
+    align-items: baseline;
+}
+
+.companion-bonus-list .bonus-value {
+    font-weight: 600;
+    color: #ffd166;
+}
+
+#companion-panel .companion-passive,
+.companion-option .companion-passive {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+.companion-option.active-companion {
+    border-color: rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+}
+
 #summon-companion {
     white-space: normal;
     overflow-wrap: anywhere;
