@@ -509,8 +509,7 @@ function updateCompanionUI() {
         const passiveKey = activeCompanion.passiveDescriptionKey;
         if (bonusSummary.hasBonuses || passiveKey) {
             const header = `<h4 data-i18n="companion-bond"></h4>`;
-            const passiveHtml = passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : '';
-            companionBonus.innerHTML = `${header}${bonusSummary.html}${passiveHtml}`;
+            companionBonus.innerHTML = `${header}${bonusSummary.html}`;
             applyTranslations(companionBonus);
         } else {
             companionBonus.innerHTML = '';
