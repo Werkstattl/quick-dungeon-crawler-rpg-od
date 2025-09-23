@@ -106,8 +106,6 @@ class Companion {
         this.atkSpd = this.calculateAtkSpd();
         this.critRate = this.baseCritRate;
         this.critDmg = this.baseCritDmg;
-        // Bonus attack percentage granted to the player when this companion is active
-        this.evolutionBonus = 0;
     }
 
     get name() {
@@ -125,7 +123,6 @@ class Companion {
                 this.hp = this.calculateHp();
                 this.atk = this.calculateAtk();
                 this.atkSpd = this.calculateAtkSpd();
-                this.evolutionBonus += 2;
                 if (this.isActive) {
                     applyActiveCompanionBonuses(this);
                 }
@@ -235,11 +232,6 @@ class Companion {
             const stat = passive.stat;
             totals[stat] = (totals[stat] || 0) + value;
         });
-
-        if (this.evolutionBonus) {
-            totals.atk = (totals.atk || 0) + this.evolutionBonus;
-        }
-
         return totals;
     }
 }
@@ -449,7 +441,6 @@ function initCompanions() {
             comp.atk = comp.calculateAtk();
             comp.atkSpd = comp.calculateAtkSpd();
             comp.isActive = data.isActive;
-            comp.evolutionBonus = data.evolutionBonus || 0;
             if (Array.isArray(data.passives) && data.passives.length && !type.passives) {
                 comp.passives = data.passives;
             }
@@ -484,7 +475,6 @@ function giveCompanion(companionId) {
             template.baseAtk,
             getCompanionOptionsFromTemplate(template)
         );
-        newCompanion.evolutionBonus = 0;
         playerCompanions.push(newCompanion);
         saveCompanions();
         addDungeonLog(`You found a <span class="${newCompanion.rarity}">${newCompanion.name}</span>!`);
