@@ -10,6 +10,16 @@ const defaultCompanionStats = () => ({
     luck: 0,
 });
 
+let activeCompanionBonuses = defaultCompanionStats();
+
+function getActiveCompanionBonuses() {
+    return { ...activeCompanionBonuses };
+}
+
+function resetActiveCompanionBonuses() {
+    activeCompanionBonuses = defaultCompanionStats();
+}
+
 const getCompanionOptionsFromTemplate = (template = {}) => ({
     passives: template.passives || [],
     passiveDescriptionKey: template.passiveDescriptionKey || null,
@@ -78,10 +88,11 @@ function applyActiveCompanionBonuses(companion) {
         bonuses = { ...emptyStats, ...companion.calculateBonuses() };
     }
 
-    player.companionStats = { ...emptyStats, ...bonuses };
-    player.companionBonus = bonuses.atk || 0;
+    activeCompanionBonuses = { ...emptyStats, ...bonuses };
 
-    calculateStats();
+    if (typeof calculateStats === 'function') {
+        calculateStats();
+    }
     if (typeof playerLoadStats === 'function') playerLoadStats();
 }
 

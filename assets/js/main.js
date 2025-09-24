@@ -111,18 +111,6 @@ window.addEventListener("DOMContentLoaded", async function () {
                     kills: 0,
                     deaths: 0,
                     inCombat: false,
-                    companionBonus: 0,
-                    companionStats: {
-                        hp: 0,
-                        atk: 0,
-                        def: 0,
-                        atkSpd: 0,
-                        vamp: 0,
-                        critRate: 0,
-                        critDmg: 0,
-                        dodge: 0,
-                        luck: 0,
-                    },
                     allocationChoices: {
                         hp: 10,
                         atk: 10,
@@ -893,7 +881,7 @@ const calculateStats = () => {
         };
     }
 
-    const companionStats = player.companionStats || {
+    const emptyCompanionBonuses = {
         hp: 0,
         atk: 0,
         def: 0,
@@ -905,24 +893,29 @@ const calculateStats = () => {
         luck: 0,
     };
 
-    const hpBonusPct = (player.bonusStats.hp || 0) + (companionStats.hp || 0);
+    const companionBonuses = (typeof getActiveCompanionBonuses === 'function')
+        ? getActiveCompanionBonuses()
+        : { ...emptyCompanionBonuses };
+
+    const hpBonusPct = (player.bonusStats.hp || 0) + (companionBonuses.hp || 0);
     const atkBonusPct = (player.bonusStats.atk || 0);
-    const defBonusPct = (player.bonusStats.def || 0) + (companionStats.def || 0);
-    const atkSpdBonusPct = (player.bonusStats.atkSpd || 0) + (companionStats.atkSpd || 0);
+    const defBonusPct = (player.bonusStats.def || 0) + (companionBonuses.def || 0);
+    const atkSpdBonusPct = (player.bonusStats.atkSpd || 0) + (companionBonuses.atkSpd || 0);
+    const companionAtkBonusPct = companionBonuses.atk || 0;
 
     player.stats.hpMax = Math.round((playerHpBase + playerHpBase * (hpBonusPct / 100)) + player.equippedStats.hp);
-    player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (atkBonusPct / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (player.companionBonus / 100)));
+    player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (atkBonusPct / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (companionAtkBonusPct / 100)));
     player.stats.def = Math.round(((playerDefBase + playerDefBase * (defBonusPct / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
     player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (atkSpdBonusPct / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
-    player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionStats.vamp || 0);
-    player.stats.critRate = playerCRateBase + player.bonusStats.critRate + player.equippedStats.critRate + (companionStats.critRate || 0);
+    player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionBonuses.vamp || 0);
+    player.stats.critRate = playerCRateBase + player.bonusStats.critRate + player.equippedStats.critRate + (companionBonuses.critRate || 0);
     if (player.stats.critRate > 100) {
         player.stats.critRate = 100;
     }
-    player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg + (companionStats.critDmg || 0);
-    player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge + (companionStats.dodge || 0);
+    player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg + (companionBonuses.critDmg || 0);
+    player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge + (companionBonuses.dodge || 0);
     // Luck from bonus (level-ups), equipment, and companion bonds
-    player.stats.luck = (player.bonusStats.luck || 0) + (player.equippedStats.luck || 0) + (companionStats.luck || 0);
+    player.stats.luck = (player.bonusStats.luck || 0) + (player.equippedStats.luck || 0) + (companionBonuses.luck || 0);
     if (player.stats.luck > 140) {
         player.stats.luck = 140;
     }
@@ -987,18 +980,9 @@ const progressReset = (fromDeath = false) => {
         luck: 0
     };
     player.inCombat = false;
-    player.companionBonus = 0;
-    player.companionStats = {
-        hp: 0,
-        atk: 0,
-        def: 0,
-        atkSpd: 0,
-        vamp: 0,
-        critRate: 0,
-        critDmg: 0,
-        dodge: 0,
-        luck: 0,
-    };
+    if (typeof resetActiveCompanionBonuses === 'function') {
+        resetActiveCompanionBonuses();
+    }
     dungeon.progress.floor = 1;
     dungeon.progress.room = 1;
     dungeon.statistics.kills = 0;

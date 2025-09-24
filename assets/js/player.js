@@ -25,27 +25,33 @@ if (player) {
     if (player.bonusStats && player.bonusStats.luck === undefined) {
         player.bonusStats.luck = 0;
     }
-    if (player.companionBonus === undefined) {
-        player.companionBonus = 0;
-    }
-    if (player.companionStats === undefined) {
-        player.companionStats = {
-            hp: 0,
-            atk: 0,
-            def: 0,
-            atkSpd: 0,
-            vamp: 0,
-            critRate: 0,
-            critDmg: 0,
-            dodge: 0,
-            luck: 0,
-        };
-    }
 }
+
 let inventoryOpen = false;
 let leveled = false;
 
 const MAX_INVENTORY_ITEMS = 100;
+
+function getFallbackCompanionBonuses() {
+    return {
+        hp: 0,
+        atk: 0,
+        def: 0,
+        atkSpd: 0,
+        vamp: 0,
+        critRate: 0,
+        critDmg: 0,
+        dodge: 0,
+        luck: 0,
+    };
+}
+
+function getCurrentCompanionBonuses() {
+    if (typeof getActiveCompanionBonuses === 'function') {
+        return getActiveCompanionBonuses();
+    }
+    return getFallbackCompanionBonuses();
+}
 
 const inventoryItemCount = () => {
     const consumables = player.inventory && player.inventory.consumables ? player.inventory.consumables.length : 0;
@@ -423,7 +429,8 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.hpMax;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="atk"){
-                    let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (player.companionBonus / 100)));
+                    const companionBonuses = getCurrentCompanionBonuses();
+                    let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + ((companionBonuses.atk || 0) / 100)));
                     let statInitial = player.stats.atk;
                     marginalValue = (statFinal-statInitial) / statInitial;
                 } else if(selectedStats[i]=="def"){
