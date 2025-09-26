@@ -2,7 +2,20 @@
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
     // Apply saved font size on page load
-    
+    const advancedStatsDetails = document.querySelector('#advanced-stats');
+    const bonusStatsBox = document.querySelector('#bonus-stats');
+    if (advancedStatsDetails && bonusStatsBox) {
+        const syncBonusVisibility = () => {
+            if (advancedStatsDetails.open) {
+                bonusStatsBox.removeAttribute('hidden');
+            } else {
+                bonusStatsBox.setAttribute('hidden', 'true');
+            }
+        };
+        advancedStatsDetails.addEventListener('toggle', syncBonusVisibility);
+        syncBonusVisibility();
+    }
+
     if (player === null) {
         showCharacterCreation();
     } else {
