@@ -784,7 +784,7 @@ header button i {
 }
 @media (min-width: 400px) {
     #bonus-stats {
-        width: 55%;
+        width: 56%;
     }
     #companion-panel {
         width: 66%;
@@ -802,7 +802,7 @@ header button i {
 }
 @media (min-width: 430px) {
     #bonus-stats {
-        width: 53%;
+        width: 54%;
     }
     #companion-panel {
         width: 59%;
@@ -820,7 +820,7 @@ header button i {
 }
 @media (min-width: 480px) {
     #bonus-stats {
-        width: 50%;
+        width: 51%;
     }
     #companion-panel {
         width: 55%;
