@@ -274,7 +274,7 @@ const companionTypes = [
         baseHp: 15,
         baseAtk: 150,
         evolvesTo: 7,
-        evolveLevel: 10,
+        evolveLevel: 20,
         passives: [
             { stat: 'hp', base: 3.5, perLevel: 0.5 },
             { stat: 'vamp', base: 0.5, perLevel: 0.15 },
@@ -292,7 +292,7 @@ const companionTypes = [
         baseHp: 30,
         baseAtk: 280,
         evolvesTo: 8,
-        evolveLevel: 10,
+        evolveLevel: 30,
         passives: [
             { stat: 'atk', base: 3.5, perLevel: 0.45 },
             { stat: 'critDmg', base: 5, perLevel: 0.6 },
@@ -310,7 +310,7 @@ const companionTypes = [
         baseHp: 40,
         baseAtk: 450,
         evolvesTo: 9,
-        evolveLevel: 10,
+        evolveLevel: 40,
         passives: [
             { stat: 'atkSpd', base: 2, perLevel: 0.25 },
             { stat: 'dodge', base: 2.5, perLevel: 0.35 },
@@ -328,7 +328,7 @@ const companionTypes = [
         baseHp: 60,
         baseAtk: 650,
         evolvesTo: 10,
-        evolveLevel: 10,
+        evolveLevel: 50,
         passives: [
             { stat: 'hp', base: 4.5, perLevel: 0.65 },
             { stat: 'luck', base: 5, perLevel: 0.4 },
