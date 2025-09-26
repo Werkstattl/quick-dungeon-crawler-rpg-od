@@ -31,15 +31,15 @@ const getCompanionOptionsFromTemplate = (template = {}) => ({
 
 const COMPANION_STAT_ORDER = ['atk', 'hp', 'def', 'atkSpd', 'critRate', 'critDmg', 'dodge', 'vamp', 'luck'];
 const COMPANION_STAT_CONFIG = {
-    atk: { labelKey: 'companion-stat-atk', suffix: '%', precision: 1 },
-    hp: { labelKey: 'companion-stat-hp', suffix: '%', precision: 1 },
-    def: { labelKey: 'companion-stat-def', suffix: '%', precision: 1 },
-    atkSpd: { labelKey: 'companion-stat-atkspd', suffix: '%', precision: 1 },
-    critRate: { labelKey: 'companion-stat-critRate', suffix: '%', precision: 1 },
-    critDmg: { labelKey: 'companion-stat-critDmg', suffix: '%', precision: 1 },
-    dodge: { labelKey: 'companion-stat-dodge', suffix: '%', precision: 1 },
-    vamp: { labelKey: 'companion-stat-vamp', suffix: '%', precision: 1 },
-    luck: { labelKey: 'companion-stat-luck', suffix: '', precision: 0 },
+    atk: { labelKey: 'companion-stat-atk', suffix: '%', precision: 1, iconClass: 'ra ra-sword' },
+    hp: { labelKey: 'companion-stat-hp', suffix: '%', precision: 1, iconClass: 'fas fa-heart' },
+    def: { labelKey: 'companion-stat-def', suffix: '%', precision: 1, iconClass: 'ra ra-round-shield' },
+    atkSpd: { labelKey: 'companion-stat-atkspd', suffix: '%', precision: 1, iconClass: 'ra ra-plain-dagger' },
+    critRate: { labelKey: 'companion-stat-critRate', suffix: '%', precision: 1, iconClass: 'ra ra-lightning-bolt' },
+    critDmg: { labelKey: 'companion-stat-critDmg', suffix: '%', precision: 1, iconClass: 'ra ra-focused-lightning' },
+    dodge: { labelKey: 'companion-stat-dodge', suffix: '%', precision: 1, iconClass: 'ra ra-player-dodge' },
+    vamp: { labelKey: 'companion-stat-vamp', suffix: '%', precision: 1, iconClass: 'ra ra-dripping-blade' },
+    luck: { labelKey: 'companion-stat-luck', suffix: '', precision: 0, iconClass: 'ra ra-perspective-dice-one' },
 };
 
 const formatBonusValue = (value, precision = 1) => {
@@ -63,7 +63,10 @@ const buildCompanionBonusList = (companion) => {
         const valueStr = formatBonusValue(rawValue, precision);
         const suffix = config.suffix || '';
         const label = typeof t === 'function' ? t(config.labelKey) : config.labelKey;
-        lines.push(`<li><span class="bonus-value">+${valueStr}${suffix}</span> ${label}</li>`);
+        const iconClass = config.iconClass || '';
+        const icon = iconClass ? `<i class="bonus-icon ${iconClass}" aria-hidden="true"></i>` : '';
+        const srLabel = label ? `<span class="sr-only">${label}</span>` : '';
+        lines.push(`<li>${icon}${srLabel}<span class="bonus-value">+${valueStr}${suffix}</span></li>`);
     });
 
     if (!lines.length) {
