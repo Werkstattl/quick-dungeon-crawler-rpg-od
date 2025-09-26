@@ -102,10 +102,18 @@ img {
     margin-top: 1rem;
 }
 
+@font-face{
+    font-family:'Germania One';
+    src:url(../fonts/GermaniaOne-Regular.ttf) format("truetype");
+    font-weight:400;
+    font-style:normal
+}
+
 body {
     background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
-    font-family: Futura, Trebuchet MS, Arial, sans-serif;
+    /* font-family: Futura, Trebuchet MS, Arial, sans-serif; */
+    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
     font-size: calc(var(--base-font-size) * var(--font-scale));
     color: white;
     height: 100vh;
