@@ -258,8 +258,8 @@ const companionTypes = [
         evolvesTo: 6,
         evolveLevel: 10,
         passives: [
-            { stat: 'atk', base: 2.5, perLevel: 0.4 },
-            { stat: 'critRate', base: 1, perLevel: 0.2 }
+            { stat: 'atk', base: 0.1, perLevel: 0.1 },
+            { stat: 'critRate', base: 0.1, perLevel: 0.1 }
         ],
         passiveDescriptionKey: 'companion-passive-wolf-pup',
         baseCritRate: 35,
@@ -276,8 +276,8 @@ const companionTypes = [
         evolvesTo: 7,
         evolveLevel: 20,
         passives: [
-            { stat: 'hp', base: 3.5, perLevel: 0.5 },
-            { stat: 'vamp', base: 0.5, perLevel: 0.15 },
+            { stat: 'hp', base: 0.1, perLevel: 0.1 },
+            { stat: 'vamp', base: 0.1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-fairy-helper',
         baseCritRate: 25,
@@ -294,8 +294,8 @@ const companionTypes = [
         evolvesTo: 8,
         evolveLevel: 30,
         passives: [
-            { stat: 'atk', base: 3.5, perLevel: 0.45 },
-            { stat: 'critDmg', base: 5, perLevel: 0.6 },
+            { stat: 'atk', base: 0.1, perLevel: 0.1 },
+            { stat: 'critDmg', base: 0.1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-mini-dragon',
         baseCritRate: 45,
@@ -312,8 +312,8 @@ const companionTypes = [
         evolvesTo: 9,
         evolveLevel: 40,
         passives: [
-            { stat: 'atkSpd', base: 2, perLevel: 0.25 },
-            { stat: 'dodge', base: 2.5, perLevel: 0.35 },
+            { stat: 'atkSpd', base: 0.1, perLevel: 0.1 },
+            { stat: 'dodge', base: 0.1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-shadow-cat',
         baseCritRate: 40,
@@ -330,8 +330,8 @@ const companionTypes = [
         evolvesTo: 10,
         evolveLevel: 50,
         passives: [
-            { stat: 'hp', base: 4.5, perLevel: 0.65 },
-            { stat: 'luck', base: 5, perLevel: 0.4 },
+            { stat: 'hp', base: 0.1, perLevel: 0.1 },
+            { stat: 'luck', base: 0.1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-phoenix-chick',
         baseCritRate: 30,
@@ -347,8 +347,8 @@ const companionTypes = [
         baseAtk: 150,
         obtainable: false,
         passives: [
-            { stat: 'atk', base: 6, perLevel: 0.6 },
-            { stat: 'critRate', base: 2.5, perLevel: 0.25 },
+            { stat: 'atk', base: 1, perLevel: 0.1 },
+            { stat: 'critRate', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-wolf',
         baseCritRate: 40,
@@ -364,8 +364,8 @@ const companionTypes = [
         baseAtk: 250,
         obtainable: false,
         passives: [
-            { stat: 'hp', base: 6, perLevel: 0.55 },
-            { stat: 'vamp', base: 1, perLevel: 0.2 },
+            { stat: 'hp', base: 1, perLevel: 0.1 },
+            { stat: 'vamp', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-fairy-guardian',
         baseCritRate: 30,
@@ -381,8 +381,8 @@ const companionTypes = [
         baseAtk: 420,
         obtainable: false,
         passives: [
-            { stat: 'atk', base: 7, perLevel: 0.7 },
-            { stat: 'critDmg', base: 12, perLevel: 0.8 },
+            { stat: 'atk', base: 1, perLevel: 0.1 },
+            { stat: 'critDmg', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-young-dragon',
         baseCritRate: 50,
@@ -398,8 +398,8 @@ const companionTypes = [
         baseAtk: 600,
         obtainable: false,
         passives: [
-            { stat: 'atkSpd', base: 3.5, perLevel: 0.35 },
-            { stat: 'dodge', base: 4.5, perLevel: 0.45 },
+            { stat: 'atkSpd', base: 1, perLevel: 0.1 },
+            { stat: 'dodge', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-night-panther',
         baseCritRate: 45,
@@ -415,9 +415,9 @@ const companionTypes = [
         baseAtk: 900,
         obtainable: false,
         passives: [
-            { stat: 'hp', base: 8, perLevel: 0.8 },
-            { stat: 'atk', base: 4, perLevel: 0.5 },
-            { stat: 'luck', base: 8, perLevel: 0.45 },
+            { stat: 'hp', base: 1, perLevel: 0.1 },
+            { stat: 'atk', base: 1, perLevel: 0.1 },
+            { stat: 'luck', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-phoenix',
         baseCritRate: 35,
