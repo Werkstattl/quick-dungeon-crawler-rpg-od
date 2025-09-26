@@ -419,7 +419,7 @@ const companionTypes = [
         obtainable: false,
         passives: [
             { stat: 'hp', base: 1, perLevel: 0.1 },
-            { stat: 'atk', base: 1, perLevel: 0.1 },
+            { stat: 'atk', base: 0.1, perLevel: 0.1 },
             { stat: 'luck', base: 1, perLevel: 0.1 },
         ],
         passiveDescriptionKey: 'companion-passive-phoenix',
