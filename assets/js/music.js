@@ -10,19 +10,46 @@ if (JSON.parse(localStorage.getItem("volumeData")) == undefined) {
     volume = JSON.parse(localStorage.getItem("volumeData"));
 }
 
-// Font size settings
-let fontSize;
-if (JSON.parse(localStorage.getItem("fontSizeData")) == undefined) {
+// Font size & family settings
+const DEFAULT_FONT_KEY = 'germania';
+const FONT_FAMILY_OPTIONS = [
+    { key: 'germania', label: 'Germania One', stack: '"Germania One", Georgia, "Times New Roman", serif' },
+    { key: 'futura', label: 'Futura', stack: 'Futura, Trebuchet MS, Arial, sans-serif' },
+];
+
+const FONT_FAMILY_MAP = FONT_FAMILY_OPTIONS.reduce((map, option) => {
+    map[option.key] = option.stack;
+    return map;
+}, {});
+
+// expose options for other scripts (settings modal)
+window.fontFamilyOptions = FONT_FAMILY_OPTIONS;
+window.defaultFontFamilyKey = DEFAULT_FONT_KEY;
+
+let fontSize = JSON.parse(localStorage.getItem("fontSizeData"));
+if (!fontSize || typeof fontSize !== 'object') {
     fontSize = {
-        scale: 1.0
-    }
+        scale: 1.0,
+        family: DEFAULT_FONT_KEY
+    };
 } else {
-    fontSize = JSON.parse(localStorage.getItem("fontSizeData"));
+    if (typeof fontSize.scale !== 'number') {
+        fontSize.scale = 1.0;
+    }
+    if (!fontSize.family || !FONT_FAMILY_MAP[fontSize.family]) {
+        fontSize.family = DEFAULT_FONT_KEY;
+    }
 }
 
-// Apply font size on load
+// Apply font size settings on load
 const applyFontSize = () => {
+    const selectedStack = FONT_FAMILY_MAP[fontSize.family] || FONT_FAMILY_MAP[DEFAULT_FONT_KEY];
     document.documentElement.style.setProperty('--font-scale', fontSize.scale);
+    if (fontSize.family && fontSize.family !== DEFAULT_FONT_KEY) {
+        document.body.style.fontFamily = selectedStack;
+    } else {
+        document.body.style.removeProperty('font-family');
+    }
 }
 
 

@@ -68,6 +68,7 @@
   "load-more": "もっと読み込む",
   "settings": "設定",
   "font-size": "フォントサイズ",
+  "font-family": "フォント",
   "auto-mode": "オートモード",
   "auto-mode-unlock": "オートモードをアンロック（プレミアム）",
   "auto-mode-description": "自動的に敵に攻撃し、戦利品を獲得し、扉を開きます。",

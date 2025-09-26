@@ -480,6 +480,16 @@ function openMenu(isTitle = false) {
         let bgm = (volume.bgm * 100) * 2;
         let sfx = volume.sfx * 100;
         let fontScale = Math.round(fontSize.scale * 100);
+        const fontOptions = Array.isArray(window.fontFamilyOptions) ? window.fontFamilyOptions : [];
+        const defaultFontKey = window.defaultFontFamilyKey || 'futura';
+        const currentFontKey = fontOptions.some(option => option.key === fontSize.family) ? fontSize.family : defaultFontKey;
+        if (fontOptions.length && fontSize.family !== currentFontKey) {
+            fontSize.family = currentFontKey;
+        }
+        const fontFamilyOptionsMarkup = fontOptions.map(option => {
+            const selected = option.key === currentFontKey ? 'selected' : '';
+            return `<option value="${option.key}" ${selected} data-i18n="font-family-${option.key}">${option.label}</option>`;
+        }).join('');
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
         // Only allow changing logFlow while resting with no open choices
@@ -503,6 +513,11 @@ function openMenu(isTitle = false) {
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size"><span data-i18n="font-size">Font Size</span> (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
+                ${fontOptions.length ? `
+                <label id="font-family-label" for="font-family-select" data-i18n="font-family">Font Family</label>
+                <select id="font-family-select">
+                    ${fontFamilyOptionsMarkup}
+                </select>` : ''}
                 <label id="logflow-label" for="logflow-select" data-i18n="log-flow">Log Flow</label>
                 <select id="logflow-select" ${!canChangeLogFlow ? 'disabled' : ''}>
                     <option value="bottom" ${logFlow === 'bottom' ? 'selected' : ''} data-i18n="log-flow-bottom-to-top">Bottom to top (newest last)</option>
@@ -523,6 +538,7 @@ function openMenu(isTitle = false) {
         let sfxVol = document.querySelector('#sfx-volume');
         let fontSizeSlider = document.querySelector('#font-size');
         let languageSelect = document.querySelector('#language-select');
+        let fontFamilySelect = document.querySelector('#font-family-select');
         let logFlowSelect = document.querySelector('#logflow-select');
         let selectedLang = localStorage.getItem('lang') || 'en';
         languageSelect.value = selectedLang;
@@ -579,6 +595,9 @@ function openMenu(isTitle = false) {
             volume.bgm = (bgm / 100) / 2;
             volume.sfx = sfx / 100;
             fontSize.scale = fontSizeSlider.value / 100;
+            if (fontFamilySelect) {
+                fontSize.family = fontFamilySelect.value;
+            }
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();
