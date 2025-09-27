@@ -505,6 +505,8 @@ function updateCompanionUI() {
     const summonBtn = document.getElementById('summon-companion');
 
     if (activeCompanion) {
+        companionName.removeAttribute('data-i18n');
+        companionName.removeAttribute('data-i18n-params');
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
         companionAtk.textContent = activeCompanion.atk;
@@ -521,6 +523,7 @@ function updateCompanionUI() {
         summonBtn.textContent = t('change');
         summonBtn.classList.remove('attention');
     } else {
+        companionName.setAttribute('data-i18n', 'none');
         companionName.textContent = t('none');
         companionName.className = "";
         companionAtk.textContent = "0";
