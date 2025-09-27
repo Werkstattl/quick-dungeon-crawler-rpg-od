@@ -116,7 +116,6 @@ img {
 body {
     background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
-    /* font-family: Futura, Trebuchet MS, Arial, sans-serif; */
     font-family: var(--font-family-base);
     font-size: calc(var(--base-font-size) * var(--font-scale));
     color: white;
@@ -290,7 +289,7 @@ button {
     text-align: center;
     background-color: transparent;
     color: white;
-    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-family-base);
     font-size: calc(1rem * var(--font-scale));
     padding: 0.4rem 1rem;
     border-radius: 0.3rem;
