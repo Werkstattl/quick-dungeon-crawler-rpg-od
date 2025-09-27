@@ -325,6 +325,61 @@ window.addEventListener("DOMContentLoaded", async function () {
     ratingSystem.init();
 });
 
+function renderDungeonMapModal() {
+    let mapData = [];
+    if (typeof getDungeonMapData === 'function') {
+        mapData = getDungeonMapData();
+    }
+
+    const hasData = Array.isArray(mapData) && mapData.length > 0;
+    const floorsHtml = hasData ? mapData.map(floor => {
+        const classes = ['map-floor'];
+        if (floor.isCurrent) classes.push('is-current');
+        if (floor.cleared) classes.push('is-cleared');
+
+        const nextRoom = floor.cleared ? floor.totalRooms : Math.max(floor.currentRoom, floor.roomsCleared + 1);
+        const statusLabel = floor.cleared ? 'Cleared' : `Room ${nextRoom}/${floor.totalRooms}`;
+
+        const cells = Array.from({ length: floor.totalRooms }, (_, idx) => {
+            const roomNumber = idx + 1;
+            let stateClass = 'future';
+            if (roomNumber <= floor.roomsCleared) {
+                stateClass = 'cleared';
+            } else if (roomNumber === floor.currentRoom && !floor.cleared) {
+                stateClass = 'current';
+            }
+            const bossClass = roomNumber === floor.totalRooms ? ' boss' : '';
+            const label = roomNumber === floor.totalRooms ? 'Boss' : String(roomNumber);
+            return `<div class="map-room ${stateClass}${bossClass}" data-room="${roomNumber}">${label}</div>`;
+        }).join('');
+
+        const note = floor.isCurrent && !floor.cleared
+            ? `<p class="map-note">You are on room ${floor.currentRoom} of ${floor.totalRooms}.</p>`
+            : '';
+
+        return `
+            <div class="${classes.join(' ')}">
+                <div class="map-floor-header">
+                    <span>Floor ${floor.floor}${floor.isCurrent ? ' (current)' : ''}</span>
+                    <span>${statusLabel}</span>
+                </div>
+                <div class="map-grid">${cells}</div>
+                ${note}
+            </div>`;
+    }).join('') : '<p class="map-empty">Explore a few rooms to populate your map.</p>';
+
+    return `
+        <div class="content" id="map-tab">
+            <div class="content-head">
+                <h3>Dungeon Map</h3>
+                <p id="map-close"><i class="fa fa-xmark"></i></p>
+            </div>
+            <div class="map-container">
+                ${floorsHtml}
+            </div>
+        </div>`;
+}
+
 function openMenu(isTitle = false) {
     closeInventory();
 
@@ -349,6 +404,7 @@ function openMenu(isTitle = false) {
             <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
             ${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> <span data-i18n="current-run">Current Run</span></button>'}
             <button id="bestiary-menu"><i class="fas fa-book"></i> <span data-i18n="bestiary">Bestiary</span></button>
+            ${isTitle ? '' : '<button id="map-menu"><i class="fas fa-map"></i> Dungeon Map</button>'}
             <button id="volume-btn"><i class="fas fa-cog"></i> <span data-i18n="settings">Settings</span></button>
             <button id="auto-mode-settings"><i class="fas fa-play"></i> <span data-i18n="auto-mode">Auto Mode</span></button>
             <button id="export-import"><i class="fas fa-file-export"></i> <span data-i18n="export-import-data">Export/Import Data</span></button>
@@ -364,6 +420,7 @@ function openMenu(isTitle = false) {
     let heroReturn = document.querySelector('#hero-return');
     let exportImport = document.querySelector('#export-import');
     let bestiaryMenu = document.querySelector('#bestiary-menu');
+    let mapMenu = document.querySelector('#map-menu');
     let volumeSettings = document.querySelector('#volume-btn');
     let autoModeSettings = document.querySelector('#auto-mode-settings');
     let redditLink = document.querySelector('#reddit-link');
@@ -409,6 +466,24 @@ function openMenu(isTitle = false) {
             menuModalElement.style.display = "flex";
         };
     };
+
+    if (mapMenu) {
+        mapMenu.onclick = function () {
+            sfxOpen.play();
+            menuModalElement.style.display = "none";
+            defaultModalElement.style.display = "flex";
+            defaultModalElement.innerHTML = renderDungeonMapModal();
+            const mapClose = document.querySelector('#map-close');
+            if (mapClose) {
+                mapClose.onclick = function () {
+                    sfxDecline.play();
+                    defaultModalElement.style.display = "none";
+                    defaultModalElement.innerHTML = "";
+                    menuModalElement.style.display = "flex";
+                };
+            }
+        };
+    }
 
     // Dungeon run click function
     if (runMenu) {
@@ -1032,6 +1107,7 @@ const progressReset = (fromDeath = false) => {
     }
     dungeon.progress.floor = 1;
     dungeon.progress.room = 1;
+    dungeon.map = {};
     dungeon.statistics.kills = 0;
     dungeon.status = {
         exploring: false,
@@ -1050,6 +1126,7 @@ const progressReset = (fromDeath = false) => {
         atkSpd: 0,
         currentFloor: 1,
     };
+    syncDungeonMapState();
     delete dungeon.enemyMultipliers;
     delete player.allocated;
     dungeon.backlog.length = 0;

@@ -56,6 +56,85 @@ let dungeon = {
     nothingBias: 0,
 };
 
+function ensureDungeonMapInitialized() {
+    if (!dungeon.map || typeof dungeon.map !== 'object') {
+        dungeon.map = {};
+    }
+
+    const roomsPerFloor = dungeon.progress.roomLimit || 5;
+    const currentFloor = dungeon.progress.floor || 1;
+    const currentRoom = dungeon.progress.room || 1;
+
+    for (let floor = 1; floor < currentFloor; floor++) {
+        const entry = dungeon.map[floor] || {};
+        dungeon.map[floor] = {
+            roomsCleared: roomsPerFloor,
+            currentRoom: roomsPerFloor,
+            cleared: true,
+        };
+    }
+
+    const existing = dungeon.map[currentFloor] || {};
+    const roomsCleared = Math.max(0, Math.min(currentRoom - 1, roomsPerFloor));
+    dungeon.map[currentFloor] = {
+        roomsCleared,
+        currentRoom: Math.max(1, Math.min(currentRoom, roomsPerFloor)),
+        cleared: existing.cleared ? true : roomsCleared >= roomsPerFloor,
+    };
+}
+
+function syncDungeonMapState() {
+    ensureDungeonMapInitialized();
+    return dungeon.map;
+}
+
+function getDungeonMapData() {
+    const map = syncDungeonMapState();
+    const roomsPerFloor = dungeon.progress.roomLimit || 5;
+    const currentFloor = dungeon.progress.floor || 1;
+
+    const floors = Object.keys(map)
+        .map(Number)
+        .filter(num => Number.isFinite(num))
+        .concat(currentFloor)
+        .filter((value, index, array) => array.indexOf(value) === index)
+        .sort((a, b) => a - b);
+
+    return floors.map(floorNum => {
+        const entry = map[floorNum] || {};
+        let roomsCleared = entry.roomsCleared != null ? entry.roomsCleared : 0;
+        let currentRoom = entry.currentRoom != null ? entry.currentRoom : 1;
+        let cleared = !!entry.cleared;
+        const isCurrent = floorNum === currentFloor;
+
+        if (floorNum < currentFloor) {
+            roomsCleared = roomsPerFloor;
+            currentRoom = roomsPerFloor;
+            cleared = true;
+        }
+
+        if (isCurrent) {
+            currentRoom = dungeon.progress.room || currentRoom || 1;
+            if (currentRoom > roomsPerFloor) {
+                currentRoom = roomsPerFloor;
+            }
+            roomsCleared = Math.max(roomsCleared, Math.max(0, currentRoom - 1));
+            if (roomsCleared >= roomsPerFloor) {
+                cleared = true;
+            }
+        }
+
+        return {
+            floor: floorNum,
+            roomsCleared: Math.max(0, Math.min(roomsCleared, roomsPerFloor)),
+            currentRoom: Math.max(1, Math.min(currentRoom, roomsPerFloor)),
+            totalRooms: roomsPerFloor,
+            cleared,
+            isCurrent,
+        };
+    });
+}
+
 // ===== Dungeon Setup =====
 // Enables start and pause on button click
 dungeonActivity.addEventListener('click', function () {
@@ -164,7 +243,7 @@ const loadDungeonProgress = () => {
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
-        
+
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
     }
@@ -174,6 +253,7 @@ const loadDungeonProgress = () => {
     roomCount.setAttribute('data-i18n', 'room-count');
     roomCount.setAttribute('data-i18n-params', JSON.stringify({ room: dungeon.progress.room }));
     roomCount.textContent = t('room-count', { room: dungeon.progress.room });
+    syncDungeonMapState();
 }
 
 // ========== Events in the Dungeon ==========
