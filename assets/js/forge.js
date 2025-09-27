@@ -84,6 +84,9 @@ const closeForgeModal = () => {
 // Load available equipment for forging
 const loadForgeEquipment = () => {
     const equipmentGrid = document.querySelector('#forge-equipment-grid');
+    if (!equipmentGrid) {
+        return;
+    }
     equipmentGrid.innerHTML = "";
     
     // Collect forgeable equipment from both inventory and equipped items
@@ -108,6 +111,11 @@ const loadForgeEquipment = () => {
         });
     });
     
+    if (forgeableEquipment.length === 0) {
+        equipmentGrid.innerHTML = `<p class="forge-empty">${t('no-forge-equipment')}</p>`;
+        return;
+    }
+
     // Sort equipment by rarity (highest to lowest), then by level (highest to lowest)
     const rarityOrder = ['Heirloom', 'Legendary', 'Epic', 'Rare', 'Uncommon', 'Common'];
     

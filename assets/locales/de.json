@@ -107,6 +107,7 @@
   "cost": "Kosten:",
   "gold": "Gold",
   "available-equipment": "Verfügbare Ausrüstung",
+  "no-forge-equipment": "Du hast noch keine Ausrüstung zum Schmieden.",
   "forge-equipment": "Ausrüstung schmieden",
   "clear-selection": "Auswahl zurücksetzen",
   "change": "Ändern",

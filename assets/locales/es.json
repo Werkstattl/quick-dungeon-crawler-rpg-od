@@ -107,6 +107,7 @@
   "cost": "Costo:",
   "gold": "oro",
   "available-equipment": "Equipo disponible",
+  "no-forge-equipment": "Todavía no tienes equipo para forjar.",
   "forge-equipment": "Forjar equipo",
   "clear-selection": "Borrar selección",
   "change": "Cambiar",

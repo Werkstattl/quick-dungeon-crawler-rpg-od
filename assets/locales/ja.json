@@ -107,6 +107,7 @@
   "cost": "コスト:",
   "gold": "ゴールド",
   "available-equipment": "使用可能な装備",
+  "no-forge-equipment": "鍛造できる装備がまだありません。",
   "forge-equipment": "装備を鍛造",
   "clear-selection": "選択をクリア",
   "change": "変更",

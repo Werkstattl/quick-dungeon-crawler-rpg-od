@@ -107,6 +107,7 @@
   "cost": "Cost:",
   "gold": "gold",
   "available-equipment": "Available Equipment",
+  "no-forge-equipment": "You don't have any equipment to forge yet.",
   "forge-equipment": "Forge Equipment",
   "clear-selection": "Clear Selection",
   "change": "Change",

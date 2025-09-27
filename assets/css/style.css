@@ -1349,6 +1349,14 @@ header button i {
     padding: 0.5rem;
 }
 
+.forge-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #bcbcbc;
+    padding: 1.5rem 0;
+    font-style: italic;
+}
+
 .forge-equipment-item {
     border: 1px solid #444;
     border-radius: 0.3rem;
