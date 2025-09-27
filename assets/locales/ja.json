@@ -72,6 +72,7 @@
   "auto-mode": "オートモード",
   "auto-mode-unlock": "オートモードをアンロック（プレミアム）",
   "auto-mode-description": "自動的に敵に攻撃し、戦利品を獲得し、扉を開きます。",
+  "auto-mode-show-button": "オートボタン表示",
   "active": "アクティブ",
   "blessings": "祝福",
   "heal": "ヒール",

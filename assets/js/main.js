@@ -652,7 +652,7 @@ function openMenu(isTitle = false) {
                 </div>
                 <p data-i18n="auto-mode-description">Automatically engage enemies, claim loot and open doors.</p>
                 ${!autoModeUnlocked ? '<button id="unlock-auto" data-i18n="auto-mode-unlock">Unlock Auto Mode (Premium)</button>' : ''}
-                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> <span data-i18n="active">Active</span></label>
+                <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> <span data-i18n="auto-mode-show-button">Show Auto Button</span></label>
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
