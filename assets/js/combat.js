@@ -8,6 +8,7 @@ let enemyAttackTimeout;
 let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
+let autoSpecialAbilityInterval;
 // ========== Validation ==========
 const hpValidation = () => {
     const deathMessage = player.hardcore
@@ -397,6 +398,58 @@ const updateCombatLog = () => {
 // Combat Timer
 let combatSeconds = 0;
 
+const isAutoSpecialFeatureActive = () => {
+    if (typeof autoMode === 'undefined' || typeof autoSpecialAbility === 'undefined') {
+        return false;
+    }
+    return autoMode && autoSpecialAbility;
+};
+
+const shouldAutoUseSpecialAbility = () => {
+    if (!player || !player.inCombat) {
+        return false;
+    }
+    if (!isAutoSpecialFeatureActive()) {
+        return false;
+    }
+    if (specialAbilityCooldown) {
+        return false;
+    }
+    if (player.selectedClass === "Paladin" && player.stats.hp >= player.stats.hpMax) {
+        return false;
+    }
+    return true;
+};
+
+const startAutoSpecialAbilityLoop = () => {
+    clearInterval(autoSpecialAbilityInterval);
+    if (!player || !player.inCombat) {
+        return;
+    }
+    if (!isAutoSpecialFeatureActive()) {
+        return;
+    }
+
+    if (shouldAutoUseSpecialAbility()) {
+        useSpecialAbility();
+    }
+
+    autoSpecialAbilityInterval = setInterval(() => {
+        if (!player || !player.inCombat) {
+            stopAutoSpecialAbilityLoop();
+            return;
+        }
+        if (shouldAutoUseSpecialAbility()) {
+            useSpecialAbility();
+        }
+    }, 750);
+};
+
+const stopAutoSpecialAbilityLoop = () => {
+    clearInterval(autoSpecialAbilityInterval);
+    autoSpecialAbilityInterval = null;
+};
+
 const startCombat = (battleMusic) => {
     currentBattleMusic = battleMusic;
     bgmDungeon.pause();
@@ -428,6 +481,7 @@ const startCombat = (battleMusic) => {
     combatPanel.style.display = "flex";
 
     combatTimer = setInterval(combatCounter, 1000);
+    startAutoSpecialAbilityLoop();
 }
 
 const endCombat = () => {
@@ -444,6 +498,7 @@ const endCombat = () => {
     // Stops every timer in combat
     clearInterval(combatTimer);
     combatSeconds = 0;
+    stopAutoSpecialAbilityLoop();
 }
 
 const combatCounter = () => {

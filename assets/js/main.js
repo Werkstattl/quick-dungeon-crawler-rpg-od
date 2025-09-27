@@ -655,6 +655,7 @@ function openMenu(isTitle = false) {
                 <label id="auto-label"><input type="checkbox" id="auto-mode-toggle" ${autoModeBtnVisible && autoModeUnlocked ? 'checked' : ''} ${!autoModeUnlocked ? 'disabled' : ''}> <span data-i18n="active">Active</span></label>
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
+                <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
         <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
                 <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
@@ -686,6 +687,7 @@ function openMenu(isTitle = false) {
         let autoToggle = document.querySelector('#auto-mode-toggle');
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
+        let autoSpecialToggle = document.querySelector('#auto-special-toggle');
     let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
         let autoCurseSelect = document.querySelector('#auto-curse-select');
@@ -724,6 +726,7 @@ function openMenu(isTitle = false) {
             }
             autoBlessings = autoBlessToggle.checked;
             autoHeal = autoHealToggle.checked;
+            autoSpecialAbility = autoSpecialToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
             autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
             autoCurseTotemsUntil = parseInt(autoCurseSelect.value, 10);
@@ -733,6 +736,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoModeBtnVisible", autoModeBtnVisible);
             localStorage.setItem("autoBlessings", autoBlessings);
             localStorage.setItem("autoHeal", autoHeal);
+            localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
             localStorage.setItem("autoBossDoors", autoBossDoors);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             localStorage.setItem("autoCurseTotemsUntil", autoCurseTotemsUntil);
