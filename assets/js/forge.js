@@ -34,7 +34,7 @@ const openForgeModal = () => {
     if (!forgeModalElement) initializeForge();
 
     if (inventoryOpen) {
-        closeInventory();
+        closeInventory(true);
     }
 
     sfxOpen.play();

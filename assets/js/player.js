@@ -334,8 +334,8 @@ const openInventory = () => {
 }
 
 // Closes inventory
-const closeInventory = () => {
-    sfxDecline.play();
+const closeInventory = (silent = false) => {
+    if (!silent) sfxDecline.play();
 
     let openInv = document.querySelector('#inventory');
     let dimDungeon = document.querySelector('#dungeon-main');
