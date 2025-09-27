@@ -13,17 +13,12 @@ if (JSON.parse(localStorage.getItem("volumeData")) == undefined) {
 // Font size & family settings
 const DEFAULT_FONT_KEY = 'germania';
 const FONT_FAMILY_OPTIONS = [
-    { key: 'germania', label: 'Germania One', stack: '"Germania One", Georgia, "Times New Roman", serif', scale: 1.08 },
-    { key: 'futura', label: 'Futura', stack: 'Futura, Trebuchet MS, Arial, sans-serif', scale: 1 },
+    { key: 'germania', label: 'Germania One', stack: '"Germania One", Georgia, "Times New Roman", serif' },
+    { key: 'futura', label: 'Futura', stack: 'Futura, Trebuchet MS, Arial, sans-serif' },
 ];
 
 const FONT_FAMILY_MAP = FONT_FAMILY_OPTIONS.reduce((map, option) => {
     map[option.key] = option.stack;
-    return map;
-}, {});
-
-const FONT_FAMILY_SCALE_MAP = FONT_FAMILY_OPTIONS.reduce((map, option) => {
-    map[option.key] = typeof option.scale === 'number' ? option.scale : 1;
     return map;
 }, {});
 
@@ -49,8 +44,7 @@ if (!fontSize || typeof fontSize !== 'object') {
 // Apply font size settings on load
 const applyFontSize = () => {
     const selectedStack = FONT_FAMILY_MAP[fontSize.family] || FONT_FAMILY_MAP[DEFAULT_FONT_KEY];
-    const scaleMultiplier = FONT_FAMILY_SCALE_MAP[fontSize.family] || FONT_FAMILY_SCALE_MAP[DEFAULT_FONT_KEY] || 1;
-    document.documentElement.style.setProperty('--font-scale', fontSize.scale * scaleMultiplier);
+    document.documentElement.style.setProperty('--font-scale', fontSize.scale);
     document.documentElement.style.setProperty('--font-family-base', selectedStack);
     if (fontSize.family && fontSize.family !== DEFAULT_FONT_KEY) {
         document.body.style.fontFamily = selectedStack;
