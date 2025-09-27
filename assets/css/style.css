@@ -2,6 +2,7 @@
 :root {
     --font-scale: 1;
     --base-font-size: 1rem;
+    --font-family-base: 'Germania One', Georgia, 'Times New Roman', serif;
 }
 
 * {
@@ -62,7 +63,7 @@ i {
 
 input {
     font-size: calc(1rem * var(--font-scale));
-    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-family-base);
     padding: 0.4rem;
     margin: 1rem 0 0.5rem 0;
     background: transparent;
@@ -77,7 +78,7 @@ input {
 select {
     cursor: pointer;
     font-size: calc(1rem * var(--font-scale));
-    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-family-base);
     width: 100%;
     padding: 0.4rem;
     background: transparent;
@@ -97,7 +98,7 @@ select {
 
 option {
     background-color: #030303;
-    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-family-base);
 }
 
 img {
@@ -116,7 +117,7 @@ body {
     background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
     /* font-family: Futura, Trebuchet MS, Arial, sans-serif; */
-    font-family: 'Germania One', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-family-base);
     font-size: calc(var(--base-font-size) * var(--font-scale));
     color: white;
     height: 100vh;
@@ -595,7 +596,7 @@ button:focus {
 }
 
 #character-creation input {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-family-base);
     width: 20rem;
     max-width: calc(100% - 2rem);
 }

@@ -45,6 +45,7 @@ if (!fontSize || typeof fontSize !== 'object') {
 const applyFontSize = () => {
     const selectedStack = FONT_FAMILY_MAP[fontSize.family] || FONT_FAMILY_MAP[DEFAULT_FONT_KEY];
     document.documentElement.style.setProperty('--font-scale', fontSize.scale);
+    document.documentElement.style.setProperty('--font-family-base', selectedStack);
     if (fontSize.family && fontSize.family !== DEFAULT_FONT_KEY) {
         document.body.style.fontFamily = selectedStack;
     } else {
