@@ -4,12 +4,23 @@ window.addEventListener("DOMContentLoaded", async function () {
     // Apply saved font size on page load
     const advancedStatsDetails = document.querySelector('#advanced-stats');
     const bonusStatsBox = document.querySelector('#bonus-stats');
+    const companionBonus = document.querySelector('#companion-bonus');
     if (advancedStatsDetails && bonusStatsBox) {
         const syncBonusVisibility = () => {
-            if (advancedStatsDetails.open) {
-                bonusStatsBox.removeAttribute('hidden');
-            } else {
-                bonusStatsBox.setAttribute('hidden', 'true');
+            const showAdvanced = advancedStatsDetails.open;
+            if (bonusStatsBox) {
+                if (showAdvanced) {
+                    bonusStatsBox.removeAttribute('hidden');
+                } else {
+                    bonusStatsBox.setAttribute('hidden', 'true');
+                }
+            }
+            if (companionBonus) {
+                if (showAdvanced) {
+                    companionBonus.removeAttribute('hidden');
+                } else {
+                    companionBonus.setAttribute('hidden', 'true');
+                }
             }
         };
         advancedStatsDetails.addEventListener('toggle', syncBonusVisibility);
