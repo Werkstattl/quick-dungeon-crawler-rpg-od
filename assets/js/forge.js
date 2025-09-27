@@ -33,8 +33,11 @@ const updateForgeGold = () => {
 const openForgeModal = () => {
     if (!forgeModalElement) initializeForge();
 
+    if (inventoryOpen) {
+        closeInventory();
+    }
+
     sfxOpen.play();
-    closeInventory();
     menuModalElement.style.display = "none";
 
     forgeModalElement.style.display = "flex";
