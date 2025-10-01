@@ -151,14 +151,15 @@ const loadForgeEquipment = () => {
                 return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
             }
         }).join('');
-        
+        const effectsHtml = renderEquipmentStatusEffects(equip.statusEffects);
+
         equipDiv.innerHTML = `
             <div class="equipment-icon">${equipmentIcon(equip.category)}</div>
             <div class="equipment-info">
                 <p class="${equip.rarity}">${equipmentName(equip.category)}</p>
                 <p>Lv.${equip.lvl} T${equip.tier}</p>
                 <ul class="equipment-stats">
-                    ${statsHtml}
+                    ${statsHtml}${effectsHtml}
                 </ul>
                 <p class="equipment-value">${t('value')}: ${nFormatter(equip.value)}</p>
                 ${source === 'equipped' ? `<p class="equipped-indicator">⚔️ ${t('equipped')}</p>` : ''}
@@ -463,6 +464,16 @@ const displayForgeResult = () => {
     
     let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     
+    const statsHtml = forgeResult.stats.map(stat => {
+        const statName = Object.keys(stat)[0];
+        const statValue = stat[statName];
+        if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck"].includes(statName)) {
+            return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
+        }
+        return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
+    }).join('');
+    const effectsHtml = renderEquipmentStatusEffects(forgeResult.statusEffects);
+
     resultItem.innerHTML = `
         <div class="forged-equipment ${forgeResult.rarity}">
             <h4 class="${forgeResult.rarity}">
@@ -470,15 +481,7 @@ const displayForgeResult = () => {
             </h4>
             <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} ${t('tier')} ${forgeResult.tier}</h5>
             <ul style="display:none">
-                ${forgeResult.stats.map(stat => {
-                    const statName = Object.keys(stat)[0];
-                    const statValue = stat[statName];
-                    if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck"].includes(statName)) {
-                        return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
-                    } else {
-                        return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
-                    }
-                }).join('')}
+                ${statsHtml}${effectsHtml}
             </ul>
             <p class="forged-indicator">⚒️ ${t('forged-equipment')}</p>
         </div>

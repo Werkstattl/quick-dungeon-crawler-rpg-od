@@ -8,6 +8,7 @@ const createEquipment = (addToInventory = true) => {
         tier: null,
         value: null,
         stats: [],
+        statusEffects: [],
     };
 
     // Generate random equipment attribute
@@ -222,6 +223,7 @@ const createEquipment = (addToInventory = true) => {
             equipment.stats.push({ [statType]: statValue });
         }
     }
+    assignWeaponStatusEffects(equipment);
     equipment.value = Math.round(equipmentValue * 3);
     equipment.icon = equipmentIcon(equipment.category);
 
@@ -233,6 +235,47 @@ const createEquipment = (addToInventory = true) => {
     }
 
     return equipment;
+}
+
+function assignWeaponStatusEffects(equipment) {
+    if (!equipment) {
+        return;
+    }
+    if (!Array.isArray(equipment.statusEffects)) {
+        equipment.statusEffects = [];
+    }
+    if (equipment.type !== 'Weapon') {
+        return;
+    }
+
+    const burnChanceByRarity = {
+        Common: 0.08,
+        Uncommon: 0.1,
+        Rare: 0.12,
+        Epic: 0.15,
+        Legendary: 0.18,
+        Heirloom: 0.22,
+    };
+    const burnDamagePercentByRarity = {
+        Common: 4,
+        Uncommon: 5,
+        Rare: 6,
+        Epic: 7,
+        Legendary: 8,
+        Heirloom: 10,
+    };
+
+    const burnChance = burnChanceByRarity[equipment.rarity] ?? 0.1;
+    if (Math.random() >= burnChance) {
+        return;
+    }
+
+    equipment.statusEffects.push({
+        type: 'burn',
+        duration: 4,
+        tickInterval: 1000,
+        damagePercent: burnDamagePercentByRarity[equipment.rarity] ?? 5,
+    });
 }
 
 // Add a new equipment item to the player's collection. Automatically equips
@@ -254,6 +297,10 @@ const receiveEquipment = (equipment) => {
 const rerollEquipmentStats = (equipment) => {
     equipment.stats = [];
     let equipmentValue = 0;
+
+    if (!Array.isArray(equipment.statusEffects)) {
+        equipment.statusEffects = [];
+    }
 
     // Determine loop count from rarity
     let loopCount;
@@ -493,6 +540,38 @@ function closeEquipmentInfo() {
     if (typeof continueExploring === 'function') continueExploring();
 }
 
+const formatStatusEffectDescription = (effect) => {
+    if (!effect || !effect.type) {
+        return '';
+    }
+    if (effect.type === 'burn') {
+        if (typeof t === 'function') {
+            const translated = t('weapon-effect-burn', {
+                duration: effect.duration,
+                percent: effect.damagePercent
+            });
+            if (translated && translated !== 'weapon-effect-burn') {
+                return translated;
+            }
+        }
+        return `Applies Burn (${effect.duration}s, ${effect.damagePercent}% ATK per sec)`;
+    }
+    return '';
+};
+
+const renderEquipmentStatusEffects = (effects) => {
+    if (!Array.isArray(effects) || effects.length === 0) {
+        return '';
+    }
+    return effects.map(effect => {
+        const description = formatStatusEffectDescription(effect);
+        if (!description) {
+            return '';
+        }
+        return `<li class="status-effect">${description}</li>`;
+    }).join('');
+};
+
 // Show full detail of the item
 const showItemInfo = (item, icon, action, i) => {
     sfxOpen.play();
@@ -507,19 +586,20 @@ const showItemInfo = (item, icon, action, i) => {
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
     const actionLabel = t(action);
+    const statsHtml = item.stats.map(stat => {
+        const statKey = Object.keys(stat)[0];
+        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(statKey)) {
+            return `<li>${statKey.toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[statKey].toFixed(2).replace(rx, "$1")}%</li>`;
+        }
+        return `<li>${statKey.toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[statKey]}</li>`;
+    }).join('');
+    const effectsHtml = renderEquipmentStatusEffects(item.statusEffects);
     itemInfo.innerHTML = `
             <div class="content">
                 <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
                 <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
-                ${item.stats.map(stat => {
-        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
-        }
-        else {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]]}</li>`;
-        }
-    }).join('')}
+                ${statsHtml}${effectsHtml}
                 </ul>
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
@@ -811,20 +891,21 @@ const createEquipmentPrint = (condition) => {
     let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     let item = createEquipment(false);
     receiveEquipment(item);
+    const statsHtml = item.stats.map(stat => {
+        const statKey = Object.keys(stat)[0];
+        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(statKey)) {
+            return `<li>${statKey.toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[statKey].toFixed(2).replace(rx, "$1")}%</li>`;
+        }
+        return `<li>${statKey.toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[statKey]}</li>`;
+    }).join('');
+    const effectsHtml = renderEquipmentStatusEffects(item.statusEffects);
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
                 <h4 class="${item.rarity}"><b>${item.icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</b></h4>
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
-                ${item.stats.map(stat => {
-        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
-        }
-        else {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]]}</li>`;
-        }
-    }).join('')}
-            </ul>
+                ${statsHtml}${effectsHtml}
+                </ul>
         </div>`;
     const itemLabel = `<span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>`;
     if (condition == "combat") {

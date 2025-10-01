@@ -20,6 +20,7 @@ let enemy = {
         name: null,
         size: null
     },
+    statusEffects: {},
     rewards: {
         exp: null,
         gold: null,
@@ -131,6 +132,7 @@ const enemyPools = {
 
 const generateRandomEnemy = (condition) => {
     enemy.condition = condition;
+    enemy.statusEffects = {};
     const enemyTypes = Object.keys(enemyPools);
     enemy.type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
 

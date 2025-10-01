@@ -9,6 +9,136 @@ let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 let autoSpecialAbilityInterval;
+let burnStatusInterval = null;
+
+function clearBurnEffect() {
+    if (burnStatusInterval) {
+        clearInterval(burnStatusInterval);
+        burnStatusInterval = null;
+    }
+    if (enemy && enemy.statusEffects && enemy.statusEffects.burn) {
+        delete enemy.statusEffects.burn;
+    }
+}
+
+function clearCombatStatusEffects() {
+    clearBurnEffect();
+}
+
+function getEquippedWeaponStatusEffects() {
+    if (!player || !Array.isArray(player.equipped)) {
+        return [];
+    }
+
+    const merged = {};
+    for (const item of player.equipped) {
+        if (!item || (item.type !== 'Weapon' && item.attribute !== 'Damage')) {
+            continue;
+        }
+        const effects = Array.isArray(item.statusEffects) ? item.statusEffects : [];
+        for (const effect of effects) {
+            if (!effect || !effect.type) {
+                continue;
+            }
+            const existing = merged[effect.type];
+            if (!existing || (effect.damagePercent || 0) > (existing.damagePercent || 0)) {
+                merged[effect.type] = effect;
+            }
+        }
+    }
+    return Object.values(merged);
+}
+
+function applyWeaponStatusEffectsOnHit() {
+    const effects = getEquippedWeaponStatusEffects();
+    if (!effects.length) {
+        return;
+    }
+
+    for (const effect of effects) {
+        if (effect.type === 'burn') {
+            applyBurnEffect(effect);
+        }
+    }
+}
+
+function applyBurnEffect(effect) {
+    if (!player || !player.inCombat || !enemy || enemyDead) {
+        return;
+    }
+
+    if (!enemy.statusEffects) {
+        enemy.statusEffects = {};
+    }
+
+    const wasActive = Boolean(enemy.statusEffects.burn);
+    const tickInterval = effect.tickInterval || 1000;
+    const durationMs = Math.max((effect.duration || 0) * 1000, tickInterval);
+    const totalTicks = Math.max(1, Math.floor(durationMs / tickInterval));
+    const damagePercent = effect.damagePercent ?? 5;
+    const damagePerTick = Math.max(1, Math.round(player.stats.atk * (damagePercent / 100)));
+
+    enemy.statusEffects.burn = {
+        remainingTicks: totalTicks,
+        damagePerTick,
+        tickInterval
+    };
+
+    clearInterval(burnStatusInterval);
+    burnStatusInterval = setInterval(processBurnTick, tickInterval);
+
+    if (!wasActive) {
+        const logMessage = typeof t === 'function'
+            ? t('weapon-burn-applied', { enemy: enemy.name })
+            : `${enemy.name} is burning!`;
+        addCombatLog(logMessage);
+    }
+}
+
+function processBurnTick() {
+    if (!player || !player.inCombat || !enemy || enemyDead || playerDead) {
+        clearBurnEffect();
+        return;
+    }
+    if (!enemy.statusEffects || !enemy.statusEffects.burn) {
+        clearBurnEffect();
+        return;
+    }
+
+    const burn = enemy.statusEffects.burn;
+
+    if (burn.remainingTicks <= 0) {
+        clearBurnEffect();
+        return;
+    }
+
+    if (enemy.stats.hp <= 0) {
+        clearBurnEffect();
+        return;
+    }
+
+    enemy.stats.hp -= burn.damagePerTick;
+    if (enemy.stats.hp < 0) {
+        enemy.stats.hp = 0;
+    }
+    burn.remainingTicks -= 1;
+
+    const tickMessage = typeof t === 'function'
+        ? t('weapon-burn-tick', { enemy: enemy.name, value: nFormatter(burn.damagePerTick) })
+        : `Burn deals ${nFormatter(burn.damagePerTick)} damage to ${enemy.name}.`;
+    addCombatLog(tickMessage);
+
+    hpValidation();
+    if (!enemyDead && player.inCombat) {
+        enemyLoadStats();
+    }
+    playerLoadStats();
+
+    if (burn.remainingTicks <= 0 || enemy.stats.hp <= 0) {
+        clearBurnEffect();
+    }
+}
+
 // ========== Validation ==========
 const hpValidation = () => {
     const deathMessage = player.hardcore
@@ -38,11 +168,13 @@ const hpValidation = () => {
             clearInterval(playTimer);
             progressReset(true);
         });
+        clearCombatStatusEffects();
         endCombat();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button
         enemy.stats.hp = 0;
         enemyDead = true;
+        clearCombatStatusEffects();
         player.kills++;
         if (typeof recordBestiaryKill === 'function') {
             recordBestiaryKill(enemy.id);
@@ -154,6 +286,10 @@ const playerAttack = () => {
     hpValidation();
     playerLoadStats();
     enemyLoadStats();
+
+    if (!dodged && player.inCombat && !enemyDead) {
+        applyWeaponStatusEffectsOnHit();
+    }
 
     // Damage effect
     let enemySprite = document.querySelector("#enemy-sprite");
@@ -455,6 +591,7 @@ const startCombat = (battleMusic) => {
     bgmDungeon.pause();
     sfxEncounter.play();
         currentBattleMusic.play();
+    clearCombatStatusEffects();
     player.inCombat = true;
     clearTimeout(playerAttackTimeout);
     clearTimeout(enemyAttackTimeout);
@@ -488,6 +625,7 @@ const endCombat = () => {
     currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;
+    clearCombatStatusEffects();
     clearTimeout(playerAttackTimeout);
     clearTimeout(enemyAttackTimeout);
     clearTimeout(companionAttackTimeout);
