@@ -229,6 +229,7 @@
   ,"special-ability-heal": "{player}は必殺技を使い{hp} HP回復した！"
   ,"claim": "獲得"
   ,"start-new-run": "新しいランを開始"
+  ,"attack": "攻撃"
   ,"special-ability": "必殺技"
   ,"cooling": "冷却中..."
   ,"you-leveled-up": "レベルアップ！ (Lv.{previousLvl} > Lv.{newLvl})"

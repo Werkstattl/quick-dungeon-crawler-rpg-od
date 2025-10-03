@@ -9,6 +9,80 @@ let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 let autoSpecialAbilityInterval;
+let playerAttackReady = false;
+
+const getPlayerAttackButton = () => document.querySelector('#player-attack-btn');
+
+const updateAttackButtonState = () => {
+    const btn = getPlayerAttackButton();
+    if (!btn) {
+        return;
+    }
+
+    if (!player || !player.inCombat) {
+        btn.disabled = true;
+        btn.textContent = t('attack');
+        btn.setAttribute('data-i18n', 'attack');
+        return;
+    }
+
+    if (playerAttackReady) {
+        btn.disabled = false;
+        btn.textContent = t('attack');
+        btn.setAttribute('data-i18n', 'attack');
+    } else {
+        btn.disabled = true;
+        btn.textContent = t('cooling');
+        btn.setAttribute('data-i18n', 'cooling');
+    }
+};
+
+const getPlayerAttackCooldown = () => {
+    const atkSpd = player && player.stats ? player.stats.atkSpd : 1;
+    const normalized = Math.max(atkSpd || 0, 0.1);
+    return 1000 / normalized;
+};
+
+const setPlayerAttackReady = (ready) => {
+    playerAttackReady = !!ready;
+    updateAttackButtonState();
+    if (playerAttackReady) {
+        maybeAutoAttack();
+    }
+};
+
+const schedulePlayerAttackCooldown = () => {
+    clearTimeout(playerAttackTimeout);
+    if (!player || !player.inCombat) {
+        setPlayerAttackReady(false);
+        return;
+    }
+
+    const cooldown = getPlayerAttackCooldown();
+    playerAttackTimeout = setTimeout(() => {
+        if (player && player.inCombat) {
+            setPlayerAttackReady(true);
+        } else {
+            setPlayerAttackReady(false);
+        }
+    }, cooldown);
+};
+
+const maybeAutoAttack = () => {
+    if (!playerAttackReady) {
+        return;
+    }
+    if (!player || !player.inCombat) {
+        return;
+    }
+    if (typeof autoMode !== 'undefined' && autoMode) {
+        playerAttack();
+    }
+};
+
+if (typeof window !== 'undefined') {
+    window.maybeAutoAttack = maybeAutoAttack;
+}
 // ========== Validation ==========
 const hpValidation = () => {
     const deathMessage = player.hardcore
@@ -94,9 +168,11 @@ const hpValidation = () => {
 
 // ========== Attack Functions ==========
 const playerAttack = () => {
-    if (!player.inCombat) {
+    if (!player.inCombat || !playerAttackReady) {
         return;
     }
+    setPlayerAttackReady(false);
+    clearTimeout(playerAttackTimeout);
     if (player.inCombat) {
         sfxAttack.play();
     }
@@ -177,13 +253,9 @@ const playerAttack = () => {
         dmgContainer.removeChild(dmgContainer.lastElementChild);
     }, 370);
 
-    // Attack Timer
+    // Attack cooldown timer
     if (player.inCombat) {
-        playerAttackTimeout = setTimeout(() => {
-            if (player.inCombat) {
-                playerAttack();
-            }
-        }, (1000 / player.stats.atkSpd));
+        schedulePlayerAttackCooldown();
     }
 }
 
@@ -469,7 +541,6 @@ const startCombat = (battleMusic) => {
     }
 
     // Starts the timer for player and enemy attacks along with combat timer
-    playerAttackTimeout = setTimeout(playerAttack, (1000 / player.stats.atkSpd));
     enemyAttackTimeout = setTimeout(enemyAttack, (1000 / enemy.stats.atkSpd));
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
@@ -480,6 +551,7 @@ const startCombat = (battleMusic) => {
     dungeon.status.event = true;
     combatPanel.style.display = "flex";
 
+    setPlayerAttackReady(true);
     combatTimer = setInterval(combatCounter, 1000);
     startAutoSpecialAbilityLoop();
 }
@@ -493,6 +565,7 @@ const endCombat = () => {
     clearTimeout(companionAttackTimeout);
     clearTimeout(specialAbilityTimeout);
     specialAbilityCooldown = false;
+    setPlayerAttackReady(false);
     // Skill validation
 
     // Stops every timer in combat
@@ -658,6 +731,7 @@ const showCombatInfo = () => {
             <div class="battle-bar empty-bar bb-xb">
                 <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
             </div>
+            <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
             <button id="special-ability-btn" ${specialAbilityCooldown ? 'disabled' : ''}>${specialAbilityCooldown ? t('cooling') : t('special-ability')}</button>
         </div>
         <div class="logBox primary-panel">
@@ -665,7 +739,14 @@ const showCombatInfo = () => {
         </div>
     </div>
     `;
+    const attackBtn = document.querySelector('#player-attack-btn');
+    if (attackBtn) {
+        attackBtn.addEventListener('click', () => {
+            playerAttack();
+        });
+    }
     document.querySelector('#special-ability-btn').addEventListener('click', useSpecialAbility);
+    updateAttackButtonState();
 }
 
 // Mute combat sounds when the app loses focus

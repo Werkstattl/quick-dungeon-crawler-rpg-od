@@ -229,6 +229,7 @@
   "special-ability-heal": "{player} usó una habilidad especial y curó {hp} HP!",
   "claim": "Reclamar",
   "start-new-run": "Iniciar nueva partida",
+  "attack": "Atacar",
   "special-ability": "Habilidad especial",
   "cooling": "Enfriando...",
   "you-leveled-up": "¡Subiste de nivel! (Nv.{previousLvl} > Nv.{newLvl})",

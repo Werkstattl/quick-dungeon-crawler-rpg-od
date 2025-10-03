@@ -229,6 +229,7 @@
   ,"special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!"
   ,"claim": "Beanspruchen"
   ,"start-new-run": "Neuen Lauf starten"
+  ,"attack": "Angreifen"
   ,"special-ability": "Spezialfähigkeit"
   ,"cooling": "Abkühlung..."
   ,"you-leveled-up": "Du bist aufgestiegen! (Lv.{previousLvl} > Lv.{newLvl})"

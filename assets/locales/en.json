@@ -229,6 +229,7 @@
     ,"special-ability-heal": "{player} used a special ability and healed {hp} HP!"
     ,"claim": "Claim"
     ,"start-new-run": "Start new Run"
+    ,"attack": "Attack"
   ,"special-ability": "Special Ability"
   ,"cooling": "Cooling..."
   ,"you-leveled-up": "You leveled up! (Lv.{previousLvl} > Lv.{newLvl})"

@@ -87,6 +87,9 @@ autoModeBtn.addEventListener('click', function () {
     autoMode = !autoMode;
     updateAutoModeBtn();
     localStorage.setItem("autoMode", autoMode);
+    if (autoMode && typeof window !== 'undefined' && typeof window.maybeAutoAttack === 'function') {
+        window.maybeAutoAttack();
+    }
     if (autoMode && dungeon.status.paused) {
         dungeonStartPause();
     }
