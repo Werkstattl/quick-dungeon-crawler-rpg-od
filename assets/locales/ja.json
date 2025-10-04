@@ -180,6 +180,7 @@
   "offer": "奉納",
   "boss-room-door-discovered": "<span class='Heirloom'>ボス部屋の扉を発見した。</span>",
   "door-found": "扉を見つけた。",
+  "companion-found": "<span class='{rarity}'>{name}</span>を見つけた！",
   "treasure-chamber-entered": "宝箱<i class='fa fa-toolbox'></i>のある宝物庫に入った。",
   "moved-to-next-room": "次の部屋へ移動した。",
   "moved-to-next-floor": "次の階へ移動した。",

@@ -491,7 +491,10 @@ function giveCompanion(companionId) {
         );
         playerCompanions.push(newCompanion);
         saveCompanions();
-        addDungeonLog(`You found a <span class="${newCompanion.rarity}">${newCompanion.name}</span>!`);
+        addDungeonLog(t('companion-found', {
+            rarity: newCompanion.rarity,
+            name: newCompanion.name,
+        }));
         return newCompanion;
     }
     return null;

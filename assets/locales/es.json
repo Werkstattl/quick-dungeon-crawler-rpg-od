@@ -180,6 +180,7 @@
   "offer": "Ofrecer",
   "boss-room-door-discovered": "<span class='Heirloom'>Puerta de la sala del jefe descubierta.</span>",
   "door-found": "Encontraste una puerta.",
+  "companion-found": "¡Has encontrado a <span class='{rarity}'>{name}</span>!",
   "treasure-chamber-entered": "Entraste a una cámara del tesoro con un <i class='fa fa-toolbox'></i>Cofre.",
   "moved-to-next-room": "Te moviste a la siguiente sala.",
   "moved-to-next-floor": "Te moviste al siguiente piso.",

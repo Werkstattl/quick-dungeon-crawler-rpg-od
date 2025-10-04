@@ -180,6 +180,7 @@
   "offer": "Offer",
   "boss-room-door-discovered": "<span class='Heirloom'>Boss room door discovered.</span>",
   "door-found": "You found a door.",
+  "companion-found": "You found a <span class='{rarity}'>{name}</span>!",
   "treasure-chamber-entered": "You entered a treasure chamber with a <i class='fa fa-toolbox'></i>Chest.",
   "moved-to-next-room": "You moved to the next room.",
   "moved-to-next-floor": "You moved to the next floor.",

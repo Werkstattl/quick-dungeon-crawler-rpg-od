@@ -180,6 +180,7 @@
   "offer": "Opfern",
   "boss-room-door-discovered": "<span class='Heirloom'>Bossraumtür entdeckt.</span>",
   "door-found": "Du hast eine Tür gefunden.",
+  "companion-found": "Du hast <span class='{rarity}'>{name}</span> gefunden!",
   "treasure-chamber-entered": "Du hast eine Schatzkammer mit einer <i class='fa fa-toolbox'></i>Truhe betreten.",
   "moved-to-next-room": "Du bist in den nächsten Raum gegangen.",
   "moved-to-next-floor": "Du bist in die nächste Etage gegangen.",
