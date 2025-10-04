@@ -175,7 +175,7 @@ const setEnemyStats = (type, condition) => {
     if (type == 'Offensive') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(310, 380),
+            hpMax: randomizeNum(330, 380),
             atk: randomizeNum(70, 100),
             def: randomizeNum(20, 50),
             atkSpd: randomizeDecimal(0.2, 0.4),
@@ -187,7 +187,7 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Defensive') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(410, 510),
+            hpMax: randomizeNum(430, 510),
             atk: randomizeNum(40, 70),
             def: randomizeNum(40, 70),
             atkSpd: randomizeDecimal(0.1, 0.3),
@@ -199,7 +199,7 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Balanced') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(330, 430),
+            hpMax: randomizeNum(350, 430),
             atk: randomizeNum(50, 80),
             def: randomizeNum(30, 60),
             atkSpd: randomizeDecimal(0.15, 0.35),
@@ -211,7 +211,7 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Quick') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(310, 380),
+            hpMax: randomizeNum(330, 380),
             atk: randomizeNum(50, 80),
             def: randomizeNum(30, 60),
             atkSpd: randomizeDecimal(0.35, 0.45),
@@ -223,7 +223,7 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Lethal') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(310, 380),
+            hpMax: randomizeNum(330, 380),
             atk: randomizeNum(70, 100),
             def: randomizeNum(20, 50),
             atkSpd: randomizeDecimal(0.15, 0.35),
