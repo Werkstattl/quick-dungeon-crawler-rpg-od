@@ -8,7 +8,6 @@ let enemyAttackTimeout;
 let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
-let autoSpecialAbilityInterval;
 let playerAttackReady = false;
 
 const getPlayerAttackButton = () => document.querySelector('#player-attack-btn');
@@ -102,6 +101,10 @@ const maybeAutoAttack = () => {
         return;
     }
     if (typeof autoMode !== 'undefined' && autoMode) {
+        if (!specialAbilityCooldown && shouldAutoUseSpecialAbility()) {
+            useSpecialAbility();
+            return;
+        }
         playerAttack();
     }
 };
@@ -522,35 +525,6 @@ const shouldAutoUseSpecialAbility = () => {
     return true;
 };
 
-const startAutoSpecialAbilityLoop = () => {
-    clearInterval(autoSpecialAbilityInterval);
-    if (!player || !player.inCombat) {
-        return;
-    }
-    if (!isAutoSpecialFeatureActive()) {
-        return;
-    }
-
-    if (shouldAutoUseSpecialAbility()) {
-        useSpecialAbility();
-    }
-
-    autoSpecialAbilityInterval = setInterval(() => {
-        if (!player || !player.inCombat) {
-            stopAutoSpecialAbilityLoop();
-            return;
-        }
-        if (shouldAutoUseSpecialAbility()) {
-            useSpecialAbility();
-        }
-    }, 750);
-};
-
-const stopAutoSpecialAbilityLoop = () => {
-    clearInterval(autoSpecialAbilityInterval);
-    autoSpecialAbilityInterval = null;
-};
-
 const startCombat = (battleMusic) => {
     currentBattleMusic = battleMusic;
     bgmDungeon.pause();
@@ -582,7 +556,6 @@ const startCombat = (battleMusic) => {
 
     setPlayerAttackReady(true);
     combatTimer = setInterval(combatCounter, 1000);
-    startAutoSpecialAbilityLoop();
 }
 
 const endCombat = () => {
@@ -600,7 +573,6 @@ const endCombat = () => {
     // Stops every timer in combat
     clearInterval(combatTimer);
     combatSeconds = 0;
-    stopAutoSpecialAbilityLoop();
 }
 
 const combatCounter = () => {
