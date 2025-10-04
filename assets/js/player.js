@@ -31,7 +31,7 @@ let inventoryOpen = false;
 let leveled = false;
 
 const MAX_INVENTORY_ITEMS = 100;
-const LEVEL_UP_INTERACTION_DELAY_MS = 600;
+const LEVEL_UP_INTERACTION_DELAY_MS = 500;
 
 function getFallbackCompanionBonuses() {
     return {
