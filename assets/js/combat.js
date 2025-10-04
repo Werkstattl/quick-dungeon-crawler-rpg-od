@@ -37,6 +37,31 @@ const updateAttackButtonState = () => {
     }
 };
 
+const updateSpecialAbilityButtonState = () => {
+    const btn = document.querySelector('#special-ability-btn');
+    if (!btn) {
+        return;
+    }
+
+    if (!player || !player.inCombat) {
+        btn.disabled = true;
+        btn.textContent = t('special-ability');
+        btn.setAttribute('data-i18n', 'special-ability');
+        return;
+    }
+
+    if (specialAbilityCooldown || !playerAttackReady) {
+        btn.disabled = true;
+        btn.textContent = t('cooling');
+        btn.setAttribute('data-i18n', 'cooling');
+        return;
+    }
+
+    btn.disabled = false;
+    btn.textContent = t('special-ability');
+    btn.setAttribute('data-i18n', 'special-ability');
+};
+
 const getPlayerAttackCooldown = () => {
     const atkSpd = player && player.stats ? player.stats.atkSpd : 1;
     const normalized = Math.max(atkSpd || 0, 0.1);
@@ -46,6 +71,7 @@ const getPlayerAttackCooldown = () => {
 const setPlayerAttackReady = (ready) => {
     playerAttackReady = !!ready;
     updateAttackButtonState();
+    updateSpecialAbilityButtonState();
     if (playerAttackReady) {
         maybeAutoAttack();
     }
@@ -487,6 +513,9 @@ const shouldAutoUseSpecialAbility = () => {
     if (specialAbilityCooldown) {
         return false;
     }
+    if (!playerAttackReady) {
+        return false;
+    }
     if (player.selectedClass === "Paladin" && player.stats.hp >= player.stats.hpMax) {
         return false;
     }
@@ -579,8 +608,13 @@ const combatCounter = () => {
 }
 
 const useSpecialAbility = () => {
-    if (!player.inCombat || specialAbilityCooldown) {
+    if (!player || !player.inCombat || specialAbilityCooldown || !playerAttackReady) {
         return;
+    }
+    setPlayerAttackReady(false);
+    clearTimeout(playerAttackTimeout);
+    if (player.inCombat) {
+        schedulePlayerAttackCooldown();
     }
     if (player.selectedClass === "Paladin") {
         sfxBuff.play();
@@ -673,28 +707,16 @@ const useSpecialAbility = () => {
         if (enemy.stats.hp <= 0 || enemyDead) {
             clearTimeout(specialAbilityTimeout);
             specialAbilityCooldown = false;
-            const btn = document.querySelector('#special-ability-btn');
-            if (btn) {
-                btn.disabled = false;
-                btn.textContent = t('special-ability');
-            }
+            updateSpecialAbilityButtonState();
             return;
         }
     }
 
     specialAbilityCooldown = true;
-    const btn = document.querySelector('#special-ability-btn');
-    if (btn) {
-        btn.disabled = true;
-        btn.textContent = t('cooling');
-    }
+    updateSpecialAbilityButtonState();
     specialAbilityTimeout = setTimeout(() => {
         specialAbilityCooldown = false;
-        const btn = document.querySelector('#special-ability-btn');
-        if (btn) {
-            btn.disabled = false;
-            btn.textContent = t('special-ability');
-        }
+        updateSpecialAbilityButtonState();
     }, 10000);
 }
 
@@ -732,7 +754,7 @@ const showCombatInfo = () => {
                 <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
             </div>
             <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
-            <button id="special-ability-btn" ${specialAbilityCooldown ? 'disabled' : ''}>${specialAbilityCooldown ? t('cooling') : t('special-ability')}</button>
+            <button id="special-ability-btn" data-i18n="special-ability">${t('special-ability')}</button>
         </div>
         <div class="logBox primary-panel">
             <div id="combatLogBox"></div>
@@ -747,6 +769,7 @@ const showCombatInfo = () => {
     }
     document.querySelector('#special-ability-btn').addEventListener('click', useSpecialAbility);
     updateAttackButtonState();
+    updateSpecialAbilityButtonState();
 }
 
 // Mute combat sounds when the app loses focus

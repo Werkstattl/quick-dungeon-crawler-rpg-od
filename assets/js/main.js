@@ -259,7 +259,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
             targetButton = document.querySelector('#choice1');
-            if (!targetButton && enemy && enemy.stats.hp === 0) {
+            if (!targetButton && combatPanel.style.display === 'flex') {
                 targetButton = document.querySelector('#battleButton');
             }
         } else if (isChoice2Key) {
