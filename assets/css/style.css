@@ -507,6 +507,11 @@ button:focus {
     text-align: center;
 }
 
+#lvlupSelect button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Battle Bars */
 .battle-bar {
     font-size: calc(0.8rem * var(--font-scale));

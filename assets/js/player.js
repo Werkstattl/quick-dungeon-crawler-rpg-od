@@ -31,7 +31,7 @@ let inventoryOpen = false;
 let leveled = false;
 
 const MAX_INVENTORY_ITEMS = 100;
-const LEVEL_UP_INTERACTION_DELAY_MS = 500;
+const LEVEL_UP_INTERACTION_DELAY_MS = 600;
 
 function getFallbackCompanionBonuses() {
     return {
@@ -74,10 +74,35 @@ const checkInventoryLimit = (logMessage = false) => {
 const lvlupSelect = document.querySelector("#lvlupSelect");
 const lvlupPanel = document.querySelector("#lvlupPanel");
 let levelUpInputsLockedUntil = 0;
+let levelUpUnlockTimeout;
+
+const syncLevelUpButtonDisabledState = () => {
+    if (!lvlupSelect) {
+        return;
+    }
+    const shouldDisable = Date.now() < levelUpInputsLockedUntil;
+    lvlupSelect.querySelectorAll('button[data-level-up-control]').forEach((btn) => {
+        btn.disabled = shouldDisable;
+    });
+};
 
 const lockLevelUpInputs = () => {
     levelUpInputsLockedUntil = Date.now() + LEVEL_UP_INTERACTION_DELAY_MS;
+    syncLevelUpButtonDisabledState();
+    clearTimeout(levelUpUnlockTimeout);
+    levelUpUnlockTimeout = setTimeout(() => {
+        syncLevelUpButtonDisabledState();
+    }, LEVEL_UP_INTERACTION_DELAY_MS);
 };
+
+if (lvlupPanel) {
+    lvlupPanel.addEventListener('click', (event) => {
+        if (Date.now() < levelUpInputsLockedUntil) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }, true);
+}
 
 const playerExpGain = () => {
     player.exp.expCurr += enemy.rewards.exp;
@@ -394,11 +419,12 @@ const generateLvlStats = (rerolls, percentages) => {
             <h1>${t('level-up')}</h1>
             <div class="content-head">
                 <h4>${t('remaining', { count: player.exp.lvlGained })}</h4>
-                <button id="lvlReroll">${t('reroll-button', { remaining: rerolls, total: 2 })}</button>
+                <button data-level-up-control="reroll" id="lvlReroll">${t('reroll-button', { remaining: rerolls, total: 2 })}</button>
             </div>
         `;
     }
     loadLvlHeader();
+    syncLevelUpButtonDisabledState();
 
     const lvlReroll = document.querySelector("#lvlReroll");
 
@@ -424,6 +450,7 @@ const generateLvlStats = (rerolls, percentages) => {
         for (let i = 0; i < selectedStats.length; i++) {
             let button = document.createElement("button");
             button.id = "lvlSlot" + i;
+            button.dataset.levelUpControl = "option";
 
             let stat = selectedStats[i];
             let h3 = document.createElement("h3");
@@ -508,4 +535,6 @@ const generateLvlStats = (rerolls, percentages) => {
             lvlupSelect.appendChild(button);
         }
     } catch (err) { }
+
+    syncLevelUpButtonDisabledState();
 }
