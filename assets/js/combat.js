@@ -554,7 +554,7 @@ const startCombat = (battleMusic) => {
     dungeon.status.event = true;
     combatPanel.style.display = "flex";
 
-    setPlayerAttackReady(true);
+    window.setTimeout(() => setPlayerAttackReady(true), 300);
     combatTimer = setInterval(combatCounter, 1000);
 }
 
