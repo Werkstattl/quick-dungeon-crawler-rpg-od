@@ -31,6 +31,7 @@ let inventoryOpen = false;
 let leveled = false;
 
 const MAX_INVENTORY_ITEMS = 100;
+const LEVEL_UP_INTERACTION_DELAY_MS = 500;
 
 function getFallbackCompanionBonuses() {
     return {
@@ -72,6 +73,11 @@ const checkInventoryLimit = (logMessage = false) => {
 
 const lvlupSelect = document.querySelector("#lvlupSelect");
 const lvlupPanel = document.querySelector("#lvlupPanel");
+let levelUpInputsLockedUntil = 0;
+
+const lockLevelUpInputs = () => {
+    levelUpInputsLockedUntil = Date.now() + LEVEL_UP_INTERACTION_DELAY_MS;
+};
 
 const playerExpGain = () => {
     player.exp.expCurr += enemy.rewards.exp;
@@ -354,11 +360,10 @@ const continueExploring = () => {
     }
 }
 
-// Shows the level up popup
 const lvlupPopup = () => {
-    // Show popup choices
     lvlupPanel.style.display = "flex";
     combatPanel.style.filter = "brightness(50%)";
+    lockLevelUpInputs();
     const percentages = {
         "hp": 10,
         "atk": 8,
@@ -374,7 +379,6 @@ const lvlupPopup = () => {
     generateLvlStats(2, percentages);
 }
 
-// Generates random stats for level up popup
 const generateLvlStats = (rerolls, percentages) => {
     let selectedStats = [];
     let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
@@ -397,16 +401,24 @@ const generateLvlStats = (rerolls, percentages) => {
     loadLvlHeader();
 
     const lvlReroll = document.querySelector("#lvlReroll");
-    lvlReroll.addEventListener("click", function () {
-        if (rerolls > 0) {
-            sfxSell.play();
-            rerolls--;
-            loadLvlHeader();
-            generateLvlStats(rerolls, percentages);
-        } else {
-            sfxDeny.play();
-        }
-    });
+
+    if (lvlReroll) {
+        lvlReroll.addEventListener("click", function () {
+            if (Date.now() < levelUpInputsLockedUntil) {
+                if (typeof sfxDeny !== "undefined") {
+                    sfxDeny.play();
+                }
+                return;
+            }
+            if (rerolls > 0) {
+                sfxSell.play();
+                rerolls--;
+                generateLvlStats(rerolls, percentages);
+            } else if (typeof sfxDeny !== "undefined") {
+                sfxDeny.play();
+            }
+        });
+    }
 
     try {
         for (let i = 0; i < selectedStats.length; i++) {
@@ -421,64 +433,64 @@ const generateLvlStats = (rerolls, percentages) => {
             let p = document.createElement("p");
             p.innerHTML = t(`level-up-option.${stat}.desc`, { value: percentages[stat] });
             
-            //Append the string with the marginal value of the stat.
-            try{
+            try {
                 let marginalValue = 0.0;
-                if(selectedStats[i]=="hp"){
+                if (selectedStats[i] == "hp") {
                     let statFinal = Math.round(player.baseStats.hp + player.baseStats.hp * (player.bonusStats.hp + percentages["hp"]) / 100 + player.equippedStats.hp);
                     let statInitial = player.stats.hpMax;
-                    marginalValue = (statFinal-statInitial) / statInitial;
-                } else if(selectedStats[i]=="atk"){
+                    marginalValue = (statFinal - statInitial) / statInitial;
+                } else if (selectedStats[i] == "atk") {
                     const companionBonuses = getCurrentCompanionBonuses();
                     let statFinal = Math.round(((player.baseStats.atk + player.baseStats.atk * ((player.bonusStats.atk + percentages["atk"]) / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + ((companionBonuses.atk || 0) / 100)));
                     let statInitial = player.stats.atk;
-                    marginalValue = (statFinal-statInitial) / statInitial;
-                } else if(selectedStats[i]=="def"){
+                    marginalValue = (statFinal - statInitial) / statInitial;
+                } else if (selectedStats[i] == "def") {
                     let statFinal = Math.round(((player.baseStats.def + player.baseStats.def * ((player.bonusStats.def + percentages["def"]) / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
                     let statInitial = player.stats.def;
-                    marginalValue = (statFinal-statInitial) / statInitial;
-                } else if(selectedStats[i]=="atkSpd"){
+                    marginalValue = (statFinal - statInitial) / statInitial;
+                } else if (selectedStats[i] == "atkSpd") {
                     let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
-                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd+percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
+                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd + percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
                     let statInitial = player.stats.atkSpd;
-                    marginalValue = (statFinal-statInitial) / statInitial;
-                } else if(selectedStats[i]=="vamp"){
+                    marginalValue = (statFinal - statInitial) / statInitial;
+                } else if (selectedStats[i] == "vamp") {
                     let statFinal = percentages["vamp"] + player.stats.vamp;
                     let statInitial = player.stats.vamp;
-                    marginalValue = (statFinal-statInitial) / statInitial;
-                } else if(selectedStats[i]=="critRate"){
-                    let statFinal = Math.min(percentages["critRate"] + player.stats.critRate, 100)+100;
-                    let statInitial = Math.min(player.stats.critRate, 100)+100;
-                    marginalValue = (statFinal-statInitial)/statInitial * player.stats.critDmg/100;
-                } else if(selectedStats[i]=="critDmg"){
+                    marginalValue = (statFinal - statInitial) / statInitial;
+                } else if (selectedStats[i] == "critRate") {
+                    let statFinal = Math.min(percentages["critRate"] + player.stats.critRate, 100) + 100;
+                    let statInitial = Math.min(player.stats.critRate, 100) + 100;
+                    marginalValue = (statFinal - statInitial) / statInitial * player.stats.critDmg / 100;
+                } else if (selectedStats[i] == "critDmg") {
                     let statFinal = percentages["critDmg"] + player.stats.critDmg;
                     let statInitial = player.stats.critDmg;
-                    marginalValue = (statFinal-statInitial)/statInitial * Math.min(player.stats.critRate/100, 1);
-                } else if(selectedStats[i]=="dodge"){ 
+                    marginalValue = (statFinal - statInitial) / statInitial * Math.min(player.stats.critRate / 100, 1);
+                } else if (selectedStats[i] == "dodge") {
                     let statFinal = percentages["dodge"] + player.stats.dodge;
                     let statInitial = player.stats.dodge;
                     let ehpInitial = 1 / (1 - statInitial / 100);
                     let ehpFinal = 1 / (1 - statFinal / 100);
                     marginalValue = (ehpFinal / ehpInitial) - 1;
-                } else if(selectedStats[i]=="luck"){
-                    // Estimate marginal value as relative increase in drop chance
+                } else if (selectedStats[i] == "luck") {
                     let add = percentages["luck"];
                     let currentLuck = (player.stats && Number.isFinite(player.stats.luck)) ? player.stats.luck : 0;
-                    let baseDrop = 1/3;
-                    let initial = baseDrop * (1 + currentLuck/100);
-                    let final = baseDrop * (1 + (currentLuck + add)/100);
+                    let baseDrop = 1 / 3;
+                    let initial = baseDrop * (1 + currentLuck / 100);
+                    let final = baseDrop * (1 + (currentLuck + add) / 100);
                     marginalValue = (final - initial) / initial;
                 }
                 if (Number.isFinite(marginalValue)) {
-                	p.innerHTML += ` (+${Math.round(1000*marginalValue)/10.0}%)`;
+                    p.innerHTML += ` (+${Math.round(1000 * marginalValue) / 10.0}%)`;
                 }
-            } catch (err) {}
+            } catch (err) { }
             button.appendChild(p);
 
-            // Increase the selected stat for player
             button.addEventListener("click", function () {
+                if (Date.now() < levelUpInputsLockedUntil) {
+                    return;
+                }
                 sfxItem.play();
-                player.bonusStats[selectedStats[i]] += percentages[selectedStats[i]];
+                player.bonusStats[stat] += percentages[stat];
 
                 if (player.exp.lvlGained > 1) {
                     player.exp.lvlGained--;
