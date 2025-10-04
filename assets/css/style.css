@@ -492,7 +492,8 @@ button:focus {
     margin-top: 0.5rem;
 }
 
-#special-ability-btn:disabled {
+#special-ability-btn:disabled,
+#player-attack-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
