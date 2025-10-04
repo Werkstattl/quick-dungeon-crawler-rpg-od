@@ -253,6 +253,12 @@ window.addEventListener("DOMContentLoaded", async function () {
                     return;
                 }
             }
+            // Check if in combat and attack is ready
+            if (player && player.inCombat && typeof playerAttackReady !== 'undefined' && playerAttackReady && typeof playerAttack === 'function') {
+                playerAttack();
+                event.preventDefault();
+                return;
+            }
             targetButton = document.querySelector('#choice1');
             if (!targetButton) {
                 targetButton = document.querySelector('#battleButton');
