@@ -105,7 +105,9 @@ const maybeAutoAttack = () => {
             useSpecialAbility();
             return;
         }
-        playerAttack();
+        if (typeof autoAttack !== 'undefined' && autoAttack) {
+            playerAttack();
+        }
     }
 };
 
