@@ -3,6 +3,15 @@ let player = savedPlayer ? JSON.parse(savedPlayer) : null;
 
 // Ensure newly added dodge stats exist on old saves
 if (player) {
+    if (typeof player.preferences !== 'object' || player.preferences === null) {
+        player.preferences = {};
+    }
+    if (typeof player.preferences.equipBestUseCustom !== 'boolean') {
+        player.preferences.equipBestUseCustom = false;
+    }
+    if (!Array.isArray(player.preferences.equipBestPriorities)) {
+        player.preferences.equipBestPriorities = [];
+    }
     if (player.baseStats && player.baseStats.dodge === undefined) {
         player.baseStats.dodge = 0;
     }

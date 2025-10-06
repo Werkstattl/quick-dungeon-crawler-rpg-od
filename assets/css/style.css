@@ -1379,6 +1379,103 @@ header button i {
     border-color: #666;
 }
 
+.equip-priority-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 1rem;
+    max-height: 16rem;
+    overflow-y: auto;
+}
+
+.equip-priority-modal li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.35rem;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.equip-priority-modal li:last-child {
+    margin-bottom: 0;
+}
+
+.equip-priority-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+}
+
+.equip-priority-rank {
+    min-width: 1.5rem;
+    text-align: right;
+    opacity: 0.8;
+}
+
+.equip-priority-buttons {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.equip-priority-buttons .priority-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.3rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.equip-priority-buttons .priority-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.equip-priority-buttons .priority-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.equip-priority-description,
+.equip-priority-hint {
+    margin: 0.5rem 0;
+    line-height: 1.4;
+    font-size: calc(0.9rem * var(--font-scale));
+}
+
+.equip-priority-hint {
+    opacity: 0.8;
+}
+
+.equip-priority-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.equip-priority-toggle input {
+    width: 1rem;
+    height: 1rem;
+}
+
+.equip-priority-disabled {
+    opacity: 0.6;
+}
+
+.equip-priority-disabled li {
+    cursor: default;
+}
+
 .equipment-icon {
     font-size: calc(1.8rem * var(--font-scale));
     min-width: 2rem;

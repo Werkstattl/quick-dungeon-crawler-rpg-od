@@ -135,6 +135,10 @@ window.addEventListener("DOMContentLoaded", async function () {
                     kills: 0,
                     deaths: 0,
                     inCombat: false,
+                    preferences: {
+                        equipBestUseCustom: false,
+                        equipBestPriorities: []
+                    },
                     allocationChoices: {
                         hp: 10,
                         atk: 10,
@@ -314,6 +318,12 @@ window.addEventListener("DOMContentLoaded", async function () {
     if (equipBestBtn) {
         equipBestBtn.addEventListener("click", function () {
             equipBest();
+        });
+    }
+    const equipBestSettingsBtn = document.querySelector("#equip-best-settings");
+    if (equipBestSettingsBtn && typeof openEquipBestSettings === 'function') {
+        equipBestSettingsBtn.addEventListener("click", function () {
+            openEquipBestSettings();
         });
     }
 

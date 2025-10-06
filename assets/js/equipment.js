@@ -563,6 +563,296 @@ const unequipAll = () => {
     playerLoadStats();
 };
 
+const EQUIP_BEST_STATS = ['atk', 'critRate', 'critDmg', 'atkSpd', 'hp', 'def', 'vamp', 'dodge', 'luck'];
+const EQUIP_BEST_LABEL_KEYS = {
+    atk: 'stat-display.attack',
+    critRate: 'stat-display.crit-rate',
+    critDmg: 'stat-display.crit-dmg',
+    atkSpd: 'stat-display.attack-speed',
+    hp: 'stat-display.health',
+    def: 'stat-display.defense',
+    vamp: 'stat-display.vampirism',
+    dodge: 'stat-display.dodge',
+    luck: 'stat-display.luck'
+};
+const EQUIP_BEST_LABEL_FALLBACKS = {
+    atk: 'Attack',
+    critRate: 'Crit Rate',
+    critDmg: 'Crit Damage',
+    atkSpd: 'Attack Speed',
+    hp: 'HP',
+    def: 'Defense',
+    vamp: 'Vampirism',
+    dodge: 'Dodge',
+    luck: 'Luck'
+};
+
+const translateEquipText = (key, fallback) => {
+    if (typeof t === 'function') {
+        const translated = t(key);
+        if (translated !== key) {
+            return translated;
+        }
+    }
+    return fallback;
+};
+
+const ensureEquipBestPriorities = () => {
+    if (!player.preferences) {
+        player.preferences = {
+            equipBestUseCustom: false,
+            equipBestPriorities: [...EQUIP_BEST_STATS],
+        };
+    }
+    if (typeof player.preferences.equipBestUseCustom !== 'boolean') {
+        player.preferences.equipBestUseCustom = false;
+    }
+    if (!Array.isArray(player.preferences.equipBestPriorities)) {
+        player.preferences.equipBestPriorities = [];
+    }
+
+    const unique = [];
+    const seen = new Set();
+    for (const stat of player.preferences.equipBestPriorities) {
+        if (EQUIP_BEST_STATS.includes(stat) && !seen.has(stat)) {
+            unique.push(stat);
+            seen.add(stat);
+        }
+    }
+    for (const stat of EQUIP_BEST_STATS) {
+        if (!seen.has(stat)) {
+            unique.push(stat);
+            seen.add(stat);
+        }
+    }
+    player.preferences.equipBestPriorities = unique;
+    return unique;
+};
+
+const getEquipPriorityLabel = (stat) => {
+    const key = EQUIP_BEST_LABEL_KEYS[stat];
+    const fallback = EQUIP_BEST_LABEL_FALLBACKS[stat] || stat.toUpperCase();
+    if (key) {
+        return translateEquipText(key, fallback);
+    }
+    return fallback;
+};
+
+const getItemStatValue = (item, stat) => {
+    if (!item || !Array.isArray(item.stats)) {
+        return 0;
+    }
+    let total = 0;
+    for (const entry of item.stats) {
+        if (entry && typeof entry === 'object' && entry[stat] !== undefined) {
+            total += entry[stat];
+        }
+    }
+    return total;
+};
+
+const compareItemsByPriority = (itemA, itemB, priorities) => {
+    for (const stat of priorities) {
+        const valueA = getItemStatValue(itemA, stat);
+        const valueB = getItemStatValue(itemB, stat);
+        if (valueA !== valueB) {
+            return valueB - valueA;
+        }
+    }
+    const aValue = itemA.value || 0;
+    const bValue = itemB.value || 0;
+    if (aValue !== bValue) {
+        return bValue - aValue;
+    }
+    return 0;
+};
+
+function openEquipBestSettings() {
+    const modal = typeof defaultModalElement !== 'undefined' ? defaultModalElement : null;
+    if (!modal) {
+        return;
+    }
+    if (typeof sfxOpen !== 'undefined') {
+        sfxOpen.play();
+    }
+    if (typeof dungeon !== 'undefined' && dungeon.status) {
+        dungeon.status.exploring = false;
+    }
+    const dimTarget = document.querySelector('#inventory');
+    if (dimTarget) {
+        dimTarget.style.filter = 'brightness(50%)';
+    }
+
+    const priorities = [...ensureEquipBestPriorities()];
+    let useCustom = Boolean(player.preferences && player.preferences.equipBestUseCustom);
+
+    const title = translateEquipText('auto-equip-priorities', 'Auto Equip Priorities');
+    const help = translateEquipText('auto-equip-priorities-help', 'Reorder the stats to set their importance when using Auto Equip.');
+    const toggleLabel = translateEquipText('use-custom-priorities', 'Use custom priorities');
+    const toggleHint = translateEquipText('use-custom-priorities-detail', 'When disabled, Auto Equip will choose gear by overall item value.');
+    const saveLabel = translateEquipText('apply', 'Apply');
+    const closeLabel = translateEquipText('close', 'Close');
+    const moveUpLabel = translateEquipText('move-up', 'Move up');
+    const moveDownLabel = translateEquipText('move-down', 'Move down');
+
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="content equip-priority-modal">
+            <h3>${title}</h3>
+            <p class="equip-priority-description">${help}</p>
+            <label class="equip-priority-toggle">
+                <input type="checkbox" id="equip-priority-toggle"${useCustom ? ' checked' : ''}>
+                <span>${toggleLabel}</span>
+            </label>
+            <p class="equip-priority-hint">${toggleHint}</p>
+            <ul id="equip-priority-list" class="${useCustom ? '' : 'equip-priority-disabled'}"></ul>
+            <div class="button-container">
+                <button id="equip-priority-save">${saveLabel}</button>
+                <button id="equip-priority-cancel">${closeLabel}</button>
+            </div>
+        </div>`;
+
+    const listEl = modal.querySelector('#equip-priority-list');
+    const toggleEl = modal.querySelector('#equip-priority-toggle');
+    const saveBtn = modal.querySelector('#equip-priority-save');
+    const cancelBtn = modal.querySelector('#equip-priority-cancel');
+
+    const renderList = () => {
+        if (!listEl) {
+            return;
+        }
+        listEl.innerHTML = '';
+        if (!useCustom) {
+            listEl.classList.add('equip-priority-disabled');
+        } else {
+            listEl.classList.remove('equip-priority-disabled');
+        }
+
+        priorities.forEach((stat, index) => {
+            const li = document.createElement('li');
+            li.dataset.stat = stat;
+
+            const labelWrap = document.createElement('span');
+            labelWrap.className = 'equip-priority-label';
+
+            const rankSpan = document.createElement('span');
+            rankSpan.className = 'equip-priority-rank';
+            rankSpan.textContent = `${index + 1}.`;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'equip-priority-name';
+            nameSpan.textContent = getEquipPriorityLabel(stat);
+
+            labelWrap.appendChild(rankSpan);
+            labelWrap.appendChild(nameSpan);
+
+            const controls = document.createElement('div');
+            controls.className = 'equip-priority-buttons';
+
+            const upBtn = document.createElement('button');
+            upBtn.type = 'button';
+            upBtn.className = 'priority-btn';
+            upBtn.dataset.direction = 'up';
+            upBtn.setAttribute('aria-label', moveUpLabel);
+            upBtn.innerHTML = '<i class="fa fa-angle-up"></i>';
+            if (!useCustom || index === 0) {
+                upBtn.disabled = true;
+            }
+
+            const downBtn = document.createElement('button');
+            downBtn.type = 'button';
+            downBtn.className = 'priority-btn';
+            downBtn.dataset.direction = 'down';
+            downBtn.setAttribute('aria-label', moveDownLabel);
+            downBtn.innerHTML = '<i class="fa fa-angle-down"></i>';
+            if (!useCustom || index === priorities.length - 1) {
+                downBtn.disabled = true;
+            }
+
+            controls.appendChild(upBtn);
+            controls.appendChild(downBtn);
+
+            li.appendChild(labelWrap);
+            li.appendChild(controls);
+
+            listEl.appendChild(li);
+        });
+    };
+
+    const closeModal = (sound) => {
+        if (sound === 'decline' && typeof sfxDecline !== 'undefined') {
+            sfxDecline.play();
+        }
+        if (dimTarget) {
+            dimTarget.style.filter = 'brightness(100%)';
+        }
+        modal.style.display = 'none';
+        modal.innerHTML = '';
+        if (typeof continueExploring === 'function') {
+            continueExploring();
+        }
+    };
+
+    if (toggleEl) {
+        toggleEl.addEventListener('change', () => {
+            useCustom = toggleEl.checked;
+            renderList();
+        });
+    }
+
+    if (listEl) {
+        listEl.addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-direction]');
+            if (!button || !useCustom || button.disabled) {
+                return;
+            }
+            const direction = button.dataset.direction;
+            const parentLi = button.closest('li');
+            if (!parentLi) {
+                return;
+            }
+            const stat = parentLi.dataset.stat;
+            const currentIndex = priorities.indexOf(stat);
+            if (currentIndex === -1) {
+                return;
+            }
+            if (direction === 'up' && currentIndex > 0) {
+                const temp = priorities[currentIndex - 1];
+                priorities[currentIndex - 1] = priorities[currentIndex];
+                priorities[currentIndex] = temp;
+            } else if (direction === 'down' && currentIndex < priorities.length - 1) {
+                const temp = priorities[currentIndex + 1];
+                priorities[currentIndex + 1] = priorities[currentIndex];
+                priorities[currentIndex] = temp;
+            }
+            renderList();
+        });
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            if (!player.preferences) {
+                player.preferences = {};
+            }
+            player.preferences.equipBestUseCustom = useCustom;
+            player.preferences.equipBestPriorities = [...priorities];
+            saveData();
+            if (typeof sfxConfirm !== 'undefined') {
+                sfxConfirm.play();
+            }
+            closeModal();
+        });
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            closeModal('decline');
+        });
+    }
+
+    renderList();
+}
+
 const equipBest = () => {
     if (player.inventory.equipment.length === 0 && player.equipped.length === 0) {
         if (typeof sfxDeny !== 'undefined') sfxDeny.play();
@@ -573,7 +863,12 @@ const equipBest = () => {
     for (const eq of player.inventory.equipment) {
         allItems.push(JSON.parse(eq));
     }
-    allItems.sort((a, b) => b.value - a.value);
+    if (player.preferences && player.preferences.equipBestUseCustom) {
+        const priorities = [...ensureEquipBestPriorities()];
+        allItems.sort((a, b) => compareItemsByPriority(a, b, priorities));
+    } else {
+        allItems.sort((a, b) => b.value - a.value);
+    }
     player.equipped = allItems.slice(0, 6);
     player.inventory.equipment = allItems.slice(6).map(item => JSON.stringify(item));
     playerLoadStats();
