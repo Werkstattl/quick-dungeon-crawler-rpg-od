@@ -48,7 +48,7 @@ function unlockAutoMode() {
 }
 
 const autoConfirm = () => {
-    if (autoMode) {
+    if (autoMode && autoEngage) {
         // Slight delay to ensure button exists
         setTimeout(() => {
             const btn = document.querySelector('#choice1');
@@ -58,7 +58,7 @@ const autoConfirm = () => {
 };
 
 const autoDecline = () => {
-    if (autoMode) {
+    if (autoMode && autoEngage) {
         setTimeout(() => {
             const btn = document.querySelector('#choice2');
             if (btn) btn.click();
@@ -67,7 +67,7 @@ const autoDecline = () => {
 };
 
 const autoClaim = () => {
-    if (autoMode) {
+    if (autoMode && autoEngage) {
         setTimeout(() => {
             const btn = document.querySelector('#battleButton');
             if (btn) btn.click();

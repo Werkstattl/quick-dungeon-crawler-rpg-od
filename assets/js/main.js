@@ -702,6 +702,7 @@ function openMenu(isTitle = false) {
             </div>`;
         applyTranslations(defaultModalElement);
         let autoToggle = document.querySelector('#auto-mode-toggle');
+        let autoEngageToggle = document.querySelector('#auto-engage-toggle');
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
