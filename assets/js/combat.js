@@ -113,8 +113,10 @@ const maybeAutoAttack = () => {
     }
     if (typeof autoMode !== 'undefined' && autoMode) {
         if (!specialAbilityCooldown && shouldAutoUseSpecialAbility()) {
-            useSpecialAbility();
-            return;
+            autoAttackDelayTimeout = setTimeout(() => {
+                useSpecialAbility();
+                return;
+            }, 200);
         }
         if (typeof autoAttack !== 'undefined' && autoAttack) {
             if (autoAttackDelayTimeout !== null) {
@@ -131,7 +133,7 @@ const maybeAutoAttack = () => {
                 if (typeof autoMode !== 'undefined' && autoMode && typeof autoAttack !== 'undefined' && autoAttack) {
                     playerAttack();
                 }
-            }, 150);
+            }, 200);
         }
     }
 };
