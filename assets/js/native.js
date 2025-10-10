@@ -1,7 +1,7 @@
 function isPremium() {
-//  if ( window.__TAURI__ || window.electronAPI ) {
+  if ( window.__TAURI__ || window.electronAPI ) {
     return true;
- // }
+  }
   return false;
 }
 
