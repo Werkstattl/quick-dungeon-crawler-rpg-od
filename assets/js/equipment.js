@@ -318,6 +318,9 @@ const showItemInfo = (item, icon, action, i) => {
     if (item.tier == undefined) {
         item.tier = 1;
     }
+    const isLocked = Boolean(item.locked);
+    const lockButtonLabel = translateEquipText(isLocked ? 'unlock-item' : 'lock-item', isLocked ? 'Unlock item' : 'Lock item');
+    const lockButtonMarkup = action === 'unequip' ? `<button id="toggle-lock">${lockButtonLabel}</button>` : '';
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
     const actionLabel = t(action);
@@ -333,10 +336,11 @@ const showItemInfo = (item, icon, action, i) => {
         else {
             return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]]}</li>`;
         }
-    }).join('')}
+                }).join('')}
                 </ul>
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
+                    ${lockButtonMarkup}
                     <button id="sell-equip"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
                     <button id="close-item-info">${t('close')}</button>
                 </div>
@@ -374,6 +378,19 @@ const showItemInfo = (item, icon, action, i) => {
             continueExploring();
         }
     };
+
+    const toggleLock = document.querySelector("#toggle-lock");
+    if (toggleLock) {
+        toggleLock.setAttribute('aria-pressed', isLocked ? 'true' : 'false');
+        toggleLock.onclick = function () {
+            item.locked = !item.locked;
+            const updatedLabel = translateEquipText(item.locked ? 'unlock-item' : 'lock-item', item.locked ? 'Unlock item' : 'Lock item');
+            toggleLock.textContent = updatedLabel;
+            toggleLock.setAttribute('aria-pressed', item.locked ? 'true' : 'false');
+            showEquipment();
+            saveData();
+        };
+    }
 
     // Sell equipment
     let sell = document.querySelector("#sell-equip");
@@ -513,10 +530,21 @@ const showEquipment = () => {
         const item = player.equipped[i];
 
         // Create an element to display the item's name
-        let equipDiv = document.createElement('div');
-        let icon = equipmentIcon(item.baseCategory || item.category);
-        equipDiv.className = "items";
+        const equipDiv = document.createElement('div');
+        const icon = equipmentIcon(item.baseCategory || item.category);
+        const isLocked = Boolean(item.locked);
+        equipDiv.className = isLocked ? "items locked-item" : "items";
         equipDiv.innerHTML = `<button class="${item.rarity}">${icon}</button>`;
+        if (isLocked) {
+            const lockLabel = translateEquipText('locked', 'Locked');
+            const lockIndicator = document.createElement('span');
+            lockIndicator.className = 'lock-indicator';
+            lockIndicator.innerHTML = '<i class="fas fa-lock"></i>';
+            lockIndicator.setAttribute('aria-hidden', 'true');
+            lockIndicator.setAttribute('title', lockLabel);
+            equipDiv.setAttribute('title', lockLabel);
+            equipDiv.appendChild(lockIndicator);
+        }
         equipDiv.addEventListener('click', function () {
             showItemInfo(item, icon, 'unequip', i);
         });
@@ -859,18 +887,27 @@ const equipBest = () => {
         return;
     }
     if (typeof sfxEquip !== 'undefined') sfxEquip.play();
-    const allItems = [...player.equipped];
+    const maxEquippedSlots = 6;
+    const equippedItems = Array.isArray(player.equipped) ? player.equipped : [];
+    const lockedItems = equippedItems.filter(item => item && item.locked);
+    const unlockedEquipped = equippedItems.filter(item => item && !item.locked);
+    const candidateItems = [...unlockedEquipped];
     for (const eq of player.inventory.equipment) {
-        allItems.push(JSON.parse(eq));
+        candidateItems.push(JSON.parse(eq));
     }
     if (player.preferences && player.preferences.equipBestUseCustom) {
         const priorities = [...ensureEquipBestPriorities()];
-        allItems.sort((a, b) => compareItemsByPriority(a, b, priorities));
+        candidateItems.sort((a, b) => compareItemsByPriority(a, b, priorities));
     } else {
-        allItems.sort((a, b) => b.value - a.value);
+        candidateItems.sort((a, b) => (b.value || 0) - (a.value || 0));
     }
-    player.equipped = allItems.slice(0, 6);
-    player.inventory.equipment = allItems.slice(6).map(item => JSON.stringify(item));
+    const lockedSlots = Math.min(lockedItems.length, maxEquippedSlots);
+    const availableSlots = Math.max(0, maxEquippedSlots - lockedSlots);
+    const selected = candidateItems.slice(0, availableSlots);
+    const remaining = candidateItems.slice(availableSlots);
+    const overflowLocked = lockedItems.slice(maxEquippedSlots);
+    player.equipped = lockedItems.slice(0, maxEquippedSlots).concat(selected).filter(Boolean);
+    player.inventory.equipment = remaining.concat(overflowLocked).filter(Boolean).map(item => JSON.stringify(item));
     playerLoadStats();
 };
 

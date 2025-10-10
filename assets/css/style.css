@@ -227,6 +227,27 @@ main {
     margin: 0 0.4rem;
 }
 
+#playerEquipment .items {
+    position: relative;
+}
+
+#playerEquipment .items .lock-indicator {
+    position: absolute;
+    top: -0.35rem;
+    right: -0.35rem;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 9999px;
+    padding: 0.15rem 0.3rem;
+    line-height: 1;
+    font-size: 0.75rem;
+    color: #FFD700;
+    pointer-events: none;
+}
+
+#playerEquipment .items.locked-item button {
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.6);
+}
+
 .inventorySlots {
     display: flex;
     flex-direction: column;
