@@ -1,5 +1,9 @@
 let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
+let autoEngage = true;
+if (localStorage.getItem("autoEngage") === "false") {
+    autoEngage = false;
+}
 let autoBlessings = true;
 if (localStorage.getItem("autoBlessings") === "false") {
     autoBlessings = false;
