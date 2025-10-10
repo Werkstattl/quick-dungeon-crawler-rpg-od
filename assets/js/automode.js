@@ -1,10 +1,25 @@
 let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
-let autoBlessings = localStorage.getItem("autoBlessings") === "true";
-let autoHeal = localStorage.getItem("autoHeal") === "true";
-let autoSpecialAbility = localStorage.getItem("autoSpecialAbility") === "true";
-let autoAttack = localStorage.getItem("autoAttack") === "true";
-let autoBossDoors = localStorage.getItem("autoBossDoors") === "true"; // open boss doors automatically
+let autoBlessings = true;
+if (localStorage.getItem("autoBlessings") === "false") {
+    autoBlessings = false;
+}
+let autoHeal = true;
+if (localStorage.getItem("autoHeal") === "false") {
+    autoHeal = false;
+}
+let autoSpecialAbility = true;
+if (localStorage.getItem("autoSpecialAbility") === "false") {
+    autoSpecialAbility = false;
+}
+let autoAttack = true;
+if (localStorage.getItem("autoAttack") === "false") {
+    autoAttack = false;
+}
+let autoBossDoors = true
+if (localStorage.getItem("autoBossDoors") === "false") {
+    autoBossDoors = false;
+}
 let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
 if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoCurseTotemsUntil = parseInt(localStorage.getItem("autoCurseTotemsUntil"), 10);
