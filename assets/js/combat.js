@@ -9,8 +9,16 @@ let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 let playerAttackReady = false;
+let autoAttackDelayTimeout = null;
 
 const getPlayerAttackButton = () => document.querySelector('#player-attack-btn');
+
+const clearAutoAttackDelay = () => {
+    if (autoAttackDelayTimeout !== null) {
+        clearTimeout(autoAttackDelayTimeout);
+        autoAttackDelayTimeout = null;
+    }
+};
 
 const updateAttackButtonState = () => {
     const btn = getPlayerAttackButton();
@@ -68,6 +76,9 @@ const getPlayerAttackCooldown = () => {
 };
 
 const setPlayerAttackReady = (ready) => {
+    if (!ready) {
+        clearAutoAttackDelay();
+    }
     playerAttackReady = !!ready;
     updateAttackButtonState();
     updateSpecialAbilityButtonState();
@@ -106,7 +117,21 @@ const maybeAutoAttack = () => {
             return;
         }
         if (typeof autoAttack !== 'undefined' && autoAttack) {
-            playerAttack();
+            if (autoAttackDelayTimeout !== null) {
+                return;
+            }
+            autoAttackDelayTimeout = setTimeout(() => {
+                autoAttackDelayTimeout = null;
+                if (!playerAttackReady) {
+                    return;
+                }
+                if (!player || !player.inCombat) {
+                    return;
+                }
+                if (typeof autoMode !== 'undefined' && autoMode && typeof autoAttack !== 'undefined' && autoAttack) {
+                    playerAttack();
+                }
+            }, 150);
         }
     }
 };
