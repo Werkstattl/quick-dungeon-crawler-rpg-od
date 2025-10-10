@@ -471,7 +471,7 @@ button:focus {
 #combatPanel .content {
     height: 100%;
     width: 100%;
-    max-height: 40rem;
+    max-height: 42rem;
     padding: 0.5em;
     overflow-y: auto;
 }
