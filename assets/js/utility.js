@@ -61,11 +61,11 @@ const ratingSystem = {
             }
         }
         // Check if player has played enough
-        if (player.playtime < 600) {
+        if (player.playtime < 1800) {
             return false;
         }
         // Check if player has progressed far enough
-        if (dungeon.progress.floor < 15) {
+        if (dungeon.progress.floor < 10) {
             return false;
         }
         return true;
