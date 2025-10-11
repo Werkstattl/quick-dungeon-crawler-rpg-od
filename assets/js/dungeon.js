@@ -182,7 +182,7 @@ const dungeonEvent = () => {
         dungeon.action++;
         let choices;
         let eventRoll;
-        let eventTypes = ["blessing", "curse", "treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
+        let eventTypes = ["blessing", "treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
         }
