@@ -218,6 +218,11 @@ const hpValidation = () => {
             enemyDead = false;
             combatBacklog.length = 0;
             findCompanionAfterCombat(enemy.lvl);
+            if (typeof window !== 'undefined' && typeof window.showLevelUpModalIfPending === 'function') {
+                window.showLevelUpModalIfPending();
+            } else if (typeof showLevelUpModalIfPending === 'function') {
+                showLevelUpModalIfPending();
+            }
         });
         autoClaim();
         endCombat();

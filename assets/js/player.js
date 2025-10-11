@@ -40,7 +40,6 @@ let inventoryOpen = false;
 let leveled = false;
 
 const MAX_INVENTORY_ITEMS = 100;
-const LEVEL_UP_INTERACTION_DELAY_MS = 500;
 
 function getFallbackCompanionBonuses() {
     return {
@@ -82,36 +81,7 @@ const checkInventoryLimit = (logMessage = false) => {
 
 const lvlupSelect = document.querySelector("#lvlupSelect");
 const lvlupPanel = document.querySelector("#lvlupPanel");
-let levelUpInputsLockedUntil = 0;
-let levelUpUnlockTimeout;
-
-const syncLevelUpButtonDisabledState = () => {
-    if (!lvlupSelect) {
-        return;
-    }
-    const shouldDisable = Date.now() < levelUpInputsLockedUntil;
-    lvlupSelect.querySelectorAll('button[data-level-up-control]').forEach((btn) => {
-        btn.disabled = shouldDisable;
-    });
-};
-
-const lockLevelUpInputs = () => {
-    levelUpInputsLockedUntil = Date.now() + LEVEL_UP_INTERACTION_DELAY_MS;
-    syncLevelUpButtonDisabledState();
-    clearTimeout(levelUpUnlockTimeout);
-    levelUpUnlockTimeout = setTimeout(() => {
-        syncLevelUpButtonDisabledState();
-    }, LEVEL_UP_INTERACTION_DELAY_MS);
-};
-
-if (lvlupPanel) {
-    lvlupPanel.addEventListener('click', (event) => {
-        if (Date.now() < levelUpInputsLockedUntil) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    }, true);
-}
+let levelUpDimTarget = null;
 
 const playerExpGain = () => {
     player.exp.expCurr += enemy.rewards.exp;
@@ -120,10 +90,6 @@ const playerExpGain = () => {
     while (player.exp.expCurr >= player.exp.expMax) {
         playerLvlUp();
     }
-    if (leveled && lvlupPanel.style.display !== "flex") {
-        lvlupPopup();
-    }
-
     playerLoadStats();
 }
 
@@ -168,6 +134,20 @@ const playerLvlUp = () => {
             remainingHeader.textContent = t('remaining', { count: player.exp.lvlGained });
         }
     }
+}
+
+const showLevelUpModalIfPending = () => {
+    if (!leveled || !lvlupPanel) {
+        return;
+    }
+    if (lvlupPanel.style.display === "flex") {
+        return;
+    }
+    lvlupPopup();
+};
+
+if (typeof window !== 'undefined') {
+    window.showLevelUpModalIfPending = showLevelUpModalIfPending;
 }
 
 // Refresh the player stats
@@ -395,9 +375,26 @@ const continueExploring = () => {
 }
 
 const lvlupPopup = () => {
+    if (!lvlupPanel) {
+        return;
+    }
+
     lvlupPanel.style.display = "flex";
-    combatPanel.style.filter = "brightness(50%)";
-    lockLevelUpInputs();
+
+    if (typeof combatPanel !== 'undefined' && combatPanel && combatPanel.style.display === "flex") {
+        levelUpDimTarget = combatPanel;
+    } else {
+        levelUpDimTarget = document.querySelector('#dungeon-main');
+    }
+    if (levelUpDimTarget) {
+        levelUpDimTarget.style.filter = "brightness(50%)";
+    }
+
+    if (typeof dungeon !== 'undefined' && dungeon.status) {
+        dungeon.status.exploring = false;
+        dungeon.status.event = true;
+    }
+
     const percentages = {
         "hp": 10,
         "atk": 8,
@@ -433,18 +430,11 @@ const generateLvlStats = (rerolls, percentages) => {
         `;
     }
     loadLvlHeader();
-    syncLevelUpButtonDisabledState();
 
     const lvlReroll = document.querySelector("#lvlReroll");
 
     if (lvlReroll) {
         lvlReroll.addEventListener("click", function () {
-            if (Date.now() < levelUpInputsLockedUntil) {
-                if (typeof sfxDeny !== "undefined") {
-                    sfxDeny.play();
-                }
-                return;
-            }
             if (rerolls > 0) {
                 sfxSell.play();
                 rerolls--;
@@ -522,9 +512,6 @@ const generateLvlStats = (rerolls, percentages) => {
             button.appendChild(p);
 
             button.addEventListener("click", function () {
-                if (Date.now() < levelUpInputsLockedUntil) {
-                    return;
-                }
                 sfxItem.play();
                 player.bonusStats[stat] += percentages[stat];
 
@@ -534,8 +521,15 @@ const generateLvlStats = (rerolls, percentages) => {
                 } else {
                     player.exp.lvlGained = 0;
                     lvlupPanel.style.display = "none";
-                    combatPanel.style.filter = "brightness(100%)";
+                    if (levelUpDimTarget) {
+                        levelUpDimTarget.style.filter = "brightness(100%)";
+                        levelUpDimTarget = null;
+                    }
                     leveled = false;
+                    if (typeof dungeon !== 'undefined' && dungeon.status) {
+                        dungeon.status.event = false;
+                    }
+                    continueExploring();
                 }
 
                 playerLoadStats();
@@ -544,6 +538,4 @@ const generateLvlStats = (rerolls, percentages) => {
             lvlupSelect.appendChild(button);
         }
     } catch (err) { }
-
-    syncLevelUpButtonDisabledState();
 }
