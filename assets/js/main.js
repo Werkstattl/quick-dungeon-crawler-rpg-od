@@ -1244,6 +1244,21 @@ const allocationPopup = () => {
             <div class="row primary-panel pad">
                 <p id="skill-desc" data-i18n="remnant-razor-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
             </div>
+            <div class="row">
+                <p data-i18n="curse">Curse</p>
+                <select id="select-curse">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
             <div class="row" id="forge-button-row" style="margin-top: 15px">
                 <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></button>
             </div>
