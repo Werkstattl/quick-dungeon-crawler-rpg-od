@@ -147,7 +147,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                     },
                     hardcore: hardcore,
                     selectedPassive: "Remnant Razor",
-                    selectedClass: "Knight"
+                    selectedClass: "Knight",
+                    selectedCurseLevel: 1
                 };
                 }
                 player.name = playerName;
@@ -1061,11 +1062,21 @@ const progressReset = (fromDeath = false) => {
         paused: true,
         event: false,
     };
+    let storedCurseLevel = 1;
+    if (player && typeof player.selectedCurseLevel === "number" && Number.isFinite(player.selectedCurseLevel)) {
+        storedCurseLevel = Math.round(player.selectedCurseLevel);
+    }
+    if (storedCurseLevel < 1) {
+        storedCurseLevel = 1;
+    }
+    if (storedCurseLevel > 10) {
+        storedCurseLevel = 10;
+    }
     dungeon.settings = {
         enemyBaseLvl: 1,
         enemyLvlGap: 5,
         enemyBaseStats: 1,
-        enemyScaling: 1.1,
+        enemyScaling: 1 + (storedCurseLevel / 10),
     };
     dungeon.floorBuffs = {
         atk: 0,
@@ -1174,6 +1185,20 @@ const allocationPopup = () => {
         }
     }
     updateStats();
+    const sanitizeCurseLevel = (value) => {
+        let level = Number(value);
+        if (!Number.isFinite(level)) {
+            level = 1;
+        }
+        level = Math.round(level);
+        if (level < 1) {
+            level = 1;
+        }
+        if (level > 10) {
+            level = 10;
+        }
+        return level;
+    };
     let points = 40 - (allocation.hp + allocation.atk + allocation.def + allocation.atkSpd);
     if (points < 0) { points = 0; }
     const loadContent = function () {
@@ -1381,6 +1406,15 @@ const allocationPopup = () => {
         }
         selectClass.onchange();
     
+        let selectCurse = document.querySelector("#select-curse");
+        let defaultCurseLevel = sanitizeCurseLevel(Math.round((dungeon.settings.enemyScaling - 1) * 10));
+        if (player && typeof player.selectedCurseLevel === "number") {
+            defaultCurseLevel = sanitizeCurseLevel(player.selectedCurseLevel);
+        }
+        selectCurse.value = `${defaultCurseLevel}`;
+        selectCurse.onclick = function () {
+            sfxConfirm.play();
+        };
 
     // Operation Buttons
     let confirm = document.querySelector("#allocate-confirm");
@@ -1416,6 +1450,9 @@ const allocationPopup = () => {
         player.allocationChoices = { ...allocation };
         player.selectedPassive = selectSkill.value;
 		player.selectedClass = selectClass.value;
+        const selectedCurseLevel = sanitizeCurseLevel(selectCurse.value);
+        player.selectedCurseLevel = selectedCurseLevel;
+        dungeon.settings.enemyScaling = 1 + (selectedCurseLevel / 10);
         // Set player skill
         objectValidation();
         player.skills = [selectSkill.value];
