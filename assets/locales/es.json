@@ -84,6 +84,7 @@
   "current-run": "Partida actual",
   "runtime": "Tiempo transcurrido",
   "curse": "Maldición",
+  "curse-level-unlocked": "¡Nuevo nivel de maldición desbloqueado! (Nv.{level})",
   "bestiary": "Bestiario",
   "load-more": "Cargar más",
   "settings": "Configuración",

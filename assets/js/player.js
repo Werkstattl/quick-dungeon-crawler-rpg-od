@@ -3,6 +3,20 @@ let player = savedPlayer ? JSON.parse(savedPlayer) : null;
 
 // Ensure newly added dodge stats exist on old saves
 if (player) {
+    const clampCurseLevel = (value) => {
+        let level = Number(value);
+        if (!Number.isFinite(level)) {
+            level = 1;
+        }
+        level = Math.round(level);
+        if (level < 1) {
+            level = 1;
+        }
+        if (level > 10) {
+            level = 10;
+        }
+        return level;
+    };
     if (typeof player.preferences !== 'object' || player.preferences === null) {
         player.preferences = {};
     }
@@ -33,6 +47,34 @@ if (player) {
     }
     if (player.bonusStats && player.bonusStats.luck === undefined) {
         player.bonusStats.luck = 0;
+    }
+    if (player.maxUnlockedCurseLevel === undefined) {
+        player.maxUnlockedCurseLevel = 1;
+    }
+    player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
+    if (player.selectedCurseLevel === undefined) {
+        const savedDungeon = localStorage.getItem("dungeonData");
+        if (savedDungeon) {
+            try {
+                const parsedDungeon = JSON.parse(savedDungeon);
+                if (parsedDungeon && parsedDungeon.settings && Number.isFinite(parsedDungeon.settings.enemyScaling)) {
+                    const inferredLevel = clampCurseLevel(Math.round((parsedDungeon.settings.enemyScaling - 1) * 10));
+                    player.selectedCurseLevel = inferredLevel;
+                }
+            } catch (err) {
+                player.selectedCurseLevel = 1;
+            }
+        }
+    }
+    if (player.selectedCurseLevel === undefined) {
+        player.selectedCurseLevel = 1;
+    }
+    player.selectedCurseLevel = clampCurseLevel(player.selectedCurseLevel);
+    if (player.selectedCurseLevel > player.maxUnlockedCurseLevel) {
+        player.maxUnlockedCurseLevel = player.selectedCurseLevel;
+    }
+    if (player.selectedCurseLevel > player.maxUnlockedCurseLevel) {
+        player.selectedCurseLevel = player.maxUnlockedCurseLevel;
     }
 }
 

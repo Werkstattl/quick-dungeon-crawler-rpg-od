@@ -84,6 +84,7 @@
   "current-run": "現在のラン",
   "runtime": "ランタイム",
   "curse": "呪い",
+  "curse-level-unlocked": "新しい呪いレベルを解放した！(Lv.{level})",
   "bestiary": "モンスター図鑑",
   "load-more": "もっと読み込む",
   "settings": "設定",

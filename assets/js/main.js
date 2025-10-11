@@ -148,7 +148,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                     hardcore: hardcore,
                     selectedPassive: "Remnant Razor",
                     selectedClass: "Knight",
-                    selectedCurseLevel: 1
+                    selectedCurseLevel: 1,
+                    maxUnlockedCurseLevel: 1
                 };
                 }
                 player.name = playerName;
@@ -930,6 +931,53 @@ const saveData = () => {
     }
 }
 
+const clampCurseLevel = (value) => {
+    let level = Number(value);
+    if (!Number.isFinite(level)) {
+        level = 1;
+    }
+    level = Math.round(level);
+    if (level < 1) {
+        level = 1;
+    }
+    if (level > 10) {
+        level = 10;
+    }
+    return level;
+};
+
+const maybeUnlockNextCurseLevel = () => {
+    if (!player || !dungeon || !dungeon.progress || !dungeon.settings) {
+        return;
+    }
+    if (typeof player.maxUnlockedCurseLevel !== "number") {
+        player.maxUnlockedCurseLevel = 1;
+    }
+    player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
+    const maxUnlocked = player.maxUnlockedCurseLevel;
+    if (maxUnlocked >= 10) {
+        return;
+    }
+    const selectedLevel = clampCurseLevel(player.selectedCurseLevel || 1);
+    if (selectedLevel !== maxUnlocked) {
+        return;
+    }
+    if (dungeon.progress.floor >= 10) {
+        const newMax = clampCurseLevel(maxUnlocked + 1);
+        if (newMax > player.maxUnlockedCurseLevel) {
+            player.maxUnlockedCurseLevel = newMax;
+            if (typeof addDungeonLog === 'function') {
+                addDungeonLog(t('curse-level-unlocked', { level: newMax }));
+            }
+            saveData();
+        }
+    }
+};
+
+if (typeof window !== 'undefined') {
+    window.maybeUnlockNextCurseLevel = maybeUnlockNextCurseLevel;
+}
+
 // Calculate every player stat
 const calculateStats = () => {
     let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
@@ -1066,12 +1114,15 @@ const progressReset = (fromDeath = false) => {
     if (player && typeof player.selectedCurseLevel === "number" && Number.isFinite(player.selectedCurseLevel)) {
         storedCurseLevel = Math.round(player.selectedCurseLevel);
     }
-    if (storedCurseLevel < 1) {
-        storedCurseLevel = 1;
+    if (!player || typeof player.maxUnlockedCurseLevel !== "number") {
+        player.maxUnlockedCurseLevel = 1;
     }
-    if (storedCurseLevel > 10) {
-        storedCurseLevel = 10;
+    player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
+    storedCurseLevel = clampCurseLevel(storedCurseLevel);
+    if (storedCurseLevel > player.maxUnlockedCurseLevel) {
+        storedCurseLevel = player.maxUnlockedCurseLevel;
     }
+    player.selectedCurseLevel = storedCurseLevel;
     dungeon.settings = {
         enemyBaseLvl: 1,
         enemyLvlGap: 5,
@@ -1185,20 +1236,12 @@ const allocationPopup = () => {
         }
     }
     updateStats();
-    const sanitizeCurseLevel = (value) => {
-        let level = Number(value);
-        if (!Number.isFinite(level)) {
-            level = 1;
-        }
-        level = Math.round(level);
-        if (level < 1) {
-            level = 1;
-        }
-        if (level > 10) {
-            level = 10;
-        }
-        return level;
-    };
+    const maxUnlockedCurse = clampCurseLevel(player && typeof player.maxUnlockedCurseLevel === "number" ? player.maxUnlockedCurseLevel : 1);
+    if (player) {
+        player.maxUnlockedCurseLevel = maxUnlockedCurse;
+        const sanitizedSelected = clampCurseLevel(player.selectedCurseLevel || 1);
+        player.selectedCurseLevel = sanitizedSelected > maxUnlockedCurse ? maxUnlockedCurse : sanitizedSelected;
+    }
     let points = 40 - (allocation.hp + allocation.atk + allocation.def + allocation.atkSpd);
     if (points < 0) { points = 0; }
     const loadContent = function () {
@@ -1407,11 +1450,23 @@ const allocationPopup = () => {
         selectClass.onchange();
     
         let selectCurse = document.querySelector("#select-curse");
-        let defaultCurseLevel = sanitizeCurseLevel(Math.round((dungeon.settings.enemyScaling - 1) * 10));
+        let defaultCurseLevel = clampCurseLevel(Math.round((dungeon.settings.enemyScaling - 1) * 10));
         if (player && typeof player.selectedCurseLevel === "number") {
-            defaultCurseLevel = sanitizeCurseLevel(player.selectedCurseLevel);
+            defaultCurseLevel = clampCurseLevel(player.selectedCurseLevel);
+        }
+        if (defaultCurseLevel > maxUnlockedCurse) {
+            defaultCurseLevel = maxUnlockedCurse;
         }
         selectCurse.value = `${defaultCurseLevel}`;
+        if (player) {
+            player.selectedCurseLevel = defaultCurseLevel;
+        }
+        Array.from(selectCurse.options).forEach((option) => {
+            const optionValue = clampCurseLevel(option.value);
+            if (optionValue > maxUnlockedCurse) {
+                option.disabled = true;
+            }
+        });
         selectCurse.onclick = function () {
             sfxConfirm.play();
         };
@@ -1450,7 +1505,10 @@ const allocationPopup = () => {
         player.allocationChoices = { ...allocation };
         player.selectedPassive = selectSkill.value;
 		player.selectedClass = selectClass.value;
-        const selectedCurseLevel = sanitizeCurseLevel(selectCurse.value);
+        let selectedCurseLevel = clampCurseLevel(selectCurse.value);
+        if (selectedCurseLevel > maxUnlockedCurse) {
+            selectedCurseLevel = maxUnlockedCurse;
+        }
         player.selectedCurseLevel = selectedCurseLevel;
         dungeon.settings.enemyScaling = 1 + (selectedCurseLevel / 10);
         // Set player skill
@@ -1544,6 +1602,27 @@ const objectValidation = () => {
     if (player.selectedClass == undefined) {
             player.selectedClass = "Knight";
             changed = true;
+    }
+    if (player.maxUnlockedCurseLevel == undefined) {
+        player.maxUnlockedCurseLevel = 1;
+        changed = true;
+    }
+    player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
+    if (player.selectedCurseLevel == undefined) {
+        player.selectedCurseLevel = 1;
+        changed = true;
+    }
+    player.selectedCurseLevel = clampCurseLevel(player.selectedCurseLevel);
+    if (player.selectedCurseLevel > player.maxUnlockedCurseLevel) {
+        player.selectedCurseLevel = player.maxUnlockedCurseLevel;
+        changed = true;
+    }
+    if (dungeon && dungeon.settings) {
+        const desiredScaling = 1 + (player.selectedCurseLevel / 10);
+        if (!Number.isFinite(dungeon.settings.enemyScaling) || Math.abs(dungeon.settings.enemyScaling - desiredScaling) > 0.0001) {
+            dungeon.settings.enemyScaling = desiredScaling;
+            changed = true;
+        }
     }
     if (player.tempStats == undefined) {
         player.tempStats = {};

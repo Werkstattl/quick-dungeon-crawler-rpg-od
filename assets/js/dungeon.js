@@ -174,6 +174,9 @@ const loadDungeonProgress = () => {
     roomCount.setAttribute('data-i18n', 'room-count');
     roomCount.setAttribute('data-i18n-params', JSON.stringify({ room: dungeon.progress.room }));
     roomCount.textContent = t('room-count', { room: dungeon.progress.room });
+    if (typeof maybeUnlockNextCurseLevel === 'function') {
+        maybeUnlockNextCurseLevel();
+    }
 }
 
 // ========== Events in the Dungeon ==========

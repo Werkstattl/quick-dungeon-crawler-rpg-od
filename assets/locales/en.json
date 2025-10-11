@@ -84,6 +84,7 @@
   "current-run": "Current Run",
   "runtime": "Runtime",
   "curse": "Curse",
+  "curse-level-unlocked": "New curse level unlocked! (Lv.{level})",
   "bestiary": "Bestiary",
   "load-more": "Load more",
   "settings": "Settings",
