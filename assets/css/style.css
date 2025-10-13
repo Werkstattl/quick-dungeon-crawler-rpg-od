@@ -1481,12 +1481,12 @@ header button i {
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
-    margin-top: 0.5rem;
 }
 
 .equip-priority-toggle input {
     width: 1rem;
     height: 1rem;
+    margin: 0;
 }
 
 .equip-priority-disabled {
