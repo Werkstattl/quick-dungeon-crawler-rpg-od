@@ -688,18 +688,6 @@ function openMenu(isTitle = false) {
                     <option value="8" ${autoIgnoreDoors === 8 ? 'selected' : ''}>8</option>
                     <option value="9" ${autoIgnoreDoors === 9 ? 'selected' : ''}>9</option>
                 </select></label>
-                <label id="auto-curse-label"><span data-i18n="curse-totems-until">Target Curse Level</span> <select id="auto-curse-select">
-                    <option value="1" ${autoCurseTotemsUntil === 1 ? 'selected' : ''}>1</option>
-                    <option value="2" ${autoCurseTotemsUntil === 2 ? 'selected' : ''}>2</option>
-                    <option value="3" ${autoCurseTotemsUntil === 3 ? 'selected' : ''}>3</option>
-                    <option value="4" ${autoCurseTotemsUntil === 4 ? 'selected' : ''}>4</option>
-                    <option value="5" ${autoCurseTotemsUntil === 5 ? 'selected' : ''}>5</option>
-                    <option value="6" ${autoCurseTotemsUntil === 6 ? 'selected' : ''}>6</option>
-                    <option value="7" ${autoCurseTotemsUntil === 7 ? 'selected' : ''}>7</option>
-                    <option value="8" ${autoCurseTotemsUntil === 8 ? 'selected' : ''}>8</option>
-                    <option value="9" ${autoCurseTotemsUntil === 9 ? 'selected' : ''}>9</option>
-                    <option value="10" ${autoCurseTotemsUntil === 10 ? 'selected' : ''}>10</option>
-                </select></label>
                 <br><button id="apply-auto" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations(defaultModalElement);
@@ -711,7 +699,6 @@ function openMenu(isTitle = false) {
         let autoAttackToggle = document.querySelector('#auto-attack-toggle');
     let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
-        let autoCurseSelect = document.querySelector('#auto-curse-select');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
         autoTab.style.width = "15rem";
@@ -752,7 +739,6 @@ function openMenu(isTitle = false) {
             autoAttack = autoAttackToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
             autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
-            autoCurseTotemsUntil = parseInt(autoCurseSelect.value, 10);
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
             }
@@ -764,7 +750,6 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoAttack", autoAttack);
             localStorage.setItem("autoBossDoors", autoBossDoors);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
-            localStorage.setItem("autoCurseTotemsUntil", autoCurseTotemsUntil);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
         };

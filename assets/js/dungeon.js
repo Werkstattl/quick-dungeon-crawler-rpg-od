@@ -339,43 +339,6 @@ const dungeonEvent = () => {
                     nothingEvent();
                 }
                 break;
-            case "curse":
-                eventRoll = randomizeNum(1, 3);
-                if (eventRoll == 1) {
-                    dungeon.status.event = true;
-                    let curseLvl = Math.round((dungeon.settings.enemyScaling - 1) * 10);
-                    let cost = curseLvl * (10000 * (curseLvl * 0.5)) + 5000;
-                    choices = `
-                            <div class="decision-panel">
-                                <button id="choice1">${t('offer')}</button>
-                                <button id="choice2">${t('ignore')}</button>
-                            </div>`;
-                    addDungeonLog(t('cursed-totem-offer', { cost: nFormatter(cost), level: curseLvl }), choices);
-                    document.querySelector("#choice1").onclick = function () {
-                        if (player.gold < cost) {
-                            sfxDeny.play();
-                            addDungeonLog(t('not-enough-gold'));
-                        } else {
-                            player.gold -= cost;
-                            sfxConfirm.play();
-                            cursedTotem(curseLvl);
-                        }
-                        dungeon.status.event = false;
-                    }
-                    document.querySelector("#choice2").onclick = function () {
-                        ignoreEvent();
-                    };
-                    // Auto-buy cursed totem if below target level
-                    const curseTarget = typeof autoCurseTotemsUntil === 'number' ? autoCurseTotemsUntil : 0;
-                    if (curseTarget > 0 && curseLvl < curseTarget && player.gold >= cost) {
-                        autoConfirm();
-                    } else {
-                        autoDecline();
-                    }
-                } else {
-                    nothingEvent();
-                }
-                break;
             case "monarch":
                 eventRoll = randomizeNum(1, 7);
                 if (eventRoll == 1) {
@@ -583,13 +546,6 @@ const statBlessing = () => {
     addDungeonLog(t('blessing-gain', { value: value, stat: buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase(), old: player.blessing, new: player.blessing + 1 }));
     blessingUp();
     playerLoadStats();
-}
-
-// Cursed totem offering
-const cursedTotem = (curseLvl) => {
-    sfxBuff.play();
-    dungeon.settings.enemyScaling += 0.1;
-    addDungeonLog(t('curse-powered', { old: curseLvl, new: curseLvl + 1 }));
 }
 
 // Shrine healing offering
