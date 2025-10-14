@@ -297,6 +297,206 @@ const equipmentIcon = (equipment) => {
     }
 }
 
+const STAT_DECIMAL_REGEX = /\.0+$|(\.[0-9]*[1-9])0+$/;
+const PERCENTAGE_STATS = new Set(["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck"]);
+const COMPARISON_STATS_ORDER = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
+
+const isPercentageStat = (stat) => PERCENTAGE_STATS.has(stat);
+
+const formatComparisonStatLabel = (stat) => {
+    if (stat === "lvl") {
+        return translateEquipText("level", "Level");
+    }
+    if (stat === "tier") {
+        return translateEquipText("tier", "Tier");
+    }
+    if (stat === "value") {
+        return translateEquipText("value", "Value");
+    }
+    return stat.toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase();
+};
+
+const formatNumericValue = (value) => {
+    if (value === undefined || value === null) {
+        return "0";
+    }
+    if (Math.abs(value - Math.round(value)) < 0.0001) {
+        return Math.round(value).toString();
+    }
+    return value.toFixed(2).replace(STAT_DECIMAL_REGEX, "$1");
+};
+
+const formatComparisonValue = (stat, value) => {
+    const formatted = formatNumericValue(value || 0);
+    if (isPercentageStat(stat)) {
+        return `${formatted}%`;
+    }
+    return formatted;
+};
+
+const formatComparisonDiff = (stat, diff) => {
+    if (Math.abs(diff) < 0.0001) {
+        return formatComparisonValue(stat, 0);
+    }
+    const sign = diff > 0 ? "+" : "-";
+    return `${sign}${formatComparisonValue(stat, Math.abs(diff))}`;
+};
+
+const buildItemStatMap = (item) => {
+    const map = {
+        lvl: item && item.lvl ? item.lvl : 0,
+        tier: item && item.tier ? item.tier : 0,
+        value: item && item.value ? item.value : 0
+    };
+    if (item && Array.isArray(item.stats)) {
+        for (const entry of item.stats) {
+            if (!entry || typeof entry !== "object") {
+                continue;
+            }
+            const stat = Object.keys(entry)[0];
+            const value = entry[stat];
+            if (typeof value !== "number") {
+                continue;
+            }
+            map[stat] = (map[stat] || 0) + value;
+        }
+    }
+    return map;
+};
+
+const pickBestComparableItem = (candidates) => {
+    if (!Array.isArray(candidates) || candidates.length === 0) {
+        return null;
+    }
+    return candidates.reduce((best, current) => {
+        if (!current) {
+            return best;
+        }
+        if (!best) {
+            return current;
+        }
+        const currentValue = current.value || 0;
+        const bestValue = best.value || 0;
+        if (currentValue !== bestValue) {
+            return currentValue > bestValue ? current : best;
+        }
+        const currentLevel = current.lvl || 0;
+        const bestLevel = best.lvl || 0;
+        if (currentLevel !== bestLevel) {
+            return currentLevel > bestLevel ? current : best;
+        }
+        return best;
+    }, null);
+};
+
+const findComparableEquippedItem = (item) => {
+    if (!player || !Array.isArray(player.equipped) || player.equipped.length === 0) {
+        return null;
+    }
+    const equippedItems = player.equipped.filter(Boolean);
+    if (equippedItems.length === 0) {
+        return null;
+    }
+    const targetCategory = item.baseCategory || item.category;
+    const targetType = item.type;
+    const targetAttribute = item.attribute;
+
+    const sameCategory = equippedItems.filter(eq => (eq.baseCategory || eq.category) === targetCategory);
+    if (sameCategory.length > 0) {
+        return pickBestComparableItem(sameCategory);
+    }
+
+    const sameType = targetType ? equippedItems.filter(eq => eq.type === targetType) : [];
+    if (sameType.length > 0) {
+        return pickBestComparableItem(sameType);
+    }
+
+    const sameAttribute = targetAttribute ? equippedItems.filter(eq => eq.attribute === targetAttribute) : [];
+    if (sameAttribute.length > 0) {
+        return pickBestComparableItem(sameAttribute);
+    }
+
+    return pickBestComparableItem(equippedItems);
+};
+
+const summarizeComparisonRows = (inventoryItem, equippedItem) => {
+    if (!inventoryItem || !equippedItem) {
+        return [];
+    }
+    const inventoryStats = buildItemStatMap(inventoryItem);
+    const equippedStats = buildItemStatMap(equippedItem);
+    const rows = [];
+
+    for (const stat of COMPARISON_STATS_ORDER) {
+        const equippedValue = equippedStats[stat] || 0;
+        const inventoryValue = inventoryStats[stat] || 0;
+        const shouldInclude = stat === "lvl" || stat === "tier" || stat === "value" || Math.abs(equippedValue) > 0.0001 || Math.abs(inventoryValue) > 0.0001;
+        if (!shouldInclude) {
+            continue;
+        }
+        const diff = inventoryValue - equippedValue;
+        rows.push({
+            stat,
+            label: formatComparisonStatLabel(stat),
+            equippedFormatted: formatComparisonValue(stat, equippedValue),
+            inventoryFormatted: formatComparisonValue(stat, inventoryValue),
+            diffFormatted: formatComparisonDiff(stat, diff),
+            diffClass: diff > 0.0001 ? "positive" : diff < -0.0001 ? "negative" : "neutral"
+        });
+    }
+
+    return rows;
+};
+
+const renderComparisonSection = (inventoryItem) => {
+    if (!inventoryItem || !player || !Array.isArray(player.equipped)) {
+        return "";
+    }
+    const heading = translateEquipText("comparison-heading", "Comparison");
+    if (player.equipped.length === 0) {
+        const emptyLabel = translateEquipText("comparison-no-equipment", "You have no items equipped.");
+        return `<div class="equip-comparison"><h4>${heading}</h4><p class="equip-comparison-note">${emptyLabel}</p></div>`;
+    }
+    const equippedMatch = findComparableEquippedItem(inventoryItem);
+    if (!equippedMatch) {
+        const noComparableLabel = translateEquipText("comparison-no-comparable", "No similar item equipped.");
+        return `<div class="equip-comparison"><h4>${heading}</h4><p class="equip-comparison-note">${noComparableLabel}</p></div>`;
+    }
+
+    const rows = summarizeComparisonRows(inventoryItem, equippedMatch);
+    const rowMarkup = rows.length > 0
+        ? rows.map(row => `<li class="${row.diffClass}"><span class="diff-label">${row.label}</span><span class="diff-values">${row.equippedFormatted} -> ${row.inventoryFormatted}</span><span class="diff-delta">${row.diffFormatted}</span></li>`).join("")
+        : `<li class="neutral"><span class="diff-label">${translateEquipText("comparison-no-differences", "Stats are identical.")}</span></li>`;
+
+    const equippedLabel = translateEquipText("comparison-equipped-label", "Equipped");
+    const inventoryLabel = translateEquipText("comparison-inventory-label", "Inventory");
+    const equippedIcon = equipmentIcon(equippedMatch.baseCategory || equippedMatch.category) || "";
+    const inventoryIcon = equipmentIcon(inventoryItem.baseCategory || inventoryItem.category) || "";
+    const equippedTitle = `${equippedIcon}${rarityName(equippedMatch.rarity, equippedMatch.category)} ${equipmentName(equippedMatch.category)}`;
+    const inventoryTitle = `${inventoryIcon}${rarityName(inventoryItem.rarity, inventoryItem.category)} ${equipmentName(inventoryItem.category)}`;
+    const equippedMeta = `Lv.${equippedMatch.lvl || 0} T${equippedMatch.tier || 0}`;
+    const inventoryMeta = `Lv.${inventoryItem.lvl || 0} T${inventoryItem.tier || 0}`;
+
+    return `<div class="equip-comparison">
+        <h4>${heading}</h4>
+        <div class="equip-comparison-items">
+            <div class="equip-comparison-item">
+                <p class="equip-comparison-label">${equippedLabel}</p>
+                <p class="equip-comparison-name ${equippedMatch.rarity || ""}">${equippedTitle}</p>
+                <p class="equip-comparison-meta">${equippedMeta}</p>
+            </div>
+            <div class="equip-comparison-item">
+                <p class="equip-comparison-label">${inventoryLabel}</p>
+                <p class="equip-comparison-name ${inventoryItem.rarity || ""}">${inventoryTitle}</p>
+                <p class="equip-comparison-meta">${inventoryMeta}</p>
+            </div>
+        </div>
+        <ul class="equip-comparison-diffs">
+            ${rowMarkup}
+        </ul>
+    </div>`;
+};
+
 // Close equipment info modal helper (used by click-away)
 function closeEquipmentInfo() {
     const itemInfo = document.querySelector('#equipmentInfo');
@@ -324,6 +524,7 @@ const showItemInfo = (item, icon, action, i) => {
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
     const actionLabel = t(action);
+    const comparisonSection = action === 'equip' ? renderComparisonSection(item) : '';
     itemInfo.innerHTML = `
             <div class="content">
                 <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
@@ -338,6 +539,7 @@ const showItemInfo = (item, icon, action, i) => {
         }
                 }).join('')}
                 </ul>
+                ${comparisonSection}
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
                     ${lockButtonMarkup}
@@ -615,7 +817,7 @@ const EQUIP_BEST_LABEL_FALLBACKS = {
     luck: 'Luck'
 };
 
-const translateEquipText = (key, fallback) => {
+function translateEquipText(key, fallback) {
     if (typeof t === 'function') {
         const translated = t(key);
         if (translated !== key) {
@@ -623,7 +825,7 @@ const translateEquipText = (key, fallback) => {
         }
     }
     return fallback;
-};
+}
 
 const ensureEquipBestPriorities = () => {
     if (!player.preferences) {
