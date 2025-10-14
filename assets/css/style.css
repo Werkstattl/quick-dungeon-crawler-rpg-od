@@ -422,6 +422,106 @@ button:focus {
     margin-left: 1rem;
 }
 
+#equipmentInfo .content.equipment-info-content {
+    max-width: 28rem;
+}
+
+#equipmentInfo .content.equipment-info-content--with-compare {
+    max-width: 48rem;
+}
+
+#equipmentInfo .content .equipment-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+}
+
+#equipmentInfo .content .equipment-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.4rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#equipmentInfo .content .equipment-card-label {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #bbb;
+}
+
+#equipmentInfo .content .equipment-card h3 {
+    margin: 0;
+}
+
+#equipmentInfo .content .equipment-card .lvltier {
+    margin: 0;
+}
+
+#equipmentInfo .content .equipment-stat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+#equipmentInfo .content .equipment-stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-name {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #ccc;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-numbers {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-weight: 600;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-value {
+    white-space: nowrap;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-diff {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-diff.positive {
+    color: #6ad16a;
+}
+
+#equipmentInfo .content .equipment-stat-row .stat-diff.negative {
+    color: #f08080;
+}
+
+#equipmentInfo .content .equipment-compare-hint {
+    margin-top: 0.75rem;
+    color: #bbb;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+    #equipmentInfo .content.equipment-info-content,
+    #equipmentInfo .content.equipment-info-content--with-compare {
+        max-width: calc(100vw - 1.5rem);
+    }
+}
+
 /* Inventory */
 #inventory {
     flex-direction: column;

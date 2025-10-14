@@ -313,7 +313,6 @@ const showItemInfo = (item, icon, action, i) => {
 
     dungeon.status.exploring = false;
     let itemInfo = document.querySelector("#equipmentInfo");
-    let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     let dimContainer = document.querySelector(`#inventory`);
     if (item.tier == undefined) {
         item.tier = 1;
@@ -323,26 +322,48 @@ const showItemInfo = (item, icon, action, i) => {
     const lockButtonMarkup = action === 'unequip' ? `<button id="toggle-lock">${lockButtonLabel}</button>` : '';
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
-    const actionLabel = t(action);
+    const comparisonItem = action === 'equip' ? findComparableEquippedItem(item) : null;
+    const selectedTotals = getEquipmentStatTotals(item);
+    const comparisonTotals = comparisonItem ? getEquipmentStatTotals(comparisonItem) : null;
+    const selectedLabelKey = action === 'equip' ? 'inventory-item' : 'equipped-item';
+    const selectedLabelFallback = action === 'equip' ? 'Inventory Item' : 'Equipped Item';
+    const selectedCard = renderEquipmentCard({
+        item,
+        icon,
+        totals: selectedTotals,
+        comparisonTotals,
+        labelKey: selectedLabelKey,
+        labelFallback: selectedLabelFallback,
+        highlightDiff: Boolean(comparisonTotals)
+    });
+    let comparisonSection = selectedCard;
+    if (comparisonItem && comparisonTotals) {
+        const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
+        const comparisonCard = renderEquipmentCard({
+            item: comparisonItem,
+            icon: comparisonIcon,
+            totals: comparisonTotals,
+            comparisonTotals: selectedTotals,
+            labelKey: 'currently-equipped',
+            labelFallback: 'Currently Equipped',
+            highlightDiff: false
+        });
+        comparisonSection = `<div class="equipment-compare-grid">${selectedCard}${comparisonCard}</div>`;
+    } else if (action === 'equip') {
+        const hintKey = player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items';
+        const hintFallback = player.equipped.length > 0 ? 'No comparable equipment currently equipped.' : 'You have no equipment equipped yet.';
+        comparisonSection = `${selectedCard}<p class="equipment-compare-hint">${translateEquipText(hintKey, hintFallback)}</p>`;
+    }
+    const actionLabel = typeof t === 'function' ? t(action) : action;
+    const closeLabel = typeof t === 'function' ? t('close') : 'Close';
     itemInfo.innerHTML = `
-            <div class="content">
-                <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
-                <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
-                <ul>
-                ${item.stats.map(stat => {
-        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
-        }
-        else {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]]}</li>`;
-        }
-                }).join('')}
-                </ul>
+            <div class="content equipment-info-content${comparisonItem ? ' equipment-info-content--with-compare' : ''}">
+                ${comparisonSection}
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
                     ${lockButtonMarkup}
                     <button id="sell-equip"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
-                    <button id="close-item-info">${t('close')}</button>
+                    <button id="close-item-info">${closeLabel}</button>
                 </div>
             </div>`;
 
@@ -623,6 +644,137 @@ const translateEquipText = (key, fallback) => {
         }
     }
     return fallback;
+};
+
+const EQUIPMENT_PERCENT_STATS = new Set(['critRate', 'critDmg', 'atkSpd', 'vamp', 'dodge', 'luck']);
+const EQUIPMENT_STAT_DISPLAY_ORDER = ['atk', 'def', 'hp', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'dodge', 'luck'];
+const EQUIPMENT_TRAILING_ZERO_RX = /\.0+$|(\.[0-9]*[1-9])0+$/;
+
+const getEquipmentStatTotals = (item) => {
+    const totals = {};
+    if (!item || !Array.isArray(item.stats)) {
+        return totals;
+    }
+    for (const entry of item.stats) {
+        if (!entry || typeof entry !== 'object') {
+            continue;
+        }
+        const statKey = Object.keys(entry)[0];
+        if (!statKey) {
+            continue;
+        }
+        const value = Number(entry[statKey]) || 0;
+        totals[statKey] = (totals[statKey] || 0) + value;
+    }
+    return totals;
+};
+
+const legacyEquipmentStatLabel = (stat) => stat.replace(/([A-Z])/g, '.$1').replace(/crit/gi, 'c').toUpperCase();
+
+const formatEquipmentStatLabel = (stat) => {
+    const key = EQUIP_BEST_LABEL_KEYS[stat];
+    const fallback = EQUIP_BEST_LABEL_FALLBACKS[stat] || legacyEquipmentStatLabel(stat);
+    if (key) {
+        return translateEquipText(key, fallback);
+    }
+    return fallback;
+};
+
+const formatEquipmentValue = (stat, rawValue, { includeSign = false } = {}) => {
+    let value = Number(rawValue) || 0;
+    const isPercent = EQUIPMENT_PERCENT_STATS.has(stat);
+    const precision = isPercent ? 2 : (Number.isInteger(value) ? 0 : 2);
+    const absValue = Math.abs(value);
+    let formatted = absValue.toFixed(precision).replace(EQUIPMENT_TRAILING_ZERO_RX, "$1");
+    if (isPercent) {
+        formatted += "%";
+    }
+    if (includeSign) {
+        if (value < 0) {
+            return `-${formatted}`;
+        }
+        return `+${formatted}`;
+    }
+    if (value < 0) {
+        return `-${formatted}`;
+    }
+    return formatted;
+};
+
+const normalizeEquipmentDiff = (value) => Math.abs(value) < 0.005 ? 0 : value;
+
+const getOrderedEquipmentStats = (primaryTotals, comparisonTotals) => {
+    const keys = new Set();
+    if (primaryTotals) {
+        Object.keys(primaryTotals).forEach(key => keys.add(key));
+    }
+    if (comparisonTotals) {
+        Object.keys(comparisonTotals).forEach(key => keys.add(key));
+    }
+    const ordered = [];
+    EQUIPMENT_STAT_DISPLAY_ORDER.forEach(stat => {
+        if (keys.has(stat)) {
+            ordered.push(stat);
+            keys.delete(stat);
+        }
+    });
+    const remaining = Array.from(keys).sort();
+    return ordered.concat(remaining);
+};
+
+const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false }) => {
+    const label = labelKey ? translateEquipText(labelKey, labelFallback || labelKey) : (labelFallback || '');
+    const tier = item.tier === undefined ? 1 : item.tier;
+    const statKeys = getOrderedEquipmentStats(totals, comparisonTotals);
+    const statsMarkup = statKeys.map(stat => {
+        const value = totals[stat] || 0;
+        const comparisonValue = comparisonTotals && comparisonTotals[stat] ? comparisonTotals[stat] : 0;
+        const diffValue = highlightDiff && comparisonTotals ? normalizeEquipmentDiff(value - comparisonValue) : 0;
+        const diffMarkup = diffValue !== 0 ? `<span class="stat-diff ${diffValue > 0 ? 'positive' : 'negative'}">(${formatEquipmentValue(stat, diffValue, { includeSign: true })})</span>` : '';
+        return `<li class="equipment-stat-row">
+                    <span class="stat-name">${formatEquipmentStatLabel(stat)}</span>
+                    <span class="stat-numbers">
+                        <span class="stat-value">${formatEquipmentValue(stat, value, { includeSign: true })}</span>
+                        ${diffMarkup}
+                    </span>
+                </li>`;
+    }).join('');
+    const statsList = statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`;
+    return `
+        <div class="equipment-card">
+            ${label ? `<p class="equipment-card-label">${label}</p>` : ''}
+            <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
+            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
+            <ul class="equipment-stat-list">
+                ${statsList}
+            </ul>
+        </div>`;
+};
+
+const findComparableEquippedItem = (item) => {
+    if (!Array.isArray(player.equipped) || player.equipped.length === 0) {
+        return null;
+    }
+    const category = item.baseCategory || item.category;
+    const type = item.type || null;
+    const attribute = item.attribute || null;
+    const categoryMatch = player.equipped.find(eq => (eq.baseCategory || eq.category) === category);
+    if (categoryMatch) {
+        return categoryMatch;
+    }
+    if (type) {
+        const typeMatch = player.equipped.find(eq => eq.type === type);
+        if (typeMatch) {
+            return typeMatch;
+        }
+    }
+    if (attribute) {
+        const attributeMatch = player.equipped.find(eq => eq.attribute === attribute);
+        if (attributeMatch) {
+            return attributeMatch;
+        }
+    }
+    return player.equipped[0];
 };
 
 const ensureEquipBestPriorities = () => {
