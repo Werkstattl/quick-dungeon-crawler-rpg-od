@@ -57,6 +57,7 @@
   "sell-all": "Vender tudo",
   "sell-all-question": "Vender todo o seu equipamento?",
   "sell-all-rarity-question": "Vender todo o equipamento {rarity}?",
+  "abandon-run-question": "Você quer abandonar esta partida?",
   "cancel": "Cancelar",
   "equip": "Equipar",
   "unequip": "Desequipar",

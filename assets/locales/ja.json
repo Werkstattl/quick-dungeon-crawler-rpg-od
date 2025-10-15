@@ -57,6 +57,7 @@
   "sell-all": "全て売却",
   "sell-all-question": "全ての装備を売却しますか？",
   "sell-all-rarity-question": "{rarity}の装備を全て売却しますか？",
+  "abandon-run-question": "この冒険をやめますか？",
   "cancel": "キャンセル",
   "equip": "装備する",
   "unequip": "装備を外す",

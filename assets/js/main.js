@@ -467,12 +467,13 @@ function openMenu(isTitle = false) {
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
                 <div class="content">
-                    <p>Do you want to abandon this run?</p>
+                    <p data-i18n="abandon-run-question">${t('abandon-run-question')}</p>
                     <div class="button-container">
-                        <button id="quit-run">Abandon</button>
-                        <button id="cancel-quit">Cancel</button>
+                        <button id="quit-run" data-i18n="abandon">${t('abandon')}</button>
+                        <button id="cancel-quit" data-i18n="cancel">${t('cancel')}</button>
                     </div>
                 </div>`;
+            applyTranslations(defaultModalElement);
             let quit = document.querySelector('#quit-run');
             let cancel = document.querySelector('#cancel-quit');
             quit.onclick = function () {

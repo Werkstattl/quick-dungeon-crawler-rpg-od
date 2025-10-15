@@ -57,6 +57,7 @@
   "sell-all": "Sell All",
   "sell-all-question": "Sell all of your equipment?",
   "sell-all-rarity-question": "Sell all {rarity} equipment?",
+  "abandon-run-question": "Do you want to abandon this run?",
   "cancel": "Cancel",
   "equip": "Equip",
   "unequip": "Unequip",

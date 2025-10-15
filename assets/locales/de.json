@@ -57,6 +57,7 @@
   "sell-all": "Alles verkaufen",
   "sell-all-question": "Alle deine Ausrüstung verkaufen?",
   "sell-all-rarity-question": "Alle {rarity}-Ausrüstung verkaufen?",
+  "abandon-run-question": "Möchtest du diesen Durchgang aufgeben?",
   "cancel": "Abbrechen",
   "equip": "Ausrüsten",
   "unequip": "Ablegen",
