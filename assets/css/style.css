@@ -436,6 +436,64 @@ button:focus {
     gap: 1rem;
 }
 
+#equipmentInfo .content .equipment-compare-slot {
+    display: flex;
+    justify-content: center;
+}
+
+#equipmentInfo .content .equipment-compare-slot--with-nav {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+    justify-items: center;
+}
+
+#equipmentInfo .content .equipment-compare-card-slot {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#equipmentInfo .content .equipment-compare-slot--with-nav > .equipment-compare-card-slot {
+    min-width: 0;
+}
+
+#equipmentInfo .content .equipment-compare-slot--with-nav > .equipment-compare-card-slot:only-child {
+    grid-column: 1 / -1;
+}
+
+#equipmentInfo .content .equipment-compare-nav {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: #fff;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#equipmentInfo .content .equipment-compare-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+}
+
+#equipmentInfo .content .equipment-compare-nav:not(:disabled):hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.05);
+}
+
+#equipmentInfo .content .equipment-compare-nav:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}
+
 #equipmentInfo .content .equipment-card {
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -519,6 +577,14 @@ button:focus {
     #equipmentInfo .content.equipment-info-content,
     #equipmentInfo .content.equipment-info-content--with-compare {
         max-width: calc(100vw - 1.5rem);
+    }
+    #equipmentInfo .content .equipment-compare-slot--with-nav {
+        grid-template-columns: 1fr;
+    }
+    #equipmentInfo .content .equipment-compare-nav {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1.05rem;
     }
 }
 

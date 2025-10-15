@@ -322,12 +322,17 @@ const showItemInfo = (item, icon, action, i) => {
     const lockButtonMarkup = action === 'unequip' ? `<button id="toggle-lock">${lockButtonLabel}</button>` : '';
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
-    const comparisonItem = action === 'equip' ? findComparableEquippedItem(item) : null;
+    const equippedItems = action === 'equip' && Array.isArray(player.equipped) ? player.equipped.filter(Boolean) : [];
+    let comparisonIndex = 0;
+    if (action === 'equip' && equippedItems.length > 0) {
+        const initialComparison = findComparableEquippedItem(item);
+        const initialIndex = initialComparison ? equippedItems.indexOf(initialComparison) : -1;
+        comparisonIndex = initialIndex >= 0 ? initialIndex : 0;
+    }
     const selectedTotals = getEquipmentStatTotals(item);
-    const comparisonTotals = comparisonItem ? getEquipmentStatTotals(comparisonItem) : null;
     const selectedLabelKey = action === 'equip' ? 'inventory-item' : 'equipped-item';
     const selectedLabelFallback = action === 'equip' ? 'Inventory Item' : 'Equipped Item';
-    const selectedCard = renderEquipmentCard({
+    const renderSelectedCard = (comparisonTotals = null) => renderEquipmentCard({
         item,
         icon,
         totals: selectedTotals,
@@ -336,28 +341,34 @@ const showItemInfo = (item, icon, action, i) => {
         labelFallback: selectedLabelFallback,
         highlightDiff: Boolean(comparisonTotals)
     });
-    let comparisonSection = selectedCard;
-    if (comparisonItem && comparisonTotals) {
-        const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
-        const comparisonCard = renderEquipmentCard({
-            item: comparisonItem,
-            icon: comparisonIcon,
-            totals: comparisonTotals,
-            comparisonTotals: selectedTotals,
-            labelKey: 'currently-equipped',
-            labelFallback: 'Currently Equipped',
-            highlightDiff: false
-        });
-        comparisonSection = `<div class="equipment-compare-grid">${selectedCard}${comparisonCard}</div>`;
-    } else if (action === 'equip') {
-        const hintKey = player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items';
-        const hintFallback = player.equipped.length > 0 ? 'No comparable equipment currently equipped.' : 'You have no equipment equipped yet.';
-        comparisonSection = `${selectedCard}<p class="equipment-compare-hint">${translateEquipText(hintKey, hintFallback)}</p>`;
+    const hasComparisonItems = action === 'equip' && equippedItems.length > 0;
+    const shouldShowNav = hasComparisonItems && equippedItems.length > 1;
+    let comparisonSection = renderSelectedCard();
+    if (action === 'equip') {
+        const prevLabel = translateEquipText('previous-equipped-item', 'Previous equipped item');
+        const nextLabel = translateEquipText('next-equipped-item', 'Next equipped item');
+        const prevButtonMarkup = shouldShowNav ? `<button type="button" class="equipment-compare-nav equipment-compare-nav--prev" aria-label="${prevLabel}" title="${prevLabel}">&#9664;</button>` : '';
+        const nextButtonMarkup = shouldShowNav ? `<button type="button" class="equipment-compare-nav equipment-compare-nav--next" aria-label="${nextLabel}" title="${nextLabel}">&#9654;</button>` : '';
+        comparisonSection = `
+            <div class="equipment-compare-grid">
+                <div id="equipment-selected-card" class="equipment-compare-slot"></div>
+                ${hasComparisonItems ? `
+                <div class="equipment-compare-slot equipment-compare-slot--with-nav">
+                    ${prevButtonMarkup}
+                    <div id="equipment-comparison-card" class="equipment-compare-card-slot"></div>
+                    ${nextButtonMarkup}
+                </div>` : ''}
+            </div>`;
+        if (!hasComparisonItems) {
+            const hintKey = player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items';
+            const hintFallback = player.equipped.length > 0 ? 'No comparable equipment currently equipped.' : 'You have no equipment equipped yet.';
+            comparisonSection += `<p class="equipment-compare-hint">${translateEquipText(hintKey, hintFallback)}</p>`;
+        }
     }
     const actionLabel = typeof t === 'function' ? t(action) : action;
     const closeLabel = typeof t === 'function' ? t('close') : 'Close';
     itemInfo.innerHTML = `
-            <div class="content equipment-info-content${comparisonItem ? ' equipment-info-content--with-compare' : ''}">
+            <div class="content equipment-info-content${hasComparisonItems ? ' equipment-info-content--with-compare' : ''}">
                 ${comparisonSection}
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
@@ -366,6 +377,68 @@ const showItemInfo = (item, icon, action, i) => {
                     <button id="close-item-info">${closeLabel}</button>
                 </div>
             </div>`;
+
+    if (action === 'equip') {
+        const selectedCardContainer = itemInfo.querySelector('#equipment-selected-card');
+        const comparisonCardContainer = itemInfo.querySelector('#equipment-comparison-card');
+        const prevButton = itemInfo.querySelector('.equipment-compare-nav--prev');
+        const nextButton = itemInfo.querySelector('.equipment-compare-nav--next');
+        const updateComparisonDisplay = () => {
+            let comparisonTotals = null;
+            let comparisonItem = null;
+            if (equippedItems.length > 0) {
+                comparisonIndex = ((comparisonIndex % equippedItems.length) + equippedItems.length) % equippedItems.length;
+                comparisonItem = equippedItems[comparisonIndex];
+                comparisonTotals = getEquipmentStatTotals(comparisonItem);
+            }
+            if (selectedCardContainer) {
+                selectedCardContainer.innerHTML = renderSelectedCard(comparisonTotals);
+            }
+            if (comparisonCardContainer) {
+                if (comparisonItem && comparisonTotals) {
+                    const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
+                    const baseLabel = translateEquipText('currently-equipped', 'Currently Equipped');
+                    const label = equippedItems.length > 1 ? `${baseLabel} (${comparisonIndex + 1}/${equippedItems.length})` : baseLabel;
+                    const comparisonCard = renderEquipmentCard({
+                        item: comparisonItem,
+                        icon: comparisonIcon,
+                        totals: comparisonTotals,
+                        comparisonTotals: selectedTotals,
+                        labelFallback: label,
+                        highlightDiff: false
+                    });
+                    comparisonCardContainer.innerHTML = comparisonCard;
+                } else {
+                    comparisonCardContainer.innerHTML = '';
+                }
+            }
+            if (prevButton) {
+                prevButton.disabled = equippedItems.length <= 1;
+            }
+            if (nextButton) {
+                nextButton.disabled = equippedItems.length <= 1;
+            }
+        };
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                if (!equippedItems.length) {
+                    return;
+                }
+                comparisonIndex = (comparisonIndex - 1 + equippedItems.length) % equippedItems.length;
+                updateComparisonDisplay();
+            });
+        }
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                if (!equippedItems.length) {
+                    return;
+                }
+                comparisonIndex = (comparisonIndex + 1) % equippedItems.length;
+                updateComparisonDisplay();
+            });
+        }
+        updateComparisonDisplay();
+    }
 
     // Equip/Unequip button for the item
     let unEquip = document.querySelector("#un-equip");
