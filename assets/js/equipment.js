@@ -342,21 +342,18 @@ const showItemInfo = (item, icon, action, i) => {
         highlightDiff: Boolean(comparisonTotals)
     });
     const hasComparisonItems = action === 'equip' && equippedItems.length > 0;
-    const shouldShowNav = hasComparisonItems && equippedItems.length > 1;
+    let prevLabel = '';
+    let nextLabel = '';
     let comparisonSection = renderSelectedCard();
     if (action === 'equip') {
-        const prevLabel = translateEquipText('previous-equipped-item', 'Previous equipped item');
-        const nextLabel = translateEquipText('next-equipped-item', 'Next equipped item');
-        const prevButtonMarkup = shouldShowNav ? `<button type="button" class="equipment-compare-nav equipment-compare-nav--prev" aria-label="${prevLabel}" title="${prevLabel}">&#9664;</button>` : '';
-        const nextButtonMarkup = shouldShowNav ? `<button type="button" class="equipment-compare-nav equipment-compare-nav--next" aria-label="${nextLabel}" title="${nextLabel}">&#9654;</button>` : '';
+        prevLabel = translateEquipText('previous-equipped-item', 'Previous equipped item');
+        nextLabel = translateEquipText('next-equipped-item', 'Next equipped item');
         comparisonSection = `
             <div class="equipment-compare-grid">
                 <div id="equipment-selected-card" class="equipment-compare-slot"></div>
                 ${hasComparisonItems ? `
                 <div class="equipment-compare-slot equipment-compare-slot--with-nav">
-                    ${prevButtonMarkup}
                     <div id="equipment-comparison-card" class="equipment-compare-card-slot"></div>
-                    ${nextButtonMarkup}
                 </div>` : ''}
             </div>`;
         if (!hasComparisonItems) {
@@ -381,8 +378,6 @@ const showItemInfo = (item, icon, action, i) => {
     if (action === 'equip') {
         const selectedCardContainer = itemInfo.querySelector('#equipment-selected-card');
         const comparisonCardContainer = itemInfo.querySelector('#equipment-comparison-card');
-        const prevButton = itemInfo.querySelector('.equipment-compare-nav--prev');
-        const nextButton = itemInfo.querySelector('.equipment-compare-nav--next');
         const updateComparisonDisplay = () => {
             let comparisonTotals = null;
             let comparisonItem = null;
@@ -399,41 +394,42 @@ const showItemInfo = (item, icon, action, i) => {
                     const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
                     const baseLabel = translateEquipText('currently-equipped', 'Currently Equipped');
                     const label = equippedItems.length > 1 ? `${baseLabel} (${comparisonIndex + 1}/${equippedItems.length})` : baseLabel;
+                    const navMarkup = hasComparisonItems ? `
+                        <div class="equipment-compare-nav-group">
+                            <button type="button" class="equipment-compare-nav equipment-compare-nav--prev" aria-label="${prevLabel}" title="${prevLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9664;</button>
+                            <button type="button" class="equipment-compare-nav equipment-compare-nav--next" aria-label="${nextLabel}" title="${nextLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9654;</button>
+                        </div>` : '';
                     const comparisonCard = renderEquipmentCard({
                         item: comparisonItem,
                         icon: comparisonIcon,
                         totals: comparisonTotals,
                         comparisonTotals: selectedTotals,
                         labelFallback: label,
-                        highlightDiff: false
+                        highlightDiff: false,
+                        headerActions: navMarkup
                     });
                     comparisonCardContainer.innerHTML = comparisonCard;
                 } else {
                     comparisonCardContainer.innerHTML = '';
                 }
             }
-            if (prevButton) {
-                prevButton.disabled = equippedItems.length <= 1;
-            }
-            if (nextButton) {
-                nextButton.disabled = equippedItems.length <= 1;
-            }
         };
-        if (prevButton) {
-            prevButton.addEventListener('click', () => {
+        if (comparisonCardContainer) {
+            comparisonCardContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('.equipment-compare-nav');
+                if (!button || button.disabled) {
+                    return;
+                }
                 if (!equippedItems.length) {
                     return;
                 }
-                comparisonIndex = (comparisonIndex - 1 + equippedItems.length) % equippedItems.length;
-                updateComparisonDisplay();
-            });
-        }
-        if (nextButton) {
-            nextButton.addEventListener('click', () => {
-                if (!equippedItems.length) {
+                if (button.classList.contains('equipment-compare-nav--prev')) {
+                    comparisonIndex = (comparisonIndex - 1 + equippedItems.length) % equippedItems.length;
+                } else if (button.classList.contains('equipment-compare-nav--next')) {
+                    comparisonIndex = (comparisonIndex + 1) % equippedItems.length;
+                } else {
                     return;
                 }
-                comparisonIndex = (comparisonIndex + 1) % equippedItems.length;
                 updateComparisonDisplay();
             });
         }
@@ -795,7 +791,7 @@ const getOrderedEquipmentStats = (primaryTotals, comparisonTotals) => {
     return ordered.concat(remaining);
 };
 
-const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false }) => {
+const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false, headerActions = '' }) => {
     const label = labelKey ? translateEquipText(labelKey, labelFallback || labelKey) : (labelFallback || '');
     const tier = item.tier === undefined ? 1 : item.tier;
     const statKeys = getOrderedEquipmentStats(totals, comparisonTotals);
@@ -813,9 +809,17 @@ const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labe
                 </li>`;
     }).join('');
     const statsList = statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`;
+    let headerMarkup = '';
+    if (label) {
+        headerMarkup = headerActions ? `
+            <div class="equipment-card-header">
+                <p class="equipment-card-label">${label}</p>
+                ${headerActions}
+            </div>` : `<p class="equipment-card-label">${label}</p>`;
+    }
     return `
         <div class="equipment-card">
-            ${label ? `<p class="equipment-card-label">${label}</p>` : ''}
+            ${headerMarkup}
             <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
             <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
             <ul class="equipment-stat-list">

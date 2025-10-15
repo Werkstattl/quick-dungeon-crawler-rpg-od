@@ -442,11 +442,9 @@ button:focus {
 }
 
 #equipmentInfo .content .equipment-compare-slot--with-nav {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.5rem;
-    align-items: center;
-    justify-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 #equipmentInfo .content .equipment-compare-card-slot {
@@ -460,7 +458,7 @@ button:focus {
 }
 
 #equipmentInfo .content .equipment-compare-slot--with-nav > .equipment-compare-card-slot:only-child {
-    grid-column: 1 / -1;
+    flex: 1 1 auto;
 }
 
 #equipmentInfo .content .equipment-compare-nav {
@@ -468,14 +466,27 @@ button:focus {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 999px;
     color: #fff;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#equipmentInfo .content .equipment-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+#equipmentInfo .content .equipment-compare-nav-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 #equipmentInfo .content .equipment-compare-nav:disabled {
@@ -579,12 +590,12 @@ button:focus {
         max-width: calc(100vw - 1.5rem);
     }
     #equipmentInfo .content .equipment-compare-slot--with-nav {
-        grid-template-columns: 1fr;
+        justify-content: center;
     }
     #equipmentInfo .content .equipment-compare-nav {
-        width: 2.25rem;
-        height: 2.25rem;
-        font-size: 1.05rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        font-size: 0.85rem;
     }
 }
 
