@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es'];
+const SUPPORTED = ['en','de','ja','es','pt'];
 const DEFAULT_LANG = 'en';
 
 const dictionaries = Object.create(null); // in-memory cache
