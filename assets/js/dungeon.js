@@ -4,6 +4,10 @@ const dungeonTime = document.querySelector("#dungeonTime");
 const floorCount = document.querySelector("#floorCount");
 const roomCount = document.querySelector("#roomCount");
 
+// Track dungeon loop timers even before the dungeon has started
+let dungeonTimer = null;
+let playTimer = null;
+
 // Maximum number of entries to keep in the dungeon log backlog
 const DUNGEON_BACKLOG_LIMIT = 40;
 
