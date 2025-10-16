@@ -38,10 +38,13 @@ if ( !autoModeUnlocked ) {
 const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
 
 function unlockAutoMode() {
+    let old = autoModeUnlocked;
     autoModeUnlocked = true;
     updateAutoModeBtnVisibility();
     if (typeof window.renderAutoModeSettingsModal === 'function') {
-        window.renderAutoModeSettingsModal();
+        if (!old) {
+            window.renderAutoModeSettingsModal();
+        }
     }
 }
 
