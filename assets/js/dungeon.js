@@ -299,7 +299,7 @@ const dungeonEvent = () => {
                     enemy.name = getEnemyTranslatedName(enemy.id);
                 // }
                 addDungeonLog(t('encountered-enemy', { enemy: enemy.name }), choices);
-                player.inCombat = true;
+                // player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {
                     engageBattle();
                 }

@@ -10,13 +10,231 @@ let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 let playerAttackReady = false;
 let autoAttackDelayTimeout = null;
+let combatPaused = false;
+
+let enemyAttackDueAt = null;
+let playerAttackDueAt = null;
+let companionAttackDueAt = null;
+let specialAbilityDueAt = null;
+
+let enemyAttackRemaining = null;
+let playerAttackRemaining = null;
+let companionAttackRemaining = null;
+let specialAbilityRemaining = null;
+
+let combatTimer = null;
+let combatTimerWasRunning = false;
+
+const nowMs = () => {
+    if (typeof performance !== "undefined" && typeof performance.now === "function") {
+        return performance.now();
+    }
+    return Date.now();
+};
 
 const getPlayerAttackButton = () => document.querySelector('#player-attack-btn');
+
+const getEnemyAttackDelay = () => {
+    const atkSpd = enemy && enemy.stats ? enemy.stats.atkSpd : 1;
+    const normalized = Math.max(atkSpd || 0, 0.1);
+    return 1000 / normalized;
+};
+
+const getCompanionAttackDelay = () => {
+    const atkSpd = activeCompanion && activeCompanion.atkSpd ? activeCompanion.atkSpd : 1;
+    const normalized = Math.max(atkSpd || 0, 0.1);
+    return 1000 / normalized;
+};
 
 const clearAutoAttackDelay = () => {
     if (autoAttackDelayTimeout !== null) {
         clearTimeout(autoAttackDelayTimeout);
         autoAttackDelayTimeout = null;
+    }
+};
+
+const scheduleEnemyAttack = (delayOverride) => {
+    if (!player || !player.inCombat) {
+        return;
+    }
+    const baseDelay = typeof delayOverride === "number" ? Math.max(0, delayOverride) : getEnemyAttackDelay();
+    enemyAttackDueAt = nowMs() + baseDelay;
+    if (enemyAttackTimeout) {
+        clearTimeout(enemyAttackTimeout);
+    }
+    enemyAttackTimeout = setTimeout(() => {
+        enemyAttackTimeout = null;
+        enemyAttackDueAt = null;
+        if (!player || !player.inCombat) {
+            return;
+        }
+        if (combatPaused) {
+            enemyAttackRemaining = 0;
+            return;
+        }
+        enemyAttack();
+    }, baseDelay);
+};
+
+const scheduleCompanionAttack = (delayOverride) => {
+    if (!player || !player.inCombat || !activeCompanion || !activeCompanion.isActive) {
+        return;
+    }
+    const baseDelay = typeof delayOverride === "number" ? Math.max(0, delayOverride) : getCompanionAttackDelay();
+    companionAttackDueAt = nowMs() + baseDelay;
+    if (companionAttackTimeout) {
+        clearTimeout(companionAttackTimeout);
+    }
+    companionAttackTimeout = setTimeout(() => {
+        companionAttackTimeout = null;
+        companionAttackDueAt = null;
+        if (!player || !player.inCombat) {
+            return;
+        }
+        if (combatPaused) {
+            companionAttackRemaining = 0;
+            return;
+        }
+        companionAttack();
+    }, baseDelay);
+};
+
+const scheduleSpecialAbilityReset = (delayOverride = 10000) => {
+    const baseDelay = typeof delayOverride === "number" ? Math.max(0, delayOverride) : 10000;
+    specialAbilityDueAt = nowMs() + baseDelay;
+    if (specialAbilityTimeout) {
+        clearTimeout(specialAbilityTimeout);
+    }
+    specialAbilityTimeout = setTimeout(() => {
+        specialAbilityTimeout = null;
+        specialAbilityDueAt = null;
+        if (combatPaused) {
+            specialAbilityRemaining = 0;
+            return;
+        }
+        specialAbilityCooldown = false;
+        updateSpecialAbilityButtonState();
+    }, baseDelay);
+};
+
+const pauseCombatTimers = () => {
+    if (combatPaused) {
+        return;
+    }
+    if (!player || !player.inCombat) {
+        return;
+    }
+    combatPaused = true;
+    const current = nowMs();
+
+    if (enemyAttackTimeout) {
+        enemyAttackRemaining = Math.max(0, (enemyAttackDueAt || current) - current);
+        clearTimeout(enemyAttackTimeout);
+        enemyAttackTimeout = null;
+    } else {
+        enemyAttackRemaining = null;
+    }
+    enemyAttackDueAt = null;
+
+    if (companionAttackTimeout) {
+        companionAttackRemaining = Math.max(0, (companionAttackDueAt || current) - current);
+        clearTimeout(companionAttackTimeout);
+        companionAttackTimeout = null;
+    } else {
+        companionAttackRemaining = null;
+    }
+    companionAttackDueAt = null;
+
+    if (playerAttackTimeout && !playerAttackReady) {
+        playerAttackRemaining = Math.max(0, (playerAttackDueAt || current) - current);
+    } else {
+        playerAttackRemaining = null;
+    }
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+    }
+    playerAttackDueAt = null;
+
+    if (specialAbilityTimeout && specialAbilityCooldown) {
+        specialAbilityRemaining = Math.max(0, (specialAbilityDueAt || current) - current);
+    } else {
+        specialAbilityRemaining = null;
+    }
+    if (specialAbilityTimeout) {
+        clearTimeout(specialAbilityTimeout);
+        specialAbilityTimeout = null;
+    }
+    specialAbilityDueAt = null;
+
+    if (combatTimer) {
+        clearInterval(combatTimer);
+        combatTimer = null;
+        combatTimerWasRunning = true;
+    } else {
+        combatTimerWasRunning = false;
+    }
+
+    clearAutoAttackDelay();
+};
+
+const resumeCombatTimers = () => {
+    if (!combatPaused) {
+        return;
+    }
+    if (!player || !player.inCombat) {
+        combatPaused = false;
+        enemyAttackRemaining = null;
+        companionAttackRemaining = null;
+        playerAttackRemaining = null;
+        specialAbilityRemaining = null;
+        return;
+    }
+    combatPaused = false;
+
+    if (combatTimerWasRunning) {
+        combatTimer = setInterval(combatCounter, 1000);
+        combatTimerWasRunning = false;
+    }
+
+    if (enemyAttackRemaining !== null) {
+        scheduleEnemyAttack(enemyAttackRemaining);
+    } else if (!enemyAttackTimeout) {
+        scheduleEnemyAttack();
+    }
+    enemyAttackRemaining = null;
+
+    if (activeCompanion && activeCompanion.isActive) {
+        if (companionAttackRemaining !== null) {
+            scheduleCompanionAttack(companionAttackRemaining);
+        } else if (!companionAttackTimeout) {
+            scheduleCompanionAttack();
+        }
+    }
+    companionAttackRemaining = null;
+
+    if (!playerAttackReady) {
+        if (playerAttackRemaining !== null) {
+            schedulePlayerAttackCooldown(playerAttackRemaining);
+        } else if (!playerAttackTimeout) {
+            schedulePlayerAttackCooldown();
+        }
+    }
+    playerAttackRemaining = null;
+
+    if (specialAbilityCooldown) {
+        if (specialAbilityRemaining !== null) {
+            scheduleSpecialAbilityReset(specialAbilityRemaining);
+        } else if (!specialAbilityTimeout) {
+            scheduleSpecialAbilityReset();
+        }
+    }
+    specialAbilityRemaining = null;
+
+    updateAttackButtonState();
+    updateSpecialAbilityButtonState();
+    if (playerAttackReady) {
+        maybeAutoAttack();
     }
 };
 
@@ -87,20 +305,30 @@ const setPlayerAttackReady = (ready) => {
     }
 };
 
-const schedulePlayerAttackCooldown = () => {
-    clearTimeout(playerAttackTimeout);
+const schedulePlayerAttackCooldown = (delayOverride) => {
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+    }
     if (!player || !player.inCombat) {
         setPlayerAttackReady(false);
         return;
     }
 
-    const cooldown = getPlayerAttackCooldown();
+    const cooldown = typeof delayOverride === "number" ? Math.max(0, delayOverride) : getPlayerAttackCooldown();
+    playerAttackDueAt = nowMs() + cooldown;
     playerAttackTimeout = setTimeout(() => {
-        if (player && player.inCombat) {
-            setPlayerAttackReady(true);
-        } else {
+        playerAttackTimeout = null;
+        playerAttackDueAt = null;
+        if (!player || !player.inCombat) {
             setPlayerAttackReady(false);
+            return;
         }
+        if (combatPaused) {
+            playerAttackRemaining = 0;
+            return;
+        }
+        setPlayerAttackReady(true);
     }, cooldown);
 };
 
@@ -109,6 +337,9 @@ const maybeAutoAttack = () => {
         return;
     }
     if (!player || !player.inCombat) {
+        return;
+    }
+    if (combatPaused) {
         return;
     }
     if (typeof autoMode !== 'undefined' && autoMode) {
@@ -231,11 +462,15 @@ const hpValidation = () => {
 
 // ========== Attack Functions ==========
 const playerAttack = () => {
-    if (!player.inCombat || !playerAttackReady) {
+    if (!player.inCombat || !playerAttackReady || combatPaused) {
         return;
     }
     setPlayerAttackReady(false);
-    clearTimeout(playerAttackTimeout);
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+        playerAttackDueAt = null;
+    }
     if (player.inCombat) {
         sfxAttack.play();
     }
@@ -324,7 +559,7 @@ const playerAttack = () => {
 
 // Companion Attack
 const companionAttack = () => {
-    if (!player.inCombat) {
+    if (!player.inCombat || combatPaused) {
         return;
     }
     if (player.inCombat) {
@@ -389,16 +624,12 @@ const companionAttack = () => {
 
     // Attack Timer
     if (player.inCombat) {
-        companionAttackTimeout = setTimeout(() => {
-            if (player.inCombat) {
-                companionAttack();
-            }
-        }, (1000 / activeCompanion.atkSpd));
+        scheduleCompanionAttack();
     }
 }
 
 const enemyAttack = () => {
-    if (!player.inCombat) {
+    if (!player.inCombat || combatPaused) {
         return;
     }
     if (player.inCombat) {
@@ -459,11 +690,7 @@ const enemyAttack = () => {
 
     // Attack Timer
     if (player.inCombat) {
-        enemyAttackTimeout = setTimeout(() => {
-            if (player.inCombat) {
-                enemyAttack();
-            }
-        }, (1000 / enemy.stats.atkSpd));
+        scheduleEnemyAttack();
     }
 }
 
@@ -565,20 +792,39 @@ const startCombat = (battleMusic) => {
     sfxEncounter.play();
         currentBattleMusic.play();
     player.inCombat = true;
-    clearTimeout(playerAttackTimeout);
-    clearTimeout(enemyAttackTimeout);
-    clearTimeout(companionAttackTimeout);
-    clearTimeout(specialAbilityTimeout);
+    combatPaused = false;
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+    }
+    playerAttackDueAt = null;
+    playerAttackRemaining = null;
+    if (enemyAttackTimeout) {
+        clearTimeout(enemyAttackTimeout);
+        enemyAttackTimeout = null;
+    }
+    enemyAttackDueAt = null;
+    enemyAttackRemaining = null;
+    if (companionAttackTimeout) {
+        clearTimeout(companionAttackTimeout);
+        companionAttackTimeout = null;
+    }
+    companionAttackDueAt = null;
+    companionAttackRemaining = null;
+    if (specialAbilityTimeout) {
+        clearTimeout(specialAbilityTimeout);
+        specialAbilityTimeout = null;
+    }
     specialAbilityCooldown = false;
+    specialAbilityDueAt = null;
+    specialAbilityRemaining = null;
+    combatTimerWasRunning = false;
 
     // Add companion involvement
-    if (activeCompanion && activeCompanion.isActive) {
-//        addCombatLog(`${activeCompanion.name} joins the battle!`);
-        companionAttackTimeout = setTimeout(companionAttack, (1000 / activeCompanion.atkSpd));
-    }
+    scheduleCompanionAttack();
 
     // Starts the timer for player and enemy attacks along with combat timer
-    enemyAttackTimeout = setTimeout(enemyAttack, (1000 / enemy.stats.atkSpd));
+    scheduleEnemyAttack();
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
 
@@ -596,16 +842,42 @@ const endCombat = () => {
     currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;
-    clearTimeout(playerAttackTimeout);
-    clearTimeout(enemyAttackTimeout);
-    clearTimeout(companionAttackTimeout);
-    clearTimeout(specialAbilityTimeout);
+    combatPaused = false;
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+    }
+    playerAttackDueAt = null;
+    playerAttackRemaining = null;
+    if (enemyAttackTimeout) {
+        clearTimeout(enemyAttackTimeout);
+        enemyAttackTimeout = null;
+    }
+    enemyAttackDueAt = null;
+    enemyAttackRemaining = null;
+    if (companionAttackTimeout) {
+        clearTimeout(companionAttackTimeout);
+        companionAttackTimeout = null;
+    }
+    companionAttackDueAt = null;
+    companionAttackRemaining = null;
+    if (specialAbilityTimeout) {
+        clearTimeout(specialAbilityTimeout);
+        specialAbilityTimeout = null;
+    }
     specialAbilityCooldown = false;
+    specialAbilityDueAt = null;
+    specialAbilityRemaining = null;
     setPlayerAttackReady(false);
+    clearAutoAttackDelay();
     // Skill validation
 
     // Stops every timer in combat
-    clearInterval(combatTimer);
+    if (combatTimer) {
+        clearInterval(combatTimer);
+        combatTimer = null;
+    }
+    combatTimerWasRunning = false;
     combatSeconds = 0;
 }
 
@@ -614,11 +886,16 @@ const combatCounter = () => {
 }
 
 const useSpecialAbility = () => {
-    if (!player || !player.inCombat || specialAbilityCooldown || !playerAttackReady) {
+    if (!player || !player.inCombat || specialAbilityCooldown || !playerAttackReady || combatPaused) {
         return;
     }
     setPlayerAttackReady(false);
-    clearTimeout(playerAttackTimeout);
+    if (playerAttackTimeout) {
+        clearTimeout(playerAttackTimeout);
+        playerAttackTimeout = null;
+        playerAttackDueAt = null;
+        playerAttackRemaining = null;
+    }
     if (player.inCombat) {
         schedulePlayerAttackCooldown();
     }
@@ -711,25 +988,34 @@ const useSpecialAbility = () => {
 
         // If the special ability kills the enemy, reset the cooldown immediately
         if (enemy.stats.hp <= 0 || enemyDead) {
-            clearTimeout(specialAbilityTimeout);
+            if (specialAbilityTimeout) {
+                clearTimeout(specialAbilityTimeout);
+                specialAbilityTimeout = null;
+            }
             specialAbilityCooldown = false;
+            specialAbilityDueAt = null;
+            specialAbilityRemaining = null;
             updateSpecialAbilityButtonState();
             return;
         }
     }
 
     specialAbilityCooldown = true;
+    specialAbilityDueAt = null;
+    specialAbilityRemaining = null;
     updateSpecialAbilityButtonState();
-    specialAbilityTimeout = setTimeout(() => {
-        specialAbilityCooldown = false;
-        updateSpecialAbilityButtonState();
-    }, 10000);
+    scheduleSpecialAbilityReset(10000);
 }
 
 const showCombatInfo = () => {
     if (!player.inCombat) {
-        clearTimeout(specialAbilityTimeout);
+        if (specialAbilityTimeout) {
+            clearTimeout(specialAbilityTimeout);
+            specialAbilityTimeout = null;
+        }
         specialAbilityCooldown = false;
+        specialAbilityDueAt = null;
+        specialAbilityRemaining = null;
     }
     // Re-evaluate enemy name in case language changed after spawn
     // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
@@ -778,14 +1064,47 @@ const showCombatInfo = () => {
     updateSpecialAbilityButtonState();
 }
 
-// Mute combat sounds when the app loses focus
+// Pause combat timers and mute sounds when the app loses focus
 document.addEventListener("visibilitychange", () => {
-    if (!player || !player.inCombat) {
-        return;
-    }
     if (document.hidden) {
-        Howler.mute(true);
+        pauseCombatTimers();
+        if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+            Howler.mute(true);
+        }
     } else {
-        Howler.mute(false);
+        if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+            Howler.mute(false);
+        }
+        resumeCombatTimers();
     }
 });
+
+document.addEventListener("pause", () => {
+    pauseCombatTimers();
+    if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+        Howler.mute(true);
+    }
+}, false);
+
+document.addEventListener("resume", () => {
+    if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+        Howler.mute(false);
+    }
+    resumeCombatTimers();
+}, false);
+
+if (typeof window !== "undefined" && window.Capacitor && window.Capacitor.App && typeof window.Capacitor.App.addListener === "function") {
+    window.Capacitor.App.addListener("appStateChange", ({ isActive }) => {
+        if (isActive) {
+            if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+                Howler.mute(false);
+            }
+            resumeCombatTimers();
+        } else {
+            pauseCombatTimers();
+            if (typeof Howler !== "undefined" && Howler && typeof Howler.mute === "function") {
+                Howler.mute(true);
+            }
+        }
+    });
+}
