@@ -780,8 +780,12 @@ const shouldAutoUseSpecialAbility = () => {
     if (!playerAttackReady) {
         return false;
     }
-    if (player.selectedClass === "Paladin" && player.stats.hp >= player.stats.hpMax) {
-        return false;
+    if (player.selectedClass === "Paladin") {
+        const hpMax = Math.max(1, player.stats.hpMax || 1);
+        const hpRatio = player.stats.hp / hpMax;
+        if (hpRatio > 0.4) {
+            return false;
+        }
     }
     return true;
 };
