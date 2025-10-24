@@ -704,6 +704,11 @@ button:focus {
     margin-top: 0.5rem;
 }
 
+.attack-controls #player-attack-btn {
+    flex: 1 0 8rem;
+    padding: 0.6rem 1.2rem;
+}
+
 .auto-attack-toggle {
     display: flex;
     align-items: center;
