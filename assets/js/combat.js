@@ -670,8 +670,8 @@ const enemyAttack = () => {
     // Aegis Thorns skill
     objectValidation();
     if (player.skills.includes("Aegis Thorns")) {
-        // Enemies receive 20% of the damage they dealt
-        enemy.stats.hp -= Math.round((20 * damage) / 100);
+        // Enemies receive 30% of the damage they dealt
+        enemy.stats.hp -= Math.round((30 * damage) / 100);
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {
