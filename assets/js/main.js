@@ -592,11 +592,14 @@ function openMenu(isTitle = false) {
         let volumeTab = document.querySelector('#volume-tab');
         volumeTab.style.width = "15rem";
         let volumeClose = document.querySelector('#volume-close');
-        volumeClose.onclick = function () {
-            sfxDecline.play();
+        const closeSettingsModal = () => {
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
             menuModalElement.style.display = "flex";
+        };
+        volumeClose.onclick = function () {
+            sfxDecline.play();
+            closeSettingsModal();
         };
 
         // Volume Control
@@ -653,7 +656,12 @@ function openMenu(isTitle = false) {
                     }
                 }
             }
-            setLanguage(selectedLang);
+            const languageResult = setLanguage(selectedLang);
+            if (languageResult && typeof languageResult.then === 'function') {
+                languageResult.then(closeSettingsModal).catch(closeSettingsModal);
+            } else {
+                closeSettingsModal();
+            }
         };
     };
 
@@ -703,11 +711,14 @@ function openMenu(isTitle = false) {
         let autoTab = document.querySelector('#auto-tab');
         autoTab.style.width = "15rem";
         let autoClose = document.querySelector('#auto-close');
-        autoClose.onclick = function () {
-            sfxDecline.play();
+        const closeAutoModeModal = () => {
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
             menuModalElement.style.display = "flex";
+        };
+        autoClose.onclick = function () {
+            sfxDecline.play();
+            closeAutoModeModal();
         };
 
         if (!autoModeUnlocked) {
@@ -750,6 +761,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
+            closeAutoModeModal();
         };
     };
 
