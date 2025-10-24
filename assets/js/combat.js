@@ -342,6 +342,7 @@ const maybeAutoAttack = () => {
     if (combatPaused) {
         return;
     }
+
     if (typeof autoMode !== 'undefined' && autoMode) {
         if (!specialAbilityCooldown && shouldAutoUseSpecialAbility()) {
             autoAttackDelayTimeout = setTimeout(() => {
@@ -349,24 +350,30 @@ const maybeAutoAttack = () => {
                 return;
             }, 200);
         }
-        if (typeof autoAttack !== 'undefined' && autoAttack) {
-            if (autoAttackDelayTimeout !== null) {
-                return;
-            }
-            autoAttackDelayTimeout = setTimeout(() => {
-                autoAttackDelayTimeout = null;
-                if (!playerAttackReady) {
-                    return;
-                }
-                if (!player || !player.inCombat) {
-                    return;
-                }
-                if (typeof autoMode !== 'undefined' && autoMode && typeof autoAttack !== 'undefined' && autoAttack) {
-                    playerAttack();
-                }
-            }, 200);
-        }
     }
+
+    const autoAttackEnabled = typeof autoAttack !== 'undefined' ? autoAttack : false;
+    if (!autoAttackEnabled) {
+        return;
+    }
+    if (autoAttackDelayTimeout !== null) {
+        return;
+    }
+    autoAttackDelayTimeout = setTimeout(() => {
+        autoAttackDelayTimeout = null;
+        if (!playerAttackReady) {
+            return;
+        }
+        if (!player || !player.inCombat) {
+            return;
+        }
+        if (combatPaused) {
+            return;
+        }
+        if (typeof autoAttack !== 'undefined' && autoAttack) {
+            playerAttack();
+        }
+    }, 200);
 };
 
 if (typeof window !== 'undefined') {
@@ -1025,8 +1032,8 @@ const showCombatInfo = () => {
     // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
         enemy.name = getEnemyTranslatedName(enemy.id);
     // }
-    const autoAttackCheckedAttr =
-        (typeof autoAttack === 'undefined' || autoAttack) ? 'checked' : '';
+    const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
+    const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">

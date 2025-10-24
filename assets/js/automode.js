@@ -16,10 +16,8 @@ let autoSpecialAbility = true;
 if (localStorage.getItem("autoSpecialAbility") === "false") {
     autoSpecialAbility = false;
 }
-let autoAttack = true;
-if (localStorage.getItem("autoAttack") === "false") {
-    autoAttack = false;
-}
+const autoAttackSetting = localStorage.getItem("autoAttack");
+let autoAttack = autoAttackSetting === "true";
 let autoBossDoors = true
 if (localStorage.getItem("autoBossDoors") === "false") {
     autoBossDoors = false;
