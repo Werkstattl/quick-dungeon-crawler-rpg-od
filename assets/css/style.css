@@ -696,6 +696,25 @@ button:focus {
     cursor: not-allowed;
 }
 
+.attack-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.auto-attack-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: calc(0.8rem * var(--font-scale));
+}
+
+.auto-attack-toggle input {
+    margin: 0;
+}
+
 #lvlupPanel .content {
     width: 100%;
     max-width: 24em;

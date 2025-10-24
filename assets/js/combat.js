@@ -1025,6 +1025,8 @@ const showCombatInfo = () => {
     // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
         enemy.name = getEnemyTranslatedName(enemy.id);
     // }
+    const autoAttackCheckedAttr =
+        (typeof autoAttack === 'undefined' || autoAttack) ? 'checked' : '';
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
@@ -1049,7 +1051,13 @@ const showCombatInfo = () => {
             <div class="battle-bar empty-bar bb-xb">
                 <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
             </div>
-            <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
+            <div class="attack-controls">
+                <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
+                <label class="auto-attack-toggle">
+                    <input type="checkbox" id="auto-attack-combat-toggle" ${autoAttackCheckedAttr}>
+                    <span data-i18n="auto-attack">${t('auto-attack')}</span>
+                </label>
+            </div>
             <button id="special-ability-btn" data-i18n="special-ability">${t('special-ability')}</button>
         </div>
         <div class="logBox primary-panel">
@@ -1061,6 +1069,25 @@ const showCombatInfo = () => {
     if (attackBtn) {
         attackBtn.addEventListener('click', () => {
             playerAttack();
+        });
+    }
+    const autoAttackToggle = document.querySelector('#auto-attack-combat-toggle');
+    if (autoAttackToggle) {
+        autoAttackToggle.addEventListener('change', (event) => {
+            const enabled = event.target.checked;
+            if (typeof autoAttack !== 'undefined') {
+                autoAttack = enabled;
+            }
+            try {
+                localStorage.setItem('autoAttack', enabled);
+            } catch (err) {
+                console.warn('Failed to persist auto-attack preference', err);
+            }
+            if (enabled) {
+                maybeAutoAttack();
+            } else {
+                clearAutoAttackDelay();
+            }
         });
     }
     document.querySelector('#special-ability-btn').addEventListener('click', useSpecialAbility);
