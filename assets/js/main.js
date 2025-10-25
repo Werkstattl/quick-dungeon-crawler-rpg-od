@@ -1042,9 +1042,6 @@ const calculateStats = () => {
     if (player.stats.luck > 140) {
         player.stats.luck = 140;
     }
-    if (player.skills && player.skills.includes("Evasion Mastery")) {
-        player.stats.dodge += 15;
-    }
     if (player.stats.dodge > 75) {
         player.stats.dodge = 75;
     }
@@ -1310,7 +1307,6 @@ const allocationPopup = () => {
                     <option value="Devastator" data-i18n="devastator">Devastator</option>
                     <option value="Paladin's Heart" data-i18n="paladins-heart">Paladin's Heart</option>
                     <option value="Aegis Thorns" data-i18n="aegis-thorns">Aegis Thorns</option>
-                    <option value="Evasion Mastery" data-i18n="evasion-mastery">Evasion Mastery</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
@@ -1420,9 +1416,6 @@ const allocationPopup = () => {
         }
         if (selectSkill.value == "Aegis Thorns") {
             skillDesc.setAttribute('data-i18n', 'aegis-thorns-desc');
-        }
-        if (selectSkill.value == "Evasion Mastery") {
-            skillDesc.setAttribute('data-i18n', 'evasion-mastery-desc');
         }
         applyTranslations(defaultModalElement);
     }
