@@ -701,6 +701,37 @@ const addDungeonLog = (message, choices) => {
     updateDungeonLog(choices);
 }
 
+// Clear the dungeon log without disrupting active choices
+const clearDungeonLog = () => {
+    let storedChoiceContainer = null;
+    const dungeonLogElement = document.querySelector('#dungeonLog');
+    if (dungeonLogElement) {
+        const activeChoiceButton = dungeonLogElement.querySelector('#choice1, #choice2, #choice3');
+        if (activeChoiceButton) {
+            storedChoiceContainer = activeChoiceButton.parentElement;
+            if (storedChoiceContainer && storedChoiceContainer.parentElement) {
+                storedChoiceContainer.parentElement.removeChild(storedChoiceContainer);
+            }
+        }
+    }
+
+    dungeon.backlog.length = 0;
+    updateDungeonLog();
+
+    if (storedChoiceContainer && dungeonLogElement) {
+        const logFlow = (localStorage.getItem('logFlow') || 'bottom');
+        if (logFlow === 'top') {
+            dungeonLogElement.insertBefore(storedChoiceContainer, dungeonLogElement.firstChild);
+            dungeonLogElement.scrollTop = 0;
+        } else {
+            dungeonLogElement.appendChild(storedChoiceContainer);
+            dungeonLogElement.scrollTop = dungeonLogElement.scrollHeight;
+        }
+    }
+
+    saveData();
+}
+
 // ========= Resting System ==========
 // Process all resting activities while paused
 const processRestingActivities = () => {

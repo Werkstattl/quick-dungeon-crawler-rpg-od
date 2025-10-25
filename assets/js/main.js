@@ -44,6 +44,15 @@ window.addEventListener("DOMContentLoaded", async function () {
         }
     });
 
+    const clearLogButton = document.querySelector('#clear-log-button');
+    if (clearLogButton) {
+        clearLogButton.addEventListener('click', () => {
+            if (typeof clearDungeonLog === 'function') {
+                clearDungeonLog();
+            }
+        });
+    }
+
     // Prevent double-click zooming on mobile devices
     document.ondblclick = function (e) {
         e.preventDefault();
