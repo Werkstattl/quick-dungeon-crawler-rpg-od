@@ -263,6 +263,17 @@ const rarityName = (rarity, category) => {
     return rarity;
 };
 
+const equipmentLabel = (rarity, category) => {
+    const name = equipmentName(category);
+    const rarityText = rarityName(rarity, category);
+    const requiresPostpositiveAdjective =
+        typeof currentLanguage !== 'undefined' && ['pt'].includes(currentLanguage);
+    const parts = requiresPostpositiveAdjective
+        ? [name, rarityText]
+        : [rarityText, name];
+    return parts.filter(Boolean).join(' ');
+};
+
 const equipmentIcon = (equipment) => {
     if (equipment == "Sword") {
         return '<i class="ra ra-relic-blade"></i>';
@@ -502,7 +513,7 @@ const showItemInfo = (item, icon, action, i) => {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>` })}</p>
+            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</span>` })}</p>
             <div class="button-container">
                 <button id="sell-confirm" data-i18n="sell">${t('sell')}</button>
                 <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
@@ -607,7 +618,7 @@ const showInventory = () => {
         let itemDiv = document.createElement('div');
         let icon = equipmentIcon(item.baseCategory || item.category);
         itemDiv.className = "items";
-        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</p>`;
+        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</p>`;
         itemDiv.addEventListener('click', function () {
             showItemInfo(item, icon, 'equip', i);
         });
@@ -832,7 +843,7 @@ const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labe
     return `
         <div class="equipment-card">
             ${headerMarkup}
-            <h3 class="${item.rarity}">${icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</h3>
+            <h3 class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</h3>
             <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
             <ul class="equipment-stat-list">
                 ${statsList}
@@ -1198,7 +1209,7 @@ const createEquipmentPrint = (condition) => {
     receiveEquipment(item);
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
-                <h4 class="${item.rarity}"><b>${item.icon}${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</b></h4>
+                <h4 class="${item.rarity}"><b>${item.icon}${equipmentLabel(item.rarity, item.category)}</b></h4>
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
@@ -1211,7 +1222,7 @@ const createEquipmentPrint = (condition) => {
     }).join('')}
             </ul>
         </div>`;
-    const itemLabel = `<span class="${item.rarity}">${rarityName(item.rarity, item.category)} ${equipmentName(item.category)}</span>`;
+    const itemLabel = `<span class="${item.rarity}">${equipmentLabel(item.rarity, item.category)}</span>`;
     if (condition == "combat") {
         const msg = typeof t === 'function' ? t('enemy-dropped-item', { enemy: enemy.name, item: itemLabel }) : `${enemy.name} dropped ${itemLabel}.`;
         addCombatLog(`${msg}<br>${panel}`);
