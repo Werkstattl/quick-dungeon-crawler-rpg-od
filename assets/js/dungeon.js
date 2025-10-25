@@ -704,6 +704,7 @@ const addDungeonLog = (message, choices) => {
 // Clear the dungeon log without disrupting active choices
 const clearDungeonLog = () => {
     let storedChoiceContainer = null;
+    let preservedLogEntry = null;
     const dungeonLogElement = document.querySelector('#dungeonLog');
     if (dungeonLogElement) {
         const activeChoiceButton = dungeonLogElement.querySelector('#choice1, #choice2, #choice3');
@@ -712,10 +713,17 @@ const clearDungeonLog = () => {
             if (storedChoiceContainer && storedChoiceContainer.parentElement) {
                 storedChoiceContainer.parentElement.removeChild(storedChoiceContainer);
             }
+
+            if (dungeon.backlog.length > 0) {
+                preservedLogEntry = dungeon.backlog[dungeon.backlog.length - 1];
+            }
         }
     }
 
     dungeon.backlog.length = 0;
+    if (preservedLogEntry !== null) {
+        dungeon.backlog.push(preservedLogEntry);
+    }
     updateDungeonLog();
 
     if (storedChoiceContainer && dungeonLogElement) {
