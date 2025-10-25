@@ -160,7 +160,7 @@ const playerLvlUp = () => {
     player.bonusStats.def += 3;
     player.bonusStats.atkSpd += 0.15;
     player.bonusStats.critRate += 0.1;
-    player.bonusStats.critDmg += 0.25;
+    player.bonusStats.critDmg += 0.1;
 
     // Play level up effects
     sfxLvlUp.play();
@@ -444,7 +444,7 @@ const lvlupPopup = () => {
         "atkSpd": 3.5,
         "vamp": 0.5,
         "critRate": 1,
-        "critDmg": 6,
+        "critDmg": 3,
         "dodge": 0.3,
         "luck": 1
     };

@@ -171,8 +171,8 @@ const rerollEquipmentStats = (equipment) => {
             equipmentValue += statValue * 20.83;
         } else if (statType === "critDmg") {
             statValue = randomizeDecimal(cdAtkSpdScaling * 0.1, cdAtkSpdScaling * 0.2);
-            if (statValue > 25) {
-                statValue = 25 * randomizeDecimal(0.5, 1);
+            if (statValue > 20) {
+                statValue = 20 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 10.83;
