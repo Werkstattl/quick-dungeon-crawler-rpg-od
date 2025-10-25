@@ -442,19 +442,31 @@ const showItemInfo = (item, icon, action, i) => {
         if (action === "equip") {
             // Remove the item from the inventory and add it to the equipment
             if (player.equipped.length >= 6) {
-                sfxDeny.play();
+                const comparisonItem = equippedItems.length ? equippedItems[comparisonIndex] || equippedItems[0] : null;
+                const comparisonIndexInEquipped = comparisonItem ? player.equipped.indexOf(comparisonItem) : -1;
+
+                if (comparisonIndexInEquipped === -1) {
+                    sfxDeny.play();
+                    return;
+                }
+
+                sfxEquip.play();
+
+                player.inventory.equipment.splice(i, 1);
+                player.inventory.equipment.push(JSON.stringify(comparisonItem));
+                player.equipped[comparisonIndexInEquipped] = item;
             } else {
                 sfxEquip.play();
 
                 // Equip the item
                 player.inventory.equipment.splice(i, 1);
                 player.equipped.push(item);
-
-                itemInfo.style.display = "none";
-                dimContainer.style.filter = "brightness(100%)";
-                playerLoadStats();
-                continueExploring();
             }
+
+            itemInfo.style.display = "none";
+            dimContainer.style.filter = "brightness(100%)";
+            playerLoadStats();
+            continueExploring();
         } else if (action === "unequip") {
             sfxUnequip.play();
 
