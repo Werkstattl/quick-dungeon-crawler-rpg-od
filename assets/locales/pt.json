@@ -185,6 +185,8 @@
   "paladin": "Paladino",
   "knight-class-description": "Habilidade especial que causa 1.5x do dano de ATQ.",
   "paladin-class-description": "Habilidade especial que cura você.",
+  "special-ability-knight": "Power Strike",
+  "special-ability-paladin": "Divine Blessing",
   "stat-points": "Pontos de atributo:",
   "reset": "Redefinir",
   "auto": "Auto",

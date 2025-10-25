@@ -185,6 +185,8 @@
   "paladin": "Paladin",
   "knight-class-description": "Spezialfähigkeit, die 1,5x ATK Schaden verursacht.",
   "paladin-class-description": "Spezialfähigkeit, um sich selbst zu heilen.",
+  "special-ability-knight": "Power Strike",
+  "special-ability-paladin": "Divine Blessing",
   "stat-points": "Stat-Punkte:",
   "reset": "Reset",
   "auto": "Auto",
