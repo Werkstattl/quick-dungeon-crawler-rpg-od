@@ -1031,7 +1031,10 @@ const calculateStats = () => {
     player.stats.def = Math.round(((playerDefBase + playerDefBase * (defBonusPct / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
     player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (atkSpdBonusPct / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
     player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionBonuses.vamp || 0);
-    player.stats.critRate = playerCRateBase + player.bonusStats.critRate + player.equippedStats.critRate + (companionBonuses.critRate || 0);
+    const equipmentCritRate = player.equippedStats.critRate;
+    const hasEagleEye = (typeof PASSIVE_EAGLE_EYE !== 'undefined') && ((Array.isArray(player.skills) && player.skills.includes(PASSIVE_EAGLE_EYE)) || player.selectedPassive === PASSIVE_EAGLE_EYE);
+    const eagleEyeBonus = hasEagleEye ? equipmentCritRate * 0.25 : 0;
+    player.stats.critRate = playerCRateBase + player.bonusStats.critRate + equipmentCritRate + eagleEyeBonus + (companionBonuses.critRate || 0);
     if (player.stats.critRate > 100) {
         player.stats.critRate = 100;
     }
@@ -1307,6 +1310,7 @@ const allocationPopup = () => {
                     <option value="Titan's Will" data-i18n="titans-will">Titan's Will</option>
                     <option value="Devastator" data-i18n="devastator">Devastator</option>
                     <option value="Limit Breaker" data-i18n="limit-breaker">Limit Breaker</option>
+                    <option value="Eagle Eye" data-i18n="eagle-eye">Eagle Eye</option>
                     <option value="Paladin's Heart" data-i18n="paladins-heart">Paladin's Heart</option>
                     <option value="Aegis Thorns" data-i18n="aegis-thorns">Aegis Thorns</option>
                 </select>
@@ -1415,6 +1419,9 @@ const allocationPopup = () => {
         }
         if (selectSkill.value == PASSIVE_LIMIT_BREAKER) {
             skillDesc.setAttribute('data-i18n', 'limit-breaker-desc');
+        }
+        if (typeof PASSIVE_EAGLE_EYE !== 'undefined' && selectSkill.value == PASSIVE_EAGLE_EYE) {
+            skillDesc.setAttribute('data-i18n', 'eagle-eye-desc');
         }
         if (selectSkill.value == "Paladin's Heart") {
             skillDesc.setAttribute('data-i18n', 'paladins-heart-desc');

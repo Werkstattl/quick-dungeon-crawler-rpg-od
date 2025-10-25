@@ -82,6 +82,7 @@ let inventoryOpen = false;
 let leveled = false;
 
 const PASSIVE_LIMIT_BREAKER = "Limit Breaker";
+const PASSIVE_EAGLE_EYE = "Eagle Eye";
 
 const getPlayerAtkSpdCap = () => {
     if (player && Array.isArray(player.skills) && player.skills.includes(PASSIVE_LIMIT_BREAKER)) {
