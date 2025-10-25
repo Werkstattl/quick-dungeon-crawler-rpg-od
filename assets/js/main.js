@@ -1045,8 +1045,9 @@ const calculateStats = () => {
     if (player.stats.dodge > 75) {
         player.stats.dodge = 75;
     }
-    if (player.stats.atkSpd > 2.5) {
-        player.stats.atkSpd = 2.5;
+    const atkSpdCap = getPlayerAtkSpdCap();
+    if (player.stats.atkSpd > atkSpdCap) {
+        player.stats.atkSpd = atkSpdCap;
     }
 }
 
@@ -1305,6 +1306,7 @@ const allocationPopup = () => {
                     <option value="Remnant Razor" data-i18n="remnant-razor">Remnant Razor</option>
                     <option value="Titan's Will" data-i18n="titans-will">Titan's Will</option>
                     <option value="Devastator" data-i18n="devastator">Devastator</option>
+                    <option value="Limit Breaker" data-i18n="limit-breaker">Limit Breaker</option>
                     <option value="Paladin's Heart" data-i18n="paladins-heart">Paladin's Heart</option>
                     <option value="Aegis Thorns" data-i18n="aegis-thorns">Aegis Thorns</option>
                 </select>
@@ -1410,6 +1412,9 @@ const allocationPopup = () => {
         }
         if (selectSkill.value == "Devastator") {
             skillDesc.setAttribute('data-i18n', 'devastator-desc');
+        }
+        if (selectSkill.value == PASSIVE_LIMIT_BREAKER) {
+            skillDesc.setAttribute('data-i18n', 'limit-breaker-desc');
         }
         if (selectSkill.value == "Paladin's Heart") {
             skillDesc.setAttribute('data-i18n', 'paladins-heart-desc');

@@ -81,6 +81,18 @@ if (player) {
 let inventoryOpen = false;
 let leveled = false;
 
+const PASSIVE_LIMIT_BREAKER = "Limit Breaker";
+
+const getPlayerAtkSpdCap = () => {
+    if (player && Array.isArray(player.skills) && player.skills.includes(PASSIVE_LIMIT_BREAKER)) {
+        return 3;
+    }
+    if (player && player.selectedPassive === PASSIVE_LIMIT_BREAKER) {
+        return 3;
+    }
+    return 2.5;
+};
+
 const MAX_INVENTORY_ITEMS = 100;
 
 function getFallbackCompanionBonuses() {
@@ -253,7 +265,8 @@ const playerLoadStats = () => {
     playerAtkElement.innerHTML = nFormatter(player.stats.atk);
     playerDefElement.innerHTML = nFormatter(player.stats.def);
     playerAtkSpdElement.innerHTML = player.stats.atkSpd.toFixed(2).replace(rx, "$1");
-    if (player.stats.atkSpd >= 2.5) {
+    const atkSpdCap = getPlayerAtkSpdCap();
+    if (player.stats.atkSpd >= atkSpdCap) {
         playerAtkSpdElement.style.color = '#e30b5c';
     } else {
         playerAtkSpdElement.style.color = 'white';
@@ -518,7 +531,7 @@ const generateLvlStats = (rerolls, percentages) => {
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "atkSpd") {
                     let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
-                    let statFinal = Math.min(2.5, player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd + percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
+                    let statFinal = Math.min(getPlayerAtkSpdCap(), player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd + percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
                     let statInitial = player.stats.atkSpd;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "vamp") {
