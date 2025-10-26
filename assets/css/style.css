@@ -221,9 +221,9 @@ main {
     flex-shrink: 0;
 }
 
-.clear-log-button:hover,
-.clear-log-button:focus-visible {
-    background: rgba(255, 255, 255, 0.1);
+.clear-log-button:hover {
+    background: white;
+color: black;
 }
 
 .logBox #dungeonAction {
