@@ -49,6 +49,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         clearLogButton.addEventListener('click', () => {
             if (typeof clearDungeonLog === 'function') {
                 clearDungeonLog();
+		sfxConfirm.play();
             }
         });
     }
