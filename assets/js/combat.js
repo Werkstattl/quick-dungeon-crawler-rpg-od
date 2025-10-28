@@ -548,6 +548,9 @@ const playerAttack = () => {
     player.stats.hp += lifesteal;
     if (!dodged) {
         addCombatLog(t('player-attack-hit', { player: player.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
+        if (lifesteal > 0) {
+            addCombatLog(t('player-vamp-heal', { player: player.name, value: nFormatter(lifesteal) }));
+        }
     }
     hpValidation();
     playerLoadStats();
@@ -700,6 +703,9 @@ const enemyAttack = () => {
     enemy.stats.hp += lifesteal;
     if (!dodged) {
         addCombatLog(t('enemy-attack-hit', { enemy: enemy.name, player: player.name, value: nFormatter(damage), type: dmgtype }));
+        if (lifesteal > 0) {
+            addCombatLog(t('enemy-vamp-heal', { enemy: enemy.name, value: nFormatter(lifesteal) }));
+        }
     }
     hpValidation();
     playerLoadStats();
