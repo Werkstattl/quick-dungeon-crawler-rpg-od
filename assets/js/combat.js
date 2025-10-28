@@ -683,6 +683,7 @@ const enemyAttack = () => {
     if (Math.random() < player.stats.dodge / 100) {
         addCombatLog(t('dodged-attack-player', { player: player.name }));
         damage = 0;
+        lifesteal = 0;
         dodged = true;
     }
 
