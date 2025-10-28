@@ -243,18 +243,36 @@ const equipmentGender = (category) => {
     return null;
 };
 
+const RARITY_GENDERED_TRANSLATIONS = {
+    pt: {
+        rare: { m: 'Raro', f: 'Rara' },
+        epic: { m: 'Épico', f: 'Épica' },
+        legendary: { m: 'Lendário', f: 'Lendária' },
+    },
+};
+
 const rarityName = (rarity, category) => {
     if (typeof t === 'function') {
         const key = rarity.toLowerCase();
         let translated = t(key);
         if (translated !== key) {
-            if (typeof currentLanguage !== 'undefined' && currentLanguage === 'de' && category) {
-                const adjectival = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
-                if (adjectival.includes(key)) {
+            if (typeof currentLanguage !== 'undefined' && category) {
+                if (currentLanguage === 'de') {
+                    const adjectival = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+                    if (adjectival.includes(key)) {
+                        const gender = equipmentGender(category);
+                        if (gender === 'm') translated += 'er';
+                        else if (gender === 'f') translated += 'e';
+                        else if (gender === 'n') translated += 'es';
+                    }
+                } else if (currentLanguage === 'pt') {
                     const gender = equipmentGender(category);
-                    if (gender === 'm') translated += 'er';
-                    else if (gender === 'f') translated += 'e';
-                    else if (gender === 'n') translated += 'es';
+                    if (gender) {
+                        const genderedTranslations = RARITY_GENDERED_TRANSLATIONS.pt[key];
+                        if (genderedTranslations && genderedTranslations[gender]) {
+                            translated = genderedTranslations[gender];
+                        }
+                    }
                 }
             }
             return translated;

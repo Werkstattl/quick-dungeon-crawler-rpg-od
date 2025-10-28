@@ -285,6 +285,23 @@
     "horned-helm": "Elmo com chifres",
     "mask": "Máscara"
   },
+  "equipment-genders": {
+    "sword": "f",
+    "axe": "m",
+    "hammer": "m",
+    "dagger": "f",
+    "flail": "m",
+    "scythe": "f",
+    "plate": "f",
+    "chain": "f",
+    "leather": "m",
+    "tower": "f",
+    "kite": "m",
+    "buckler": "m",
+    "great-helm": "m",
+    "horned-helm": "m",
+    "mask": "f"
+  },
   "enemy-names": {
     "goblin": "Goblin",
     "goblin-rogue": "Goblin ladino",
