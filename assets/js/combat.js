@@ -938,7 +938,7 @@ const useSpecialAbility = () => {
         sfxBuff.play();
         const healAmount = Math.round(player.stats.hpMax);
         player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
-    addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(healAmount) }));
+        addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(healAmount) }));
         hpValidation();
         playerLoadStats();
     } else {
@@ -994,6 +994,9 @@ const useSpecialAbility = () => {
         player.stats.hp += lifesteal;
         if (!dodged) {
             addCombatLog(t('special-ability-attack-hit', { player: player.name, value: nFormatter(damage), type: dmgtype }));
+            if (lifesteal > 0) {
+                addCombatLog(t('player-vamp-heal', { player: player.name, value: nFormatter(lifesteal) }));
+            }
         }
         hpValidation();
         playerLoadStats();
