@@ -73,16 +73,6 @@ async function setLanguage(lang) {
   document.documentElement.lang = loaded;
   localStorage.setItem('lang', loaded);
   applyTranslations(document);
-  // if (typeof updateCompanionUI === 'function') updateCompanionUI();
-  // // Refresh enemy related UI
-  // if (typeof getEnemyTranslatedName === 'function' && enemy && enemy.id != null) {
-  //   enemy.name = getEnemyTranslatedName(enemy.id);
-  //   // Update combat panel if visible
-  //   const enemyPanel = document.querySelector('#enemyPanel p');
-  //   if (enemyPanel) {
-  //     enemyPanel.firstChild && (enemyPanel.firstChild.textContent = `${enemy.name} Lv.${enemy.lvl}`);
-  //   }
-  // }
 }
 
 (function initLanguage() {
