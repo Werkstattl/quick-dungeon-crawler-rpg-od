@@ -1221,8 +1221,30 @@ const sellAll = (rarity) => {
     }
 }
 
+const EQUIPMENT_STAT_ABBREVIATION_KEYS = {
+    atk: 'atk',
+    def: 'def',
+    hp: 'hp',
+    atkSpd: 'aps',
+    critRate: 'c-rate',
+    critDmg: 'c-dmg',
+    vamp: 'vamp',
+    dodge: 'dodge',
+    luck: 'luck'
+};
+
+const getEquipmentStatAbbreviation = (statKey) => {
+    const translationKey = EQUIPMENT_STAT_ABBREVIATION_KEYS[statKey];
+    if (translationKey && typeof t === 'function') {
+        const translated = t(translationKey);
+        if (translated && translated !== translationKey) {
+            return translated;
+        }
+    }
+    return legacyEquipmentStatLabel(statKey);
+};
+
 const createEquipmentPrint = (condition) => {
-    let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     let item = createEquipment(false);
     receiveEquipment(item);
     let panel = `
@@ -1231,12 +1253,10 @@ const createEquipmentPrint = (condition) => {
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
-        if (["critRate","critDmg","atkSpd","vamp","dodge","luck"].includes(Object.keys(stat)[0])) {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]].toFixed(2).replace(rx, "$1")}%</li>`;
-        }
-        else {
-            return `<li>${Object.keys(stat)[0].toString().replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${stat[Object.keys(stat)[0]]}</li>`;
-        }
+        const statKey = Object.keys(stat)[0];
+        const label = getEquipmentStatAbbreviation(statKey);
+        const value = stat[statKey];
+        return `<li>${label}${formatEquipmentValue(statKey, value, { includeSign: true })}</li>`;
     }).join('')}
             </ul>
         </div>`;
