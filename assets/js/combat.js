@@ -547,10 +547,14 @@ const playerAttack = () => {
     enemy.stats.hp -= damage;
     player.stats.hp += lifesteal;
     if (!dodged) {
-        addCombatLog(t('player-attack-hit', { player: player.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
-        if (lifesteal > 0) {
-            addCombatLog(t('player-vamp-heal', { player: player.name, value: nFormatter(lifesteal) }));
-        }
+        const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
+        addCombatLog(t('player-attack-hit', {
+            player: player.name,
+            enemy: enemy.name,
+            value: nFormatter(damage),
+            type: dmgtype,
+            lifesteal: lifestealText
+        }));
     }
     hpValidation();
     playerLoadStats();
@@ -703,10 +707,14 @@ const enemyAttack = () => {
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {
-        addCombatLog(t('enemy-attack-hit', { enemy: enemy.name, player: player.name, value: nFormatter(damage), type: dmgtype }));
-        if (lifesteal > 0) {
-            addCombatLog(t('enemy-vamp-heal', { enemy: enemy.name, value: nFormatter(lifesteal) }));
-        }
+        const lifestealText = lifesteal > 0 ? t('enemy-vamp-heal', { value: nFormatter(lifesteal) }) : '';
+        addCombatLog(t('enemy-attack-hit', {
+            enemy: enemy.name,
+            player: player.name,
+            value: nFormatter(damage),
+            type: dmgtype,
+            lifesteal: lifestealText
+        }));
     }
     hpValidation();
     playerLoadStats();
@@ -993,10 +1001,13 @@ const useSpecialAbility = () => {
         enemy.stats.hp -= damage;
         player.stats.hp += lifesteal;
         if (!dodged) {
-            addCombatLog(t('special-ability-attack-hit', { player: player.name, value: nFormatter(damage), type: dmgtype }));
-            if (lifesteal > 0) {
-                addCombatLog(t('player-vamp-heal', { player: player.name, value: nFormatter(lifesteal) }));
-            }
+            const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
+            addCombatLog(t('special-ability-attack-hit', {
+                player: player.name,
+                value: nFormatter(damage),
+                type: dmgtype,
+                lifesteal: lifestealText
+            }));
         }
         hpValidation();
         playerLoadStats();
