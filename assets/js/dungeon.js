@@ -305,7 +305,7 @@ const dungeonEvent = () => {
                 addDungeonLog(t('found-stairs'), choices);
                 document.querySelector("#choice1").onclick = function () {
                     sfxConfirm.play();
-                    dungeon.progress.floor = dungeon.progress.floor + 5;
+                    dungeon.progress.floor = dungeon.progress.floor +( Math.floor(Math.random() * (6 - 3 + 1)) + 3);
                     dungeon.progress.room = 1;
                     dungeon.action = 0;
                     loadDungeonProgress();
