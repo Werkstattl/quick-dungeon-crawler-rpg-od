@@ -189,6 +189,7 @@ const dungeonEvent = () => {
         dungeon.action++;
         let choices;
         let eventRoll;
+        let event;
         let eventTypes = ["blessing", "treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
@@ -198,7 +199,10 @@ const dungeonEvent = () => {
         } else if (dungeon.action > 5) {
             eventTypes = ["nextroom"];
         }
-        const event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1) {
+            event = "enemy";
+        }
         currentEvent = event;
 
         switch (event) {
