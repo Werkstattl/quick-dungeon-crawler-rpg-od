@@ -201,7 +201,11 @@ const dungeonEvent = () => {
         }
         event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
         if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1) {
-            event = "enemy";
+            if (!localStorage.getItem('introHintShown')) {
+                localStorage.setItem('introHintShown', true);
+            } else {
+                event = "stairs";
+            }
         }
         currentEvent = event;
 
@@ -289,6 +293,29 @@ const dungeonEvent = () => {
                 break;
             case "nothing":
                 nothingEvent();
+                break;
+            case "stairs":
+                dungeon.status.event = true;
+                choices = `
+                    <div class="decision-panel">
+                        <button id="choice1" data-i18n="ascend">${t('ascend')}</button>
+                        <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
+                    </div>`;
+                addDungeonLog(t('found-stairs'), choices);
+                document.querySelector("#choice1").onclick = function () {
+                    sfxConfirm.play();
+                    dungeon.progress.floor = dungeon.progress.floor + 5;
+                    dungeon.progress.room = 1;
+                    dungeon.action = 0;
+                    loadDungeonProgress();
+                    addDungeonLog(t('ascended-to-floor', { floor: dungeon.progress.floor }));
+                    dungeon.status.event = false;
+                    currentEvent = null;
+                }
+                document.querySelector("#choice2").onclick = function () {
+                    ignoreEvent();
+                };
+                autoConfirm();
                 break;
             case "enemy":
                 dungeon.status.event = true;

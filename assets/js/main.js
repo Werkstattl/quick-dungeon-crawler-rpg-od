@@ -906,7 +906,6 @@ const enterDungeon = () => {
     playerLoadStats();
     if (!localStorage.getItem('introHintShown')) {
         addDungeonLog(t('summon-explore-hint'));
-        localStorage.setItem('introHintShown', true);
     }
 }
 
