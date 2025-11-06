@@ -298,7 +298,7 @@ const dungeonEvent = () => {
                 dungeon.status.event = true;
                 choices = `
                     <div class="decision-panel">
-                        <button id="choice1" data-i18n="ascend">${t('ascend')}</button>
+                        <button id="choice1" data-i18n="descend">${t('descend')}</button>
                         <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                     </div>`;
                 addDungeonLog(t('found-stairs'), choices);
@@ -308,7 +308,7 @@ const dungeonEvent = () => {
                     dungeon.progress.room = 1;
                     dungeon.action = 0;
                     loadDungeonProgress();
-                    addDungeonLog(t('ascended-to-floor', { floor: dungeon.progress.floor }));
+                    addDungeonLog(t('descended-to-floor', { floor: dungeon.progress.floor }));
                     dungeon.status.event = false;
                     currentEvent = null;
                 }
