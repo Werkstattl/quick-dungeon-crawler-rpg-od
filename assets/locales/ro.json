@@ -377,5 +377,9 @@
       "title": "LUCK +",
       "desc": "Mărește bonusul de LUCK cu {value}%."
     }
-  }
+  },
+
+  "descend": "Coboară",
+  "descended-to-floor": "Ai coborât la etajul {floor}.",
+  "found-stairs": "Ai găsit niște scări care duc mai adânc în temniță."
 }

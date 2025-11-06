@@ -367,5 +367,9 @@
     "critDmg": { "title": "D.CRÍT +", "desc": "Aumenta o dano crítico bônus em {value}%." },
     "dodge": { "title": "ESQUIVA +", "desc": "Aumenta a esquiva bônus em {value}%." },
     "luck": { "title": "SORTE +", "desc": "Aumenta a sorte bônus em {value}%." }
-  }
+  },
+
+  "descend": "Descer",
+  "descended-to-floor": "Você desceu para o andar {floor}.",
+  "found-stairs": "Você encontrou escadas que levam mais fundo na masmorra."
 }

@@ -373,4 +373,8 @@
     "luck": { "title": "LUCK UP", "desc": "Erhöhe Bonus-LUCK um {value}%." }
   }
 
+  ,"descend": "Hinabsteigen"
+  ,"descended-to-floor": "Du bist zur Ebene {floor} hinabgestiegen."
+  ,"found-stairs": "Du hast eine Treppe gefunden, die tiefer in den Dungeon führt."
+
 }

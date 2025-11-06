@@ -353,5 +353,9 @@
     "critDmg": { "title": "D.CRIT +", "desc": "Incrementa el D.CRIT adicional en {value}%." },
     "dodge": { "title": "ESQ +", "desc": "Incrementa la ESQ adicional en {value}%." },
     "luck": { "title": "SUERTE +", "desc": "Incrementa la SUERTE adicional en {value}%." }
-  }
+  },
+
+  "descend": "Descender",
+  "descended-to-floor": "Descendiste al piso {floor}.",
+  "found-stairs": "Encontraste unas escaleras que descienden más profundo en la mazmorra."
 }

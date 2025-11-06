@@ -354,4 +354,9 @@
     "dodge": { "title": "DODGE UP", "desc": "ボーナスDODGEが{value}%増加する。" },
     "luck": { "title": "LUCK UP", "desc": "ボーナスLUCKが{value}%増加する。" }
   }
+
+  ,"descend": "降りる"
+  ,"descended-to-floor": "{floor}階へ降りた。"
+  ,"found-stairs": "ダンジョンの奥へ続く階段を見つけた。"
+
 }

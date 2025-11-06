@@ -355,4 +355,8 @@
     "luck": { "title": "LUCK UP", "desc": "Increase bonus LUCK by {value}%." }
   }
 
+  ,"descend": "Descend"
+  ,"descended-to-floor": "You descended to floor {floor}."
+  ,"found-stairs": "You found stairs leading deeper into the dungeon."
+
 }
