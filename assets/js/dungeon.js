@@ -203,6 +203,7 @@ const dungeonEvent = () => {
         if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1) {
             if (!localStorage.getItem('introHintShown')) {
                 localStorage.setItem('introHintShown', true);
+                event = "enemy";
             } else {
                 event = "stairs";
             }
