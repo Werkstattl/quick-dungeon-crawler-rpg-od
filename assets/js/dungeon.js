@@ -22,6 +22,7 @@ let dungeon = {
         room: 1,
         floorLimit: 100,
         roomLimit: 5,
+        stairsFloor: null,
     },
     settings: {
         enemyBaseLvl: 1,
@@ -84,6 +85,10 @@ const initialDungeonLoad = () => {
             event: false,
         };
         
+        if (dungeon.progress.stairsFloor === undefined) {
+            dungeon.progress.stairsFloor = null;
+        }
+
         // Initialize resting system if it doesn't exist
         if (!dungeon.resting) {
             dungeon.resting = {
@@ -168,6 +173,7 @@ const loadDungeonProgress = () => {
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
+        dungeon.progress.stairsFloor = null;
         
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
@@ -308,6 +314,7 @@ const dungeonEvent = () => {
                     dungeon.progress.floor = dungeon.progress.floor +( Math.floor(Math.random() * (6 - 3 + 1)) + 3);
                     dungeon.progress.room = 1;
                     dungeon.action = 0;
+                    dungeon.progress.stairsFloor = dungeon.progress.floor;
                     loadDungeonProgress();
                     addDungeonLog(t('descended-to-floor', { floor: dungeon.progress.floor }));
                     dungeon.status.event = false;
@@ -488,13 +495,17 @@ const fleeBattle = () => {
 }
 
 // Chest event randomizer
+const isGoldOnlyFloor = () => {
+    return dungeon.progress.floor === 1 || dungeon.progress.stairsFloor === dungeon.progress.floor;
+}
+
 const chestEvent = () => {
     sfxConfirm.play();
     let eventRoll = randomizeNum(1, 4);
     if (eventRoll == 1) {
         mimicBattle("chest");
     } else if (eventRoll == 2) {
-        if (dungeon.progress.floor == 1) {
+        if (isGoldOnlyFloor()) {
             goldDrop();
         } else {
             createEquipmentPrint("dungeon");
