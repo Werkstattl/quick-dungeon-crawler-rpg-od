@@ -316,7 +316,6 @@ const dungeonEvent = () => {
                 document.querySelector("#choice2").onclick = function () {
                     ignoreEvent();
                 };
-                autoConfirm();
                 break;
             case "enemy":
                 dungeon.status.event = true;
