@@ -200,7 +200,7 @@ const dungeonEvent = () => {
             eventTypes = ["nextroom"];
         }
         event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-        if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1) {
+        if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1 && dungeon.nothingBias === 0) {
             if (!localStorage.getItem('introHintShown')) {
                 localStorage.setItem('introHintShown', true);
                 event = "enemy";
