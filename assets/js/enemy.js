@@ -144,7 +144,7 @@ const generateRandomEnemy = (condition) => {
         enemy.lvl = randomizeNum(minLvl, maxLvl);
     }
     if (player && player.lvl === 1 && enemy.lvl > 3) {
-        enemy.lvl = 3;
+        enemy.lvl = enemy.lvl - 2;
     }
 
     let pool = enemyPools[enemy.type].base;
