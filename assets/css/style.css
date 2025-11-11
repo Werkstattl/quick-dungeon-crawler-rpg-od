@@ -652,6 +652,8 @@ button:focus {
 /* Menu Modal */
 #menuModal .content {
     min-width: 15rem;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 #menuModal .content-head {
