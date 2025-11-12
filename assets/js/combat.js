@@ -411,20 +411,26 @@ const hpValidation = () => {
         } else {
             addCombatLog(t('you-died-softcore'));
         }
-        document.querySelector("#battleButton").addEventListener("click", function () {
-            sfxConfirm.play();
-            playerDead = false;
-
-            // Reset all the necessary stats and return to menu
-            let dimDungeon = document.querySelector('#dungeon-main');
-            dimDungeon.style.filter = "brightness(100%)";
-            dimDungeon.style.display = "none";
-            combatPanel.style.display = "none";
-            runLoad("title-screen", "flex");
-            clearInterval(dungeonTimer);
-            clearInterval(playTimer);
-            progressReset(true);
-        });
+        const runSummary = {
+            playerName: player && player.name ? player.name : '',
+            level: player && typeof player.lvl === 'number' ? player.lvl : 1,
+            hardcore: !!(player && player.hardcore),
+            runtime: dungeon && dungeon.statistics ? dungeon.statistics.runtime : 0,
+            floor: dungeon && dungeon.progress ? dungeon.progress.floor : 1,
+            room: dungeon && dungeon.progress ? dungeon.progress.room : 1,
+            kills: dungeon && dungeon.statistics ? dungeon.statistics.kills : 0,
+        };
+        if (typeof showEndgameScreen === 'function') {
+            showEndgameScreen(runSummary);
+        }
+        const battleButton = document.querySelector("#battleButton");
+        if (battleButton) {
+            battleButton.addEventListener("click", function () {
+                if (typeof startNewRunAfterDeath === 'function') {
+                    startNewRunAfterDeath();
+                }
+            }, { once: true });
+        }
         endCombat();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button

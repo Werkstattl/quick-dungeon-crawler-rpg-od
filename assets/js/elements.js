@@ -19,7 +19,7 @@ const sortInventoryElement = document.querySelector('#sort-inventory');
 // Close modals when clicking outside their content
 (function setupModalClickAway() {
   const containers = Array.from(document.querySelectorAll('.modal-container'));
-  const shouldIgnore = new Set(['combatPanel', 'lvlupPanel']);
+  const shouldIgnore = new Set(['combatPanel', 'lvlupPanel', 'endgameModal']);
 
   const restoreDimmedUI = () => {
     const ids = ['dungeon-main', 'inventory', 'character-creation', 'title-screen'];

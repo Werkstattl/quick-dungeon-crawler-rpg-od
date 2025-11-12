@@ -146,6 +146,20 @@
         </div>
         <div class="modal-container" id="equipmentInfo"></div>
         <div class="modal-container" id="combatPanel"></div>
+        <div class="modal-container" id="endgameModal">
+            <div class="content endgame-content">
+                <h3 data-i18n="run-summary">Run summary</h3>
+                <p class="endgame-player">
+                    <span id="endgame-player-name"></span>
+                    <span id="endgame-player-mode" class="endgame-mode-badge" hidden></span>
+                </p>
+                <ul class="endgame-stats" id="endgame-stats"></ul>
+                <p class="endgame-hint" data-i18n="run-summary-hint">Start a new run to dive back into the dungeon.</p>
+                <div class="button-container">
+                    <button id="endgame-start-btn" data-i18n="start-new-run">Start new Run</button>
+                </div>
+            </div>
+        </div>
         <div class="modal-container" id="lvlupPanel">
             <div class="content" id="lvlupSelect"></div>
         </div>

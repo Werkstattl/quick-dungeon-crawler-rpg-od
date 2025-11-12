@@ -49,7 +49,16 @@ window.addEventListener("DOMContentLoaded", async function () {
         clearLogButton.addEventListener('click', () => {
             if (typeof clearDungeonLog === 'function') {
                 clearDungeonLog();
-		sfxConfirm.play();
+                sfxConfirm.play();
+            }
+        });
+    }
+
+    const endgameStartButton = document.querySelector('#endgame-start-btn');
+    if (endgameStartButton) {
+        endgameStartButton.addEventListener('click', () => {
+            if (typeof startNewRunAfterDeath === 'function') {
+                startNewRunAfterDeath();
             }
         });
     }
@@ -1153,6 +1162,122 @@ const progressReset = (fromDeath = false) => {
     activeCompanion = null;
     saveCompanions();
     saveData();
+}
+
+const formatRunDuration = (seconds) => {
+    const totalSeconds = Math.max(0, Math.floor(Number(seconds) || 0));
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    const parts = [hrs, mins, secs].map(part => String(part).padStart(2, "0"));
+    return parts.join(":");
+};
+
+const hideEndgameScreen = () => {
+    const modal = document.querySelector("#endgameModal");
+    if (!modal) {
+        return;
+    }
+    modal.style.display = "none";
+    const dungeonMain = document.querySelector("#dungeon-main");
+    if (dungeonMain) {
+        dungeonMain.style.filter = "brightness(100%)";
+    }
+};
+
+const showEndgameScreen = (summary) => {
+    const modal = document.querySelector("#endgameModal");
+    if (!modal) {
+        return;
+    }
+
+    const safeSummary = summary || {};
+    const playerNameElement = modal.querySelector("#endgame-player-name");
+    if (playerNameElement) {
+        playerNameElement.textContent = safeSummary.playerName || "";
+    }
+
+    const modeElement = modal.querySelector("#endgame-player-mode");
+    if (modeElement) {
+        if (safeSummary.hardcore) {
+            modeElement.textContent = typeof t === "function" ? t("hardcore") : "Hardcore";
+            modeElement.classList.add("hardcore");
+            modeElement.hidden = false;
+        } else {
+            modeElement.textContent = "";
+            modeElement.classList.remove("hardcore");
+            modeElement.hidden = true;
+        }
+    }
+
+    const statsList = modal.querySelector("#endgame-stats");
+    if (statsList) {
+        const stats = [
+            { key: "level", value: safeSummary.level ?? 1 },
+            { key: "runtime", value: formatRunDuration(safeSummary.runtime) },
+            { key: "floor", value: safeSummary.floor ?? 1 },
+            { key: "room", value: safeSummary.room ?? 1 },
+            { key: "kills", value: safeSummary.kills ?? 0 },
+        ];
+        statsList.innerHTML = stats.map(({ key, value }) => {
+            const label = typeof t === "function" ? t(key) : key;
+            return `<li><span class="label" data-i18n="${key}">${label}</span><span class="value">${value}</span></li>`;
+        }).join("");
+        if (typeof applyTranslations === "function") {
+            applyTranslations(statsList);
+        }
+    }
+
+    modal.style.display = "flex";
+    const dungeonMain = document.querySelector("#dungeon-main");
+    if (dungeonMain) {
+        dungeonMain.style.filter = "brightness(35%)";
+    }
+
+    const startButton = modal.querySelector("#endgame-start-btn");
+    if (startButton && typeof startButton.focus === "function") {
+        try {
+            startButton.focus({ preventScroll: true });
+        } catch (err) {
+            startButton.focus();
+        }
+    }
+};
+
+const startNewRunAfterDeath = () => {
+    if (typeof sfxConfirm !== "undefined" && sfxConfirm && typeof sfxConfirm.play === "function") {
+        sfxConfirm.play();
+    }
+    playerDead = false;
+    hideEndgameScreen();
+
+    const dimDungeon = document.querySelector("#dungeon-main");
+    if (dimDungeon) {
+        dimDungeon.style.filter = "brightness(100%)";
+        dimDungeon.style.display = "none";
+    }
+
+    if (typeof combatPanel !== "undefined" && combatPanel) {
+        combatPanel.style.display = "none";
+    }
+
+    runLoad("title-screen", "flex");
+
+    if (typeof dungeonTimer !== "undefined" && dungeonTimer) {
+        clearInterval(dungeonTimer);
+        dungeonTimer = null;
+    }
+    if (typeof playTimer !== "undefined" && playTimer) {
+        clearInterval(playTimer);
+        playTimer = null;
+    }
+
+    progressReset(true);
+};
+
+if (typeof window !== "undefined") {
+    window.showEndgameScreen = showEndgameScreen;
+    window.startNewRunAfterDeath = startNewRunAfterDeath;
 }
 
 // Export and Import Save Data
