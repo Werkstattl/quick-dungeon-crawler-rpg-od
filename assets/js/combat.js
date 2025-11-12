@@ -25,11 +25,6 @@ let specialAbilityRemaining = null;
 let combatTimer = null;
 let combatTimerWasRunning = false;
 
-const SPECIAL_ABILITY_TRANSLATIONS = {
-    Knight: 'special-ability-knight',
-    Paladin: 'special-ability-paladin',
-};
-
 const nowMs = () => {
     if (typeof performance !== "undefined" && typeof performance.now === "function") {
         return performance.now();
@@ -273,41 +268,29 @@ const updateSpecialAbilityButtonState = () => {
         return;
     }
 
-    applySpecialAbilityLabel(btn);
-    btn.title = '';
-
     if (!player || !player.inCombat) {
         btn.disabled = true;
+        btn.textContent = t('special-ability');
+        btn.setAttribute('data-i18n', 'special-ability');
         return;
     }
 
     if (specialAbilityCooldown || !playerAttackReady) {
         btn.disabled = true;
-        btn.title = t('cooling');
+        btn.textContent = t('cooling');
+        btn.setAttribute('data-i18n', 'cooling');
         return;
     }
 
     btn.disabled = false;
+    btn.textContent = t('special-ability');
+    btn.setAttribute('data-i18n', 'special-ability');
 };
 
 const getPlayerAttackCooldown = () => {
     const atkSpd = player && player.stats ? player.stats.atkSpd : 1;
     const normalized = Math.max(atkSpd || 0, 0.1);
     return 1000 / normalized;
-};
-
-const getSpecialAbilityTranslationKey = () => {
-    if (!player || !player.selectedClass) {
-        return 'special-ability';
-    }
-    const key = SPECIAL_ABILITY_TRANSLATIONS[player.selectedClass];
-    return key || 'special-ability';
-};
-
-const applySpecialAbilityLabel = (btn) => {
-    const translationKey = getSpecialAbilityTranslationKey();
-    btn.textContent = t(translationKey);
-    btn.setAttribute('data-i18n', translationKey);
 };
 
 const setPlayerAttackReady = (ready) => {
