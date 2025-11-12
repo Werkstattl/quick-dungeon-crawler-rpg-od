@@ -790,10 +790,6 @@ const updateCombatLog = () => {
         appendDecisionPanel(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
     }
 
-    if (playerDead) {
-        appendDecisionPanel(`<button id="battleButton" data-i18n="start-new-run">${t('start-new-run')}</button>`);
-    }
-
     // Adjust scroll to match flow
     if (logFlow === 'top') {
         combatLogBox.scrollTop = 0;
