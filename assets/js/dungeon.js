@@ -4,6 +4,26 @@ const dungeonTime = document.querySelector("#dungeonTime");
 const floorCount = document.querySelector("#floorCount");
 const roomCount = document.querySelector("#roomCount");
 
+const RUN_LOOT_RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
+
+const createDefaultLootStatistics = () => ({
+    total: 0,
+    highestRarity: null,
+    rarityCounts: RUN_LOOT_RARITIES.reduce((acc, rarity) => {
+        acc[rarity] = 0;
+        return acc;
+    }, {}),
+});
+
+const createDefaultRunStatistics = () => ({
+    kills: 0,
+    runtime: 0,
+    damageDealt: 0,
+    damageTaken: 0,
+    goldEarned: 0,
+    lootDrops: createDefaultLootStatistics(),
+});
+
 // Track dungeon loop timers even before the dungeon has started
 let dungeonTimer = null;
 let playTimer = null;
@@ -35,10 +55,7 @@ let dungeon = {
         paused: true,
         event: false,
     },
-    statistics: {
-        kills: 0,
-        runtime: 0,
-    },
+    statistics: createDefaultRunStatistics(),
     floorBuffs: {
         atk: 0,
         def: 0,
@@ -60,6 +77,90 @@ let dungeon = {
     // Tracks how often the player ignored door events
     nothingBias: 0,
 };
+
+const ensureRunStatisticsShape = () => {
+    if (!dungeon.statistics || typeof dungeon.statistics !== 'object') {
+        dungeon.statistics = createDefaultRunStatistics();
+        return;
+    }
+    const stats = dungeon.statistics;
+    const numericFields = ['kills', 'runtime', 'damageDealt', 'damageTaken', 'goldEarned'];
+    numericFields.forEach((field) => {
+        if (!Number.isFinite(stats[field])) {
+            stats[field] = 0;
+        }
+    });
+    if (!stats.lootDrops || typeof stats.lootDrops !== 'object') {
+        stats.lootDrops = createDefaultLootStatistics();
+    }
+    if (!stats.lootDrops.rarityCounts || typeof stats.lootDrops.rarityCounts !== 'object') {
+        stats.lootDrops.rarityCounts = createDefaultLootStatistics().rarityCounts;
+    }
+    RUN_LOOT_RARITIES.forEach((rarity) => {
+        if (!Number.isFinite(stats.lootDrops.rarityCounts[rarity])) {
+            stats.lootDrops.rarityCounts[rarity] = 0;
+        }
+    });
+    if (typeof stats.lootDrops.total !== 'number') {
+        stats.lootDrops.total = 0;
+    }
+    if (typeof stats.lootDrops.highestRarity !== 'string' || !stats.lootDrops.highestRarity) {
+        stats.lootDrops.highestRarity = null;
+    }
+};
+
+const resetRunStatistics = () => {
+    dungeon.statistics = createDefaultRunStatistics();
+};
+
+const recordRunDamageDealt = (amount) => {
+    ensureRunStatisticsShape();
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return;
+    }
+    dungeon.statistics.damageDealt += Math.round(value);
+};
+
+const recordRunDamageTaken = (amount) => {
+    ensureRunStatisticsShape();
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return;
+    }
+    dungeon.statistics.damageTaken += Math.round(value);
+};
+
+const recordRunGoldEarned = (amount) => {
+    ensureRunStatisticsShape();
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return;
+    }
+    dungeon.statistics.goldEarned += Math.round(value);
+};
+
+const getRarityRank = (rarity) => RUN_LOOT_RARITIES.indexOf(rarity);
+
+const recordRunLootDrop = (rarity) => {
+    ensureRunStatisticsShape();
+    const lootStats = dungeon.statistics.lootDrops;
+    lootStats.total += 1;
+    const normalizedRarity = RUN_LOOT_RARITIES.includes(rarity) ? rarity : 'Common';
+    lootStats.rarityCounts[normalizedRarity] += 1;
+    if (!lootStats.highestRarity || getRarityRank(normalizedRarity) > getRarityRank(lootStats.highestRarity)) {
+        lootStats.highestRarity = normalizedRarity;
+    }
+};
+
+if (typeof window !== 'undefined') {
+    window.recordRunDamageDealt = recordRunDamageDealt;
+    window.recordRunDamageTaken = recordRunDamageTaken;
+    window.recordRunGoldEarned = recordRunGoldEarned;
+    window.recordRunLootDrop = recordRunLootDrop;
+    window.resetRunStatistics = resetRunStatistics;
+    window.ensureRunStatisticsShape = ensureRunStatisticsShape;
+}
 
 // ===== Dungeon Setup =====
 // Enables start and pause on button click
@@ -107,6 +208,7 @@ const initialDungeonLoad = () => {
             dungeon.nothingBias = 0;
         }
 
+        ensureRunStatisticsShape();
         updateDungeonLog();
     }
     
@@ -526,6 +628,9 @@ const goldDrop = () => {
     let goldValue = randomizeNum(50, 500) * dungeon.progress.floor;
     addDungeonLog(t('gold-found', { gold: nFormatter(goldValue) }));
     player.gold += goldValue;
+    if (typeof recordRunGoldEarned === 'function') {
+        recordRunGoldEarned(goldValue);
+    }
     playerLoadStats();
 }
 

@@ -546,9 +546,15 @@ const showItemInfo = (item, icon, action, i) => {
             // Sell the equipment
             if (action === "equip") {
                 player.gold += item.value;
+                if (typeof recordRunGoldEarned === 'function') {
+                    recordRunGoldEarned(item.value);
+                }
                 player.inventory.equipment.splice(i, 1);
             } else if (action === "unequip") {
                 player.gold += item.value;
+                if (typeof recordRunGoldEarned === 'function') {
+                    recordRunGoldEarned(item.value);
+                }
                 player.equipped.splice(i, 1);
             }
 
@@ -1188,6 +1194,9 @@ const sellAll = (rarity) => {
             for (let i = 0; i < player.inventory.equipment.length; i++) {
                 const equipment = JSON.parse(player.inventory.equipment[i]);
                 player.gold += equipment.value;
+                if (typeof recordRunGoldEarned === 'function') {
+                    recordRunGoldEarned(equipment.value);
+                }
                 player.inventory.equipment.splice(i, 1);
                 i--;
             }
@@ -1210,6 +1219,9 @@ const sellAll = (rarity) => {
                 const equipment = JSON.parse(player.inventory.equipment[i]);
                 if (equipment.rarity === rarity) {
                     player.gold += equipment.value;
+                    if (typeof recordRunGoldEarned === 'function') {
+                        recordRunGoldEarned(equipment.value);
+                    }
                     player.inventory.equipment.splice(i, 1);
                     i--;
                 }
@@ -1247,6 +1259,9 @@ const getEquipmentStatAbbreviation = (statKey) => {
 const createEquipmentPrint = (condition) => {
     let item = createEquipment(false);
     receiveEquipment(item);
+    if (typeof recordRunLootDrop === 'function') {
+        recordRunLootDrop(item.rarity);
+    }
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
                 <h4 class="${item.rarity}"><b>${item.icon}${equipmentLabel(item.rarity, item.category)}</b></h4>

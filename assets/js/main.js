@@ -1120,7 +1120,18 @@ const progressReset = (fromDeath = false) => {
     }
     dungeon.progress.floor = 1;
     dungeon.progress.room = 1;
-    dungeon.statistics.kills = 0;
+    if (typeof resetRunStatistics === 'function') {
+        resetRunStatistics();
+    } else {
+        dungeon.statistics = {
+            kills: 0,
+            runtime: 0,
+            damageDealt: 0,
+            damageTaken: 0,
+            goldEarned: 0,
+            lootDrops: { total: 0, highestRarity: null, rarityCounts: {} },
+        };
+    }
     dungeon.status = {
         exploring: false,
         paused: true,
@@ -1155,7 +1166,6 @@ const progressReset = (fromDeath = false) => {
     delete player.allocated;
     dungeon.backlog.length = 0;
     dungeon.action = 0;
-    dungeon.statistics.runtime = 0;
     dungeon.nothingBias = 0;
     combatBacklog.length = 0;
     playerCompanions = [];
@@ -1212,12 +1222,43 @@ const showEndgameScreen = (summary) => {
 
     const statsList = modal.querySelector("#endgame-stats");
     if (statsList) {
+        const formatNumberStat = (value) => {
+            const numericValue = Number(value);
+            if (!Number.isFinite(numericValue) || numericValue <= 0) {
+                return "0";
+            }
+            return nFormatter(Math.max(0, Math.round(numericValue)));
+        };
+        const lootStats = (safeSummary.lootDrops && typeof safeSummary.lootDrops === "object")
+            ? safeSummary.lootDrops
+            : { total: 0, highestRarity: null, rarityCounts: {} };
+        if (!lootStats.rarityCounts || typeof lootStats.rarityCounts !== "object") {
+            lootStats.rarityCounts = {};
+        }
+        const formatLootDrops = () => formatNumberStat(lootStats.total);
+        const formatBestLoot = () => {
+            if (!lootStats.highestRarity) {
+                return typeof t === "function" ? t("none") : "None";
+            }
+            const rarityKey = lootStats.highestRarity.toLowerCase();
+            const rarityLabel = typeof t === "function" ? t(rarityKey) : lootStats.highestRarity;
+            const count = lootStats.rarityCounts[lootStats.highestRarity];
+            if (Number.isFinite(count) && count > 1) {
+                return `${rarityLabel} x${count}`;
+            }
+            return rarityLabel;
+        };
         const stats = [
             { key: "level", value: safeSummary.level ?? 1 },
             { key: "runtime", value: formatRunDuration(safeSummary.runtime) },
             { key: "floor", value: safeSummary.floor ?? 1 },
             { key: "room", value: safeSummary.room ?? 1 },
             { key: "kills", value: safeSummary.kills ?? 0 },
+            { key: "damage-dealt", value: formatNumberStat(safeSummary.damageDealt) },
+            { key: "damage-taken", value: formatNumberStat(safeSummary.damageTaken) },
+            { key: "gold-earned", value: formatNumberStat(safeSummary.goldEarned) },
+            { key: "loot-drops", value: formatLootDrops() },
+            { key: "best-loot", value: formatBestLoot() },
         ];
         statsList.innerHTML = stats.map(({ key, value }) => {
             const label = typeof t === "function" ? t(key) : key;

@@ -419,6 +419,12 @@ const hpValidation = () => {
             floor: dungeon && dungeon.progress ? dungeon.progress.floor : 1,
             room: dungeon && dungeon.progress ? dungeon.progress.room : 1,
             kills: dungeon && dungeon.statistics ? dungeon.statistics.kills : 0,
+            damageDealt: dungeon && dungeon.statistics ? dungeon.statistics.damageDealt : 0,
+            damageTaken: dungeon && dungeon.statistics ? dungeon.statistics.damageTaken : 0,
+            goldEarned: dungeon && dungeon.statistics ? dungeon.statistics.goldEarned : 0,
+            lootDrops: (dungeon && dungeon.statistics && dungeon.statistics.lootDrops)
+                ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
+                : null,
         };
         if (typeof showEndgameScreen === 'function') {
             showEndgameScreen(runSummary);
@@ -448,6 +454,9 @@ const hpValidation = () => {
             activeCompanion.gainExperience(enemy.rewards.exp / 10);
         }
         player.gold += enemy.rewards.gold;
+        if (typeof recordRunGoldEarned === 'function') {
+            recordRunGoldEarned(enemy.rewards.gold);
+        }
         playerLoadStats();
         if (enemy.rewards.drop) {
             createEquipmentPrint("combat");
@@ -551,6 +560,9 @@ const playerAttack = () => {
 
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
+    if (typeof recordRunDamageDealt === 'function') {
+        recordRunDamageDealt(damage);
+    }
     player.stats.hp += lifesteal;
     if (!dodged) {
         const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
@@ -630,6 +642,9 @@ const companionAttack = () => {
 
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
+    if (typeof recordRunDamageDealt === 'function') {
+        recordRunDamageDealt(damage);
+    }
     if (!dodged) {
         addCombatLog(t('companion-attack-hit', { companion: activeCompanion.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
     }
@@ -705,11 +720,18 @@ const enemyAttack = () => {
 
     // Apply the calculations
     player.stats.hp -= damage;
+    if (typeof recordRunDamageTaken === 'function') {
+        recordRunDamageTaken(damage);
+    }
     // Aegis Thorns skill
     objectValidation();
     if (player.skills.includes("Aegis Thorns")) {
         // Enemies receive 30% of the damage they dealt
-        enemy.stats.hp -= Math.round((30 * damage) / 100);
+        const reflectedDamage = Math.round((30 * damage) / 100);
+        enemy.stats.hp -= reflectedDamage;
+        if (typeof recordRunDamageDealt === 'function') {
+            recordRunDamageDealt(reflectedDamage);
+        }
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {
@@ -1001,6 +1023,9 @@ const useSpecialAbility = () => {
 
         // Apply calculations
         enemy.stats.hp -= damage;
+        if (typeof recordRunDamageDealt === 'function') {
+            recordRunDamageDealt(damage);
+        }
         player.stats.hp += lifesteal;
         if (!dodged) {
             const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
