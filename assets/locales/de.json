@@ -200,6 +200,8 @@
   "reset": "Reset",
   "auto": "Auto",
   "passive": "Passiv",
+  "curse-level": "Fluchstufe",
+  "unknown": "Unbekannt",
   "remnant-razor": "Klingensplitter",
   "titans-will": "Wille des Titanen",
   "devastator": "Verwüster",

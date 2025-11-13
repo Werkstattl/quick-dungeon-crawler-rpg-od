@@ -200,6 +200,8 @@
   "reset": "Reset",
   "auto": "Auto",
   "passive": "Passive",
+  "curse-level": "Curse Level",
+  "unknown": "Unknown",
   "remnant-razor": "Remnant Razor",
   "titans-will": "Titan's Will",
   "devastator": "Devastator",
