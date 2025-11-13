@@ -39,6 +39,8 @@ const nowMs = () => {
 
 const getPlayerAttackButton = () => document.querySelector('#player-attack-btn');
 
+const ENEMY_FIRST_ATTACK_DELAY = 200;
+
 const getEnemyAttackDelay = () => {
     const atkSpd = enemy && enemy.stats ? enemy.stats.atkSpd : 1;
     const normalized = Math.max(atkSpd || 0, 0.1);
@@ -891,7 +893,7 @@ const startCombat = (battleMusic) => {
     scheduleCompanionAttack();
 
     // Starts the timer for player and enemy attacks along with combat timer
-    scheduleEnemyAttack();
+    scheduleEnemyAttack(getEnemyAttackDelay() + ENEMY_FIRST_ATTACK_DELAY);
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(50%)";
 
