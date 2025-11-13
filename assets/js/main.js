@@ -982,7 +982,8 @@ const maybeUnlockNextCurseLevel = () => {
         if (newMax > player.maxUnlockedCurseLevel) {
             player.maxUnlockedCurseLevel = newMax;
             if (typeof addDungeonLog === 'function') {
-                addDungeonLog(t('curse-level-unlocked', { level: newMax }));
+                const unlockMessage = t('curse-level-unlocked', { level: newMax });
+                addDungeonLog(`<span class="CurseUnlock">${unlockMessage}</span>`);
             }
             saveData();
         }

@@ -395,6 +395,10 @@ button:focus {
     color: #e30b5c;
 }
 
+.CurseUnlock {
+    color: #c77dff;
+}
+
 /* Game */
 .game-container {
     display: inline-block;
