@@ -8,6 +8,7 @@ let enemyAttackTimeout;
 let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
+let specialAbilityCooldownInterval = null;
 let playerAttackReady = false;
 let autoAttackDelayTimeout = null;
 let combatPaused = false;
@@ -112,15 +113,20 @@ const scheduleSpecialAbilityReset = (delayOverride = 10000) => {
     if (specialAbilityTimeout) {
         clearTimeout(specialAbilityTimeout);
     }
+    startSpecialAbilityCooldownTicker();
     specialAbilityTimeout = setTimeout(() => {
         specialAbilityTimeout = null;
         specialAbilityDueAt = null;
         if (combatPaused) {
             specialAbilityRemaining = 0;
+            stopSpecialAbilityCooldownTicker();
+            updateSpecialAbilityCooldownDisplay();
             return;
         }
         specialAbilityCooldown = false;
         updateSpecialAbilityButtonState();
+        stopSpecialAbilityCooldownTicker();
+        updateSpecialAbilityCooldownDisplay();
     }, baseDelay);
 };
 
@@ -183,6 +189,8 @@ const pauseCombatTimers = () => {
     }
 
     clearAutoAttackDelay();
+    stopSpecialAbilityCooldownTicker();
+    updateSpecialAbilityCooldownDisplay();
 };
 
 const resumeCombatTimers = () => {
@@ -195,6 +203,8 @@ const resumeCombatTimers = () => {
         companionAttackRemaining = null;
         playerAttackRemaining = null;
         specialAbilityRemaining = null;
+        stopSpecialAbilityCooldownTicker();
+        updateSpecialAbilityCooldownDisplay();
         return;
     }
     combatPaused = false;
@@ -269,6 +279,63 @@ const updateAttackButtonState = () => {
     }
 };
 
+const stopSpecialAbilityCooldownTicker = () => {
+    if (specialAbilityCooldownInterval) {
+        clearInterval(specialAbilityCooldownInterval);
+        specialAbilityCooldownInterval = null;
+    }
+};
+
+const updateSpecialAbilityCooldownDisplay = () => {
+    const btn = document.querySelector('#special-ability-btn');
+    if (!btn) {
+        return;
+    }
+
+    const showDefaultLabel = () => {
+        applySpecialAbilityLabel(btn);
+    };
+
+    if (!player || !player.inCombat) {
+        showDefaultLabel();
+        return;
+    }
+
+    if (!specialAbilityCooldown) {
+        showDefaultLabel();
+        return;
+    }
+
+    let remainingMs = 0;
+    if (specialAbilityDueAt) {
+        remainingMs = Math.max(0, specialAbilityDueAt - nowMs());
+    } else if (specialAbilityRemaining !== null) {
+        remainingMs = Math.max(0, specialAbilityRemaining);
+    }
+
+    const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
+    const baseLabel = t(getSpecialAbilityTranslationKey());
+    btn.textContent = `${baseLabel} (${seconds}s)`;
+    btn.removeAttribute('data-i18n');
+};
+
+const startSpecialAbilityCooldownTicker = () => {
+    stopSpecialAbilityCooldownTicker();
+    if (!specialAbilityCooldown) {
+        updateSpecialAbilityCooldownDisplay();
+        return;
+    }
+    updateSpecialAbilityCooldownDisplay();
+    specialAbilityCooldownInterval = setInterval(() => {
+        if (!specialAbilityCooldown) {
+            stopSpecialAbilityCooldownTicker();
+            updateSpecialAbilityCooldownDisplay();
+            return;
+        }
+        updateSpecialAbilityCooldownDisplay();
+    }, 200);
+};
+
 const updateSpecialAbilityButtonState = () => {
     const btn = document.querySelector('#special-ability-btn');
     if (!btn) {
@@ -280,16 +347,19 @@ const updateSpecialAbilityButtonState = () => {
 
     if (!player || !player.inCombat) {
         btn.disabled = true;
+        updateSpecialAbilityCooldownDisplay();
         return;
     }
 
     if (specialAbilityCooldown || !playerAttackReady) {
         btn.disabled = true;
         btn.title = t('cooling');
+        updateSpecialAbilityCooldownDisplay();
         return;
     }
 
     btn.disabled = false;
+    updateSpecialAbilityCooldownDisplay();
 };
 
 const getPlayerAttackCooldown = () => {
@@ -940,6 +1010,8 @@ const endCombat = () => {
     specialAbilityCooldown = false;
     specialAbilityDueAt = null;
     specialAbilityRemaining = null;
+    stopSpecialAbilityCooldownTicker();
+    updateSpecialAbilityCooldownDisplay();
     setPlayerAttackReady(false);
     clearAutoAttackDelay();
     // Skill validation
@@ -1077,6 +1149,8 @@ const useSpecialAbility = () => {
             specialAbilityDueAt = null;
             specialAbilityRemaining = null;
             updateSpecialAbilityButtonState();
+            stopSpecialAbilityCooldownTicker();
+            updateSpecialAbilityCooldownDisplay();
             return;
         }
     }
@@ -1084,8 +1158,8 @@ const useSpecialAbility = () => {
     specialAbilityCooldown = true;
     specialAbilityDueAt = null;
     specialAbilityRemaining = null;
-    updateSpecialAbilityButtonState();
     scheduleSpecialAbilityReset(10000);
+    updateSpecialAbilityButtonState();
 }
 
 const showCombatInfo = () => {
@@ -1097,6 +1171,8 @@ const showCombatInfo = () => {
         specialAbilityCooldown = false;
         specialAbilityDueAt = null;
         specialAbilityRemaining = null;
+        stopSpecialAbilityCooldownTicker();
+        updateSpecialAbilityCooldownDisplay();
     }
     // Re-evaluate enemy name in case language changed after spawn
     // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
