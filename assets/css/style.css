@@ -1208,6 +1208,22 @@ header button i {
     margin: 0.5rem;
 }
 
+.combat-sell-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.combat-sell-button i {
+    margin: 0;
+}
+
+.combat-sell-log {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
 /* Box Header */
 .box-head {
     display: flex;

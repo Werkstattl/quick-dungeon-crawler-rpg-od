@@ -1258,6 +1258,14 @@ const getEquipmentStatAbbreviation = (statKey) => {
 
 const createEquipmentPrint = (condition) => {
     let item = createEquipment(false);
+    const willAutoEquip = Array.isArray(player.equipped) ? player.equipped.length < 6 : false;
+    const placementIndex = willAutoEquip
+        ? (Array.isArray(player.equipped) ? player.equipped.length : -1)
+        : (player.inventory && Array.isArray(player.inventory.equipment)
+            ? player.inventory.equipment.length
+            : -1);
+    const placement = willAutoEquip ? 'equipped' : 'inventory';
+    const serializedItem = JSON.stringify(item);
     receiveEquipment(item);
     if (typeof recordRunLootDrop === 'function') {
         recordRunLootDrop(item.rarity);
@@ -1285,4 +1293,10 @@ const createEquipmentPrint = (condition) => {
         addDungeonLog(`${msg}<br>${panel}`);
         checkInventoryLimit(true);
     }
+    return {
+        item,
+        placement,
+        index: placementIndex,
+        serialized: serializedItem
+    };
 }

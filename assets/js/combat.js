@@ -26,6 +26,8 @@ let specialAbilityRemaining = null;
 let combatTimer = null;
 let combatTimerWasRunning = false;
 
+let latestCombatLoot = null;
+
 const SPECIAL_ABILITY_TRANSLATIONS = {
     Knight: 'special-ability-knight',
     Paladin: 'special-ability-paladin',
@@ -517,6 +519,7 @@ const hpValidation = () => {
         // Gives out all the reward and show the claim button
         enemy.stats.hp = 0;
         enemyDead = true;
+        latestCombatLoot = null;
         player.kills++;
         if (typeof recordBestiaryKill === 'function') {
             recordBestiaryKill(enemy.id);
@@ -534,7 +537,16 @@ const hpValidation = () => {
         }
         playerLoadStats();
         if (enemy.rewards.drop) {
-            createEquipmentPrint("combat");
+            const lootDetails = createEquipmentPrint("combat");
+            if (lootDetails && lootDetails.item) {
+                latestCombatLoot = {
+                    item: lootDetails.item,
+                    placement: lootDetails.placement,
+                    index: lootDetails.index,
+                    serialized: lootDetails.serialized
+                };
+                updateCombatLog();
+            }
         }
 
         // Recover 20% of players health
@@ -542,33 +554,7 @@ const hpValidation = () => {
         playerLoadStats();
 
         // Close the battle panel
-        document.querySelector("#battleButton").addEventListener("click", function () {
-            sfxConfirm.play();
-
-            if (enemy.condition === "guardian") {
-                incrementRoom();
-                clearFloorBuffs();
-                addDungeonLog(t('moved-to-next-floor'));
-            } else if (enemy.condition === "door") {
-                addDungeonLog(t('moved-to-next-floor'));
-            }
-
-            // Clear combat backlog and transition to dungeon exploration
-            let dimDungeon = document.querySelector('#dungeon-main');
-            dimDungeon.style.filter = "brightness(100%)";
-            bgmDungeon.play();
-
-            dungeon.status.event = false;
-            combatPanel.style.display = "none";
-            enemyDead = false;
-            combatBacklog.length = 0;
-            findCompanionAfterCombat(enemy.lvl);
-            if (typeof window !== 'undefined' && typeof window.showLevelUpModalIfPending === 'function') {
-                window.showLevelUpModalIfPending();
-            } else if (typeof showLevelUpModalIfPending === 'function') {
-                showLevelUpModalIfPending();
-            }
-        });
+        bindClaimButton();
         autoClaim();
         endCombat();
     }
@@ -849,6 +835,115 @@ const addCombatLog = (message) => {
     updateCombatLog()
 }
 
+const handleClaimButtonClick = () => {
+    sfxConfirm.play();
+
+    if (enemy.condition === "guardian") {
+        incrementRoom();
+        clearFloorBuffs();
+        addDungeonLog(t('moved-to-next-floor'));
+    } else if (enemy.condition === "door") {
+        addDungeonLog(t('moved-to-next-floor'));
+    }
+
+    let dimDungeon = document.querySelector('#dungeon-main');
+    dimDungeon.style.filter = "brightness(100%)";
+    bgmDungeon.play();
+
+    dungeon.status.event = false;
+    combatPanel.style.display = "none";
+    enemyDead = false;
+    latestCombatLoot = null;
+    combatBacklog.length = 0;
+    findCompanionAfterCombat(enemy.lvl);
+    if (typeof window !== 'undefined' && typeof window.showLevelUpModalIfPending === 'function') {
+        window.showLevelUpModalIfPending();
+    } else if (typeof showLevelUpModalIfPending === 'function') {
+        showLevelUpModalIfPending();
+    }
+};
+
+const bindClaimButton = () => {
+    const battleButton = document.querySelector('#battleButton');
+    if (battleButton) {
+        battleButton.onclick = handleClaimButtonClick;
+    }
+};
+
+const hasSellableCombatLoot = () => {
+    return Boolean(latestCombatLoot && latestCombatLoot.item && typeof latestCombatLoot.item.value === 'number');
+};
+
+const renderSellLootButton = () => {
+    if (!hasSellableCombatLoot()) {
+        return '';
+    }
+    const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
+    const goldValue = nFormatter(Math.max(0, latestCombatLoot.item.value));
+    return `<button id="sellLootButton" class="combat-sell-button" aria-label="${sellLabel}"><span data-i18n="sell">${sellLabel}</span><i class="fas fa-coins" style="color: #FFD700;"></i>${goldValue}</button>`;
+};
+
+const sellLatestCombatLoot = () => {
+    if (!hasSellableCombatLoot()) {
+        return;
+    }
+    const loot = latestCombatLoot;
+    let removed = false;
+    if (loot.placement === 'inventory' && player && player.inventory && Array.isArray(player.inventory.equipment)) {
+        let targetIndex = typeof loot.index === 'number' ? loot.index : -1;
+        if (targetIndex >= 0 && player.inventory.equipment[targetIndex] === loot.serialized) {
+            player.inventory.equipment.splice(targetIndex, 1);
+            removed = true;
+        } else {
+            const fallbackIndex = player.inventory.equipment.lastIndexOf(loot.serialized);
+            if (fallbackIndex >= 0) {
+                player.inventory.equipment.splice(fallbackIndex, 1);
+                removed = true;
+            }
+        }
+    } else if (loot.placement === 'equipped' && player && Array.isArray(player.equipped)) {
+        let targetIndex = typeof loot.index === 'number' ? loot.index : -1;
+        if (targetIndex >= 0 && player.equipped[targetIndex] === loot.item) {
+            player.equipped.splice(targetIndex, 1);
+            removed = true;
+        } else {
+            const fallbackIndex = player.equipped.indexOf(loot.item);
+            if (fallbackIndex >= 0) {
+                player.equipped.splice(fallbackIndex, 1);
+                removed = true;
+            }
+        }
+    }
+
+    if (!removed) {
+        console.warn('Unable to locate latest combat loot for sale.');
+        latestCombatLoot = null;
+        updateCombatLog();
+        return;
+    }
+
+    player.gold += loot.item.value;
+    if (typeof recordRunGoldEarned === 'function') {
+        recordRunGoldEarned(loot.item.value);
+    }
+    sfxSell.play();
+    latestCombatLoot = null;
+    const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
+    addCombatLog(`<span class="combat-sell-log"><i class="fas fa-coins" style="color: #FFD700;"></i>${sellLabel}: +${nFormatter(loot.item.value)}</span>`);
+    playerLoadStats();
+    saveData();
+};
+
+const bindSellLootButton = () => {
+    if (!hasSellableCombatLoot()) {
+        return;
+    }
+    const sellBtn = document.querySelector('#sellLootButton');
+    if (sellBtn) {
+        sellBtn.onclick = sellLatestCombatLoot;
+    }
+};
+
 // Displays every combat activity
 const updateCombatLog = () => {
     let combatLogBox = document.getElementById("combatLogBox");
@@ -884,7 +979,14 @@ const updateCombatLog = () => {
     };
 
     if (enemyDead) {
-        appendDecisionPanel(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
+        const decisionButtons = [];
+        if (hasSellableCombatLoot()) {
+            decisionButtons.push(renderSellLootButton());
+        }
+        decisionButtons.push(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
+        appendDecisionPanel(decisionButtons.join(''));
+        bindClaimButton();
+        bindSellLootButton();
     }
 
     // Adjust scroll to match flow
@@ -985,6 +1087,7 @@ const endCombat = () => {
     sfxCombatEnd.play();
     player.inCombat = false;
     combatPaused = false;
+    latestCombatLoot = null;
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
         playerAttackTimeout = null;

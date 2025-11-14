@@ -1273,14 +1273,26 @@ const showEndgameScreen = (summary) => {
     const metaList = modal.querySelector("#endgame-meta");
     if (metaList) {
         const unknownLabel = typeof t === "function" ? t("unknown") : "Unknown";
-        const formatMetaValue = (value) => {
+        const formatMetaValue = (key, value) => {
             if (value === null || value === undefined) {
                 return unknownLabel;
             }
-            const stringValue = String(value).trim();
+            let stringValue = String(value).trim();
             if (!stringValue) {
                 return unknownLabel;
             }
+
+            if (key === "class") {
+                const normalized = stringValue.toLowerCase();
+                const classTranslationKeys = new Set(["knight", "paladin"]);
+                if (classTranslationKeys.has(normalized) && typeof t === "function") {
+                    const translatedValue = t(normalized);
+                    if (translatedValue && typeof translatedValue === "string") {
+                        stringValue = translatedValue;
+                    }
+                }
+            }
+
             return stringValue;
         };
         const metaEntries = [
@@ -1290,7 +1302,7 @@ const showEndgameScreen = (summary) => {
         ];
         metaList.innerHTML = metaEntries.map(({ key, value }) => {
             const label = typeof t === "function" ? t(key) : key;
-            return `<li><span class="label" data-i18n="${key}">${label}</span><span class="value">${formatMetaValue(value)}</span></li>`;
+            return `<li><span class="label" data-i18n="${key}">${label}</span><span class="value">${formatMetaValue(key, value)}</span></li>`;
         }).join("");
         if (typeof applyTranslations === "function") {
             applyTranslations(metaList);
