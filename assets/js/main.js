@@ -1196,6 +1196,32 @@ const hideEndgameScreen = () => {
     }
 };
 
+const PASSIVE_TRANSLATION_MAP = new Map([
+    ["remnant razor", "remnant-razor"],
+    ["titan's will", "titans-will"],
+    ["devastator", "devastator"],
+    ["limit breaker", "limit-breaker"],
+    ["eagle eye", "eagle-eye"],
+    ["paladin's heart", "paladins-heart"],
+    ["aegis thorns", "aegis-thorns"],
+]);
+
+const translatePassiveValue = (value) => {
+    if (typeof value !== "string") {
+        return null;
+    }
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) {
+        return null;
+    }
+    const translationKey = PASSIVE_TRANSLATION_MAP.get(normalized);
+    if (!translationKey || typeof t !== "function") {
+        return null;
+    }
+    const translated = t(translationKey);
+    return typeof translated === "string" && translated.trim() ? translated : null;
+};
+
 const showEndgameScreen = (summary) => {
     const modal = document.querySelector("#endgameModal");
     if (!modal) {
@@ -1290,6 +1316,13 @@ const showEndgameScreen = (summary) => {
                     if (translatedValue && typeof translatedValue === "string") {
                         stringValue = translatedValue;
                     }
+                }
+            }
+
+            if (key === "passive") {
+                const translatedPassive = translatePassiveValue(stringValue);
+                if (translatedPassive) {
+                    stringValue = translatedPassive;
                 }
             }
 
