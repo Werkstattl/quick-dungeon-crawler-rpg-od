@@ -980,10 +980,10 @@ const updateCombatLog = () => {
 
     if (enemyDead) {
         const decisionButtons = [];
+        decisionButtons.push(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
         if (hasSellableCombatLoot()) {
             decisionButtons.push(renderSellLootButton());
         }
-        decisionButtons.push(`<button id="battleButton" data-i18n="claim">${t('claim')}</button>`);
         appendDecisionPanel(decisionButtons.join(''));
         bindClaimButton();
         bindSellLootButton();
