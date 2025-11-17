@@ -938,7 +938,7 @@ const bindSellLootButton = () => {
     if (!hasSellableCombatLoot()) {
         return;
     }
-    const sellBtn = document.querySelector('#sellLootButton');
+    const sellBtn = document.getElementById('sellLootButton');
     if (sellBtn) {
         sellBtn.onclick = sellLatestCombatLoot;
     }
