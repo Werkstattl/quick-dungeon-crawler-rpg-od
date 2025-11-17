@@ -458,6 +458,8 @@ button:focus {
     max-width: 22rem;
     text-align: center;
     gap: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .endgame-player {
