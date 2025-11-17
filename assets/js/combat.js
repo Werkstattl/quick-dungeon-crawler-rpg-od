@@ -1087,7 +1087,6 @@ const endCombat = () => {
     sfxCombatEnd.play();
     player.inCombat = false;
     combatPaused = false;
-    latestCombatLoot = null;
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
         playerAttackTimeout = null;
