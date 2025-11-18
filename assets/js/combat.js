@@ -932,6 +932,7 @@ const sellLatestCombatLoot = () => {
     addCombatLog(`<span class="combat-sell-log"><i class="fas fa-coins" style="color: #FFD700;"></i>${sellLabel}: +${nFormatter(loot.item.value)}</span>`);
     playerLoadStats();
     saveData();
+handleClaimButtonClick();
 };
 
 const bindSellLootButton = () => {
