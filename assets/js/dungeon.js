@@ -76,6 +76,23 @@ let dungeon = {
     action: 0,
     // Tracks how often the player ignored door events
     nothingBias: 0,
+    roomEvents: {
+        blessingOccurred: false,
+    },
+};
+
+const ensureRoomEventsState = () => {
+    if (!dungeon.roomEvents || typeof dungeon.roomEvents !== 'object') {
+        dungeon.roomEvents = { blessingOccurred: false };
+    } else if (typeof dungeon.roomEvents.blessingOccurred !== 'boolean') {
+        dungeon.roomEvents.blessingOccurred = false;
+    }
+};
+
+// Reset per-room event flags
+const resetRoomEvents = () => {
+    ensureRoomEventsState();
+    dungeon.roomEvents.blessingOccurred = false;
 };
 
 const ensureRunStatisticsShape = () => {
@@ -272,13 +289,16 @@ const dungeonCounter = () => {
 
 // Loads the floor and room count
 const loadDungeonProgress = () => {
+    ensureRoomEventsState();
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
         dungeon.progress.stairsFloor = null;
-        
+
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
+
+        resetRoomEvents();
     }
     floorCount.setAttribute('data-i18n', 'floor-count');
     floorCount.setAttribute('data-i18n-params', JSON.stringify({ floor: dungeon.progress.floor }));
@@ -298,7 +318,11 @@ const dungeonEvent = () => {
         let choices;
         let eventRoll;
         let event;
-        let eventTypes = ["blessing", "treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
+        ensureRoomEventsState();
+        let eventTypes = ["treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
+        if (!dungeon.roomEvents.blessingOccurred) {
+            eventTypes.unshift("blessing");
+        }
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
         }
@@ -417,6 +441,7 @@ const dungeonEvent = () => {
                     dungeon.progress.room = 1;
                     dungeon.action = 0;
                     dungeon.progress.stairsFloor = dungeon.progress.floor;
+                    resetRoomEvents();
                     loadDungeonProgress();
                     addDungeonLog(t('descended-to-floor', { floor: dungeon.progress.floor }));
                     dungeon.status.event = false;
@@ -452,6 +477,7 @@ const dungeonEvent = () => {
                 eventRoll = randomizeNum(1, 2);
                 if (eventRoll == 1) {
                     dungeon.status.event = true;
+                    dungeon.roomEvents.blessingOccurred = true;
                     blessingValidation();
                     let cost = player.blessing * (500 * (player.blessing * 0.5)) + 750;
                     choices = `
@@ -740,6 +766,7 @@ const ignoreEvent = () => {
 const incrementRoom = () => {
     dungeon.progress.room++;
     dungeon.action = 0;
+    resetRoomEvents();
     loadDungeonProgress();
 }
 
