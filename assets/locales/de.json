@@ -130,6 +130,12 @@
   "hero-creation": "Heldenerschaffung",
   "abandon": "Aufgeben",
   "rate-game": "Spiel bewerten",
+  "rating-prompt": {
+    "title": "Gefällt dir das Spiel?",
+    "rate-now": "Jetzt bewerten",
+    "later": "Später",
+    "no-thanks": "Nein danke"
+  },
   "subreddit": "Subreddit",
   "companions": "Begleiter",
   "the-forge": "Die Schmiede",

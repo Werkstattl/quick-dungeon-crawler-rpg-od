@@ -113,6 +113,12 @@
   "hero-creation": "角色创建",
   "abandon": "放弃",
   "rate-game": "为游戏评分",
+  "rating-prompt": {
+    "title": "喜欢这个游戏吗？",
+    "rate-now": "立即评分",
+    "later": "稍后",
+    "no-thanks": "不用了，谢谢"
+  },
   "subreddit": "Subreddit",
   "companions": "同伴",
   "the-forge": "锻造所",

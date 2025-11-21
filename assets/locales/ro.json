@@ -130,6 +130,12 @@
   "hero-creation": "Crearea eroului",
   "abandon": "Renunță",
   "rate-game": "Evaluează jocul",
+  "rating-prompt": {
+    "title": "Îți place jocul?",
+    "rate-now": "Evaluează acum",
+    "later": "Mai târziu",
+    "no-thanks": "Nu, mulțumesc"
+  },
   "subreddit": "Subreddit",
   "companions": "Însoțitorii",
   "the-forge": "Forja",

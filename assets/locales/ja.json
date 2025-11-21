@@ -130,6 +130,12 @@
   "hero-creation": "ヒーロー作成",
   "abandon": "放棄",
   "rate-game": "ゲームを評価",
+  "rating-prompt": {
+    "title": "ゲームを楽しんでいますか？",
+    "rate-now": "今すぐ評価",
+    "later": "後で",
+    "no-thanks": "結構です"
+  },
   "subreddit": "サブレディット",
   "companions": "仲間",
   "the-forge": "鍛冶場",
