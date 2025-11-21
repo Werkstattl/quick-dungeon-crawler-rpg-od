@@ -76,22 +76,23 @@ const ratingSystem = {
         const modalContent = `
             <div class="content">
                 <div class="content-head">
-                    <h3>Enjoying the game?</h3>
-                    <p onclick="closeDefaultModal()"><i class="fa fa-xmark"></i></p>
+                    <h3 data-i18n="rating-prompt.title">${t('rating-prompt.title')}</h3>
+                    <p onclick="closeDefaultModal()" data-i18n-attr="aria-label:close" aria-label="${t('close')}"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="modal-body">
                     <div class="decision-panel">
-                        <button id="rate-btn">Rate Now</button>
-                        <button id="rate-later-btn">Later</button>
-                        <button id="rate-never-btn">No Thanks</button>
+                        <button id="rate-btn" type="button" data-i18n="rating-prompt.rate-now">${t('rating-prompt.rate-now')}</button>
+                        <button id="rate-later-btn" type="button" data-i18n="rating-prompt.later">${t('rating-prompt.later')}</button>
+                        <button id="rate-never-btn" type="button" data-i18n="rating-prompt.no-thanks">${t('rating-prompt.no-thanks')}</button>
                     </div>
                 </div>
             </div>
         `;
-        
+
         const defaultModal = document.getElementById('defaultModal');
         defaultModal.innerHTML = modalContent;
         defaultModal.style.display = "flex";
+        applyTranslations(defaultModal);
 
         document.getElementById('rate-btn').addEventListener('click', () => {
             this.openRating();

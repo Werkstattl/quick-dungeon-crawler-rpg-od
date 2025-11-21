@@ -1,4 +1,20 @@
 const SUPPORTED = ['en','de','ja','es','pt','ro','zh'];
+const LANGUAGE_LABELS = {
+  en: 'English',
+  de: 'Deutsch',
+  ja: '日本語',
+  es: 'Español',
+  pt: 'Português (Brasil)',
+  ro: 'Română',
+  zh: '中文'
+};
+const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
+  code,
+  label: LANGUAGE_LABELS[code] || code
+}));
+
+window.supportedLanguages = SUPPORTED.slice();
+window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
 
 const dictionaries = Object.create(null); // in-memory cache

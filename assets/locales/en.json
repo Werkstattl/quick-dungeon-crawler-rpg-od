@@ -130,6 +130,12 @@
   "hero-creation": "Hero Creation",
   "abandon": "Abandon",
   "rate-game": "Rate Game",
+  "rating-prompt": {
+    "title": "Enjoying the game?",
+    "rate-now": "Rate Now",
+    "later": "Later",
+    "no-thanks": "No Thanks"
+  },
   "subreddit": "Subreddit",
   "companions": "Companions",
   "the-forge": "The Forge",

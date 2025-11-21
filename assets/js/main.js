@@ -538,6 +538,14 @@ function openMenu(isTitle = false) {
             const selected = option.key === currentFontKey ? 'selected' : '';
             return `<option value="${option.key}" ${selected} data-i18n="font-family-${option.key}">${option.label}</option>`;
         }).join('');
+        const availableLanguages = (Array.isArray(window.languageOptions) && window.languageOptions.length)
+            ? window.languageOptions
+            : (Array.isArray(window.supportedLanguages) && window.supportedLanguages.length
+                ? window.supportedLanguages.map(code => ({ code, label: code }))
+                : [{ code: 'en', label: 'English' }]);
+        const languageOptionsMarkup = availableLanguages.map(({ code, label }) => {
+            return `<option value="${code}">${label}</option>`;
+        }).join('');
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
         // Only allow changing logFlow while resting with no open choices
@@ -573,13 +581,7 @@ function openMenu(isTitle = false) {
                 </select>
                 <label id="language-label" for="language-select" data-i18n="language">Language</label>
                 <select id="language-select">
-                    <option value="en">English</option>
-                    <option value="de">Deutsch</option>
-                    <option value="ja">日本語</option>
-                    <option value="zh">中文</option>
-                    <option value="es">Español</option>
-                    <option value="pt">Português (Brasil)</option>
-                    <option value="ro">Română</option>
+                    ${languageOptionsMarkup}
                 </select>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
