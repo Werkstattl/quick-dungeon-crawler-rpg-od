@@ -16,6 +16,15 @@ function getActiveCompanionBonuses() {
     return { ...activeCompanionBonuses };
 }
 
+const getCompanionExperienceMultiplier = () => {
+    if (typeof player === 'undefined' || !player) {
+        return 1;
+    }
+    const hasInsightPassive = (Array.isArray(player.skills) && player.skills.includes(PASSIVE_COMPANION_INSIGHT))
+        || player.selectedPassive === PASSIVE_COMPANION_INSIGHT;
+    return hasInsightPassive ? 1.5 : 1;
+};
+
 function resetActiveCompanionBonuses() {
     activeCompanionBonuses = defaultCompanionStats();
 }
