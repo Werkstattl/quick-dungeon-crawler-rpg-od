@@ -150,6 +150,9 @@ const ratingSystem = {
 
 function closeDefaultModal() {
     const defaultModal = document.getElementById('defaultModal');
+    if (!defaultModal) return;
+
     defaultModal.style.display = "none";
+    defaultModal.innerHTML = "";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
 }
