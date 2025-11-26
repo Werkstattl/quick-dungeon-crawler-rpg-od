@@ -283,7 +283,7 @@
     ,"enemy-vamp-heal": ", and healed {value} HP from vampirism"
     ,"special-ability-attack-hit": "{player} unleashed a special ability for {value} {type}{lifesteal}!"
     ,"special-ability-heal": "{player} used a special ability and healed {hp} HP!"
-    ,"special-ability-companion-boost": "{player} empowered {companion}, boosting their ATK and APS by 50% for 5s!"
+    ,"special-ability-companion-boost": "{player} boosted {companion}! +50% ATK/APS for 5s."
     ,"special-ability-no-companion": "You need an active companion to use this ability."
     ,"claim": "Claim"
     ,"start-new-run": "Start new Run"

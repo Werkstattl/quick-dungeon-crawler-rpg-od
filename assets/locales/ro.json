@@ -283,7 +283,7 @@
   "enemy-vamp-heal": ", și a vindecat {value} HP prin vampirism",
   "special-ability-attack-hit": "{player} a dezlănțuit o abilitate specială pentru {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} a folosit o abilitate specială și a vindecat {hp} HP!",
-  "special-ability-companion-boost": "{player} l-a împuternicit pe {companion}, crescând ATK și APS cu 50% timp de 5 s!",
+  "special-ability-companion-boost": "{player} l-a stimulat pe {companion}! +50% ATK/APS timp de 5 s.",
   "special-ability-no-companion": "Ai nevoie de un companion activ pentru a folosi această abilitate.",
   "claim": "Revendică",
   "start-new-run": "Pornește o rundă nouă",

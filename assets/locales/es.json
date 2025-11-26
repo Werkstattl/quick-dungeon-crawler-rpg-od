@@ -283,7 +283,7 @@
   "enemy-vamp-heal": ", y se curó {value} HP por vampirismo",
   "special-ability-attack-hit": "{player} desató una habilidad especial por {value} de {type}{lifesteal}!",
   "special-ability-heal": "{player} usó una habilidad especial y curó {hp} HP!",
-  "special-ability-companion-boost": "{player} potenció a {companion}, aumentando su ATQ y APS un 50% durante 5 s!",
+  "special-ability-companion-boost": "{player} potenció a {companion}! +50% ATQ/APS por 5 s.",
   "special-ability-no-companion": "Necesitas un compañero activo para usar esta habilidad.",
   "claim": "Reclamar",
   "start-new-run": "Iniciar nueva partida",

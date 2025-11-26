@@ -272,7 +272,7 @@
   "enemy-vamp-heal": "，并通过吸血恢复了 {value} 点生命",
   "special-ability-attack-hit": "{player} 释放了特殊技能，造成 {value} 点{type}{lifesteal}！",
   "special-ability-heal": "{player} 使用特殊技能并恢复了 {hp} 点生命！",
-  "special-ability-companion-boost": "{player} 鼓舞了 {companion}，使其攻击和攻速提高50%，持续5秒！",
+  "special-ability-companion-boost": "{player} 鼓舞了 {companion}！攻擊/攻速+50%，持續5秒。",
   "special-ability-no-companion": "需要激活同伴才能使用此技能。",
   "claim": "领取",
   "start-new-run": "开始新的冒险",

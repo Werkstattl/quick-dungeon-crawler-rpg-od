@@ -283,7 +283,7 @@
   ,"enemy-vamp-heal": ", und heilte {value} HP durch Vampirismus"
   ,"special-ability-attack-hit": "{player} entfesselt eine Spezialfähigkeit für {value} {type}{lifesteal}!"
   ,"special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!"
-  ,"special-ability-companion-boost": "{player} stärkt {companion} und erhöht ATK und APS 5 Sekunden lang um 50%!"
+  ,"special-ability-companion-boost": "{player} stärkt {companion}! +50% ATK/APS (5 Sek.)."
   ,"special-ability-no-companion": "Du benötigst einen aktiven Begleiter, um diese Fähigkeit zu nutzen."
   ,"claim": "Beanspruchen"
   ,"start-new-run": "Neuen Lauf starten"
