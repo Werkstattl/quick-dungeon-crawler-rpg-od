@@ -1313,7 +1313,7 @@ const showEndgameScreen = (summary) => {
 
             if (key === "class") {
                 const normalized = stringValue.toLowerCase();
-                const classTranslationKeys = new Set(["knight", "paladin"]);
+                const classTranslationKeys = new Set(["knight", "paladin", "beastmaster"]);
                 if (classTranslationKeys.has(normalized) && typeof t === "function") {
                     const translatedValue = t(normalized);
                     if (translatedValue && typeof translatedValue === "string") {
@@ -1471,7 +1471,8 @@ const allocationPopup = () => {
 
     const classBaseStats = {
         "Knight": { hp: 0, atk: 20, def: 0, atkSpd: 0 },
-        "Paladin": { hp: 100, atk: 0, def: 20, atkSpd: 0 }
+        "Paladin": { hp: 100, atk: 0, def: 20, atkSpd: 0 },
+        "Beastmaster": { hp: 0, atk: 0, def: 0, atkSpd: 0 }
     };
 
     let currentClass = player.selectedClass || "Knight";
@@ -1506,6 +1507,7 @@ const allocationPopup = () => {
                 <select id="select-class">
                     <option value="Knight" data-i18n="knight">Knight</option>
                     <option value="Paladin" data-i18n="paladin">Paladin</option>
+                    <option value="Beastmaster" data-i18n="beastmaster">Beastmaster</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
@@ -1696,6 +1698,9 @@ const allocationPopup = () => {
             }
             if (selectClass.value == "Paladin") {
                 classDesc.setAttribute('data-i18n', 'paladin-class-description');
+            }
+            if (selectClass.value == "Beastmaster") {
+                classDesc.setAttribute('data-i18n', 'beastmaster-class-description');
             }
             applyTranslations(defaultModalElement);
             updateStats();

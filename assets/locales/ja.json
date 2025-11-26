@@ -198,10 +198,13 @@
   "class": "クラス",
   "knight": "ナイト",
   "paladin": "パラディン",
+  "beastmaster": "ビーストマスター",
   "knight-class-description": "特殊能力: ATKの1.5倍の直接ダメージを与える。",
   "paladin-class-description": "特殊能力: 自分を回復する。",
+  "beastmaster-class-description": "特殊能力: コンパニオンのATKとAPSを5秒間50%上昇させる。",
   "special-ability-knight": "強撃",
   "special-ability-paladin": "神聖なる祝福",
+  "special-ability-beastmaster": "ワイルドコマンド",
   "stat-points": "ステータスポイント:",
   "reset": "リセット",
   "auto": "自動",
@@ -280,6 +283,8 @@
   ,"enemy-vamp-heal": "、吸血で{value} HPを回復した"
   ,"special-ability-attack-hit": "{player}は必殺技で{value}{type}を与え{lifesteal}！"
   ,"special-ability-heal": "{player}は必殺技を使い{hp} HP回復した！"
+  ,"special-ability-companion-boost": "{player}は{companion}を強化し、ATKとAPSを5秒間50%上昇させた！"
+  ,"special-ability-no-companion": "このスキルを使うにはコンパニオンが必要です。"
   ,"claim": "獲得"
   ,"start-new-run": "新しいランを開始"
   ,"attack": "攻撃"

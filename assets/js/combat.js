@@ -12,6 +12,8 @@ let specialAbilityCooldownInterval = null;
 let playerAttackReady = false;
 let autoAttackDelayTimeout = null;
 let combatPaused = false;
+let companionSpecialBuffTimeout = null;
+let companionSpecialBuffRevert = null;
 
 let enemyAttackDueAt = null;
 let playerAttackDueAt = null;
@@ -31,6 +33,7 @@ let latestCombatLoot = null;
 const SPECIAL_ABILITY_TRANSLATIONS = {
     Knight: 'special-ability-knight',
     Paladin: 'special-ability-paladin',
+    Beastmaster: 'special-ability-beastmaster',
 };
 
 const nowMs = () => {
@@ -54,6 +57,44 @@ const getCompanionAttackDelay = () => {
     const atkSpd = activeCompanion && activeCompanion.atkSpd ? activeCompanion.atkSpd : 1;
     const normalized = Math.max(atkSpd || 0, 0.1);
     return 1000 / normalized;
+};
+
+const clearCompanionSpecialBuff = () => {
+    if (companionSpecialBuffTimeout) {
+        clearTimeout(companionSpecialBuffTimeout);
+        companionSpecialBuffTimeout = null;
+    }
+    if (typeof companionSpecialBuffRevert === 'function') {
+        companionSpecialBuffRevert();
+        companionSpecialBuffRevert = null;
+    }
+};
+
+const applyCompanionSpecialBuff = (durationMs = 5000) => {
+    if (!activeCompanion || !activeCompanion.isActive) {
+        return false;
+    }
+
+    clearCompanionSpecialBuff();
+
+    const atkBonus = activeCompanion.atk * 0.5;
+    const atkSpdBonus = activeCompanion.atkSpd * 0.5;
+
+    activeCompanion.atk += atkBonus;
+    activeCompanion.atkSpd += atkSpdBonus;
+
+    companionSpecialBuffRevert = () => {
+        activeCompanion.atk -= atkBonus;
+        activeCompanion.atkSpd -= atkSpdBonus;
+        companionSpecialBuffRevert = null;
+    };
+
+    companionSpecialBuffTimeout = setTimeout(() => {
+        clearCompanionSpecialBuff();
+    }, durationMs);
+
+    scheduleCompanionAttack();
+    return true;
 };
 
 const clearAutoAttackDelay = () => {
@@ -1041,6 +1082,7 @@ const startCombat = (battleMusic) => {
         currentBattleMusic.play();
     player.inCombat = true;
     combatPaused = false;
+    clearCompanionSpecialBuff();
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
         playerAttackTimeout = null;
@@ -1091,6 +1133,7 @@ const endCombat = () => {
     sfxCombatEnd.play();
     player.inCombat = false;
     combatPaused = false;
+    clearCompanionSpecialBuff();
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
         playerAttackTimeout = null;
@@ -1156,6 +1199,15 @@ const useSpecialAbility = () => {
         addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(healAmount) }));
         hpValidation();
         playerLoadStats();
+    } else if (player.selectedClass === "Beastmaster") {
+        const buffApplied = applyCompanionSpecialBuff();
+        if (buffApplied) {
+            sfxBuff.play();
+            addCombatLog(t('special-ability-companion-boost', { player: player.name, companion: activeCompanion.name }));
+        } else {
+            sfxDeny.play();
+            addCombatLog(t('special-ability-no-companion'));
+        }
     } else {
         sfxAttack.play();
 

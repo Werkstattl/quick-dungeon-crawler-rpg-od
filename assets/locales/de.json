@@ -198,10 +198,13 @@
   "class": "Klasse",
   "knight": "Ritter",
   "paladin": "Paladin",
+  "beastmaster": "Beastmaster",
   "knight-class-description": "Spezialfähigkeit, die 1,5x ATK Schaden verursacht.",
   "paladin-class-description": "Spezialfähigkeit, um sich selbst zu heilen.",
+  "beastmaster-class-description": "Spezialfähigkeit, deinen Begleiter 5 Sekunden lang mit +50% ATK und +50% APS zu stärken.",
   "special-ability-knight": "Machthieb",
   "special-ability-paladin": "Göttlicher Segen",
+  "special-ability-beastmaster": "Wilder Befehl",
   "stat-points": "Stat-Punkte:",
   "reset": "Reset",
   "auto": "Auto",
@@ -280,6 +283,8 @@
   ,"enemy-vamp-heal": ", und heilte {value} HP durch Vampirismus"
   ,"special-ability-attack-hit": "{player} entfesselt eine Spezialfähigkeit für {value} {type}{lifesteal}!"
   ,"special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!"
+  ,"special-ability-companion-boost": "{player} stärkt {companion} und erhöht ATK und APS 5 Sekunden lang um 50%!"
+  ,"special-ability-no-companion": "Du benötigst einen aktiven Begleiter, um diese Fähigkeit zu nutzen."
   ,"claim": "Beanspruchen"
   ,"start-new-run": "Neuen Lauf starten"
   ,"attack": "Angreifen"

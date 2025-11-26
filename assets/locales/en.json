@@ -198,10 +198,13 @@
   "class": "Class",
   "knight": "Knight",
   "paladin": "Paladin",
+  "beastmaster": "Beastmaster",
   "knight-class-description": "Special ability to deal 1.5x ATK damage.",
   "paladin-class-description": "Special ability to heal yourself.",
+  "beastmaster-class-description": "Special ability to empower your companion with +50% ATK and +50% APS for 5 seconds.",
   "special-ability-knight": "Power Strike",
   "special-ability-paladin": "Divine Blessing",
+  "special-ability-beastmaster": "Wild Command",
   "stat-points": "Stat Points:",
   "reset": "Reset",
   "auto": "Auto",
@@ -280,6 +283,8 @@
     ,"enemy-vamp-heal": ", and healed {value} HP from vampirism"
     ,"special-ability-attack-hit": "{player} unleashed a special ability for {value} {type}{lifesteal}!"
     ,"special-ability-heal": "{player} used a special ability and healed {hp} HP!"
+    ,"special-ability-companion-boost": "{player} empowered {companion}, boosting their ATK and APS by 50% for 5s!"
+    ,"special-ability-no-companion": "You need an active companion to use this ability."
     ,"claim": "Claim"
     ,"start-new-run": "Start new Run"
     ,"attack": "Attack"
