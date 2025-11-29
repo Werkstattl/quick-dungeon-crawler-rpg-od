@@ -17,6 +17,7 @@ const createDefaultLootStatistics = () => ({
 
 const createDefaultRunStatistics = () => ({
     kills: 0,
+    bossesDefeated: 0,
     runtime: 0,
     damageDealt: 0,
     damageTaken: 0,
@@ -101,7 +102,7 @@ const ensureRunStatisticsShape = () => {
         return;
     }
     const stats = dungeon.statistics;
-    const numericFields = ['kills', 'runtime', 'damageDealt', 'damageTaken', 'goldEarned'];
+    const numericFields = ['kills', 'bossesDefeated', 'runtime', 'damageDealt', 'damageTaken', 'goldEarned'];
     numericFields.forEach((field) => {
         if (!Number.isFinite(stats[field])) {
             stats[field] = 0;
@@ -128,6 +129,11 @@ const ensureRunStatisticsShape = () => {
 
 const resetRunStatistics = () => {
     dungeon.statistics = createDefaultRunStatistics();
+};
+
+const recordRunBossDefeat = () => {
+    ensureRunStatisticsShape();
+    dungeon.statistics.bossesDefeated += 1;
 };
 
 const recordRunDamageDealt = (amount) => {
@@ -175,6 +181,7 @@ if (typeof window !== 'undefined') {
     window.recordRunDamageTaken = recordRunDamageTaken;
     window.recordRunGoldEarned = recordRunGoldEarned;
     window.recordRunLootDrop = recordRunLootDrop;
+    window.recordRunBossDefeat = recordRunBossDefeat;
     window.resetRunStatistics = resetRunStatistics;
     window.ensureRunStatisticsShape = ensureRunStatisticsShape;
 }

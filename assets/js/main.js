@@ -1128,6 +1128,7 @@ const progressReset = (fromDeath = false) => {
     } else {
         dungeon.statistics = {
             kills: 0,
+            bossesDefeated: 0,
             runtime: 0,
             damageDealt: 0,
             damageTaken: 0,
@@ -1284,6 +1285,7 @@ const showEndgameScreen = (summary) => {
             { key: "floor", value: safeSummary.floor ?? 1 },
             { key: "room", value: safeSummary.room ?? 1 },
             { key: "kills", value: safeSummary.kills ?? 0 },
+            { key: "bosses-defeated", value: safeSummary.bossesDefeated ?? 0 },
             { key: "damage-dealt", value: formatNumberStat(safeSummary.damageDealt) },
             { key: "damage-taken", value: formatNumberStat(safeSummary.damageTaken) },
             { key: "gold-earned", value: formatNumberStat(safeSummary.goldEarned) },

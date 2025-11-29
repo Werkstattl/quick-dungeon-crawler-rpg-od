@@ -537,6 +537,9 @@ const hpValidation = () => {
             floor: dungeon && dungeon.progress ? dungeon.progress.floor : 1,
             room: dungeon && dungeon.progress ? dungeon.progress.room : 1,
             kills: dungeon && dungeon.statistics ? dungeon.statistics.kills : 0,
+            bossesDefeated: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.bossesDefeated))
+                ? dungeon.statistics.bossesDefeated
+                : 0,
             damageDealt: dungeon && dungeon.statistics ? dungeon.statistics.damageDealt : 0,
             damageTaken: dungeon && dungeon.statistics ? dungeon.statistics.damageTaken : 0,
             goldEarned: dungeon && dungeon.statistics ? dungeon.statistics.goldEarned : 0,
@@ -566,8 +569,18 @@ const hpValidation = () => {
             recordBestiaryKill(enemy.id);
         }
         dungeon.statistics.kills++;
+        if (enemy && (enemy.condition === 'guardian' || enemy.condition === 'sboss')) {
+            if (typeof recordRunBossDefeat === 'function') {
+                recordRunBossDefeat();
+            } else if (dungeon && dungeon.statistics) {
+                if (!Number.isFinite(dungeon.statistics.bossesDefeated)) {
+                    dungeon.statistics.bossesDefeated = 0;
+                }
+                dungeon.statistics.bossesDefeated += 1;
+            }
+        }
         const timeStamp = new Date(combatSeconds * 1000).toISOString().substring(14, 19);
-    addCombatLog(t('enemy-defeated-reward', { enemy: enemy.name, exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
+        addCombatLog(t('enemy-defeated-reward', { enemy: enemy.name, exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
             const companionExpReward = (enemy.rewards.exp / 10) * (typeof getCompanionExperienceMultiplier === 'function'
