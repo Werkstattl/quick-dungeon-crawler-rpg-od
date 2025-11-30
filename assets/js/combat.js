@@ -1047,6 +1047,10 @@ const updateCombatLog = () => {
         bindSellLootButton();
     }
 
+    if (playerDead) {
+        appendDecisionPanel(`<button id="battleButton" data-i18n="run-summary">${t('run-summary')}</button>`);
+    }
+
     // Adjust scroll to match flow
     if (logFlow === 'top') {
         combatLogBox.scrollTop = 0;
