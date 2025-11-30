@@ -920,6 +920,7 @@ const bindClaimButton = () => {
 
 const handleRunSummaryButtonClick = () => {
     if (typeof showEndgameScreen === 'function') {
+        sfxConfirm.play();
         showEndgameScreen(pendingRunSummary);
     }
 };
