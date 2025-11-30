@@ -29,6 +29,7 @@ let combatTimer = null;
 let combatTimerWasRunning = false;
 
 let latestCombatLoot = null;
+let pendingRunSummary = null;
 
 const SPECIAL_ABILITY_TRANSLATIONS = {
     Knight: 'special-ability-knight',
@@ -521,11 +522,6 @@ const hpValidation = () => {
         player.stats.hp = 0;
         playerDead = true;
         player.deaths++;
-        if (player.hardcore) {
-            addCombatLog(t('you-died-hardcore'));
-        } else {
-            addCombatLog(t('you-died-softcore'));
-        }
         const runSummary = {
             playerName: player && player.name ? player.name : '',
             level: player && typeof player.lvl === 'number' ? player.lvl : 1,
@@ -547,16 +543,11 @@ const hpValidation = () => {
                 ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
                 : null,
         };
-        if (typeof showEndgameScreen === 'function') {
-            showEndgameScreen(runSummary);
-        }
-        const battleButton = document.querySelector("#battleButton");
-        if (battleButton) {
-            battleButton.addEventListener("click", function () {
-                if (typeof startNewRunAfterDeath === 'function') {
-                    startNewRunAfterDeath();
-                }
-            }, { once: true });
+        pendingRunSummary = runSummary;
+        if (player.hardcore) {
+            addCombatLog(t('you-died-hardcore'));
+        } else {
+            addCombatLog(t('you-died-softcore'));
         }
         endCombat();
     } else if (enemy.stats.hp < 1) {
@@ -927,6 +918,19 @@ const bindClaimButton = () => {
     }
 };
 
+const handleRunSummaryButtonClick = () => {
+    if (typeof showEndgameScreen === 'function') {
+        showEndgameScreen(pendingRunSummary);
+    }
+};
+
+const bindRunSummaryButton = () => {
+    const battleButton = document.querySelector('#battleButton');
+    if (battleButton) {
+        battleButton.onclick = handleRunSummaryButtonClick;
+    }
+};
+
 const hasSellableCombatLoot = () => {
     return Boolean(latestCombatLoot && latestCombatLoot.item && typeof latestCombatLoot.item.value === 'number');
 };
@@ -1049,6 +1053,7 @@ const updateCombatLog = () => {
 
     if (playerDead) {
         appendDecisionPanel(`<button id="battleButton" data-i18n="run-summary">${t('run-summary')}</button>`);
+        bindRunSummaryButton();
     }
 
     // Adjust scroll to match flow
