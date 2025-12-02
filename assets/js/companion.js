@@ -22,7 +22,7 @@ const getCompanionExperienceMultiplier = () => {
     }
     const hasInsightPassive = (Array.isArray(player.skills) && player.skills.includes(PASSIVE_COMPANION_INSIGHT))
         || player.selectedPassive === PASSIVE_COMPANION_INSIGHT;
-    return hasInsightPassive ? 1.5 : 1;
+    return hasInsightPassive ? 2 : 1;
 };
 
 function resetActiveCompanionBonuses() {
