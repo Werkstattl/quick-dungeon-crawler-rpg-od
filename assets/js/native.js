@@ -24,9 +24,6 @@ function isCordova() {
 }
 
   function initializePurchases() {
-    // CdvPurchase.store.register([
-    //     { type: CdvPurchase.ProductType.NON_CONSUMABLE, id: 'test-non-consumable', platform: CdvPurchase.Platform.TEST }
-    // ]);
     CdvPurchase.store.register([
         {
             type: CdvPurchase.ProductType.NON_CONSUMABLE,
@@ -50,21 +47,16 @@ function isCordova() {
         });
         transaction.finish();
       });
-    // CdvPurchase.store.initialize([
-    //   CdvPurchase.Platform.TEST,
-    // ]);
     CdvPurchase.store.initialize([
       CdvPurchase.Platform.GOOGLE_PLAY,
     ]);
   }
 
   function buyForgeUnlock() {
-    // CdvPurchase.store.get('test-non-consumable').getOffer().order();
     CdvPurchase.store.get(FORGE_PRODUCT_ID).getOffer().order();
   }
 
   function buyAutoModeUnlock() {
-    // CdvPurchase.store.get('test-non-consumable').getOffer().order();
     CdvPurchase.store.get(AUTO_MODE_PRODUCT_ID).getOffer().order();
   }
 
