@@ -8,12 +8,10 @@ window.addEventListener("DOMContentLoaded", async function () {
     if (advancedStatsDetails && bonusStatsBox) {
         const syncBonusVisibility = () => {
             const showAdvanced = advancedStatsDetails.open;
-            if (bonusStatsBox) {
-                if (showAdvanced) {
-                    bonusStatsBox.removeAttribute('hidden');
-                } else {
-                    bonusStatsBox.setAttribute('hidden', 'true');
-                }
+            if (showAdvanced) {
+                bonusStatsBox.removeAttribute('hidden');
+            } else {
+                bonusStatsBox.setAttribute('hidden', 'true');
             }
             if (companionBonus) {
                 if (showAdvanced) {
