@@ -37,8 +37,7 @@ python3 -m http.server
 php -S 127.0.0.1:4000
 ```
 
-After running the server, open your browser at the shown address to play locally. This
-ensures the service worker can cache files correctly for offline play.
+After running the server, open your browser at the shown address to play locally.
 
 ## Docker
 
