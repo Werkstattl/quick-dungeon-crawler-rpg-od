@@ -1,8 +1,5 @@
 function isPremium() {
-  if ( window.__TAURI__ || window.electronAPI ) {
-    return true;
-  }
-  return false;
+  return Boolean(window.__TAURI__ || window.electronAPI);
 }
 
 function isCordova() {
