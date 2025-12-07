@@ -461,6 +461,7 @@ const dungeonEvent = () => {
                 document.querySelector("#choice2").onclick = function () {
                     ignoreEvent();
                 };
+                autoDecline();
                 break;
             case "enemy":
                 dungeon.status.event = true;
