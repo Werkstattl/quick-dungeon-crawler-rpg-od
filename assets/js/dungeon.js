@@ -23,6 +23,7 @@ const createDefaultRunStatistics = () => ({
     damageTaken: 0,
     goldEarned: 0,
     lootDrops: createDefaultLootStatistics(),
+    latestCurseUnlock: null,
 });
 
 // Track dungeon loop timers even before the dungeon has started
@@ -124,6 +125,13 @@ const ensureRunStatisticsShape = () => {
     }
     if (typeof stats.lootDrops.highestRarity !== 'string' || !stats.lootDrops.highestRarity) {
         stats.lootDrops.highestRarity = null;
+    }
+
+    if (!Number.isFinite(stats.latestCurseUnlock)) {
+        stats.latestCurseUnlock = null;
+    } else {
+        const normalized = Math.round(stats.latestCurseUnlock);
+        stats.latestCurseUnlock = Math.min(10, Math.max(1, normalized));
     }
 };
 

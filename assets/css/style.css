@@ -518,6 +518,20 @@ button:focus {
     font-size: 0.7rem;
 }
 
+.endgame-unlocks {
+    display: none;
+    padding: 0.75rem;
+    border: 1px solid rgba(199, 125, 255, 0.6);
+    border-radius: 0.35rem;
+    background: rgba(199, 125, 255, 0.08);
+    color: #c77dff;
+    font-weight: 600;
+}
+
+.endgame-unlocks.visible {
+    display: block;
+}
+
 .endgame-meta .value {
     font-weight: 600;
 }

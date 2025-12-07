@@ -981,6 +981,12 @@ const maybeUnlockNextCurseLevel = () => {
         const newMax = clampCurseLevel(maxUnlocked + 1);
         if (newMax > player.maxUnlockedCurseLevel) {
             player.maxUnlockedCurseLevel = newMax;
+            if (typeof ensureRunStatisticsShape === 'function') {
+                ensureRunStatisticsShape();
+            }
+            if (dungeon && dungeon.statistics) {
+                dungeon.statistics.latestCurseUnlock = newMax;
+            }
             if (typeof addDungeonLog === 'function') {
                 const unlockMessage = t('curse-level-unlocked', { level: newMax });
                 addDungeonLog(`<span class="CurseUnlock">${unlockMessage}</span>`);
@@ -1132,6 +1138,7 @@ const progressReset = (fromDeath = false) => {
             damageTaken: 0,
             goldEarned: 0,
             lootDrops: { total: 0, highestRarity: null, rarityCounts: {} },
+            latestCurseUnlock: null,
         };
     }
     dungeon.status = {
@@ -1342,6 +1349,25 @@ const showEndgameScreen = (summary) => {
         }).join("");
         if (typeof applyTranslations === "function") {
             applyTranslations(metaList);
+        }
+    }
+
+    const unlocksContainer = modal.querySelector("#endgame-unlocks");
+    if (unlocksContainer) {
+        const unlockedLevel = Number.isFinite(safeSummary.curseLevelUnlocked)
+            ? clampCurseLevel(safeSummary.curseLevelUnlocked)
+            : null;
+        if (unlockedLevel) {
+            const unlockMessage = typeof t === "function"
+                ? t("curse-level-unlocked", { level: unlockedLevel })
+                : `New curse level unlocked! (Lv.${unlockedLevel})`;
+            unlocksContainer.textContent = unlockMessage;
+            unlocksContainer.classList.add("visible");
+            unlocksContainer.hidden = false;
+        } else {
+            unlocksContainer.textContent = "";
+            unlocksContainer.classList.remove("visible");
+            unlocksContainer.hidden = true;
         }
     }
 

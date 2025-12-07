@@ -542,6 +542,9 @@ const hpValidation = () => {
             lootDrops: (dungeon && dungeon.statistics && dungeon.statistics.lootDrops)
                 ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
                 : null,
+            curseLevelUnlocked: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.latestCurseUnlock))
+                ? Math.round(dungeon.statistics.latestCurseUnlock)
+                : null,
         };
         pendingRunSummary = runSummary;
         if (player.hardcore) {
