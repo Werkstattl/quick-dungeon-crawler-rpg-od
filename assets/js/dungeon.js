@@ -330,6 +330,10 @@ const dungeonEvent = () => {
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
         }
+        if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 ) {
+        	eventTypes.push("stairs");        	
+        	eventTypes.push("stairs");
+        }
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
         }
