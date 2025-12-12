@@ -938,7 +938,11 @@ const saveData = () => {
         }
         // Only save if all data is valid JSON
         localStorage.setItem("playerData", playerData);
-        localStorage.setItem("dungeonData", dungeonData);
+        const existingDungeonData = localStorage.getItem("dungeonData");
+        const canPersistDungeon = dungeon && (dungeon.initialized || existingDungeonData === null);
+        if (canPersistDungeon) {
+            localStorage.setItem("dungeonData", dungeonData);
+        }
         localStorage.setItem("enemyData", enemyData);
         lastSaveTime = Date.now();
     } finally {

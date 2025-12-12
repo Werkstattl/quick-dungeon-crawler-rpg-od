@@ -39,6 +39,7 @@ let currentEvent = null;
 let dungeon = {
     rating: 500,
     grade: "E",
+    initialized: false,
     progress: {
         floor: 1,
         room: 1,
@@ -258,6 +259,7 @@ const initialDungeonLoad = () => {
     dungeonActivity.setAttribute('data-i18n', 'explore');
     dungeonActivity.textContent = t('explore');
     updateExploreButtonAttention();
+    dungeon.initialized = true;
     dungeonTime.innerHTML = "00:00:00";
     dungeonTimer = setInterval(dungeonEvent, 1000);
     playTimer = setInterval(dungeonCounter, 1000);
@@ -297,7 +299,7 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (Date.now() - lastSaveTime >= 2000) {
+    if (Date.now() - lastSaveTime >= 2500) {
         saveData();
     }
 }
