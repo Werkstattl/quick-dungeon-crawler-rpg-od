@@ -14,6 +14,7 @@ let autoAttackDelayTimeout = null;
 let combatPaused = false;
 let companionSpecialBuffTimeout = null;
 let companionSpecialBuffRevert = null;
+let scoutDodgeReady = false;
 
 let enemyAttackDueAt = null;
 let playerAttackDueAt = null;
@@ -818,7 +819,13 @@ const enemyAttack = () => {
 
     // Player dodge chance
     let dodged = false;
-    if (Math.random() < player.stats.dodge / 100) {
+    if (scoutDodgeReady) {
+        dodged = true;
+        damage = 0;
+        lifesteal = 0;
+        scoutDodgeReady = false;
+    }
+    if (!dodged && Math.random() < player.stats.dodge / 100) {
         addCombatLog(t('dodged-attack-player', { player: player.name }));
         damage = 0;
         lifesteal = 0;
@@ -1109,6 +1116,7 @@ const startCombat = (battleMusic) => {
         currentBattleMusic.play();
     player.inCombat = true;
     combatPaused = false;
+    scoutDodgeReady = false;
     clearCompanionSpecialBuff();
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
@@ -1190,6 +1198,7 @@ const endCombat = () => {
     updateSpecialAbilityCooldownDisplay();
     setPlayerAttackReady(false);
     clearAutoAttackDelay();
+    scoutDodgeReady = false;
     // Skill validation
 
     // Stops every timer in combat
@@ -1236,7 +1245,7 @@ const useSpecialAbility = () => {
             addCombatLog(t('special-ability-no-companion'));
         }
     } else if (player.selectedClass === "Scout") {
-        // todo dodge the next hit of enemy
+        scoutDodgeReady = true;
         sfxBuff.play();
         addCombatLog(t('special-ability-scout-dodge', { player: player.name }));
     } else {
