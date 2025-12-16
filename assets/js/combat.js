@@ -35,6 +35,7 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
     Knight: 'special-ability-knight',
     Paladin: 'special-ability-paladin',
     Beastmaster: 'special-ability-beastmaster',
+    Scout: 'special-ability-scout',
 };
 
 const nowMs = () => {
@@ -1234,6 +1235,10 @@ const useSpecialAbility = () => {
             sfxDeny.play();
             addCombatLog(t('special-ability-no-companion'));
         }
+    } else if (player.selectedClass === "Scout") {
+        // todo dodge the next hit of enemy
+        sfxBuff.play();
+        addCombatLog(t('special-ability-scout-dodge', { player: player.name }));
     } else {
         sfxAttack.play();
 
