@@ -819,17 +819,17 @@ const enemyAttack = () => {
 
     // Player dodge chance
     let dodged = false;
-    if (scoutDodgeReady) {
+    if (Math.random() < player.stats.dodge / 100) {
+        addCombatLog(t('dodged-attack-player', { player: player.name }));
         dodged = true;
-        damage = 0;
-        lifesteal = 0;
+    } else if (scoutDodgeReady) {
+        addCombatLog(t('scout-dodged-attack', { player: player.name }));
+        dodged = true;
         scoutDodgeReady = false;
     }
-    if (!dodged && Math.random() < player.stats.dodge / 100) {
-        addCombatLog(t('dodged-attack-player', { player: player.name }));
+    if ( dodged ) {
         damage = 0;
         lifesteal = 0;
-        dodged = true;
     }
 
     // Skill effects

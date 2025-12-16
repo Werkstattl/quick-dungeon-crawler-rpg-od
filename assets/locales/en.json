@@ -208,7 +208,7 @@
   "special-ability-knight": "Power Strike",
   "special-ability-paladin": "Divine Blessing",
   "special-ability-beastmaster": "Wild Command",
-  "special-ability-scout": "Thumble",
+  "special-ability-scout": "Tumble",
   "stat-points": "Stat Points:",
   "reset": "Reset",
   "auto": "Auto",
@@ -280,6 +280,7 @@
     ,"dodged-attack-enemy": "{enemy} dodged the attack!"
     ,"dodged-attack-companion": "{enemy} dodged {companion}'s attack!"
     ,"dodged-attack-player": "{player} dodged the attack!"
+    ,"scout-dodged-attack": "{player} tumbles out of the way!"
     ,"player-attack-hit": "{player} dealt {value} {type} to {enemy}{lifesteal}."
     ,"player-vamp-heal": ", and healed {value} HP from vampirism"
     ,"companion-attack-hit": "{companion} dealt {value} {type} to {enemy}."
