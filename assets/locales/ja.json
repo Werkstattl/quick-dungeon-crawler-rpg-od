@@ -200,12 +200,15 @@
   "knight": "ナイト",
   "paladin": "パラディン",
   "beastmaster": "ビーストマスター",
+  "scout": "スカウト",
   "knight-class-description": "特殊能力: ATKの1.5倍の直接ダメージを与える。",
   "paladin-class-description": "特殊能力: 自分を回復する。",
   "beastmaster-class-description": "特殊能力: コンパニオンのATKとAPSを5秒間50%上昇させる。",
+  "scout-class-description": "特殊能力: 次の攻撃を回避する。",
   "special-ability-knight": "強撃",
   "special-ability-paladin": "神聖なる祝福",
   "special-ability-beastmaster": "ワイルドコマンド",
+  "special-ability-scout": "タンブル",
   "stat-points": "ステータスポイント:",
   "reset": "リセット",
   "auto": "自動",
@@ -277,6 +280,7 @@
   ,"dodged-attack-enemy": "{enemy}は攻撃を回避した！"
   ,"dodged-attack-companion": "{enemy}は{companion}の攻撃を回避した！"
   ,"dodged-attack-player": "{player}は攻撃を回避した！"
+  ,"scout-dodged-attack": "{player}は身を翻して攻撃をかわした！"
   ,"player-attack-hit": "{player}は{enemy}に{value}{type}を与え{lifesteal}。"
   ,"player-vamp-heal": "、吸血で{value} HPを回復した"
   ,"companion-attack-hit": "{companion}は{enemy}に{value}{type}を与えた。"

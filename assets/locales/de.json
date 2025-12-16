@@ -200,12 +200,15 @@
   "knight": "Ritter",
   "paladin": "Paladin",
   "beastmaster": "Beastmaster",
+  "scout": "Späher",
   "knight-class-description": "Spezialfähigkeit, die 1,5x ATK Schaden verursacht.",
   "paladin-class-description": "Spezialfähigkeit, um sich selbst zu heilen.",
   "beastmaster-class-description": "Spezialfähigkeit, deinen Begleiter 5 Sekunden lang mit +50% ATK und +50% APS zu stärken.",
+  "scout-class-description": "Spezialfähigkeit, dem nächsten Angriff auszuweichen.",
   "special-ability-knight": "Machthieb",
   "special-ability-paladin": "Göttlicher Segen",
   "special-ability-beastmaster": "Wilder Befehl",
+  "special-ability-scout": "Ausweichrolle",
   "stat-points": "Stat-Punkte:",
   "reset": "Reset",
   "auto": "Auto",
@@ -277,6 +280,7 @@
   ,"dodged-attack-enemy": "{enemy} ist dem Angriff ausgewichen!"
   ,"dodged-attack-companion": "{enemy} ist dem Angriff von {companion} ausgewichen!"
   ,"dodged-attack-player": "{player} ist dem Angriff ausgewichen!"
+  ,"scout-dodged-attack": "{player} rollt sich aus dem Weg!"
   ,"player-attack-hit": "{player} verursacht {value} {type} an {enemy}{lifesteal}."
   ,"player-vamp-heal": ", und heilte {value} HP durch Vampirismus"
   ,"companion-attack-hit": "{companion} verursacht {value} {type} an {enemy}."
