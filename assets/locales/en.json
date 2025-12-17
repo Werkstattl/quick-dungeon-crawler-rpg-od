@@ -281,6 +281,7 @@
     ,"dodged-attack-companion": "{enemy} dodged {companion}'s attack!"
     ,"dodged-attack-player": "{player} dodged the attack!"
     ,"scout-dodged-attack": "{player} tumbles out of the way!"
+    ,"special-ability-scout-dodge": "{player} prepares to tumble away from the next attack!"
     ,"player-attack-hit": "{player} dealt {value} {type} to {enemy}{lifesteal}."
     ,"player-vamp-heal": ", and healed {value} HP from vampirism"
     ,"companion-attack-hit": "{companion} dealt {value} {type} to {enemy}."

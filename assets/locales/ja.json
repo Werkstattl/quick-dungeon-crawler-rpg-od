@@ -281,6 +281,7 @@
   ,"dodged-attack-companion": "{enemy}は{companion}の攻撃を回避した！"
   ,"dodged-attack-player": "{player}は攻撃を回避した！"
   ,"scout-dodged-attack": "{player}は身を翻して攻撃をかわした！"
+  ,"special-ability-scout-dodge": "{player}は次の攻撃を避ける準備をしている！"
   ,"player-attack-hit": "{player}は{enemy}に{value}{type}を与え{lifesteal}。"
   ,"player-vamp-heal": "、吸血で{value} HPを回復した"
   ,"companion-attack-hit": "{companion}は{enemy}に{value}{type}を与えた。"

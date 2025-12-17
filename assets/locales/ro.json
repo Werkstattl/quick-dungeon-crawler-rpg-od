@@ -281,6 +281,7 @@
   "dodged-attack-companion": "{enemy} a evitat atacul lui {companion}!",
   "dodged-attack-player": "{player} a evitat atacul!",
   "scout-dodged-attack": "{player} se rostogolește din cale!",
+  "special-ability-scout-dodge": "{player} se pregătește să evite următorul atac!",
   "player-attack-hit": "{player} a provocat {value} {type} lui {enemy}{lifesteal}.",
   "player-vamp-heal": ", și a vindecat {value} HP prin vampirism",
   "companion-attack-hit": "{companion} a provocat {value} {type} lui {enemy}.",

@@ -281,6 +281,7 @@
   "dodged-attack-companion": "{enemy} esquivó el ataque de {companion}!",
   "dodged-attack-player": "{player} esquivó el ataque!",
   "scout-dodged-attack": "¡{player} rueda fuera del camino!",
+  "special-ability-scout-dodge": "¡{player} se prepara para esquivar el siguiente ataque!",
   "player-attack-hit": "{player} infligió {value} {type} a {enemy}{lifesteal}.",
   "player-vamp-heal": ", y se curó {value} HP por vampirismo",
   "companion-attack-hit": "{companion} infligió {value} {type} a {enemy}.",

@@ -270,6 +270,7 @@
   "dodged-attack-companion": "{enemy} 闪避了 {companion} 的攻击！",
   "dodged-attack-player": "{player} 闪避了这次攻击！",
   "scout-dodged-attack": "{player} 翻滚躲开了！",
+  "special-ability-scout-dodge": "{player} 准备好闪避下一次攻击！",
   "player-attack-hit": "{player} 对 {enemy} 造成了 {value} 点{type}{lifesteal}。",
   "player-vamp-heal": "，并通过吸血恢复了 {value} 点生命",
   "companion-attack-hit": "{companion} 对 {enemy} 造成了 {value} 点{type}。",
