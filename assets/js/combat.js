@@ -1246,7 +1246,7 @@ const useSpecialAbility = () => {
         }
     } else if (player.selectedClass === "Scout") {
         scoutDodgeReady = true;
-        sfxBuff.play();
+        sfxOpen.play();
         addCombatLog(t('special-ability-scout-dodge', { player: player.name }));
     } else {
         sfxAttack.play();
