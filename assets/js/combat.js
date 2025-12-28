@@ -37,7 +37,6 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
     Paladin: 'special-ability-paladin',
     Beastmaster: 'special-ability-beastmaster',
     Scout: 'special-ability-scout',
-    Rogue: 'special-ability-rogue',
 };
 
 // ========== Status Effects ==========
@@ -1338,98 +1337,7 @@ const useSpecialAbility = () => {
         addCombatLog(t('special-ability-scout-dodge', { player: player.name }));
     } else if (player.selectedClass === "Rogue") {
         sfxAttack.play();
-
-        let crit;
-        const bleed = ensureEnemyBleedState();
-        const stacks = bleed ? bleed.stacks : 0;
-
-        const baseAtk = player.stats.atk * 0.9;
-        let damage = baseAtk * (baseAtk / (baseAtk + enemy.stats.def));
-        let dmgRange = 0.9 + Math.random() * 0.2;
-        damage = damage * dmgRange;
-
-        if (Math.floor(Math.random() * 100) < player.stats.critRate) {
-            crit = true;
-            dmgtype = t('crit-damage');
-            damage = Math.round(damage * (1 + (player.stats.critDmg / 100)));
-        } else {
-            crit = false;
-            dmgtype = t('damage');
-            damage = Math.round(damage);
-        }
-
-        const hpMax = Math.max(1, Number(enemy.stats.hpMax) || 1);
-        const bleedBonusRaw = hpMax * OPEN_WOUNDS_BLEED_MAX_HP_PCT_PER_STACK_PER_SECOND * stacks * 4;
-        const bleedBonus = stacks > 0 ? Math.max(1, Math.round(bleedBonusRaw)) : 0;
-        damage += bleedBonus;
-
-        let lifesteal = Math.round(damage * (player.stats.vamp / 100));
-
-        let dodged = false;
-        if (Math.random() < enemy.stats.dodge / 100) {
-            addCombatLog(t('dodged-attack-enemy', { enemy: enemy.name }));
-            damage = 0;
-            lifesteal = 0;
-            dodged = true;
-        }
-
-        if (!dodged && bleed && stacks > 0) {
-            bleed.stacks = 0;
-            bleed.remainingSeconds = 0;
-        }
-
-        enemy.stats.hp -= damage;
-        if (typeof recordRunDamageDealt === 'function') {
-            recordRunDamageDealt(damage);
-        }
-        player.stats.hp += lifesteal;
-        if (!dodged) {
-            const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
-            addCombatLog(t('special-ability-attack-hit', {
-                player: player.name,
-                value: nFormatter(damage),
-                type: dmgtype,
-                lifesteal: lifestealText
-            }));
-        }
-
-        hpValidation();
-        playerLoadStats();
-        enemyLoadStats();
-
-        let enemySprite = document.querySelector("#enemy-sprite");
-        enemySprite.classList.add("animation-shake");
-        setTimeout(() => {
-            enemySprite.classList.remove("animation-shake");
-        }, 200);
-
-        const dmgContainer = document.querySelector("#dmg-container");
-        const dmgNumber = document.createElement("p");
-        dmgNumber.classList.add("dmg-numbers");
-        if (crit) {
-            dmgNumber.style.color = "gold";
-            dmgNumber.innerHTML = nFormatter(damage) + "!";
-        } else {
-            dmgNumber.innerHTML = nFormatter(damage);
-        }
-        dmgContainer.appendChild(dmgNumber);
-        setTimeout(() => {
-            dmgContainer.removeChild(dmgContainer.lastElementChild);
-        }, 370);
-
-        if (enemy.stats.hp <= 0 || enemyDead) {
-            if (specialAbilityTimeout) {
-                clearTimeout(specialAbilityTimeout);
-                specialAbilityTimeout = null;
-            }
-            specialAbilityCooldown = false;
-            specialAbilityDueAt = null;
-            specialAbilityRemaining = null;
-            updateSpecialAbilityButtonState();
-            stopSpecialAbilityCooldownTicker();
-            updateSpecialAbilityCooldownDisplay();
-            return;
-        }
+        // Special ability deals damage based on number of bleed stacks.
     } else {
         sfxAttack.play();
 
