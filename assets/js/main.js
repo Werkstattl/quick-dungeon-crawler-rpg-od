@@ -1217,6 +1217,7 @@ const PASSIVE_TRANSLATION_MAP = new Map([
     ["paladin's heart", "paladins-heart"],
     ["aegis thorns", "aegis-thorns"],
     ["companion's insight", "companions-insight"],
+    ["open wounds", "open-wounds"],
 ]);
 
 const translatePassiveValue = (value) => {
@@ -1595,6 +1596,7 @@ const allocationPopup = () => {
                     <option value="Paladin's Heart" data-i18n="paladins-heart">Paladin's Heart</option>
                     <option value="Aegis Thorns" data-i18n="aegis-thorns">Aegis Thorns</option>
                     <option value="${PASSIVE_COMPANION_INSIGHT}" data-i18n="companions-insight">${PASSIVE_COMPANION_INSIGHT}</option>
+                    <option value="${PASSIVE_OPEN_WOUNDS}" data-i18n="open-wounds">${PASSIVE_OPEN_WOUNDS}</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
@@ -1714,6 +1716,9 @@ const allocationPopup = () => {
         if (selectSkill.value == PASSIVE_COMPANION_INSIGHT) {
             skillDesc.setAttribute('data-i18n', 'companions-insight-desc');
         }
+        if (selectSkill.value == PASSIVE_OPEN_WOUNDS) {
+            skillDesc.setAttribute('data-i18n', 'open-wounds-desc');
+        }   
         applyTranslations(defaultModalElement);
     }
     selectSkill.onchange();
