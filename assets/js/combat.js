@@ -39,6 +39,79 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
     Scout: 'special-ability-scout',
 };
 
+// ========== Status Effects ==========
+const OPEN_WOUNDS_BLEED_DURATION_SECONDS = 5;
+const OPEN_WOUNDS_BLEED_MAX_STACKS = 25;
+const OPEN_WOUNDS_BLEED_MAX_HP_PCT_PER_STACK_PER_SECOND = 0.0015; // 0.15%
+
+const playerHasOpenWounds = () => {
+    if (!player) {
+        return false;
+    }
+    const passiveName = (typeof PASSIVE_OPEN_WOUNDS !== 'undefined') ? PASSIVE_OPEN_WOUNDS : 'Open Wounds';
+    return (Array.isArray(player.skills) && player.skills.includes(passiveName)) || player.selectedPassive === passiveName;
+};
+
+const ensureEnemyBleedState = () => {
+    if (!enemy) {
+        return null;
+    }
+    if (!enemy.bleed || typeof enemy.bleed !== 'object') {
+        enemy.bleed = { stacks: 0, remainingSeconds: 0 };
+    }
+    if (!Number.isFinite(enemy.bleed.stacks)) {
+        enemy.bleed.stacks = 0;
+    }
+    if (!Number.isFinite(enemy.bleed.remainingSeconds)) {
+        enemy.bleed.remainingSeconds = 0;
+    }
+    enemy.bleed.stacks = Math.max(0, Math.min(OPEN_WOUNDS_BLEED_MAX_STACKS, Math.round(enemy.bleed.stacks)));
+    enemy.bleed.remainingSeconds = Math.max(0, Math.round(enemy.bleed.remainingSeconds));
+    return enemy.bleed;
+};
+
+const applyOpenWoundsBleedOnHit = () => {
+    if (!playerHasOpenWounds()) {
+        return;
+    }
+    const bleed = ensureEnemyBleedState();
+    if (!bleed) {
+        return;
+    }
+    bleed.stacks = Math.min(OPEN_WOUNDS_BLEED_MAX_STACKS, bleed.stacks + 1);
+    bleed.remainingSeconds = OPEN_WOUNDS_BLEED_DURATION_SECONDS;
+};
+
+const tickEnemyBleed = () => {
+    if (!player || !player.inCombat || combatPaused || !enemy || !enemy.stats) {
+        return;
+    }
+    if (!enemy.bleed || typeof enemy.bleed !== 'object') {
+        return;
+    }
+    const bleed = ensureEnemyBleedState();
+    if (!bleed || bleed.stacks <= 0 || bleed.remainingSeconds <= 0) {
+        return;
+    }
+    if (!Number.isFinite(enemy.stats.hp) || enemy.stats.hp <= 0) {
+        bleed.remainingSeconds = 0;
+        return;
+    }
+
+    const hpMax = Math.max(1, Number(enemy.stats.hpMax) || 1);
+    const rawDamage = hpMax * OPEN_WOUNDS_BLEED_MAX_HP_PCT_PER_STACK_PER_SECOND * bleed.stacks;
+    const damage = Math.max(1, Math.round(rawDamage));
+    const applied = Math.min(enemy.stats.hp, damage);
+    enemy.stats.hp -= applied;
+    if (typeof recordRunDamageDealt === 'function') {
+        recordRunDamageDealt(applied);
+    }
+    bleed.remainingSeconds -= 1;
+
+    enemyLoadStats();
+    hpValidation();
+};
+
 const nowMs = () => {
     if (typeof performance !== "undefined" && typeof performance.now === "function") {
         return performance.now();
@@ -672,6 +745,10 @@ const playerAttack = () => {
         dodged = true;
     }
 
+    if (!dodged) {
+        applyOpenWoundsBleedOnHit();
+    }
+
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
     if (typeof recordRunDamageDealt === 'function') {
@@ -1145,6 +1222,11 @@ const startCombat = (battleMusic) => {
     specialAbilityRemaining = null;
     combatTimerWasRunning = false;
 
+    // Reset per-enemy status effects
+    if (enemy && enemy.bleed) {
+        delete enemy.bleed;
+    }
+
     // Add companion involvement
     scheduleCompanionAttack();
 
@@ -1207,11 +1289,16 @@ const endCombat = () => {
         combatTimer = null;
     }
     combatTimerWasRunning = false;
+
+    if (enemy && enemy.bleed) {
+        delete enemy.bleed;
+    }
     combatSeconds = 0;
 }
 
 const combatCounter = () => {
     combatSeconds++;
+    tickEnemyBleed();
 }
 
 const useSpecialAbility = () => {
@@ -1294,6 +1381,10 @@ const useSpecialAbility = () => {
             damage = 0;
             lifesteal = 0;
             dodged = true;
+        }
+
+        if (!dodged) {
+            applyOpenWoundsBleedOnHit();
         }
 
         // Apply calculations
