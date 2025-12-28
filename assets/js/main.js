@@ -1746,6 +1746,10 @@ const allocationPopup = () => {
             }
             if (selectClass.value == "Rogue") {
                 classDesc.setAttribute('data-i18n', 'rogue-class-description');
+                if (selectSkill.value !== PASSIVE_OPEN_WOUNDS) {
+                    selectSkill.value = PASSIVE_OPEN_WOUNDS;
+                    selectSkill.onchange();
+                }
             }
             applyTranslations(defaultModalElement);
             updateStats();
