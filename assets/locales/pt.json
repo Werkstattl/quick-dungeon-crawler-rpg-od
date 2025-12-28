@@ -133,6 +133,7 @@
   "rate-game": "Avaliar jogo",
   "rating-prompt": {
     "title": "Gostando do jogo?",
+    "reward": "Avalie o jogo e você ganhará um nível!",
     "rate-now": "Avaliar agora",
     "later": "Depois",
     "no-thanks": "Não, obrigado"

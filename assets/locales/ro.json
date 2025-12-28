@@ -133,6 +133,7 @@
   "rate-game": "Evaluează jocul",
   "rating-prompt": {
     "title": "Îți place jocul?",
+    "reward": "Evaluează jocul și vei primi un nivel!",
     "rate-now": "Evaluează acum",
     "later": "Mai târziu",
     "no-thanks": "Nu, mulțumesc"

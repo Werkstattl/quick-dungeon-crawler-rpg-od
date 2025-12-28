@@ -133,6 +133,7 @@
   "rate-game": "Spiel bewerten",
   "rating-prompt": {
     "title": "Gefällt dir das Spiel?",
+    "reward": "Bewerte das Spiel und du erhältst einen Stufenaufstieg!",
     "rate-now": "Jetzt bewerten",
     "later": "Später",
     "no-thanks": "Nein danke"

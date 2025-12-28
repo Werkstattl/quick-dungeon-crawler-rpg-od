@@ -116,6 +116,7 @@
   "rate-game": "为游戏评分",
   "rating-prompt": {
     "title": "喜欢这个游戏吗？",
+    "reward": "评分即可获得一次升级！",
     "rate-now": "立即评分",
     "later": "稍后",
     "no-thanks": "不用了，谢谢"

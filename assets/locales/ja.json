@@ -133,6 +133,7 @@
   "rate-game": "ゲームを評価",
   "rating-prompt": {
     "title": "ゲームを楽しんでいますか？",
+    "reward": "評価するとレベルアップできます！",
     "rate-now": "今すぐ評価",
     "later": "後で",
     "no-thanks": "結構です"

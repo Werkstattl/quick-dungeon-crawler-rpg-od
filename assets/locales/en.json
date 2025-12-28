@@ -133,6 +133,7 @@
   "rate-game": "Rate Game",
   "rating-prompt": {
     "title": "Enjoying the game?",
+    "reward": "Rate the game and you'll get a level up!",
     "rate-now": "Rate Now",
     "later": "Later",
     "no-thanks": "No Thanks"
