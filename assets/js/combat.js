@@ -1335,6 +1335,9 @@ const useSpecialAbility = () => {
         scoutDodgeReady = true;
         sfxUnpause.play();
         addCombatLog(t('special-ability-scout-dodge', { player: player.name }));
+    } else if (player.selectedClass === "Rogue") {
+        sfxAttack.play();
+        // Special ability deals damage based on number of bleed stacks.
     } else {
         sfxAttack.play();
 
