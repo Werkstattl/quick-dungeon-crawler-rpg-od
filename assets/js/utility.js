@@ -99,6 +99,7 @@ const ratingSystem = {
             this.openRating();
             this.config.hasRated = true;
             this.saveConfig();
+            grantLevelUpReward();
             closeDefaultModal();
         });
         
@@ -156,4 +157,19 @@ function closeDefaultModal() {
     defaultModal.style.display = "none";
     defaultModal.innerHTML = "";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
+}
+
+// give the player exp equal to one level up
+function grantLevelUpReward() {
+    const reward = player.exp.expMaxLvl;
+
+    player.exp.expCurr += reward;
+    player.exp.expCurrLvl += reward;
+    activeCompanion.gainExperience(reward);
+
+    while (player.exp.expCurr >= player.exp.expMax) {
+        playerLvlUp();
+    }
+    playerLoadStats();
+    showLevelUpModalIfPending();
 }
