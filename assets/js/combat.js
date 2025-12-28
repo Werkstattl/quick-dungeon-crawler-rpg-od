@@ -37,6 +37,7 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
     Paladin: 'special-ability-paladin',
     Beastmaster: 'special-ability-beastmaster',
     Scout: 'special-ability-scout',
+    Rogue: 'special-ability-rogue',
 };
 
 // ========== Status Effects ==========
