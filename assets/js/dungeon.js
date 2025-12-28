@@ -299,7 +299,7 @@ const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
     dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
-    if (Date.now() - lastSaveTime >= 2500) {
+    if (Date.now() - lastSaveTime >= 3000) {
         saveData();
     }
 }
