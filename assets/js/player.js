@@ -88,12 +88,12 @@ const PASSIVE_OPEN_WOUNDS = "Open Wounds";
 
 const getPlayerAtkSpdCap = () => {
     if (player && Array.isArray(player.skills) && player.skills.includes(PASSIVE_LIMIT_BREAKER)) {
-        return 3;
+        return 3.25;
     }
     if (player && player.selectedPassive === PASSIVE_LIMIT_BREAKER) {
-        return 3;
+        return 3.25;
     }
-    return 2.5;
+    return 2.75;
 };
 
 const MAX_INVENTORY_ITEMS = 100;

@@ -229,7 +229,7 @@
   "remnant-razor-desc": "攻撃が命中時に敵の現在の体力の9%の追加ダメージを与える。",
   "titans-will-desc": "攻撃が命中時に自分の最大体力の4.5%の追加ダメージを与える。",
   "devastator-desc": "与えるダメージが30%増加するが、基礎攻撃速度が30%低下する。",
-  "limit-breaker-desc": "攻撃速度の上限を毎秒3回まで引き上げる。",
+  "limit-breaker-desc": "攻撃速度の上限を毎秒3.25回まで引き上げる。",
   "eagle-eye-desc": "装備から得られるクリティカル率が25%増加する。",
   "paladins-heart-desc": "受けるダメージが恒久的に25%減少する。",
   "aegis-thorns-desc": "敵が与えたダメージの30%を受ける。",

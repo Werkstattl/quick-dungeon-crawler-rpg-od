@@ -333,8 +333,8 @@ const setEnemyStats = (type, condition) => {
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
 
-    if (enemy.stats.atkSpd > 2.5) {
-        enemy.stats.atkSpd = 2.5;
+    if (enemy.stats.atkSpd > 2.75) {
+        enemy.stats.atkSpd = 2.75;
     }
 };
 

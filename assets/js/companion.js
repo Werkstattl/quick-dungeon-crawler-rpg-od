@@ -190,7 +190,7 @@ class Companion {
 
     calculateAtkSpd() {
         // Increase attack speed slightly with each level
-        return Math.min(2.5, this.atkSpdBase + (this.level - 1) * this.atkSpdGrowth);
+        return Math.min(2.75, this.atkSpdBase + (this.level - 1) * this.atkSpdGrowth);
     }
 
     gainExperience(amount) {
