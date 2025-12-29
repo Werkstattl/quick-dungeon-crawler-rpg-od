@@ -44,7 +44,7 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
 const OPEN_WOUNDS_BLEED_DURATION_SECONDS = 5;
 const OPEN_WOUNDS_BLEED_MAX_STACKS = 25;
 const OPEN_WOUNDS_BLEED_MAX_HP_PCT_PER_STACK_PER_SECOND = 0.0015; // 0.15%
-const ROGUE_SPECIAL_BLEED_BONUS_PER_STACK = 0.1;
+const ROGUE_SPECIAL_BLEED_BONUS_PER_STACK = 0.05;
 
 const playerHasOpenWounds = () => {
     if (!player) {
@@ -92,7 +92,12 @@ const tickEnemyBleed = () => {
         return;
     }
     const bleed = ensureEnemyBleedState();
-    if (!bleed || bleed.stacks <= 0 || bleed.remainingSeconds <= 0) {
+    if (!bleed || bleed.stacks <= 0) {
+        return;
+    }
+    if (bleed.remainingSeconds <= 0) {
+        bleed.stacks = 0;
+        bleed.remainingSeconds = 0;
         return;
     }
     if (!Number.isFinite(enemy.stats.hp) || enemy.stats.hp <= 0) {
