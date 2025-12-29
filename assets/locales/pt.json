@@ -319,7 +319,8 @@
     "buckler": "Broquel",
     "great-helm": "Grande elmo",
     "horned-helm": "Elmo com chifres",
-    "mask": "Máscara"
+    "mask": "Máscara",
+    "boots": "Botas"
   },
   "equipment-genders": {
     "sword": "f",
@@ -336,7 +337,8 @@
     "buckler": "m",
     "great-helm": "m",
     "horned-helm": "m",
-    "mask": "f"
+    "mask": "f",
+    "boots": "f"
   },
   "enemy-names": {
     "goblin": "Goblin",

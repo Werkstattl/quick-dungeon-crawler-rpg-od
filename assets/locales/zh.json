@@ -322,7 +322,8 @@
     "buckler": "小圆盾",
     "great-helm": "重盔",
     "horned-helm": "角盔",
-    "mask": "面具"
+    "mask": "面具",
+    "boots": "靴子"
   },
   "enemy-names": {
     "goblin": "哥布林",

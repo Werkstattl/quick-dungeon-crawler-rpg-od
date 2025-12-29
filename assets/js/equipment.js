@@ -22,7 +22,7 @@ const createEquipment = (addToInventory = true) => {
         equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
         equipment.type = "Weapon";
     } else if (equipment.attribute == "Defense") {
-        const equipmentTypes = ["Armor", "Shield", "Helmet", "Mask"];
+        const equipmentTypes = ["Armor", "Shield", "Helmet", "Mask", "Boots"];
         equipment.type = equipmentTypes[Math.floor(Math.random() * equipmentTypes.length)];
         if (equipment.type == "Armor") {
             const equipmentCategories = ["Plate", "Chain", "Leather"];
@@ -35,6 +35,8 @@ const createEquipment = (addToInventory = true) => {
             equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
         } else if (equipment.type == "Mask") {
             equipment.category = "Mask";
+        } else if (equipment.type == "Boots") {
+            equipment.category = "Boots";
         }
     }
     const rarityChances = {
@@ -127,6 +129,8 @@ const rerollEquipmentStats = (equipment) => {
         }
     } else if (equipment.attribute == "Defense") {
         if (equipment.type == "Mask" || equipment.category == "Mask") {
+            statTypes = evasiveStats;
+        } else if (equipment.type == "Boots" || equipment.category == "Boots") {
             statTypes = evasiveStats;
         } else {
             statTypes = defenseStats;
@@ -323,6 +327,8 @@ const equipmentIcon = (equipment) => {
         return '<i class="ra ra-helmet"></i>';
     } else if (equipment == "Mask") {
         return '<i class="ra ra-arcane-mask"></i>';
+    } else if (equipment == "Boots") {
+        return '<i class="ra ra-boot-stomp"></i>';
     }
 }
 

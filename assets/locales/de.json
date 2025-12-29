@@ -320,7 +320,8 @@
     "buckler": "Buckler",
     "great-helm": "Großhelm",
     "horned-helm": "Hornhelm",
-    "mask": "Maske"
+    "mask": "Maske",
+    "boots": "Stiefel"
   }
 
   ,"enemy-names": {
@@ -392,7 +393,8 @@
     "buckler": "m",
     "great-helm": "m",
     "horned-helm": "m",
-    "mask": "f"
+    "mask": "f",
+    "boots": "m"
   }
 
   ,"level-up-option": {
