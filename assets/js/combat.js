@@ -1185,6 +1185,12 @@ const shouldAutoUseSpecialAbility = () => {
             return false;
         }
     }
+    if (player.selectedClass === "Rogue" && playerHasOpenWounds()) {
+        const bleedState = ensureEnemyBleedState();
+        if (bleedState.stacks < 4) {
+            return false;
+        }
+    }
     return true;
 };
 
