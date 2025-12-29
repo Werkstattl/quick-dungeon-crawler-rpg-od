@@ -44,7 +44,7 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
 const OPEN_WOUNDS_BLEED_DURATION_SECONDS = 5;
 const OPEN_WOUNDS_BLEED_MAX_STACKS = 25;
 const OPEN_WOUNDS_BLEED_MAX_HP_PCT_PER_STACK_PER_SECOND = 0.0015; // 0.15%
-const ROGUE_SPECIAL_BLEED_BONUS_PER_STACK = 0.05; // +5% base special damage per bleed stack
+const ROGUE_SPECIAL_BLEED_BONUS_PER_STACK = 0.1;
 
 const playerHasOpenWounds = () => {
     if (!player) {
@@ -1345,7 +1345,8 @@ const useSpecialAbility = () => {
         if (player.selectedClass === "Rogue") {
             const bleedStacks = ensureEnemyBleedState()?.stacks || 0;
             const stackMultiplier = 1 + (bleedStacks * ROGUE_SPECIAL_BLEED_BONUS_PER_STACK);
-            baseAtk *= stackMultiplier;
+            baseAtk = player.stats.atk * 1.1;
+            baseAtk = baseAtk * stackMultiplier;
         }
         let damage = baseAtk * (baseAtk / (baseAtk + enemy.stats.def));
         // Randomize the damage by 90% - 110%
