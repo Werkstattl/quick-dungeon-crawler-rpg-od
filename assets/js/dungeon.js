@@ -81,6 +81,7 @@ let dungeon = {
     nothingBias: 0,
     roomEvents: {
         blessingOccurred: false,
+        stairsIgnored: false,
     },
 };
 
@@ -96,6 +97,7 @@ const ensureRoomEventsState = () => {
 const resetRoomEvents = () => {
     ensureRoomEventsState();
     dungeon.roomEvents.blessingOccurred = false;
+    dungeon.roomEvents.stairsIgnored = false;
 };
 
 const ensureRunStatisticsShape = () => {
@@ -340,7 +342,7 @@ const dungeonEvent = () => {
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
         }
-        if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 ) {
+        if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && !dungeon.roomEvents.stairsIgnored) {
         	eventTypes.push("stairs");        	
         	eventTypes.push("stairs");
         }
@@ -469,6 +471,7 @@ const dungeonEvent = () => {
                     currentEvent = null;
                 }
                 document.querySelector("#choice2").onclick = function () {
+                    dungeon.roomEvents.stairsIgnored = true;
                     ignoreEvent();
                 };
                 autoDecline();
