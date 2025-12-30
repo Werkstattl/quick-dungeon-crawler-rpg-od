@@ -115,7 +115,7 @@ const rerollEquipmentStats = (equipment) => {
     const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
     const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
     const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
-    const bootStats = ["dodge", "dodge", "luck", "fasterRun", "fasterRun", "atkSpd", "critRate"];
+    const bootStats = ["dodge", "fasterRun", "hp", "def", "hp", "def"];
     const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
