@@ -189,10 +189,10 @@ const rerollEquipmentStats = (equipment) => {
             }
             equipmentValue += statValue * 33.33;
         } else if (statType === "fasterRun") {
-            const fasterRunScaling = (2 * randomizeDecimal(0.5, 1.5)) + ((3 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+            const fasterRunScaling = (1 * randomizeDecimal(0.5, 1.5)) + ((2.5 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
             statValue = randomizeDecimal(fasterRunScaling * 0.5, fasterRunScaling);
-            if (statValue > 25) {
-                statValue = 25 * randomizeDecimal(0.5, 1);
+            if (statValue > 18) {
+                statValue = 18 * randomizeDecimal(0.5, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 15;
