@@ -39,6 +39,9 @@
   "c-dmg": "暴击伤害：",
   "dodge": "闪避：",
   "luck": "幸运：",
+  "stat-display": {
+    "faster-run": "奔跑速度"
+  },
   "companion": "同伴",
   "none": "无",
   "summon": "召唤",
