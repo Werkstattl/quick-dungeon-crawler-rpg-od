@@ -37,7 +37,7 @@ const DUNGEON_BACKLOG_LIMIT = 40;
 let currentEvent = null;
 
 const BASE_DUNGEON_EVENT_INTERVAL_MS = 1000;
-const MIN_DUNGEON_EVENT_INTERVAL_MS = 300;
+const MIN_DUNGEON_EVENT_INTERVAL_MS = 100;
 const DUNGEON_TIMER_TICK_MS = 100;
 let lastDungeonEventTimestamp = Date.now();
 
@@ -211,7 +211,7 @@ const getFasterRunBonus = () => {
 
 const getDungeonEventInterval = () => {
     const fasterRun = Math.max(0, getFasterRunBonus());
-    const reduction = Math.min(fasterRun / 100, 0.5);
+    const reduction = Math.min(fasterRun / 100, 0.9);
     const adjusted = BASE_DUNGEON_EVENT_INTERVAL_MS * (1 - reduction);
     return Math.max(MIN_DUNGEON_EVENT_INTERVAL_MS, adjusted);
 };
