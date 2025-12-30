@@ -36,6 +36,11 @@ const DUNGEON_BACKLOG_LIMIT = 40;
 // Holds the type of the currently active event
 let currentEvent = null;
 
+const BASE_DUNGEON_EVENT_INTERVAL_MS = 1000;
+const MIN_DUNGEON_EVENT_INTERVAL_MS = 300;
+const DUNGEON_TIMER_TICK_MS = 100;
+let lastDungeonEventTimestamp = Date.now();
+
 let dungeon = {
     rating: 500,
     grade: "E",
@@ -197,6 +202,32 @@ if (typeof window !== 'undefined') {
     window.ensureRunStatisticsShape = ensureRunStatisticsShape;
 }
 
+const getFasterRunBonus = () => {
+    if (player && player.stats && Number.isFinite(player.stats.fasterRun)) {
+        return player.stats.fasterRun;
+    }
+    return 0;
+};
+
+const getDungeonEventInterval = () => {
+    const fasterRun = Math.max(0, getFasterRunBonus());
+    const reduction = Math.min(fasterRun / 100, 0.5);
+    const adjusted = BASE_DUNGEON_EVENT_INTERVAL_MS * (1 - reduction);
+    return Math.max(MIN_DUNGEON_EVENT_INTERVAL_MS, adjusted);
+};
+
+const dungeonEventTick = () => {
+    if (!dungeon.status.exploring || dungeon.status.event) {
+        return;
+    }
+    const now = Date.now();
+    if (now - lastDungeonEventTimestamp < getDungeonEventInterval()) {
+        return;
+    }
+    lastDungeonEventTimestamp = now;
+    dungeonEvent();
+};
+
 // ===== Dungeon Setup =====
 // Enables start and pause on button click
 dungeonActivity.addEventListener('click', function () {
@@ -263,7 +294,8 @@ const initialDungeonLoad = () => {
     updateExploreButtonAttention();
     dungeon.initialized = true;
     dungeonTime.innerHTML = "00:00:00";
-    dungeonTimer = setInterval(dungeonEvent, 1000);
+    lastDungeonEventTimestamp = Date.now();
+    dungeonTimer = setInterval(dungeonEventTick, DUNGEON_TIMER_TICK_MS);
     playTimer = setInterval(dungeonCounter, 1000);
 }
 

@@ -1,7 +1,7 @@
 let savedPlayer = localStorage.getItem("playerData");
 let player = savedPlayer ? JSON.parse(savedPlayer) : null;
 
-// Ensure newly added dodge stats exist on old saves
+// Ensure newly added stats exist on old saves
 if (player) {
     const clampCurseLevel = (value) => {
         let level = Number(value);
@@ -26,28 +26,22 @@ if (player) {
     if (!Array.isArray(player.preferences.equipBestPriorities)) {
         player.preferences.equipBestPriorities = [];
     }
-    if (player.baseStats && player.baseStats.dodge === undefined) {
-        player.baseStats.dodge = 0;
-    }
-    if (player.stats && player.stats.dodge === undefined) {
-        player.stats.dodge = 0;
-    }
-    // Backfill Luck on old saves
-    if (player.stats && player.stats.luck === undefined) {
-        player.stats.luck = 0;
-    }
-    if (player.equippedStats && player.equippedStats.dodge === undefined) {
-        player.equippedStats.dodge = 0;
-    }
-    if (player.equippedStats && player.equippedStats.luck === undefined) {
-        player.equippedStats.luck = 0;
-    }
-    if (player.bonusStats && player.bonusStats.dodge === undefined) {
-        player.bonusStats.dodge = 0;
-    }
-    if (player.bonusStats && player.bonusStats.luck === undefined) {
-        player.bonusStats.luck = 0;
-    }
+    const ensureStat = (collection, key) => {
+        if (collection && collection[key] === undefined) {
+            collection[key] = 0;
+        }
+    };
+    ensureStat(player.baseStats, 'dodge');
+    ensureStat(player.baseStats, 'fasterRun');
+    ensureStat(player.stats, 'dodge');
+    ensureStat(player.stats, 'luck');
+    ensureStat(player.stats, 'fasterRun');
+    ensureStat(player.equippedStats, 'dodge');
+    ensureStat(player.equippedStats, 'luck');
+    ensureStat(player.equippedStats, 'fasterRun');
+    ensureStat(player.bonusStats, 'dodge');
+    ensureStat(player.bonusStats, 'luck');
+    ensureStat(player.bonusStats, 'fasterRun');
     if (player.maxUnlockedCurseLevel === undefined) {
         player.maxUnlockedCurseLevel = 1;
     }

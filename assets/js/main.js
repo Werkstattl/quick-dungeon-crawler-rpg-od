@@ -95,7 +95,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         critRate: null,
                         critDmg: null,
                         dodge: null,
-                        luck: 0
+                        luck: 0,
+                        fasterRun: 0
                     },
                     baseStats: {
                         hp: 500,
@@ -106,7 +107,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         vamp: 0,
                         critRate: 0,
                         critDmg: 50,
-                        dodge: 0
+                        dodge: 0,
+                        fasterRun: 0
                     },
                     equippedStats: {
                         hp: 0,
@@ -118,6 +120,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                         critRate: 0,
                         critDmg: 0,
                         dodge: 0,
+                        fasterRun: 0,
                         luck: 0,
                         hpPct: 0,
                         atkPct: 0,
@@ -133,7 +136,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         critRate: 0,
                         critDmg: 0,
                         dodge: 0,
-                        luck: 0
+                        luck: 0,
+                        fasterRun: 0
                     },
                     exp: {
                         expCurr: 0,
@@ -188,6 +192,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                             critRate: 0,
                             critDmg: 0,
                             dodge: 0,
+                            fasterRun: 0,
                             luck: 0,
                             hpPct: 0,
                             atkPct: 0,
@@ -1015,6 +1020,7 @@ const calculateStats = () => {
     let playerCRateBase = player.baseStats.critRate;
     let playerCDmgBase = player.baseStats.critDmg;
     let playerDodgeBase = player.baseStats.dodge;
+    let playerFasterRunBase = player.baseStats.fasterRun || 0;
 
     // Initialize floor buffs if they don't exist
     if (dungeon.floorBuffs == undefined) {
@@ -1062,6 +1068,7 @@ const calculateStats = () => {
     }
     player.stats.critDmg = playerCDmgBase + player.bonusStats.critDmg + player.equippedStats.critDmg + (companionBonuses.critDmg || 0);
     player.stats.dodge = playerDodgeBase + player.bonusStats.dodge + player.equippedStats.dodge + (companionBonuses.dodge || 0);
+    player.stats.fasterRun = playerFasterRunBase + (player.bonusStats.fasterRun || 0) + (player.equippedStats.fasterRun || 0);
     // Luck from bonus (level-ups), equipment, and companion bonds
     player.stats.luck = (player.bonusStats.luck || 0) + (player.equippedStats.luck || 0) + (companionBonuses.luck || 0);
     if (player.stats.luck > 140) {
@@ -1095,6 +1102,7 @@ const progressReset = (fromDeath = false) => {
             critRate: 0,
             critDmg: 0,
             dodge: 0,
+            fasterRun: 0,
             luck: 0,
             hpPct: 0,
             atkPct: 0,
@@ -1123,7 +1131,8 @@ const progressReset = (fromDeath = false) => {
         critRate: 0,
         critDmg: 0,
         dodge: 0,
-        luck: 0
+        luck: 0,
+        fasterRun: 0
     };
     player.inCombat = false;
     if (typeof resetActiveCompanionBonuses === 'function') {
@@ -1150,6 +1159,9 @@ const progressReset = (fromDeath = false) => {
         paused: true,
         event: false,
     };
+    if (typeof lastDungeonEventTimestamp !== 'undefined') {
+        lastDungeonEventTimestamp = Date.now();
+    }
     let storedCurseLevel = 1;
     if (player && typeof player.selectedCurseLevel === "number" && Number.isFinite(player.selectedCurseLevel)) {
         storedCurseLevel = Math.round(player.selectedCurseLevel);

@@ -115,6 +115,7 @@ const rerollEquipmentStats = (equipment) => {
     const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
     const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
     const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
+    const bootStats = ["dodge", "dodge", "luck", "fasterRun", "fasterRun", "atkSpd", "critRate"];
     const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
     let statTypes;
     if (equipment.attribute == "Damage") {
@@ -131,7 +132,7 @@ const rerollEquipmentStats = (equipment) => {
         if (equipment.type == "Mask" || equipment.category == "Mask") {
             statTypes = evasiveStats;
         } else if (equipment.type == "Boots" || equipment.category == "Boots") {
-            statTypes = evasiveStats;
+            statTypes = bootStats;
         } else {
             statTypes = defenseStats;
         }
@@ -187,6 +188,14 @@ const rerollEquipmentStats = (equipment) => {
                 loopCount++;
             }
             equipmentValue += statValue * 33.33;
+        } else if (statType === "fasterRun") {
+            const fasterRunScaling = (3 * randomizeDecimal(0.5, 1.5)) + ((3 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
+            statValue = randomizeDecimal(fasterRunScaling * 0.5, fasterRunScaling);
+            if (statValue > 25) {
+                statValue = 25 * randomizeDecimal(0.5, 1);
+                loopCount++;
+            }
+            equipmentValue += statValue * 15;
         } else if (statType === "luck") {
             statValue = randomizeDecimal(crVampScaling * 0.2, crVampScaling * 0.4);
             if (statValue > 8) {
@@ -709,7 +718,8 @@ const applyEquipmentStats = () => {
         critRate: 0,
         critDmg: 0,
         dodge: 0,
-        luck: 0
+        luck: 0,
+        fasterRun: 0
     };
 
     for (let i = 0; i < player.equipped.length; i++) {
@@ -734,7 +744,7 @@ const unequipAll = () => {
     playerLoadStats();
 };
 
-const EQUIP_BEST_STATS = ['atk', 'critRate', 'critDmg', 'atkSpd', 'hp', 'def', 'vamp', 'dodge', 'luck'];
+const EQUIP_BEST_STATS = ['atk', 'critRate', 'critDmg', 'atkSpd', 'hp', 'def', 'vamp', 'dodge', 'luck', 'fasterRun'];
 const EQUIP_BEST_LABEL_KEYS = {
     atk: 'stat-display.attack',
     critRate: 'stat-display.crit-rate',
@@ -744,7 +754,8 @@ const EQUIP_BEST_LABEL_KEYS = {
     def: 'stat-display.defense',
     vamp: 'stat-display.vampirism',
     dodge: 'stat-display.dodge',
-    luck: 'stat-display.luck'
+    luck: 'stat-display.luck',
+    fasterRun: 'stat-display.faster-run'
 };
 const EQUIP_BEST_LABEL_FALLBACKS = {
     atk: 'Attack',
@@ -755,7 +766,8 @@ const EQUIP_BEST_LABEL_FALLBACKS = {
     def: 'Defense',
     vamp: 'Vampirism',
     dodge: 'Dodge',
-    luck: 'Luck'
+    luck: 'Luck',
+    fasterRun: 'Faster Run'
 };
 
 const translateEquipText = (key, fallback) => {
@@ -768,8 +780,8 @@ const translateEquipText = (key, fallback) => {
     return fallback;
 };
 
-const EQUIPMENT_PERCENT_STATS = new Set(['critRate', 'critDmg', 'atkSpd', 'vamp', 'dodge', 'luck']);
-const EQUIPMENT_STAT_DISPLAY_ORDER = ['atk', 'def', 'hp', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'dodge', 'luck'];
+const EQUIPMENT_PERCENT_STATS = new Set(['critRate', 'critDmg', 'atkSpd', 'vamp', 'dodge', 'luck', 'fasterRun']);
+const EQUIPMENT_STAT_DISPLAY_ORDER = ['atk', 'def', 'hp', 'atkSpd', 'fasterRun', 'critRate', 'critDmg', 'vamp', 'dodge', 'luck'];
 const EQUIPMENT_TRAILING_ZERO_RX = /\.0+$|(\.[0-9]*[1-9])0+$/;
 
 const getEquipmentStatTotals = (item) => {
@@ -791,7 +803,12 @@ const getEquipmentStatTotals = (item) => {
     return totals;
 };
 
-const legacyEquipmentStatLabel = (stat) => stat.replace(/([A-Z])/g, '.$1').replace(/crit/gi, 'c').toUpperCase();
+const legacyEquipmentStatLabel = (stat) => {
+    if (stat === 'fasterRun') {
+        return 'Faster Run';
+    }
+    return stat.replace(/([A-Z])/g, '.$1').replace(/crit/gi, 'c').toUpperCase();
+};
 
 const formatEquipmentStatLabel = (stat) => {
     const key = EQUIP_BEST_LABEL_KEYS[stat];
@@ -1248,7 +1265,8 @@ const EQUIPMENT_STAT_ABBREVIATION_KEYS = {
     critDmg: 'c-dmg',
     vamp: 'vamp',
     dodge: 'dodge',
-    luck: 'luck'
+    luck: 'luck',
+    fasterRun: 'faster-run'
 };
 
 const getEquipmentStatAbbreviation = (statKey) => {
