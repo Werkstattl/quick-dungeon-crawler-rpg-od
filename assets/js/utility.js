@@ -96,9 +96,9 @@ const ratingSystem = {
         applyTranslations(defaultModal);
 
         document.getElementById('rate-btn').addEventListener('click', () => {
-            this.openRating();
             this.config.hasRated = true;
             this.saveConfig();
+            this.openRating();
             grantLevelUpReward();
             closeDefaultModal();
         });

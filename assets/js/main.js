@@ -360,8 +360,8 @@ window.addEventListener("DOMContentLoaded", async function () {
     });
     applyFontSize();
     setVolume();
-    await loadBestiary();
     ratingSystem.init();
+    loadBestiary();
 });
 
 function openMenu(isTitle = false) {
