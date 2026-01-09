@@ -205,7 +205,7 @@ class Companion {
     }
 
     getExperienceRequired() {
-        const growthRate = 1.02;
+        const growthRate = 1.015;
         return Math.floor(100 * this.level * Math.pow(growthRate, Math.max(0, this.level - 1)));
     }
 
