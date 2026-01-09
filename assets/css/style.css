@@ -1240,6 +1240,24 @@ header button i {
     gap: 0.35rem;
 }
 
+.dungeon-loot-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.dungeon-sell-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+}
+
+.dungeon-sell-button i {
+    margin: 0;
+}
+
 /* Box Header */
 .box-head {
     display: flex;

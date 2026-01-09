@@ -921,6 +921,8 @@ const updateDungeonLog = (choices) => {
     } else {
         dungeonLog.scrollTop = dungeonLog.scrollHeight;
     }
+
+    bindDungeonSellButtons();
 }
 
 // Add a log to the dungeon backlog
@@ -931,6 +933,92 @@ const addDungeonLog = (message, choices) => {
     }
     updateDungeonLog(choices);
 }
+
+const bindDungeonSellButtons = () => {
+    const dungeonLog = document.querySelector('#dungeonLog');
+    if (!dungeonLog) {
+        return;
+    }
+    const buttons = dungeonLog.querySelectorAll('.dungeon-sell-button');
+    buttons.forEach((button) => {
+        if (button.dataset.bound === 'true') {
+            return;
+        }
+        button.dataset.bound = 'true';
+        button.onclick = () => sellDungeonLoot(button);
+    });
+};
+
+const markDungeonLootSold = (lootId) => {
+    if (!lootId || !Array.isArray(dungeon.backlog)) {
+        return;
+    }
+    const marker = `data-loot-id="${lootId}"`;
+    for (let i = dungeon.backlog.length - 1; i >= 0; i--) {
+        const entry = dungeon.backlog[i];
+        if (typeof entry === 'string' && entry.includes(marker) && !entry.includes(`${marker} disabled`)) {
+            dungeon.backlog[i] = entry.replace(marker, `${marker} disabled`);
+            return;
+        }
+    }
+};
+
+const sellDungeonLoot = (button) => {
+    if (!button || button.disabled) {
+        return;
+    }
+    const { placement, index, serialized, value, lootId } = button.dataset;
+    const serializedItem = serialized ? decodeURIComponent(serialized) : '';
+    const goldValue = Number(value);
+    let removed = false;
+
+    if (placement === 'inventory' && player && player.inventory && Array.isArray(player.inventory.equipment)) {
+        const targetIndex = Number(index);
+        if (Number.isInteger(targetIndex) && player.inventory.equipment[targetIndex] === serializedItem) {
+            player.inventory.equipment.splice(targetIndex, 1);
+            removed = true;
+        } else {
+            const fallbackIndex = player.inventory.equipment.lastIndexOf(serializedItem);
+            if (fallbackIndex >= 0) {
+                player.inventory.equipment.splice(fallbackIndex, 1);
+                removed = true;
+            }
+        }
+    } else if (placement === 'equipped' && player && Array.isArray(player.equipped)) {
+        const targetIndex = Number(index);
+        if (Number.isInteger(targetIndex)) {
+            const equippedItem = player.equipped[targetIndex];
+            if (equippedItem && JSON.stringify(equippedItem) === serializedItem) {
+                player.equipped.splice(targetIndex, 1);
+                removed = true;
+            }
+        }
+        if (!removed) {
+            const fallbackIndex = player.equipped.findIndex((item) => JSON.stringify(item) === serializedItem);
+            if (fallbackIndex >= 0) {
+                player.equipped.splice(fallbackIndex, 1);
+                removed = true;
+            }
+        }
+    }
+
+    if (!removed) {
+        console.warn('Unable to locate dungeon loot for sale.');
+        return;
+    }
+
+    const payout = Number.isFinite(goldValue) ? goldValue : 0;
+    player.gold += payout;
+    if (typeof recordRunGoldEarned === 'function') {
+        recordRunGoldEarned(payout);
+    }
+    sfxSell.play();
+    markDungeonLootSold(lootId);
+//    const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
+//    addDungeonLog(`<span class="combat-sell-log"><i class="fas fa-coins" style="color: #FFD700;"></i>${sellLabel}: +${nFormatter(payout)}</span>`);
+    playerLoadStats();
+    saveData();
+};
 
 // Clear the dungeon log without disrupting active choices
 const clearDungeonLog = () => {

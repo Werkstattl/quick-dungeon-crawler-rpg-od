@@ -1314,7 +1314,12 @@ const createEquipmentPrint = (condition) => {
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {
         const msg = typeof t === 'function' ? t('you-got-item', { item: itemLabel }) : `You got ${itemLabel}.`;
-        addDungeonLog(`${msg}<br>${panel}`);
+        const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
+        const goldValue = nFormatter(Math.max(0, item.value));
+        const lootId = `dungeon-loot-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+        const sellButton = `<button type="button" class="dungeon-sell-button" data-loot-id="${lootId}" data-placement="${placement}" data-index="${placementIndex}" data-serialized="${encodeURIComponent(serializedItem)}" data-value="${item.value}" aria-label="${sellLabel}"><span data-i18n="sell">${sellLabel}</span><i class="fas fa-coins" style="color: #FFD700;"></i>${goldValue}</button>`;
+        const headerRow = `<span class="dungeon-loot-row"><span>${msg}</span>${sellButton}</span>`;
+        addDungeonLog(`${headerRow}<br>${panel}`);
         checkInventoryLimit(true);
     }
     return {
