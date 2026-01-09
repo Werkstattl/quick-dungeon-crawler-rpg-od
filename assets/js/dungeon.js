@@ -954,10 +954,15 @@ const markDungeonLootSold = (lootId) => {
         return;
     }
     const marker = `data-loot-id="${lootId}"`;
+    const soldClass = 'dungeon-sell-button--used';
     for (let i = dungeon.backlog.length - 1; i >= 0; i--) {
         const entry = dungeon.backlog[i];
         if (typeof entry === 'string' && entry.includes(marker) && !entry.includes(`${marker} disabled`)) {
-            dungeon.backlog[i] = entry.replace(marker, `${marker} disabled`);
+            let updated = entry.replace(marker, `${marker} disabled`);
+            if (updated.includes('class="dungeon-sell-button"') && !updated.includes(soldClass)) {
+                updated = updated.replace('class="dungeon-sell-button"', `class="dungeon-sell-button ${soldClass}"`);
+            }
+            dungeon.backlog[i] = updated;
             return;
         }
     }
@@ -1014,6 +1019,8 @@ const sellDungeonLoot = (button) => {
     }
     sfxSell.play();
     markDungeonLootSold(lootId);
+    button.disabled = true;
+    button.classList.add('dungeon-sell-button--used');
 //    const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
 //    addDungeonLog(`<span class="combat-sell-log"><i class="fas fa-coins" style="color: #FFD700;"></i>${sellLabel}: +${nFormatter(payout)}</span>`);
     playerLoadStats();
