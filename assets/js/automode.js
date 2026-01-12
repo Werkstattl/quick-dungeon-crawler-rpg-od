@@ -24,6 +24,7 @@ if (localStorage.getItem("autoBossDoors") === "false") {
 }
 let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
 if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
+let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";
 let autoModeUnlocked = autoModeBtnVisible;
 
 if ( !autoModeUnlocked ) {

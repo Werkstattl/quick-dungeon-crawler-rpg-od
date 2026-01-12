@@ -1280,6 +1280,71 @@ const getEquipmentStatAbbreviation = (statKey) => {
     return legacyEquipmentStatLabel(statKey);
 };
 
+const AUTO_SELL_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
+
+const shouldAutoSellEquipment = (equipment) => {
+    if (typeof autoMode === 'undefined' || typeof autoSellRarity === 'undefined') {
+        return false;
+    }
+    if (!autoMode || !autoSellRarity || autoSellRarity === 'none') {
+        return false;
+    }
+    const thresholdIndex = AUTO_SELL_RARITY_ORDER.indexOf(autoSellRarity);
+    const itemIndex = AUTO_SELL_RARITY_ORDER.indexOf(equipment.rarity);
+    if (thresholdIndex <= 0 || itemIndex < 0) {
+        return false;
+    }
+    return itemIndex < thresholdIndex;
+};
+
+const autoSellEquipmentDrop = (equipment, placement, placementIndex, serializedItem) => {
+    let removed = false;
+    if (placement === 'inventory' && player && player.inventory && Array.isArray(player.inventory.equipment)) {
+        const targetIndex = Number.isInteger(placementIndex) ? placementIndex : -1;
+        if (targetIndex >= 0 && player.inventory.equipment[targetIndex] === serializedItem) {
+            player.inventory.equipment.splice(targetIndex, 1);
+            removed = true;
+        } else {
+            const fallbackIndex = player.inventory.equipment.lastIndexOf(serializedItem);
+            if (fallbackIndex >= 0) {
+                player.inventory.equipment.splice(fallbackIndex, 1);
+                removed = true;
+            }
+        }
+    } else if (placement === 'equipped' && player && Array.isArray(player.equipped)) {
+        const targetIndex = Number.isInteger(placementIndex) ? placementIndex : -1;
+        if (targetIndex >= 0 && player.equipped[targetIndex] === equipment) {
+            player.equipped.splice(targetIndex, 1);
+            removed = true;
+        } else {
+            const fallbackIndex = player.equipped.indexOf(equipment);
+            if (fallbackIndex >= 0) {
+                player.equipped.splice(fallbackIndex, 1);
+                removed = true;
+            } else {
+                const serializedFallback = player.equipped.findIndex((item) => JSON.stringify(item) === serializedItem);
+                if (serializedFallback >= 0) {
+                    player.equipped.splice(serializedFallback, 1);
+                    removed = true;
+                }
+            }
+        }
+    }
+
+    if (!removed) {
+        return { sold: false, payout: 0 };
+    }
+
+    const payout = Number.isFinite(equipment.value) ? equipment.value : 0;
+    player.gold += payout;
+    if (typeof recordRunGoldEarned === 'function') {
+        recordRunGoldEarned(payout);
+    }
+    saveData();
+    playerLoadStats();
+    return { sold: true, payout };
+};
+
 const createEquipmentPrint = (condition) => {
     let item = createEquipment(false);
     const willAutoEquip = Array.isArray(player.equipped) ? player.equipped.length < 6 : false;
@@ -1294,6 +1359,7 @@ const createEquipmentPrint = (condition) => {
     if (typeof recordRunLootDrop === 'function') {
         recordRunLootDrop(item.rarity);
     }
+    const itemLabel = `<span class="${item.rarity}">${equipmentLabel(item.rarity, item.category)}</span>`;
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
                 <h4 class="${item.rarity}"><b>${item.icon}${equipmentLabel(item.rarity, item.category)}</b></h4>
@@ -1307,7 +1373,27 @@ const createEquipmentPrint = (condition) => {
     }).join('')}
             </ul>
         </div>`;
-    const itemLabel = `<span class="${item.rarity}">${equipmentLabel(item.rarity, item.category)}</span>`;
+    const autoSellResult = shouldAutoSellEquipment(item)
+        ? autoSellEquipmentDrop(item, placement, placementIndex, serializedItem)
+        : { sold: false, payout: 0 };
+    if (autoSellResult.sold) {
+        const goldValue = nFormatter(Math.max(0, autoSellResult.payout));
+        const autoSellMessage = typeof t === 'function'
+            ? t('auto-sold-item', { item: itemLabel, gold: goldValue })
+            : `Auto-sold ${itemLabel} for ${goldValue} gold.`;
+        if (condition == "combat") {
+            addCombatLog(`${autoSellMessage}<br>${panel}`);
+        } else if (condition == "dungeon") {
+            addDungeonLog(`${autoSellMessage}<br>${panel}`);
+        }
+        return {
+            item,
+            placement,
+            index: placementIndex,
+            serialized: serializedItem,
+            autoSold: true
+        };
+    }
     if (condition == "combat") {
         const msg = typeof t === 'function' ? t('enemy-dropped-item', { enemy: enemy.name, item: itemLabel }) : `${enemy.name} dropped ${itemLabel}.`;
         addCombatLog(`${msg}<br>${panel}`);

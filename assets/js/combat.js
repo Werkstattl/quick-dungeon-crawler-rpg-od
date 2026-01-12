@@ -672,12 +672,16 @@ const hpValidation = () => {
         if (enemy.rewards.drop) {
             const lootDetails = createEquipmentPrint("combat");
             if (lootDetails && lootDetails.item) {
-                latestCombatLoot = {
-                    item: lootDetails.item,
-                    placement: lootDetails.placement,
-                    index: lootDetails.index,
-                    serialized: lootDetails.serialized
-                };
+                if (!lootDetails.autoSold) {
+                    latestCombatLoot = {
+                        item: lootDetails.item,
+                        placement: lootDetails.placement,
+                        index: lootDetails.index,
+                        serialized: lootDetails.serialized
+                    };
+                } else {
+                    latestCombatLoot = null;
+                }
                 updateCombatLog();
             }
         }

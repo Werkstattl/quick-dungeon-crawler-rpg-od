@@ -710,7 +710,15 @@ function openMenu(isTitle = false) {
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
-        <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
+                <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
+                <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">Auto-sell below</span> <select id="auto-sell-rarity-select">
+                    <option value="none" ${autoSellRarity === 'none' ? 'selected' : ''} data-i18n="auto-sell-off">Off</option>
+                    <option value="Uncommon" ${autoSellRarity === 'Uncommon' ? 'selected' : ''} data-i18n="uncommon">Uncommon</option>
+                    <option value="Rare" ${autoSellRarity === 'Rare' ? 'selected' : ''} data-i18n="rare">Rare</option>
+                    <option value="Epic" ${autoSellRarity === 'Epic' ? 'selected' : ''} data-i18n="epic">Epic</option>
+                    <option value="Legendary" ${autoSellRarity === 'Legendary' ? 'selected' : ''} data-i18n="legendary">Legendary</option>
+                    <option value="Heirloom" ${autoSellRarity === 'Heirloom' ? 'selected' : ''} data-i18n="heirloom">Heirloom</option>
+                </select></label>
                 <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
                     <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
@@ -732,6 +740,7 @@ function openMenu(isTitle = false) {
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
+        let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
@@ -774,6 +783,7 @@ function openMenu(isTitle = false) {
             autoHeal = autoHealToggle.checked;
             autoSpecialAbility = autoSpecialToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
+            autoSellRarity = autoSellRaritySelect.value;
             autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
@@ -784,6 +794,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoHeal", autoHeal);
             localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
             localStorage.setItem("autoBossDoors", autoBossDoors);
+            localStorage.setItem("autoSellRarity", autoSellRarity);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
