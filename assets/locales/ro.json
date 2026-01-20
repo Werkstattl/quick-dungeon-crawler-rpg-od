@@ -120,6 +120,7 @@
   "auto-special-ability": "Abilitate specială automată",
   "boss-doors": "Uși de boss",
   "auto-sell-rarity": "Vinde automat sub",
+  "auto-sell-level": "Vinde automat sub nivelul",
   "auto-sell-off": "Dezactivat",
   "ignore-doors": "Uși de ignorat per cameră",
   "auto-sold-item": "Vândut automat {item} pentru {gold} aur.",

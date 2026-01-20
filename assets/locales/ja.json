@@ -120,6 +120,7 @@
   "auto-special-ability": "必殺技",
   "boss-doors": "ボスの扉",
   "auto-sell-rarity": "自動売却（以下）",
+  "auto-sell-level": "自動売却（レベル以下）",
   "auto-sell-off": "オフ",
   "ignore-doors": "部屋ごとに無視する扉の数",
   "auto-sold-item": "{item}を{gold}ゴールドで自動売却しました。",

@@ -120,6 +120,7 @@
   "auto-special-ability": "Особая способность",
   "boss-doors": "Двери босса",
   "auto-sell-rarity": "Автопродажа ниже",
+  "auto-sell-level": "Автопродажа ниже уровня",
   "auto-sell-off": "Выкл.",
   "ignore-doors": "Игнорируемые двери за комнату",
   "auto-sold-item": "Автоматически продано {item} за {gold} золота.",

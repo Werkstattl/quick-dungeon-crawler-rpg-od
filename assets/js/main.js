@@ -719,6 +719,7 @@ function openMenu(isTitle = false) {
                     <option value="Legendary" ${autoSellRarity === 'Legendary' ? 'selected' : ''} data-i18n="legendary">Legendary</option>
                     <option value="Heirloom" ${autoSellRarity === 'Heirloom' ? 'selected' : ''} data-i18n="heirloom">Heirloom</option>
                 </select></label>
+                <label id="auto-sell-level-label"><span data-i18n="auto-sell-level">Auto-sell below level</span> <input id="auto-sell-level-input" type="number" min="1" step="1" value="${autoSellBelowLevel > 0 ? autoSellBelowLevel : ''}"></label>
                 <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
                     <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
@@ -741,6 +742,7 @@ function openMenu(isTitle = false) {
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
+        let autoSellLevelInput = document.querySelector('#auto-sell-level-input');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
@@ -784,6 +786,10 @@ function openMenu(isTitle = false) {
             autoSpecialAbility = autoSpecialToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
             autoSellRarity = autoSellRaritySelect.value;
+            autoSellBelowLevel = parseInt(autoSellLevelInput.value, 10);
+            if (Number.isNaN(autoSellBelowLevel) || autoSellBelowLevel < 0) {
+                autoSellBelowLevel = 0;
+            }
             autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
@@ -795,6 +801,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
             localStorage.setItem("autoBossDoors", autoBossDoors);
             localStorage.setItem("autoSellRarity", autoSellRarity);
+            localStorage.setItem("autoSellBelowLevel", autoSellBelowLevel);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();

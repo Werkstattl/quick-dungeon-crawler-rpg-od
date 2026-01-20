@@ -120,6 +120,7 @@
   "auto-special-ability": "Авто особлива здібність",
   "boss-doors": "Двері боса",
   "auto-sell-rarity": "Автопродаж нижче",
+  "auto-sell-level": "Автопродаж нижче рівня",
   "auto-sell-off": "Вимк.",
   "ignore-doors": "Ігнорувати двері на кімнату",
   "auto-sold-item": "Автоматично продано {item} за {gold} золота.",

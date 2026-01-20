@@ -105,6 +105,7 @@
   "auto-special-ability": "自动施放技能",
   "boss-doors": "首领之门",
   "auto-sell-rarity": "自动出售低于",
+  "auto-sell-level": "自动出售低于等级",
   "auto-sell-off": "关闭",
   "ignore-doors": "每间忽略的房门数量",
   "auto-sold-item": "已自动出售 {item}，获得 {gold} 金币。",

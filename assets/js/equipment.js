@@ -1286,15 +1286,18 @@ const shouldAutoSellEquipment = (equipment) => {
     if (typeof autoMode === 'undefined' || typeof autoSellRarity === 'undefined') {
         return false;
     }
-    if (!autoMode || !autoSellRarity || autoSellRarity === 'none') {
+    if (!autoMode) {
         return false;
     }
     const thresholdIndex = AUTO_SELL_RARITY_ORDER.indexOf(autoSellRarity);
     const itemIndex = AUTO_SELL_RARITY_ORDER.indexOf(equipment.rarity);
-    if (thresholdIndex <= 0 || itemIndex < 0) {
-        return false;
-    }
-    return itemIndex < thresholdIndex;
+    const meetsRarityRule = autoSellRarity && autoSellRarity !== 'none'
+        ? thresholdIndex > 0 && itemIndex >= 0 && itemIndex < thresholdIndex
+        : false;
+    const levelThreshold = typeof autoSellBelowLevel === 'number' ? autoSellBelowLevel : 0;
+    const itemLevel = Number.isFinite(equipment.lvl) ? equipment.lvl : 0;
+    const meetsLevelRule = levelThreshold > 0 && itemLevel > 0 && itemLevel < levelThreshold;
+    return meetsRarityRule || meetsLevelRule;
 };
 
 const autoSellEquipmentDrop = (equipment, placement, placementIndex, serializedItem) => {

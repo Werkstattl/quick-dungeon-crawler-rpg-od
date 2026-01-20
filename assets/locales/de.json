@@ -120,6 +120,7 @@
   "auto-special-ability": "Spezialfähigkeit",
   "boss-doors": "Boss-Türen",
   "auto-sell-rarity": "Auto-Verkauf unter",
+  "auto-sell-level": "Auto-Verkauf unter Stufe",
   "auto-sell-off": "Aus",
   "ignore-doors": "Türen pro Raum ignorieren",
   "auto-sold-item": "Automatisch verkauft: {item} für {gold} Gold.",

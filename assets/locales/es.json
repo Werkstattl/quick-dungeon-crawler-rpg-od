@@ -120,6 +120,7 @@
   "auto-special-ability": "Habilidad especial",
   "boss-doors": "Puertas de jefe",
   "auto-sell-rarity": "Vender automáticamente por debajo de",
+  "auto-sell-level": "Vender automáticamente por debajo del nivel",
   "auto-sell-off": "Desactivado",
   "ignore-doors": "Puertas a ignorar por sala",
   "auto-sold-item": "Venta automática de {item} por {gold} de oro.",
