@@ -711,7 +711,7 @@ function openMenu(isTitle = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
-                <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">Auto-sell below</span> <select id="auto-sell-rarity-select">
+                <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">"Auto-sell below rarity"</span> <select id="auto-sell-rarity-select">
                     <option value="none" ${autoSellRarity === 'none' ? 'selected' : ''} data-i18n="auto-sell-off">Off</option>
                     <option value="Uncommon" ${autoSellRarity === 'Uncommon' ? 'selected' : ''} data-i18n="uncommon">Uncommon</option>
                     <option value="Rare" ${autoSellRarity === 'Rare' ? 'selected' : ''} data-i18n="rare">Rare</option>
