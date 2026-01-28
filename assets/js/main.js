@@ -694,6 +694,13 @@ function openMenu(isTitle = false) {
     // Function to render the auto mode settings modal
     window.renderAutoModeSettingsModal = function () {
         sfxOpen.play();
+        const autoSellLevelOptions = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        const autoSellBelowLevelSelected = Number.isNaN(autoSellBelowLevel)
+            ? 0
+            : Math.max(0, Math.min(90, Math.floor(autoSellBelowLevel / 10) * 10));
+        const autoSellLevelOptionsMarkup = autoSellLevelOptions.map((value) => (
+            `<option value="${value}" ${autoSellBelowLevelSelected === value ? 'selected' : ''}>${value}</option>`
+        )).join('');
 
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
@@ -719,7 +726,7 @@ function openMenu(isTitle = false) {
                     <option value="Legendary" ${autoSellRarity === 'Legendary' ? 'selected' : ''} data-i18n="legendary">Legendary</option>
                     <option value="Heirloom" ${autoSellRarity === 'Heirloom' ? 'selected' : ''} data-i18n="heirloom">Heirloom</option>
                 </select></label>
-                <label id="auto-sell-level-label"><span data-i18n="auto-sell-level">Auto-sell below level</span> <input id="auto-sell-level-input" type="number" min="1" step="1" value="${autoSellBelowLevel > 0 ? autoSellBelowLevel : ''}"></label>
+                <label id="auto-sell-level-label"><span data-i18n="auto-sell-level">Auto-sell below level</span> <select id="auto-sell-level-input">${autoSellLevelOptionsMarkup}</select></label>
                 <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
                     <option value="0" ${autoIgnoreDoors === 0 ? 'selected' : ''}>0</option>
                     <option value="1" ${autoIgnoreDoors === 1 ? 'selected' : ''}>1</option>
@@ -742,7 +749,7 @@ function openMenu(isTitle = false) {
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
-        let autoSellLevelInput = document.querySelector('#auto-sell-level-input');
+        let autoSellLevelSelect = document.querySelector('#auto-sell-level-input');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
@@ -786,7 +793,7 @@ function openMenu(isTitle = false) {
             autoSpecialAbility = autoSpecialToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
             autoSellRarity = autoSellRaritySelect.value;
-            autoSellBelowLevel = parseInt(autoSellLevelInput.value, 10);
+            autoSellBelowLevel = parseInt(autoSellLevelSelect.value, 10);
             if (Number.isNaN(autoSellBelowLevel) || autoSellBelowLevel < 0) {
                 autoSellBelowLevel = 0;
             }
