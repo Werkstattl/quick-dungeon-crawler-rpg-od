@@ -566,6 +566,8 @@ button:focus {
 
 #equipmentInfo .content.equipment-info-content--with-compare {
     max-width: 48rem;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 #equipmentInfo .content .equipment-compare-grid {
