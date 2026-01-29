@@ -363,7 +363,7 @@ const showItemInfo = (item, icon, action, i) => {
     }
     const isLocked = Boolean(item.locked);
     const lockButtonLabel = translateEquipText(isLocked ? 'unlock-item' : 'lock-item', isLocked ? 'Unlock item' : 'Lock item');
-    const lockButtonMarkup = action === 'unequip' ? `<button id="toggle-lock">${lockButtonLabel}</button>` : '';
+    const lockButtonMarkup = `<button id="toggle-lock">${lockButtonLabel}</button>`;
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
     const equippedItems = action === 'equip' && Array.isArray(player.equipped) ? player.equipped.filter(Boolean) : [];
@@ -408,13 +408,16 @@ const showItemInfo = (item, icon, action, i) => {
     }
     const actionLabel = typeof t === 'function' ? t(action) : action;
     const closeLabel = typeof t === 'function' ? t('close') : 'Close';
+    const lockedSellLabel = translateEquipText('item-locked', 'Item is locked');
+    const sellButtonDisabled = isLocked ? ' disabled' : '';
+    const sellButtonTitle = isLocked ? ` title="${lockedSellLabel}"` : '';
     itemInfo.innerHTML = `
             <div class="content equipment-info-content${hasComparisonItems ? ' equipment-info-content--with-compare' : ''}">
                 ${comparisonSection}
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
                     ${lockButtonMarkup}
-                    <button id="sell-equip"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
+                    <button id="sell-equip"${sellButtonDisabled}${sellButtonTitle} aria-disabled="${isLocked ? 'true' : 'false'}"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
                     <button id="close-item-info">${closeLabel}</button>
                 </div>
             </div>`;
@@ -533,7 +536,23 @@ const showItemInfo = (item, icon, action, i) => {
             const updatedLabel = translateEquipText(item.locked ? 'unlock-item' : 'lock-item', item.locked ? 'Unlock item' : 'Lock item');
             toggleLock.textContent = updatedLabel;
             toggleLock.setAttribute('aria-pressed', item.locked ? 'true' : 'false');
-            showEquipment();
+            const sellButton = document.querySelector('#sell-equip');
+            if (sellButton) {
+                const lockedLabel = translateEquipText('item-locked', 'Item is locked');
+                sellButton.disabled = item.locked;
+                sellButton.setAttribute('aria-disabled', item.locked ? 'true' : 'false');
+                if (item.locked) {
+                    sellButton.setAttribute('title', lockedLabel);
+                } else {
+                    sellButton.removeAttribute('title');
+                }
+            }
+            if (action === 'equip') {
+                player.inventory.equipment[i] = JSON.stringify(item);
+                showInventory();
+            } else {
+                showEquipment();
+            }
             saveData();
         };
     }
@@ -541,6 +560,10 @@ const showItemInfo = (item, icon, action, i) => {
     // Sell equipment
     let sell = document.querySelector("#sell-equip");
     sell.onclick = function () {
+        if (item.locked) {
+            sfxDeny.play();
+            return;
+        }
         sfxOpen.play();
         itemInfo.style.display = "none";
         defaultModalElement.style.display = "flex";
@@ -656,8 +679,22 @@ const showInventory = () => {
         // Create an element to display the item's name
         let itemDiv = document.createElement('div');
         let icon = equipmentIcon(item.baseCategory || item.category);
-        itemDiv.className = "items";
-        itemDiv.innerHTML = `<p class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</p>`;
+        const isLocked = Boolean(item.locked);
+        itemDiv.className = isLocked ? "items locked-item" : "items";
+        const itemLabel = document.createElement('p');
+        itemLabel.className = item.rarity;
+        itemLabel.innerHTML = `${icon}${equipmentLabel(item.rarity, item.category)}`;
+        itemDiv.appendChild(itemLabel);
+        if (isLocked) {
+            const lockLabel = translateEquipText('locked', 'Locked');
+            const lockIndicator = document.createElement('span');
+            lockIndicator.className = 'lock-indicator';
+            lockIndicator.innerHTML = '<i class="fas fa-lock"></i>';
+            lockIndicator.setAttribute('aria-hidden', 'true');
+            lockIndicator.setAttribute('title', lockLabel);
+            itemDiv.setAttribute('title', lockLabel);
+            itemDiv.appendChild(lockIndicator);
+        }
         itemDiv.addEventListener('click', function () {
             showItemInfo(item, icon, 'equip', i);
         });
@@ -1284,6 +1321,9 @@ const AUTO_SELL_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary
 
 const shouldAutoSellEquipment = (equipment) => {
     if (typeof autoMode === 'undefined' || typeof autoSellRarity === 'undefined') {
+        return false;
+    }
+    if (equipment && equipment.locked) {
         return false;
     }
     if (!autoMode) {

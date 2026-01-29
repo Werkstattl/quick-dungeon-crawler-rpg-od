@@ -248,6 +248,27 @@ color: black;
     height: 100%;
 }
 
+#playerInventory .items {
+    position: relative;
+}
+
+#playerInventory .items .lock-indicator {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 9999px;
+    padding: 0.1rem 0.25rem;
+    line-height: 1;
+    font-size: 0.65rem;
+    color: #FFD700;
+    pointer-events: none;
+}
+
+#playerInventory .items.locked-item p {
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
+}
+
 #playerEquipment {
     display: flex;
     gap: 0.5rem;
