@@ -50,7 +50,7 @@
                 <button onclick="openInventory()" data-i18n-attr="aria-label:open-inventory" aria-label="Open inventory"><i class="fas fa-bars" style="font-size: calc(1.3rem * var(--font-scale));"></i></button>
             </header>
             <div class="stat-panel">
-                <div class="box">
+                <div class="box" id="dungeon-stats-panel">
                     <h4 data-i18n="stats">Stats</h4>
                     <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
                     <div class="key-stats" aria-label="Core stats">
@@ -168,6 +168,14 @@
         <div class="modal-container" id="defaultModal"></div>
         <div class="modal-container" id="menuModal"></div>
         <div class="modal-container" id="confirmationModal"></div>
+        <div class="modal-container" id="statsModal">
+            <div class="content">
+                <div class="content-head">
+                    <h3 data-i18n="stats">Stats</h3>
+                    <p onclick="closeStatsModal()" aria-label="Close stats"><i class="fa fa-xmark"></i></p>
+                </div>
+            </div>
+        </div>
         <div class="modal-container" id="companionModal">
             <div class="content">
                 <div class="content-head">

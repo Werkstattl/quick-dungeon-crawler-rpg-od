@@ -25,6 +25,18 @@ window.addEventListener("DOMContentLoaded", async function () {
         syncBonusVisibility();
     }
 
+    const dungeonStatsPanel = document.querySelector('#dungeon-stats-panel');
+    if (dungeonStatsPanel) {
+        dungeonStatsPanel.addEventListener('click', (event) => {
+            if (event.target && typeof event.target.closest === 'function' && event.target.closest('details')) {
+                return;
+            }
+            if (typeof openStatsModal === 'function') {
+                openStatsModal();
+            }
+        });
+    }
+
     if (player === null) {
         showCharacterCreation();
     } else {

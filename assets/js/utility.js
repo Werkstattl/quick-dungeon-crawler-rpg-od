@@ -159,6 +159,32 @@ function closeDefaultModal() {
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
 }
 
+function openStatsModal() {
+    const statsModal = document.getElementById('statsModal');
+    if (!statsModal) return;
+    if (typeof sfxConfirm !== 'undefined' && sfxConfirm && typeof sfxConfirm.play === 'function') {
+        sfxConfirm.play();
+    }
+    statsModal.style.display = "flex";
+    const dimDungeon = document.querySelector('#dungeon-main');
+    if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
+        dimDungeon.style.filter = "brightness(50%)";
+    }
+}
+
+function closeStatsModal() {
+    const statsModal = document.getElementById('statsModal');
+    if (!statsModal) return;
+    if (typeof sfxDecline !== 'undefined' && sfxDecline && typeof sfxDecline.play === 'function') {
+        sfxDecline.play();
+    }
+    statsModal.style.display = "none";
+    const dimDungeon = document.querySelector('#dungeon-main');
+    if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
+        dimDungeon.style.filter = "brightness(100%)";
+    }
+}
+
 // give the player exp equal to one level up
 function grantLevelUpReward() {
     const reward = player.exp.expMaxLvl;
