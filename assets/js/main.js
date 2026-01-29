@@ -1098,12 +1098,16 @@ const calculateStats = () => {
     player.stats.hpMax = Math.round((playerHpBase + playerHpBase * (hpBonusPct / 100)) + player.equippedStats.hp);
     player.stats.atk = Math.round(((playerAtkBase + playerAtkBase * (atkBonusPct / 100)) + player.equippedStats.atk) * (1 + (dungeon.floorBuffs.atk / 100)) * (1 + (companionAtkBonusPct / 100)));
     player.stats.def = Math.round(((playerDefBase + playerDefBase * (defBonusPct / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
-    player.stats.atkSpd = (playerAtkSpdBase + playerAtkSpdBase * (atkSpdBonusPct / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
+    const atkSpdValue = (playerAtkSpdBase + playerAtkSpdBase * (atkSpdBonusPct / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
+    player.stats.atkSpdUncapped = atkSpdValue;
+    player.stats.atkSpd = atkSpdValue;
     player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionBonuses.vamp || 0);
     const equipmentCritRate = player.equippedStats.critRate;
     const hasEagleEye = (typeof PASSIVE_EAGLE_EYE !== 'undefined') && ((Array.isArray(player.skills) && player.skills.includes(PASSIVE_EAGLE_EYE)) || player.selectedPassive === PASSIVE_EAGLE_EYE);
     const eagleEyeBonus = hasEagleEye ? equipmentCritRate * 0.25 : 0;
-    player.stats.critRate = playerCRateBase + player.bonusStats.critRate + equipmentCritRate + eagleEyeBonus + (companionBonuses.critRate || 0);
+    const critRateValue = playerCRateBase + player.bonusStats.critRate + equipmentCritRate + eagleEyeBonus + (companionBonuses.critRate || 0);
+    player.stats.critRateUncapped = critRateValue;
+    player.stats.critRate = critRateValue;
     if (player.stats.critRate > 100) {
         player.stats.critRate = 100;
     }
