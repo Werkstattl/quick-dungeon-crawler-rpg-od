@@ -98,6 +98,7 @@
   "auto-mode-unlock": "解锁：自动模式",
   "auto-mode-description": "自动与敌人战斗、拾取战利品并打开门。",
   "auto-mode-show-button": "显示自动按钮",
+  "auto-mode-level-up": "升级时继续运行",
   "active": "激活",
   "blessings": "祝福",
   "heal": "治疗",

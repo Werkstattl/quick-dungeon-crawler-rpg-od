@@ -113,6 +113,7 @@
   "auto-mode-unlock": "Purchase: Auto Mode",
   "auto-mode-description": "Automatically engage enemies, claim loot and open doors.",
   "auto-mode-show-button": "Show Auto Button",
+  "auto-mode-level-up": "Keep running during level-up",
   "active": "Active",
   "blessings": "Blessings",
   "heal": "Heal",

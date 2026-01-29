@@ -16,6 +16,7 @@ let autoSpecialAbility = true;
 if (localStorage.getItem("autoSpecialAbility") === "false") {
     autoSpecialAbility = false;
 }
+let autoContinueLevelUp = localStorage.getItem("autoContinueLevelUp") === "true";
 const autoAttackSetting = localStorage.getItem("autoAttack");
 let autoAttack = autoAttackSetting === "true";
 let autoBossDoors = true

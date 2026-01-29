@@ -729,6 +729,7 @@ function openMenu(isTitle = false) {
                 <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
+                <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoContinueLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Keep running during level-up</span></label>
                 <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
                 <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">"Auto-sell below rarity"</span> <select id="auto-sell-rarity-select">
                     <option value="none" ${autoSellRarity === 'none' ? 'selected' : ''} data-i18n="auto-sell-off">Off</option>
@@ -759,6 +760,7 @@ function openMenu(isTitle = false) {
         let autoBlessToggle = document.querySelector('#auto-bless-toggle');
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
+        let autoLevelUpToggle = document.querySelector('#auto-levelup-toggle');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
         let autoSellLevelSelect = document.querySelector('#auto-sell-level-input');
@@ -803,6 +805,7 @@ function openMenu(isTitle = false) {
             autoBlessings = autoBlessToggle.checked;
             autoHeal = autoHealToggle.checked;
             autoSpecialAbility = autoSpecialToggle.checked;
+            autoContinueLevelUp = autoLevelUpToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
             autoSellRarity = autoSellRaritySelect.value;
             autoSellBelowLevel = parseInt(autoSellLevelSelect.value, 10);
@@ -818,6 +821,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoBlessings", autoBlessings);
             localStorage.setItem("autoHeal", autoHeal);
             localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
+            localStorage.setItem("autoContinueLevelUp", autoContinueLevelUp);
             localStorage.setItem("autoBossDoors", autoBossDoors);
             localStorage.setItem("autoSellRarity", autoSellRarity);
             localStorage.setItem("autoSellBelowLevel", autoSellBelowLevel);

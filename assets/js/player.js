@@ -133,6 +133,7 @@ const checkInventoryLimit = (logMessage = false) => {
 const lvlupSelect = document.querySelector("#lvlupSelect");
 const lvlupPanel = document.querySelector("#lvlupPanel");
 let levelUpDimTarget = null;
+let levelUpPausedForChoice = false;
 
 const playerExpGain = () => {
     player.exp.expCurr += enemy.rewards.exp;
@@ -443,8 +444,17 @@ const lvlupPopup = () => {
     }
 
     if (typeof dungeon !== 'undefined' && dungeon.status) {
-        dungeon.status.exploring = false;
-        dungeon.status.event = true;
+        const shouldPauseForLevelUp = !(typeof autoMode !== 'undefined'
+            && autoMode
+            && typeof autoContinueLevelUp !== 'undefined'
+            && autoContinueLevelUp);
+        if (shouldPauseForLevelUp) {
+            dungeon.status.exploring = false;
+            dungeon.status.event = true;
+            levelUpPausedForChoice = true;
+        } else {
+            levelUpPausedForChoice = false;
+        }
     }
 
     const percentages = {
@@ -579,9 +589,14 @@ const generateLvlStats = (rerolls, percentages) => {
                     }
                     leveled = false;
                     if (typeof dungeon !== 'undefined' && dungeon.status) {
-                        dungeon.status.event = false;
+                        if (levelUpPausedForChoice) {
+                            dungeon.status.event = false;
+                        }
                     }
-                    continueExploring();
+                    if (levelUpPausedForChoice) {
+                        continueExploring();
+                        levelUpPausedForChoice = false;
+                    }
                 }
 
                 playerLoadStats();

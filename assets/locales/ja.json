@@ -113,6 +113,7 @@
   "auto-mode-unlock": "購入: オートモード",
   "auto-mode-description": "自動的に敵に攻撃し、戦利品を獲得し、扉を開きます。",
   "auto-mode-show-button": "オートボタン表示",
+  "auto-mode-level-up": "レベルアップ中も自動で進行",
   "active": "アクティブ",
   "blessings": "祝福",
   "heal": "ヒール",
