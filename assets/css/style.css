@@ -1084,6 +1084,20 @@ header button i {
     margin: 0.1rem 0;
 }
 
+.stat-panel .stat-capped-indicator {
+    font-size: 0.7em;
+    margin-left: 0.2rem;
+    opacity: 0.8;
+    vertical-align: super;
+}
+
+.stat-panel .stat-capped-value {
+    display: block;
+    font-size: 0.7em;
+    margin-left: 0.2rem;
+    opacity: 0.8;
+}
+
 /* Advanced stats collapsible */
 .stat-panel details.advanced-stats {
     margin-top: 0.2rem;

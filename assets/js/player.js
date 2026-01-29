@@ -266,7 +266,10 @@ const playerLoadStats = () => {
     const atkSpdRaw = Number.isFinite(player.stats.atkSpdUncapped) ? player.stats.atkSpdUncapped : player.stats.atkSpd;
     const atkSpdDisplay = player.stats.atkSpd.toFixed(2).replace(rx, "$1");
     const atkSpdRawDisplay = atkSpdRaw.toFixed(2).replace(rx, "$1");
-    playerAtkSpdElement.innerHTML = atkSpdRaw > atkSpdCap ? `${atkSpdDisplay} (${atkSpdRawDisplay})` : atkSpdDisplay;
+    const atkSpdCapped = atkSpdRaw > atkSpdCap;
+    playerAtkSpdElement.innerHTML = atkSpdCapped
+        ? `${atkSpdDisplay}<span class="stat-capped-indicator" aria-hidden="true">▲</span><span class="stat-capped-value">(${atkSpdRawDisplay})</span>`
+        : atkSpdDisplay;
     if (player.stats.atkSpd >= atkSpdCap) {
         playerAtkSpdElement.style.color = '#e30b5c';
     } else {
@@ -276,7 +279,10 @@ const playerLoadStats = () => {
     const critRateRaw = Number.isFinite(player.stats.critRateUncapped) ? player.stats.critRateUncapped : player.stats.critRate;
     const critRateDisplay = (player.stats.critRate).toFixed(2).replace(rx, "$1") + "%";
     const critRateRawDisplay = critRateRaw.toFixed(2).replace(rx, "$1") + "%";
-    playerCrateElement.innerHTML = critRateRaw > 100 ? `${critRateDisplay} (${critRateRawDisplay})` : critRateDisplay;
+    const critRateCapped = critRateRaw > 100;
+    playerCrateElement.innerHTML = critRateCapped
+        ? `${critRateDisplay}<span class="stat-capped-indicator" aria-hidden="true">▲</span><span class="stat-capped-value">(${critRateRawDisplay})</span>`
+        : critRateDisplay;
     if (player.stats.critRate >= 100) {
         playerCrateElement.style.color = '#e30b5c';
     } else {
