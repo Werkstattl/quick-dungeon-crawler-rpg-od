@@ -452,8 +452,8 @@ const lvlupPopup = () => {
     if (typeof dungeon !== 'undefined' && dungeon.status) {
         const shouldPauseForLevelUp = !(typeof autoMode !== 'undefined'
             && autoMode
-            && typeof autoContinueLevelUp !== 'undefined'
-            && autoContinueLevelUp);
+            && typeof autoStopLevelUp !== 'undefined'
+            && !autoStopLevelUp);
         if (shouldPauseForLevelUp) {
             dungeon.status.exploring = false;
             dungeon.status.event = true;
