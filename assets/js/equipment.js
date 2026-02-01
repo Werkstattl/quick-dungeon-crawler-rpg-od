@@ -1250,9 +1250,16 @@ const equipBest = () => {
 const sellAll = (rarity) => {
     if (rarity == "All") {
         if (player.inventory.equipment.length !== 0) {
-            sfxSell.play();
+            let soldAny = false;
             for (let i = 0; i < player.inventory.equipment.length; i++) {
                 const equipment = JSON.parse(player.inventory.equipment[i]);
+                if (equipment.locked) {
+                    continue;
+                }
+                if (!soldAny) {
+                    sfxSell.play();
+                    soldAny = true;
+                }
                 player.gold += equipment.value;
                 if (typeof recordRunGoldEarned === 'function') {
                     recordRunGoldEarned(equipment.value);
@@ -1260,7 +1267,11 @@ const sellAll = (rarity) => {
                 player.inventory.equipment.splice(i, 1);
                 i--;
             }
-            playerLoadStats();
+            if (soldAny) {
+                playerLoadStats();
+            } else {
+                sfxDeny.play();
+            }
         } else {
             sfxDeny.play();
         }
@@ -1268,7 +1279,7 @@ const sellAll = (rarity) => {
         let rarityCheck = false;
         for (let i = 0; i < player.inventory.equipment.length; i++) {
             const equipment = JSON.parse(player.inventory.equipment[i]);
-            if (equipment.rarity === rarity) {
+            if (equipment.rarity === rarity && !equipment.locked) {
                 rarityCheck = true;
                 break;
             }
@@ -1277,7 +1288,7 @@ const sellAll = (rarity) => {
             sfxSell.play();
             for (let i = 0; i < player.inventory.equipment.length; i++) {
                 const equipment = JSON.parse(player.inventory.equipment[i]);
-                if (equipment.rarity === rarity) {
+                if (equipment.rarity === rarity && !equipment.locked) {
                     player.gold += equipment.value;
                     if (typeof recordRunGoldEarned === 'function') {
                         recordRunGoldEarned(equipment.value);
