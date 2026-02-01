@@ -57,6 +57,18 @@
     "dodge": "Esquiva",
     "luck": "Sorte"
   },
+  "stats-modal": {
+    "health": "Pontos de vida. Quando chegam a 0, você é derrotado.",
+    "attack": "Poder de ataque que aumenta o dano causado.",
+    "defense": "Defesa que reduz o dano recebido.",
+    "attack-speed": "Ataques por segundo; valores mais altos fazem você atacar mais rápido.",
+    "vampirism": "Porcentagem do dano devolvido como vida.",
+    "crit-rate": "Chance de causar um acerto crítico.",
+    "crit-dmg": "Dano adicional em acertos críticos.",
+    "dodge": "Chance de esquivar de ataques recebidos.",
+    "luck": "Aumenta a chance de obter equipamentos.",
+    "faster-run-desc": "Bônus de botas que reduz o tempo entre eventos da masmorra."
+  },
   "companion": "Companheiro",
   "none": "Nenhum",
   "summon": "Invocar",

@@ -57,6 +57,18 @@
     "dodge": "Ausweichen",
     "luck": "Glück"
   },
+  "stats-modal": {
+    "health": "Lebenspunkte. Wenn sie 0 erreichen, wirst du besiegt.",
+    "attack": "Angriffskraft, die den verursachten Schaden erhöht.",
+    "defense": "Verteidigung, die erlittenen Schaden verringert.",
+    "attack-speed": "Angriffe pro Sekunde; höhere Werte lassen dich schneller angreifen.",
+    "vampirism": "Prozentsatz des Schadens, der als Gesundheit zurückkehrt.",
+    "crit-rate": "Chance, einen kritischen Treffer zu landen.",
+    "crit-dmg": "Zusatzschaden bei kritischen Treffern.",
+    "dodge": "Chance, eingehenden Angriffen auszuweichen.",
+    "luck": "Erhöht die Chance auf Ausrüstungsdrops.",
+    "faster-run-desc": "Stiefelbonus, der die Zeit zwischen Dungeon-Ereignissen verkürzt."
+  },
   "companion": "Begleiter",
   "none": "Keiner",
   "summon": "Beschwöre",

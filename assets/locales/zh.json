@@ -42,6 +42,18 @@
   "stat-display": {
     "faster-run": "奔跑速度"
   },
+  "stats-modal": {
+    "health": "生命值。降为 0 时会被击败。",
+    "attack": "攻击力，会提高造成的伤害。",
+    "defense": "防御力，降低所受伤害。",
+    "attack-speed": "每秒攻击次数；数值越高攻击越快。",
+    "vampirism": "造成伤害的一部分返还为生命值。",
+    "crit-rate": "触发暴击的概率。",
+    "crit-dmg": "暴击时的额外伤害。",
+    "dodge": "闪避来袭攻击的概率。",
+    "luck": "提高装备掉落几率。",
+    "faster-run-desc": "靴子加成，缩短地下城事件之间的时间。"
+  },
   "companion": "同伴",
   "none": "无",
   "summon": "召唤",

@@ -57,6 +57,18 @@
     "dodge": "Evasión",
     "luck": "Suerte"
   },
+  "stats-modal": {
+    "health": "Puntos de salud. Cuando llega a 0, eres derrotado.",
+    "attack": "Poder de ataque que aumenta el daño infligido.",
+    "defense": "Defensa que reduce el daño recibido.",
+    "attack-speed": "Ataques por segundo; valores más altos hacen que ataques más rápido.",
+    "vampirism": "Porcentaje del daño devuelto como salud.",
+    "crit-rate": "Probabilidad de asestar un golpe crítico.",
+    "crit-dmg": "Daño adicional en los golpes críticos.",
+    "dodge": "Probabilidad de esquivar ataques entrantes.",
+    "luck": "Aumenta la probabilidad de obtener equipo.",
+    "faster-run-desc": "Bonificación de botas que reduce el tiempo entre eventos del calabozo."
+  },
   "companion": "Compañero",
   "none": "Ninguno",
   "summon": "Invocar",

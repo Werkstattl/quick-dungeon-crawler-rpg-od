@@ -57,6 +57,18 @@
     "dodge": "Dodge",
     "luck": "Luck"
   },
+  "stats-modal": {
+    "health": "Health points. When it reaches 0, you are defeated.",
+    "attack": "Attack power that increases damage dealt.",
+    "defense": "Defense that reduces damage taken.",
+    "attack-speed": "Attacks per second; higher values make you attack faster.",
+    "vampirism": "Percent of damage returned as health.",
+    "crit-rate": "Chance to land a critical hit.",
+    "crit-dmg": "Bonus damage dealt on critical hits.",
+    "dodge": "Chance to evade incoming attacks.",
+    "luck": "Increases equipment drop chance.",
+    "faster-run-desc": "Boot bonus that reduces time between dungeon events."
+  },
   "companion": "Companion",
   "none": "None",
   "summon": "Summon",

@@ -57,6 +57,18 @@
     "dodge": "Evitare",
     "luck": "Noroc"
   },
+  "stats-modal": {
+    "health": "Puncte de viață. Când ajung la 0, ești învins.",
+    "attack": "Putere de atac care crește daunele provocate.",
+    "defense": "Apărare care reduce daunele primite.",
+    "attack-speed": "Atacuri pe secundă; valori mai mari te fac să ataci mai repede.",
+    "vampirism": "Procent din daunele întoarse ca viață.",
+    "crit-rate": "Șansă de a lovi critic.",
+    "crit-dmg": "Daune bonus la lovituri critice.",
+    "dodge": "Șansă de a evita atacurile primite.",
+    "luck": "Crește șansa de a obține echipament.",
+    "faster-run-desc": "Bonusul cizmelor care reduce timpul dintre evenimentele din temniță."
+  },
   "companion": "Însoțitor",
   "none": "Niciunul",
   "summon": "Cheamă",
