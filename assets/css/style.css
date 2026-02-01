@@ -1080,6 +1080,19 @@ header button i {
     font-weight: bold;
 }
 
+.stat-panel .stats-title-link {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-panel .stats-title-link:hover,
+.stat-panel .stats-title-link:focus {
+    text-decoration: underline;
+}
+
 .stat-panel .key-stats p {
     margin: 0.1rem 0;
 }

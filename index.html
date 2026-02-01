@@ -51,7 +51,12 @@
             </header>
             <div class="stat-panel">
                 <div class="box" id="dungeon-stats-panel">
-                    <h4 data-i18n="stats">Stats</h4>
+                    <h4>
+                        <a class="stats-title-link" href="#" onclick="openStatsModal(); event.stopPropagation(); return false;" aria-label="Open stats details">
+                            <span data-i18n="stats">Stats</span>
+                            <i class="fa fa-link" aria-hidden="true"></i>
+                        </a>
+                    </h4>
                     <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
                     <div class="key-stats" aria-label="Core stats">
                         <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
