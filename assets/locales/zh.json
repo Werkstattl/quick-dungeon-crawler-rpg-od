@@ -102,6 +102,14 @@
   "curse": "诅咒",
   "curse-level-unlocked": "新诅咒等级已解锁！（等级 {level}）",
   "bestiary": "怪物志",
+  "bestiary-sort": {
+    "id": "编号",
+    "name": "名称",
+    "encounters": "遭遇",
+    "kills": "击杀",
+    "asc": "升序",
+    "desc": "降序"
+  },
   "load-more": "加载更多",
   "settings": "设置",
   "font-size": "字体大小",

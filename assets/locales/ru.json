@@ -117,6 +117,14 @@
   "curse": "Проклятие",
   "curse-level-unlocked": "Открыт новый уровень проклятия! (Ур.{level})",
   "bestiary": "Бестиарий",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "Имя",
+    "encounters": "Встречи",
+    "kills": "Убийства",
+    "asc": "По возрастанию",
+    "desc": "По убыванию"
+  },
   "load-more": "Загрузить ещё",
   "settings": "Настройки",
   "font-size": "Размер шрифта",

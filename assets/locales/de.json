@@ -117,6 +117,14 @@
   "curse": "Fluch",
   "curse-level-unlocked": "Neues Fluchlevel freigeschaltet! (Lv.{level})",
   "bestiary": "Bestiarium",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "Name",
+    "encounters": "Begegnungen",
+    "kills": "Kills",
+    "asc": "Aufsteigend",
+    "desc": "Absteigend"
+  },
   "load-more": "Mehr laden",
   "settings": "Einstellungen",
   "font-size": "Schriftgröße",

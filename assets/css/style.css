@@ -2007,6 +2007,24 @@ header button i {
 }
 
 /* Bestiary */
+.bestiary-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+}
+
+.bestiary-controls .label {
+    white-space: nowrap;
+    opacity: 0.9;
+}
+
+.bestiary-controls select {
+    margin: 0;
+    width: auto;
+    flex: 1;
+}
+
 .bestiary-list {
     max-height: 70vh;
     overflow-y: auto;

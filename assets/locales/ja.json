@@ -117,6 +117,14 @@
   "curse": "呪い",
   "curse-level-unlocked": "新しい呪いレベルを解放した！(Lv.{level})",
   "bestiary": "モンスター図鑑",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "名前",
+    "encounters": "遭遇",
+    "kills": "キル",
+    "asc": "昇順",
+    "desc": "降順"
+  },
   "load-more": "もっと読み込む",
   "settings": "設定",
   "font-size": "フォントサイズ",

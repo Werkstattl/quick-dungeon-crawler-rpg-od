@@ -117,6 +117,14 @@
   "curse": "Blestem",
   "curse-level-unlocked": "Noul nivel de blestem deblocat! (Niv.{level})",
   "bestiary": "Bestiar",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "Nume",
+    "encounters": "Întâlniri",
+    "kills": "Ucideri",
+    "asc": "Crescător",
+    "desc": "Descrescător"
+  },
   "load-more": "Încarcă mai multe",
   "settings": "Setări",
   "font-size": "Dimensiune font",

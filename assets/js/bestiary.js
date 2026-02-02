@@ -96,6 +96,19 @@ function openBestiaryModal() {
         <h3 data-i18n="bestiary">Bestiary</h3>
         <p id="bestiary-close"><i class="fa fa-xmark"></i></p>
       </div>
+      <div class="bestiary-controls" id="bestiary-controls">
+        <span class="label" data-i18n="sort">Sort</span>
+        <select id="bestiary-sort-by" aria-label="Sort by">
+          <!--<option value="id" data-i18n="bestiary-sort.id">ID</option>-->
+          <option value="name" data-i18n="bestiary-sort.name">Name</option>
+          <option value="encounters" data-i18n="bestiary-sort.encounters">Encounters</option>
+          <option value="kills" data-i18n="bestiary-sort.kills">Kills</option>
+        </select>
+        <select id="bestiary-sort-dir" aria-label="Sort direction">
+          <option value="asc" data-i18n="bestiary-sort.asc">Ascending</option>
+          <option value="desc" data-i18n="bestiary-sort.desc">Descending</option>
+        </select>
+      </div>
       <ul class="bestiary-list" id="bestiary-list"></ul>
       <button id="bestiary-load-more" data-i18n="load-more">Load more</button>
     </div>`;
@@ -103,6 +116,8 @@ function openBestiaryModal() {
   const closeBtn = document.querySelector('#bestiary-close');
   const listEl = document.querySelector('#bestiary-list');
   const loadMoreBtn = document.querySelector('#bestiary-load-more');
+  const sortByEl = document.querySelector('#bestiary-sort-by');
+  const sortDirEl = document.querySelector('#bestiary-sort-dir');
 
   closeBtn.onclick = () => {
     sfxDecline.play();
@@ -113,7 +128,15 @@ function openBestiaryModal() {
     menuModalElement.style.display = 'flex';
   };
 
-  const ids = Object.keys(bestiary).sort((a, b) => Number(a) - Number(b));
+  const BESTIARY_SORT_BY_KEY = 'bestiarySortBy';
+  const BESTIARY_SORT_DIR_KEY = 'bestiarySortDir';
+
+  const savedSortBy = (localStorage.getItem(BESTIARY_SORT_BY_KEY) || '').trim();
+  const savedSortDir = (localStorage.getItem(BESTIARY_SORT_DIR_KEY) || '').trim();
+  sortByEl.value = ['id', 'name', 'encounters', 'kills'].includes(savedSortBy) ? savedSortBy : 'id';
+  sortDirEl.value = ['asc', 'desc'].includes(savedSortDir) ? savedSortDir : 'asc';
+
+  let ids = [];
   const BATCH = 10;
   let index = 0;
 
@@ -129,6 +152,78 @@ function openBestiaryModal() {
       }
     }
   }, { root: listEl, rootMargin: '200px' });
+
+  function getSortValue(enemyId, sortBy) {
+    switch (sortBy) {
+      case 'encounters':
+        return (bestiary[enemyId] && bestiary[enemyId].e) ? bestiary[enemyId].e : 0;
+      case 'kills':
+        return (bestiary[enemyId] && bestiary[enemyId].k) ? bestiary[enemyId].k : 0;
+      case 'name':
+        try {
+          return (typeof getEnemyTranslatedName === 'function' ? (getEnemyTranslatedName(enemyId) || '') : '') || '';
+        } catch {
+          return '';
+        }
+      case 'id':
+      default:
+        return Number(enemyId);
+    }
+  }
+
+  function computeSortedIds() {
+    const sortBy = sortByEl.value;
+    const sortDir = sortDirEl.value;
+    const base = Object.keys(bestiary);
+
+    // Cache expensive name lookups during sort.
+    const nameCache = Object.create(null);
+    const getName = (enemyId) => {
+      if (nameCache[enemyId] != null) return nameCache[enemyId];
+      const v = getSortValue(enemyId, 'name');
+      nameCache[enemyId] = v;
+      return v;
+    };
+
+    const dir = sortDir === 'desc' ? -1 : 1;
+
+    base.sort((a, b) => {
+      let cmp = 0;
+
+      if (sortBy === 'name') {
+        const nameA = getName(a);
+        const nameB = getName(b);
+        cmp = nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+      } else if (sortBy === 'encounters' || sortBy === 'kills') {
+        const va = getSortValue(a, sortBy);
+        const vb = getSortValue(b, sortBy);
+        cmp = (va - vb);
+      } else {
+        cmp = (Number(a) - Number(b));
+      }
+
+      if (cmp === 0) {
+        // Stable-ish tie-breaker: ID ascending
+        cmp = Number(a) - Number(b);
+      }
+
+      return cmp * dir;
+    });
+
+    return base;
+  }
+
+  function resetAndRender() {
+    localStorage.setItem(BESTIARY_SORT_BY_KEY, sortByEl.value);
+    localStorage.setItem(BESTIARY_SORT_DIR_KEY, sortDirEl.value);
+
+    ids = computeSortedIds();
+    index = 0;
+    listEl.replaceChildren();
+    imgObserver.disconnect();
+    loadMoreBtn.style.display = ids.length > BATCH ? 'block' : 'none';
+    renderBatch();
+  }
 
   function renderBatch() {
     const frag = document.createDocumentFragment();
@@ -183,5 +278,7 @@ function openBestiaryModal() {
   }
 
   loadMoreBtn.onclick = renderBatch;
-  renderBatch(); // first chunk
+  sortByEl.onchange = resetAndRender;
+  sortDirEl.onchange = resetAndRender;
+  resetAndRender(); // first chunk
 }

@@ -117,6 +117,14 @@
   "curse": "Maldição",
   "curse-level-unlocked": "Novo nível de maldição desbloqueado! (Nv.{level})",
   "bestiary": "Bestiário",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "Nome",
+    "encounters": "Encontros",
+    "kills": "Abates",
+    "asc": "Crescente",
+    "desc": "Decrescente"
+  },
   "load-more": "Carregar mais",
   "settings": "Configurações",
   "font-size": "Tamanho da fonte",

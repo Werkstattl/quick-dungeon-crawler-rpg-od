@@ -117,6 +117,14 @@
   "curse": "Curse",
   "curse-level-unlocked": "New curse level unlocked! (Lv.{level})",
   "bestiary": "Bestiary",
+  "bestiary-sort": {
+    "id": "ID",
+    "name": "Name",
+    "encounters": "Encounters",
+    "kills": "Kills",
+    "asc": "Ascending",
+    "desc": "Descending"
+  },
   "load-more": "Load more",
   "settings": "Settings",
   "font-size": "Font Size",
