@@ -290,6 +290,22 @@ function openBestiaryModal() {
       }
       renameBtn.innerHTML = '<i class="fa fa-pen"></i>';
 
+      const imageBtn = document.createElement('button');
+      imageBtn.className = 'bestiary-image';
+      imageBtn.type = 'button';
+      imageBtn.setAttribute('aria-label', 'Change image');
+      try {
+        if (typeof t === 'function') {
+          imageBtn.setAttribute('aria-label', t('change-image'));
+          imageBtn.setAttribute('title', t('change-image'));
+        } else {
+          imageBtn.setAttribute('title', 'Change image');
+        }
+      } catch {
+        imageBtn.setAttribute('title', 'Change image');
+      }
+      imageBtn.innerHTML = '<i class="fa fa-image"></i>';
+
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
 
@@ -341,6 +357,7 @@ function openBestiaryModal() {
         }
       };
 
+      // li.appendChild(imageBtn);
       li.appendChild(renameBtn);
       li.appendChild(nameEl);
       li.appendChild(statEl);

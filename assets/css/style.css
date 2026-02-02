@@ -2047,11 +2047,26 @@ header button i {
     opacity: 0.85;
 }
 
+.bestiary-image {
+    padding: 0.15rem 0.4rem;
+    margin: 0;
+    line-height: 1;
+    opacity: 0.85;
+}
+
 .bestiary-rename i {
     margin-right: 0;
 }
 
+.bestiary-image i {
+    margin-right: 0;
+}
+
 .bestiary-rename:hover {
+    opacity: 1;
+}
+
+.bestiary-image:hover {
     opacity: 1;
 }
 
