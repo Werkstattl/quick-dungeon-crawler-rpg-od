@@ -192,6 +192,24 @@ const recordRunLootDrop = (rarity) => {
     }
 };
 
+const getDungeonEnemyName = (enemyId, fallbackName) => {
+    try {
+        if (typeof getBestiaryDisplayName === 'function') {
+            const displayName = getBestiaryDisplayName(enemyId);
+            if (displayName) return displayName;
+        }
+    } catch {}
+    if (typeof fallbackName === 'string' && fallbackName.trim()) {
+        return fallbackName.trim();
+    }
+    try {
+        if (typeof getEnemyTranslatedName === 'function') {
+            return getEnemyTranslatedName(enemyId);
+        }
+    } catch {}
+    return String(enemyId || 'Unknown');
+};
+
 if (typeof window !== 'undefined') {
     window.recordRunDamageDealt = recordRunDamageDealt;
     window.recordRunDamageTaken = recordRunDamageTaken;
@@ -520,7 +538,7 @@ const dungeonEvent = () => {
                 // if (typeof getEnemyTranslatedName === 'function') {
                     enemy.name = getEnemyTranslatedName(enemy.id);
                 // }
-                addDungeonLog(t('encountered-enemy', { enemy: enemy.name }), choices);
+                addDungeonLog(t('encountered-enemy', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }), choices);
                 // player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {
                     engageBattle();
@@ -641,7 +659,7 @@ const mimicBattle = (type) => {
     showCombatInfo();
     addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
     startCombat(bgmBattleMain);
-    addDungeonLog(t('encountered-enemy', { enemy: enemy.name }));
+    addDungeonLog(t('encountered-enemy', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }));
 }
 
 // boss fight
@@ -659,7 +677,7 @@ const specialBossBattle = () => {
     showCombatInfo();
     addCombatLog(t('enemy-awoken', { enemy: enemy.name }));
     startCombat(bgmBattleBoss);
-    addDungeonLog(t('enemy-awoken', { enemy: enemy.name }));
+    addDungeonLog(t('enemy-awoken', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }));
 }
 
 // Flee from the monster
