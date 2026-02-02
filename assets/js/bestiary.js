@@ -125,6 +125,16 @@ function getRenamePromptText(currentName) {
   return `Enter a custom name for ${currentName}. Leave empty to reset.`;
 }
 
+function getBestiaryActionLabel(key, fallback) {
+  try {
+    if (typeof t === 'function') {
+      const label = t(key);
+      if (label && label !== key) return label;
+    }
+  } catch {}
+  return fallback;
+}
+
 function readFileAsDataURL(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -299,37 +309,31 @@ function openBestiaryModal() {
       //   if (translated) name = translated;
       // }
 
+      const sprite = bestiarySprites[id];
       const renameBtn = document.createElement('button');
       renameBtn.className = 'bestiary-rename';
       renameBtn.type = 'button';
-      renameBtn.setAttribute('aria-label', 'Rename');
-      try {
-        if (typeof t === 'function') {
-          renameBtn.setAttribute('aria-label', t('rename'));
-          renameBtn.setAttribute('title', t('rename'));
-        } else {
-          renameBtn.setAttribute('title', 'Rename');
-        }
-      } catch {
-        renameBtn.setAttribute('title', 'Rename');
-      }
+      const renameLabel = getBestiaryActionLabel('rename', 'Rename');
+      renameBtn.setAttribute('aria-label', renameLabel);
+      renameBtn.setAttribute('title', renameLabel);
       renameBtn.innerHTML = '<i class="fa fa-pen"></i>';
 
       const imageBtn = document.createElement('button');
       imageBtn.className = 'bestiary-image';
       imageBtn.type = 'button';
-      imageBtn.setAttribute('aria-label', 'Change image');
-      try {
-        if (typeof t === 'function') {
-          imageBtn.setAttribute('aria-label', t('change-image'));
-          imageBtn.setAttribute('title', t('change-image'));
-        } else {
-          imageBtn.setAttribute('title', 'Change image');
-        }
-      } catch {
-        imageBtn.setAttribute('title', 'Change image');
-      }
+      const imageLabel = getBestiaryActionLabel('change-image', 'Change image');
+      imageBtn.setAttribute('aria-label', imageLabel);
+      imageBtn.setAttribute('title', imageLabel);
       imageBtn.innerHTML = '<i class="fa fa-image"></i>';
+
+      const imageResetBtn = document.createElement('button');
+      imageResetBtn.className = 'bestiary-image-reset';
+      imageResetBtn.type = 'button';
+      const removeLabel = getBestiaryActionLabel('remove-image', 'Remove custom image');
+      imageResetBtn.setAttribute('aria-label', removeLabel);
+      imageResetBtn.setAttribute('title', removeLabel);
+      imageResetBtn.innerHTML = '<i class="fa fa-trash-can"></i>';
+      imageResetBtn.disabled = !getBestiaryCustomImage(id);
 
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
@@ -341,7 +345,6 @@ function openBestiaryModal() {
       statEl.textContent = `E:${stats.e} K:${stats.k}`;
 
       // Image - lazy + async decode + explicit size (use thumbnails if possible)
-      const sprite = bestiarySprites[id];
       const spriteSrc = getBestiaryEnemySpriteSrc(id, sprite);
       if (spriteSrc) {
         const img = document.createElement('img');
@@ -393,6 +396,7 @@ function openBestiaryModal() {
           }
           img.dataset.src = dataUrl;
           img.src = dataUrl;
+          imageResetBtn.disabled = false;
 
           if (typeof enemy !== 'undefined' && enemy && String(enemy.id) === String(id)) {
             const enemySprite = document.querySelector('#enemy-sprite');
@@ -429,8 +433,46 @@ function openBestiaryModal() {
         }
       };
 
+      imageResetBtn.onclick = () => {
+        if (imageResetBtn.disabled) return;
+        sfxDecline.play();
+        if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };
+        delete bestiary[String(id)].img;
+        saveBestiary();
+
+        const fallbackSrc = getBestiaryEnemySpriteSrc(id, sprite);
+        let img = li.querySelector('img');
+        if (img) {
+          if (fallbackSrc) {
+            img.dataset.src = fallbackSrc;
+            img.src = fallbackSrc;
+          } else {
+            img.remove();
+            img = null;
+          }
+        } else if (fallbackSrc) {
+          img = document.createElement('img');
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.alt = name;
+          img.width = 64;
+          img.height = 64;
+          img.dataset.src = fallbackSrc;
+          img.src = fallbackSrc;
+          li.insertBefore(img, li.firstChild);
+        }
+
+        if (typeof enemy !== 'undefined' && enemy && String(enemy.id) === String(id)) {
+          const enemySprite = document.querySelector('#enemy-sprite');
+          if (enemySprite && fallbackSrc) enemySprite.src = fallbackSrc;
+        }
+
+        imageResetBtn.disabled = true;
+      };
+
       li.appendChild(imageInput);
       li.appendChild(imageBtn);
+      li.appendChild(imageResetBtn);
       li.appendChild(renameBtn);
       li.appendChild(nameEl);
       li.appendChild(statEl);
