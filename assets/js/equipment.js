@@ -1449,7 +1449,8 @@ const createEquipmentPrint = (condition) => {
         };
     }
     if (condition == "combat") {
-        const msg = typeof t === 'function' ? t('enemy-dropped-item', { enemy: enemy.name, item: itemLabel }) : `${enemy.name} dropped ${itemLabel}.`;
+        const enemyLabel = getDisplayEnemyName(enemy.id, enemy.name);
+        const msg = typeof t === 'function' ? t('enemy-dropped-item', { enemy: enemyLabel, item: itemLabel }) : `${enemyLabel} dropped ${itemLabel}.`;
         addCombatLog(`${msg}<br>${panel}`);
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {

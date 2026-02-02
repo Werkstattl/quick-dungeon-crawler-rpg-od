@@ -656,7 +656,7 @@ const hpValidation = () => {
             }
         }
         const timeStamp = new Date(combatSeconds * 1000).toISOString().substring(14, 19);
-        addCombatLog(t('enemy-defeated-reward', { enemy: enemy.name, exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
+        addCombatLog(t('enemy-defeated-reward', { enemy: getDisplayEnemyName(enemy.id, enemy.name), exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
             const companionExpReward = (enemy.rewards.exp / 10) * (typeof getCompanionExperienceMultiplier === 'function'
@@ -750,7 +750,7 @@ const playerAttack = () => {
     // Enemy dodge chance
     let dodged = false;
     if (Math.random() < enemy.stats.dodge / 100) {
-        addCombatLog(t('dodged-attack-enemy', { enemy: enemy.name }));
+        addCombatLog(t('dodged-attack-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
         damage = 0;
         lifesteal = 0;
         dodged = true;
@@ -770,7 +770,7 @@ const playerAttack = () => {
         const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
         addCombatLog(t('player-attack-hit', {
             player: player.name,
-            enemy: enemy.name,
+            enemy: getDisplayEnemyName(enemy.id, enemy.name),
             value: nFormatter(damage),
             type: dmgtype,
             lifesteal: lifestealText
@@ -837,7 +837,7 @@ const companionAttack = () => {
     // Enemy dodge chance
     let dodged = false;
     if (Math.random() < enemy.stats.dodge / 100) {
-        addCombatLog(t('dodged-attack-companion', { enemy: enemy.name, companion: activeCompanion.name }));
+        addCombatLog(t('dodged-attack-companion', { enemy: getDisplayEnemyName(enemy.id, enemy.name), companion: activeCompanion.name }));
         damage = 0;
         dodged = true;
     }
@@ -848,7 +848,7 @@ const companionAttack = () => {
         recordRunDamageDealt(damage);
     }
     if (!dodged) {
-        addCombatLog(t('companion-attack-hit', { companion: activeCompanion.name, enemy: enemy.name, value: nFormatter(damage), type: dmgtype }));
+        addCombatLog(t('companion-attack-hit', { companion: activeCompanion.name, enemy: getDisplayEnemyName(enemy.id, enemy.name), value: nFormatter(damage), type: dmgtype }));
     }
     hpValidation();
     playerLoadStats();
@@ -945,7 +945,7 @@ const enemyAttack = () => {
     if (!dodged) {
         const lifestealText = lifesteal > 0 ? t('enemy-vamp-heal', { value: nFormatter(lifesteal) }) : '';
         addCombatLog(t('enemy-attack-hit', {
-            enemy: enemy.name,
+            enemy: getDisplayEnemyName(enemy.id, enemy.name),
             player: player.name,
             value: nFormatter(damage),
             type: dmgtype,
@@ -1400,7 +1400,7 @@ const useSpecialAbility = () => {
         // Enemy dodge chance
         let dodged = false;
         if (Math.random() < enemy.stats.dodge / 100) {
-            addCombatLog(t('dodged-attack-enemy', { enemy: enemy.name }));
+            addCombatLog(t('dodged-attack-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
             damage = 0;
             lifesteal = 0;
             dodged = true;
@@ -1488,7 +1488,7 @@ const showCombatInfo = () => {
     }
     // Re-evaluate enemy name in case language changed after spawn
     // if (typeof getEnemyTranslatedName === 'function' && enemy.id != null) {
-        enemy.name = getEnemyTranslatedName(enemy.id);
+        enemy.name = getDisplayEnemyName(enemy.id);
     // }
     const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
     const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';

@@ -28,6 +28,24 @@ const randomizeDecimal = (min, max) => {
     return Math.random() * (max - min) + min;
 }
 
+const getDisplayEnemyName = (enemyId, fallbackName) => {
+    try {
+        if (typeof getBestiaryDisplayName === 'function') {
+            const displayName = getBestiaryDisplayName(enemyId);
+            if (displayName) return displayName;
+        }
+    } catch {}
+    if (typeof fallbackName === 'string' && fallbackName.trim()) {
+        return fallbackName.trim();
+    }
+    try {
+        if (typeof getEnemyTranslatedName === 'function') {
+            return getEnemyTranslatedName(enemyId);
+        }
+    } catch {}
+    return String(enemyId || 'Unknown');
+};
+
 // Rating system - prompts user to rate the app after certain conditions
 const ratingSystem = {
     // Configuration for when to show rating dialog

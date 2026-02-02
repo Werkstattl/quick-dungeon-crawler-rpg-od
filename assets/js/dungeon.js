@@ -192,23 +192,6 @@ const recordRunLootDrop = (rarity) => {
     }
 };
 
-const getDungeonEnemyName = (enemyId, fallbackName) => {
-    try {
-        if (typeof getBestiaryDisplayName === 'function') {
-            const displayName = getBestiaryDisplayName(enemyId);
-            if (displayName) return displayName;
-        }
-    } catch {}
-    if (typeof fallbackName === 'string' && fallbackName.trim()) {
-        return fallbackName.trim();
-    }
-    try {
-        if (typeof getEnemyTranslatedName === 'function') {
-            return getEnemyTranslatedName(enemyId);
-        }
-    } catch {}
-    return String(enemyId || 'Unknown');
-};
 
 if (typeof window !== 'undefined') {
     window.recordRunDamageDealt = recordRunDamageDealt;
@@ -534,11 +517,9 @@ const dungeonEvent = () => {
                         <button id="choice2" data-i18n="flee">${t('flee')}</button>
                     </div>`;
                 generateRandomEnemy();
-                // Ensure name reflects current language
-                // if (typeof getEnemyTranslatedName === 'function') {
-                    enemy.name = getEnemyTranslatedName(enemy.id);
-                // }
-                addDungeonLog(t('encountered-enemy', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }), choices);
+                // Ensure name reflects current language and bestiary custom name
+                enemy.name = getDisplayEnemyName(enemy.id);
+                addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }), choices);
                 // player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {
                     engageBattle();
@@ -648,7 +629,7 @@ const dungeonEvent = () => {
 // Starts the battle
 const engageBattle = () => {
     showCombatInfo();
-    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
+    addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
     startCombat(bgmBattleMain);
     updateDungeonLog();
 }
@@ -657,16 +638,16 @@ const engageBattle = () => {
 const mimicBattle = (type) => {
     generateRandomEnemy(type);
     showCombatInfo();
-    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
+    addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
     startCombat(bgmBattleMain);
-    addDungeonLog(t('encountered-enemy', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }));
+    addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
 }
 
 // boss fight
 const guardianBattle = () => {
     generateRandomEnemy("guardian");
     showCombatInfo();
-    addCombatLog(t('guardian-blocking-way', { enemy: enemy.name }));
+    addCombatLog(t('guardian-blocking-way', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
     startCombat(bgmBattleBoss);
     updateDungeonLog();
 }
@@ -675,9 +656,9 @@ const guardianBattle = () => {
 const specialBossBattle = () => {
     generateRandomEnemy("sboss");
     showCombatInfo();
-    addCombatLog(t('enemy-awoken', { enemy: enemy.name }));
+    addCombatLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
     startCombat(bgmBattleBoss);
-    addDungeonLog(t('enemy-awoken', { enemy: getDungeonEnemyName(enemy.id, enemy.name) }));
+    addDungeonLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
 }
 
 // Flee from the monster
@@ -691,7 +672,7 @@ const fleeBattle = () => {
     } else {
     addDungeonLog(t('flee-failure'));
         showCombatInfo();
-    addCombatLog(t('encountered-enemy', { enemy: enemy.name }));
+    addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
         startCombat(bgmBattleMain);
     addCombatLog(t('flee-failure'));
     }
