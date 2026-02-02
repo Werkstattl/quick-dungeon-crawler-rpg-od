@@ -170,7 +170,7 @@ function openBestiaryModal() {
 
   const savedSortBy = (localStorage.getItem(BESTIARY_SORT_BY_KEY) || '').trim();
   const savedSortDir = (localStorage.getItem(BESTIARY_SORT_DIR_KEY) || '').trim();
-  sortByEl.value = ['id', 'name', 'encounters', 'kills'].includes(savedSortBy) ? savedSortBy : 'id';
+  sortByEl.value = ['id', 'name', 'encounters', 'kills'].includes(savedSortBy) ? savedSortBy : 'name';
   sortDirEl.value = ['asc', 'desc'].includes(savedSortDir) ? savedSortDir : 'asc';
 
   let ids = [];
