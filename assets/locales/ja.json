@@ -117,6 +117,8 @@
   "curse": "呪い",
   "curse-level-unlocked": "新しい呪いレベルを解放した！(Lv.{level})",
   "bestiary": "モンスター図鑑",
+  "rename": "名前を変更",
+  "bestiary-rename-prompt": "{name} のカスタム名を入力してください。空欄でリセットします。",
   "bestiary-sort": {
     "id": "ID",
     "name": "名前",

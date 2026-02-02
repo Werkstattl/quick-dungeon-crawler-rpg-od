@@ -1,5 +1,5 @@
 // Bestiary system
-// Structure: { [id]: { e: Number, k: Number } }
+// Structure: { [id]: { e: Number, k: Number, n?: String } }
 let bestiary = {};
 
 const BESTIARY_DB = 'qdc';
@@ -24,10 +24,22 @@ function openBestiaryDB() {
   });
 }
 
-function idbRequest(req) {
+function idbRequest(reqOrTx) {
+  // Supports both IDBRequest and IDBTransaction.
   return new Promise((resolve, reject) => {
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    if (!reqOrTx) return resolve(null);
+
+    // Transaction: wait for completion.
+    if (typeof reqOrTx.objectStore === 'function') {
+      reqOrTx.oncomplete = () => resolve();
+      reqOrTx.onabort = () => reject(reqOrTx.error || new Error('IndexedDB transaction aborted'));
+      reqOrTx.onerror = () => reject(reqOrTx.error || new Error('IndexedDB transaction error'));
+      return;
+    }
+
+    // Request: resolve with result.
+    reqOrTx.onsuccess = () => resolve(reqOrTx.result);
+    reqOrTx.onerror = () => reject(reqOrTx.error);
   });
 }
 
@@ -45,7 +57,9 @@ async function loadBestiary() {
         const tx = db.transaction(BESTIARY_STORE, 'readonly');
         const records = await idbRequest(tx.objectStore(BESTIARY_STORE).getAll());
         for (const r of records) {
-            bestiary[String(r.id)] = { e: r.e, k: r.k };
+      const entry = { e: r.e, k: r.k };
+      if (typeof r.n === 'string' && r.n.trim()) entry.n = r.n;
+      bestiary[String(r.id)] = entry;
         }
         await idbRequest(tx);
     } catch (e) {
@@ -60,7 +74,9 @@ async function saveBestiary() {
         const store = tx.objectStore(BESTIARY_STORE);
         for (const id in bestiary) {
             const entry = bestiary[id];
-            store.put({ id: Number(id), e: entry.e, k: entry.k });
+      const record = { id: Number(id), e: entry.e, k: entry.k };
+      if (typeof entry.n === 'string' && entry.n.trim()) record.n = entry.n;
+      store.put(record);
         }
         await idbRequest(tx);
     } catch (e) {
@@ -71,7 +87,7 @@ async function saveBestiary() {
 function addToBestiary(id) {
     const key = String(id);
     if (!bestiary[key]) {
-        bestiary[key] = { e: 0, k: 0 };
+    bestiary[key] = { e: 0, k: 0 };
     }
     bestiary[key].e++;
     saveBestiary();
@@ -84,6 +100,27 @@ function recordBestiaryKill(id) {
     }
     bestiary[key].k++;
     saveBestiary();
+}
+
+function getBestiaryDisplayName(enemyId) {
+  const entry = bestiary[String(enemyId)];
+  if (entry && typeof entry.n === 'string' && entry.n.trim()) return entry.n.trim();
+  try {
+    if (typeof getEnemyTranslatedName === 'function') {
+      const translated = getEnemyTranslatedName(enemyId);
+      if (translated) return translated;
+    }
+  } catch {}
+  return String(enemyId);
+}
+
+function getRenamePromptText(currentName) {
+  try {
+    if (typeof t === 'function') {
+      return t('bestiary-rename-prompt', { name: currentName });
+    }
+  } catch {}
+  return `Enter a custom name for ${currentName}. Leave empty to reset.`;
 }
 
 function openBestiaryModal() {
@@ -160,11 +197,7 @@ function openBestiaryModal() {
       case 'kills':
         return (bestiary[enemyId] && bestiary[enemyId].k) ? bestiary[enemyId].k : 0;
       case 'name':
-        try {
-          return (typeof getEnemyTranslatedName === 'function' ? (getEnemyTranslatedName(enemyId) || '') : '') || '';
-        } catch {
-          return '';
-        }
+        return getBestiaryDisplayName(enemyId) || '';
       case 'id':
       default:
         return Number(enemyId);
@@ -235,11 +268,28 @@ function openBestiaryModal() {
 
       // Name (use textContent to avoid injection and layout thrash)
       // let name = enemyIdMap[id] || id;
-      let name = getEnemyTranslatedName(id)
+      let name = getBestiaryDisplayName(id);
       // if (typeof getEnemyTranslatedName === 'function') {
         // const translated = getEnemyTranslatedName(id);
       //   if (translated) name = translated;
       // }
+
+      const renameBtn = document.createElement('button');
+      renameBtn.className = 'bestiary-rename';
+      renameBtn.type = 'button';
+      renameBtn.setAttribute('aria-label', 'Rename');
+      try {
+        if (typeof t === 'function') {
+          renameBtn.setAttribute('aria-label', t('rename'));
+          renameBtn.setAttribute('title', t('rename'));
+        } else {
+          renameBtn.setAttribute('title', 'Rename');
+        }
+      } catch {
+        renameBtn.setAttribute('title', 'Rename');
+      }
+      renameBtn.innerHTML = '<i class="fa fa-pen"></i>';
+
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
 
@@ -265,6 +315,33 @@ function openBestiaryModal() {
         li.appendChild(img);
       }
 
+      renameBtn.onclick = () => {
+        sfxOpen.play();
+        const current = getBestiaryDisplayName(id);
+        const next = prompt(getRenamePromptText(current), (bestiary[String(id)] && bestiary[String(id)].n) ? bestiary[String(id)].n : current);
+        if (next == null) return;
+        const trimmed = String(next).trim();
+        if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };
+        if (!trimmed) {
+          delete bestiary[String(id)].n;
+        } else {
+          bestiary[String(id)].n = trimmed;
+        }
+        saveBestiary();
+
+        // Update UI immediately.
+        name = getBestiaryDisplayName(id);
+        nameEl.textContent = name;
+        const img = li.querySelector('img');
+        if (img) img.alt = name;
+
+        // If we are sorting by name, the list order may change.
+        if (sortByEl.value === 'name') {
+          resetAndRender();
+        }
+      };
+
+      li.appendChild(renameBtn);
       li.appendChild(nameEl);
       li.appendChild(statEl);
       frag.appendChild(li);

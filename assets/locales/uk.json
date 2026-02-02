@@ -117,6 +117,8 @@
   "curse": "Прокляття",
   "curse-level-unlocked": "Відкрито новий рівень прокляття! (Рів.{level})",
   "bestiary": "Бестіарій",
+  "rename": "Перейменувати",
+  "bestiary-rename-prompt": "Введіть власну назву для {name}. Залиште порожнім, щоб скинути.",
   "bestiary-sort": {
     "id": "ID",
     "name": "Ім'я",

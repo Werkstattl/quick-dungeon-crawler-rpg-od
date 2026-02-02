@@ -117,6 +117,8 @@
   "curse": "Fluch",
   "curse-level-unlocked": "Neues Fluchlevel freigeschaltet! (Lv.{level})",
   "bestiary": "Bestiarium",
+  "rename": "Umbenennen",
+  "bestiary-rename-prompt": "Gib einen benutzerdefinierten Namen für {name} ein. Leer lassen zum Zurücksetzen.",
   "bestiary-sort": {
     "id": "ID",
     "name": "Name",

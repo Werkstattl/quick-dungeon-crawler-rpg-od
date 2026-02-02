@@ -2040,6 +2040,21 @@ header button i {
     gap: 0.4rem;
 }
 
+.bestiary-rename {
+    padding: 0.15rem 0.4rem;
+    margin: 0;
+    line-height: 1;
+    opacity: 0.85;
+}
+
+.bestiary-rename i {
+    margin-right: 0;
+}
+
+.bestiary-rename:hover {
+    opacity: 1;
+}
+
 .bestiary-list img {
     width: 2.5rem;
     height: auto;

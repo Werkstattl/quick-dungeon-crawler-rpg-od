@@ -117,6 +117,8 @@
   "curse": "Blestem",
   "curse-level-unlocked": "Noul nivel de blestem deblocat! (Niv.{level})",
   "bestiary": "Bestiar",
+  "rename": "Redenumește",
+  "bestiary-rename-prompt": "Introdu un nume personalizat pentru {name}. Lasă gol pentru resetare.",
   "bestiary-sort": {
     "id": "ID",
     "name": "Nume",

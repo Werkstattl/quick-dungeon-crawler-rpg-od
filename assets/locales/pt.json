@@ -117,6 +117,8 @@
   "curse": "Maldição",
   "curse-level-unlocked": "Novo nível de maldição desbloqueado! (Nv.{level})",
   "bestiary": "Bestiário",
+  "rename": "Renomear",
+  "bestiary-rename-prompt": "Digite um nome personalizado para {name}. Deixe em branco para redefinir.",
   "bestiary-sort": {
     "id": "ID",
     "name": "Nome",

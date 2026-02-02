@@ -117,6 +117,8 @@
   "curse": "Curse",
   "curse-level-unlocked": "New curse level unlocked! (Lv.{level})",
   "bestiary": "Bestiary",
+  "rename": "Rename",
+  "bestiary-rename-prompt": "Enter a custom name for {name}. Leave empty to reset.",
   "bestiary-sort": {
     "id": "ID",
     "name": "Name",
