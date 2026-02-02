@@ -333,7 +333,10 @@ function openBestiaryModal() {
       imageResetBtn.setAttribute('aria-label', removeLabel);
       imageResetBtn.setAttribute('title', removeLabel);
       imageResetBtn.innerHTML = '<i class="fa fa-trash-can"></i>';
-      imageResetBtn.disabled = !getBestiaryCustomImage(id);
+      const hasCustomImage = !!getBestiaryCustomImage(id);
+      imageResetBtn.disabled = !hasCustomImage;
+      imageResetBtn.style.display = hasCustomImage ? '' : 'none';
+      imageBtn.style.display = hasCustomImage ? 'none' : '';
 
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
@@ -397,6 +400,8 @@ function openBestiaryModal() {
           img.dataset.src = dataUrl;
           img.src = dataUrl;
           imageResetBtn.disabled = false;
+          imageResetBtn.style.display = '';
+          imageBtn.style.display = 'none';
 
           if (typeof enemy !== 'undefined' && enemy && String(enemy.id) === String(id)) {
             const enemySprite = document.querySelector('#enemy-sprite');
@@ -468,6 +473,8 @@ function openBestiaryModal() {
         }
 
         imageResetBtn.disabled = true;
+        imageResetBtn.style.display = 'none';
+        imageBtn.style.display = '';
       };
 
       li.appendChild(imageInput);
