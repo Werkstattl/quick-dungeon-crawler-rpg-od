@@ -118,6 +118,7 @@
   "curse-level-unlocked": "Відкрито новий рівень прокляття! (Рів.{level})",
   "bestiary": "Бестіарій",
   "rename": "Перейменувати",
+  "change-image": "Змінити зображення",
   "bestiary-rename-prompt": "Введіть власну назву для {name}. Залиште порожнім, щоб скинути.",
   "bestiary-sort": {
     "id": "ID",
