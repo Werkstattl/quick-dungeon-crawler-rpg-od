@@ -119,6 +119,7 @@
   "bestiary": "Bestiar",
   "rename": "Redenumește",
   "change-image": "Schimbă imaginea",
+  "remove-image": "Șterge imaginea personalizată",
   "bestiary-rename-prompt": "Introdu un nume personalizat pentru {name}. Lasă gol pentru resetare.",
   "bestiary-sort": {
     "id": "ID",

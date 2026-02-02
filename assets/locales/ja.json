@@ -119,6 +119,7 @@
   "bestiary": "モンスター図鑑",
   "rename": "名前を変更",
   "change-image": "画像を変更",
+  "remove-image": "カスタム画像を削除",
   "bestiary-rename-prompt": "{name} のカスタム名を入力してください。空欄でリセットします。",
   "bestiary-sort": {
     "id": "ID",

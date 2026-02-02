@@ -119,6 +119,7 @@
   "bestiary": "Bestiarium",
   "rename": "Umbenennen",
   "change-image": "Bild ändern",
+  "remove-image": "Benutzerdefiniertes Bild entfernen",
   "bestiary-rename-prompt": "Gib einen benutzerdefinierten Namen für {name} ein. Leer lassen zum Zurücksetzen.",
   "bestiary-sort": {
     "id": "ID",

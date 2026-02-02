@@ -119,6 +119,7 @@
   "bestiary": "Bestiário",
   "rename": "Renomear",
   "change-image": "Alterar imagem",
+  "remove-image": "Remover imagem personalizada",
   "bestiary-rename-prompt": "Digite um nome personalizado para {name}. Deixe em branco para redefinir.",
   "bestiary-sort": {
     "id": "ID",
