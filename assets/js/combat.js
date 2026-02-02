@@ -1492,6 +1492,10 @@ const showCombatInfo = () => {
     // }
     const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
     const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';
+    const defaultEnemySpriteSrc = `./assets/sprites/${enemy.image.name}.webp`;
+    const enemySpriteSrc = (typeof getBestiaryEnemySpriteSrc === 'function')
+        ? (getBestiaryEnemySpriteSrc(enemy.id, enemy.image.name) || defaultEnemySpriteSrc)
+        : defaultEnemySpriteSrc;
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
@@ -1503,7 +1507,7 @@ const showCombatInfo = () => {
                 </div>
             </div>
             <div id="dmg-container"></div>
-            <img src="./assets/sprites/${enemy.image.name}.webp" alt="${enemy.name}" width="${enemy.image.size}" id="enemy-sprite">
+            <img src="${enemySpriteSrc}" alt="${enemy.name}" width="${enemy.image.size}" id="enemy-sprite">
         </div>
         <div class="battle-info-panel primary-panel" id="playerPanel">
             <p id="player-combat-info"></p>

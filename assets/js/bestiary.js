@@ -1,5 +1,5 @@
 // Bestiary system
-// Structure: { [id]: { e: Number, k: Number, n?: String } }
+// Structure: { [id]: { e: Number, k: Number, n?: String, img?: String } }
 let bestiary = {};
 
 const BESTIARY_DB = 'qdc';
@@ -59,6 +59,7 @@ async function loadBestiary() {
         for (const r of records) {
       const entry = { e: r.e, k: r.k };
       if (typeof r.n === 'string' && r.n.trim()) entry.n = r.n;
+      if (typeof r.img === 'string' && r.img) entry.img = r.img;
       bestiary[String(r.id)] = entry;
         }
         await idbRequest(tx);
@@ -76,6 +77,7 @@ async function saveBestiary() {
             const entry = bestiary[id];
       const record = { id: Number(id), e: entry.e, k: entry.k };
       if (typeof entry.n === 'string' && entry.n.trim()) record.n = entry.n;
+      if (typeof entry.img === 'string' && entry.img) record.img = entry.img;
       store.put(record);
         }
         await idbRequest(tx);
@@ -121,6 +123,29 @@ function getRenamePromptText(currentName) {
     }
   } catch {}
   return `Enter a custom name for ${currentName}. Leave empty to reset.`;
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function getBestiaryCustomImage(enemyId) {
+  const entry = bestiary[String(enemyId)];
+  if (entry && typeof entry.img === 'string' && entry.img) return entry.img;
+  return null;
+}
+
+function getBestiaryEnemySpriteSrc(enemyId, fallbackSpriteName) {
+  const custom = getBestiaryCustomImage(enemyId);
+  if (custom) return custom;
+  const spriteName = fallbackSpriteName || bestiarySprites[enemyId];
+  if (!spriteName) return '';
+  return `./assets/sprites/${spriteName}.webp`;
 }
 
 function openBestiaryModal() {
@@ -317,7 +342,8 @@ function openBestiaryModal() {
 
       // Image - lazy + async decode + explicit size (use thumbnails if possible)
       const sprite = bestiarySprites[id];
-      if (sprite) {
+      const spriteSrc = getBestiaryEnemySpriteSrc(id, sprite);
+      if (spriteSrc) {
         const img = document.createElement('img');
         img.loading = 'lazy';     // browser native lazy load
         img.decoding = 'async';
@@ -326,10 +352,56 @@ function openBestiaryModal() {
         img.height = 64;
         // Prefer a small thumbnail path if available:
         // img.dataset.src = `./assets/sprites/thumbs/${sprite}.webp`;
-        img.dataset.src = `./assets/sprites/${sprite}.webp`;
+        img.dataset.src = spriteSrc;
         imgObserver.observe(img);
         li.appendChild(img);
       }
+
+      const imageInput = document.createElement('input');
+      imageInput.type = 'file';
+      imageInput.accept = 'image/*';
+      imageInput.className = 'bestiary-image-input';
+      imageInput.style.display = 'none';
+
+      imageBtn.onclick = () => {
+        imageInput.value = '';
+        imageInput.click();
+      };
+
+      imageInput.addEventListener('change', async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        if (file.type && !file.type.startsWith('image/')) {
+          console.warn('Unsupported file type for bestiary image.');
+          return;
+        }
+        try {
+          const dataUrl = await readFileAsDataURL(file);
+          if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };
+          bestiary[String(id)].img = dataUrl;
+          saveBestiary();
+
+          let img = li.querySelector('img');
+          if (!img) {
+            img = document.createElement('img');
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.alt = name;
+            img.width = 64;
+            img.height = 64;
+            li.insertBefore(img, li.firstChild);
+          }
+          img.dataset.src = dataUrl;
+          img.src = dataUrl;
+
+          if (typeof enemy !== 'undefined' && enemy && String(enemy.id) === String(id)) {
+            const enemySprite = document.querySelector('#enemy-sprite');
+            if (enemySprite) enemySprite.src = dataUrl;
+          }
+        } catch (err) {
+          console.warn('Failed to load bestiary image.', err);
+        }
+      });
 
       renameBtn.onclick = () => {
         sfxOpen.play();
@@ -357,7 +429,8 @@ function openBestiaryModal() {
         }
       };
 
-      // li.appendChild(imageBtn);
+      li.appendChild(imageInput);
+      li.appendChild(imageBtn);
       li.appendChild(renameBtn);
       li.appendChild(nameEl);
       li.appendChild(statEl);
