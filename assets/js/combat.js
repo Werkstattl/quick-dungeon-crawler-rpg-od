@@ -990,7 +990,7 @@ const handleClaimButtonClick = () => {
         clearFloorBuffs();
         addDungeonLog(t('moved-to-next-floor'));
     } else if (enemy.condition === "door") {
-        addDungeonLog(t('moved-to-next-floor'));
+        addDungeonLog(t('moved-to-next-room'));
     }
 
     let dimDungeon = document.querySelector('#dungeon-main');
