@@ -120,6 +120,7 @@
   "rename": "Redenumește",
   "change-image": "Schimbă imaginea",
   "remove-image": "Șterge imaginea personalizată",
+  "bestiary-unlock-customization": "Achiziționează: Personalizare inamici",
   "bestiary-rename-prompt": "Introdu un nume personalizat pentru {name}. Lasă gol pentru resetare.",
   "bestiary-sort": {
     "id": "ID",

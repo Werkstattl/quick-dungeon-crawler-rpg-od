@@ -195,7 +195,7 @@ function openBestiaryModal() {
           <option value="asc" data-i18n="bestiary-sort.asc">Ascending</option>
           <option value="desc" data-i18n="bestiary-sort.desc">Descending</option>
         </select>
-        ${!isEnemyCustomizationUnlocked() ? '<button id="bestiary-unlock-customization" type="button">Purchase: Enemy Customization</button>' : ''}
+        ${!isEnemyCustomizationUnlocked() ? '<button id="bestiary-unlock-customization" type="button" data-i18n="bestiary-unlock-customization">Purchase: Enemy Customization</button>' : ''}
       </div>
       <ul class="bestiary-list" id="bestiary-list"></ul>
       <button id="bestiary-load-more" data-i18n="load-more">Load more</button>

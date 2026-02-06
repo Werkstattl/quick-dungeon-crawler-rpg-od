@@ -120,6 +120,7 @@
   "rename": "Rename",
   "change-image": "Change image",
   "remove-image": "Remove custom image",
+  "bestiary-unlock-customization": "Purchase: Enemy Customization",
   "bestiary-rename-prompt": "Enter a custom name for {name}. Leave empty to reset.",
   "bestiary-sort": {
     "id": "ID",

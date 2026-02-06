@@ -120,6 +120,7 @@
   "rename": "Renombrar",
   "change-image": "Cambiar imagen",
   "remove-image": "Eliminar imagen personalizada",
+  "bestiary-unlock-customization": "Comprar: Personalización de enemigos",
   "bestiary-rename-prompt": "Introduce un nombre personalizado para {name}. Déjalo vacío para restablecer.",
   "bestiary-sort": {
     "id": "ID",

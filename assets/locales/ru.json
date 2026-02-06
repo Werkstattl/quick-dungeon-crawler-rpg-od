@@ -120,6 +120,7 @@
   "rename": "Переименовать",
   "change-image": "Изменить изображение",
   "remove-image": "Удалить пользовательское изображение",
+  "bestiary-unlock-customization": "Покупка: настройка врагов",
   "bestiary-rename-prompt": "Введите пользовательское имя для {name}. Оставьте пустым, чтобы сбросить.",
   "bestiary-sort": {
     "id": "ID",

@@ -105,6 +105,7 @@
   "rename": "重命名",
   "change-image": "更改图片",
   "remove-image": "删除自定义图片",
+  "bestiary-unlock-customization": "购买：敌人自定义",
   "bestiary-rename-prompt": "为 {name} 输入自定义名称。留空以重置。",
   "bestiary-sort": {
     "id": "编号",
