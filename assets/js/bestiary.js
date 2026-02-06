@@ -1,6 +1,7 @@
 // Bestiary system
 // Structure: { [id]: { e: Number, k: Number, n?: String, img?: String } }
 let bestiary = {};
+let enemyCustomizationUnlocked = localStorage.getItem('enemyCustomizationUnlocked') === 'true';
 
 const BESTIARY_DB = 'qdc';
 const BESTIARY_STORE = 'bestiary';
@@ -48,6 +49,20 @@ const bestiarySprites = {};
 for (const id in enemyData) {
     const spriteInfo = enemyData[id].sprite;
     bestiarySprites[id] = Array.isArray(spriteInfo) ? spriteInfo[0] : spriteInfo;
+}
+
+const ENEMY_CUSTOMIZATION_PRODUCT_ID = 'unlock_enemy_customization';
+
+function unlockEnemyCustomization() {
+  enemyCustomizationUnlocked = true;
+  localStorage.setItem('enemyCustomizationUnlocked', 'true');
+}
+
+function isEnemyCustomizationUnlocked() {
+  try {
+    if (typeof isPremium === 'function' && isPremium()) return true;
+  } catch {}
+  return enemyCustomizationUnlocked;
 }
 
 async function loadBestiary() {
@@ -106,7 +121,7 @@ function recordBestiaryKill(id) {
 
 function getBestiaryDisplayName(enemyId) {
   const entry = bestiary[String(enemyId)];
-  if (entry && typeof entry.n === 'string' && entry.n.trim()) return entry.n.trim();
+  if (isEnemyCustomizationUnlocked() && entry && typeof entry.n === 'string' && entry.n.trim()) return entry.n.trim();
   try {
     if (typeof getEnemyTranslatedName === 'function') {
       const translated = getEnemyTranslatedName(enemyId);
@@ -146,7 +161,7 @@ function readFileAsDataURL(file) {
 
 function getBestiaryCustomImage(enemyId) {
   const entry = bestiary[String(enemyId)];
-  if (entry && typeof entry.img === 'string' && entry.img) return entry.img;
+  if (isEnemyCustomizationUnlocked() && entry && typeof entry.img === 'string' && entry.img) return entry.img;
   return null;
 }
 
@@ -180,6 +195,7 @@ function openBestiaryModal() {
           <option value="asc" data-i18n="bestiary-sort.asc">Ascending</option>
           <option value="desc" data-i18n="bestiary-sort.desc">Descending</option>
         </select>
+        ${!isEnemyCustomizationUnlocked() ? '<button id="bestiary-unlock-customization" type="button">Purchase: Enemy Customization</button>' : ''}
       </div>
       <ul class="bestiary-list" id="bestiary-list"></ul>
       <button id="bestiary-load-more" data-i18n="load-more">Load more</button>
@@ -190,6 +206,7 @@ function openBestiaryModal() {
   const loadMoreBtn = document.querySelector('#bestiary-load-more');
   const sortByEl = document.querySelector('#bestiary-sort-by');
   const sortDirEl = document.querySelector('#bestiary-sort-dir');
+  const unlockCustomizationBtn = document.querySelector('#bestiary-unlock-customization');
 
   closeBtn.onclick = () => {
     sfxDecline.play();
@@ -199,6 +216,21 @@ function openBestiaryModal() {
     defaultModalElement.replaceChildren(); // drop references to nodes quickly
     menuModalElement.style.display = 'flex';
   };
+
+  if (unlockCustomizationBtn) {
+    unlockCustomizationBtn.onclick = () => {
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      if (isCordova()) {
+        if (typeof buyEnemyCustomizationUnlock === 'function') {
+          buyEnemyCustomizationUnlock();
+        }
+      } else if (isAndroid) {
+        ratingSystem.openGooglePlayForRating();
+      } else {
+        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+      }
+    };
+  }
 
   const BESTIARY_SORT_BY_KEY = 'bestiarySortBy';
   const BESTIARY_SORT_DIR_KEY = 'bestiarySortDir';
@@ -333,10 +365,16 @@ function openBestiaryModal() {
       imageResetBtn.setAttribute('aria-label', removeLabel);
       imageResetBtn.setAttribute('title', removeLabel);
       imageResetBtn.innerHTML = '<i class="fa fa-trash-can"></i>';
-      const hasCustomImage = !!getBestiaryCustomImage(id);
+      const customizationUnlocked = isEnemyCustomizationUnlocked();
+      const hasCustomImage = customizationUnlocked && !!getBestiaryCustomImage(id);
       imageResetBtn.disabled = !hasCustomImage;
       imageResetBtn.style.display = hasCustomImage ? '' : 'none';
       imageBtn.style.display = hasCustomImage ? 'none' : '';
+      renameBtn.disabled = !customizationUnlocked;
+      imageBtn.disabled = !customizationUnlocked;
+      if (!customizationUnlocked) {
+        imageResetBtn.disabled = true;
+      }
 
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
@@ -370,11 +408,13 @@ function openBestiaryModal() {
       imageInput.style.display = 'none';
 
       imageBtn.onclick = () => {
+        if (!isEnemyCustomizationUnlocked()) return;
         imageInput.value = '';
         imageInput.click();
       };
 
       imageInput.addEventListener('change', async (event) => {
+        if (!isEnemyCustomizationUnlocked()) return;
         const file = event.target.files && event.target.files[0];
         if (!file) return;
         if (file.type && !file.type.startsWith('image/')) {
@@ -413,6 +453,7 @@ function openBestiaryModal() {
       });
 
       renameBtn.onclick = () => {
+        if (!isEnemyCustomizationUnlocked()) return;
         sfxOpen.play();
         const current = getBestiaryDisplayName(id);
         const next = prompt(getRenamePromptText(current), (bestiary[String(id)] && bestiary[String(id)].n) ? bestiary[String(id)].n : current);
@@ -439,6 +480,7 @@ function openBestiaryModal() {
       };
 
       imageResetBtn.onclick = () => {
+        if (!isEnemyCustomizationUnlocked()) return;
         if (imageResetBtn.disabled) return;
         sfxDecline.play();
         if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };

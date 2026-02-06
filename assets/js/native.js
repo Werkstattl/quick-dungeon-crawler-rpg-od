@@ -10,6 +10,9 @@ function isCordova() {
     if ( isPremium() ) {
       unlockForge();
       unlockAutoMode();
+      if (typeof unlockEnemyCustomization === 'function') {
+        unlockEnemyCustomization();
+      }
       return;
     }
   if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {  
@@ -34,6 +37,11 @@ function isCordova() {
             type: CdvPurchase.ProductType.NON_CONSUMABLE,
             id: AUTO_MODE_PRODUCT_ID,
             platform: CdvPurchase.Platform.GOOGLE_PLAY,
+        },
+        {
+            type: CdvPurchase.ProductType.NON_CONSUMABLE,
+            id: ENEMY_CUSTOMIZATION_PRODUCT_ID,
+            platform: CdvPurchase.Platform.GOOGLE_PLAY,
         }
     ]);
     CdvPurchase.store.when()
@@ -43,6 +51,10 @@ function isCordova() {
             unlockForge();
           } else if (product.id === AUTO_MODE_PRODUCT_ID) {
             unlockAutoMode();
+          } else if (product.id === ENEMY_CUSTOMIZATION_PRODUCT_ID) {
+            if (typeof unlockEnemyCustomization === 'function') {
+              unlockEnemyCustomization();
+            }
           }
         });
         transaction.finish();
@@ -58,6 +70,10 @@ function isCordova() {
 
   function buyAutoModeUnlock() {
     CdvPurchase.store.get(AUTO_MODE_PRODUCT_ID).getOffer().order();
+  }
+
+  function buyEnemyCustomizationUnlock() {
+    CdvPurchase.store.get(ENEMY_CUSTOMIZATION_PRODUCT_ID).getOffer().order();
   }
 
 function openExternal(url) {
