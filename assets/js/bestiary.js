@@ -168,6 +168,56 @@ function readFileAsDataURL(file) {
   });
 }
 
+
+function getBestiaryOutputMimeType() {
+  try {
+    const canvas = document.createElement('canvas');
+    const webpData = canvas.toDataURL('image/webp');
+    if (webpData.startsWith('data:image/webp')) return 'image/webp';
+  } catch {}
+  return 'image/png';
+}
+
+async function loadBestiaryImageSource(file) {
+  if (typeof createImageBitmap === 'function') {
+    return createImageBitmap(file);
+  }
+  const dataUrl = await readFileAsDataURL(file);
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Failed to decode image'));
+    img.src = dataUrl;
+  });
+}
+
+async function normalizeBestiaryImage(file) {
+  const source = await loadBestiaryImageSource(file);
+  const sourceWidth = source.width || source.naturalWidth || 1;
+  const sourceHeight = source.height || source.naturalHeight || 1;
+  const maxDim = 256;
+  const scale = Math.min(1, maxDim / Math.max(sourceWidth, sourceHeight));
+  const targetWidth = Math.max(1, Math.round(sourceWidth * scale));
+  const targetHeight = Math.max(1, Math.round(sourceHeight * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(source, 0, 0, targetWidth, targetHeight);
+  if (source && typeof source.close === 'function') {
+    source.close();
+  }
+
+  const mimeType = getBestiaryOutputMimeType();
+  if (mimeType === 'image/webp') {
+    return canvas.toDataURL(mimeType, 0.8);
+  }
+  return canvas.toDataURL(mimeType);
+}
+
 function getBestiaryCustomImage(enemyId) {
   const entry = bestiary[String(enemyId)];
   if (isEnemyCustomizationUnlocked() && entry && typeof entry.img === 'string' && entry.img) return entry.img;
@@ -431,7 +481,13 @@ function openBestiaryModal() {
           return;
         }
         try {
-          const dataUrl = await readFileAsDataURL(file);
+          let dataUrl = '';
+          try {
+            dataUrl = await normalizeBestiaryImage(file);
+          } catch (error) {
+            // console.warn('Falling back to original bestiary image.', error);
+            dataUrl = await readFileAsDataURL(file);
+          }
           if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };
           bestiary[String(id)].img = dataUrl;
           saveBestiary();
