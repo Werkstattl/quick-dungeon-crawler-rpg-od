@@ -56,6 +56,7 @@ const ENEMY_CUSTOMIZATION_PRODUCT_ID = 'unlock_enemy_customization';
 function unlockEnemyCustomization() {
   enemyCustomizationUnlocked = true;
   localStorage.setItem('enemyCustomizationUnlocked', 'true');
+  refreshBestiaryModalIfOpen();
 }
 
 function isEnemyCustomizationUnlocked() {
@@ -63,6 +64,14 @@ function isEnemyCustomizationUnlocked() {
     if (typeof isPremium === 'function' && isPremium()) return true;
   } catch {}
   return enemyCustomizationUnlocked;
+}
+
+function refreshBestiaryModalIfOpen() {
+  const modal = document.querySelector('#bestiary-modal');
+  if (!modal) return;
+  if (typeof defaultModalElement === 'undefined' || !defaultModalElement) return;
+  if (defaultModalElement.style.display !== 'flex') return;
+  openBestiaryModal();
 }
 
 async function loadBestiary() {
