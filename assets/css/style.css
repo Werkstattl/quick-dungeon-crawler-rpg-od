@@ -2010,6 +2010,7 @@ header button i {
 .bestiary-controls {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
     padding: 0.25rem 0.5rem 0.5rem 0.5rem;
 }
@@ -2023,6 +2024,10 @@ header button i {
     margin: 0;
     width: auto;
     flex: 1;
+}
+
+.bestiary-controls button {
+    flex: 1 0 100%;
 }
 
 .bestiary-list {
