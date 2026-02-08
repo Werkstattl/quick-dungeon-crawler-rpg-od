@@ -270,6 +270,7 @@ function openBestiaryModal() {
   closeBtn.onclick = () => {
     sfxDecline.play();
     // Clean up aggressively
+    if (activeRenameCleanup) activeRenameCleanup();
     if (imgObserver) imgObserver.disconnect();
     defaultModalElement.style.display = 'none';
     defaultModalElement.replaceChildren(); // drop references to nodes quickly
@@ -302,6 +303,7 @@ function openBestiaryModal() {
   let ids = [];
   const BATCH = 10;
   let index = 0;
+  let activeRenameCleanup = null;
 
   // Lazy image loader (assign src only when in view)
   const imgObserver = new IntersectionObserver(entries => {
@@ -373,6 +375,7 @@ function openBestiaryModal() {
   }
 
   function resetAndRender() {
+    if (activeRenameCleanup) activeRenameCleanup();
     localStorage.setItem(BESTIARY_SORT_BY_KEY, sortByEl.value);
     localStorage.setItem(BESTIARY_SORT_DIR_KEY, sortDirEl.value);
 
@@ -437,6 +440,29 @@ function openBestiaryModal() {
 
       const nameEl = document.createElement('span');
       nameEl.textContent = name;
+
+      const renameInput = document.createElement('input');
+      renameInput.type = 'text';
+      renameInput.className = 'bestiary-rename-input';
+      renameInput.style.display = 'none';
+
+      const renameSaveBtn = document.createElement('button');
+      renameSaveBtn.className = 'bestiary-rename-save';
+      renameSaveBtn.type = 'button';
+      const renameSaveLabel = getBestiaryActionLabel('confirm', 'Confirm');
+      renameSaveBtn.setAttribute('aria-label', renameSaveLabel);
+      renameSaveBtn.setAttribute('title', renameSaveLabel);
+      renameSaveBtn.innerHTML = '<i class="fa fa-check"></i>';
+      renameSaveBtn.style.display = 'none';
+
+      const renameCancelBtn = document.createElement('button');
+      renameCancelBtn.className = 'bestiary-rename-cancel';
+      renameCancelBtn.type = 'button';
+      const renameCancelLabel = getBestiaryActionLabel('close', 'Close');
+      renameCancelBtn.setAttribute('aria-label', renameCancelLabel);
+      renameCancelBtn.setAttribute('title', renameCancelLabel);
+      renameCancelBtn.innerHTML = '<i class="fa fa-xmark"></i>';
+      renameCancelBtn.style.display = 'none';
 
       // Stats
       const stats = bestiary[id];
@@ -517,13 +543,18 @@ function openBestiaryModal() {
         }
       });
 
-      renameBtn.onclick = () => {
-        if (!isEnemyCustomizationUnlocked()) return;
-        sfxOpen.play();
-        const current = getBestiaryDisplayName(id);
-        const next = prompt(getRenamePromptText(current), (bestiary[String(id)] && bestiary[String(id)].n) ? bestiary[String(id)].n : current);
-        if (next == null) return;
-        const trimmed = String(next).trim();
+      const closeRenameEditor = () => {
+        renameInput.style.display = 'none';
+        renameSaveBtn.style.display = 'none';
+        renameCancelBtn.style.display = 'none';
+        renameBtn.style.display = '';
+        nameEl.style.display = '';
+        renameInput.value = '';
+        if (activeRenameCleanup === closeRenameEditor) activeRenameCleanup = null;
+      };
+
+      const applyRename = () => {
+        const trimmed = String(renameInput.value || '').trim();
         if (!bestiary[String(id)]) bestiary[String(id)] = { e: 0, k: 0 };
         if (!trimmed) {
           delete bestiary[String(id)].n;
@@ -537,11 +568,46 @@ function openBestiaryModal() {
         nameEl.textContent = name;
         const img = li.querySelector('img');
         if (img) img.alt = name;
+        closeRenameEditor();
 
         // If we are sorting by name, the list order may change.
         if (sortByEl.value === 'name') {
           resetAndRender();
         }
+      };
+
+      renameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          applyRename();
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          closeRenameEditor();
+        }
+      });
+
+      renameSaveBtn.onclick = applyRename;
+      renameCancelBtn.onclick = closeRenameEditor;
+
+      renameBtn.onclick = () => {
+        if (!isEnemyCustomizationUnlocked()) return;
+        if (activeRenameCleanup && activeRenameCleanup !== closeRenameEditor) {
+          activeRenameCleanup();
+        }
+        sfxOpen.play();
+        const current = getBestiaryDisplayName(id);
+        const defaultName = (bestiary[String(id)] && bestiary[String(id)].n) ? bestiary[String(id)].n : current;
+        renameInput.value = defaultName;
+        renameInput.placeholder = current;
+        renameInput.setAttribute('aria-label', getRenamePromptText(current));
+        renameBtn.style.display = 'none';
+        nameEl.style.display = 'none';
+        renameInput.style.display = '';
+        renameSaveBtn.style.display = '';
+        renameCancelBtn.style.display = '';
+        activeRenameCleanup = closeRenameEditor;
+        renameInput.focus();
+        renameInput.select();
       };
 
       imageResetBtn.onclick = () => {
@@ -588,6 +654,9 @@ function openBestiaryModal() {
       li.appendChild(imageBtn);
       li.appendChild(imageResetBtn);
       li.appendChild(renameBtn);
+      li.appendChild(renameInput);
+      li.appendChild(renameSaveBtn);
+      li.appendChild(renameCancelBtn);
       li.appendChild(nameEl);
       li.appendChild(statEl);
       frag.appendChild(li);

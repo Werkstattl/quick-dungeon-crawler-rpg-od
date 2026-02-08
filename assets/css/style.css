@@ -2066,6 +2066,22 @@ header button i {
     opacity: 0.85;
 }
 
+.bestiary-rename-input {
+    margin: 0;
+    min-width: 6rem;
+    max-width: 12rem;
+    flex: 1 1 8rem;
+    padding: 0.15rem 0.35rem;
+}
+
+.bestiary-rename-save,
+.bestiary-rename-cancel {
+    padding: 0.15rem 0.4rem;
+    margin: 0;
+    line-height: 1;
+    opacity: 0.85;
+}
+
 .bestiary-rename i {
     margin-right: 0;
 }
@@ -2078,6 +2094,11 @@ header button i {
     margin-right: 0;
 }
 
+.bestiary-rename-save i,
+.bestiary-rename-cancel i {
+    margin-right: 0;
+}
+
 .bestiary-rename:hover {
     opacity: 1;
 }
@@ -2087,6 +2108,11 @@ header button i {
 }
 
 .bestiary-image-reset:hover {
+    opacity: 1;
+}
+
+.bestiary-rename-save:hover,
+.bestiary-rename-cancel:hover {
     opacity: 1;
 }
 
