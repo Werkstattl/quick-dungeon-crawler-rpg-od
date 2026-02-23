@@ -699,11 +699,3 @@ function findCompanionAfterCombat(enemyLevel) {
         }
     }
 }
-
-// Companion combat integration
-function companionCombatTurn(enemy) {
-    if (activeCompanion && activeCompanion.isActive) {
-        return activeCompanion.attack(enemy);
-    }
-    return 0;
-}
