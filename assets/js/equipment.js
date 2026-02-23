@@ -769,6 +769,10 @@ const applyEquipmentStats = () => {
             }
         });
     }
+    
+    // Apply equipment set bonuses
+    applySetBonuses();
+    
     calculateStats();
 }
 
@@ -1469,4 +1473,240 @@ const createEquipmentPrint = (condition) => {
         index: placementIndex,
         serialized: serializedItem
     };
+}
+
+// ========== Equipment Set Bonus System ==========
+
+// Define equipment sets based on weapon types and armor types
+const EQUIPMENT_SETS = {
+    // Weapon-based sets
+    'swordmaster': {
+        name: 'Swordmaster',
+        nameKey: 'set-swordmaster',
+        pieces: ['Sword'],
+        bonus: { atk: 15, critDmg: 10 },
+        bonusDesc: '+15 ATK, +10% Crit Damage',
+        icon: '⚔️'
+    },
+    'axe-warrior': {
+        name: 'Axe Warrior',
+        nameKey: 'set-axe-warrior',
+        pieces: ['Axe'],
+        bonus: { atk: 20, critRate: 5 },
+        bonusDesc: '+20 ATK, +5% Crit Rate',
+        icon: '🪓'
+    },
+    'dagger-rogue': {
+        name: 'Dagger Rogue',
+        nameKey: 'set-dagger-rogue',
+        pieces: ['Dagger'],
+        bonus: { atkSpd: 0.2, dodge: 8 },
+        bonusDesc: '+0.2 Atk Spd, +8% Dodge',
+        icon: '🗡️'
+    },
+    'hammer-crusher': {
+        name: 'Hammer Crusher',
+        nameKey: 'set-hammer-crusher',
+        pieces: ['Hammer'],
+        bonus: { atk: 25, def: 10 },
+        bonusDesc: '+25 ATK, +10 DEF',
+        icon: '🔨'
+    },
+    'flail-knight': {
+        name: 'Flail Knight',
+        nameKey: 'set-flail-knight',
+        pieces: ['Flail'],
+        bonus: { atk: 15, vamp: 5 },
+        bonusDesc: '+15 ATK, +5% Vampirism',
+        icon: '⛓️'
+    },
+    'scythe-reaper': {
+        name: 'Scythe Reaper',
+        nameKey: 'set-scythe-reaper',
+        pieces: ['Scythe'],
+        bonus: { atk: 30, critRate: 3 },
+        bonusDesc: '+30 ATK, +3% Crit Rate',
+        icon: '🌙'
+    },
+    // Armor-based sets
+    'plate-armor': {
+        name: 'Plate Armor',
+        nameKey: 'set-plate-armor',
+        pieces: ['Plate'],
+        bonus: { def: 25, hp: 100 },
+        bonusDesc: '+25 DEF, +100 HP',
+        icon: '🛡️'
+    },
+    'chain-mail': {
+        name: 'Chain Mail',
+        nameKey: 'set-chain-mail',
+        pieces: ['Chain'],
+        bonus: { def: 15, dodge: 5 },
+        bonusDesc: '+15 DEF, +5% Dodge',
+        icon: '🔗'
+    },
+    'leather-scout': {
+        name: 'Leather Scout',
+        nameKey: 'set-leather-scout',
+        pieces: ['Leather'],
+        bonus: { dodge: 10, atkSpd: 0.15 },
+        bonusDesc: '+10% Dodge, +0.15 Atk Spd',
+        icon: '🦌'
+    },
+    // Shield-based sets
+    'shield-bearer': {
+        name: 'Shield Bearer',
+        nameKey: 'set-shield-bearer',
+        pieces: ['Tower', 'Kite', 'Buckler'],
+        bonus: { def: 20, hp: 50 },
+        bonusDesc: '+20 DEF, +50 HP',
+        icon: '🛡️'
+    },
+    // Hybrid sets (2+ piece combos)
+    'dragon-slayer': {
+        name: 'Dragon Slayer',
+        nameKey: 'set-dragon-slayer',
+        pieces: ['Sword', 'Plate'],
+        bonus: { atk: 25, def: 15, critDmg: 15 },
+        bonusDesc: '+25 ATK, +15 DEF, +15% Crit Damage',
+        icon: '🐉'
+    },
+    'shadow-assassin': {
+        name: 'Shadow Assassin',
+        nameKey: 'set-shadow-assassin',
+        pieces: ['Dagger', 'Leather'],
+        bonus: { atk: 20, dodge: 12, critRate: 5 },
+        bonusDesc: '+20 ATK, +12% Dodge, +5% Crit Rate',
+        icon: '🌑'
+    }
+};
+
+// Track active set bonuses
+let activeSetBonuses = {};
+
+// Get the set name for an equipment item
+const getEquipmentSetName = (item) => {
+    if (!item || !item.category) return null;
+    
+    for (const [setKey, setData] of Object.entries(EQUIPMENT_SETS)) {
+        if (setData.pieces.includes(item.category)) {
+            return setKey;
+        }
+    }
+    return null;
+};
+
+// Count equipped items per set
+const countSetPieces = () => {
+    const setCounts = {};
+    
+    if (!player || !player.equipped) return setCounts;
+    
+    for (const item of player.equipped) {
+        const setKey = getEquipmentSetName(item);
+        if (setKey) {
+            setCounts[setKey] = (setCounts[setKey] || 0) + 1;
+        }
+    }
+    
+    return setCounts;
+};
+
+// Calculate active set bonuses based on equipped items
+const calculateSetBonuses = () => {
+    activeSetBonuses = {};
+    const setCounts = countSetPieces();
+    
+    // Check if 2+ pieces from same set are equipped
+    for (const [setKey, count] of Object.entries(setCounts)) {
+        if (count >= 2) {
+            const setData = EQUIPMENT_SETS[setKey];
+            if (setData && setData.bonus) {
+                activeSetBonuses[setKey] = {
+                    ...setData,
+                    pieceCount: count
+                };
+            }
+        }
+    }
+    
+    return activeSetBonuses;
+};
+
+// Get total stats from set bonuses
+const getSetBonusStats = () => {
+    const bonusStats = {
+        hp: 0,
+        atk: 0,
+        def: 0,
+        atkSpd: 0,
+        vamp: 0,
+        critRate: 0,
+        critDmg: 0,
+        dodge: 0,
+        luck: 0,
+        fasterRun: 0
+    };
+    
+    for (const setKey in activeSetBonuses) {
+        const set = activeSetBonuses[setKey];
+        if (set.bonus) {
+            for (const stat in set.bonus) {
+                if (bonusStats.hasOwnProperty(stat)) {
+                    bonusStats[stat] += set.bonus[stat];
+                }
+            }
+        }
+    }
+    
+    return bonusStats;
+};
+
+// Apply set bonuses to player stats
+const applySetBonuses = () => {
+    calculateSetBonuses();
+    const setStats = getSetBonusStats();
+    
+    // Add set bonus stats to equipped stats
+    for (const stat in setStats) {
+        if (player.equippedStats.hasOwnProperty(stat)) {
+            player.equippedStats[stat] += setStats[stat];
+        }
+    }
+};
+
+// Get set bonus display HTML
+const getSetBonusDisplayHtml = () => {
+    if (!player || !player.equipped || player.equipped.length < 2) {
+        return '';
+    }
+    
+    calculateSetBonuses();
+    const setCount = Object.keys(activeSetBonuses).length;
+    
+    if (setCount === 0) {
+        return '';
+    }
+    
+    let html = '<div class="set-bonuses-panel" style="margin-top: 1rem; padding: 0.75rem; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 8px; border: 1px solid #4a4a6a;">';
+    html += '<h5 style="margin: 0 0 0.5rem 0; color: #ffd700; font-size: 0.9rem;">🎭 Active Set Bonuses</h5>';
+    
+    for (const [setKey, set] of Object.entries(activeSetBonuses)) {
+        const setName = typeof t === 'function' ? t(set.nameKey || set.name) : set.name;
+        html += `<div class="active-set" style="display: flex; align-items: center; justify-content: space-between; padding: 0.4rem; margin: 0.3rem 0; background: rgba(255,215,0,0.1); border-radius: 4px; border-left: 3px solid #ffd700;">`;
+        html += `<span style="color: #fff; font-size: 0.85rem;">${set.icon || '⚔️'} ${setName}</span>`;
+        html += `<span style="color: #90EE90; font-size: 0.8rem;">${set.bonusDesc}</span>`;
+        html += '</div>';
+    }
+    
+    html += '</div>';
+    return html;
+};
+
+// Export for use in other modules
+if (typeof window !== 'undefined') {
+    window.EQUIPMENT_SETS = EQUIPMENT_SETS;
+    window.calculateSetBonuses = calculateSetBonuses;
+    window.getSetBonusStats = getSetBonusStats;
+    window.getSetBonusDisplayHtml = getSetBonusDisplayHtml;
 }
