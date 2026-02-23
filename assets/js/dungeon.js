@@ -363,6 +363,113 @@ const loadDungeonProgress = () => {
     }
 }
 
+// ========== Path Selection System ==========
+const generatePathOptions = () => {
+    const floor = dungeon.progress.floor || 1;
+    const baseMultiplier = 1 + (floor * 0.1);
+    
+    return {
+        safe: {
+            desc: 'Less enemies, guaranteed loot',
+            enemyCount: Math.max(1, Math.floor(Math.random() * 2)),
+            enemyScale: 0.7,
+            goldBonus: 1,
+            expBonus: 0.8,
+            lootChance: 1.5,
+            hasTreasure: Math.random() > 0.3
+        },
+        medium: {
+            desc: 'Balanced risk and reward',
+            enemyCount: Math.max(1, Math.floor(Math.random() * 2) + 1),
+            enemyScale: 1.0,
+            goldBonus: 1.2,
+            expBonus: 1.0,
+            lootChance: 1.0,
+            hasTreasure: Math.random() > 0.5
+        },
+        risky: {
+            desc: 'Many enemies, double loot!',
+            enemyCount: Math.max(2, Math.floor(Math.random() * 3) + 2),
+            enemyScale: 1.3,
+            goldBonus: 2.0,
+            expBonus: 1.5,
+            lootChance: 2.0,
+            hasTreasure: Math.random() > 0.2
+        }
+    };
+};
+
+const selectPath = (pathType) => {
+    sfxConfirm.play();
+    dungeon.nothingBias = 0;
+    currentEvent = null;
+    dungeon.status.event = false;
+    
+    const options = generatePathOptions();
+    const selected = options[pathType];
+    
+    // Apply path modifiers to next encounters
+    dungeon.pathModifiers = {
+        enemyCount: selected.enemyCount,
+        enemyScale: selected.enemyScale,
+        goldBonus: selected.goldBonus,
+        expBonus: selected.expBonus,
+        lootChance: selected.lootChance
+    };
+    
+    let logMessage = '';
+    if (pathType === 'safe') {
+        logMessage = '🌿 You take the safe path...';
+    } else if (pathType === 'medium') {
+        logMessage = '⚔️ You take the normal path...';
+    } else {
+        logMessage = '💀 You take the risky path!';
+    }
+    
+    addDungeonLog(logMessage);
+    
+    // Generate encounters based on path
+    const encounterCount = selected.enemyCount;
+    for (let i = 0; i < encounterCount; i++) {
+        setTimeout(() => {
+            generateRandomEnemy();
+            // Scale enemy based on path
+            if (enemy.lvl && selected.enemyScale !== 1) {
+                enemy.lvl = Math.max(1, Math.round(enemy.lvl * selected.enemyScale));
+            }
+            enemy.name = getDisplayEnemyName(enemy.id);
+            addDungeonLog(t('encountered-enemy', { enemy: enemy.name }));
+            dungeon.status.event = true;
+            
+            // Auto-engage after a short delay
+            setTimeout(() => {
+                engageBattle();
+            }, 500);
+        }, i * 2000); // Stagger encounters
+    }
+    
+    // Add treasure room chance
+    if (selected.hasTreasure) {
+        setTimeout(() => {
+            const roll = Math.random();
+            if (roll < selected.lootChance * 0.3) {
+                currentEvent = "treasure";
+                const choices = `
+                    <div class="decision-panel">
+                        <button id="choice1">${t('open-the-chest')}</button>
+                        <button id="choice2">${t('ignore')}</button>
+                    </div>`;
+                addDungeonLog(t('treasure-chamber-found'), choices);
+                document.querySelector("#choice1").onclick = function() { chestEvent(); }
+                document.querySelector("#choice2").onclick = function() { 
+                    dungeon.action = 0; 
+                    ignoreEvent(); 
+                };
+            }
+        }, encounterCount * 2000 + 1000);
+    }
+};
+
 // ========== Events in the Dungeon ==========
 const dungeonEvent = () => {
     if (dungeon.status.exploring && !dungeon.status.event) {
@@ -382,6 +489,14 @@ const dungeonEvent = () => {
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
         }
+        
+        // Add path selection events occasionally (after action 2, not on every floor)
+        if (dungeon.action >= 2 && dungeon.action <= 4 && dungeon.progress.floor > 1) {
+            if (Math.random() < 0.25) { // 25% chance when conditions are met
+                event = "path";
+            }
+        }
+        
         if (dungeon.action > 2 && dungeon.action < 6) {
             eventTypes.push("nextroom");
         } else if (dungeon.action > 5) {
@@ -399,6 +514,32 @@ const dungeonEvent = () => {
         currentEvent = event;
 
         switch (event) {
+            case "path":
+                dungeon.status.event = true;
+                const pathOptions = generatePathOptions();
+                choices = `
+                    <div class="path-selection-panel" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                        <div class="path-option" style="padding: 0.75rem; background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%); border-radius: 8px; border: 1px solid #4ade80; cursor: pointer;" onclick="selectPath('safe')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #4ade80; font-weight: bold;">🌿 Safe Path</span>
+                                <span style="color: #86efac; font-size: 0.85rem;">${pathOptions.safe.desc}</span>
+                            </div>
+                        </div>
+                        <div class="path-option" style="padding: 0.75rem; background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%); border-radius: 8px; border: 1px solid #60a5fa; cursor: pointer;" onclick="selectPath('medium')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #60a5fa; font-weight: bold;">⚔️ Normal Path</span>
+                                <span style="color: #93c5fd; font-size: 0.85rem;">${pathOptions.medium.desc}</span>
+                            </div>
+                        </div>
+                        <div class="path-option" style="padding: 0.75rem; background: linear-gradient(135deg, #5f1a1a 0%, #6f2a2a 100%); border-radius: 8px; border: 1px solid #f87171; cursor: pointer;" onclick="selectPath('risky')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #f87171; font-weight: bold;">💀 Risky Path</span>
+                                <span style="color: #fca5a5; font-size: 0.85rem;">${pathOptions.risky.desc}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                addDungeonLog('You come to a crossroads...', choices);
+                break;
             case "nextroom":
                 dungeon.status.event = true;
                 choices = `
