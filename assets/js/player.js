@@ -339,16 +339,6 @@ const playerLoadStats = () => {
     }
 
     document.querySelector("#bonus-stats").innerHTML = bonusStatsHTML;
-    
-    // Add equipment set bonuses display
-    const setBonusHtml = typeof getSetBonusDisplayHtml === 'function' ? getSetBonusDisplayHtml() : '';
-    if (setBonusHtml) {
-        const bonusStatsContainer = document.querySelector("#bonus-stats");
-        if (bonusStatsContainer) {
-            bonusStatsContainer.innerHTML += setBonusHtml;
-        }
-    }
-    
     if (typeof updateExploreButtonAttention === 'function') {
         updateExploreButtonAttention();
     }
