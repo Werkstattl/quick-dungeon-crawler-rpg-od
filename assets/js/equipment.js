@@ -1557,7 +1557,6 @@ const EQUIPMENT_SETS = {
     'shield-bearer': {
         name: 'Shield Bearer',
         nameKey: 'set-shield-bearer',
-        match: 'any',
         pieces: ['Tower', 'Kite', 'Buckler'],
         bonus: { def: 20, hp: 50 },
         bonusDesc: '+20 DEF, +50 HP',
@@ -1567,7 +1566,6 @@ const EQUIPMENT_SETS = {
     'dragon-slayer': {
         name: 'Dragon Slayer',
         nameKey: 'set-dragon-slayer',
-        match: 'all',
         pieces: ['Sword', 'Plate'],
         bonus: { atk: 25, def: 15, critDmg: 15 },
         bonusDesc: '+25 ATK, +15 DEF, +15% Crit Damage',
@@ -1576,7 +1574,6 @@ const EQUIPMENT_SETS = {
     'shadow-assassin': {
         name: 'Shadow Assassin',
         nameKey: 'set-shadow-assassin',
-        match: 'all',
         pieces: ['Dagger', 'Leather'],
         bonus: { atk: 20, dodge: 12, critRate: 5 },
         bonusDesc: '+20 ATK, +12% Dodge, +5% Crit Rate',
@@ -1588,36 +1585,27 @@ const EQUIPMENT_SETS = {
 let activeSetBonuses = {};
 
 // Get the set name for an equipment item
+const getEquipmentSetName = (item) => {
+    if (!item || !item.category) return null;
+    
+    for (const [setKey, setData] of Object.entries(EQUIPMENT_SETS)) {
+        if (setData.pieces.includes(item.category)) {
+            return setKey;
+        }
+    }
+    return null;
+};
+
+// Count equipped items per set
 const countSetPieces = () => {
     const setCounts = {};
-    const categoryCounts = {};
     
     if (!player || !player.equipped) return setCounts;
     
     for (const item of player.equipped) {
-        if (!item || !item.category) {
-            continue;
-        }
-        categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
-    }
-
-    for (const [setKey, setData] of Object.entries(EQUIPMENT_SETS)) {
-        if (!setData || !Array.isArray(setData.pieces) || setData.pieces.length === 0) {
-            continue;
-        }
-        if (setData.match === 'all') {
-            const hasAllPieces = setData.pieces.every(piece => (categoryCounts[piece] || 0) > 0);
-            if (hasAllPieces) {
-                setCounts[setKey] = setData.pieces.reduce((sum, piece) => sum + (categoryCounts[piece] || 0), 0);
-            }
-            continue;
-        }
-        let count = 0;
-        for (const piece of setData.pieces) {
-            count += categoryCounts[piece] || 0;
-        }
-        if (count > 0) {
-            setCounts[setKey] = count;
+        const setKey = getEquipmentSetName(item);
+        if (setKey) {
+            setCounts[setKey] = (setCounts[setKey] || 0) + 1;
         }
     }
     
