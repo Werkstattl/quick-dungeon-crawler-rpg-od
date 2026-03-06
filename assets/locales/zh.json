@@ -40,7 +40,16 @@
   "dodge": "闪避：",
   "luck": "幸运：",
   "stat-display": {
-    "faster-run": "奔跑速度"
+    "attack": "攻击",
+    "crit-rate": "暴击率",
+    "crit-dmg": "暴击伤害",
+    "attack-speed": "攻击速度",
+    "faster-run": "奔跑速度",
+    "health": "生命",
+    "defense": "防御",
+    "vampirism": "吸血",
+    "dodge": "闪避",
+    "luck": "幸运"
   },
   "stats-modal": {
     "health": "生命值。降为 0 时会被击败。",
@@ -333,18 +342,6 @@
   "descend": "下楼",
   "descended-to-floor": "你下到了第 {floor} 层。",
   "found-stairs": "你发现了一段通往更深处的楼梯。",
-  "stat-display": {
-    "attack": "攻击",
-    "crit-rate": "暴击率",
-    "crit-dmg": "暴击伤害",
-    "attack-speed": "攻击速度",
-    "faster-run": "奔跑速度",
-    "health": "生命",
-    "defense": "防御",
-    "vampirism": "吸血",
-    "dodge": "闪避",
-    "luck": "幸运"
-  },
   "equipment-names": {
     "sword": "长剑",
     "axe": "战斧",
