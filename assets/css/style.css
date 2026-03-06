@@ -343,7 +343,8 @@ color: black;
     position: relative;
 }
 
-#playerEquipment .items .lock-indicator {
+#playerEquipment .items .lock-indicator,
+#companionCharmSlot .items .lock-indicator {
     position: absolute;
     top: -0.35rem;
     right: -0.35rem;
@@ -356,7 +357,8 @@ color: black;
     pointer-events: none;
 }
 
-#playerEquipment .items.locked-item button {
+#playerEquipment .items.locked-item button,
+#companionCharmSlot .items.locked-item button {
     box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.6);
 }
 
