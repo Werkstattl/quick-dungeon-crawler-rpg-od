@@ -276,26 +276,58 @@ color: black;
     margin-left: 0.5rem;
 }
 
+.companion-charm-slot-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0.75rem 0.5rem 0;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.45rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.14));
+}
+
+.companion-charm-slot-group__copy {
+    min-width: 0;
+}
+
+.companion-charm-slot-group__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.15rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+    text-transform: uppercase;
+}
+
+.companion-charm-slot-group__title {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.1;
+}
+
 #companionCharmSlot {
     display: flex;
-    justify-content: center;
-    min-height: 3rem;
-    margin: 0 0.5rem 0.75rem;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: auto;
+    margin: 0;
+    flex-shrink: 0;
 }
 
 #companionCharmSlot .items {
     position: relative;
 }
 
-.companion-charm-slot-group h5 {
-    margin: 0 0 0.35rem;
-    text-align: center;
-}
-
 .companion-slot-empty {
     margin: 0;
-    opacity: 0.8;
-    text-align: center;
+    max-width: 5.5rem;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    opacity: 0.7;
+    text-align: right;
+    white-space: normal;
 }
 
 .small-text {

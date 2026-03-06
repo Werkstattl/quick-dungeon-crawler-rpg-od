@@ -143,11 +143,14 @@
                                 <p id="unequip-all"><i class="fa fa-circle-xmark"></i></p>
                             </div>
                         </div>
-                        <div class="companion-charm-slot-group">
-                            <h5 data-i18n="companion-charm">Charm</h5>
+                        <div id="playerEquipment"></div>
+                        <div class="companion-charm-slot-group" aria-labelledby="companion-charm-heading">
+                            <div class="companion-charm-slot-group__copy">
+                                <span class="companion-charm-slot-group__eyebrow" data-i18n="companion">Companion</span>
+                                <h5 id="companion-charm-heading" class="companion-charm-slot-group__title" data-i18n="companion-charm">Charm</h5>
+                            </div>
                             <div id="companionCharmSlot"></div>
                         </div>
-                        <div id="playerEquipment"></div>
                     </div>
                 </div>
                 <button id="menu-btn" data-i18n="menu">Menu</button>
