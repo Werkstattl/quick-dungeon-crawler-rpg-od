@@ -151,6 +151,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                         equipment: []
                     },
                     equipped: [],
+                    companionCharm: null,
                     gold: 0,
                     playtime: 0,
                     kills: 0,
@@ -176,12 +177,13 @@ window.addEventListener("DOMContentLoaded", async function () {
                 player.name = playerName;
                 if (hardcore && !wasHardcore) {
                     if ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) ||
-                        (player.equipped && player.equipped.length > 0) || player.gold > 0) {
+                        (player.equipped && player.equipped.length > 0) || player.companionCharm || player.gold > 0) {
                         player.inventory = {
                             consumables: [],
                             equipment: []
                         };
                         player.equipped = [];
+                        player.companionCharm = null;
                         player.equippedStats = {
                             hp: 0,
                             atk: 0,
@@ -216,7 +218,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     const hcCheckbox = document.querySelector("#hardcore-checkbox");
     hcCheckbox.addEventListener("change", function (e) {
         if (e.target.checked && player && !player.hardcore &&
-            ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) || player.gold > 0)) {
+            ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) || player.companionCharm || player.gold > 0)) {
             sfxOpen.play();
             let dimTarget = document.querySelector('#character-creation');
             dimTarget.style.filter = "brightness(50%)";

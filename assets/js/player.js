@@ -42,6 +42,9 @@ if (player) {
     ensureStat(player.bonusStats, 'dodge');
     ensureStat(player.bonusStats, 'luck');
     ensureStat(player.bonusStats, 'fasterRun');
+    if (player.companionCharm === undefined) {
+        player.companionCharm = null;
+    }
     if (player.maxUnlockedCurseLevel === undefined) {
         player.maxUnlockedCurseLevel = 1;
     }

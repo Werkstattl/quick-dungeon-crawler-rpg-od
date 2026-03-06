@@ -137,7 +137,10 @@ const getEnemyAttackDelay = () => {
 };
 
 const getCompanionAttackDelay = () => {
-    const atkSpd = activeCompanion && activeCompanion.atkSpd ? activeCompanion.atkSpd : 1;
+    const combatStats = typeof getCompanionCombatStats === 'function'
+        ? getCompanionCombatStats(activeCompanion)
+        : null;
+    const atkSpd = combatStats && combatStats.atkSpd ? combatStats.atkSpd : 1;
     const normalized = Math.max(atkSpd || 0, 0.1);
     return 1000 / normalized;
 };
@@ -159,16 +162,18 @@ const applyCompanionSpecialBuff = (durationMs = 5000) => {
     }
 
     clearCompanionSpecialBuff();
-
-    const atkBonus = activeCompanion.atk * 0.5;
-    const atkSpdBonus = activeCompanion.atkSpd * 0.5;
-
-    activeCompanion.atk += atkBonus;
-    activeCompanion.atkSpd += atkSpdBonus;
+    if (typeof setActiveCompanionCombatModifiers === 'function') {
+        setActiveCompanionCombatModifiers({
+            atkMultiplier: 1.5,
+            atkSpdMultiplier: 1.5,
+        });
+    }
 
     companionSpecialBuffRevert = () => {
-        activeCompanion.atk -= atkBonus;
-        activeCompanion.atkSpd -= atkSpdBonus;
+        if (typeof resetActiveCompanionCombatModifiers === 'function') {
+            resetActiveCompanionCombatModifiers();
+            updateCompanionUI();
+        }
         companionSpecialBuffRevert = null;
     };
 
@@ -819,15 +824,23 @@ const companionAttack = () => {
 
     // Calculates the damage and attacks the enemy
     let crit;
-    let damage = activeCompanion.atk * (activeCompanion.atk / (activeCompanion.atk + enemy.stats.def));
+    const combatStats = typeof getCompanionCombatStats === 'function'
+        ? getCompanionCombatStats(activeCompanion)
+        : {
+            atk: activeCompanion.atk,
+            atkSpd: activeCompanion.atkSpd,
+            critRate: activeCompanion.critRate,
+            critDmg: activeCompanion.critDmg,
+        };
+    let damage = combatStats.atk * (combatStats.atk / (combatStats.atk + enemy.stats.def));
     // Randomizes the damage by 90% - 110%
     let dmgRange = 0.9 + Math.random() * 0.2;
     damage = damage * dmgRange;
     // Check if the attack is a critical hit
-    if (Math.floor(Math.random() * 100) < activeCompanion.critRate) {
+    if (Math.floor(Math.random() * 100) < combatStats.critRate) {
         crit = true;
         dmgtype = t('crit-damage');
-        damage = Math.round(damage * (1 + (activeCompanion.critDmg / 100)));
+        damage = Math.round(damage * (1 + (combatStats.critDmg / 100)));
     } else {
         crit = false;
         dmgtype = t('damage');
@@ -1074,6 +1087,11 @@ const sellLatestCombatLoot = () => {
                 removed = true;
             }
         }
+    } else if (loot.placement === 'companionCharm' && player && player.companionCharm) {
+        if (player.companionCharm === loot.item || JSON.stringify(player.companionCharm) === loot.serialized) {
+            player.companionCharm = null;
+            removed = true;
+        }
     }
 
     if (!removed) {
@@ -1092,6 +1110,9 @@ const sellLatestCombatLoot = () => {
     const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
     addCombatLog(`<span class="combat-sell-log"><i class="fas fa-coins" style="color: #FFD700;"></i>${sellLabel}: +${nFormatter(loot.item.value)}</span>`);
     playerLoadStats();
+    if (typeof updateCompanionUI === 'function') {
+        updateCompanionUI();
+    }
     saveData();
 handleClaimButtonClick();
 };

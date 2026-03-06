@@ -11,6 +11,10 @@ const defaultCompanionStats = () => ({
 });
 
 let activeCompanionBonuses = defaultCompanionStats();
+let activeCompanionCombatModifiers = {
+    atkMultiplier: 1,
+    atkSpdMultiplier: 1,
+};
 
 function getActiveCompanionBonuses() {
     return { ...activeCompanionBonuses };
@@ -27,6 +31,58 @@ const getCompanionExperienceMultiplier = () => {
 
 function resetActiveCompanionBonuses() {
     activeCompanionBonuses = defaultCompanionStats();
+}
+
+function getActiveCompanionCombatModifiers() {
+    return { ...activeCompanionCombatModifiers };
+}
+
+function resetActiveCompanionCombatModifiers() {
+    activeCompanionCombatModifiers = {
+        atkMultiplier: 1,
+        atkSpdMultiplier: 1,
+    };
+}
+
+function setActiveCompanionCombatModifiers(modifiers = {}) {
+    activeCompanionCombatModifiers = {
+        atkMultiplier: Number.isFinite(modifiers.atkMultiplier) ? modifiers.atkMultiplier : 1,
+        atkSpdMultiplier: Number.isFinite(modifiers.atkSpdMultiplier) ? modifiers.atkSpdMultiplier : 1,
+    };
+    updateCompanionUI();
+}
+
+function getActiveCompanionCharmBonuses(companion = activeCompanion) {
+    if (!companion || !companion.isActive || typeof getCompanionCharmBonuses !== 'function') {
+        return {
+            atk: 0,
+            atkSpd: 0,
+            critRate: 0,
+            critDmg: 0,
+        };
+    }
+    return getCompanionCharmBonuses();
+}
+
+function getCompanionCombatStats(companion = activeCompanion) {
+    if (!companion) {
+        return {
+            atk: 0,
+            atkSpd: 0,
+            critRate: 0,
+            critDmg: 0,
+        };
+    }
+    const charmBonuses = getActiveCompanionCharmBonuses(companion);
+    const modifiers = companion.isActive ? getActiveCompanionCombatModifiers() : { atkMultiplier: 1, atkSpdMultiplier: 1 };
+    const atk = Math.max(1, Math.round((companion.atk + (charmBonuses.atk || 0)) * (modifiers.atkMultiplier || 1)));
+    const atkSpd = Math.min(2.75, (companion.atkSpd * (1 + ((charmBonuses.atkSpd || 0) / 100))) * (modifiers.atkSpdMultiplier || 1));
+    return {
+        atk,
+        atkSpd,
+        critRate: companion.critRate + (charmBonuses.critRate || 0),
+        critDmg: companion.critDmg + (charmBonuses.critDmg || 0),
+    };
 }
 
 const getCompanionOptionsFromTemplate = (template = {}) => ({
@@ -123,12 +179,8 @@ class Companion {
         this.baseCritDmg = options.baseCritDmg ?? 50;
         this.atkSpdBase = options.atkSpdBase ?? 0.4;
         this.atkSpdGrowth = options.atkSpdGrowth ?? 0.02;
-        this.hp = this.calculateHp();
-        this.atk = this.calculateAtk();
         this.isActive = false;
-        this.atkSpd = this.calculateAtkSpd();
-        this.critRate = this.baseCritRate;
-        this.critDmg = this.baseCritDmg;
+        this.refreshBaseStats();
     }
 
     get name() {
@@ -143,9 +195,7 @@ class Companion {
                 const oldName = this.name;
                 this.id = next.id;
                 this.applyTemplate(next);
-                this.hp = this.calculateHp();
-                this.atk = this.calculateAtk();
-                this.atkSpd = this.calculateAtkSpd();
+                this.refreshBaseStats();
                 if (this.isActive) {
                     applyActiveCompanionBonuses(this);
                 }
@@ -180,6 +230,14 @@ class Companion {
         }
     }
 
+    refreshBaseStats() {
+        this.hp = this.calculateHp();
+        this.atk = this.calculateAtk();
+        this.atkSpd = this.calculateAtkSpd();
+        this.critRate = this.baseCritRate;
+        this.critDmg = this.baseCritDmg;
+    }
+
     calculateHp() {
         return Math.floor(this.baseHp * (1 + (this.level - 1) * 0.1));
     }
@@ -211,9 +269,7 @@ class Companion {
 
     levelUp() {
         this.level += 1;
-        this.hp = this.calculateHp();
-        this.atk = this.calculateAtk();
-        this.atkSpd = this.calculateAtkSpd();
+        this.refreshBaseStats();
         addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`);
         this.checkEvolution();
         if (this.isActive) {
@@ -224,8 +280,9 @@ class Companion {
 
     attack(enemy) {
         if (!this.isActive) return 0;
-        
-        const damage = Math.max(1, Math.floor(this.atk - (enemy.stats.def / 2)));
+
+        const combatStats = getCompanionCombatStats(this);
+        const damage = Math.max(1, Math.floor(combatStats.atk - (enemy.stats.def / 2)));
         enemy.hp -= damage;
         addDungeonLog(`${this.name} attacks for ${damage} damage!`);
         return damage;
@@ -233,12 +290,14 @@ class Companion {
 
     activate() {
         this.isActive = true;
+        resetActiveCompanionCombatModifiers();
         applyActiveCompanionBonuses(this);
         updateCompanionUI();
     }
 
     deactivate() {
         this.isActive = false;
+        resetActiveCompanionCombatModifiers();
         applyActiveCompanionBonuses(null);
         updateCompanionUI();
     }
@@ -461,9 +520,7 @@ function initCompanions() {
             );
             comp.level = data.level;
             comp.experience = data.experience;
-            comp.hp = comp.calculateHp();
-            comp.atk = comp.calculateAtk();
-            comp.atkSpd = comp.calculateAtkSpd();
+            comp.refreshBaseStats();
             comp.isActive = data.isActive;
             if (Array.isArray(data.passives) && data.passives.length && !type.passives) {
                 comp.passives = data.passives;
@@ -515,15 +572,20 @@ function updateCompanionUI() {
     const companionAtk = document.getElementById('companion-atk');
     const companionBonus = document.getElementById('companion-bonus');
     const companionAtkSpd = document.getElementById('companion-atkspd');
+    const companionCharmStatus = document.getElementById('companion-charm-status');
     const summonBtn = document.getElementById('summon-companion');
+    const equippedCharm = typeof getEquippedCompanionCharm === 'function' ? getEquippedCompanionCharm() : null;
+    const charmIcon = equippedCharm ? equipmentIcon(equippedCharm.baseCategory || equippedCharm.category) : '';
+    const charmLabel = equippedCharm ? equipmentLabel(equippedCharm.rarity, equippedCharm.category) : '';
 
     if (activeCompanion) {
+        const combatStats = getCompanionCombatStats(activeCompanion);
         companionName.removeAttribute('data-i18n');
         companionName.removeAttribute('data-i18n-params');
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
-        companionAtk.textContent = activeCompanion.atk;
-        companionAtkSpd.textContent = activeCompanion.atkSpd.toFixed(2);
+        companionAtk.textContent = combatStats.atk;
+        companionAtkSpd.textContent = combatStats.atkSpd.toFixed(2);
         const bonusSummary = buildCompanionBonusList(activeCompanion);
         const passiveKey = activeCompanion.passiveDescriptionKey;
         if (bonusSummary.hasBonuses || passiveKey) {
@@ -544,6 +606,17 @@ function updateCompanionUI() {
         companionAtkSpd.textContent = "0";
         summonBtn.textContent = t('summon');
         summonBtn.classList.add('attention');
+    }
+
+    if (companionCharmStatus) {
+        if (equippedCharm) {
+            companionCharmStatus.removeAttribute('data-i18n');
+            const inactiveNote = !activeCompanion ? ` <span class="small-text">(${t('companion-charm-inactive')})</span>` : '';
+            companionCharmStatus.innerHTML = `<span data-i18n="companion-charm">${t('companion-charm')}</span>: <span class="${equippedCharm.rarity}">${charmIcon}${charmLabel}</span>${inactiveNote}`;
+        } else {
+            companionCharmStatus.setAttribute('data-i18n', 'no-companion-charm');
+            companionCharmStatus.textContent = t('no-companion-charm');
+        }
     }
     
     summonBtn.classList.remove('hidden');
@@ -587,11 +660,12 @@ function openCompanionModal() {
         option.className = `companion-option ${companion.rarity}`;
         const bonusSummary = buildCompanionBonusList(companion);
         const passiveKey = companion.passiveDescriptionKey;
+        const combatStats = getCompanionCombatStats(companion);
         option.innerHTML = `
             <h4>${companion.name}</h4>
             <p><span data-i18n="level">Level</span>: ${companion.level}</p>
-            <p><span data-i18n="atk">ATK:</span> ${companion.atk}</p>
-            <p><span data-i18n="aps">APS:</span> ${companion.atkSpd.toFixed(2)}</p>
+            <p><span data-i18n="atk">ATK:</span> ${combatStats.atk}</p>
+            <p><span data-i18n="aps">APS:</span> ${combatStats.atkSpd.toFixed(2)}</p>
             ${bonusSummary.html}
             ${passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : ''}
         `;

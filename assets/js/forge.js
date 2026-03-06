@@ -95,6 +95,9 @@ const loadForgeEquipment = () => {
     // Add inventory equipment
     player.inventory.equipment.forEach(equipStr => {
         const equip = JSON.parse(equipStr);
+        if (typeof isCompanionCharm === 'function' && isCompanionCharm(equip)) {
+            return;
+        }
         forgeableEquipment.push({
             equipStr,
             equip,
@@ -104,6 +107,9 @@ const loadForgeEquipment = () => {
 
     // Add equipped items
     player.equipped.forEach(equip => {
+        if (typeof isCompanionCharm === 'function' && isCompanionCharm(equip)) {
+            return;
+        }
         forgeableEquipment.push({
             equipStr: JSON.stringify(equip),
             equip,
@@ -423,7 +429,7 @@ const calculateForgeResult = () => {
 // Create forged equipment
 const createForgedEquipment = (item1, item2, item3) => {
     // Generate a fresh piece of equipment similar to a normal dungeon drop
-    const forgedEquipment = createEquipment(false);
+    const forgedEquipment = createEquipment(false, { allowCompanionCharm: false });
 
     // Set tier to the same as input items
     forgedEquipment.tier = item1.tier;

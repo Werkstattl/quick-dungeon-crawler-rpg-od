@@ -276,6 +276,33 @@ color: black;
     margin-left: 0.5rem;
 }
 
+#companionCharmSlot {
+    display: flex;
+    justify-content: center;
+    min-height: 3rem;
+    margin: 0 0.5rem 0.75rem;
+}
+
+#companionCharmSlot .items {
+    position: relative;
+}
+
+.companion-charm-slot-group h5 {
+    margin: 0 0 0.35rem;
+    text-align: center;
+}
+
+.companion-slot-empty {
+    margin: 0;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.small-text {
+    font-size: 0.85em;
+    opacity: 0.85;
+}
+
 #playerEquipment i {
     margin: 0 0.4rem;
 }
@@ -1118,6 +1145,11 @@ header button i {
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+#companion-charm-status {
+    font-size: 0.95em;
+    opacity: 0.9;
 }
 
 .companion-bonus-list {

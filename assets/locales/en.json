@@ -190,6 +190,9 @@
   "change": "Change",
   "dismiss-companion": "Dismiss Companion",
   "send-away": "Send {name} away",
+  "companion-charm": "Charm",
+  "no-companion-charm": "No charm equipped",
+  "companion-charm-inactive": "Equipped, but inactive without a companion.",
   "companion-wolf-pup": "Wolf Pup",
   "companion-fairy-helper": "Fairy Helper",
   "companion-mini-dragon": "Mini Dragon",
@@ -353,7 +356,8 @@
     "great-helm": "Great Helm",
     "horned-helm": "Horned Helm",
     "mask": "Mask",
-    "boots": "Boots"
+    "boots": "Boots",
+    "charm": "Charm"
   }
 
   ,"enemy-names": {
