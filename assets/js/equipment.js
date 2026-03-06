@@ -1250,6 +1250,19 @@ const compareItemsByPriority = (itemA, itemB, priorities) => {
     return 0;
 };
 
+const sortEquipBestCandidates = (items) => {
+    if (!Array.isArray(items) || items.length < 2) {
+        return items;
+    }
+    if (player.preferences && player.preferences.equipBestUseCustom) {
+        const priorities = [...ensureEquipBestPriorities()];
+        items.sort((a, b) => compareItemsByPriority(a, b, priorities));
+        return items;
+    }
+    items.sort((a, b) => (b.value || 0) - (a.value || 0));
+    return items;
+};
+
 function openEquipBestSettings() {
     const modal = typeof defaultModalElement !== 'undefined' ? defaultModalElement : null;
     if (!modal) {
@@ -1437,13 +1450,19 @@ function openEquipBestSettings() {
 }
 
 const equipBest = () => {
-    const inventoryEquipment = Array.isArray(player.inventory.equipment)
-        ? player.inventory.equipment.map(item => JSON.parse(item)).filter(item => !isCompanionCharm(item))
+    const inventoryItems = player.inventory && Array.isArray(player.inventory.equipment)
+        ? player.inventory.equipment.map(item => JSON.parse(item))
         : [];
+    const inventoryEquipment = inventoryItems.filter(item => !isCompanionCharm(item));
+    const inventoryCompanionCharms = inventoryItems.filter(item => isCompanionCharm(item));
     const equippedItems = Array.isArray(player.equipped)
         ? player.equipped.filter(item => item && !isCompanionCharm(item))
         : [];
-    if (inventoryEquipment.length === 0 && equippedItems.length === 0) {
+    const equippedCompanionCharm = getEquippedCompanionCharm();
+    if (inventoryEquipment.length === 0
+        && equippedItems.length === 0
+        && inventoryCompanionCharms.length === 0
+        && !equippedCompanionCharm) {
         if (typeof sfxDeny !== 'undefined') sfxDeny.play();
         return;
     }
@@ -1455,24 +1474,29 @@ const equipBest = () => {
     for (const eq of inventoryEquipment) {
         candidateItems.push(eq);
     }
-    if (player.preferences && player.preferences.equipBestUseCustom) {
-        const priorities = [...ensureEquipBestPriorities()];
-        candidateItems.sort((a, b) => compareItemsByPriority(a, b, priorities));
-    } else {
-        candidateItems.sort((a, b) => (b.value || 0) - (a.value || 0));
-    }
+    sortEquipBestCandidates(candidateItems);
     const lockedSlots = Math.min(lockedItems.length, maxEquippedSlots);
     const availableSlots = Math.max(0, maxEquippedSlots - lockedSlots);
     const selected = candidateItems.slice(0, availableSlots);
     const remaining = candidateItems.slice(availableSlots);
     const overflowLocked = lockedItems.slice(maxEquippedSlots);
-    const companionCharmItems = Array.isArray(player.inventory.equipment)
-        ? player.inventory.equipment.map(item => JSON.parse(item)).filter(item => isCompanionCharm(item))
-        : [];
+    let selectedCompanionCharm = equippedCompanionCharm && equippedCompanionCharm.locked
+        ? equippedCompanionCharm
+        : null;
+    let remainingCompanionCharms = [...inventoryCompanionCharms];
+    if (!equippedCompanionCharm || !equippedCompanionCharm.locked) {
+        const companionCharmCandidates = equippedCompanionCharm
+            ? [equippedCompanionCharm].concat(inventoryCompanionCharms)
+            : [...inventoryCompanionCharms];
+        sortEquipBestCandidates(companionCharmCandidates);
+        selectedCompanionCharm = companionCharmCandidates[0] || null;
+        remainingCompanionCharms = companionCharmCandidates.slice(1);
+    }
     player.equipped = lockedItems.slice(0, maxEquippedSlots).concat(selected).filter(Boolean);
+    player.companionCharm = selectedCompanionCharm;
     player.inventory.equipment = remaining
         .concat(overflowLocked)
-        .concat(companionCharmItems)
+        .concat(remainingCompanionCharms)
         .filter(Boolean)
         .map(item => JSON.stringify(item));
     playerLoadStats();
