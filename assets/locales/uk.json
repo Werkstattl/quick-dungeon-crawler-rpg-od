@@ -190,6 +190,9 @@
   "change": "Змінити",
   "dismiss-companion": "Відпустити супутника",
   "send-away": "Відпустити {name}",
+  "companion-charm": "Амулет",
+  "no-companion-charm": "Амулет не екіпіровано",
+  "companion-charm-inactive": "Екіпіровано, але неактивне без супутника.",
   "companion-wolf-pup": "Вовченя",
   "companion-fairy-helper": "Фея-помічниця",
   "companion-mini-dragon": "Міні дракон",
@@ -353,7 +356,8 @@
     "great-helm": "Великий шолом",
     "horned-helm": "Рогатий шолом",
     "mask": "Маска",
-    "boots": "Чоботи"
+    "boots": "Чоботи",
+    "charm": "Амулет"
   },
 
   "enemy-names": {

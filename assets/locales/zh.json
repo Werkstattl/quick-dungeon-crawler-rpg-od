@@ -175,6 +175,9 @@
   "change": "更换",
   "dismiss-companion": "解散同伴",
   "send-away": "送走 {name}",
+  "companion-charm": "护符",
+  "no-companion-charm": "未装备护符",
+  "companion-charm-inactive": "已装备，但没有同伴时不会生效。",
   "companion-wolf-pup": "幼狼",
   "companion-fairy-helper": "妖精助手",
   "companion-mini-dragon": "小龙",
@@ -234,6 +237,7 @@
   "special-ability-paladin": "神圣赐福",
   "special-ability-beastmaster": "野性号令",
   "special-ability-scout": "翻滚",
+  "special-ability-rogue": "血涌",
   "stat-points": "属性点：",
   "reset": "重置",
   "auto": "自动",
@@ -334,6 +338,7 @@
     "crit-rate": "暴击率",
     "crit-dmg": "暴击伤害",
     "attack-speed": "攻击速度",
+    "faster-run": "奔跑速度",
     "health": "生命",
     "defense": "防御",
     "vampirism": "吸血",
@@ -356,7 +361,8 @@
     "great-helm": "重盔",
     "horned-helm": "角盔",
     "mask": "面具",
-    "boots": "靴子"
+    "boots": "靴子",
+    "charm": "护符"
   },
   "enemy-names": {
     "goblin": "哥布林",

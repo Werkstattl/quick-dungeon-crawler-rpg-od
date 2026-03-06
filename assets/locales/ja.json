@@ -190,6 +190,9 @@
   "change": "変更",
   "dismiss-companion": "仲間を解雇",
   "send-away": "{name}を送り出す",
+  "companion-charm": "チャーム",
+  "no-companion-charm": "チャーム未装備",
+  "companion-charm-inactive": "装備中だが、コンパニオンがいないため効果なし。",
   "companion-wolf-pup": "ウルフパピー",
   "companion-fairy-helper": "フェアリーヘルパー",
   "companion-mini-dragon": "ミニドラゴン",
@@ -243,6 +246,7 @@
   "special-ability-paladin": "神聖なる祝福",
   "special-ability-beastmaster": "ワイルドコマンド",
   "special-ability-scout": "タンブル",
+  "special-ability-rogue": "ブラッドサージ",
   "stat-points": "ステータスポイント:",
   "reset": "リセット",
   "auto": "自動",
@@ -352,7 +356,8 @@
     "great-helm": "グレートヘルム",
     "horned-helm": "ホーンヘルム",
     "mask": "マスク",
-    "boots": "ブーツ"
+    "boots": "ブーツ",
+    "charm": "チャーム"
   }
 
   ,"enemy-names": {

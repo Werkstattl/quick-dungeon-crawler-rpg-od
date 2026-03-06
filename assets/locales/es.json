@@ -190,6 +190,9 @@
   "change": "Cambiar",
   "dismiss-companion": "Despedir compañero",
   "send-away": "Enviar a {name}",
+  "companion-charm": "Amuleto",
+  "no-companion-charm": "No hay amuleto equipado",
+  "companion-charm-inactive": "Equipado, pero inactivo sin un compañero.",
   "companion-wolf-pup": "Cachorro de lobo",
   "companion-fairy-helper": "Hada ayudante",
   "companion-mini-dragon": "Dragón pequeño",
@@ -243,6 +246,7 @@
   "special-ability-paladin": "Bendición Divina",
   "special-ability-beastmaster": "Comando Salvaje",
   "special-ability-scout": "Voltereta",
+  "special-ability-rogue": "Oleada sangrienta",
   "stat-points": "Puntos de estadística:",
   "reset": "Reiniciar",
   "auto": "Automático",
@@ -352,7 +356,8 @@
     "great-helm": "Gran yelmo",
     "horned-helm": "Yelmo con cuernos",
     "mask": "Máscara",
-    "boots": "Botas"
+    "boots": "Botas",
+    "charm": "Amuleto"
   },
 
   "enemy-names": {

@@ -190,6 +190,9 @@
   "change": "Изменить",
   "dismiss-companion": "Отпустить спутника",
   "send-away": "Отправить {name}",
+  "companion-charm": "Амулет",
+  "no-companion-charm": "Амулет не экипирован",
+  "companion-charm-inactive": "Экипирован, но неактивен без спутника.",
   "companion-wolf-pup": "Волчонок",
   "companion-fairy-helper": "Фея-помощница",
   "companion-mini-dragon": "Мини-дракон",
@@ -352,7 +355,8 @@
     "great-helm": "Большой шлем",
     "horned-helm": "Рогатый шлем",
     "mask": "Маска",
-    "boots": "Ботинки"
+    "boots": "Ботинки",
+    "charm": "Амулет"
   },
   "enemy-names": {
     "goblin": "Гоблин",

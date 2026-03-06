@@ -190,6 +190,9 @@
   "change": "Ändern",
   "dismiss-companion": "Begleiter entlassen",
   "send-away": "Schicke {name} weg",
+  "companion-charm": "Talisman",
+  "no-companion-charm": "Kein Talisman ausgerüstet",
+  "companion-charm-inactive": "Ausgerüstet, aber ohne Begleiter inaktiv.",
   "companion-wolf-pup": "Wolfswelpe",
   "companion-fairy-helper": "Feenhelfer",
   "companion-mini-dragon": "Mini-Drache",
@@ -243,6 +246,7 @@
   "special-ability-paladin": "Göttlicher Segen",
   "special-ability-beastmaster": "Wilder Befehl",
   "special-ability-scout": "Ausweichrolle",
+  "special-ability-rogue": "Blutschub",
   "stat-points": "Stat-Punkte:",
   "reset": "Reset",
   "auto": "Auto",
@@ -352,7 +356,8 @@
     "great-helm": "Großhelm",
     "horned-helm": "Hornhelm",
     "mask": "Maske",
-    "boots": "Stiefel"
+    "boots": "Stiefel",
+    "charm": "Talisman"
   }
 
   ,"enemy-names": {

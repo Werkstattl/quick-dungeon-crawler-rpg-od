@@ -190,6 +190,9 @@
   "change": "Mudar",
   "dismiss-companion": "Dispensar companheiro",
   "send-away": "Enviar {name} embora",
+  "companion-charm": "Amuleto",
+  "no-companion-charm": "Nenhum amuleto equipado",
+  "companion-charm-inactive": "Equipado, mas inativo sem um companheiro.",
   "companion-wolf-pup": "Filhote de lobo",
   "companion-fairy-helper": "Fada ajudante",
   "companion-mini-dragon": "Dragãozinho",
@@ -243,6 +246,7 @@
   "special-ability-paladin": "Bênção Divina",
   "special-ability-beastmaster": "Comando Selvagem",
   "special-ability-scout": "Cambalhota",
+  "special-ability-rogue": "Surto Sangrento",
   "stat-points": "Pontos de atributo:",
   "reset": "Redefinir",
   "auto": "Auto",
@@ -351,7 +355,8 @@
     "great-helm": "Grande elmo",
     "horned-helm": "Elmo com chifres",
     "mask": "Máscara",
-    "boots": "Botas"
+    "boots": "Botas",
+    "charm": "Amuleto"
   },
   "equipment-genders": {
     "sword": "f",

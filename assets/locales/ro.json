@@ -190,6 +190,9 @@
   "change": "Schimbă",
   "dismiss-companion": "Alungă însoțitorul",
   "send-away": "Trimite-l pe {name} departe",
+  "companion-charm": "Amuletă",
+  "no-companion-charm": "Nicio amuletă echipată",
+  "companion-charm-inactive": "Echipată, dar inactivă fără un companion.",
   "companion-wolf-pup": "Pui de lup",
   "companion-fairy-helper": "Zână ajutor",
   "companion-mini-dragon": "Pui de dragon",
@@ -243,6 +246,7 @@
   "special-ability-paladin": "Binecuvântare divină",
   "special-ability-beastmaster": "Comandă Sălbatică",
   "special-ability-scout": "Rostogolire",
+  "special-ability-rogue": "Izbucnire sângeroasă",
   "stat-points": "Puncte de atribut:",
   "reset": "Resetează",
   "auto": "Auto",
@@ -351,7 +355,8 @@
     "great-helm": "Coif mare",
     "horned-helm": "Coif cu coarne",
     "mask": "Mască",
-    "boots": "Cizme"
+    "boots": "Cizme",
+    "charm": "Amuletă"
   },
   "enemy-names": {
     "goblin": "Goblin",
