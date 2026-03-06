@@ -572,11 +572,7 @@ function updateCompanionUI() {
     const companionAtk = document.getElementById('companion-atk');
     const companionBonus = document.getElementById('companion-bonus');
     const companionAtkSpd = document.getElementById('companion-atkspd');
-    const companionCharmStatus = document.getElementById('companion-charm-status');
     const summonBtn = document.getElementById('summon-companion');
-    const equippedCharm = typeof getEquippedCompanionCharm === 'function' ? getEquippedCompanionCharm() : null;
-    const charmIcon = equippedCharm ? equipmentIcon(equippedCharm.baseCategory || equippedCharm.category) : '';
-    const charmLabel = equippedCharm ? equipmentLabel(equippedCharm.rarity, equippedCharm.category) : '';
 
     if (activeCompanion) {
         const combatStats = getCompanionCombatStats(activeCompanion);
@@ -606,17 +602,6 @@ function updateCompanionUI() {
         companionAtkSpd.textContent = "0";
         summonBtn.textContent = t('summon');
         summonBtn.classList.add('attention');
-    }
-
-    if (companionCharmStatus) {
-        if (equippedCharm) {
-            companionCharmStatus.removeAttribute('data-i18n');
-            const inactiveNote = !activeCompanion ? ` <span class="small-text">(${t('companion-charm-inactive')})</span>` : '';
-            companionCharmStatus.innerHTML = `<span data-i18n="companion-charm">${t('companion-charm')}</span>: <span class="${equippedCharm.rarity}">${charmIcon}${charmLabel}</span>${inactiveNote}`;
-        } else {
-            companionCharmStatus.setAttribute('data-i18n', 'no-companion-charm');
-            companionCharmStatus.textContent = t('no-companion-charm');
-        }
     }
     
     summonBtn.classList.remove('hidden');

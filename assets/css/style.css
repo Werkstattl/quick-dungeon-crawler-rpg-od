@@ -1147,11 +1147,6 @@ header button i {
     overflow-wrap: break-word;
 }
 
-#companion-charm-status {
-    font-size: 0.95em;
-    opacity: 0.9;
-}
-
 .companion-bonus-list {
     list-style: none;
     padding-left: 0;
