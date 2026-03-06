@@ -1500,6 +1500,9 @@ const equipBest = () => {
         .filter(Boolean)
         .map(item => JSON.stringify(item));
     playerLoadStats();
+    if (typeof updateCompanionUI === 'function') {
+        updateCompanionUI();
+    }
 };
 
 const sellAll = (rarity) => {
