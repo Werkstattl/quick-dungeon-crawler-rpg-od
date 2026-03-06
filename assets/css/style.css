@@ -321,7 +321,7 @@ color: black;
 }
 
 .companion-slot-empty {
-    margin: 0;
+    margin: 2px 0 0 0;
     max-width: 5.5rem;
     font-size: 0.75rem;
     line-height: 1.3;
