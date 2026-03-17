@@ -54,12 +54,12 @@ const applyFontSize = () => {
 }
 
 
-// BGM
+// BGM - lazy loaded on demand with preload: false
 let bgmDungeon;
 let bgmBattleMain;
 let bgmBattleBoss;
 
-// SFX
+// SFX - lazy loaded on demand with preload: false  
 let sfxEncounter;
 let sfxEnemyDeath;
 let sfxCombatEnd;
@@ -79,98 +79,120 @@ let sfxBuff;
 
 const setVolume = () => {
     // ===== BGM =====
+    // preload: false means audio won't load until actually played
+    // This significantly reduces initial memory usage on older devices
     bgmDungeon = new Howl({
         src: ['./assets/bgm/dungeon.webm'],
         volume: volume.bgm * volume.master,
-        loop: true
+        loop: true,
+        preload: false
     });
 
     bgmBattleMain = new Howl({
         src: ['./assets/bgm/battle_main.webm'],
         volume: volume.bgm * volume.master,
-        loop: true
+        loop: true,
+        preload: false
     });
 
     bgmBattleBoss = new Howl({
         src: ['./assets/bgm/battle_boss.webm'],
         volume: volume.bgm * volume.master,
-        loop: true
+        loop: true,
+        preload: false
     });
 
     // ===== SFX =====
+    // SFX are one-shot sounds, preload: false saves memory
+    // They will load on first play() call
     sfxEncounter = new Howl({
         src: ['./assets/sfx/encounter.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxCombatEnd = new Howl({
         src: ['./assets/sfx/combat_end.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxAttack = new Howl({
         src: ['./assets/sfx/attack.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxLvlUp = new Howl({
         src: ['./assets/sfx/level_up.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxConfirm = new Howl({
         src: ['./assets/sfx/confirm.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxDecline = new Howl({
         src: ['./assets/sfx/decline.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxDeny = new Howl({
         src: ['./assets/sfx/denied.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxEquip = new Howl({
         src: ['./assets/sfx/equip.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxUnequip = new Howl({
         src: ['./assets/sfx/unequip.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxOpen = new Howl({
         src: ['./assets/sfx/hover.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxPause = new Howl({
         src: ['./assets/sfx/pause.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxUnpause = new Howl({
         src: ['./assets/sfx/unpause.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxSell = new Howl({
         src: ['./assets/sfx/sell.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxItem = new Howl({
         src: ['./assets/sfx/item_use.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 
     sfxBuff = new Howl({
         src: ['./assets/sfx/buff.webm'],
-        volume: volume.sfx * volume.master
+        volume: volume.sfx * volume.master,
+        preload: false
     });
 }
 
