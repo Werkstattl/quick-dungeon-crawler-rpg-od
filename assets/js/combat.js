@@ -1,8 +1,6 @@
 const combatPanel = document.querySelector("#combatPanel")
 let enemyDead = false;
 let playerDead = false;
-let currentBattleMusic = false;
-
 let playerAttackTimeout;
 let enemyAttackTimeout;
 let companionAttackTimeout;
@@ -1008,7 +1006,7 @@ const handleClaimButtonClick = () => {
 
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(100%)";
-    bgmDungeon.play();
+    playBgm(bgmDungeon, 'dungeon');
 
     dungeon.status.event = false;
     combatPanel.style.display = "none";
@@ -1224,11 +1222,10 @@ const shouldAutoUseSpecialAbility = () => {
     return true;
 };
 
-const startCombat = (battleMusic) => {
-    currentBattleMusic = battleMusic;
-    bgmDungeon.pause();
+const startCombat = (battleMusic, key) => {
+    stopBgm();
     sfxEncounter.play();
-        currentBattleMusic.play();
+    playBgm(battleMusic, key);
     player.inCombat = true;
     combatPaused = false;
     scoutDodgeReady = false;
@@ -1284,7 +1281,7 @@ const startCombat = (battleMusic) => {
 }
 
 const endCombat = () => {
-    currentBattleMusic.stop();
+    stopBgm();
     sfxCombatEnd.play();
     player.inCombat = false;
     combatPaused = false;

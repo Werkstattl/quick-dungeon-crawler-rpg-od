@@ -1057,6 +1057,27 @@ button:focus {
     max-width: calc(100% - 2rem);
 }
 
+/* Intro Screen */
+#intro-screen {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+#intro-screen .intro-text {
+    font-size: calc(1.2rem * var(--font-scale));
+    max-width: 30rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+#intro-screen button {
+    margin: 0.5rem 0;
+}
+
 /* Stat Allocation */
 #allocate-stats {
     width: 18rem;
