@@ -10,6 +10,87 @@ if (JSON.parse(localStorage.getItem("volumeData")) == undefined) {
     volume = JSON.parse(localStorage.getItem("volumeData"));
 }
 
+// Helper: create a SFX Howl that auto-unloads after playing to free memory
+const createSfx = (src) => {
+    const howl = new Howl({
+        src: [src],
+        volume: volume.sfx * volume.master,
+        preload: false,
+        onend: () => {
+            // Auto-unload after sound finishes to free RAM
+            howl.unload();
+        }
+    });
+    return howl;
+};
+
+// ===== BGM: single-player approach — only one BGM track in RAM at a time =====
+let currentBgm = null;      // { howl: Howl, key: string }
+let lastBgmKey = null;      // remembers which track was playing before tab hide
+
+const playBgm = (bgmHowl, key) => {
+    // If same track already playing, do nothing
+    if (currentBgm && currentBgm.key === key && currentBgm.howl.playing()) {
+        return;
+    }
+    // Stop and unload the previous BGM to free RAM
+    if (currentBgm) {
+        currentBgm.howl.stop();
+        currentBgm.howl.unload();
+        currentBgm = null;
+    }
+    currentBgm = { howl: bgmHowl, key };
+    bgmHowl.play();
+};
+
+const stopBgm = () => {
+    if (currentBgm) {
+        currentBgm.howl.stop();
+        currentBgm.howl.unload();
+        currentBgm = null;
+    }
+};
+
+// Create BGM Howls lazily (preload: false — only load when played)
+let bgmDungeon = new Howl({
+    src: ['./assets/bgm/dungeon.webm'],
+    volume: volume.bgm * volume.master,
+    loop: true,
+    preload: false
+});
+
+let bgmBattleMain = new Howl({
+    src: ['./assets/bgm/battle_main.webm'],
+    volume: volume.bgm * volume.master,
+    loop: true,
+    preload: false
+});
+
+let bgmBattleBoss = new Howl({
+    src: ['./assets/bgm/battle_boss.webm'],
+    volume: volume.bgm * volume.master,
+    loop: true,
+    preload: false
+});
+
+// SFX
+let sfxEncounter;
+let sfxEnemyDeath;
+let sfxCombatEnd;
+let sfxAttack;
+let sfxLvlUp;
+let sfxConfirm;
+let sfxDecline;
+let sfxDeny;
+let sfxEquip;
+let sfxUnequip;
+let sfxOpen;
+let sfxPause;
+let sfxUnpause;
+let sfxSell;
+let sfxItem;
+let sfxBuff;
+
 // Font size & family settings
 const DEFAULT_FONT_KEY = 'germania';
 const FONT_FAMILY_OPTIONS = [
@@ -51,128 +132,35 @@ const applyFontSize = () => {
     } else {
         document.body.style.removeProperty('font-family');
     }
-}
-
-
-// BGM
-let bgmDungeon;
-let bgmBattleMain;
-let bgmBattleBoss;
-
-// SFX
-let sfxEncounter;
-let sfxEnemyDeath;
-let sfxCombatEnd;
-let sfxAttack;
-let sfxLvlUp;
-let sfxConfirm;
-let sfxDecline;
-let sfxDeny;
-let sfxEquip;
-let sfxUnequip;
-let sfxOpen;
-let sfxPause;
-let sfxUnpause;
-let sfxSell;
-let sfxItem;
-let sfxBuff;
+};
 
 const setVolume = () => {
-    // ===== BGM =====
-    bgmDungeon = new Howl({
-        src: ['./assets/bgm/dungeon.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
+    // Update BGM volumes (instances already exist)
+    bgmDungeon.volume(volume.bgm * volume.master);
+    bgmBattleMain.volume(volume.bgm * volume.master);
+    bgmBattleBoss.volume(volume.bgm * volume.master);
 
-    bgmBattleMain = new Howl({
-        src: ['./assets/bgm/battle_main.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
-
-    bgmBattleBoss = new Howl({
-        src: ['./assets/bgm/battle_boss.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
-
-    // ===== SFX =====
-    sfxEncounter = new Howl({
-        src: ['./assets/sfx/encounter.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxCombatEnd = new Howl({
-        src: ['./assets/sfx/combat_end.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxAttack = new Howl({
-        src: ['./assets/sfx/attack.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxLvlUp = new Howl({
-        src: ['./assets/sfx/level_up.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxConfirm = new Howl({
-        src: ['./assets/sfx/confirm.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxDecline = new Howl({
-        src: ['./assets/sfx/decline.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxDeny = new Howl({
-        src: ['./assets/sfx/denied.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxEquip = new Howl({
-        src: ['./assets/sfx/equip.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxUnequip = new Howl({
-        src: ['./assets/sfx/unequip.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxOpen = new Howl({
-        src: ['./assets/sfx/hover.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxPause = new Howl({
-        src: ['./assets/sfx/pause.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxUnpause = new Howl({
-        src: ['./assets/sfx/unpause.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxSell = new Howl({
-        src: ['./assets/sfx/sell.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxItem = new Howl({
-        src: ['./assets/sfx/item_use.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxBuff = new Howl({
-        src: ['./assets/sfx/buff.webm'],
-        volume: volume.sfx * volume.master
-    });
+    // SFX (auto-unload after playing to free RAM)
+    sfxEncounter = createSfx('./assets/sfx/encounter.webm');
+    sfxCombatEnd = createSfx('./assets/sfx/combat_end.webm');
+    sfxAttack = createSfx('./assets/sfx/attack.webm');
+    sfxLvlUp = createSfx('./assets/sfx/level_up.webm');
+    sfxConfirm = createSfx('./assets/sfx/confirm.webm');
+    sfxDecline = createSfx('./assets/sfx/decline.webm');
+    sfxDeny = createSfx('./assets/sfx/denied.webm');
+    sfxEquip = createSfx('./assets/sfx/equip.webm');
+    sfxUnequip = createSfx('./assets/sfx/unequip.webm');
+    sfxOpen = createSfx('./assets/sfx/hover.webm');
+    sfxPause = createSfx('./assets/sfx/pause.webm');
+    sfxUnpause = createSfx('./assets/sfx/unpause.webm');
+    sfxSell = createSfx('./assets/sfx/sell.webm');
+    sfxItem = createSfx('./assets/sfx/item_use.webm');
+    sfxBuff = createSfx('./assets/sfx/buff.webm');
 }
+
+// Expose playBgm / stopBgm globally for dungeon.js, combat.js, main.js
+window.playBgm = playBgm;
+window.stopBgm = stopBgm;
 
 document.querySelector("#title-screen").addEventListener("click", function () {
     setVolume();
@@ -181,8 +169,19 @@ document.querySelector("#title-screen").addEventListener("click", function () {
 
 document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
+        // Remember which BGM was playing, then unload it to free RAM
+        if (currentBgm) {
+            lastBgmKey = currentBgm.key;
+            stopBgm();
+        }
         Howler.mute(true);
     } else {
         Howler.mute(false);
+        // Reload the BGM that was playing before tab hide
+        if (lastBgmKey) {
+            if (lastBgmKey === 'dungeon') playBgm(bgmDungeon, 'dungeon');
+            else if (lastBgmKey === 'battleMain') playBgm(bgmBattleMain, 'battleMain');
+            else if (lastBgmKey === 'battleBoss') playBgm(bgmBattleBoss, 'battleBoss');
+        }
     }
 });

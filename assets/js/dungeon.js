@@ -630,7 +630,7 @@ const dungeonEvent = () => {
 const engageBattle = () => {
     showCombatInfo();
     addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
-    startCombat(bgmBattleMain);
+    startCombat(bgmBattleMain, 'battleMain');
     updateDungeonLog();
 }
 
@@ -639,7 +639,7 @@ const mimicBattle = (type) => {
     generateRandomEnemy(type);
     showCombatInfo();
     addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
-    startCombat(bgmBattleMain);
+    startCombat(bgmBattleMain, 'battleMain');
     addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
 }
 
@@ -648,7 +648,7 @@ const guardianBattle = () => {
     generateRandomEnemy("guardian");
     showCombatInfo();
     addCombatLog(t('guardian-blocking-way', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
-    startCombat(bgmBattleBoss);
+    startCombat(bgmBattleBoss, 'battleBoss');
     updateDungeonLog();
 }
 
@@ -657,7 +657,7 @@ const specialBossBattle = () => {
     generateRandomEnemy("sboss");
     showCombatInfo();
     addCombatLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
-    startCombat(bgmBattleBoss);
+    startCombat(bgmBattleBoss, 'battleBoss');
     addDungeonLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
 }
 
@@ -673,7 +673,7 @@ const fleeBattle = () => {
     addDungeonLog(t('flee-failure'));
         showCombatInfo();
     addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
-        startCombat(bgmBattleMain);
+        startCombat(bgmBattleMain, 'battleMain');
     addCombatLog(t('flee-failure'));
     }
 }

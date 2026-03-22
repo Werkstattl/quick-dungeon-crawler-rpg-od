@@ -26,7 +26,13 @@ window.addEventListener("DOMContentLoaded", async function () {
     }
 
     if (player === null) {
-        showCharacterCreation();
+        // First time player - show intro if not yet shown
+        if (!localStorage.getItem('introShown')) {
+            document.querySelector("#intro-screen").style.display = "flex";
+            document.querySelector("#title-screen").style.display = "none";
+        } else {
+            showCharacterCreation();
+        }
     } else {
         let target = document.querySelector("#title-screen");
         target.style.display = "flex";
@@ -58,6 +64,16 @@ window.addEventListener("DOMContentLoaded", async function () {
             if (typeof startNewRunAfterDeath === 'function') {
                 startNewRunAfterDeath();
             }
+        });
+    }
+
+    // Intro screen buttons
+    const introStartBtn = document.querySelector('#intro-start-btn');
+    if (introStartBtn) {
+        introStartBtn.addEventListener('click', () => {
+            localStorage.setItem('introShown', 'true');
+            document.querySelector("#intro-screen").style.display = "none";
+            showCharacterCreation();
         });
     }
 
@@ -503,7 +519,7 @@ function openMenu(isTitle = false) {
             quit.onclick = function () {
                 sfxConfirm.play();
                 // Clear out everything, send the player back to meny and clear progress.
-                bgmDungeon.stop();
+                stopBgm();
                 let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
                 dimDungeon.style.display = "none";
@@ -659,14 +675,14 @@ function openMenu(isTitle = false) {
             if (fontFamilySelect) {
                 fontSize.family = fontFamilySelect.value;
             }
-            let wasPlaying = bgmDungeon && bgmDungeon.playing();
-            if (wasPlaying) {
-                bgmDungeon.stop();
+            let wasDungeonPlaying = currentBgm && currentBgm.key === 'dungeon' && currentBgm.howl.playing();
+            if (wasDungeonPlaying) {
+                stopBgm();
             }
             setVolume();
             applyFontSize();
-            if (wasPlaying) {
-                bgmDungeon.play();
+            if (wasDungeonPlaying) {
+                playBgm(bgmDungeon, 'dungeon');
             }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
@@ -941,9 +957,9 @@ const enterDungeon = () => {
     if (player.inCombat) {
         enemy = JSON.parse(localStorage.getItem("enemyData"));
         showCombatInfo();
-        startCombat(bgmBattleMain);
+        startCombat(bgmBattleMain, 'battleMain');
     } else {
-        bgmDungeon.play();
+        playBgm(bgmDungeon, 'dungeon');
     }
     if (player.stats.hp == 0) {
         progressReset(true);
@@ -1505,7 +1521,7 @@ const importData = (importedData) => {
                 }
                 player = playerImport;
                 saveData();
-                bgmDungeon.stop();
+                stopBgm();
                 let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
                 dimDungeon.style.display = "none";

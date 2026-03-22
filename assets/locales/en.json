@@ -429,5 +429,8 @@
   ,"descend": "Descend"
   ,"descended-to-floor": "You descended to floor {floor}."
   ,"found-stairs": "You found stairs leading deeper into the dungeon."
+  ,"intro-story": "Rumors speak of a dungeon filled with untold riches and deadly dangers. Many have entered. None have returned. Will you be the one to conquer its depths and return as a legend?"
+  ,"intro-start": "Begin Your Quest"
+  ,"skip": "Skip"
 
 }
