@@ -1,0 +1,66 @@
+name: Sync Game to Website
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Clone site repo
+        run: |
+          git clone https://x-access-token:${{ secrets.SITE_REPO_TOKEN }}@github.com/Werkstattl/quick-dungeon-crawler-site.git /tmp/site-repo
+        env:
+          GH_TOKEN: ${{ secrets.SITE_REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SITE_REPO_TOKEN }}
+
+      - name: Copy game files to site public/game/
+        run: |
+          rm -rf /tmp/site-repo/public/game
+          mkdir -p /tmp/site-repo/public/game
+          cp index.html sw.js offline.html site.webmanifest browserconfig.xml \
+            android-chrome-192x192.png android-chrome-512x512.png \
+            apple-touch-icon.png favicon-16x16.png favicon-32x32.png favicon.ico \
+            maskable_icon.png monochrome_icon.png mstile-150x150.png \
+            safari-pinned-tab.svg \
+            /tmp/site-repo/public/game/
+          cp -r assets /tmp/site-repo/public/game/
+          cp -r .well-known /tmp/site-repo/public/game/
+
+      - name: Create a new branch in site repo
+        run: |
+          cd /tmp/site-repo
+          git checkout -B sync-game-from-tag-${{ github.ref_name }}
+
+      - name: Commit and push changes
+        run: |
+          cd /tmp/site-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: sync game files from tag ${{ github.ref_name }}"
+          git push -u origin sync-game-from-tag-${{ github.ref_name }} --force
+
+      - name: Create PR in site repo
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { repository } = context;
+            await github.rest.pulls.create({
+              owner: 'Werkstattl',
+              repo: 'quick-dungeon-crawler-site',
+              title: 'chore: sync game from tag ${{ github.ref_name }}',
+              body: 'Auto-created PR from tag push in game repo. Merging to update embedded game.',
+              head: 'sync-game-from-tag-${{ github.ref_name }}',
+              base: 'main'
+            });
