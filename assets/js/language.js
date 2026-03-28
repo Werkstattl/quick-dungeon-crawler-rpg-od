@@ -31,14 +31,32 @@ function formatParams(str, vars) {
   return str.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`));
 }
 
-function t(key, vars) {
+function getTranslationValue(key) {
   const dict = dictionaries[currentLanguage] || {};
-  let str = pathGet(dict, key);
-  if (str == null) {
+  let value = pathGet(dict, key);
+  if (value == null) {
     const fallback = dictionaries[DEFAULT_LANG] || {};
-    str = pathGet(fallback, key);
+    value = pathGet(fallback, key);
   }
-  return str != null ? formatParams(str, vars) : key;
+  return value;
+}
+
+function t(key, vars) {
+  const value = getTranslationValue(key);
+  return typeof value === 'string' ? formatParams(value, vars) : key;
+}
+
+function tRandom(key) {
+  const value = getTranslationValue(key);
+  const choices = Array.isArray(value)
+    ? value
+    : (value && typeof value === 'object' ? Object.values(value) : []);
+  const messages = choices.filter(choice => typeof choice === 'string');
+  if (!messages.length) {
+    return typeof value === 'string' ? value : key;
+  }
+  const randomIndex = Math.floor(Math.random() * messages.length);
+  return messages[randomIndex];
 }
 
 function applyTranslations(root = document) {

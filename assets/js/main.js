@@ -932,19 +932,6 @@ const showCharacterCreation = () => {
     runLoad("character-creation", "flex");
 }
 
-const NEW_RUN_INTRO_MESSAGE_KEYS = [
-    "new-run-intro.1",
-    "new-run-intro.2",
-    "new-run-intro.3",
-    "new-run-intro.4",
-    "new-run-intro.5",
-    "new-run-intro.6",
-    "new-run-intro.7",
-    "new-run-intro.8",
-    "new-run-intro.9",
-    "new-run-intro.10"
-];
-
 const isFreshDungeonRun = () => {
     const onFirstRoom = dungeon?.progress?.floor === 1 && dungeon?.progress?.room === 1;
     const hasNoDungeonHistory = Array.isArray(dungeon?.backlog) && dungeon.backlog.length === 0;
@@ -955,8 +942,7 @@ const addNewRunIntroLog = () => {
     if (!isFreshDungeonRun()) {
         return;
     }
-    const randomIndex = Math.floor(Math.random() * NEW_RUN_INTRO_MESSAGE_KEYS.length);
-    addDungeonLog(t(NEW_RUN_INTRO_MESSAGE_KEYS[randomIndex]));
+    addDungeonLog(tRandom("new-run-intro"));
 };
 
 // Start the game
