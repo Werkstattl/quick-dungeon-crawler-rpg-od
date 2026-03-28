@@ -24,6 +24,18 @@
   "room": "Room",
   "run-summary": "Run summary",
   "run-summary-hint": "Start a new run to dive back into the dungeon.",
+  "new-run-intro": {
+    "1": "The stairs lead down. The dark leads back up — but not for long.",
+    "2": "Cold stone. Distant growls. Your adventure starts here.",
+    "3": "The dungeon exhales. You breathe in. No way but forward.",
+    "4": "Shadows move before you do. Something knows your name.",
+    "5": "Torchlight dies at the first step. Everything else waits below.",
+    "6": "Stone walls close in. The dark gets heavier. You're not alone down here.",
+    "7": "Ancient. Hungry. Patient. The dungeon has been waiting.",
+    "8": "Dripping water. Echoing footsteps. The dungeon plays its music.",
+    "9": "One step in and the world above is already gone.",
+    "10": "The dark doesn't flinch. You will."
+  },
   "damage-dealt": "Damage dealt",
   "damage-taken": "Damage taken",
   "gold-earned": "Gold earned",

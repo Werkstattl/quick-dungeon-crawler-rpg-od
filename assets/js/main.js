@@ -932,17 +932,17 @@ const showCharacterCreation = () => {
     runLoad("character-creation", "flex");
 }
 
-const NEW_RUN_INTRO_MESSAGES = [
-    "The stairs lead down. The dark leads back up — but not for long.",
-    "Cold stone. Distant growls. Your adventure starts here.",
-    "The dungeon exhales. You breathe in. No way but forward.",
-    "Shadows move before you do. Something knows your name.",
-    "Torchlight dies at the first step. Everything else waits below.",
-    "Stone walls close in. The dark gets heavier. You're not alone down here.",
-    "Ancient. Hungry. Patient. The dungeon has been waiting.",
-    "Dripping water. Echoing footsteps. The dungeon plays its music.",
-    "One step in and the world above is already gone.",
-    "The dark doesn't flinch. You will."
+const NEW_RUN_INTRO_MESSAGE_KEYS = [
+    "new-run-intro.1",
+    "new-run-intro.2",
+    "new-run-intro.3",
+    "new-run-intro.4",
+    "new-run-intro.5",
+    "new-run-intro.6",
+    "new-run-intro.7",
+    "new-run-intro.8",
+    "new-run-intro.9",
+    "new-run-intro.10"
 ];
 
 const isFreshDungeonRun = () => {
@@ -955,8 +955,8 @@ const addNewRunIntroLog = () => {
     if (!isFreshDungeonRun()) {
         return;
     }
-    const randomIndex = Math.floor(Math.random() * NEW_RUN_INTRO_MESSAGES.length);
-    addDungeonLog(NEW_RUN_INTRO_MESSAGES[randomIndex]);
+    const randomIndex = Math.floor(Math.random() * NEW_RUN_INTRO_MESSAGE_KEYS.length);
+    addDungeonLog(t(NEW_RUN_INTRO_MESSAGE_KEYS[randomIndex]));
 };
 
 // Start the game
