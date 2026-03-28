@@ -113,37 +113,6 @@ const resetRoomEvents = () => {
     dungeon.roomEvents.stairsIgnored = false;
 };
 
-const ensureDungeonStoryState = () => {
-    const currentFloor = Number.isFinite(dungeon?.progress?.floor) ? dungeon.progress.floor : 1;
-    const derivedBeatFloor = Math.min(Math.floor(currentFloor / 5) * 5, 20);
-    const derivedPhase = derivedBeatFloor / 5;
-    const storyWasMissing = !dungeon.story || typeof dungeon.story !== 'object';
-
-    if (storyWasMissing) {
-        dungeon.story = createDefaultDungeonStory();
-    }
-
-    if (storyWasMissing || !Number.isFinite(dungeon.story.phase)) {
-        dungeon.story.phase = derivedPhase;
-    } else {
-        dungeon.story.phase = Math.max(0, Math.min(4, Math.round(dungeon.story.phase)));
-    }
-
-    if (storyWasMissing || !Number.isFinite(dungeon.story.lastFloorBeat)) {
-        dungeon.story.lastFloorBeat = derivedBeatFloor;
-    } else {
-        dungeon.story.lastFloorBeat = Math.max(0, Math.min(20, Math.round(dungeon.story.lastFloorBeat)));
-    }
-
-    if (typeof dungeon.story.monarchUnlocked !== 'boolean') {
-        dungeon.story.monarchUnlocked = dungeon.story.phase >= 4 || derivedPhase >= 4;
-    }
-
-    if (typeof dungeon.story.monarchSeen !== 'boolean') {
-        dungeon.story.monarchSeen = false;
-    }
-};
-
 const resetDungeonStory = () => {
     dungeon.story = createDefaultDungeonStory();
 };
@@ -164,7 +133,6 @@ const getDungeonStoryBeatKey = (floor) => {
 };
 
 const maybeAdvanceDungeonStory = () => {
-    ensureDungeonStoryState();
     const currentFloor = dungeon.progress.floor;
     const beatKey = getDungeonStoryBeatKey(currentFloor);
     if (!beatKey || dungeon.story.lastFloorBeat >= currentFloor) {
@@ -350,7 +318,9 @@ const initialDungeonLoad = () => {
             dungeon.nothingBias = 0;
         }
 
-        ensureDungeonStoryState();
+        if (!dungeon.story || typeof dungeon.story !== 'object') {
+            resetDungeonStory();
+        }
         ensureRunStatisticsShape();
         updateDungeonLog();
     }
@@ -418,7 +388,6 @@ const dungeonCounter = () => {
 // Loads the floor and room count
 const loadDungeonProgress = () => {
     ensureRoomEventsState();
-    ensureDungeonStoryState();
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
@@ -448,7 +417,6 @@ const dungeonEvent = () => {
         let eventRoll;
         let event;
         ensureRoomEventsState();
-        ensureDungeonStoryState();
         let eventTypes = ["treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
@@ -735,9 +703,8 @@ const guardianBattle = () => {
 
 // mysterious chamber fight
 const specialBossBattle = () => {
-    ensureDungeonStoryState();
     dungeon.story.monarchSeen = true;
-     generateRandomEnemy("sboss");
+    generateRandomEnemy("sboss");
     showCombatInfo();
     addCombatLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
     startCombat(bgmBattleBoss);
