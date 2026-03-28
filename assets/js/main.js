@@ -932,6 +932,33 @@ const showCharacterCreation = () => {
     runLoad("character-creation", "flex");
 }
 
+const NEW_RUN_INTRO_MESSAGES = [
+    "The stairs lead down. The dark leads back up — but not for long.",
+    "Cold stone. Distant growls. Your adventure starts here.",
+    "The dungeon exhales. You breathe in. No way but forward.",
+    "Shadows move before you do. Something knows your name.",
+    "Torchlight dies at the first step. Everything else waits below.",
+    "Stone walls close in. The dark gets heavier. You're not alone down here.",
+    "Ancient. Hungry. Patient. The dungeon has been waiting.",
+    "Dripping water. Echoing footsteps. The dungeon plays its music.",
+    "One step in and the world above is already gone.",
+    "The dark doesn't flinch. You will."
+];
+
+const isFreshDungeonRun = () => {
+    const onFirstRoom = dungeon?.progress?.floor === 1 && dungeon?.progress?.room === 1;
+    const hasNoDungeonHistory = Array.isArray(dungeon?.backlog) && dungeon.backlog.length === 0;
+    return onFirstRoom && hasNoDungeonHistory;
+};
+
+const addNewRunIntroLog = () => {
+    if (!isFreshDungeonRun()) {
+        return;
+    }
+    const randomIndex = Math.floor(Math.random() * NEW_RUN_INTRO_MESSAGES.length);
+    addDungeonLog(NEW_RUN_INTRO_MESSAGES[randomIndex]);
+};
+
 // Start the game
 const enterDungeon = () => {
     sfxConfirm.play();
@@ -949,6 +976,7 @@ const enterDungeon = () => {
         progressReset(true);
     }
     initialDungeonLoad();
+    addNewRunIntroLog();
     playerLoadStats();
     if (!localStorage.getItem('introHintShown')) {
         addDungeonLog(t('summon-explore-hint'));
