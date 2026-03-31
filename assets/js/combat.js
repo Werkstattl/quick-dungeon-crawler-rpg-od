@@ -32,6 +32,32 @@ let combatTimerWasRunning = false;
 let latestCombatLoot = null;
 let pendingRunSummary = null;
 
+const createRunSummary = (result = 'defeat') => ({
+    playerName: player && player.name ? player.name : '',
+    level: player && typeof player.lvl === 'number' ? player.lvl : 1,
+    hardcore: !!(player && player.hardcore),
+    playerClass: player && player.selectedClass ? player.selectedClass : '',
+    playerPassive: player && player.selectedPassive ? player.selectedPassive : '',
+    curseLevel: (player && Number.isFinite(player.selectedCurseLevel)) ? Math.round(player.selectedCurseLevel) : null,
+    runtime: dungeon && dungeon.statistics ? dungeon.statistics.runtime : 0,
+    floor: dungeon && dungeon.progress ? dungeon.progress.floor : 1,
+    room: dungeon && dungeon.progress ? dungeon.progress.room : 1,
+    kills: dungeon && dungeon.statistics ? dungeon.statistics.kills : 0,
+    bossesDefeated: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.bossesDefeated))
+        ? dungeon.statistics.bossesDefeated
+        : 0,
+    damageDealt: dungeon && dungeon.statistics ? dungeon.statistics.damageDealt : 0,
+    damageTaken: dungeon && dungeon.statistics ? dungeon.statistics.damageTaken : 0,
+    goldEarned: dungeon && dungeon.statistics ? dungeon.statistics.goldEarned : 0,
+    lootDrops: (dungeon && dungeon.statistics && dungeon.statistics.lootDrops)
+        ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
+        : null,
+    curseLevelUnlocked: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.latestCurseUnlock))
+        ? Math.round(dungeon.statistics.latestCurseUnlock)
+        : null,
+    result,
+});
+
 const SPECIAL_ABILITY_TRANSLATIONS = {
     Knight: 'special-ability-knight',
     Paladin: 'special-ability-paladin',
@@ -609,31 +635,7 @@ const hpValidation = () => {
         player.stats.hp = 0;
         playerDead = true;
         player.deaths++;
-        const runSummary = {
-            playerName: player && player.name ? player.name : '',
-            level: player && typeof player.lvl === 'number' ? player.lvl : 1,
-            hardcore: !!(player && player.hardcore),
-            playerClass: player && player.selectedClass ? player.selectedClass : '',
-            playerPassive: player && player.selectedPassive ? player.selectedPassive : '',
-            curseLevel: (player && Number.isFinite(player.selectedCurseLevel)) ? Math.round(player.selectedCurseLevel) : null,
-            runtime: dungeon && dungeon.statistics ? dungeon.statistics.runtime : 0,
-            floor: dungeon && dungeon.progress ? dungeon.progress.floor : 1,
-            room: dungeon && dungeon.progress ? dungeon.progress.room : 1,
-            kills: dungeon && dungeon.statistics ? dungeon.statistics.kills : 0,
-            bossesDefeated: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.bossesDefeated))
-                ? dungeon.statistics.bossesDefeated
-                : 0,
-            damageDealt: dungeon && dungeon.statistics ? dungeon.statistics.damageDealt : 0,
-            damageTaken: dungeon && dungeon.statistics ? dungeon.statistics.damageTaken : 0,
-            goldEarned: dungeon && dungeon.statistics ? dungeon.statistics.goldEarned : 0,
-            lootDrops: (dungeon && dungeon.statistics && dungeon.statistics.lootDrops)
-                ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
-                : null,
-            curseLevelUnlocked: (dungeon && dungeon.statistics && Number.isFinite(dungeon.statistics.latestCurseUnlock))
-                ? Math.round(dungeon.statistics.latestCurseUnlock)
-                : null,
-        };
-        pendingRunSummary = runSummary;
+        pendingRunSummary = createRunSummary('defeat');
         if (player.hardcore) {
             addCombatLog(t('you-died-hardcore'));
         } else {
@@ -695,10 +697,16 @@ const hpValidation = () => {
         player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);
         playerLoadStats();
 
+        const defeatedSpecialBoss = enemy && enemy.condition === 'sboss';
+
         // Close the battle panel
+        endCombat();
+        if (defeatedSpecialBoss) {
+            handleSpecialBossVictory();
+            return;
+        }
         bindClaimButton();
         autoClaim();
-        endCombat();
     }
 }
 
@@ -1041,6 +1049,33 @@ const bindRunSummaryButton = () => {
     const battleButton = document.querySelector('#battleButton');
     if (battleButton) {
         battleButton.onclick = handleRunSummaryButtonClick;
+    }
+};
+
+const handleSpecialBossVictory = () => {
+    pendingRunSummary = createRunSummary('victory');
+    dungeon.status.exploring = false;
+    dungeon.status.paused = true;
+    dungeon.status.event = false;
+    enemyDead = false;
+    latestCombatLoot = null;
+    combatBacklog.length = 0;
+
+    if (typeof dungeonTimer !== 'undefined' && dungeonTimer) {
+        clearInterval(dungeonTimer);
+        dungeonTimer = null;
+    }
+    if (typeof playTimer !== 'undefined' && playTimer) {
+        clearInterval(playTimer);
+        playTimer = null;
+    }
+
+    if (combatPanel) {
+        combatPanel.style.display = "none";
+    }
+
+    if (typeof showEndgameScreen === 'function') {
+        showEndgameScreen(pendingRunSummary);
     }
 };
 

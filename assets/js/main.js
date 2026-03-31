@@ -55,7 +55,9 @@ window.addEventListener("DOMContentLoaded", async function () {
     const endgameStartButton = document.querySelector('#endgame-start-btn');
     if (endgameStartButton) {
         endgameStartButton.addEventListener('click', () => {
-            if (typeof startNewRunAfterDeath === 'function') {
+            if (typeof startNewRunAfterEndgame === 'function') {
+                startNewRunAfterEndgame();
+            } else if (typeof startNewRunAfterDeath === 'function') {
                 startNewRunAfterDeath();
             }
         });
@@ -1307,6 +1309,13 @@ const showEndgameScreen = (summary) => {
     }
 
     const safeSummary = summary || {};
+    modal.dataset.result = safeSummary.result === "victory" ? "victory" : "defeat";
+    const endgameHint = modal.querySelector(".endgame-hint");
+    if (endgameHint) {
+        endgameHint.textContent = safeSummary.result === "victory"
+            ? "Victory! Start a new run to dive back into the dungeon."
+            : (typeof t === "function" ? t("run-summary-hint") : "Start a new run to dive back into the dungeon.");
+    }
     const playerNameElement = modal.querySelector("#endgame-player-name");
     if (playerNameElement) {
         playerNameElement.textContent = safeSummary.playerName || "";
@@ -1456,10 +1465,12 @@ const showEndgameScreen = (summary) => {
     }
 };
 
-const startNewRunAfterDeath = () => {
+const startNewRunAfterEndgame = () => {
     if (typeof sfxConfirm !== "undefined" && sfxConfirm && typeof sfxConfirm.play === "function") {
         sfxConfirm.play();
     }
+    const modal = document.querySelector("#endgameModal");
+    const endedInVictory = modal && modal.dataset && modal.dataset.result === "victory";
     playerDead = false;
     hideEndgameScreen();
 
@@ -1484,11 +1495,14 @@ const startNewRunAfterDeath = () => {
         playTimer = null;
     }
 
-    progressReset(true);
+    progressReset(!endedInVictory);
 };
+
+const startNewRunAfterDeath = startNewRunAfterEndgame;
 
 if (typeof window !== "undefined") {
     window.showEndgameScreen = showEndgameScreen;
+    window.startNewRunAfterEndgame = startNewRunAfterEndgame;
     window.startNewRunAfterDeath = startNewRunAfterDeath;
 }
 
