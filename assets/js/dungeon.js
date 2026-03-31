@@ -386,14 +386,12 @@ const dungeonCounter = () => {
 }
 
 // Loads the floor and room count
-const loadDungeonProgress = ({ didAdvanceFloor: floorAdvancedFromCaller = false } = {}) => {
+const loadDungeonProgress = () => {
     ensureRoomEventsState();
-    let didAdvanceFloor = floorAdvancedFromCaller;
     if (dungeon.progress.room > dungeon.progress.roomLimit) {
         dungeon.progress.room = 1;
         dungeon.progress.floor++;
         dungeon.progress.stairsFloor = null;
-        didAdvanceFloor = true;
 
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
@@ -409,7 +407,7 @@ const loadDungeonProgress = ({ didAdvanceFloor: floorAdvancedFromCaller = false 
     if (typeof maybeUnlockNextCurseLevel === 'function') {
         maybeUnlockNextCurseLevel();
     }
-    if (didAdvanceFloor) {
+    if (dungeon.progress.floor > 4 && dungeon.progress.room === 1) {
         maybeAdvanceDungeonStory();
     }
 }
@@ -552,7 +550,7 @@ const dungeonEvent = () => {
                     dungeon.action = 0;
                     dungeon.progress.stairsFloor = dungeon.progress.floor;
                     resetRoomEvents();
-                    loadDungeonProgress({ didAdvanceFloor: true });
+                    loadDungeonProgress();
                     addDungeonLog(t('descended-to-floor', { floor: dungeon.progress.floor }));
                     dungeon.status.event = false;
                     currentEvent = null;
