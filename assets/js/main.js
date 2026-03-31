@@ -504,23 +504,19 @@ function openMenu(isTitle = false) {
             let cancel = document.querySelector('#cancel-quit');
             quit.onclick = function () {
                 sfxConfirm.play();
-                // Show run summary before resetting progress and returning to title.
+                // Clear out everything, send the player back to meny and clear progress.
                 bgmDungeon.stop();
                 let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
+                dimDungeon.style.display = "none";
                 menuModalElement.style.display = "none";
                 menuModalElement.innerHTML = "";
                 defaultModalElement.style.display = "none";
                 defaultModalElement.innerHTML = "";
+                runLoad("title-screen", "flex");
                 clearInterval(dungeonTimer);
                 clearInterval(playTimer);
-                if (typeof createRunSummary === "function" && typeof showEndgameScreen === "function") {
-                    showEndgameScreen(createRunSummary('defeat'));
-                } else {
-                    dimDungeon.style.display = "none";
-                    runLoad("title-screen", "flex");
-                    progressReset();
-                }
+                progressReset();
             };
             cancel.onclick = function () {
                 sfxDecline.play();
