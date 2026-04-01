@@ -82,6 +82,8 @@
   "sell-all-question": "Alle deine Ausrüstung verkaufen?",
   "sell-all-rarity-question": "Alle {rarity}-Ausrüstung verkaufen?",
   "abandon-run-question": "Möchtest du diesen Durchgang aufgeben?",
+  "hardcore-enable-warning": "Wenn du <b>Hardcore</b> aktivierst, werden alle deine aktuellen <b>Gegenstände</b> und dein <b>Gold</b> dauerhaft gelöscht. Nutze vorher die Option <b>Daten exportieren/importieren</b>, um deinen Spielstand zu sichern.",
+  "enable": "Aktivieren",
   "cancel": "Abbrechen",
   "equip": "Ausrüsten",
   "unequip": "Ablegen",

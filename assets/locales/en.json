@@ -94,6 +94,8 @@
   "sell-all-question": "Sell all of your equipment?",
   "sell-all-rarity-question": "Sell all {rarity} equipment?",
   "abandon-run-question": "Do you want to abandon this run?",
+  "hardcore-enable-warning": "Enabling <b>hardcore</b> will permanently delete all of your current <b>items</b> and <b>gold</b>. Use the <b>Export/Import Data</b> option to back up your save before continuing.",
+  "enable": "Enable",
   "cancel": "Cancel",
   "equip": "Equip",
   "unequip": "Unequip",

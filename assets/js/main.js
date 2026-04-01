@@ -227,10 +227,10 @@ window.addEventListener("DOMContentLoaded", async function () {
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
             <div class="content">
-                <p>Enabling <b>hardcore</b> will permanently delete all of your current <b>items</b> and <b>gold</b>. Use the <b>Export/Import Data</b> option to back up your save before continuing.</p>
+                <p>${t('hardcore-enable-warning')}</p>
                 <div class="button-container">
-                    <button id="hc-enable">Enable</button>
-                    <button id="hc-cancel">Cancel</button>
+                    <button id="hc-enable">${t('enable')}</button>
+                    <button id="hc-cancel">${t('cancel')}</button>
                 </div>
             </div>`;
             let confirm = document.querySelector('#hc-enable');
