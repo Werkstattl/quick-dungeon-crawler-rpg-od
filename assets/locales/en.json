@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Treasure chamber found with a <i class='fa fa-toolbox'></i>Chest.",
   "encountered-enemy": "You encountered {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue of Blessing: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for blessings? (Lv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Mysterious chamber; something sleeps inside.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Mysterious chamber; something stirs inside.</span>",
   "healing-shrine-offer": "<span class='Epic'>Healing shrine: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for healing and a blessing?</span>",
   "enemy-awoken": "Dungeon Monarch {enemy} has awoken.",
   "flee-success": "You managed to flee.",

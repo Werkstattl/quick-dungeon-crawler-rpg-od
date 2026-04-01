@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Schatzkammer mit einer <i class='fa fa-toolbox'></i>Truhe gefunden.",
   "encountered-enemy": "Du bist {enemy} begegnet.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue des Segens: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Segen opfern? (Lv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Geheimnisvolle Kammer; etwas schläft darin.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Geheimnisvolle Kammer; etwas regt sich darin.</span>",
   "healing-shrine-offer": "<span class='Epic'>Heilschrein: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Heilung und einen Segen opfern?</span>",
   "enemy-awoken": "Dungeon-Monarch {enemy} ist erwacht.",
   "flee-success": "Du konntest fliehen.",
