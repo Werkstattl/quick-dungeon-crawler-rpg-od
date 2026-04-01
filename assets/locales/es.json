@@ -6,6 +6,7 @@
   "what-is-your-name": "¿Cómo te llamas?",
   "hardcore": "Hardcore",
   "hardcore-enable-warning": "Al activar <b>hardcore</b> se eliminarán de forma permanente todos tus <b>objetos</b> y <b>oro</b> actuales. Usa la opción <b>Exportar/Importar datos</b> para hacer una copia de seguridad de tu partida antes de continuar.",
+  "enable": "Activar",
   "yes": "Sí",
   "no": "No",
   "kills": "Bajas",

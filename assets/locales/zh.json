@@ -6,6 +6,7 @@
   "what-is-your-name": "你的名字是什么？",
   "hardcore": "硬核模式",
   "hardcore-enable-warning": "启用<b>硬核模式</b>将永久删除你当前所有的<b>物品</b>和<b>金币</b>。继续之前，请使用<b>导出/导入数据</b>选项备份存档。",
+  "enable": "启用",
   "yes": "是",
   "no": "否",
   "kills": "击杀",

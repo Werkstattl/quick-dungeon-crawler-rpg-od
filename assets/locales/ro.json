@@ -6,6 +6,7 @@
   "what-is-your-name": "Cum te numești?",
   "hardcore": "Hardcore",
   "hardcore-enable-warning": "Activarea modului <b>hardcore</b> va șterge permanent toate <b>obiectele</b> și tot <b>aurul</b> tău curent. Folosește opțiunea <b>Export/Import date</b> pentru a face backup salvării înainte de a continua.",
+  "enable": "Activează",
   "yes": "Da",
   "no": "Nu",
   "kills": "Ucideri",
