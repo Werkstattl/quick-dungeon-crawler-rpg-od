@@ -26,6 +26,18 @@
   "room": "Sala",
   "run-summary": "Resumen de la partida",
   "run-summary-hint": "Inicia una nueva partida para volver a la mazmorra.",
+  "new-run-intro": [
+    "Las escaleras bajan. La oscuridad vuelve a subir, pero no por mucho.",
+    "Piedra fría. Gruñidos lejanos. Tu aventura comienza aquí.",
+    "La mazmorra exhala. Tú inhalas. No hay otro camino que seguir adelante.",
+    "Las sombras se mueven antes que tú. Algo conoce tu nombre.",
+    "La luz de la antorcha muere en el primer paso. Todo lo demás espera abajo.",
+    "Los muros de piedra se cierran. La oscuridad pesa más. No estás solo aquí abajo.",
+    "Antigua. Hambrienta. Paciente. La mazmorra ha estado esperando.",
+    "Agua goteando. Pasos que resuenan. La mazmorra toca su música.",
+    "Un paso dentro y el mundo de arriba ya se ha ido.",
+    "La oscuridad no se inmuta. Tú sí."
+  ],
   "damage-dealt": "Daño infligido",
   "damage-taken": "Daño recibido",
   "gold-earned": "Oro obtenido",

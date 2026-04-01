@@ -26,6 +26,18 @@
   "room": "Sala",
   "run-summary": "Resumo da partida",
   "run-summary-hint": "Inicie uma nova partida para voltar à masmorra.",
+  "new-run-intro": [
+    "As escadas descem. A escuridão leva de volta para cima — mas não por muito tempo.",
+    "Pedra fria. Rosnados distantes. Sua aventura começa aqui.",
+    "A masmorra expira. Você inspira. Não há caminho além de seguir em frente.",
+    "As sombras se movem antes de você. Algo sabe seu nome.",
+    "A luz da tocha morre no primeiro passo. Todo o resto espera lá embaixo.",
+    "As paredes de pedra se fecham. A escuridão fica mais pesada. Você não está sozinho aqui embaixo.",
+    "Antiga. Faminta. Paciente. A masmorra estava esperando.",
+    "Água pingando. Passos ecoando. A masmorra toca sua música.",
+    "Um passo para dentro e o mundo lá de cima já desapareceu.",
+    "A escuridão não vacila. Você vai vacilar."
+  ],
   "damage-dealt": "Dano causado",
   "damage-taken": "Dano recebido",
   "gold-earned": "Ouro obtido",

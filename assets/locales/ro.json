@@ -26,6 +26,18 @@
   "room": "Cameră",
   "run-summary": "Rezumatul rundei",
   "run-summary-hint": "Pornește o rundă nouă pentru a reveni în temniță.",
+  "new-run-intro": [
+    "Scările coboară. Întunericul urcă înapoi — dar nu pentru mult timp.",
+    "Piatră rece. Mârâituri îndepărtate. Aventura ta începe aici.",
+    "Temnița expiră. Tu inspiri. Nu există alt drum decât înainte.",
+    "Umbrele se mișcă înaintea ta. Ceva îți știe numele.",
+    "Lumina torței moare la primul pas. Tot ce e jos te așteaptă.",
+    "Pereții de piatră se strâng. Întunericul devine mai greu. Nu ești singur aici jos.",
+    "Veche. Flămândă. Răbdătoare. Temnița a așteptat.",
+    "Apă picurând. Pași răsunând. Temnița își cântă muzica.",
+    "Un pas înăuntru și lumea de deasupra a dispărut deja.",
+    "Întunericul nu tresare. Tu o vei face."
+  ],
   "damage-dealt": "Daune provocate",
   "damage-taken": "Daune primite",
   "gold-earned": "Aur câștigat",

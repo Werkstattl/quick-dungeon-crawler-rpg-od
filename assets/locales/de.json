@@ -24,6 +24,18 @@
   "room": "Raum",
   "run-summary": "Laufzusammenfassung",
   "run-summary-hint": "Starte einen neuen Lauf, um wieder in den Dungeon zu ziehen.",
+  "new-run-intro": [
+    "Die Treppe führt hinab. Die Dunkelheit führt zurück nach oben — aber nicht lange.",
+    "Kalter Stein. Fernes Knurren. Dein Abenteuer beginnt hier.",
+    "Der Dungeon atmet aus. Du atmest ein. Es gibt nur den Weg nach vorn.",
+    "Schatten bewegen sich vor dir. Etwas kennt deinen Namen.",
+    "Das Fackellicht stirbt beim ersten Schritt. Alles andere wartet unten.",
+    "Steinwände rücken näher. Die Dunkelheit wird schwerer. Du bist hier nicht allein.",
+    "Uralt. Hungrig. Geduldig. Der Dungeon hat gewartet.",
+    "Tropfendes Wasser. Hallende Schritte. Der Dungeon spielt seine Musik.",
+    "Ein Schritt hinein, und die Welt über dir ist schon verschwunden.",
+    "Die Dunkelheit zuckt nicht. Du wirst es tun."
+  ],
   "damage-dealt": "Verursachter Schaden",
   "damage-taken": "Erlittener Schaden",
   "gold-earned": "Verdientes Gold",
