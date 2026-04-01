@@ -944,7 +944,7 @@ const addNewRunIntroLog = () => {
     if (!isFreshDungeonRun()) {
         return;
     }
-    addDungeonLog(tRandom("new-run-intro"));
+    addDungeonLog(`<span class="storyBeatLog">${tRandom("new-run-intro")}</span>`);
 };
 
 // Start the game
