@@ -145,7 +145,7 @@ const maybeAdvanceDungeonStory = () => {
         dungeon.story.monarchUnlocked = true;
     }
 
-    addDungeonLog(t(beatKey));
+    addDungeonLog(`<span class="storyBeatLog">${t(beatKey)}</span>`);
 };
 
 const ensureRunStatisticsShape = () => {

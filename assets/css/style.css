@@ -481,6 +481,10 @@ button:focus {
     color: #c77dff;
 }
 
+.storyBeatLog {
+    color: #7dd3fc;
+}
+
 /* Game */
 .game-container {
     display: inline-block;
