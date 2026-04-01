@@ -5,6 +5,7 @@
   "summon-explore-hint": "Pressione 'Invocar' para obter um companheiro e 'Explorar' para iniciar sua jornada.",
   "what-is-your-name": "Qual é o seu nome?",
   "hardcore": "Hardcore",
+  "hardcore-enable-warning": "Ativar o <b>hardcore</b> excluirá permanentemente todos os seus <b>itens</b> e <b>ouro</b> atuais. Use a opção <b>Exportar/Importar Dados</b> para fazer backup do seu save antes de continuar.",
   "yes": "Sim",
   "no": "Não",
   "kills": "Abates",
