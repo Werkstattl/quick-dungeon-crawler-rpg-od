@@ -308,6 +308,10 @@
   "armor-fortifies": "Rüstung verstärkt sich! (+3% DEF auf dieser Etage)",
   "ignored-move-on": "Du hast es ignoriert und bist weitergegangen.",
   "shrine-blessings-fade": "<span class='Common'>Etagen-Buffs verblassen auf der neuen Etage.</span>",
+  "story-beat-floor-5": "<span class='Common'>Der Dungeon wird auf eine Weise tiefer, die sich nicht allein durch die Treppen erklären lässt.</span>",
+  "story-beat-floor-10": "<span class='Common'>Ein langsamer Puls wandert durch die Wände, als hätte sich tief unten etwas geregt.</span>",
+  "story-beat-floor-15": "<span class='Heirloom'>Die Dunkelheit ist nicht länger leer. Etwas Uraltes hat deinen Abstieg bemerkt.</span>",
+  "story-beat-floor-20": "<span class='Heirloom'>Irgendwo tiefer unten erzittert eine versiegelte Kammer. Der Dungeon-Monarch erwacht.</span>",
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Du fühlst dich geistig fokussiert! (+10% ATK.GES bis zur nächsten Etage)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Du fühlst dich körperlich energiegeladen! (+15% ATK bis zur nächsten Etage)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Du fühlst inneren Frieden! (+12% DEF bis zur nächsten Etage)</span>"
