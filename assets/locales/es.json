@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Se encontró una cámara del tesoro con un <i class='fa fa-toolbox'></i>Cofre.",
   "encountered-enemy": "Te encontraste con {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Estatua de la bendición: ¿ofrecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por bendiciones? (Nv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Cámara misteriosa; algo duerme adentro.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Cámara misteriosa; algo se agita adentro.</span>",
   "healing-shrine-offer": "<span class='Epic'>Santuario curativo: ¿ofrecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por curación y una bendición?</span>",
   "enemy-awoken": "El Monarca del calabozo {enemy} ha despertado.",
   "flee-success": "Lograste huir.",

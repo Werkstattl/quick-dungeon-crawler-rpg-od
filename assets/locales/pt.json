@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Câmara do tesouro encontrada com um <i class='fa fa-toolbox'></i>Baú.",
   "encountered-enemy": "Você encontrou {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Estátua da Bênção: oferecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por bênçãos? (Nv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Câmara misteriosa; algo dorme lá dentro.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Câmara misteriosa; algo se mexe lá dentro.</span>",
   "healing-shrine-offer": "<span class='Epic'>Santuário de cura: oferecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por cura e uma bênção?</span>",
   "enemy-awoken": "O Monarca da Masmorra {enemy} despertou.",
   "flee-success": "Você conseguiu fugir.",

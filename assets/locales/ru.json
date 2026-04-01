@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Найдена сокровищница с сундуком <i class='fa fa-toolbox'></i>.",
   "encountered-enemy": "Вы встретили {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Статуя благословения: пожертвовать <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за благословения? (Ур.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Таинственная камера; внутри кто-то спит.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Таинственная камера; внутри что-то шевелится.</span>",
   "healing-shrine-offer": "<span class='Epic'>Святилище исцеления: пожертвовать <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за исцеление и благословение?</span>",
   "enemy-awoken": "Повелитель подземелья {enemy} пробудился.",
   "flee-success": "Вам удалось сбежать.",

@@ -299,7 +299,7 @@
   "treasure-chamber-found": "Ai găsit o cameră a comorii cu un <i class='fa fa-toolbox'></i>cufăr.",
   "encountered-enemy": "Ai întâlnit {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statuia binecuvântării: oferi <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> pentru binecuvântări? (Lv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>Cameră misterioasă; ceva doarme înăuntru.</span>",
+  "mysterious-chamber": "<span class='Heirloom'>Cameră misterioasă; ceva se mișcă înăuntru.</span>",
   "healing-shrine-offer": "<span class='Epic'>Altar de vindecare: oferi <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> pentru vindecare și o binecuvântare?</span>",
   "enemy-awoken": "Dungeon Monarch {enemy} s-a trezit.",
   "flee-success": "Ai reușit să fugi.",

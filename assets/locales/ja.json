@@ -299,7 +299,7 @@
   "treasure-chamber-found": "<i class='fa fa-toolbox'></i>宝箱のある宝物庫を見つけた。",
   "encountered-enemy": "{enemy}と遭遇した。",
   "statue-of-blessing-offer": "<span class='Legendary'>祝福の像: 祝福を得るために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？ (Lv.{level})</span>",
-  "mysterious-chamber": "<span class='Heirloom'>謎めいた部屋; 何かが眠っている。</span>",
+  "mysterious-chamber": "<span class='Heirloom'>謎めいた部屋; 中で何かがうごめいている。</span>",
   "healing-shrine-offer": "<span class='Epic'>癒しの祭壇: 回復と祝福のために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？</span>",
   "enemy-awoken": "ダンジョンの君主{enemy}が目を覚ました。",
   "flee-success": "逃走に成功した。",

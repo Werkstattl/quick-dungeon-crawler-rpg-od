@@ -299,7 +299,7 @@
   "treasure-chamber-found": "发现了带有<i class='fa fa-toolbox'></i>宝箱的宝物室。",
   "encountered-enemy": "你遭遇了 {enemy}。",
   "statue-of-blessing-offer": "<span class='Legendary'>祝福之像：献上 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 获取祝福？（等级 {level}）</span>",
-  "mysterious-chamber": "<span class='Heirloom'>神秘房间，里面沉睡着某种存在。</span>",
+  "mysterious-chamber": "<span class='Heirloom'>神秘房间，里面有什么在蠢动。</span>",
   "healing-shrine-offer": "<span class='Epic'>治疗神殿：献上 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 获取治疗与祝福？</span>",
   "enemy-awoken": "地城霸主 {enemy} 被惊醒了。",
   "flee-success": "你成功逃离了。",
