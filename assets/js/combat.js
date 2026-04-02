@@ -31,6 +31,7 @@ let combatTimerWasRunning = false;
 
 let latestCombatLoot = null;
 let pendingRunSummary = null;
+let runSummaryReadyInCombat = false;
 
 const createRunSummary = (result = 'defeat') => ({
     playerName: player && player.name ? player.name : '',
@@ -1041,6 +1042,7 @@ const bindClaimButton = () => {
 const handleRunSummaryButtonClick = () => {
     if (typeof showEndgameScreen === 'function') {
         sfxConfirm.play();
+        runSummaryReadyInCombat = false;
         showEndgameScreen(pendingRunSummary);
     }
 };
@@ -1054,12 +1056,12 @@ const bindRunSummaryButton = () => {
 
 const handleSpecialBossVictory = () => {
     pendingRunSummary = createRunSummary('victory');
+    runSummaryReadyInCombat = true;
     dungeon.status.exploring = false;
     dungeon.status.paused = true;
     dungeon.status.event = false;
     enemyDead = false;
     latestCombatLoot = null;
-    combatBacklog.length = 0;
 
     if (typeof dungeonTimer !== 'undefined' && dungeonTimer) {
         clearInterval(dungeonTimer);
@@ -1070,13 +1072,7 @@ const handleSpecialBossVictory = () => {
         playTimer = null;
     }
 
-    if (combatPanel) {
-        combatPanel.style.display = "none";
-    }
-
-    if (typeof showEndgameScreen === 'function') {
-        showEndgameScreen(pendingRunSummary);
-    }
+    updateCombatLog();
 };
 
 const hasSellableCombatLoot = () => {
@@ -1207,7 +1203,7 @@ const updateCombatLog = () => {
         bindSellLootButton();
     }
 
-    if (playerDead) {
+    if (playerDead || runSummaryReadyInCombat) {
         appendDecisionPanel(`<button id="battleButton" data-i18n="run-summary">${t('run-summary')}</button>`);
         bindRunSummaryButton();
     }
@@ -1294,6 +1290,7 @@ const startCombat = (battleMusic) => {
     specialAbilityDueAt = null;
     specialAbilityRemaining = null;
     combatTimerWasRunning = false;
+    runSummaryReadyInCombat = false;
 
     // Reset per-enemy status effects
     if (enemy && enemy.bleed) {
