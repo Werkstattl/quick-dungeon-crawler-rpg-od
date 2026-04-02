@@ -273,7 +273,7 @@ const setEnemyStats = (type, condition) => {
     // Stat multiplier for monarchs
     if (condition == 'sboss') {
         enemy.stats.hpMax = enemy.stats.hpMax * 6;
-        enemy.stats.atk = enemy.stats.atk * 2;
+        enemy.stats.atk = enemy.stats.atk * 1.8;
         enemy.stats.def = enemy.stats.def * 2;
         enemy.stats.critRate = enemy.stats.critRate * 1.1;
         enemy.stats.critDmg = enemy.stats.critDmg * 1.2;
