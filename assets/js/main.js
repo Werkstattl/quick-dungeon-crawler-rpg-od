@@ -1442,6 +1442,7 @@ const showEndgameScreen = (summary) => {
             unlocksContainer.textContent = unlockMessage;
             unlocksContainer.classList.add("visible");
             unlocksContainer.hidden = false;
+            player.selectedCurseLevel = unlockedLevel;
         } else {
             unlocksContainer.textContent = "";
             unlocksContainer.classList.remove("visible");
