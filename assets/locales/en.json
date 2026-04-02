@@ -23,7 +23,8 @@
   "floor": "Floor",
   "room": "Room",
   "run-summary": "Run summary",
-  "run-summary-hint": "Start a new run to dive back into the dungeon.",
+  "run-summary-hint": "Start a new run to enter the dungeon again.",
+  "run-summary-victory-hint": "Victory! Start a new run to enter the dungeon again.",
   "new-run-intro": [
     "The stairs lead down. The dark leads back up — but not for long.",
     "Cold stone. Distant growls. Your adventure starts here.",

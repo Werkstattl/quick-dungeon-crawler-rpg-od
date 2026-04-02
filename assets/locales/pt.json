@@ -26,6 +26,7 @@
   "room": "Sala",
   "run-summary": "Resumo da partida",
   "run-summary-hint": "Inicie uma nova partida para voltar à masmorra.",
+  "run-summary-victory-hint": "Vitória! Inicie uma nova partida para voltar à masmorra.",
   "new-run-intro": [
     "As escadas descem. A escuridão leva de volta para cima — mas não por muito tempo.",
     "Pedra fria. Rosnados distantes. Sua aventura começa aqui.",

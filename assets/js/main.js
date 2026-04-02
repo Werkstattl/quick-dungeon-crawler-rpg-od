@@ -1313,8 +1313,8 @@ const showEndgameScreen = (summary) => {
     const endgameHint = modal.querySelector(".endgame-hint");
     if (endgameHint) {
         endgameHint.textContent = safeSummary.result === "victory"
-            ? "Victory! Start a new run to enter the dungeon again."
-            : (typeof t === "function" ? t("run-summary-hint") : "Start a new run to enter the dungeon again.");
+            ? (typeof t === "function" ? t("run-summary-victory-hint") : "Victory! Start a new run to dive back into the dungeon.")
+            : (typeof t === "function" ? t("run-summary-hint") : "Start a new run to dive back into the dungeon.");
     }
     const playerNameElement = modal.querySelector("#endgame-player-name");
     if (playerNameElement) {

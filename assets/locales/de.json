@@ -24,6 +24,7 @@
   "room": "Raum",
   "run-summary": "Laufzusammenfassung",
   "run-summary-hint": "Starte einen neuen Lauf, um wieder in den Dungeon zu ziehen.",
+  "run-summary-victory-hint": "Sieg! Starte einen neuen Lauf, um wieder in den Dungeon zu ziehen.",
   "new-run-intro": [
     "Die Treppe führt hinab. Die Dunkelheit führt zurück nach oben — aber nicht lange.",
     "Kalter Stein. Fernes Knurren. Dein Abenteuer beginnt hier.",
