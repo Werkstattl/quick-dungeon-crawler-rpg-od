@@ -317,8 +317,8 @@ const setEnemyStats = (type, condition) => {
 
     let expCalculation = (expYield.reduce((acc, cur) => acc + cur, 0)) / 20;
     enemy.rewards.exp = Math.round(expCalculation + expCalculation * (enemy.lvl * 0.1));
-    if (enemy.rewards.exp > 1000000) {
-        enemy.rewards.exp = 1000000 * randomizeDecimal(0.9, 1.1);
+    if (enemy.rewards.exp > 800000) {
+        enemy.rewards.exp = 800000 * randomizeDecimal(0.9, 1.1);
     }
     enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.3);
     // Calculate equipment drop chance. Base 33%, increased by player's Luck.
