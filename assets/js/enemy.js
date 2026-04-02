@@ -276,7 +276,7 @@ const setEnemyStats = (type, condition) => {
         enemy.stats.atk = enemy.stats.atk * 2;
         enemy.stats.def = enemy.stats.def * 2;
         enemy.stats.critRate = enemy.stats.critRate * 1.1;
-        enemy.stats.critDmg = enemy.stats.critDmg * 1.3;
+        enemy.stats.critDmg = enemy.stats.critDmg * 1.2;
     }
 
     // Apply stat multipliers for every stat
