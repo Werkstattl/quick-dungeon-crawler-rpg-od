@@ -398,7 +398,7 @@ const companionTypes = [
         nameKey: "companion-phoenix-chick",
         rarity: "Legendary",
         baseHp: 60,
-        baseAtk: 650,
+        baseAtk: 560,
         evolvesTo: 10,
         evolveLevel: 50,
         passives: [
@@ -484,7 +484,7 @@ const companionTypes = [
         nameKey: "companion-phoenix",
         rarity: "Legendary",
         baseHp: 90,
-        baseAtk: 900,
+        baseAtk: 700,
         obtainable: false,
         passives: [
             { stat: 'hp', base: 1, perLevel: 0.1 },
@@ -494,7 +494,7 @@ const companionTypes = [
         passiveDescriptionKey: 'companion-passive-phoenix',
         baseCritRate: 35,
         baseCritDmg: 85,
-        atkSpdBase: 0.6,
+        atkSpdBase: 0.52,
         atkSpdGrowth: 0.025,
     },
 ];
