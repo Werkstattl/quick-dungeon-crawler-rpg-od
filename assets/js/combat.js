@@ -1057,7 +1057,7 @@ const bindRunSummaryButton = () => {
 const handleSpecialBossVictory = () => {
     pendingRunSummary = createRunSummary('victory');
     runSummaryReadyInCombat = true;
-    addCombatLog("<span class='Legendary'>🏆 Victory! The Dungeon Monarch has been defeated.</span>");
+    addCombatLog(t('combat-victory-monarch-defeated'));
     dungeon.status.exploring = false;
     dungeon.status.paused = true;
     dungeon.status.event = false;

@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Mysterious chamber; something stirs inside.</span>",
   "healing-shrine-offer": "<span class='Epic'>Healing shrine: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for healing and a blessing?</span>",
   "enemy-awoken": "Dungeon Monarch {enemy} has awoken.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Victory! The Dungeon Monarch has been defeated.</span>",
   "flee-success": "You managed to flee.",
   "flee-failure": "You failed to escape!",
   "chest-empty": "The chest is empty.",

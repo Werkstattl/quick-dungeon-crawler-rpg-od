@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Cameră misterioasă; ceva se mișcă înăuntru.</span>",
   "healing-shrine-offer": "<span class='Epic'>Altar de vindecare: oferi <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> pentru vindecare și o binecuvântare?</span>",
   "enemy-awoken": "Dungeon Monarch {enemy} s-a trezit.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Victorie! Monarhul Temniței a fost învins.</span>",
   "flee-success": "Ai reușit să fugi.",
   "flee-failure": "Nu ai reușit să scapi!",
   "chest-empty": "Cufărul este gol.",

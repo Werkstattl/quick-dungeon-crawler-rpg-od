@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>神秘房间，里面有什么在蠢动。</span>",
   "healing-shrine-offer": "<span class='Epic'>治疗神殿：献上 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 获取治疗与祝福？</span>",
   "enemy-awoken": "地城霸主 {enemy} 被惊醒了。",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 胜利！地下城君主已被击败。</span>",
   "flee-success": "你成功逃离了。",
   "flee-failure": "你没能逃脱！",
   "chest-empty": "宝箱是空的。",

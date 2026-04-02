@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Cámara misteriosa; algo se agita adentro.</span>",
   "healing-shrine-offer": "<span class='Epic'>Santuario curativo: ¿ofrecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por curación y una bendición?</span>",
   "enemy-awoken": "El Monarca del calabozo {enemy} ha despertado.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 ¡Victoria! El Monarca del calabozo ha sido derrotado.</span>",
   "flee-success": "Lograste huir.",
   "flee-failure": "¡No pudiste escapar!",
   "chest-empty": "El cofre está vacío.",

@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Таємнича камера; усередині щось ворушиться.</span>",
   "healing-shrine-offer": "<span class='Epic'>Святилище зцілення: пожертвувати <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за зцілення і благословення?</span>",
   "enemy-awoken": "Монарх підземелля {enemy} прокинувся.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Перемога! Монарха підземелля переможено.</span>",
   "flee-success": "Вам вдалося втекти.",
   "flee-failure": "Ви не змогли втекти!",
   "chest-empty": "Скриня порожня.",

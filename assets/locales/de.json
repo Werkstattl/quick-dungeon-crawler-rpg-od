@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Geheimnisvolle Kammer; etwas regt sich darin.</span>",
   "healing-shrine-offer": "<span class='Epic'>Heilschrein: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Heilung und einen Segen opfern?</span>",
   "enemy-awoken": "Dungeon-Monarch {enemy} ist erwacht.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Sieg! Der Dungeon-Monarch wurde besiegt.</span>",
   "flee-success": "Du konntest fliehen.",
   "flee-failure": "Du konntest nicht entkommen!",
   "chest-empty": "Die Truhe ist leer.",

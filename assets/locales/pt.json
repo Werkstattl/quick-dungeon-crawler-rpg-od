@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Câmara misteriosa; algo se mexe lá dentro.</span>",
   "healing-shrine-offer": "<span class='Epic'>Santuário de cura: oferecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por cura e uma bênção?</span>",
   "enemy-awoken": "O Monarca da Masmorra {enemy} despertou.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Vitória! O Monarca da Masmorra foi derrotado.</span>",
   "flee-success": "Você conseguiu fugir.",
   "flee-failure": "Você não conseguiu escapar!",
   "chest-empty": "O baú está vazio.",

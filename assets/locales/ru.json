@@ -303,6 +303,7 @@
   "mysterious-chamber": "<span class='Heirloom'>Таинственная камера; внутри что-то шевелится.</span>",
   "healing-shrine-offer": "<span class='Epic'>Святилище исцеления: пожертвовать <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за исцеление и благословение?</span>",
   "enemy-awoken": "Повелитель подземелья {enemy} пробудился.",
+  "combat-victory-monarch-defeated": "<span class='Legendary'>🏆 Победа! Монарх подземелья повержен.</span>",
   "flee-success": "Вам удалось сбежать.",
   "flee-failure": "Вы не смогли сбежать!",
   "chest-empty": "Сундук пуст.",
