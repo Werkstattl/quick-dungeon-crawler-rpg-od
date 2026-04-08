@@ -810,7 +810,7 @@ const nothingEvent = () => {
 // Curse Room Event
 const curseRoomEvent = () => {
     dungeon.status.event = true;
-    let curseLevel = dungeon.curse || 0;
+    let curseLevel = player.selectedCurseLevel || 0;
     let curseReduction = 0;
     // Chance to reduce curse: 20% base + 5% per curse level
     if (curseLevel > 0 && randomizeNum(1, 100) <= (20 + curseLevel * 5)) {
