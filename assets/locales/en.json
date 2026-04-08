@@ -449,5 +449,13 @@
   ,"descend": "Descend"
   ,"descended-to-floor": "You descended to floor {floor}."
   ,"found-stairs": "You found stairs leading deeper into the dungeon."
+  ,"curse-room-discovered": "<span class='Epic'>⚠️ A curse shrine pulses in the shadows...</span>"
+  ,"curse-room-description": "<span class='Epic'>Curse Level {level}:</span> Dangerous enemies ahead, but glory comes with risk."
+  ,"curse-room-enter": "Enter the Curse Room"
+  ,"curse-room-ignore": "Leave"
+  ,"curse-room-entered": "You entered the cursed chamber. Enemies are strengthened!"
+  ,"curse-room-victory": "<span class='Legendary'>🏆 Victory! The curse recedes... +{xp} XP, +{gold} Gold, +{loot} Loot Boost!</span>"
+  ,"curse-room-loot-bonus": "<span class='Legendary'>Bonus Loot: {item}!</span>"
+  ,"curse-room-curse-reduced": "<span class='Epic'>Your curse has weakened! ({old} → {new})</span>"
 
 }

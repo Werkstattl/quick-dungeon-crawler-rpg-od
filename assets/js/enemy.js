@@ -279,6 +279,17 @@ const setEnemyStats = (type, condition) => {
         enemy.stats.critDmg = enemy.stats.critDmg * 1.2;
     }
 
+    // Stat multiplier for curse rooms
+    if (dungeon.inCurseRoom) {
+        enemy.stats.hpMax = enemy.stats.hpMax * 2;
+        enemy.stats.atk = enemy.stats.atk * 1.5;
+        enemy.stats.def = enemy.stats.def * 1.3;
+        enemy.stats.critRate = enemy.stats.critRate * 1.2;
+        enemy.stats.critDmg = enemy.stats.critDmg * 1.2;
+        // Mark enemy as curse enemy for bonus rewards
+        enemy.condition = 'curse';
+    }
+
     // Apply stat multipliers for every stat
     let floorMultiplier = (dungeon.progress.floor / 3);
     if (floorMultiplier < 1) {
