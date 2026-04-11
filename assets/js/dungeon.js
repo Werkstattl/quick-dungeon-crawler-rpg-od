@@ -830,8 +830,24 @@ const curseRoomEvent = () => {
         // Set curse room flags for enhanced combat
         dungeon.inCurseRoom = true;
         dungeon.curseRoomCurseReduction = curseReduction;
-        // Trigger enhanced enemy encounter
-        enemyEncounter(true); // true = enhanced
+        // Generate enhanced enemy and start combat
+        dungeon.status.event = false;
+        currentEvent = null;
+        generateRandomEnemy();
+        choices = `
+            <div class="decision-panel">
+                <button id="choice1" data-i18n="engage">${t('engage')}</button>
+                <button id="choice2" data-i18n="flee">${t('flee')}</button>
+            </div>`;
+        enemy.name = getDisplayEnemyName(enemy.id);
+        addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }), choices);
+        document.querySelector("#choice1").onclick = function () {
+            engageBattle();
+        };
+        document.querySelector("#choice2").onclick = function () {
+            fleeBattle();
+        };
+        autoConfirm();
     };
     document.querySelector("#choice2").onclick = function () {
         dungeon.action = 0;
