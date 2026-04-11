@@ -1015,6 +1015,25 @@ const handleClaimButtonClick = () => {
         addDungeonLog(t('moved-to-next-room'));
     }
 
+    // Curse room rewards and cleanup
+    if (enemy.condition === 'curse' && dungeon.inCurseRoom) {
+        const floorBonus = dungeon.progress.floor;
+        const bonusXp = floorBonus * 100;
+        const bonusGold = floorBonus * 50;
+        const oldCurse = player.selectedCurseLevel || 0;
+        // Apply curse reduction if applicable
+        if (dungeon.curseRoomCurseReduction > 0 && oldCurse > 0) {
+            const newCurse = Math.max(0, oldCurse - dungeon.curseRoomCurseReduction);
+            player.selectedCurseLevel = newCurse;
+            addDungeonLog(t('curse-room-curse-reduced', { old: Math.round(oldCurse), new: Math.round(newCurse) }));
+        }
+        // Bonus rewards message
+        addDungeonLog(t('curse-room-victory', { xp: nFormatter(bonusXp), gold: nFormatter(bonusGold), loot: '10%' }));
+        // Clean up curse room state
+        dungeon.inCurseRoom = false;
+        dungeon.curseRoomCurseReduction = 0;
+    }
+
     let dimDungeon = document.querySelector('#dungeon-main');
     dimDungeon.style.filter = "brightness(100%)";
     bgmDungeon.play();

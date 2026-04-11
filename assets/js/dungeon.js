@@ -96,6 +96,9 @@ let dungeon = {
         stairsIgnored: false,
     },
     story: createDefaultDungeonStory(),
+    // Curse room state
+    inCurseRoom: false,
+    curseRoomCurseReduction: 0,
 };
 
 const ensureRoomEventsState = () => {
@@ -427,6 +430,13 @@ const dungeonEvent = () => {
         if (dungeon.story.monarchUnlocked && !dungeon.story.monarchSeen) {
             eventTypes.push("monarch", "monarch", "monarch");
         }
+        // Curse rooms appear from floor 5+, chance increases with floor
+        if (dungeon.progress.floor >= 5) {
+            let curseChance = Math.min(dungeon.progress.floor - 4, 10); // 1% at floor 5, up to 10% at floor 14+
+            if (randomizeNum(1, 100) <= curseChance) {
+                eventTypes.push("curse");
+            }
+        }
         if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && !dungeon.roomEvents.stairsIgnored) {
         	eventTypes.push("stairs");        	
         	eventTypes.push("stairs");
@@ -534,6 +544,9 @@ const dungeonEvent = () => {
                 break;
             case "nothing":
                 nothingEvent();
+                break;
+            case "curse":
+                curseRoomEvent();
                 break;
             case "stairs":
                 dungeon.status.event = true;
@@ -723,15 +736,20 @@ const fleeBattle = () => {
     let eventRoll = randomizeNum(1, 10);
     if (eventRoll <= 9) {
         sfxConfirm.play();
-    addDungeonLog(t('flee-success'));
+        addDungeonLog(t('flee-success'));
         player.inCombat = false;
         dungeon.status.event = false;
+        // Clean up curse room state if fleeing from one
+        if (dungeon.inCurseRoom) {
+            dungeon.inCurseRoom = false;
+            dungeon.curseRoomCurseReduction = 0;
+        }
     } else {
-    addDungeonLog(t('flee-failure'));
+        addDungeonLog(t('flee-failure'));
         showCombatInfo();
-    addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
+        addCombatLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
         startCombat(bgmBattleMain);
-    addCombatLog(t('flee-failure'));
+        addCombatLog(t('flee-failure'));
     }
 }
 
@@ -788,6 +806,55 @@ const nothingEvent = () => {
     addDungeonLog(t('nothing-here'));
     }
 }
+
+// Curse Room Event
+const curseRoomEvent = () => {
+    dungeon.status.event = true;
+    let curseLevel = player.selectedCurseLevel || 0;
+    let curseReduction = 0;
+    // Chance to reduce curse: 20% base + 5% per curse level
+    if (curseLevel > 0 && randomizeNum(1, 100) <= (20 + curseLevel * 5)) {
+        curseReduction = 1;
+    }
+    let choices = `
+        <div class="decision-panel">
+            <button id="choice1" data-i18n="curse-room-enter">${t('curse-room-enter')}</button>
+            <button id="choice2" data-i18n="curse-room-ignore">${t('curse-room-ignore')}</button>
+        </div>`;
+    addDungeonLog(t('curse-room-discovered'));
+    addDungeonLog(t('curse-room-description', { level: curseLevel }), choices);
+    document.querySelector("#choice1").onclick = function () {
+        sfxConfirm.play();
+        dungeon.status.event = false;
+        currentEvent = null;
+        // Set curse room flags for enhanced combat
+        dungeon.inCurseRoom = true;
+        dungeon.curseRoomCurseReduction = curseReduction;
+        // Generate enhanced enemy and start combat
+        dungeon.status.event = false;
+        currentEvent = null;
+        generateRandomEnemy();
+        choices = `
+            <div class="decision-panel">
+                <button id="choice1" data-i18n="engage">${t('engage')}</button>
+                <button id="choice2" data-i18n="flee">${t('flee')}</button>
+            </div>`;
+        enemy.name = getDisplayEnemyName(enemy.id);
+        addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }), choices);
+        document.querySelector("#choice1").onclick = function () {
+            engageBattle();
+        };
+        document.querySelector("#choice2").onclick = function () {
+            fleeBattle();
+        };
+        autoConfirm();
+    };
+    document.querySelector("#choice2").onclick = function () {
+        dungeon.action = 0;
+        ignoreEvent();
+    };
+    autoDecline();
+};
 
 // Random stat buff
 const statBlessing = () => {
