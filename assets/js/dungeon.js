@@ -261,9 +261,6 @@ const getDungeonEventInterval = () => {
 };
 
 const dungeonEventTick = () => {
-    if (!dungeon.status.exploring || dungeon.status.event) {
-        return;
-    }
     const now = Date.now();
     if (now - lastDungeonEventTimestamp < getDungeonEventInterval()) {
         return;
@@ -1134,7 +1131,7 @@ const clearDungeonLog = () => {
 // Process all resting activities while paused
 const processRestingActivities = () => {
     if (player.inCombat) return;
-
+    
     dungeon.resting.duration++;
 
     // Passive health regeneration (percentage based)
