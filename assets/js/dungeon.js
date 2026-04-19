@@ -262,11 +262,21 @@ const getDungeonEventInterval = () => {
 
 const dungeonEventTick = () => {
     const now = Date.now();
-    if (now - lastDungeonEventTimestamp < getDungeonEventInterval()) {
+
+    if (dungeon.status.exploring && !dungeon.status.event) {
+        if (now - lastDungeonEventTimestamp >= getDungeonEventInterval()) {
+            lastDungeonEventTimestamp = now;
+            dungeonEvent();
+        }
         return;
     }
-    lastDungeonEventTimestamp = now;
-    dungeonEvent();
+
+    if (dungeon.status.paused && !dungeon.status.event) {
+        if (now - lastDungeonEventTimestamp >= 1000) {
+            lastDungeonEventTimestamp = now;
+            processRestingActivities();
+        }
+    }
 };
 
 // ===== Dungeon Setup =====
