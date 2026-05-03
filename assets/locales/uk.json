@@ -359,7 +359,6 @@
   "level-up": "Рівень підвищено!",
   "remaining": "Залишилось: {count}",
   "reroll-button": "Перекинути {remaining}/{total}",
-
   "equipment-names": {
     "sword": "Меч",
     "axe": "Сокира",
@@ -379,7 +378,6 @@
     "boots": "Чоботи",
     "charm": "Амулет"
   },
-
   "enemy-names": {
     "goblin": "Гоблін",
     "goblin-rogue": "Гоблін-розбійник",
@@ -433,21 +431,50 @@
     "darkness-angel-reaper": "Темний янгол-жнець",
     "zalaras-dragon-emperor": "Заларас, імператор драконів"
   },
-
   "level-up-option": {
-    "hp": { "title": "HP UP", "desc": "Збільшує бонусне HP на {value}%." },
-    "atk": { "title": "ATK UP", "desc": "Збільшує бонусний ATK на {value}%." },
-    "def": { "title": "DEF UP", "desc": "Збільшує бонусний DEF на {value}%." },
-    "atkSpd": { "title": "ATK.SPD UP", "desc": "Збільшує бонусний ATK.SPD на {value}%." },
-    "vamp": { "title": "VAMP UP", "desc": "Збільшує бонусний VAMP на {value}%." },
-    "critRate": { "title": "C.RATE UP", "desc": "Збільшує бонусний C.RATE на {value}%." },
-    "critDmg": { "title": "C.DMG UP", "desc": "Збільшує бонусний C.DMG на {value}%." },
-    "dodge": { "title": "DODGE UP", "desc": "Збільшує бонусний DODGE на {value}%." },
-    "luck": { "title": "LUCK UP", "desc": "Збільшує бонусний LUCK на {value}%." }
+    "hp": {
+      "title": "HP UP",
+      "desc": "Збільшує бонусне HP на {value}%."
+    },
+    "atk": {
+      "title": "ATK UP",
+      "desc": "Збільшує бонусний ATK на {value}%."
+    },
+    "def": {
+      "title": "DEF UP",
+      "desc": "Збільшує бонусний DEF на {value}%."
+    },
+    "atkSpd": {
+      "title": "ATK.SPD UP",
+      "desc": "Збільшує бонусний ATK.SPD на {value}%."
+    },
+    "vamp": {
+      "title": "VAMP UP",
+      "desc": "Збільшує бонусний VAMP на {value}%."
+    },
+    "critRate": {
+      "title": "C.RATE UP",
+      "desc": "Збільшує бонусний C.RATE на {value}%."
+    },
+    "critDmg": {
+      "title": "C.DMG UP",
+      "desc": "Збільшує бонусний C.DMG на {value}%."
+    },
+    "dodge": {
+      "title": "DODGE UP",
+      "desc": "Збільшує бонусний DODGE на {value}%."
+    },
+    "luck": {
+      "title": "LUCK UP",
+      "desc": "Збільшує бонусний LUCK на {value}%."
+    }
   },
-
   "descend": "Спуститися",
   "descended-to-floor": "Ви спустилися на поверх {floor}.",
-  "found-stairs": "Ви знайшли сходи, що ведуть глибше в підземелля."
-
+  "found-stairs": "Ви знайшли сходи, що ведуть глибше в підземелля.",
+  "enemy-type-offensive": "Атакуючий",
+  "enemy-type-defensive": "Захисний",
+  "enemy-type-balanced": "Збалансований",
+  "enemy-type-quick": "Швидкий",
+  "enemy-type-lethal": "Смертельний"
 }

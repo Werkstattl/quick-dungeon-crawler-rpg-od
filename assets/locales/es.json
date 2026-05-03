@@ -359,7 +359,6 @@
   "level-up": "¡Nivel aumentado!",
   "remaining": "Restante: {count}",
   "reroll-button": "Volver a tirar {remaining}/{total}",
-
   "equipment-names": {
     "sword": "Espada",
     "axe": "Hacha",
@@ -379,7 +378,6 @@
     "boots": "Botas",
     "charm": "Amuleto"
   },
-
   "enemy-names": {
     "goblin": "Goblin",
     "goblin-rogue": "Goblin pícaro",
@@ -433,20 +431,50 @@
     "darkness-angel-reaper": "Ángel de la oscuridad segador",
     "zalaras-dragon-emperor": "Zalaras, el emperador dragón"
   },
-
   "level-up-option": {
-    "hp": { "title": "HP +", "desc": "Incrementa el HP adicional en {value}%." },
-    "atk": { "title": "ATQ +", "desc": "Incrementa el ATQ adicional en {value}%." },
-    "def": { "title": "DEF +", "desc": "Incrementa la DEF adicional en {value}%." },
-    "atkSpd": { "title": "VEL.ATQ +", "desc": "Incrementa la VEL.ATQ adicional en {value}%." },
-    "vamp": { "title": "VAMP +", "desc": "Incrementa el VAMP adicional en {value}%." },
-    "critRate": { "title": "T.CRIT +", "desc": "Incrementa la T.CRIT adicional en {value}%." },
-    "critDmg": { "title": "D.CRIT +", "desc": "Incrementa el D.CRIT adicional en {value}%." },
-    "dodge": { "title": "ESQ +", "desc": "Incrementa la ESQ adicional en {value}%." },
-    "luck": { "title": "SUERTE +", "desc": "Incrementa la SUERTE adicional en {value}%." }
+    "hp": {
+      "title": "HP +",
+      "desc": "Incrementa el HP adicional en {value}%."
+    },
+    "atk": {
+      "title": "ATQ +",
+      "desc": "Incrementa el ATQ adicional en {value}%."
+    },
+    "def": {
+      "title": "DEF +",
+      "desc": "Incrementa la DEF adicional en {value}%."
+    },
+    "atkSpd": {
+      "title": "VEL.ATQ +",
+      "desc": "Incrementa la VEL.ATQ adicional en {value}%."
+    },
+    "vamp": {
+      "title": "VAMP +",
+      "desc": "Incrementa el VAMP adicional en {value}%."
+    },
+    "critRate": {
+      "title": "T.CRIT +",
+      "desc": "Incrementa la T.CRIT adicional en {value}%."
+    },
+    "critDmg": {
+      "title": "D.CRIT +",
+      "desc": "Incrementa el D.CRIT adicional en {value}%."
+    },
+    "dodge": {
+      "title": "ESQ +",
+      "desc": "Incrementa la ESQ adicional en {value}%."
+    },
+    "luck": {
+      "title": "SUERTE +",
+      "desc": "Incrementa la SUERTE adicional en {value}%."
+    }
   },
-
   "descend": "Descender",
   "descended-to-floor": "Descendiste al piso {floor}.",
-  "found-stairs": "Encontraste unas escaleras que descienden más profundo en la mazmorra."
+  "found-stairs": "Encontraste unas escaleras que descienden más profundo en la mazmorra.",
+  "enemy-type-offensive": "Ofensivo",
+  "enemy-type-defensive": "Defensivo",
+  "enemy-type-balanced": "Equilibrado",
+  "enemy-type-quick": "Rápido",
+  "enemy-type-lethal": "Letal"
 }

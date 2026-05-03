@@ -1550,7 +1550,7 @@ const showCombatInfo = () => {
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
-            <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${enemy.type}</span></p>
+            <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>
             <div class="battle-bar empty-bar hp bb-hp">
                 <div class="battle-bar dmg bb-hp" id="enemy-hp-dmg"></div>
                 <div class="battle-bar current bb-hp" id="enemy-hp-battle">

@@ -471,5 +471,10 @@
   },
   "descend": "Descend",
   "descended-to-floor": "You descended to floor {floor}.",
-  "found-stairs": "You found stairs leading deeper into the dungeon."
+  "found-stairs": "You found stairs leading deeper into the dungeon.",
+  "enemy-type-offensive": "Saldırgan",
+  "enemy-type-defensive": "Defansif",
+  "enemy-type-balanced": "Dengeli",
+  "enemy-type-quick": "Hızlı",
+  "enemy-type-lethal": "Öldürücü"
 }

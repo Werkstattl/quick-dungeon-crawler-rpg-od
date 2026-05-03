@@ -471,5 +471,10 @@
       "title": "幸运提升",
       "desc": "额外幸运加成提高 {value}%。"
     }
-  }
+  },
+  "enemy-type-offensive": "攻击型",
+  "enemy-type-defensive": "防御型",
+  "enemy-type-balanced": "均衡型",
+  "enemy-type-quick": "速度型",
+  "enemy-type-lethal": "致命型"
 }

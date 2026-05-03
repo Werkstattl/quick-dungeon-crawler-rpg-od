@@ -432,18 +432,49 @@
     "zalaras-dragon-emperor": "Заларас, император драконов"
   },
   "level-up-option": {
-    "hp": { "title": "HP UP", "desc": "Увеличьте бонусное HP на {value}%." },
-    "atk": { "title": "ATK UP", "desc": "Увеличьте бонусный ATK на {value}%." },
-    "def": { "title": "DEF UP", "desc": "Увеличьте бонусный DEF на {value}%." },
-    "atkSpd": { "title": "ATK.SPD UP", "desc": "Увеличьте бонусный ATK.SPD на {value}%." },
-    "vamp": { "title": "VAMP UP", "desc": "Увеличьте бонусный VAMP на {value}%." },
-    "critRate": { "title": "C.RATE UP", "desc": "Увеличьте бонусный C.RATE на {value}%." },
-    "critDmg": { "title": "C.DMG UP", "desc": "Увеличьте бонусный C.DMG на {value}%." },
-    "dodge": { "title": "DODGE UP", "desc": "Увеличьте бонусный DODGE на {value}%." },
-    "luck": { "title": "LUCK UP", "desc": "Увеличьте бонусный LUCK на {value}%." }
+    "hp": {
+      "title": "HP UP",
+      "desc": "Увеличьте бонусное HP на {value}%."
+    },
+    "atk": {
+      "title": "ATK UP",
+      "desc": "Увеличьте бонусный ATK на {value}%."
+    },
+    "def": {
+      "title": "DEF UP",
+      "desc": "Увеличьте бонусный DEF на {value}%."
+    },
+    "atkSpd": {
+      "title": "ATK.SPD UP",
+      "desc": "Увеличьте бонусный ATK.SPD на {value}%."
+    },
+    "vamp": {
+      "title": "VAMP UP",
+      "desc": "Увеличьте бонусный VAMP на {value}%."
+    },
+    "critRate": {
+      "title": "C.RATE UP",
+      "desc": "Увеличьте бонусный C.RATE на {value}%."
+    },
+    "critDmg": {
+      "title": "C.DMG UP",
+      "desc": "Увеличьте бонусный C.DMG на {value}%."
+    },
+    "dodge": {
+      "title": "DODGE UP",
+      "desc": "Увеличьте бонусный DODGE на {value}%."
+    },
+    "luck": {
+      "title": "LUCK UP",
+      "desc": "Увеличьте бонусный LUCK на {value}%."
+    }
   },
   "descend": "Спуститься",
   "descended-to-floor": "Вы спустились на этаж {floor}.",
-  "found-stairs": "Вы нашли лестницу, ведущую глубже в подземелье."
-
+  "found-stairs": "Вы нашли лестницу, ведущую глубже в подземелье.",
+  "enemy-type-offensive": "Атакующий",
+  "enemy-type-defensive": "Защитный",
+  "enemy-type-balanced": "Сбалансированный",
+  "enemy-type-quick": "Быстрый",
+  "enemy-type-lethal": "Смертоносный"
 }

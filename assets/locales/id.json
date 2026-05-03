@@ -471,5 +471,10 @@
   },
   "descend": "Descend",
   "descended-to-floor": "You descended to floor {floor}.",
-  "found-stairs": "You found stairs leading deeper into the dungeon."
+  "found-stairs": "You found stairs leading deeper into the dungeon.",
+  "enemy-type-offensive": "Ofensif",
+  "enemy-type-defensive": "Defensif",
+  "enemy-type-balanced": "Seimbang",
+  "enemy-type-quick": "Cepat",
+  "enemy-type-lethal": "Mematikan"
 }

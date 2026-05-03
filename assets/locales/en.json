@@ -188,7 +188,7 @@
   "companions": "Companions",
   "the-forge": "The Forge",
   "value": "Value",
-  "equipped": "Equipped",  
+  "equipped": "Equipped",
   "forged-equipment": "Forged Equipment",
   "combine-three-items-of-the-same-tier-and-rarity-to-forge-one-of-the-next-rarity": "Combine three items of the same tier and rarity to forge one of the next rarity!",
   "material-1": "Material 1",
@@ -328,39 +328,38 @@
   "story-beat-floor-20": "A sealed chamber shudders somewhere below. The Dungeon Monarch is waking.",
   "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 You feel mentally focused! (+10% ATK.SPD until next floor)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 You feel physically energized! (+15% ATK until next floor)</span>",
-  "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ You feel inner peace! (+12% DEF until next floor)</span>"
-  ,"pray": "Pray"
-  ,"guardian-blocking-way": "Floor Guardian {enemy} is blocking your way."
-    ,"you-died-hardcore": "You died! <span class='Heirloom'>Hardcore mode:</span> you lose all <b>inventory</b> and <b>gold</b>."
-    ,"you-died-softcore": "You died! You keep your <b>inventory</b> and <b>gold</b>."
-    ,"enemy-defeated-reward": "{enemy} defeated: +{exp} exp, <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} gold ({time})"
-    ,"crit-damage": "crit damage"
-    ,"damage": "damage"
-    ,"dodged-attack-enemy": "{enemy} dodged the attack!"
-    ,"dodged-attack-companion": "{enemy} dodged {companion}'s attack!"
-    ,"dodged-attack-player": "{player} dodged the attack!"
-    ,"scout-dodged-attack": "{player} tumbles out of the way!"
-    ,"special-ability-scout-dodge": "{player} prepares to tumble away from the next attack!"
-    ,"player-attack-hit": "{player} dealt {value} {type} to {enemy}{lifesteal}."
-    ,"player-vamp-heal": ", and healed {value} HP from vampirism"
-    ,"companion-attack-hit": "{companion} dealt {value} {type} to {enemy}."
-    ,"enemy-attack-hit": "{enemy} dealt {value} {type} to {player}{lifesteal}."
-    ,"enemy-vamp-heal": ", and healed {value} HP from vampirism"
-    ,"special-ability-attack-hit": "{player} unleashed a special ability for {value} {type}{lifesteal}!"
-    ,"special-ability-heal": "{player} used a special ability and healed {hp} HP!"
-    ,"special-ability-companion-boost": "{player} boosted {companion}! +50% ATK/APS for 5s."
-    ,"special-ability-no-companion": "You need an active companion to use this ability."
-    ,"claim": "Claim"
-    ,"start-new-run": "Start new Run"
-    ,"attack": "Attack"
-  ,"special-ability": "Special Ability"
-  ,"cooling": "Cooling..."
-  ,"you-leveled-up": "You leveled up! (Lv.{previousLvl} > Lv.{newLvl})"
-  ,"level-up": "Level Up!"
-  ,"remaining": "Remaining: {count}"
-  ,"reroll-button": "Reroll {remaining}/{total}"
-
-  ,"equipment-names": {
+  "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ You feel inner peace! (+12% DEF until next floor)</span>",
+  "pray": "Pray",
+  "guardian-blocking-way": "Floor Guardian {enemy} is blocking your way.",
+  "you-died-hardcore": "You died! <span class='Heirloom'>Hardcore mode:</span> you lose all <b>inventory</b> and <b>gold</b>.",
+  "you-died-softcore": "You died! You keep your <b>inventory</b> and <b>gold</b>.",
+  "enemy-defeated-reward": "{enemy} defeated: +{exp} exp, <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} gold ({time})",
+  "crit-damage": "crit damage",
+  "damage": "damage",
+  "dodged-attack-enemy": "{enemy} dodged the attack!",
+  "dodged-attack-companion": "{enemy} dodged {companion}'s attack!",
+  "dodged-attack-player": "{player} dodged the attack!",
+  "scout-dodged-attack": "{player} tumbles out of the way!",
+  "special-ability-scout-dodge": "{player} prepares to tumble away from the next attack!",
+  "player-attack-hit": "{player} dealt {value} {type} to {enemy}{lifesteal}.",
+  "player-vamp-heal": ", and healed {value} HP from vampirism",
+  "companion-attack-hit": "{companion} dealt {value} {type} to {enemy}.",
+  "enemy-attack-hit": "{enemy} dealt {value} {type} to {player}{lifesteal}.",
+  "enemy-vamp-heal": ", and healed {value} HP from vampirism",
+  "special-ability-attack-hit": "{player} unleashed a special ability for {value} {type}{lifesteal}!",
+  "special-ability-heal": "{player} used a special ability and healed {hp} HP!",
+  "special-ability-companion-boost": "{player} boosted {companion}! +50% ATK/APS for 5s.",
+  "special-ability-no-companion": "You need an active companion to use this ability.",
+  "claim": "Claim",
+  "start-new-run": "Start new Run",
+  "attack": "Attack",
+  "special-ability": "Special Ability",
+  "cooling": "Cooling...",
+  "you-leveled-up": "You leveled up! (Lv.{previousLvl} > Lv.{newLvl})",
+  "level-up": "Level Up!",
+  "remaining": "Remaining: {count}",
+  "reroll-button": "Reroll {remaining}/{total}",
+  "equipment-names": {
     "sword": "Sword",
     "axe": "Axe",
     "hammer": "Hammer",
@@ -378,9 +377,8 @@
     "mask": "Mask",
     "boots": "Boots",
     "charm": "Charm"
-  }
-
-  ,"enemy-names": {
+  },
+  "enemy-names": {
     "goblin": "Goblin",
     "goblin-rogue": "Goblin Rogue",
     "goblin-mage": "Goblin Mage",
@@ -397,7 +395,7 @@
     "orc-archer": "Orc Archer",
     "orc-mage": "Orc Mage",
     "spider": "Spider",
-  "red-spider": "Red Spider",
+    "red-spider": "Red Spider",
     "green-spider": "Green Spider",
     "skeleton-archer": "Skeleton Archer",
     "skeleton-swordsmaster": "Skeleton Swordsmaster",
@@ -432,22 +430,51 @@
     "thanatos": "Thanatos",
     "darkness-angel-reaper": "Darkness Angel Reaper",
     "zalaras-dragon-emperor": "Zalaras, the Dragon Emperor"
-  }
-
-  ,"level-up-option": {
-    "hp": { "title": "HP UP", "desc": "Increase bonus HP by {value}%." },
-    "atk": { "title": "ATK UP", "desc": "Increase bonus ATK by {value}%." },
-    "def": { "title": "DEF UP", "desc": "Increase bonus DEF by {value}%." },
-    "atkSpd": { "title": "ATK.SPD UP", "desc": "Increase bonus ATK.SPD by {value}%." },
-    "vamp": { "title": "VAMP UP", "desc": "Increase bonus VAMP by {value}%." },
-    "critRate": { "title": "C.RATE UP", "desc": "Increase bonus C.RATE by {value}%." },
-    "critDmg": { "title": "C.DMG UP", "desc": "Increase bonus C.DMG by {value}%." },
-    "dodge": { "title": "DODGE UP", "desc": "Increase bonus DODGE by {value}%." },
-    "luck": { "title": "LUCK UP", "desc": "Increase bonus LUCK by {value}%." }
-  }
-
-  ,"descend": "Descend"
-  ,"descended-to-floor": "You descended to floor {floor}."
-  ,"found-stairs": "You found stairs leading deeper into the dungeon."
-
+  },
+  "level-up-option": {
+    "hp": {
+      "title": "HP UP",
+      "desc": "Increase bonus HP by {value}%."
+    },
+    "atk": {
+      "title": "ATK UP",
+      "desc": "Increase bonus ATK by {value}%."
+    },
+    "def": {
+      "title": "DEF UP",
+      "desc": "Increase bonus DEF by {value}%."
+    },
+    "atkSpd": {
+      "title": "ATK.SPD UP",
+      "desc": "Increase bonus ATK.SPD by {value}%."
+    },
+    "vamp": {
+      "title": "VAMP UP",
+      "desc": "Increase bonus VAMP by {value}%."
+    },
+    "critRate": {
+      "title": "C.RATE UP",
+      "desc": "Increase bonus C.RATE by {value}%."
+    },
+    "critDmg": {
+      "title": "C.DMG UP",
+      "desc": "Increase bonus C.DMG by {value}%."
+    },
+    "dodge": {
+      "title": "DODGE UP",
+      "desc": "Increase bonus DODGE by {value}%."
+    },
+    "luck": {
+      "title": "LUCK UP",
+      "desc": "Increase bonus LUCK by {value}%."
+    }
+  },
+  "descend": "Descend",
+  "descended-to-floor": "You descended to floor {floor}.",
+  "found-stairs": "You found stairs leading deeper into the dungeon.",
+  "enemy-type-offensive": "Offensive",
+  "enemy-type-defensive": "Defensive",
+  "enemy-type-balanced": "Balanced",
+  "enemy-type-quick": "Quick",
+  "enemy-type-lethal": "Lethal"
 }

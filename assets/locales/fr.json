@@ -471,5 +471,10 @@
   },
   "descend": "Descend",
   "descended-to-floor": "You descended to floor {floor}.",
-  "found-stairs": "You found stairs leading deeper into the dungeon."
+  "found-stairs": "You found stairs leading deeper into the dungeon.",
+  "enemy-type-offensive": "Offensif",
+  "enemy-type-defensive": "Défensif",
+  "enemy-type-balanced": "Équilibré",
+  "enemy-type-quick": "Rapide",
+  "enemy-type-lethal": "Létal"
 }

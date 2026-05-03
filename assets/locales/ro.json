@@ -469,8 +469,12 @@
       "desc": "Mărește bonusul de LUCK cu {value}%."
     }
   },
-
   "descend": "Coboară",
   "descended-to-floor": "Ai coborât la etajul {floor}.",
-  "found-stairs": "Ai găsit niște scări care duc mai adânc în temniță."
+  "found-stairs": "Ai găsit niște scări care duc mai adânc în temniță.",
+  "enemy-type-offensive": "Ofensiv",
+  "enemy-type-defensive": "Defensiv",
+  "enemy-type-balanced": "Echilibrat",
+  "enemy-type-quick": "Rapid",
+  "enemy-type-lethal": "Letal"
 }
