@@ -473,8 +473,8 @@
   "descended-to-floor": "You descended to floor {floor}.",
   "found-stairs": "You found stairs leading deeper into the dungeon.",
   "enemy-type-offensive": "공격형",
-  "enemy-type-defensive": "방어형",
-  "enemy-type-balanced": "균형형",
+  "enemy-type-defensive": "방역형",
+  "enemy-type-balanced": "군풍형",
   "enemy-type-quick": "속도형",
   "enemy-type-lethal": "치명형"
 }
