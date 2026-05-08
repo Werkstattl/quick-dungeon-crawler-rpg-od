@@ -314,7 +314,7 @@ const playerLoadStats = () => {
         { val: player.bonusStats.critRate, icon: '<i class="ra ra-lightning-bolt"></i>' },
         { val: player.bonusStats.critDmg, icon: '<i class="ra ra-focused-lightning"></i>' },
         { val: player.bonusStats.dodge, icon: '<i class="ra ra-player-dodge"></i>' },
-        { val: player.bonusStats.luck, icon: '<i class="ra ra-perspective-dice-one"></i>' }
+        { val: player.bonusStats.luck + (activeCompanionBonuses?.luck || 0), icon: '<i class="ra ra-perspective-dice-one"></i>' }
     ];
     bonusEntries.forEach(({ val, icon }) => {
         if (Number(val) > 0) {
