@@ -962,6 +962,10 @@ const enemyAttack = () => {
         if (typeof recordRunDamageDealt === 'function') {
             recordRunDamageDealt(reflectedDamage);
         }
+        addCombatLog(t('aegis-thorns-reflect', {
+            enemy: getDisplayEnemyName(enemy.id, enemy.name),
+            value: nFormatter(reflectedDamage)
+        }));
     }
     enemy.stats.hp += lifesteal;
     if (!dodged) {

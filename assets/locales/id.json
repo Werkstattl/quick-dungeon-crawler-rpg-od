@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Defensif",
   "enemy-type-balanced": "Seimbang",
   "enemy-type-quick": "Cepat",
-  "enemy-type-lethal": "Mematikan"
+  "enemy-type-lethal": "Mematikan,",
+  "aegis-thorns-reflect": "{enemy} menerima {value} kerusakan terpantul!"
 }
