@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion}, {enemy} hedefine {value} {type} verdi.",
   "enemy-attack-hit": "{enemy}, {player} hedefine {value} {type} verdi{lifesteal}.",
   "enemy-vamp-heal": " ve vampirlikten {value} HP iyileşti",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player}, {value} {type}{lifesteal} için özel yetenek kullandı!",
   "special-ability-heal": "{player} özel yetenek kullandı ve {hp} HP iyileşti!",
   "special-ability-companion-boost": "{player}, {companion} yoldaşını güçlendirdi! 5 sn boyunca +50% ATK/APS.",

@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion} завдав {value} {type} {enemy}.",
   "enemy-attack-hit": "{enemy} завдав {value} {type} {player}{lifesteal}.",
   "enemy-vamp-heal": ", і відновив {value} HP з вампіризму",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player} застосував особливу здібність на {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} використав особливу здібність і зцілив {hp} HP!",
   "special-ability-companion-boost": "{player} підсилив {companion}! +50% ATK/APS на 5 с.",

@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion} zadał {value} {type} przeciwnikowi {enemy}.",
   "enemy-attack-hit": "{enemy} zadał {value} {type} graczowi {player}{lifesteal}.",
   "enemy-vamp-heal": " i odzyskał {value} PW dzięki wampiryzmowi",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player} uwolnił zdolność specjalną za {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} użył zdolności specjalnej i odzyskał {hp} PW!",
   "special-ability-companion-boost": "{player} wzmocnił {companion}! +50% ATK/APS przez 5 s.",

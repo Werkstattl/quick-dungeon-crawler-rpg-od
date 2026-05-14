@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion} verursacht {value} {type} an {enemy}.",
   "enemy-attack-hit": "{enemy} verursacht {value} {type} an {player}{lifesteal}.",
   "enemy-vamp-heal": ", und heilte {value} HP durch Vampirismus",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player} entfesselt eine Spezialfähigkeit für {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!",
   "special-ability-companion-boost": "{player} stärkt {companion}! +50% ATK/APS (5 Sek.).",

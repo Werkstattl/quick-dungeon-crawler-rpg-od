@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion} a infligé {value} {type} à {enemy}.",
   "enemy-attack-hit": "{enemy} a infligé {value} {type} à {player}{lifesteal}.",
   "enemy-vamp-heal": " et a récupéré {value} PV grâce au vampirisme",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player} a déchaîné une capacité spéciale pour {value} {type}{lifesteal} !",
   "special-ability-heal": "{player} a utilisé une capacité spéciale et récupéré {hp} PV !",
   "special-ability-companion-boost": "{player} a renforcé {companion} ! +50 % ATQ/APS pendant 5 s.",

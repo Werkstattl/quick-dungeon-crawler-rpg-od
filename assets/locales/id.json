@@ -346,6 +346,7 @@
   "companion-attack-hit": "{companion} memberikan {value} {type} kepada {enemy}.",
   "enemy-attack-hit": "{enemy} memberikan {value} {type} kepada {player}{lifesteal}.",
   "enemy-vamp-heal": ", dan memulihkan {value} HP dari vampirisme",
+  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
   "special-ability-attack-hit": "{player} melepaskan kemampuan khusus untuk {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} menggunakan kemampuan khusus dan memulihkan {hp} HP!",
   "special-ability-companion-boost": "{player} memperkuat {companion}! +50% ATK/APS selama 5 dtk.",
