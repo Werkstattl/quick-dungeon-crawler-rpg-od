@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Difensivo",
   "enemy-type-balanced": "Bilanciato",
   "enemy-type-quick": "Veloce",
-  "enemy-type-lethal": "Letale"
+  "enemy-type-lethal": "Letale,",
+  "aegis-thorns-reflect": "{enemy} subisce {value} danni riflessi!"
 }
