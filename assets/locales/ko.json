@@ -346,7 +346,7 @@
   "companion-attack-hit": "{companion}이(가) {enemy}에게 {value} {type}를 가했습니다.",
   "enemy-attack-hit": "{enemy}이(가) {player}에게 {value} {type}를 가했습니다{lifesteal}.",
   "enemy-vamp-heal": ", 흡혈로 {value} HP를 회복했습니다",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": ", 그리고 아이기스 쏜즈로부터 반사 피해 {value}를 받았습니다",
   "special-ability-attack-hit": "{player}이(가) 특수 능력을 해방해 {value} {type}{lifesteal}를 가했습니다!",
   "special-ability-heal": "{player}이(가) 특수 능력을 사용해 {hp} HP를 회복했습니다!",
   "special-ability-companion-boost": "{player}이(가) {companion}을(를) 강화했습니다! 5초 동안 +50% ATK/APS.",

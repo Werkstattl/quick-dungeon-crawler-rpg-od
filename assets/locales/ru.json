@@ -346,7 +346,7 @@
   "companion-attack-hit": "{companion} нанёс {value} {type} по {enemy}.",
   "enemy-attack-hit": "{enemy} нанёс {value} {type} по {player}{lifesteal}.",
   "enemy-vamp-heal": ", и исцелился на {value} HP от вампиризма",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": ", и получил(а) {value} отражённого урона от Шипов Эгиды",
   "special-ability-attack-hit": "{player} применил особую способность на {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} использовал особую способность и исцелился на {hp} HP!",
   "special-ability-companion-boost": "{player} усилил {companion}! +50% ATK/APS на 5с.",

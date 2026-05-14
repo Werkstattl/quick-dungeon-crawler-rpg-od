@@ -346,7 +346,7 @@
   "companion-attack-hit": "سبب {companion} مقدار {value} {type} إلى {enemy}.",
   "enemy-attack-hit": "سبب {enemy} مقدار {value} {type} إلى {player}{lifesteal}.",
   "enemy-vamp-heal": "، وشفى {value} HP من مص الحياة",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": "، وتلقى {value} ضررًا مرتدًا من أشواك الأيغيس",
   "special-ability-attack-hit": "أطلق {player} قدرة خاصة بمقدار {value} {type}{lifesteal}!",
   "special-ability-heal": "استخدم {player} قدرة خاصة وشفى {hp} HP!",
   "special-ability-companion-boost": "عزز {player} الرفيق {companion}! +50% ATK/APS لمدة 5 ثوان.",

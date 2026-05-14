@@ -346,7 +346,7 @@
   "companion-attack-hit": "{companion} ha inflitto {value} {type} a {enemy}.",
   "enemy-attack-hit": "{enemy} ha inflitto {value} {type} a {player}{lifesteal}.",
   "enemy-vamp-heal": " e ha recuperato {value} PV dal vampirismo",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": ", e ha subito {value} danni riflessi da Spine dell’Egida",
   "special-ability-attack-hit": "{player} ha scatenato un'abilità speciale per {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} ha usato un'abilità speciale e ha recuperato {hp} PV!",
   "special-ability-companion-boost": "{player} ha potenziato {companion}! +50% ATT/APS per 5 s.",

@@ -346,7 +346,7 @@
   "companion-attack-hit": "{companion} a provocat {value} {type} lui {enemy}.",
   "enemy-attack-hit": "{enemy} a provocat {value} {type} lui {player}{lifesteal}.",
   "enemy-vamp-heal": ", și a vindecat {value} HP prin vampirism",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": ", și a suferit {value} daune reflectate de la Spinii Egidei",
   "special-ability-attack-hit": "{player} a dezlănțuit o abilitate specială pentru {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} a folosit o abilitate specială și a vindecat {hp} HP!",
   "special-ability-companion-boost": "{player} l-a stimulat pe {companion}! +50% ATK/APS timp de 5 s.",

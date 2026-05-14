@@ -346,7 +346,7 @@
   "companion-attack-hit": "{companion} 对 {enemy} 造成了 {value} 点{type}。",
   "enemy-attack-hit": "{enemy} 对 {player} 造成了 {value} 点{type}{lifesteal}。",
   "enemy-vamp-heal": "，并通过吸血恢复了 {value} 点生命",
-  "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "aegis-thorns-reflect": "，并受到了来自神盾荆棘的{value}点反伤",
   "special-ability-attack-hit": "{player} 释放了特殊技能，造成 {value} 点{type}{lifesteal}！",
   "special-ability-heal": "{player} 使用特殊技能并恢复了 {hp} 点生命！",
   "special-ability-companion-boost": "{player} 鼓舞了 {companion}！攻擊/攻速+50%，持續5秒。",
