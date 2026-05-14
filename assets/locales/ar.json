@@ -344,7 +344,7 @@
   "player-attack-hit": "سبب {player} مقدار {value} {type} إلى {enemy}{lifesteal}.",
   "player-vamp-heal": "، وشفى {value} HP من مص الحياة",
   "companion-attack-hit": "سبب {companion} مقدار {value} {type} إلى {enemy}.",
-  "enemy-attack-hit": "سبب {enemy} مقدار {value} {type} إلى {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} سبب {value} {type} إلى {player}{lifesteal}، وتلقى {thorns} من الضرر المنعكس!",
   "enemy-vamp-heal": "، وشفى {value} HP من مص الحياة",
   "special-ability-attack-hit": "أطلق {player} قدرة خاصة بمقدار {value} {type}{lifesteal}!",
   "special-ability-heal": "استخدم {player} قدرة خاصة وشفى {hp} HP!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "دفاعي",
   "enemy-type-balanced": "متوازن",
   "enemy-type-quick": "سريع",
-  "enemy-type-lethal": "فتاك"
+  "enemy-type-lethal": "فتاك",
+  "thorns-reflect": "وتلقى {value} من الضرر المنعكس"
 }

@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} zadał {value} {type} przeciwnikowi {enemy}{lifesteal}.",
   "player-vamp-heal": " i odzyskał {value} PW dzięki wampiryzmowi",
   "companion-attack-hit": "{companion} zadał {value} {type} przeciwnikowi {enemy}.",
-  "enemy-attack-hit": "{enemy} zadał {value} {type} graczowi {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} zadał {value} {type} graczowi {player}{lifesteal}, i otrzymał {thorns} odbitego obrażenia!",
   "enemy-vamp-heal": " i odzyskał {value} PW dzięki wampiryzmowi",
   "special-ability-attack-hit": "{player} uwolnił zdolność specjalną za {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} użył zdolności specjalnej i odzyskał {hp} PW!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Defensywny",
   "enemy-type-balanced": "Zrównoważony",
   "enemy-type-quick": "Szybki",
-  "enemy-type-lethal": "Śmiertelny"
+  "enemy-type-lethal": "Śmiertelny",
+  "thorns-reflect": "i otrzymał {value} odbitego obrażenia"
 }

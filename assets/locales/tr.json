@@ -344,7 +344,7 @@
   "player-attack-hit": "{player}, {enemy} hedefine {value} {type} verdi{lifesteal}.",
   "player-vamp-heal": " ve vampirlikten {value} HP iyileşti",
   "companion-attack-hit": "{companion}, {enemy} hedefine {value} {type} verdi.",
-  "enemy-attack-hit": "{enemy}, {player} hedefine {value} {type} verdi{lifesteal}.",
+  "enemy-attack-hit": "{enemy}, {player} hedefine {value} {type} verdi{lifesteal}, {thorns} yansıyan hasar aldı!",
   "enemy-vamp-heal": " ve vampirlikten {value} HP iyileşti",
   "special-ability-attack-hit": "{player}, {value} {type}{lifesteal} için özel yetenek kullandı!",
   "special-ability-heal": "{player} özel yetenek kullandı ve {hp} HP iyileşti!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Savunmacı",
   "enemy-type-balanced": "Dengeli",
   "enemy-type-quick": "Hızlı",
-  "enemy-type-lethal": "Öldürücü"
+  "enemy-type-lethal": "Öldürücü",
+  "thorns-reflect": "{value} yansıyan hasar aldı"
 }

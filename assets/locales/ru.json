@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} нанёс {value} {type} по {enemy}{lifesteal}.",
   "player-vamp-heal": ", и исцелился на {value} HP от вампиризма",
   "companion-attack-hit": "{companion} нанёс {value} {type} по {enemy}.",
-  "enemy-attack-hit": "{enemy} нанёс {value} {type} по {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} нанёс {value} {type} по {player}{lifesteal}, и получил {thorns} отражённого урона!",
   "enemy-vamp-heal": ", и исцелился на {value} HP от вампиризма",
   "special-ability-attack-hit": "{player} применил особую способность на {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} использовал особую способность и исцелился на {hp} HP!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Защитный",
   "enemy-type-balanced": "Сбалансированный",
   "enemy-type-quick": "Быстрый",
-  "enemy-type-lethal": "Смертоносный"
+  "enemy-type-lethal": "Смертоносный",
+  "thorns-reflect": "и получил {value} отражённого урона"
 }

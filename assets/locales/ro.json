@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} a provocat {value} {type} lui {enemy}{lifesteal}.",
   "player-vamp-heal": ", și a vindecat {value} HP prin vampirism",
   "companion-attack-hit": "{companion} a provocat {value} {type} lui {enemy}.",
-  "enemy-attack-hit": "{enemy} a provocat {value} {type} lui {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} a provocat {value} {type} lui {player}{lifesteal}, și a primit {thorns} daună reflectată!",
   "enemy-vamp-heal": ", și a vindecat {value} HP prin vampirism",
   "special-ability-attack-hit": "{player} a dezlănțuit o abilitate specială pentru {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} a folosit o abilitate specială și a vindecat {hp} HP!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Defensiv",
   "enemy-type-balanced": "Echilibrat",
   "enemy-type-quick": "Rapid",
-  "enemy-type-lethal": "Letal"
+  "enemy-type-lethal": "Letal",
+  "thorns-reflect": "și a primit {value} daună reflectată"
 }

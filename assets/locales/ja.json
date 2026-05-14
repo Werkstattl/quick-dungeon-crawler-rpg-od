@@ -344,7 +344,7 @@
   "player-attack-hit": "{player}は{enemy}に{value}{type}を与え{lifesteal}。",
   "player-vamp-heal": "、吸血で{value} HPを回復した",
   "companion-attack-hit": "{companion}は{enemy}に{value}{type}を与えた。",
-  "enemy-attack-hit": "{enemy}は{player}に{value}{type}を与え{lifesteal}。",
+  "enemy-attack-hit": "{enemy}は{player}に{value}{type}を与え{lifesteal}、さらに{thorns}の反射ダメージを受けた！",
   "enemy-vamp-heal": "、吸血で{value} HPを回復した",
   "special-ability-attack-hit": "{player}は必殺技で{value}{type}を与え{lifesteal}！",
   "special-ability-heal": "{player}は必殺技を使い{hp} HP回復した！",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "防御型",
   "enemy-type-balanced": "バランス型",
   "enemy-type-quick": "速度型",
-  "enemy-type-lethal": "致命型"
+  "enemy-type-lethal": "致命型",
+  "thorns-reflect": "{value}の反射ダメージを受けた"
 }

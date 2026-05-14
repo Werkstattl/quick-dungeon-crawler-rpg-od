@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} verursacht {value} {type} an {enemy}{lifesteal}.",
   "player-vamp-heal": ", und heilte {value} HP durch Vampirismus",
   "companion-attack-hit": "{companion} verursacht {value} {type} an {enemy}.",
-  "enemy-attack-hit": "{enemy} verursacht {value} {type} an {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} verursacht {value} {type} an {player}{lifesteal} und erhielt {thorns} reflektierten Schaden!",
   "enemy-vamp-heal": ", und heilte {value} HP durch Vampirismus",
   "special-ability-attack-hit": "{player} entfesselt eine Spezialfähigkeit für {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!",
@@ -494,5 +494,6 @@
   "enemy-type-defensive": "Defensiv",
   "enemy-type-balanced": "Ausgewogen",
   "enemy-type-quick": "Schnell",
-  "enemy-type-lethal": "Tödlich"
+  "enemy-type-lethal": "Tödlich",
+  "thorns-reflect": "und erhielt {value} reflektierten Schaden"
 }

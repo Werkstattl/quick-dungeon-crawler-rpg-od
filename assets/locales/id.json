@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} memberikan {value} {type} kepada {enemy}{lifesteal}.",
   "player-vamp-heal": ", dan memulihkan {value} HP dari vampirisme",
   "companion-attack-hit": "{companion} memberikan {value} {type} kepada {enemy}.",
-  "enemy-attack-hit": "{enemy} memberikan {value} {type} kepada {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} memberikan {value} {type} kepada {player}{lifesteal}, dan menerima {thorns} kerusakan terpantul!",
   "enemy-vamp-heal": ", dan memulihkan {value} HP dari vampirisme",
   "special-ability-attack-hit": "{player} melepaskan kemampuan khusus untuk {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} menggunakan kemampuan khusus dan memulihkan {hp} HP!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Defensif",
   "enemy-type-balanced": "Seimbang",
   "enemy-type-quick": "Cepat",
-  "enemy-type-lethal": "Mematikan"
+  "enemy-type-lethal": "Mematikan",
+  "thorns-reflect": "dan menerima {value} kerusakan terpantul"
 }

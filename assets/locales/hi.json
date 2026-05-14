@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} ने {enemy} को {value} {type} दिया{lifesteal}।",
   "player-vamp-heal": ", और वैम्पिरिज्म से {value} HP ठीक किया",
   "companion-attack-hit": "{companion} ने {enemy} को {value} {type} दिया।",
-  "enemy-attack-hit": "{enemy} ने {player} को {value} {type} दिया{lifesteal}।",
+  "enemy-attack-hit": "{enemy} ने {player} को {value} {type} दिया{lifesteal}।, और {thorns} प्रतिबिंबित नुकसान सहा!",
   "enemy-vamp-heal": ", और वैम्पिरिज्म से {value} HP ठीक किया",
   "special-ability-attack-hit": "{player} ने {value} {type}{lifesteal} के लिए विशेष क्षमता छोड़ी!",
   "special-ability-heal": "{player} ने विशेष क्षमता का उपयोग किया और {hp} HP ठीक किया!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "रक्षात्मक",
   "enemy-type-balanced": "संतुलित",
   "enemy-type-quick": "तेज़",
-  "enemy-type-lethal": "घातक"
+  "enemy-type-lethal": "घातक",
+  "thorns-reflect": "और {value} प्रतिबिंबित नुकसान सहा"
 }

@@ -344,7 +344,7 @@
   "player-attack-hit": "{player}이(가) {enemy}에게 {value} {type}를 가했습니다{lifesteal}.",
   "player-vamp-heal": ", 흡혈로 {value} HP를 회복했습니다",
   "companion-attack-hit": "{companion}이(가) {enemy}에게 {value} {type}를 가했습니다.",
-  "enemy-attack-hit": "{enemy}이(가) {player}에게 {value} {type}를 가했습니다{lifesteal}.",
+  "enemy-attack-hit": "{enemy}이(가) {player}에게 {value} {type}를 가했습니다{lifesteal}, {thorns}의 반사 대미지를 받았습니다!",
   "enemy-vamp-heal": ", 흡혈로 {value} HP를 회복했습니다",
   "special-ability-attack-hit": "{player}이(가) 특수 능력을 해방해 {value} {type}{lifesteal}를 가했습니다!",
   "special-ability-heal": "{player}이(가) 특수 능력을 사용해 {hp} HP를 회복했습니다!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "방어형",
   "enemy-type-balanced": "균형형",
   "enemy-type-quick": "속도형",
-  "enemy-type-lethal": "치명형"
+  "enemy-type-lethal": "치명형",
+  "thorns-reflect": "{value}의 반사 대미지를 받았습니다"
 }

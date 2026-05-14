@@ -953,8 +953,8 @@ const enemyAttack = () => {
     if (typeof recordRunDamageTaken === 'function') {
         recordRunDamageTaken(damage);
     }
-    // Aegis Thorns skill
-    objectValidation();
+    enemy.stats.hp += lifesteal;
+    let thornsText = '';
     if (player.skills.includes("Aegis Thorns")) {
         // Enemies receive 30% of the damage they dealt
         const reflectedDamage = Math.round((30 * damage) / 100);
@@ -962,8 +962,8 @@ const enemyAttack = () => {
         if (typeof recordRunDamageDealt === 'function') {
             recordRunDamageDealt(reflectedDamage);
         }
+        thornsText = t('thorns-reflect', { value: nFormatter(reflectedDamage) });
     }
-    enemy.stats.hp += lifesteal;
     if (!dodged) {
         const lifestealText = lifesteal > 0 ? t('enemy-vamp-heal', { value: nFormatter(lifesteal) }) : '';
         addCombatLog(t('enemy-attack-hit', {
@@ -971,7 +971,8 @@ const enemyAttack = () => {
             player: player.name,
             value: nFormatter(damage),
             type: dmgtype,
-            lifesteal: lifestealText
+            lifesteal: lifestealText,
+            thorns: thornsText
         }));
     }
     hpValidation();

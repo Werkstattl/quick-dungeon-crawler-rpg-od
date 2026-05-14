@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} infligió {value} {type} a {enemy}{lifesteal}.",
   "player-vamp-heal": ", y se curó {value} HP por vampirismo",
   "companion-attack-hit": "{companion} infligió {value} {type} a {enemy}.",
-  "enemy-attack-hit": "{enemy} infligió {value} {type} a {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} infligió {value} {type} a {player}{lifesteal}, y recibió {thorns} de daño reflejado!",
   "enemy-vamp-heal": ", y se curó {value} HP por vampirismo",
   "special-ability-attack-hit": "{player} desató una habilidad especial por {value} de {type}{lifesteal}!",
   "special-ability-heal": "{player} usó una habilidad especial y curó {hp} HP!",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Defensivo",
   "enemy-type-balanced": "Equilibrado",
   "enemy-type-quick": "Rápido",
-  "enemy-type-lethal": "Letal"
+  "enemy-type-lethal": "Letal",
+  "thorns-reflect": "y recibió {value} de daño reflejado"
 }

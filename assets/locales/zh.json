@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} 对 {enemy} 造成了 {value} 点{type}{lifesteal}。",
   "player-vamp-heal": "，并通过吸血恢复了 {value} 点生命",
   "companion-attack-hit": "{companion} 对 {enemy} 造成了 {value} 点{type}。",
-  "enemy-attack-hit": "{enemy} 对 {player} 造成了 {value} 点{type}{lifesteal}。",
+  "enemy-attack-hit": "{enemy} 对 {player} 造成了 {value} 点{type}{lifesteal}，受到{thorns}反射伤害！",
   "enemy-vamp-heal": "，并通过吸血恢复了 {value} 点生命",
   "special-ability-attack-hit": "{player} 释放了特殊技能，造成 {value} 点{type}{lifesteal}！",
   "special-ability-heal": "{player} 使用特殊技能并恢复了 {hp} 点生命！",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "防御型",
   "enemy-type-balanced": "均衡型",
   "enemy-type-quick": "速度型",
-  "enemy-type-lethal": "致命型"
+  "enemy-type-lethal": "致命型",
+  "thorns-reflect": "受到{value}反射伤害"
 }

@@ -344,7 +344,7 @@
   "player-attack-hit": "{player} a infligé {value} {type} à {enemy}{lifesteal}.",
   "player-vamp-heal": " et a récupéré {value} PV grâce au vampirisme",
   "companion-attack-hit": "{companion} a infligé {value} {type} à {enemy}.",
-  "enemy-attack-hit": "{enemy} a infligé {value} {type} à {player}{lifesteal}.",
+  "enemy-attack-hit": "{enemy} a infligé {value} {type} à {player}{lifesteal}, et subit {thorns} de dégâts réfléchis!",
   "enemy-vamp-heal": " et a récupéré {value} PV grâce au vampirisme",
   "special-ability-attack-hit": "{player} a déchaîné une capacité spéciale pour {value} {type}{lifesteal} !",
   "special-ability-heal": "{player} a utilisé une capacité spéciale et récupéré {hp} PV !",
@@ -476,5 +476,6 @@
   "enemy-type-defensive": "Défensif",
   "enemy-type-balanced": "Équilibré",
   "enemy-type-quick": "Rapide",
-  "enemy-type-lethal": "Létal"
+  "enemy-type-lethal": "Létal",
+  "thorns-reflect": "et subit {value} de dégâts réfléchis"
 }
