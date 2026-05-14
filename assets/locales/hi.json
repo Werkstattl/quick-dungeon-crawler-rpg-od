@@ -476,6 +476,5 @@
   "enemy-type-defensive": "रक्षात्मक",
   "enemy-type-balanced": "संतुलित",
   "enemy-type-quick": "तेज़",
-  "enemy-type-lethal": "घातक,",
-  "aegis-thorns-reflect": "{enemy} को {value} प्रतिबिंबित नुकसान होता है!"
+  "enemy-type-lethal": "घातक"
 }

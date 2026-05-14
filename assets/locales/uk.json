@@ -476,6 +476,5 @@
   "enemy-type-defensive": "Захисний",
   "enemy-type-balanced": "Збалансований",
   "enemy-type-quick": "Швидкий",
-  "enemy-type-lethal": "Смертельний,",
-  "aegis-thorns-reflect": "{enemy} отримує {value} відбитого пошкодження!"
+  "enemy-type-lethal": "Смертельний"
 }

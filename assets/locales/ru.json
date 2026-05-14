@@ -476,6 +476,5 @@
   "enemy-type-defensive": "Защитный",
   "enemy-type-balanced": "Сбалансированный",
   "enemy-type-quick": "Быстрый",
-  "enemy-type-lethal": "Смертоносный,",
-  "aegis-thorns-reflect": "{enemy} получает {value} отражённого урона!"
+  "enemy-type-lethal": "Смертоносный"
 }

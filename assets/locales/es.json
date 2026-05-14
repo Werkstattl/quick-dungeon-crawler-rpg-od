@@ -476,6 +476,5 @@
   "enemy-type-defensive": "Defensivo",
   "enemy-type-balanced": "Equilibrado",
   "enemy-type-quick": "Rápido",
-  "enemy-type-lethal": "Letal,",
-  "aegis-thorns-reflect": "{enemy} recibe {value} de daño reflejado!"
+  "enemy-type-lethal": "Letal"
 }

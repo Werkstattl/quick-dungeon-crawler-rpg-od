@@ -476,6 +476,5 @@
   "enemy-type-defensive": "دفاعي",
   "enemy-type-balanced": "متوازن",
   "enemy-type-quick": "سريع",
-  "enemy-type-lethal": "فتاك,",
-  "aegis-thorns-reflect": "يتلقى {enemy} {value} من الضرر المنعكس!"
+  "enemy-type-lethal": "فتاك"
 }

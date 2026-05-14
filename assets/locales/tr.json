@@ -476,6 +476,5 @@
   "enemy-type-defensive": "Savunmacı",
   "enemy-type-balanced": "Dengeli",
   "enemy-type-quick": "Hızlı",
-  "enemy-type-lethal": "Öldürücü,",
-  "aegis-thorns-reflect": "{enemy} {value} yansıyan hasar alıyor!"
+  "enemy-type-lethal": "Öldürücü"
 }
