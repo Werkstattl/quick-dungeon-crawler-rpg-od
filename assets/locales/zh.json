@@ -476,5 +476,6 @@
   "enemy-type-defensive": "防御型",
   "enemy-type-balanced": "均衡型",
   "enemy-type-quick": "速度型",
-  "enemy-type-lethal": "致命型"
+  "enemy-type-lethal": "致命型,",
+  "aegis-thorns-reflect": "{enemy}受到{value}反射伤害！"
 }
