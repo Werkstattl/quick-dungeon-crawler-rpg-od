@@ -104,7 +104,7 @@ const COMPANION_STAT_CONFIG = {
     critDmg: { labelKey: 'companion-stat-critDmg', suffix: '%', precision: 1, iconClass: 'ra ra-focused-lightning' },
     dodge: { labelKey: 'companion-stat-dodge', suffix: '%', precision: 1, iconClass: 'ra ra-player-dodge' },
     vamp: { labelKey: 'companion-stat-vamp', suffix: '%', precision: 1, iconClass: 'ra ra-dripping-blade' },
-    luck: { labelKey: 'companion-stat-luck', suffix: '', precision: 0, iconClass: 'ra ra-perspective-dice-one' },
+    luck: { labelKey: 'companion-stat-luck', suffix: '%', precision: 1, iconClass: 'ra ra-perspective-dice-one' },
 };
 
 const formatBonusValue = (value, precision = 1) => {
