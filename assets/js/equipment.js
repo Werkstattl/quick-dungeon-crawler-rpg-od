@@ -221,6 +221,44 @@ const receiveEquipment = (equipment) => {
     }
 };
 
+const EQUIPMENT_REROLL_STAT_POOLS = {
+    physical: ["atk", "atkSpd", "vamp", "critRate", "critDmg"],
+    heavyDamage: ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"],
+    speedyDamage: ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"],
+    defense: ["hp", "hp", "def", "def", "atk", "dodge"],
+    evasive: ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"],
+    boots: ["dodge", "fasterRun", "hp", "def", "hp", "def"],
+    damageDefense: ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"],
+};
+
+const getEquipmentRerollStatPool = (equipment) => {
+    if (!equipment || isCompanionCharm(equipment)) {
+        return [];
+    }
+    if (equipment.attribute == "Damage") {
+        if (equipment.category == "Axe" || equipment.category == "Scythe") {
+            return EQUIPMENT_REROLL_STAT_POOLS.heavyDamage;
+        }
+        if (equipment.category == "Dagger" || equipment.category == "Flail") {
+            return EQUIPMENT_REROLL_STAT_POOLS.speedyDamage;
+        }
+        if (equipment.category == "Hammer") {
+            return EQUIPMENT_REROLL_STAT_POOLS.damageDefense;
+        }
+        return EQUIPMENT_REROLL_STAT_POOLS.physical;
+    }
+    if (equipment.attribute == "Defense") {
+        if (equipment.type == "Mask" || equipment.category == "Mask") {
+            return EQUIPMENT_REROLL_STAT_POOLS.evasive;
+        }
+        if (equipment.type == "Boots" || equipment.category == "Boots") {
+            return EQUIPMENT_REROLL_STAT_POOLS.boots;
+        }
+        return EQUIPMENT_REROLL_STAT_POOLS.defense;
+    }
+    return [];
+};
+
 const rerollEquipmentStats = (equipment) => {
     let enemyScaling = 1 + (equipment.tier / 10);
     if (enemyScaling > 2) {
@@ -254,32 +292,9 @@ const rerollEquipmentStats = (equipment) => {
             loopCount = 8;
             break;
     }
-    const physicalStats = ["atk", "atkSpd", "vamp", "critRate", "critDmg"];
-    const damageyStats = ["atk", "atk", "vamp", "critRate", "critDmg", "critDmg"];
-    const speedyStats = ["atkSpd", "atkSpd", "atk", "vamp", "critRate", "critRate", "critDmg"];
-    const defenseStats = ["hp", "hp", "def", "def", "atk", "dodge"];
-    const evasiveStats = ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"];
-    const bootStats = ["dodge", "fasterRun", "hp", "def", "hp", "def"];
-    const dmgDefStats = ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"];
-    let statTypes;
-    if (equipment.attribute == "Damage") {
-        if (equipment.category == "Axe" || equipment.category == "Scythe") {
-            statTypes = damageyStats;
-        } else if (equipment.category == "Dagger" || equipment.category == "Flail") {
-            statTypes = speedyStats;
-        } else if (equipment.category == "Hammer") {
-            statTypes = dmgDefStats;
-        } else {
-            statTypes = physicalStats;
-        }
-    } else if (equipment.attribute == "Defense") {
-        if (equipment.type == "Mask" || equipment.category == "Mask") {
-            statTypes = evasiveStats;
-        } else if (equipment.type == "Boots" || equipment.category == "Boots") {
-            statTypes = bootStats;
-        } else {
-            statTypes = defenseStats;
-        }
+    let statTypes = getEquipmentRerollStatPool(equipment);
+    if (!statTypes.length) {
+        return;
     }
     for (let i = 0; i < loopCount; i++) {
         let statType = statTypes[Math.floor(Math.random() * statTypes.length)];

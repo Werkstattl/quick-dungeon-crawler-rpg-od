@@ -214,11 +214,15 @@
                       <h3><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></h3>
                     <p onclick="closeForgeModal()"><i class="fa fa-xmark"></i></p>
                 </div>
+                                <div class="forge-mode-toggle" role="tablist" aria-label="Forge mode">
+                                        <button id="forge-mode-merge" class="active" type="button" role="tab" aria-selected="true" data-forge-mode="merge" data-i18n="merge-items">Merge</button>
+                                        <button id="forge-mode-reroll" type="button" role="tab" aria-selected="false" data-forge-mode="reroll" data-i18n="reroll-stats">Reroll Stats</button>
+                                </div>
                 <div class="forge-description">
                       <p data-i18n="combine-three-items-of-the-same-tier-and-rarity-to-forge-one-of-the-next-rarity">Combine three items of the same tier and rarity to forge one of the next rarity!</p>
                     <p id="forge-player-gold" class="forge-current-gold"></p>
                 </div>
-                <div class="forge-slots">
+                                <div class="forge-slots" id="forge-merge-panel">
                     <div class="forge-slot-container">
                           <h4 data-i18n="material-1">Material 1</h4>
                           <div class="forge-slot" id="forge-slot-1">
@@ -239,6 +243,28 @@
                           <div class="forge-slot" id="forge-slot-3">
                             <p data-i18n="select-equipment">Select equipment</p>
                           </div>
+                    </div>
+                </div>
+                <div class="reroll-panel" id="forge-reroll-panel" style="display: none;">
+                    <p class="reroll-description" data-i18n="reroll-description">Select one item to preview a full stat reroll.</p>
+                    <div class="forge-slot-container reroll-slot-container">
+                          <h4 data-i18n="selected-equipment">Selected Equipment</h4>
+                          <div class="forge-slot reroll-slot" id="reroll-slot">
+                            <p data-i18n="select-equipment">Select equipment</p>
+                          </div>
+                    </div>
+                    <div class="reroll-preview" id="reroll-preview" style="display: none;">
+                        <div class="reroll-preview-card">
+                            <h4 data-i18n="current-stats">Current Stats</h4>
+                            <div id="reroll-current-item"></div>
+                        </div>
+                        <div class="reroll-preview-card">
+                            <h4 data-i18n="possible-stats">Possible Stats</h4>
+                            <div id="reroll-preview-item"></div>
+                        </div>
+                    </div>
+                    <div class="forge-cost reroll-cost" id="reroll-cost" style="display: none;">
+                          <p><span data-i18n="cost">Cost:</span> <i class="fas fa-coins" style="color: #FFD700;"></i><span id="reroll-cost-amount">0</span> <span data-i18n="gold">gold</span></p>
                     </div>
                 </div>
                 <div class="forge-result" id="forge-result" style="display: none;">

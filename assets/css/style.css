@@ -1716,6 +1716,27 @@ header button i {
     overflow-y: auto;
 }
 
+.forge-mode-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.forge-mode-toggle button {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #666;
+    background: rgba(255, 255, 255, 0.04);
+    color: white;
+    font-weight: bold;
+}
+
+.forge-mode-toggle button.active {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.14);
+    color: #FFD700;
+}
+
 .forge-description {
     text-align: center;
     margin-bottom: 1rem;
@@ -1772,6 +1793,70 @@ header button i {
 
 .forge-plus {
     display: none;
+}
+
+.reroll-panel {
+    margin: 1rem 0;
+}
+
+.reroll-description {
+    margin-bottom: 1rem;
+    text-align: center;
+    opacity: 0.85;
+}
+
+.reroll-slot-container {
+    margin-bottom: 1rem;
+}
+
+.reroll-slot {
+    width: 8rem;
+    min-height: 7rem;
+}
+
+.reroll-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin: 1rem 0;
+}
+
+.reroll-preview-card {
+    min-width: 0;
+    border: 1px solid #444;
+    border-radius: 0.3rem;
+    padding: 0.6rem;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.reroll-preview-card > h4 {
+    text-align: center;
+    margin-bottom: 0.6rem;
+    font-weight: bold;
+}
+
+.reroll-preview .equipment-card h3 {
+    font-size: calc(1rem * var(--font-scale));
+}
+
+.reroll-preview .equipment-card h5 {
+    margin: 0.1rem 0 0.5rem;
+}
+
+.reroll-preview .equipment-stat-row {
+    gap: 0.3rem;
+}
+
+.reroll-possible-card .equipment-stat-row {
+    justify-content: center;
+}
+
+.reroll-possible-card .stat-name {
+    text-align: center;
+}
+
+.reroll-cost {
+    margin-top: 0.5rem;
 }
 
 .selected-equipment {
@@ -2067,6 +2152,9 @@ header button i {
 
 /* Adjust Forge layout for small screens */
 @media (max-width: 480px) {
+    .reroll-preview {
+        grid-template-columns: 1fr;
+    }
     .forge-equipment-grid {
         grid-template-columns: 1fr;
     }
