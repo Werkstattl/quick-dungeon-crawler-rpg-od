@@ -1,6 +1,7 @@
 const COMPANION_CHARM_SLOT_KEY = 'companionCharm';
 const COMPANION_CHARM_DROP_CHANCE = 0.05;
 const COMPANION_CHARM_STAT_KEYS = ['atk', 'atkSpd', 'critRate', 'critDmg'];
+const EQUIPMENT_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
 
 const defaultCompanionCharmStats = () => ({
     atk: 0,
@@ -106,7 +107,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
 };
 
 const createEquipment = (addToInventory = true, options = {}) => {
-    const { allowCompanionCharm = true } = options;
+    const { allowCompanionCharm = true, minRarity = null } = options;
     const equipment = {
         category: null,
         attribute: null,
@@ -171,6 +172,13 @@ const createEquipment = (addToInventory = true, options = {}) => {
         if (randomNumber <= cumulativeChance) {
             equipment.rarity = rarity;
             break;
+        }
+    }
+    if (minRarity && EQUIPMENT_RARITY_ORDER.includes(minRarity)) {
+        const minimumRarityIndex = EQUIPMENT_RARITY_ORDER.indexOf(minRarity);
+        const currentRarityIndex = EQUIPMENT_RARITY_ORDER.indexOf(equipment.rarity);
+        if (currentRarityIndex >= 0 && currentRarityIndex < minimumRarityIndex) {
+            equipment.rarity = minRarity;
         }
     }
     let enemyScaling = dungeon.settings.enemyScaling;
@@ -1680,8 +1688,9 @@ const autoSellEquipmentDrop = (equipment, placement, placementIndex, serializedI
     return { sold: true, payout };
 };
 
-const createEquipmentPrint = (condition) => {
-    let item = createEquipment(false);
+const createEquipmentPrint = (condition, options = {}) => {
+    const { messageKey = null, ...equipmentOptions } = options;
+    let item = createEquipment(false, equipmentOptions);
     const willAutoEquipCompanionCharm = isCompanionCharm(item) && !player.companionCharm;
     const willAutoEquip = !isCompanionCharm(item) && Array.isArray(player.equipped) ? player.equipped.length < 6 : false;
     const placementIndex = willAutoEquipCompanionCharm
@@ -1740,7 +1749,8 @@ const createEquipmentPrint = (condition) => {
         addCombatLog(`${msg}<br>${panel}`);
         checkInventoryLimit(true);
     } else if (condition == "dungeon") {
-        const msg = typeof t === 'function' ? t('you-got-item', { item: itemLabel }) : `You got ${itemLabel}.`;
+        const dungeonMessageKey = messageKey || 'you-got-item';
+        const msg = typeof t === 'function' ? t(dungeonMessageKey, { item: itemLabel }) : `You got ${itemLabel}.`;
         const sellLabel = typeof t === 'function' ? t('sell') : 'Sell';
         const goldValue = nFormatter(Math.max(0, item.value));
         const lootId = `dungeon-loot-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;

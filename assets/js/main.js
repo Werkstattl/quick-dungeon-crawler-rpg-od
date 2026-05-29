@@ -1244,6 +1244,9 @@ const progressReset = (fromDeath = false) => {
     if (typeof resetDungeonStory === 'function') {
         resetDungeonStory();
     }
+    if (typeof resetSpecialEvents === 'function') {
+        resetSpecialEvents();
+    }
     delete dungeon.enemyMultipliers;
     delete player.allocated;
     dungeon.backlog.length = 0;

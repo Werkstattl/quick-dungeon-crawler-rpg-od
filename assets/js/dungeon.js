@@ -33,6 +33,10 @@ const createDefaultDungeonStory = () => ({
     monarchSeen: false,
 });
 
+const createDefaultSpecialEvents = () => ({
+    floor6WanderingShopVisited: false,
+});
+
 // Track dungeon loop timers even before the dungeon has started
 let dungeonTimer = null;
 let playTimer = null;
@@ -46,6 +50,8 @@ let currentEvent = null;
 const BASE_DUNGEON_EVENT_INTERVAL_MS = 1000;
 const MIN_DUNGEON_EVENT_INTERVAL_MS = 100;
 const DUNGEON_TIMER_TICK_MS = 100;
+const WANDERING_SHOP_FLOOR = 6;
+const WANDERING_SHOP_MIN_RARITY = 'Rare';
 let lastDungeonEventTimestamp = Date.now();
 
 let dungeon = {
@@ -96,6 +102,7 @@ let dungeon = {
         stairsIgnored: false,
     },
     story: createDefaultDungeonStory(),
+    specialEvents: createDefaultSpecialEvents(),
 };
 
 const ensureRoomEventsState = () => {
@@ -115,6 +122,34 @@ const resetRoomEvents = () => {
 
 const resetDungeonStory = () => {
     dungeon.story = createDefaultDungeonStory();
+};
+
+const ensureSpecialEventsState = () => {
+    const defaults = createDefaultSpecialEvents();
+    if (!dungeon.specialEvents || typeof dungeon.specialEvents !== 'object') {
+        dungeon.specialEvents = defaults;
+        return;
+    }
+    Object.keys(defaults).forEach((key) => {
+        if (typeof dungeon.specialEvents[key] !== typeof defaults[key]) {
+            dungeon.specialEvents[key] = defaults[key];
+        }
+    });
+};
+
+const resetSpecialEvents = () => {
+    dungeon.specialEvents = createDefaultSpecialEvents();
+};
+
+const shouldTriggerWanderingShop = () => {
+    ensureSpecialEventsState();
+    return dungeon.progress.floor === WANDERING_SHOP_FLOOR
+        && !dungeon.specialEvents.floor6WanderingShopVisited;
+};
+
+const getWanderingShopCost = () => {
+    const level = player && Number.isFinite(player.lvl) ? player.lvl : 1;
+    return Math.round((WANDERING_SHOP_FLOOR * 500) + (level * 150));
 };
 
 const getDungeonStoryBeatKey = (floor) => {
@@ -329,9 +364,12 @@ const initialDungeonLoad = () => {
         if (!dungeon.story || typeof dungeon.story !== 'object') {
             resetDungeonStory();
         }
+        ensureSpecialEventsState();
         ensureRunStatisticsShape();
         updateDungeonLog();
     }
+
+    ensureSpecialEventsState();
     
     // Initialize floor buffs system
     initializeFloorBuffs();
@@ -428,6 +466,7 @@ const dungeonEvent = () => {
         let eventRoll;
         let event;
         ensureRoomEventsState();
+        ensureSpecialEventsState();
         let eventTypes = ["treasure", "enemy", "enemy", "enemy", "enemy", "nothing", "shrine"];
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
@@ -447,7 +486,9 @@ const dungeonEvent = () => {
         } else if (dungeon.action > 5) {
             eventTypes = ["nextroom"];
         }
-        event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        event = shouldTriggerWanderingShop()
+            ? "wanderingShop"
+            : eventTypes[Math.floor(Math.random() * eventTypes.length)];
         if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1 && dungeon.nothingBias === 0) {
             if (!localStorage.getItem('introHintShown')) {
                 localStorage.setItem('introHintShown', true);
@@ -568,6 +609,9 @@ const dungeonEvent = () => {
                     ignoreEvent();
                 };
                 autoDecline();
+                break;
+            case "wanderingShop":
+                wanderingShopEvent();
                 break;
             case "enemy":
                 dungeon.status.event = true;
@@ -779,6 +823,43 @@ const goldDrop = () => {
         recordRunGoldEarned(goldValue);
     }
     playerLoadStats();
+}
+
+const wanderingShopEvent = () => {
+    dungeon.status.event = true;
+    ensureSpecialEventsState();
+    dungeon.specialEvents.floor6WanderingShopVisited = true;
+    const cost = getWanderingShopCost();
+    const choices = `
+        <div class="decision-panel">
+            <button id="choice1" data-i18n="buy">${t('buy')}</button>
+            <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
+        </div>`;
+    addDungeonLog(t('wandering-shop-offer', { cost: nFormatter(cost), rarity: t(WANDERING_SHOP_MIN_RARITY.toLowerCase()) }), choices);
+    document.querySelector("#choice1").onclick = function () {
+        if (player.gold < cost) {
+            sfxDeny.play();
+            addDungeonLog(t('not-enough-gold'));
+            dungeon.status.event = false;
+            currentEvent = null;
+            return;
+        }
+        player.gold -= cost;
+        sfxSell.play();
+        addDungeonLog(t('wandering-shop-purchase', { gold: nFormatter(cost) }));
+        createEquipmentPrint("dungeon", {
+            allowCompanionCharm: false,
+            minRarity: WANDERING_SHOP_MIN_RARITY,
+            messageKey: 'wandering-shop-item-received',
+        });
+        playerLoadStats();
+        dungeon.status.event = false;
+        currentEvent = null;
+    }
+    document.querySelector("#choice2").onclick = function () {
+        ignoreEvent();
+    };
+    autoDecline();
 }
 
 // Non choices dungeon event messages
