@@ -148,8 +148,7 @@ const shouldTriggerWanderingShop = () => {
 };
 
 const getWanderingShopCost = () => {
-    const level = player && Number.isFinite(player.lvl) ? player.lvl : 1;
-    return Math.round((WANDERING_SHOP_FLOOR * 500) + (level * 150));
+    return Math.round(((WANDERING_SHOP_FLOOR * 500) + (player.lvl * 150)) * player.selectedCurseLevel);
 };
 
 const getDungeonStoryBeatKey = (floor) => {
