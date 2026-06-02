@@ -169,6 +169,8 @@
   "log-flow-bottom-to-top": "Bottom to top (newest last)",
   "log-flow-top-to-bottom": "Top to bottom (newest first)",
   "export-import-data": "Export/Import Data",
+  "forge-membership": "The Forge Membership",
+  "forge-membership-description": "Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.",
   "export-data": "Export Data",
   "copy": "Copy",
   "copied": "Copied!",

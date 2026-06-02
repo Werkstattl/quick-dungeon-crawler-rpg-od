@@ -397,6 +397,7 @@ function openMenu(isTitle = false) {
             <button id="auto-mode-settings"><i class="fas fa-play"></i> <span data-i18n="auto-mode">Auto Mode</span></button>
             <button id="export-import"><i class="fas fa-file-export"></i> <span data-i18n="export-import-data">Export/Import Data</span></button>
             ${isTitle ? '<button id="hero-return"><i class="fas fa-user-circle"></i> <span data-i18n="hero-creation">Hero Creation</span></button>' : '<button id="quit-run"><i class="fas fa-door-open"></i> <span data-i18n="abandon">Abandon</span></button>'}
+            <button id="forge-membership"><i class="fas fa-hammer"></i> <span data-i18n="forge-membership">The Forge Membership</span></button>
             <button id="rate-game"><i class="fas fa-star"></i> <span data-i18n="rate-game">Rate Game</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> <span data-i18n="subreddit">Subreddit</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
         </div>`;
@@ -410,6 +411,7 @@ function openMenu(isTitle = false) {
     let bestiaryMenu = document.querySelector('#bestiary-menu');
     let volumeSettings = document.querySelector('#volume-btn');
     let autoModeSettings = document.querySelector('#auto-mode-settings');
+    let forgeMembership = document.querySelector('#forge-membership');
     let redditLink = document.querySelector('#reddit-link');
     let rateGameBtn = document.querySelector('#rate-game');
     // Reddit button click function
@@ -422,6 +424,30 @@ function openMenu(isTitle = false) {
         ratingSystem.openRating();
         ratingSystem.config.hasRated = true;
         ratingSystem.saveConfig();
+    }
+
+    forgeMembership.onclick = function () {
+        sfxOpen.play();
+        menuModalElement.style.display = "none";
+        defaultModalElement.style.display = "flex";
+        defaultModalElement.innerHTML = `
+            <div class="content" id="forge-membership-tab">
+                <div class="content-head">
+                    <h3 data-i18n="forge-membership">The Forge Membership</h3>
+                    <p id="forge-membership-close"><i class="fa fa-xmark"></i></p>
+                </div>
+                <p data-i18n="forge-membership-description">Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.</p>
+            </div>`;
+        applyTranslations(defaultModalElement);
+        let forgeMembershipTab = document.querySelector('#forge-membership-tab');
+        forgeMembershipTab.style.width = "15rem";
+        let forgeMembershipClose = document.querySelector('#forge-membership-close');
+        forgeMembershipClose.onclick = function () {
+            sfxDecline.play();
+            defaultModalElement.style.display = "none";
+            defaultModalElement.innerHTML = "";
+            menuModalElement.style.display = "flex";
+        };
     }
 
     // Player profile click function
