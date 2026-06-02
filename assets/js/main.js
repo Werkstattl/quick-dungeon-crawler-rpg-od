@@ -369,6 +369,20 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadBestiary();
 });
 
+const FORGE_MEMBERSHIP_PRODUCT_ID = 'the_forge_membership';
+let forgeMembershipActive = localStorage.getItem('forgeMembershipActive') === 'true';
+
+function unlockForgeMembership() {
+    forgeMembershipActive = true;
+    localStorage.setItem('forgeMembershipActive', 'true');
+    const subscribeButton = document.querySelector('#forge-membership-subscribe');
+    if (subscribeButton) {
+        subscribeButton.disabled = true;
+        subscribeButton.setAttribute('data-i18n', 'forge-membership-subscribed');
+        subscribeButton.textContent = t('forge-membership-subscribed');
+    }
+}
+
 function openMenu(isTitle = false) {
     closeInventory();
 
@@ -445,11 +459,30 @@ function openMenu(isTitle = false) {
                     <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
                 </ul>
                 <p class="forge-membership-price" data-i18n="forge-membership-price">0.99 € + VAT / month</p>
+                <button id="forge-membership-subscribe" class="forge-membership-cta" data-i18n="forge-membership-subscribe">Subscribe</button>
             </div>`;
         applyTranslations(defaultModalElement);
         let forgeMembershipTab = document.querySelector('#forge-membership-tab');
         forgeMembershipTab.style.width = "19rem";
+        let forgeMembershipSubscribe = document.querySelector('#forge-membership-subscribe');
         let forgeMembershipClose = document.querySelector('#forge-membership-close');
+        if (forgeMembershipActive) {
+            forgeMembershipSubscribe.disabled = true;
+            forgeMembershipSubscribe.setAttribute('data-i18n', 'forge-membership-subscribed');
+            forgeMembershipSubscribe.textContent = t('forge-membership-subscribed');
+        }
+        forgeMembershipSubscribe.onclick = function () {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            if (isCordova() && typeof buyForgeMembership === 'function') {
+                buyForgeMembership();
+            } else {
+                if (isAndroid) {
+                    ratingSystem.openGooglePlayForRating();
+                } else {
+                    openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
+                }
+            }
+        };
         forgeMembershipClose.onclick = function () {
             sfxDecline.play();
             defaultModalElement.style.display = "none";

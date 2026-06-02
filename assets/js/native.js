@@ -42,6 +42,11 @@ function isCordova() {
             type: CdvPurchase.ProductType.NON_CONSUMABLE,
             id: ENEMY_CUSTOMIZATION_PRODUCT_ID,
             platform: CdvPurchase.Platform.GOOGLE_PLAY,
+        },
+        {
+            type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+            id: FORGE_MEMBERSHIP_PRODUCT_ID,
+            platform: CdvPurchase.Platform.GOOGLE_PLAY,
         }
     ]);
     CdvPurchase.store.when()
@@ -55,6 +60,8 @@ function isCordova() {
             if (typeof unlockEnemyCustomization === 'function') {
               unlockEnemyCustomization();
             }
+          } else if (product.id === FORGE_MEMBERSHIP_PRODUCT_ID) {
+            unlockForgeMembership();
           }
         });
         transaction.finish();
@@ -74,6 +81,10 @@ function isCordova() {
 
   function buyEnemyCustomizationUnlock() {
     CdvPurchase.store.get(ENEMY_CUSTOMIZATION_PRODUCT_ID).getOffer().order();
+  }
+
+  function buyForgeMembership() {
+    CdvPurchase.store.get(FORGE_MEMBERSHIP_PRODUCT_ID).getOffer().order();
   }
 
 function openExternal(url) {

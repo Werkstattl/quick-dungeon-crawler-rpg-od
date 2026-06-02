@@ -878,6 +878,10 @@ button:focus {
     text-align: center;
 }
 
+.forge-membership-cta {
+    width: 100%;
+}
+
 .content-ei {
     max-height: 85vh;
     overflow-y: auto;
