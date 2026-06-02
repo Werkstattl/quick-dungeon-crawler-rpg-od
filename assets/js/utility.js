@@ -14,6 +14,29 @@ const STORAGE_KEYS = {
     enemyTemp: 'enemyData_temp',
 };
 
+const FORGE_MEMBERSHIP_PRODUCT_ID = 'the_forge_membership';
+const FORGE_MEMBERSHIP_STORAGE_KEY = 'forgeMembershipActive';
+
+function isForgeMembershipActive() {
+    return localStorage.getItem(FORGE_MEMBERSHIP_STORAGE_KEY) === 'true';
+}
+
+function getForgeMemberTitle() {
+    if (typeof t !== 'function') {
+        return 'Forge Member';
+    }
+    const translated = t('forge-member-title');
+    return translated && translated !== 'forge-member-title' ? translated : 'Forge Member';
+}
+
+function getPlayerDisplayName(name) {
+    const baseName = typeof name === 'string' && name.trim() ? name.trim() : '';
+    if (!isForgeMembershipActive()) {
+        return baseName;
+    }
+    return `${baseName} [${getForgeMemberTitle()}]`;
+}
+
 const safeSave = (key, data, backupKey, tempKey) => {
     try {
         const json = JSON.stringify(data);

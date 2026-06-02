@@ -34,7 +34,7 @@ let pendingRunSummary = null;
 let runSummaryReadyInCombat = false;
 
 const createRunSummary = (result = 'defeat') => ({
-    playerName: player && player.name ? player.name : '',
+    playerName: player && player.name ? getPlayerDisplayName(player.name) : '',
     level: player && typeof player.lvl === 'number' ? player.lvl : 1,
     hardcore: !!(player && player.hardcore),
     playerClass: player && player.selectedClass ? player.selectedClass : '',

@@ -369,17 +369,16 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadBestiary();
 });
 
-const FORGE_MEMBERSHIP_PRODUCT_ID = 'the_forge_membership';
-let forgeMembershipActive = localStorage.getItem('forgeMembershipActive') === 'true';
-
 function unlockForgeMembership() {
-    forgeMembershipActive = true;
-    localStorage.setItem('forgeMembershipActive', 'true');
+    localStorage.setItem(FORGE_MEMBERSHIP_STORAGE_KEY, 'true');
     const subscribeButton = document.querySelector('#forge-membership-subscribe');
     if (subscribeButton) {
         subscribeButton.disabled = true;
         subscribeButton.setAttribute('data-i18n', 'forge-membership-subscribed');
         subscribeButton.textContent = t('forge-membership-subscribed');
+    }
+    if (player && typeof playerLoadStats === 'function') {
+        playerLoadStats();
     }
 }
 
@@ -466,7 +465,7 @@ function openMenu(isTitle = false) {
         forgeMembershipTab.style.width = "19rem";
         let forgeMembershipSubscribe = document.querySelector('#forge-membership-subscribe');
         let forgeMembershipClose = document.querySelector('#forge-membership-close');
-        if (forgeMembershipActive) {
+        if (isForgeMembershipActive()) {
             forgeMembershipSubscribe.disabled = true;
             forgeMembershipSubscribe.setAttribute('data-i18n', 'forge-membership-subscribed');
             forgeMembershipSubscribe.textContent = t('forge-membership-subscribed');
@@ -503,7 +502,7 @@ function openMenu(isTitle = false) {
                     <h3 data-i18n="statistics">Statistics</h3>
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <p>${player.name}</p>
+                <p>${getPlayerDisplayName(player.name)}</p>
                 <p><span data-i18n="hardcore">Hardcore</span>: ${player.hardcore ? '<span data-i18n="yes">Yes</span>' : '<span data-i18n="no">No</span>'}</p>
                 <p><span data-i18n="kills">Kills</span>: ${nFormatter(player.kills)}</p>
                 <p><span data-i18n="deaths">Deaths</span>: ${nFormatter(player.deaths)}</p>
