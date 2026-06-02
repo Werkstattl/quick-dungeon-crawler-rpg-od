@@ -863,6 +863,21 @@ button:focus {
     overflow-y: auto;
 }
 
+.forge-membership-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.forge-membership-benefits li::before {
+    content: "+";
+    margin-right: 0.35rem;
+}
+
+.forge-membership-price {
+    text-align: center;
+}
+
 .content-ei {
     max-height: 85vh;
     overflow-y: auto;

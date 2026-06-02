@@ -437,10 +437,18 @@ function openMenu(isTitle = false) {
                     <p id="forge-membership-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <p data-i18n="forge-membership-description">Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.</p>
+                <ul class="forge-membership-benefits">
+                    <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
+                    <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
+                    <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
+                    <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
+                    <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
+                </ul>
+                <p class="forge-membership-price" data-i18n="forge-membership-price">0.99 € + VAT / month</p>
             </div>`;
         applyTranslations(defaultModalElement);
         let forgeMembershipTab = document.querySelector('#forge-membership-tab');
-        forgeMembershipTab.style.width = "15rem";
+        forgeMembershipTab.style.width = "19rem";
         let forgeMembershipClose = document.querySelector('#forge-membership-close');
         forgeMembershipClose.onclick = function () {
             sfxDecline.play();
