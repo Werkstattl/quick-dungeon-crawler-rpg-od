@@ -1389,9 +1389,10 @@ const useSpecialAbility = () => {
     }
     if (player.selectedClass === "Paladin") {
         sfxBuff.play();
-        const healAmount = Math.round(player.stats.hpMax);
+        const healAmount = Math.round(player.stats.hpMax * 0.8);
+        const actualHeal = Math.min(healAmount, player.stats.hpMax - player.stats.hp);
         player.stats.hp = Math.min(player.stats.hp + healAmount, player.stats.hpMax);
-        addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(healAmount) }));
+        addCombatLog(t('special-ability-heal', { player: player.name, hp: nFormatter(actualHeal) }));
         hpValidation();
         playerLoadStats();
     } else if (player.selectedClass === "Beastmaster") {
