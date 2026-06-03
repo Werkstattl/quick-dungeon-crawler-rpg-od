@@ -151,7 +151,6 @@
   "font-family": "Font Family",
   "auto-mode": "Auto Mode",
   "auto-mode-unlock": "Purchase: Auto Mode",
-  "auto-mode-permanent-unlock-price": "One-time purchase",
   "auto-mode-description": "Automatically engage enemies, claim loot and open doors.",
   "auto-mode-show-button": "Show Auto Button",
   "auto-mode-level-up": "Stop at level-up",

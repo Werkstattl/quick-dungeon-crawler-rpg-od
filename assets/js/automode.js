@@ -96,7 +96,7 @@ const openAutoModeUnlockModal = () => {
             <div class="forge-unlock-options">
                 <section class="forge-unlock-option">
                     <h4 data-i18n="forge-permanent-unlock">Permanent Unlock</h4>
-                    <p class="forge-unlock-price" data-i18n="auto-mode-permanent-unlock-price">One-time purchase</p>
+                    <p class="forge-unlock-price" data-i18n="forge-permanent-unlock-price">€2.89 + VAT one-time</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-permanent-unlock-keep-forever">Keep forever</li>
                     </ul>
