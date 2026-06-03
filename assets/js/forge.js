@@ -81,6 +81,7 @@ const openForgeUnlockModal = () => {
                         <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
                         <li data-i18n="forge-membership-benefit-supports-development">Supports ongoing development</li>
                     </ul>
+                    <p class="forge-membership-terms" data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</p>
                     <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
                     <button id="forge-buy-membership" type="button" data-i18n="subscribe">Subscribe</button>
                 </section>
