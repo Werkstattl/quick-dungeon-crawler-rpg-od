@@ -380,6 +380,9 @@ function unlockForgeMembership() {
     if (player && typeof playerLoadStats === 'function') {
         playerLoadStats();
     }
+    if (typeof updateInventoryItemCount === 'function') {
+        updateInventoryItemCount();
+    }
 }
 
 function openMenu(isTitle = false) {

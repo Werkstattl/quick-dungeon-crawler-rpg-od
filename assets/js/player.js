@@ -93,7 +93,11 @@ const getPlayerAtkSpdCap = () => {
     return 2.75;
 };
 
-const MAX_INVENTORY_ITEMS = 100;
+const BASE_MAX_INVENTORY_ITEMS = 100;
+const FORGE_MEMBERSHIP_INVENTORY_BONUS = 50;
+
+const getMaxInventoryItems = () => BASE_MAX_INVENTORY_ITEMS
+    + (typeof isForgeMembershipActive === 'function' && isForgeMembershipActive() ? FORGE_MEMBERSHIP_INVENTORY_BONUS : 0);
 
 function getFallbackCompanionBonuses() {
     return {
@@ -123,7 +127,7 @@ const inventoryItemCount = () => {
 };
 
 const checkInventoryLimit = (logMessage = false) => {
-    if (inventoryItemCount() > MAX_INVENTORY_ITEMS) {
+    if (inventoryItemCount() > getMaxInventoryItems()) {
         dungeon.status.exploring = false;
         if (logMessage && typeof addDungeonLog === 'function') {
             addDungeonLog(`<span class='Common'><i class="fas fa-box-open"></i> Inventory limit reached. Sell equipment to continue exploring.</span>`);
@@ -357,6 +361,9 @@ const openInventory = () => {
     let dimDungeon = document.querySelector('#dungeon-main');
     openInv.style.display = "flex";
     dimDungeon.style.filter = "brightness(50%)";
+    if (typeof updateInventoryItemCount === 'function') {
+        updateInventoryItemCount();
+    }
 
     sortInventoryElement.value = 'none';
     sortInventoryElement.onchange = function () {

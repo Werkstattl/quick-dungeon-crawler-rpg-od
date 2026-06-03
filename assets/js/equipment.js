@@ -868,15 +868,23 @@ const sortInventory = (type) => {
     showInventory();
 };
 
-const showInventory = () => {
-    let playerInventoryList = document.getElementById("playerInventory");
-    playerInventoryList.innerHTML = "";
-
+const updateInventoryItemCount = () => {
     const countSpan = document.getElementById('inventory-item-count');
+    const limitSpan = document.getElementById('inventory-item-limit');
     const totalItems = (typeof inventoryItemCount === 'function') ? inventoryItemCount() : (player.inventory && player.inventory.equipment ? player.inventory.equipment.length : 0);
     if (countSpan) {
         countSpan.textContent = totalItems;
     }
+    if (limitSpan) {
+        limitSpan.textContent = typeof getMaxInventoryItems === 'function' ? getMaxInventoryItems() : 100;
+    }
+};
+
+const showInventory = () => {
+    let playerInventoryList = document.getElementById("playerInventory");
+    playerInventoryList.innerHTML = "";
+
+    updateInventoryItemCount();
     
     if (player.inventory.equipment.length == 0) {
         playerInventoryList.innerHTML = t('there-are-no-items-available');
