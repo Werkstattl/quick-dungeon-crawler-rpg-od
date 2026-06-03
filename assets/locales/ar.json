@@ -151,6 +151,7 @@
   "font-family": "عائلة الخط",
   "auto-mode": "الوضع التلقائي",
   "auto-mode-unlock": "شراء: الوضع التلقائي",
+  "auto-mode-permanent-unlock-price": "شراء لمرة واحدة",
   "auto-mode-description": "يواجه الأعداء تلقائيا، ويجمع الغنائم، ويفتح الأبواب.",
   "auto-mode-show-button": "إظهار زر التلقائي",
   "auto-mode-level-up": "التوقف عند رفع المستوى",

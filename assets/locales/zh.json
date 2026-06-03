@@ -145,6 +145,7 @@
   "font-family": "字体",
   "auto-mode": "自动模式",
   "auto-mode-unlock": "解锁：自动模式",
+  "auto-mode-permanent-unlock-price": "一次性购买",
   "auto-mode-description": "自动与敌人战斗、拾取战利品并打开门。",
   "auto-mode-show-button": "显示自动按钮",
   "auto-mode-level-up": "升级时停止",

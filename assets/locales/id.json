@@ -151,6 +151,7 @@
   "font-family": "Jenis Font",
   "auto-mode": "Mode Auto",
   "auto-mode-unlock": "Beli: Mode Auto",
+  "auto-mode-permanent-unlock-price": "Pembelian satu kali",
   "auto-mode-description": "Secara otomatis melawan musuh, mengambil loot, dan membuka pintu.",
   "auto-mode-show-button": "Tampilkan Tombol Auto",
   "auto-mode-level-up": "Berhenti saat level naik",

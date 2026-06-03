@@ -151,6 +151,7 @@
   "font-family": "Шрифт",
   "auto-mode": "Авто режим",
   "auto-mode-unlock": "Покупка: Авто режим",
+  "auto-mode-permanent-unlock-price": "Единоразовая покупка",
   "auto-mode-description": "Автоматически вступать в бой, забирать добычу и открывать двери.",
   "auto-mode-show-button": "Показывать кнопку авто режима",
   "auto-mode-level-up": "Останавливаться при повышении уровня",

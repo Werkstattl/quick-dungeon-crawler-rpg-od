@@ -151,6 +151,7 @@
   "font-family": "Tipo de letra",
   "auto-mode": "Modo automático",
   "auto-mode-unlock": "Compra: Modo automático",
+  "auto-mode-permanent-unlock-price": "Compra única",
   "auto-mode-description": "Enfrenta enemigos, reclama botín y abre puertas automáticamente.",
   "auto-mode-show-button": "Mostrar botón Auto",
   "auto-mode-level-up": "Detener en la subida de nivel",

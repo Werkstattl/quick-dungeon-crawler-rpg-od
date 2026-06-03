@@ -151,6 +151,7 @@
   "font-family": "Police",
   "auto-mode": "Mode auto",
   "auto-mode-unlock": "Acheter : Mode auto",
+  "auto-mode-permanent-unlock-price": "Achat unique",
   "auto-mode-description": "Affronte automatiquement les ennemis, récupère le butin et ouvre les portes.",
   "auto-mode-show-button": "Afficher le bouton auto",
   "auto-mode-level-up": "Arrêter à la montée de niveau",

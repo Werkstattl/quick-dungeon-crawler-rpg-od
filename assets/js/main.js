@@ -851,16 +851,7 @@ function openMenu(isTitle = false) {
         if (!autoModeUnlocked) {
             let unlockAuto = document.querySelector('#unlock-auto');
             unlockAuto.onclick = function () {
-                const isAndroid = /Android/i.test(navigator.userAgent);
-                if (isCordova()) {
-                    buyAutoModeUnlock();
-                } else {
-                    if (isAndroid) {
-                        ratingSystem.openGooglePlayForRating();
-                    } else {
-                        openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
-                    }
-                }
+                openAutoModeUnlockModal();
             };
         }
 

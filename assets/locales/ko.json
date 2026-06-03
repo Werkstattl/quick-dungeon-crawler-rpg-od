@@ -151,6 +151,7 @@
   "font-family": "글꼴",
   "auto-mode": "자동 모드",
   "auto-mode-unlock": "구매: 자동 모드",
+  "auto-mode-permanent-unlock-price": "1회 구매",
   "auto-mode-description": "적과 자동으로 교전하고, 전리품을 획득하며, 문을 엽니다.",
   "auto-mode-show-button": "자동 버튼 표시",
   "auto-mode-level-up": "레벨 업 시 중지",
