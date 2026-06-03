@@ -384,7 +384,7 @@ function unlockForgeMembership() {
         updateInventoryItemCount();
     }
     unlockForge();
-    unlockAutoMode();
+    unlockAutoMode(false);
     unlockEnemyCustomization();
 }
 

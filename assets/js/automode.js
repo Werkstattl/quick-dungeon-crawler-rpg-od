@@ -39,11 +39,11 @@ if ( !autoModeUnlocked ) {
 
 const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
 
-function unlockAutoMode() {
+function unlockAutoMode(openSettings = true) {
     let old = autoModeUnlocked;
     autoModeUnlocked = true;
     updateAutoModeBtnVisibility();
-    if (typeof window.renderAutoModeSettingsModal === 'function') {
+    if (openSettings && typeof window.renderAutoModeSettingsModal === 'function') {
         if (!old) {
             window.renderAutoModeSettingsModal();
         }
