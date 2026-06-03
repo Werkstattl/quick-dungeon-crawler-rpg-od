@@ -1,5 +1,9 @@
 function isPremium() {
-  return Boolean(window.__TAURI__ || window.electronAPI);
+  let premium = Boolean(window.__TAURI__ || window.electronAPI);
+  if ( !premium && isForgeMembershipActive() ) {
+    premium = true;
+  }
+  return premium;
 }
 
 function isCordova() {

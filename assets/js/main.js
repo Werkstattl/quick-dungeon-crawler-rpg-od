@@ -383,6 +383,9 @@ function unlockForgeMembership() {
     if (typeof updateInventoryItemCount === 'function') {
         updateInventoryItemCount();
     }
+    unlockForge();
+    unlockAutoMode();
+    unlockEnemyCustomization();
 }
 
 function openMenu(isTitle = false) {
