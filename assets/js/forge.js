@@ -13,6 +13,119 @@ let rerollCost = 0;
 let forgeUnlocked = false;
 
 const FORGE_PRODUCT_ID = 'forge_unlock_premium';
+const FORGE_PURCHASE_URL = 'https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase';
+
+const closeForgeUnlockModal = () => {
+    closeDefaultModal();
+};
+
+const buyPermanentForgeUnlock = () => {
+    closeForgeUnlockModal();
+    if (isCordova() && typeof buyForgeUnlock === 'function') {
+        buyForgeUnlock();
+        return;
+    }
+
+    if (/Android/i.test(navigator.userAgent)) {
+        ratingSystem.openGooglePlayForRating();
+    } else {
+        openExternal(FORGE_PURCHASE_URL);
+    }
+};
+
+const buyForgeMembershipUnlock = () => {
+    closeForgeUnlockModal();
+    if (isCordova() && typeof buyForgeMembership === 'function') {
+        buyForgeMembership();
+        return;
+    }
+
+    if (/Android/i.test(navigator.userAgent)) {
+        ratingSystem.openGooglePlayForRating();
+    } else {
+        openExternal(FORGE_PURCHASE_URL);
+    }
+};
+
+const openForgeUnlockModal = () => {
+    if (!defaultModalElement) {
+        return;
+    }
+
+    sfxOpen.play();
+    defaultModalElement.style.zIndex = "2";
+    defaultModalElement.style.display = "flex";
+    defaultModalElement.innerHTML = `
+        <div class="content forge-unlock-modal">
+            <div class="content-head">
+                <h3><i class="ra ra-anvil"></i> <span data-i18n="unlock-the-forge">Unlock The Forge</span></h3>
+                <p id="forge-unlock-close"><i class="fa fa-xmark"></i></p>
+            </div>
+            <div class="forge-unlock-options">
+                <section class="forge-unlock-option">
+                    <h4 data-i18n="forge-permanent-unlock">Permanent Unlock</h4>
+                    <p class="forge-unlock-price" data-i18n="forge-permanent-unlock-price">€2.89 + VAT one-time</p>
+                    <ul class="forge-membership-benefits">
+                        <li data-i18n="forge-permanent-unlock-keep-forever">Keep forever</li>
+                    </ul>
+                    <button id="forge-buy-permanent" type="button" data-i18n="buy-permanently">Buy Permanently</button>
+                </section>
+                <section class="forge-unlock-option">
+                    <h4 data-i18n="forge-membership">The Forge Membership</h4>
+                    <p class="forge-unlock-price" data-i18n="forge-membership-price">€0.99 + VAT / month</p>
+                    <ul class="forge-membership-benefits">
+                        <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
+                        <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
+                        <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
+                        <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
+                        <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
+                        <li data-i18n="forge-membership-benefit-supports-development">Supports development</li>
+                    </ul>
+                    <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+                    <button id="forge-buy-membership" type="button" data-i18n="subscribe">Subscribe</button>
+                </section>
+            </div>
+        </div>`;
+    applyTranslations(defaultModalElement);
+
+    const buyPermanentButton = document.querySelector('#forge-buy-permanent');
+    const buyMembershipButton = document.querySelector('#forge-buy-membership');
+    const closeButton = document.querySelector('#forge-unlock-close');
+    const cancelButton = document.querySelector('#forge-unlock-cancel');
+
+    if (isForgeMembershipActive() && buyMembershipButton) {
+        buyMembershipButton.disabled = true;
+        buyMembershipButton.setAttribute('data-i18n', 'forge-membership-subscribed');
+        buyMembershipButton.textContent = t('forge-membership-subscribed');
+    }
+
+    if (buyPermanentButton) {
+        buyPermanentButton.onclick = () => {
+            sfxConfirm.play();
+            buyPermanentForgeUnlock();
+        };
+    }
+    if (buyMembershipButton) {
+        buyMembershipButton.onclick = () => {
+            sfxConfirm.play();
+            buyForgeMembershipUnlock();
+        };
+    }
+    [closeButton, cancelButton].forEach(button => {
+        if (!button) return;
+        button.onclick = () => {
+            sfxDecline.play();
+            closeForgeUnlockModal();
+        };
+    });
+};
+
+const setForgeUnlockButton = (confirmButton) => {
+    confirmButton.disabled = false;
+    confirmButton.setAttribute('data-i18n', 'unlock-the-forge-premium');
+    confirmButton.textContent = t('unlock-the-forge-premium');
+    confirmButton.onclick = openForgeUnlockModal;
+};
 
 // Initialize forge system
 const initializeForge = () => {
@@ -430,22 +543,7 @@ const updateRerollDisplay = () => {
     }
 
     if (!forgeUnlocked) {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        confirmButton.disabled = false;
-        const i18nKey = (!isCordova() && isAndroid) ? 'get-on-google-play-premium' : 'unlock-the-forge-premium';
-        confirmButton.setAttribute('data-i18n', i18nKey);
-        confirmButton.textContent = t(i18nKey);
-        confirmButton.onclick = () => {
-            if (isCordova()) {
-                buyForgeUnlock();
-            } else {
-                if (isAndroid) {
-                    ratingSystem.openGooglePlayForRating();
-                } else {
-                    openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
-                }
-            }
-        };
+        setForgeUnlockButton(confirmButton);
         return;
     }
 
@@ -582,22 +680,7 @@ const updateForgeDisplay = () => {
     };
 
     if (!forgeUnlocked) {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        confirmButton.disabled = false;
-        const i18nKey = (!isCordova() && isAndroid) ? 'get-on-google-play-premium' : 'unlock-the-forge-premium';
-        confirmButton.setAttribute('data-i18n', i18nKey);
-        confirmButton.textContent = t(i18nKey);
-        confirmButton.onclick = () => {
-            if (isCordova()) {
-                buyForgeUnlock();
-            } else {
-                if (isAndroid) {
-                    ratingSystem.openGooglePlayForRating();
-                } else {
-                    openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase');
-                }
-            }
-        };
+        setForgeUnlockButton(confirmButton);
         return;
     }
 

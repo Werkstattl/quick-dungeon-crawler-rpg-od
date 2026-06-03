@@ -893,6 +893,35 @@ button:focus {
     width: 100%;
 }
 
+.forge-unlock-modal {
+    width: min(25rem, calc(100vw - 1rem));
+}
+
+.forge-unlock-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.forge-unlock-option {
+    border: 1px solid #565656;
+    border-radius: 0.3rem;
+    padding: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.forge-unlock-option h4 {
+    margin: 0;
+}
+
+.forge-unlock-price {
+    color: #ffd166;
+    font-weight: bold;
+}
+
 .content-ei {
     max-height: 85vh;
     overflow-y: auto;

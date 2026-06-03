@@ -51,6 +51,10 @@ const sortInventoryElement = document.querySelector('#sort-inventory');
             container.style.display = 'none';
           }
           restoreDimmedUI();
+          if (document.getElementById('forgeModal')?.style.display === 'flex') {
+            const dungeonMain = document.getElementById('dungeon-main');
+            if (dungeonMain) dungeonMain.style.filter = 'brightness(50%)';
+          }
           break;
         case 'inventory':
           if (typeof closeInventory === 'function') {
