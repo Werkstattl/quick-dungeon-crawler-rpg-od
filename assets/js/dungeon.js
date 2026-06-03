@@ -815,7 +815,7 @@ const chestEvent = () => {
 // Calculates Gold Drop
 const goldDrop = () => {
     sfxSell.play();
-    let goldValue = randomizeNum(50, 500) * dungeon.progress.floor;
+    let goldValue = applyForgeMembershipGoldBonus(randomizeNum(50, 500) * dungeon.progress.floor);
     addDungeonLog(t('gold-found', { gold: nFormatter(goldValue) }));
     player.gold += goldValue;
     if (typeof recordRunGoldEarned === 'function') {
@@ -1226,7 +1226,7 @@ const processRestingActivities = () => {
 
     // Passive health regeneration (percentage based)
     if (player.stats.hp < player.stats.hpMax) {
-        const regenAmount = Math.round(player.stats.hpMax * (dungeon.resting.healthRegenRate / 100));
+        const regenAmount = applyForgeMembershipRestingRecoveryBonus(player.stats.hpMax * (dungeon.resting.healthRegenRate / 100));
         player.stats.hp = Math.min(player.stats.hpMax, player.stats.hp + regenAmount);
     }
 

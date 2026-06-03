@@ -21,6 +21,22 @@ function isForgeMembershipActive() {
     return localStorage.getItem(FORGE_MEMBERSHIP_STORAGE_KEY) === 'true';
 }
 
+function applyForgeMembershipGoldBonus(amount) {
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return 0;
+    }
+    return isForgeMembershipActive() ? Math.round(value * 1.1) : Math.round(value);
+}
+
+function applyForgeMembershipRestingRecoveryBonus(amount) {
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return 0;
+    }
+    return isForgeMembershipActive() ? Math.round(value * 2) : Math.round(value);
+}
+
 function getForgeMemberTitle() {
     if (typeof t !== 'function') {
         return 'Forge Member';

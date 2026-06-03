@@ -664,7 +664,8 @@ const hpValidation = () => {
             }
         }
         const timeStamp = new Date(combatSeconds * 1000).toISOString().substring(14, 19);
-        addCombatLog(t('enemy-defeated-reward', { enemy: getDisplayEnemyName(enemy.id, enemy.name), exp: nFormatter(enemy.rewards.exp), gold: nFormatter(enemy.rewards.gold), time: timeStamp }));
+        const goldReward = applyForgeMembershipGoldBonus(enemy.rewards.gold);
+        addCombatLog(t('enemy-defeated-reward', { enemy: getDisplayEnemyName(enemy.id, enemy.name), exp: nFormatter(enemy.rewards.exp), gold: nFormatter(goldReward), time: timeStamp }));
         playerExpGain();
         if (activeCompanion && activeCompanion.isActive) {
             const companionExpReward = (enemy.rewards.exp / 10) * (typeof getCompanionExperienceMultiplier === 'function'
@@ -672,9 +673,9 @@ const hpValidation = () => {
                 : 1);
             activeCompanion.gainExperience(companionExpReward);
         }
-        player.gold += enemy.rewards.gold;
+        player.gold += goldReward;
         if (typeof recordRunGoldEarned === 'function') {
-            recordRunGoldEarned(enemy.rewards.gold);
+            recordRunGoldEarned(goldReward);
         }
         playerLoadStats();
         if (enemy.rewards.drop) {
