@@ -83,7 +83,7 @@ const openForgeUnlockModal = () => {
                     </ul>
                     <p class="forge-membership-terms" data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</p>
                     <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                    <button id="forge-buy-membership" type="button" data-i18n="subscribe">Subscribe</button>
+                    <button id="forge-buy-membership" type="button" data-i18n="forge-membership-subscribe">Subscribe</button>
                 </section>
             </div>
         </div>`;
