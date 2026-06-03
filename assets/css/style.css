@@ -875,6 +875,17 @@ button:focus {
 }
 
 .forge-membership-price {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.4rem;
+    text-align: center;
+}
+
+.forge-membership-terms {
+    margin-top: -0.35rem;
+    color: #b7b7b7;
+    font-size: 0.85rem;
     text-align: center;
 }
 

@@ -463,7 +463,11 @@ function openMenu(isTitle = false) {
                     <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
                     <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
                 </ul>
-                <p class="forge-membership-price" data-i18n="forge-membership-price">0.99 € + VAT / month</p>
+                <p class="forge-membership-price">
+                    <span data-i18n="forge-membership-price">0.99 € + VAT / month</span>
+                    <span data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</span>
+                </p>
+                <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
                 <button id="forge-membership-subscribe" class="forge-membership-cta" data-i18n="forge-membership-subscribe">Subscribe</button>
             </div>`;
         applyTranslations(defaultModalElement);

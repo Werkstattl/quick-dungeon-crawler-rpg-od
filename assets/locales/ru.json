@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Эксклюзивный титул члена кузницы",
   "forge-member-title": "Член кузницы",
   "forge-membership-price": "0,99 € + НДС / месяц",
+  "forge-membership-auto-renewing": "Подписка с автоматическим продлением",
+  "forge-membership-cancel-google-play": "Отмените в любое время через Google Play.",
   "forge-membership-subscribe": "Подписаться",
   "forge-membership-subscribed": "Подписка активна",
   "export-data": "Экспорт данных",

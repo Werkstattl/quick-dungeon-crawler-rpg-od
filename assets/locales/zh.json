@@ -172,6 +172,8 @@
   "forge-membership-benefit-title": "专属锻造所会员称号",
   "forge-member-title": "锻造所会员",
   "forge-membership-price": "0.99 € + VAT / 月",
+  "forge-membership-auto-renewing": "自动续订订阅",
+  "forge-membership-cancel-google-play": "可随时通过 Google Play 取消。",
   "forge-membership-subscribe": "订阅",
   "forge-membership-subscribed": "已订阅",
   "export-data": "导出数据",

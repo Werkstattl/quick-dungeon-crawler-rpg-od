@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Titre exclusif de membre de la forge",
   "forge-member-title": "Membre de la forge",
   "forge-membership-price": "0,99 € + TVA / mois",
+  "forge-membership-auto-renewing": "Abonnement renouvelé automatiquement",
+  "forge-membership-cancel-google-play": "Annulable à tout moment via Google Play.",
   "forge-membership-subscribe": "S'abonner",
   "forge-membership-subscribed": "Abonné",
   "export-data": "Exporter les données",

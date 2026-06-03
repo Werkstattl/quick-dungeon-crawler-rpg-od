@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Ексклюзивний титул члена кузні",
   "forge-member-title": "Член кузні",
   "forge-membership-price": "0,99 € + ПДВ / місяць",
+  "forge-membership-auto-renewing": "Підписка з автоматичним поновленням",
+  "forge-membership-cancel-google-play": "Скасуйте будь-коли через Google Play.",
   "forge-membership-subscribe": "Підписатися",
   "forge-membership-subscribed": "Підписка активна",
   "export-data": "Експорт даних",

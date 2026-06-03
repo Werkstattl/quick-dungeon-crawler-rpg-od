@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Exklusiver Titel: Schmiede-Mitglied",
   "forge-member-title": "Schmiede-Mitglied",
   "forge-membership-price": "0,99 € + MwSt. / Monat",
+  "forge-membership-auto-renewing": "Automatisch verlängertes Abonnement",
+  "forge-membership-cancel-google-play": "Jederzeit über Google Play kündbar.",
   "forge-membership-subscribe": "Abonnieren",
   "forge-membership-subscribed": "Abonniert",
   "export-data": "Daten exportieren",

@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "لقب حصري: عضو المصهرة",
   "forge-member-title": "عضو المصهرة",
   "forge-membership-price": "0.99 € + ضريبة القيمة المضافة / شهر",
+  "forge-membership-auto-renewing": "اشتراك يتجدد تلقائيًا",
+  "forge-membership-cancel-google-play": "يمكنك الإلغاء في أي وقت عبر Google Play.",
   "forge-membership-subscribe": "اشترك",
   "forge-membership-subscribed": "مشترك",
   "export-data": "تصدير البيانات",

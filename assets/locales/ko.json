@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "독점 대장간 멤버 칭호",
   "forge-member-title": "대장간 멤버",
   "forge-membership-price": "0.99 € + VAT / 월",
+  "forge-membership-auto-renewing": "자동 갱신 구독",
+  "forge-membership-cancel-google-play": "Google Play에서 언제든지 취소할 수 있습니다.",
   "forge-membership-subscribe": "구독",
   "forge-membership-subscribed": "구독 중",
   "export-data": "데이터 내보내기",

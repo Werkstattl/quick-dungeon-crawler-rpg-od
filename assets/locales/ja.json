@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "限定の鍛冶場メンバー称号",
   "forge-member-title": "鍛冶場メンバー",
   "forge-membership-price": "0.99 € + VAT / 月",
+  "forge-membership-auto-renewing": "自動更新のサブスクリプション",
+  "forge-membership-cancel-google-play": "Google Play からいつでも解約できます。",
   "forge-membership-subscribe": "登録する",
   "forge-membership-subscribed": "登録済み",
   "export-data": "データをエクスポート",

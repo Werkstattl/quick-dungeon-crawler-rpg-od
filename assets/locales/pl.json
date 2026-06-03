@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Ekskluzywny tytuł członka kuźni",
   "forge-member-title": "Członek kuźni",
   "forge-membership-price": "0,99 € + VAT / miesiąc",
+  "forge-membership-auto-renewing": "Subskrypcja odnawiana automatycznie",
+  "forge-membership-cancel-google-play": "Anuluj w dowolnym momencie w Google Play.",
   "forge-membership-subscribe": "Subskrybuj",
   "forge-membership-subscribed": "Subskrybowano",
   "export-data": "Eksportuj dane",

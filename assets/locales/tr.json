@@ -178,6 +178,8 @@
   "forge-membership-benefit-title": "Özel Demirhane Üyesi unvanı",
   "forge-member-title": "Demirhane Üyesi",
   "forge-membership-price": "0,99 € + KDV / ay",
+  "forge-membership-auto-renewing": "Otomatik yenilenen abonelik",
+  "forge-membership-cancel-google-play": "Google Play üzerinden istediğin zaman iptal et.",
   "forge-membership-subscribe": "Abone ol",
   "forge-membership-subscribed": "Abone olundu",
   "export-data": "Veriyi Dışa Aktar",
