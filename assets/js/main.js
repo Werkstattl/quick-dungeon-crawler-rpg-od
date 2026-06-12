@@ -276,6 +276,8 @@ window.addEventListener("DOMContentLoaded", async function () {
         let targetButton = null;
         const isChoice1Key = !event.shiftKey && (event.key === '1' || event.code === 'Digit1' || event.code === 'Numpad1');
         const isChoice2Key = !event.shiftKey && (event.key === '2' || event.code === 'Digit2' || event.code === 'Numpad2');
+        const isChoice3Key = !event.shiftKey && (event.key === '3' || event.code === 'Digit3' || event.code === 'Numpad3');
+        const isChoice4Key = !event.shiftKey && (event.key === '4' || event.code === 'Digit4' || event.code === 'Numpad4');
 
         if (isChoice1Key) {
             const lvlupPanel = document.querySelector('#lvlupPanel');
@@ -300,6 +302,10 @@ window.addEventListener("DOMContentLoaded", async function () {
             if (!targetButton) {
                 targetButton = document.querySelector('#special-ability-btn');
             }
+        } else if (isChoice3Key) {
+            targetButton = document.querySelector('#choice3');
+        } else if (isChoice4Key) {
+            targetButton = document.querySelector('#choice4');
         }
 
         if (targetButton && !targetButton.disabled) {
@@ -633,7 +639,7 @@ function openMenu(isTitle = false) {
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
         // Only allow changing logFlow while resting with no open choices
-        const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+        const hasOpenChoices = !!document.querySelector('#choice1, #choice2, #choice3, #choice4');
         const dimTitle = document.querySelector('#title-screen');
         const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
         const canChangeLogFlow = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
@@ -684,7 +690,7 @@ function openMenu(isTitle = false) {
         };
         logFlowSelect.onchange = function () {
             // Guard: only allow change if resting and no choices are open
-            const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+            const hasOpenChoices = !!document.querySelector('#choice1, #choice2, #choice3, #choice4');
             const dimTitle = document.querySelector('#title-screen');
             const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
             const canChange = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
@@ -751,7 +757,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
             // Apply log flow if allowed and valid
             if ((logFlow === 'top' || logFlow === 'bottom')) {
-                const hasOpenChoices = !!(document.querySelector('#choice1') || document.querySelector('#choice2'));
+                const hasOpenChoices = !!document.querySelector('#choice1, #choice2, #choice3, #choice4');
                 const dimTitle = document.querySelector('#title-screen');
                 const onTitleScreen = !!(dimTitle && window.getComputedStyle(dimTitle).display !== 'none');
                 const canChange = onTitleScreen || (typeof dungeon !== 'undefined' && dungeon.status && dungeon.status.paused && !dungeon.status.event && !hasOpenChoices);
@@ -1313,6 +1319,9 @@ const progressReset = (fromDeath = false) => {
     }
     if (typeof resetSpecialEvents === 'function') {
         resetSpecialEvents();
+    }
+    if (typeof resetRouteChoice === 'function') {
+        resetRouteChoice();
     }
     delete dungeon.enemyMultipliers;
     delete player.allocated;

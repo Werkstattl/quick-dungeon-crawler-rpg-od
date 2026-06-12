@@ -37,6 +37,13 @@ const createDefaultSpecialEvents = () => ({
     floor6WanderingShopVisited: false,
 });
 
+const DUNGEON_ROUTE_KEYS = ["balanced", "spoils", "sanctuary", "descent"];
+
+const createDefaultRouteChoice = () => ({
+    floor: null,
+    selected: null,
+});
+
 // Track dungeon loop timers even before the dungeon has started
 let dungeonTimer = null;
 let playTimer = null;
@@ -103,6 +110,7 @@ let dungeon = {
     },
     story: createDefaultDungeonStory(),
     specialEvents: createDefaultSpecialEvents(),
+    routeChoice: createDefaultRouteChoice(),
 };
 
 const ensureRoomEventsState = () => {
@@ -139,6 +147,55 @@ const ensureSpecialEventsState = () => {
 
 const resetSpecialEvents = () => {
     dungeon.specialEvents = createDefaultSpecialEvents();
+};
+
+const ensureRouteChoiceState = () => {
+    if (!dungeon.routeChoice || typeof dungeon.routeChoice !== 'object') {
+        dungeon.routeChoice = createDefaultRouteChoice();
+        return;
+    }
+    if (!Number.isFinite(dungeon.routeChoice.floor)) {
+        dungeon.routeChoice.floor = null;
+    }
+    if (!DUNGEON_ROUTE_KEYS.includes(dungeon.routeChoice.selected)) {
+        dungeon.routeChoice.selected = null;
+    }
+};
+
+const resetRouteChoice = () => {
+    dungeon.routeChoice = createDefaultRouteChoice();
+};
+
+const isRouteChoiceNeeded = () => {
+    ensureRouteChoiceState();
+    return dungeon.progress.room === 1
+        && (dungeon.routeChoice.floor !== dungeon.progress.floor || !dungeon.routeChoice.selected);
+};
+
+const applyRouteBias = (eventTypes) => {
+    ensureRouteChoiceState();
+    if (dungeon.routeChoice.floor !== dungeon.progress.floor) {
+        return eventTypes;
+    }
+
+    switch (dungeon.routeChoice.selected) {
+        case "spoils":
+            eventTypes.push("treasure", "treasure", "treasure", "enemy");
+            break;
+        case "sanctuary":
+            eventTypes.push("shrine", "shrine", "nothing");
+            if (!dungeon.roomEvents.blessingOccurred) {
+                eventTypes.push("blessing");
+            }
+            break;
+        case "descent":
+            eventTypes.push("nextroom", "nextroom", "enemy", "enemy");
+            break;
+        default:
+            break;
+    }
+
+    return eventTypes;
 };
 
 const shouldTriggerWanderingShop = () => {
@@ -364,11 +421,13 @@ const initialDungeonLoad = () => {
             resetDungeonStory();
         }
         ensureSpecialEventsState();
+        ensureRouteChoiceState();
         ensureRunStatisticsShape();
         updateDungeonLog();
     }
 
     ensureSpecialEventsState();
+    ensureRouteChoiceState();
     
     // Initialize floor buffs system
     initializeFloorBuffs();
@@ -441,6 +500,7 @@ const loadDungeonProgress = () => {
         // Clear floor buffs when advancing to next floor
         clearFloorBuffs();
 
+        resetRouteChoice();
         resetRoomEvents();
     }
     floorCount.setAttribute('data-i18n', 'floor-count');
@@ -458,8 +518,52 @@ const loadDungeonProgress = () => {
 }
 
 // ========== Events in the Dungeon ==========
+const selectDungeonRoute = (routeKey) => {
+    const selectedRoute = DUNGEON_ROUTE_KEYS.includes(routeKey) ? routeKey : "balanced";
+    sfxConfirm.play();
+    ensureRouteChoiceState();
+    dungeon.routeChoice.floor = dungeon.progress.floor;
+    dungeon.routeChoice.selected = selectedRoute;
+    dungeon.status.event = false;
+    currentEvent = null;
+    addDungeonLog(t(`route-choice-selected-${selectedRoute}`));
+};
+
+const showRouteChoiceEvent = () => {
+    dungeon.status.event = true;
+    currentEvent = "routeChoice";
+    const choices = `
+        <div class="decision-panel route-choice-panel">
+            <button id="choice1" data-i18n="route-balanced">${t('route-balanced')}</button>
+            <button id="choice2" data-i18n="route-spoils">${t('route-spoils')}</button>
+            <button id="choice3" data-i18n="route-sanctuary">${t('route-sanctuary')}</button>
+            <button id="choice4" data-i18n="route-descent">${t('route-descent')}</button>
+        </div>`;
+    addDungeonLog(t('route-choice-found'), choices);
+
+    document.querySelector("#choice1").onclick = function () {
+        selectDungeonRoute("balanced");
+    };
+    document.querySelector("#choice2").onclick = function () {
+        selectDungeonRoute("spoils");
+    };
+    document.querySelector("#choice3").onclick = function () {
+        selectDungeonRoute("sanctuary");
+    };
+    document.querySelector("#choice4").onclick = function () {
+        selectDungeonRoute("descent");
+    };
+    autoConfirm();
+};
+
 const dungeonEvent = () => {
     if (dungeon.status.exploring && !dungeon.status.event) {
+        ensureRouteChoiceState();
+        if (isRouteChoiceNeeded()) {
+            showRouteChoiceEvent();
+            return;
+        }
+
         dungeon.action++;
         let choices;
         let eventRoll;
@@ -477,6 +581,7 @@ const dungeonEvent = () => {
         	eventTypes.push("stairs");        	
         	eventTypes.push("stairs");
         }
+        eventTypes = applyRouteBias(eventTypes);
         for (let i = 0; i < dungeon.nothingBias; i++) {
             eventTypes.push("nothing");
         }
@@ -597,6 +702,7 @@ const dungeonEvent = () => {
                     dungeon.progress.room = 1;
                     dungeon.action = 0;
                     dungeon.progress.stairsFloor = dungeon.progress.floor;
+                    resetRouteChoice();
                     resetRoomEvents();
                     loadDungeonProgress();
                     addDungeonLog(t('descended-to-floor', { floor: dungeon.progress.floor }));
@@ -1184,7 +1290,7 @@ const clearDungeonLog = () => {
     let preservedLogEntry = null;
     const dungeonLogElement = document.querySelector('#dungeonLog');
     if (dungeonLogElement) {
-        const activeChoiceButton = dungeonLogElement.querySelector('#choice1, #choice2, #choice3');
+        const activeChoiceButton = dungeonLogElement.querySelector('#choice1, #choice2, #choice3, #choice4');
         if (activeChoiceButton) {
             storedChoiceContainer = activeChoiceButton.parentElement;
             if (storedChoiceContainer && storedChoiceContainer.parentElement) {
