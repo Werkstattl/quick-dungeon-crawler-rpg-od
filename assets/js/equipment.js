@@ -2,6 +2,89 @@ const COMPANION_CHARM_SLOT_KEY = 'companionCharm';
 const COMPANION_CHARM_DROP_CHANCE = 0.05;
 const COMPANION_CHARM_STAT_KEYS = ['atk', 'atkSpd', 'critRate', 'critDmg'];
 const EQUIPMENT_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
+const REFINE_MAX_LEVEL = 10;
+const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
+const REFINE_STONE_COMBAT_DROP_CHANCE = 0.16;
+const REFINE_STONE_CHEST_DROP_CHANCE = 0.35;
+
+const ensureRefineInventory = () => {
+    if (!player) {
+        return 0;
+    }
+    if (typeof player.inventory !== 'object' || player.inventory === null) {
+        player.inventory = {
+            consumables: [],
+            equipment: [],
+            refineStones: 0
+        };
+    }
+    if (!Array.isArray(player.inventory.consumables)) {
+        player.inventory.consumables = [];
+    }
+    if (!Array.isArray(player.inventory.equipment)) {
+        player.inventory.equipment = [];
+    }
+    if (!Number.isFinite(Number(player.inventory.refineStones))) {
+        player.inventory.refineStones = 0;
+    }
+    player.inventory.refineStones = Math.max(0, Math.floor(Number(player.inventory.refineStones)));
+    return player.inventory.refineStones;
+};
+
+const getRefineStoneCount = () => ensureRefineInventory();
+
+const addRefineStones = (amount, source = 'dungeon') => {
+    const count = Math.max(1, Math.floor(Number(amount) || 1));
+    ensureRefineInventory();
+    player.inventory.refineStones += count;
+    const stoneName = typeof t === 'function' ? t('refine-stone') : 'Refine Stone';
+    const formattedCount = count > 1 ? `${count}x ` : '';
+    const stoneMarkup = `<span class="Rare"><i class="ra ra-crystal-ball"></i>${formattedCount}${stoneName}</span>`;
+
+    if (source === 'combat' && typeof addCombatLog === 'function') {
+        const enemyLabel = typeof enemy !== 'undefined' && enemy ? getDisplayEnemyName(enemy.id, enemy.name) : '';
+        const msg = typeof t === 'function'
+            ? t('enemy-dropped-refine-stone', { enemy: enemyLabel, item: stoneMarkup })
+            : `${enemyLabel} dropped ${stoneMarkup}.`;
+        addCombatLog(msg);
+    } else if (typeof addDungeonLog === 'function') {
+        const msg = typeof t === 'function'
+            ? t('you-found-refine-stone', { item: stoneMarkup })
+            : `You found ${stoneMarkup}.`;
+        addDungeonLog(msg);
+    }
+
+    if (typeof updateInventoryItemCount === 'function') {
+        updateInventoryItemCount();
+    }
+    if (typeof saveData === 'function') {
+        saveData();
+    }
+    return count;
+};
+
+const rollRefineStoneDrop = (source = 'combat') => {
+    const chance = source === 'chest' ? REFINE_STONE_CHEST_DROP_CHANCE : REFINE_STONE_COMBAT_DROP_CHANCE;
+    if (Math.random() >= chance) {
+        return 0;
+    }
+    return addRefineStones(1, source);
+};
+
+const getEquipmentRefineLevel = (equipment) => {
+    const level = Number(equipment && equipment.refineLevel);
+    if (!Number.isFinite(level)) {
+        return 0;
+    }
+    return Math.max(0, Math.min(REFINE_MAX_LEVEL, Math.floor(level)));
+};
+
+const getEquipmentRefineStatMultiplier = (equipment) => 1 + (getEquipmentRefineLevel(equipment) * REFINE_STAT_BONUS_PER_LEVEL);
+
+const equipmentRefinePrefix = (equipment) => {
+    const level = getEquipmentRefineLevel(equipment);
+    return level > 0 ? `+${level} ` : '';
+};
 
 const defaultCompanionCharmStats = () => ({
     atk: 0,
@@ -472,6 +555,20 @@ const equipmentLabel = (rarity, category) => {
     return parts.filter(Boolean).join(' ');
 };
 
+const equipmentDisplayLabel = (equipment) => {
+    if (!equipment) {
+        return '';
+    }
+    return `${equipmentRefinePrefix(equipment)}${equipmentLabel(equipment.rarity, equipment.category)}`;
+};
+
+const equipmentDisplayName = (equipment) => {
+    if (!equipment) {
+        return '';
+    }
+    return `${equipmentRefinePrefix(equipment)}${equipmentName(equipment.category)}`;
+};
+
 const equipmentIcon = (equipment) => {
     if (equipment == "Sword") {
         return '<i class="ra ra-relic-blade"></i>';
@@ -604,7 +701,7 @@ const showItemInfo = (item, icon, action, i) => {
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
                     ${lockButtonMarkup}
-                    <button id="sell-equip"${sellButtonDisabled}${sellButtonTitle} aria-disabled="${isLocked ? 'true' : 'false'}"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(item.value)}</button>
+                    <button id="sell-equip"${sellButtonDisabled}${sellButtonTitle} aria-disabled="${isLocked ? 'true' : 'false'}"><i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(getEquipmentEffectiveValue(item))}</button>
                     <button id="close-item-info">${closeLabel}</button>
                 </div>
             </div>`;
@@ -764,7 +861,7 @@ const showItemInfo = (item, icon, action, i) => {
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
-            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</span>` })}</p>
+            <p>${t('sell-item', { item: `<span class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</span>` })}</p>
             <div class="button-container">
                 <button id="sell-confirm" data-i18n="sell">${t('sell')}</button>
                 <button id="sell-cancel" data-i18n="cancel">${t('cancel')}</button>
@@ -775,29 +872,30 @@ const showItemInfo = (item, icon, action, i) => {
         let cancel = document.querySelector("#sell-cancel");
         confirm.onclick = function () {
             sfxSell.play();
+            const payout = getEquipmentEffectiveValue(item);
 
             if (action === "equip") {
-                player.gold += item.value;
+                player.gold += payout;
                 if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(item.value);
+                    recordRunGoldEarned(payout);
                 }
                 player.inventory.equipment.splice(i, 1);
             } else if (action === "equip-companion") {
-                player.gold += item.value;
+                player.gold += payout;
                 if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(item.value);
+                    recordRunGoldEarned(payout);
                 }
                 player.inventory.equipment.splice(i, 1);
             } else if (action === "unequip") {
-                player.gold += item.value;
+                player.gold += payout;
                 if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(item.value);
+                    recordRunGoldEarned(payout);
                 }
                 player.equipped.splice(i, 1);
             } else if (action === "unequip-companion") {
-                player.gold += item.value;
+                player.gold += payout;
                 if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(item.value);
+                    recordRunGoldEarned(payout);
                 }
                 player.companionCharm = null;
             }
@@ -900,7 +998,7 @@ const showInventory = () => {
         itemDiv.className = isLocked ? "items locked-item" : "items";
         const itemLabel = document.createElement('p');
         itemLabel.className = item.rarity;
-        itemLabel.innerHTML = `${icon}${equipmentLabel(item.rarity, item.category)}`;
+        itemLabel.innerHTML = `${icon}${equipmentDisplayLabel(item)}`;
         itemDiv.appendChild(itemLabel);
         if (isLocked) {
             const lockLabel = translateEquipText('locked', 'Locked');
@@ -1013,10 +1111,9 @@ const applyEquipmentStats = () => {
         const item = player.equipped[i];
 
         // Iterate through the stats array and update the player stats
-        item.stats.forEach(stat => {
-            for (const key in stat) {
-                player.equippedStats[key] += stat[key];
-            }
+        const totals = getEquipmentStatTotals(item);
+        Object.keys(totals).forEach(key => {
+            player.equippedStats[key] += totals[key];
         });
     }
     calculateStats();
@@ -1084,10 +1181,15 @@ const getEquipmentStatTotals = (item) => {
         if (!statKey) {
             continue;
         }
-        const value = Number(entry[statKey]) || 0;
+        const value = (Number(entry[statKey]) || 0) * getEquipmentRefineStatMultiplier(item);
         totals[statKey] = (totals[statKey] || 0) + value;
     }
     return totals;
+};
+
+const getEquipmentEffectiveValue = (item) => {
+    const value = Number(item && item.value) || 0;
+    return Math.max(0, Math.round(value * getEquipmentRefineStatMultiplier(item)));
 };
 
 const legacyEquipmentStatLabel = (stat) => {
@@ -1177,7 +1279,7 @@ const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labe
     return `
         <div class="equipment-card">
             ${headerMarkup}
-            <h3 class="${item.rarity}">${icon}${equipmentLabel(item.rarity, item.category)}</h3>
+            <h3 class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</h3>
             <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
             <ul class="equipment-stat-list">
                 ${statsList}
@@ -1253,16 +1355,10 @@ const getEquipPriorityLabel = (stat) => {
 };
 
 const getItemStatValue = (item, stat) => {
-    if (!item || !Array.isArray(item.stats)) {
+    if (!item || !stat) {
         return 0;
     }
-    let total = 0;
-    for (const entry of item.stats) {
-        if (entry && typeof entry === 'object' && entry[stat] !== undefined) {
-            total += entry[stat];
-        }
-    }
-    return total;
+    return getEquipmentStatTotals(item)[stat] || 0;
 };
 
 const compareItemsByPriority = (itemA, itemB, priorities) => {
@@ -1273,8 +1369,8 @@ const compareItemsByPriority = (itemA, itemB, priorities) => {
             return valueB - valueA;
         }
     }
-    const aValue = itemA.value || 0;
-    const bValue = itemB.value || 0;
+    const aValue = getEquipmentEffectiveValue(itemA);
+    const bValue = getEquipmentEffectiveValue(itemB);
     if (aValue !== bValue) {
         return bValue - aValue;
     }
@@ -1290,7 +1386,7 @@ const sortEquipBestCandidates = (items) => {
         items.sort((a, b) => compareItemsByPriority(a, b, priorities));
         return items;
     }
-    items.sort((a, b) => (b.value || 0) - (a.value || 0));
+    items.sort((a, b) => getEquipmentEffectiveValue(b) - getEquipmentEffectiveValue(a));
     return items;
 };
 
@@ -1549,9 +1645,10 @@ const sellAll = (rarity) => {
                     sfxSell.play();
                     soldAny = true;
                 }
-                player.gold += equipment.value;
+                const payout = getEquipmentEffectiveValue(equipment);
+                player.gold += payout;
                 if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(equipment.value);
+                    recordRunGoldEarned(payout);
                 }
                 player.inventory.equipment.splice(i, 1);
                 i--;
@@ -1578,9 +1675,10 @@ const sellAll = (rarity) => {
             for (let i = 0; i < player.inventory.equipment.length; i++) {
                 const equipment = JSON.parse(player.inventory.equipment[i]);
                 if (equipment.rarity === rarity && !equipment.locked) {
-                    player.gold += equipment.value;
+                    const payout = getEquipmentEffectiveValue(equipment);
+                    player.gold += payout;
                     if (typeof recordRunGoldEarned === 'function') {
-                        recordRunGoldEarned(equipment.value);
+                        recordRunGoldEarned(payout);
                     }
                     player.inventory.equipment.splice(i, 1);
                     i--;
@@ -1683,7 +1781,7 @@ const autoSellEquipmentDrop = (equipment, placement, placementIndex, serializedI
         return { sold: false, payout: 0 };
     }
 
-    const payout = Number.isFinite(equipment.value) ? equipment.value : 0;
+    const payout = getEquipmentEffectiveValue(equipment);
     player.gold += payout;
     if (typeof recordRunGoldEarned === 'function') {
         recordRunGoldEarned(payout);
@@ -1716,10 +1814,10 @@ const createEquipmentPrint = (condition, options = {}) => {
     if (typeof recordRunLootDrop === 'function') {
         recordRunLootDrop(item.rarity);
     }
-    const itemLabel = `<span class="${item.rarity}">${equipmentLabel(item.rarity, item.category)}</span>`;
+    const itemLabel = `<span class="${item.rarity}">${equipmentDisplayLabel(item)}</span>`;
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
-                <h4 class="${item.rarity}"><b>${item.icon}${equipmentLabel(item.rarity, item.category)}</b></h4>
+                <h4 class="${item.rarity}"><b>${item.icon}${equipmentDisplayLabel(item)}</b></h4>
                 <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {

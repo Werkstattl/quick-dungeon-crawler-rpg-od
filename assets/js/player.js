@@ -20,6 +20,23 @@ if (player) {
     if (typeof player.preferences !== 'object' || player.preferences === null) {
         player.preferences = {};
     }
+    if (typeof player.inventory !== 'object' || player.inventory === null) {
+        player.inventory = {
+            consumables: [],
+            equipment: [],
+            refineStones: 0
+        };
+    }
+    if (!Array.isArray(player.inventory.consumables)) {
+        player.inventory.consumables = [];
+    }
+    if (!Array.isArray(player.inventory.equipment)) {
+        player.inventory.equipment = [];
+    }
+    if (!Number.isFinite(Number(player.inventory.refineStones))) {
+        player.inventory.refineStones = 0;
+    }
+    player.inventory.refineStones = Math.max(0, Math.floor(Number(player.inventory.refineStones)));
     if (typeof player.preferences.equipBestUseCustom !== 'boolean') {
         player.preferences.equipBestUseCustom = false;
     }

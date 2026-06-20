@@ -907,6 +907,9 @@ const chestEvent = () => {
             goldDrop();
         } else {
             createEquipmentPrint("dungeon");
+            if (typeof rollRefineStoneDrop === 'function') {
+                rollRefineStoneDrop('chest');
+            }
         }
         dungeon.status.event = false;
     } else if (eventRoll == 3) {

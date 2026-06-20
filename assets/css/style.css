@@ -1782,7 +1782,7 @@ header button i {
 
 .forge-mode-toggle {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.4rem;
     margin: 0.5rem 0 1rem;
 }
@@ -2002,6 +2002,20 @@ header button i {
 
 .forge-cost i {
     margin: 0 0.3rem;
+}
+
+.forge-material-count,
+.refine-material-cost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.6rem;
+    color: #78d4ff;
+}
+
+.forge-material-count i,
+.refine-material-cost i {
+    margin: 0;
 }
 
 .forge-equipment-list {

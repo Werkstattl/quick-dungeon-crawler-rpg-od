@@ -217,6 +217,7 @@
                                 <div class="forge-mode-toggle" role="tablist" aria-label="Forge mode">
                                         <button id="forge-mode-merge" class="active" type="button" role="tab" aria-selected="true" data-forge-mode="merge" data-i18n="merge-items">Merge</button>
                                         <button id="forge-mode-reroll" type="button" role="tab" aria-selected="false" data-forge-mode="reroll" data-i18n="reroll-stats">Reroll Stats</button>
+                                        <button id="forge-mode-refine" type="button" role="tab" aria-selected="false" data-forge-mode="refine" data-i18n="refine">Refine</button>
                                 </div>
                 <div class="forge-description">
                       <p data-i18n="combine-three-items-of-the-same-tier-and-rarity-to-forge-one-of-the-next-rarity">Combine three items of the same tier and rarity to forge one of the next rarity!</p>
@@ -264,6 +265,27 @@
                     </div>
                     <div class="forge-cost reroll-cost" id="reroll-cost" style="display: none;">
                           <p><span data-i18n="cost">Cost:</span> <i class="fas fa-coins" style="color: #FFD700;"></i><span id="reroll-cost-amount">0</span> <span data-i18n="gold">gold</span></p>
+                    </div>
+                </div>
+                <div class="reroll-panel" id="forge-refine-panel" style="display: none;">
+                    <div class="forge-slot-container reroll-slot-container">
+                          <h4 data-i18n="selected-equipment">Selected Equipment</h4>
+                          <div class="forge-slot reroll-slot" id="refine-slot">
+                            <p data-i18n="select-equipment">Select equipment</p>
+                          </div>
+                    </div>
+                    <div class="reroll-preview" id="refine-preview" style="display: none;">
+                        <div class="reroll-preview-card">
+                            <h4 data-i18n="current-stats">Current Stats</h4>
+                            <div id="refine-current-item"></div>
+                        </div>
+                        <div class="reroll-preview-card">
+                            <h4 data-i18n="refined-stats">Refined Stats</h4>
+                            <div id="refine-preview-item"></div>
+                        </div>
+                    </div>
+                    <div class="forge-cost reroll-cost refine-cost" id="refine-cost" style="display: none;">
+                          <p><span data-i18n="cost">Cost:</span> <i class="fas fa-coins" style="color: #FFD700;"></i><span id="refine-cost-amount">0</span> <span data-i18n="gold">gold</span> <span class="refine-material-cost"><i class="ra ra-crystal-ball"></i><span id="refine-stone-cost-amount">0</span> <span data-i18n="refine-stones">Refine Stones</span></span></p>
                     </div>
                 </div>
                 <div class="forge-result" id="forge-result" style="display: none;">

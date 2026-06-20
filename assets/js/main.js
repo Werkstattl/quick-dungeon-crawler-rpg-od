@@ -151,7 +151,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                     },
                     inventory: {
                         consumables: [],
-                        equipment: []
+                        equipment: [],
+                        refineStones: 0
                     },
                     equipped: [],
                     companionCharm: null,
@@ -183,7 +184,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         (player.equipped && player.equipped.length > 0) || player.companionCharm || player.gold > 0) {
                         player.inventory = {
                             consumables: [],
-                            equipment: []
+                            equipment: [],
+                            refineStones: 0
                         };
                         player.equipped = [];
                         player.companionCharm = null;
@@ -1216,7 +1218,8 @@ const progressReset = (fromDeath = false) => {
     if (fromDeath && player.hardcore) {
         player.inventory = {
             consumables: [],
-            equipment: []
+            equipment: [],
+            refineStones: 0
         };
         player.equipped = [];
         player.equippedStats = {

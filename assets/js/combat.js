@@ -694,6 +694,9 @@ const hpValidation = () => {
                 updateCombatLog();
             }
         }
+        if (typeof rollRefineStoneDrop === 'function') {
+            rollRefineStoneDrop('combat');
+        }
 
         // Recover 20% of players health
         player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);
