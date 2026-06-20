@@ -168,7 +168,8 @@ const resetRouteChoice = () => {
 
 const isRouteChoiceNeeded = () => {
     ensureRouteChoiceState();
-    return dungeon.progress.room === 1
+    return dungeon.progress.floor > 1
+        && dungeon.progress.room === 1
         && (dungeon.routeChoice.floor !== dungeon.progress.floor || !dungeon.routeChoice.selected);
 };
 
