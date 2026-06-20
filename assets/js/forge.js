@@ -407,7 +407,7 @@ const loadForgeEquipment = () => {
             const statName = Object.keys(stat)[0];
             const statValue = stat[statName];
             // Treat luck as a percentage-based stat and round like others
-            if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck"].includes(statName)) {
+            if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck", "fasterRun"].includes(statName)) {
                 return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
             } else {
                 return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
@@ -1042,7 +1042,7 @@ const displayForgeResult = () => {
                 ${forgeResult.stats.map(stat => {
                     const statName = Object.keys(stat)[0];
                     const statValue = stat[statName];
-                    if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck"].includes(statName)) {
+                    if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck", "fasterRun"].includes(statName)) {
                         return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
                     } else {
                         return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
