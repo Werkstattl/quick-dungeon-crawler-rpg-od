@@ -250,7 +250,7 @@ const setEnemyStats = (type, condition) => {
             enemy.stats[stat] += enemy.stats[stat] * (((dungeon.settings.enemyScaling - 1) / 4) * enemy.lvl);
         } else if (["critDmg"].includes(stat)) {
             enemy.stats[stat] = 50;
-            enemy.stats[stat] += enemy.stats[stat] * (((dungeon.settings.enemyScaling - 1) / 6) * enemy.lvl);
+            enemy.stats[stat] += enemy.stats[stat] * (((dungeon.settings.enemyScaling - 1) / 8) * enemy.lvl);
         }
     }
 
