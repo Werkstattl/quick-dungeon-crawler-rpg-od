@@ -579,7 +579,7 @@ const dungeonEvent = () => {
             eventTypes.push("monarch", "monarch", "monarch");
         }
         if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && !dungeon.roomEvents.stairsIgnored) {
-        	eventTypes.push("stairs");        	
+        	eventTypes.push("stairs");
         	eventTypes.push("stairs");
         }
         eventTypes = applyRouteBias(eventTypes);
