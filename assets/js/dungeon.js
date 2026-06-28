@@ -578,7 +578,7 @@ const dungeonEvent = () => {
         if (dungeon.story.monarchUnlocked && !dungeon.story.monarchSeen) {
             eventTypes.push("monarch", "monarch", "monarch");
         }
-        if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && !dungeon.roomEvents.stairsIgnored) {
+        if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && player.lvl > 2 && !dungeon.roomEvents.stairsIgnored) {
         	eventTypes.push("stairs");
         	eventTypes.push("stairs");
         }
