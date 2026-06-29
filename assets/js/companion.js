@@ -503,6 +503,112 @@ const companionTypes = [
 let playerCompanions = [];
 let activeCompanion = null;
 
+const PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY = 'permanentCompanionUnlockProgress';
+const PERMANENT_COMPANION_UNLOCKS = {
+    2: { requiredFinds: 100 },
+    3: { requiredFinds: 250 },
+};
+
+const getDefaultPermanentCompanionUnlockProgress = () => Object.keys(PERMANENT_COMPANION_UNLOCKS).reduce((progress, companionId) => {
+    progress[companionId] = 0;
+    return progress;
+}, {});
+
+function loadPermanentCompanionUnlockProgress() {
+    const progress = getDefaultPermanentCompanionUnlockProgress();
+
+    try {
+        const savedProgress = localStorage.getItem(PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY);
+        if (!savedProgress) {
+            return progress;
+        }
+
+        const parsedProgress = JSON.parse(savedProgress);
+        Object.keys(progress).forEach(companionId => {
+            const savedValue = parsedProgress && typeof parsedProgress[companionId] === 'object'
+                ? parsedProgress[companionId].progress
+                : parsedProgress && parsedProgress[companionId];
+            const numericValue = Number(savedValue);
+            if (Number.isFinite(numericValue) && numericValue > 0) {
+                progress[companionId] = Math.floor(numericValue);
+            }
+        });
+    } catch (err) {
+        return progress;
+    }
+
+    return progress;
+}
+
+function savePermanentCompanionUnlockProgress(progress) {
+    localStorage.setItem(PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY, JSON.stringify(progress));
+}
+
+function isPermanentCompanionUnlocked(companionId, progress = loadPermanentCompanionUnlockProgress()) {
+    const unlock = PERMANENT_COMPANION_UNLOCKS[companionId];
+    return !!unlock && (progress[companionId] || 0) >= unlock.requiredFinds;
+}
+
+function getPermanentStartingCompanionIds() {
+    const progress = loadPermanentCompanionUnlockProgress();
+    return Object.keys(PERMANENT_COMPANION_UNLOCKS)
+        .map(Number)
+        .filter(companionId => isPermanentCompanionUnlocked(companionId, progress));
+}
+
+function getPermanentCompanionFindCredit() {
+    let curseLevel = 1;
+
+    if (typeof player !== 'undefined' && player && Number.isFinite(Number(player.selectedCurseLevel))) {
+        curseLevel = Number(player.selectedCurseLevel);
+    } else if (typeof dungeon !== 'undefined' && dungeon && dungeon.settings && Number.isFinite(Number(dungeon.settings.enemyScaling))) {
+        curseLevel = Math.round((Number(dungeon.settings.enemyScaling) - 1) * 10);
+    }
+
+    return Math.max(1, Math.min(10, Math.round(curseLevel)));
+}
+
+function announcePermanentCompanionUnlock(companionId) {
+    if (typeof addDungeonLog !== 'function') {
+        return;
+    }
+
+    const template = companionTypes.find(c => c.id === companionId);
+    if (!template) {
+        return;
+    }
+
+    const name = typeof t === 'function' ? t(template.nameKey) : template.nameKey;
+    addDungeonLog(`<span class="${template.rarity}">${name}</span> will join every new run.`);
+}
+
+function recordPermanentCompanionFind(companionId) {
+    const unlock = PERMANENT_COMPANION_UNLOCKS[companionId];
+    if (!unlock) {
+        return;
+    }
+
+    const progress = loadPermanentCompanionUnlockProgress();
+    const previousProgress = progress[companionId] || 0;
+    if (previousProgress >= unlock.requiredFinds) {
+        return;
+    }
+
+    progress[companionId] = Math.min(unlock.requiredFinds, previousProgress + getPermanentCompanionFindCredit());
+    savePermanentCompanionUnlockProgress(progress);
+
+    if (progress[companionId] >= unlock.requiredFinds) {
+        announcePermanentCompanionUnlock(companionId);
+    }
+}
+
+function grantStartingCompanions() {
+    [1, ...getPermanentStartingCompanionIds()].forEach(companionId => {
+        giveCompanion(companionId, { announce: false, save: false });
+    });
+    saveCompanions();
+}
+
 // Initialize companions from localStorage or create default ones
 function initCompanions() {
     const savedCompanions = localStorage.getItem('playerCompanions');
@@ -532,19 +638,21 @@ function initCompanions() {
         activeCompanion = playerCompanions.find(comp => comp.isActive) || null;
         applyActiveCompanionBonuses(activeCompanion);
     } else {
-        // Give player a starter companion
-        giveCompanion(1);
+        grantStartingCompanions();
     }
 
     updateCompanionUI();
 }
 
 // Give a new companion to the player
-function giveCompanion(companionId) {
+function giveCompanion(companionId, options = {}) {
     // Check if player already has this companion
     if (playerCompanions.some(c => c.id === companionId)) {
         return null;
     }
+
+    const announce = options.announce !== false;
+    const shouldSave = options.save !== false;
 
     const template = companionTypes.find(c => c.id === companionId);
     if (template) {
@@ -557,11 +665,15 @@ function giveCompanion(companionId) {
             getCompanionOptionsFromTemplate(template)
         );
         playerCompanions.push(newCompanion);
-        saveCompanions();
-        addDungeonLog(t('companion-found', {
-            rarity: newCompanion.rarity,
-            name: newCompanion.name,
-        }));
+        if (shouldSave) {
+            saveCompanions();
+        }
+        if (announce) {
+            addDungeonLog(t('companion-found', {
+                rarity: newCompanion.rarity,
+                name: newCompanion.name,
+            }));
+        }
         return newCompanion;
     }
     return null;
@@ -754,7 +866,10 @@ function findCompanionAfterCombat(enemyLevel) {
         
         if (availableCompanions.length > 0) {
             const selectedType = availableCompanions[Math.floor(Math.random() * availableCompanions.length)];
-            giveCompanion(selectedType.id);
+            const companion = giveCompanion(selectedType.id);
+            if (companion) {
+                recordPermanentCompanionFind(selectedType.id);
+            }
         }
     }
 }

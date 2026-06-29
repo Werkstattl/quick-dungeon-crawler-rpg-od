@@ -1334,7 +1334,11 @@ const progressReset = (fromDeath = false) => {
     combatBacklog.length = 0;
     playerCompanions = [];
     activeCompanion = null;
-    saveCompanions();
+    if (typeof grantStartingCompanions === 'function') {
+        grantStartingCompanions();
+    } else {
+        saveCompanions();
+    }
     saveData();
 }
 
