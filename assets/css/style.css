@@ -1311,6 +1311,28 @@ header button i {
     box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
 }
 
+.companion-unlock-progress {
+    height: 8px;
+    margin-top: 8px;
+    overflow: hidden;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #111;
+}
+
+.companion-unlock-progress-fill {
+    height: 100%;
+    background: #b08d57;
+}
+
+.companion-unlock-status {
+    margin-top: 0.5rem;
+}
+
+.companion-unlock-status p {
+    margin-bottom: 0;
+}
+
 #summon-companion {
     white-space: normal;
     overflow-wrap: anywhere;

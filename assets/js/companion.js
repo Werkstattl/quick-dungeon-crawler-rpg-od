@@ -602,6 +602,30 @@ function recordPermanentCompanionFind(companionId) {
     }
 }
 
+function getPermanentCompanionUnlockProgressHtml(companionId) {
+    const unlock = PERMANENT_COMPANION_UNLOCKS[companionId];
+    if (!unlock) {
+        return '';
+    }
+
+    const progress = loadPermanentCompanionUnlockProgress();
+    if (isPermanentCompanionUnlocked(companionId, progress)) {
+        return '';
+    }
+
+    const currentProgress = Math.min(unlock.requiredFinds, progress[companionId] || 0);
+    const progressPercent = Math.max(0, Math.min(100, (currentProgress / unlock.requiredFinds) * 100));
+
+    return `
+        <div class="companion-unlock-status">
+            <p><span data-i18n="unlock-item">Unlock</span>: ${currentProgress}/${unlock.requiredFinds}</p>
+            <div class="companion-unlock-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${unlock.requiredFinds}" aria-valuenow="${currentProgress}">
+                <div class="companion-unlock-progress-fill" style="width: ${progressPercent.toFixed(2)}%"></div>
+            </div>
+        </div>
+    `;
+}
+
 function grantStartingCompanions() {
     [1, ...getPermanentStartingCompanionIds()].forEach(companionId => {
         giveCompanion(companionId, { announce: false, save: false });
@@ -758,6 +782,7 @@ function openCompanionModal() {
         const bonusSummary = buildCompanionBonusList(companion);
         const passiveKey = companion.passiveDescriptionKey;
         const combatStats = getCompanionCombatStats(companion);
+        const unlockProgress = getPermanentCompanionUnlockProgressHtml(companion.id);
         option.innerHTML = `
             <h4>${companion.name}</h4>
             <p><span data-i18n="level">Level</span>: ${companion.level}</p>
@@ -765,6 +790,7 @@ function openCompanionModal() {
             <p><span data-i18n="aps">APS:</span> ${combatStats.atkSpd.toFixed(2)}</p>
             ${bonusSummary.html}
             ${passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : ''}
+            ${unlockProgress}
         `;
         if (companion.isActive) {
             option.classList.add('active-companion');
