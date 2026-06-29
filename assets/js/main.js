@@ -640,6 +640,7 @@ function openMenu(isTitle = false) {
         }).join('');
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
+        let luckLevelUpEnabled = Boolean(luckAsLevelUpOption);
         // Only allow changing logFlow while resting with no open choices
         const hasOpenChoices = !!document.querySelector('#choice1, #choice2, #choice3, #choice4');
         const dimTitle = document.querySelector('#title-screen');
@@ -675,6 +676,7 @@ function openMenu(isTitle = false) {
                 <select id="language-select">
                     ${languageOptionsMarkup}
                 </select>
+                <br><label id="luck-levelup-label"><input type="checkbox" id="luck-levelup-toggle" ${luckLevelUpEnabled ? 'checked' : ''}> <span data-i18n="luck-as-level-up-option">Luck as level up option</span></label>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations();
@@ -685,6 +687,7 @@ function openMenu(isTitle = false) {
         let languageSelect = document.querySelector('#language-select');
         let fontFamilySelect = document.querySelector('#font-family-select');
         let logFlowSelect = document.querySelector('#logflow-select');
+        let luckLevelUpToggle = document.querySelector('#luck-levelup-toggle');
         let selectedLang = localStorage.getItem('lang') || 'en';
         languageSelect.value = selectedLang;
         languageSelect.onchange = function () {
@@ -746,6 +749,8 @@ function openMenu(isTitle = false) {
             if (fontFamilySelect) {
                 fontSize.family = fontFamilySelect.value;
             }
+            luckAsLevelUpOption = luckLevelUpToggle.checked;
+            localStorage.setItem("luckAsLevelUpOption", luckAsLevelUpOption);
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();

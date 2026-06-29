@@ -154,6 +154,7 @@
   "auto-mode-description": "Düşmanlarla otomatik savaşır, ganimeti alır ve kapıları açar.",
   "auto-mode-show-button": "Otomatik Düğmesini Göster",
   "auto-mode-level-up": "Seviye atlamada dur",
+  "luck-as-level-up-option": "Seviye atlama seçeneği olarak şans",
   "active": "Aktif",
   "blessings": "Kutsamalar",
   "heal": "İyileştir",

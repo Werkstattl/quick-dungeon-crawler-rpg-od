@@ -1,5 +1,6 @@
 let savedPlayer = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup);
 let player = savedPlayer ? savedPlayer : null;
+let luckAsLevelUpOption = localStorage.getItem("luckAsLevelUpOption") === "true";
 
 // Ensure newly added stats exist on old saves
 if (player) {
@@ -507,7 +508,10 @@ const lvlupPopup = () => {
 
 const generateLvlStats = (rerolls, percentages) => {
     let selectedStats = [];
-    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
+    let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
+    if (luckAsLevelUpOption) {
+        stats.push("luck");
+    }
     while (selectedStats.length < 3) {
         let randomIndex = Math.floor(Math.random() * stats.length);
         if (!selectedStats.includes(stats[randomIndex])) {

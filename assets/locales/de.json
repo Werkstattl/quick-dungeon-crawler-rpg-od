@@ -154,6 +154,7 @@
   "auto-mode-description": "Automatisch Feinde angreifen, Beute einsammeln und Türen öffnen.",
   "auto-mode-show-button": "Auto-Button zeigen",
   "auto-mode-level-up": "Beim Level-Up stoppen",
+  "luck-as-level-up-option": "Glück als Level-Up-Option",
   "active": "Aktiv",
   "blessings": "Segnungen",
   "heal": "Heilen",
