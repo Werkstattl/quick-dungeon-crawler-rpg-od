@@ -507,6 +507,7 @@ const PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY = 'permanentCompanionUnlockProgres
 const PERMANENT_COMPANION_UNLOCKS = {
     2: { requiredFinds: 100 },
     3: { requiredFinds: 250 },
+    4: { requiredFinds: 500 },
 };
 
 const getDefaultPermanentCompanionUnlockProgress = () => Object.keys(PERMANENT_COMPANION_UNLOCKS).reduce((progress, companionId) => {
