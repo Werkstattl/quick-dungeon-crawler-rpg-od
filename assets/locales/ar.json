@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>تم اكتشاف باب غرفة الزعيم.</span>",
   "door-found": "وجدت بابا.",
   "companion-found": "وجدت <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> سينضم إلى كل جولة جديدة.",
   "treasure-chamber-entered": "دخلت غرفة كنز تحتوي على <i class='fa fa-toolbox'></i>صندوق.",
   "moved-to-next-room": "انتقلت إلى الغرفة التالية.",
   "moved-to-next-floor": "انتقلت إلى الطابق التالي.",

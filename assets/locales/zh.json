@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>发现了首领房的门。</span>",
   "door-found": "你找到一扇门。",
   "companion-found": "你发现了一只<span class='{rarity}'>{name}</span>！",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span>将在每次新冒险中加入。",
   "treasure-chamber-entered": "你进入了一个有<i class='fa fa-toolbox'></i>宝箱的宝物室。",
   "moved-to-next-room": "你移动到了下一间房。",
   "moved-to-next-floor": "你前往了下一层。",

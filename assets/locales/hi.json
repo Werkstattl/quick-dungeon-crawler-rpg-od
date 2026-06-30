@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>बॉस कक्ष का दरवाजा मिला।</span>",
   "door-found": "आपको एक दरवाजा मिला।",
   "companion-found": "आपको <span class='{rarity}'>{name}</span> मिला!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> हर नए रन में शामिल होगा।",
   "treasure-chamber-entered": "आप <i class='fa fa-toolbox'></i>संदूक वाली खजाना कक्ष में प्रवेश कर गए।",
   "moved-to-next-room": "आप अगले कमरे में चले गए।",
   "moved-to-next-floor": "आप अगली मंजिल पर चले गए।",

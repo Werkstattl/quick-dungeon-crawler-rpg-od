@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Знайдено двері до кімнати боса.</span>",
   "door-found": "Ви знайшли двері.",
   "companion-found": "Ви знайшли <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> приєднуватиметься до кожного нового забігу.",
   "treasure-chamber-entered": "Ви увійшли до скарбної з <i class='fa fa-toolbox'></i>Скринькою.",
   "moved-to-next-room": "Ви перейшли до наступної кімнати.",
   "moved-to-next-floor": "Ви перейшли на наступний поверх.",

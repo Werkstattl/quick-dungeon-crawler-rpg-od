@@ -579,7 +579,10 @@ function announcePermanentCompanionUnlock(companionId) {
     }
 
     const name = typeof t === 'function' ? t(template.nameKey) : template.nameKey;
-    addDungeonLog(`<span class="${template.rarity}">${name}</span> will join every new run.`);
+    const message = typeof t === 'function'
+        ? t('companion-permanent-unlocked', { rarity: template.rarity, name })
+        : `<span class="${template.rarity}">${name}</span> will join every new run.`;
+    addDungeonLog(message);
 }
 
 function recordPermanentCompanionFind(companionId) {

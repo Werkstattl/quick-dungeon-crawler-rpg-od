@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Odkryto drzwi do pokoju bossa.</span>",
   "door-found": "Znalazłeś drzwi.",
   "companion-found": "Znalazłeś <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> dołączy do każdego nowego podejścia.",
   "treasure-chamber-entered": "Wszedłeś do komnaty skarbów ze <i class='fa fa-toolbox'></i>Skrzynią.",
   "moved-to-next-room": "Przeszedłeś do następnego pokoju.",
   "moved-to-next-floor": "Przeszedłeś na następne piętro.",

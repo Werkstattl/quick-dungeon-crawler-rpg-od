@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Pintu ruangan boss ditemukan.</span>",
   "door-found": "Kamu menemukan pintu.",
   "companion-found": "Kamu menemukan <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> akan bergabung di setiap run baru.",
   "treasure-chamber-entered": "Kamu memasuki ruang harta dengan <i class='fa fa-toolbox'></i>Peti.",
   "moved-to-next-room": "Kamu pindah ke ruangan berikutnya.",
   "moved-to-next-floor": "Kamu pindah ke lantai berikutnya.",

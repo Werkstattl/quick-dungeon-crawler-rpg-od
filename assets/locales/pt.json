@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Porta da sala do chefe descoberta.</span>",
   "door-found": "Você encontrou uma porta.",
   "companion-found": "Você encontrou um(a) <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> se juntará a cada nova run.",
   "treasure-chamber-entered": "Você entrou em uma câmara do tesouro com um <i class='fa fa-toolbox'></i>Baú.",
   "moved-to-next-room": "Você seguiu para a próxima sala.",
   "moved-to-next-floor": "Você subiu para o próximo andar.",

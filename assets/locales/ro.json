@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Ușa camerei boss-ului a fost descoperită.</span>",
   "door-found": "Ai găsit o uşă.",
   "companion-found": "Ai găsit un <span class='{rarity}'>{name}</span>!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> se va alătura fiecărei curse noi.",
   "treasure-chamber-entered": "Ai intrat într-o cameră a comorii cu un <i class='fa fa-toolbox'></i>cufăr.",
   "moved-to-next-room": "Te-ai mutat în camera alăturată.",
   "moved-to-next-floor": "Te-ai mutat la etajul următor.",

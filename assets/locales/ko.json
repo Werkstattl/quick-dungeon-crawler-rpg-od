@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>보스 방 문을 발견했습니다.</span>",
   "door-found": "문을 발견했습니다.",
   "companion-found": "<span class='{rarity}'>{name}</span>을(를) 발견했습니다!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span>이(가) 새로운 모험마다 합류합니다.",
   "treasure-chamber-entered": "<i class='fa fa-toolbox'></i>상자가 있는 보물 방에 들어갔습니다.",
   "moved-to-next-room": "다음 방으로 이동했습니다.",
   "moved-to-next-floor": "다음 층으로 이동했습니다.",

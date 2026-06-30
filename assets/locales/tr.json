@@ -333,6 +333,7 @@
   "boss-room-door-discovered": "<span class='Heirloom'>Boss odası kapısı keşfedildi.</span>",
   "door-found": "Bir kapı buldun.",
   "companion-found": "Bir <span class='{rarity}'>{name}</span> buldun!",
+  "companion-permanent-unlocked": "<span class='{rarity}'>{name}</span> her yeni koşuya katılacak.",
   "treasure-chamber-entered": "<i class='fa fa-toolbox'></i>Sandık bulunan bir hazine odasına girdin.",
   "moved-to-next-room": "Sonraki odaya geçtin.",
   "moved-to-next-floor": "Sonraki kata geçtin.",
