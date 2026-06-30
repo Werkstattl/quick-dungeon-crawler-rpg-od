@@ -1603,6 +1603,9 @@ if (typeof window !== "undefined") {
 
 // Export and Import Save Data
 const exportData = () => {
+    if (typeof loadPermanentCompanionUnlockProgress === 'function') {
+        loadPermanentCompanionUnlockProgress();
+    }
     const exportedData = btoa(JSON.stringify(player));
     return exportedData;
 }
@@ -1611,6 +1614,9 @@ const importData = (importedData) => {
     try {
         let playerImport = JSON.parse(atob(importedData));
         if (playerImport.inventory !== undefined) {
+            if (typeof normalizePermanentCompanionUnlockProgress === 'function') {
+                playerImport.permanentCompanionUnlockProgress = normalizePermanentCompanionUnlockProgress(playerImport.permanentCompanionUnlockProgress);
+            }
             sfxOpen.play();
             defaultModalElement.style.display = "none";
             confirmationModalElement.style.display = "flex";

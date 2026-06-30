@@ -515,34 +515,33 @@ const getDefaultPermanentCompanionUnlockProgress = () => Object.keys(PERMANENT_C
     return progress;
 }, {});
 
-function loadPermanentCompanionUnlockProgress() {
+function normalizePermanentCompanionUnlockProgress(savedProgress) {
     const progress = getDefaultPermanentCompanionUnlockProgress();
 
-    try {
-        const savedProgress = localStorage.getItem(PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY);
-        if (!savedProgress) {
-            return progress;
+    Object.keys(progress).forEach(companionId => {
+        const savedValue = savedProgress && typeof savedProgress[companionId] === 'object'
+            ? savedProgress[companionId].progress
+            : savedProgress && savedProgress[companionId];
+        const numericValue = Number(savedValue);
+        if (Number.isFinite(numericValue) && numericValue > 0) {
+            progress[companionId] = Math.floor(numericValue);
         }
-
-        const parsedProgress = JSON.parse(savedProgress);
-        Object.keys(progress).forEach(companionId => {
-            const savedValue = parsedProgress && typeof parsedProgress[companionId] === 'object'
-                ? parsedProgress[companionId].progress
-                : parsedProgress && parsedProgress[companionId];
-            const numericValue = Number(savedValue);
-            if (Number.isFinite(numericValue) && numericValue > 0) {
-                progress[companionId] = Math.floor(numericValue);
-            }
-        });
-    } catch (err) {
-        return progress;
-    }
+    });
 
     return progress;
 }
 
-function savePermanentCompanionUnlockProgress(progress) {
-    localStorage.setItem(PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY, JSON.stringify(progress));
+function loadPermanentCompanionUnlockProgress() {
+    const savedProgress = typeof player !== 'undefined' && player
+        ? player[PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY]
+        : null;
+    const progress = normalizePermanentCompanionUnlockProgress(savedProgress);
+
+    if (typeof player !== 'undefined' && player) {
+        player[PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY] = progress;
+    }
+
+    return progress;
 }
 
 function isPermanentCompanionUnlocked(companionId, progress = loadPermanentCompanionUnlockProgress()) {
@@ -596,7 +595,6 @@ function recordPermanentCompanionFind(companionId) {
     }
 
     progress[companionId] = Math.min(unlock.requiredFinds, previousProgress + getPermanentCompanionFindCredit());
-    savePermanentCompanionUnlockProgress(progress);
 
     if (progress[companionId] >= unlock.requiredFinds) {
         announcePermanentCompanionUnlock(companionId);
