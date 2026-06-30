@@ -154,6 +154,7 @@
   "auto-mode-description": "Affronte automatiquement les ennemis, récupère le butin et ouvre les portes.",
   "auto-mode-show-button": "Afficher le bouton auto",
   "auto-mode-level-up": "Arrêter à la montée de niveau",
+  "auto-level-up-stats": "Stats de montée de niveau",
   "luck-as-level-up-option": "Chance comme option de montée de niveau",
   "active": "Actif",
   "blessings": "Bénédictions",

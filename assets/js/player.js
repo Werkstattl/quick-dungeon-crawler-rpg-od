@@ -461,6 +461,54 @@ const continueExploring = () => {
     }
 }
 
+const clickLevelUpStatOption = (stat) => {
+    console.log(`Attempting to click level up stat option for: ${stat}`);
+    if (!lvlupSelect || !stat) {
+        return false;
+    }
+    const buttons = Array.from(lvlupSelect.querySelectorAll('button[data-level-up-control="option"]'));
+    const target = buttons.find(button => button.dataset.levelUpStat === stat);
+    if (!target) {
+        return false;
+    }
+    target.click();
+    return true;
+};
+
+const maybeAutoPickLevelUpStat = (selectedStats, rerolls) => {
+    if (!(typeof autoMode !== 'undefined'
+        && autoMode
+        && typeof autoStopLevelUp !== 'undefined'
+        && !autoStopLevelUp
+        && typeof getAutoLevelUpPriorities === 'function'
+        && Array.isArray(selectedStats))) {
+        return;
+    }
+
+    const priorities = getAutoLevelUpPriorities();
+    if (!priorities.length) {
+        return;
+    }
+
+    const preferredStat = priorities.find(stat => selectedStats.includes(stat));
+    setTimeout(() => {
+        if (!lvlupPanel || lvlupPanel.style.display !== "flex") {
+            return;
+        }
+        if (preferredStat && clickLevelUpStatOption(preferredStat)) {
+            return;
+        }
+        if (rerolls > 0) {
+            const lvlReroll = document.querySelector("#lvlReroll");
+            if (lvlReroll) {
+                lvlReroll.click();
+                return;
+            }
+        }
+        clickLevelUpStatOption(selectedStats[0]);
+    }, 150);
+};
+
 const lvlupPopup = () => {
     if (!lvlupPanel) {
         return;
@@ -551,6 +599,7 @@ const generateLvlStats = (rerolls, percentages) => {
             button.dataset.levelUpControl = "option";
 
             let stat = selectedStats[i];
+            button.dataset.levelUpStat = stat;
             let h3 = document.createElement("h3");
             h3.innerHTML = t(`level-up-option.${stat}.title`);
             button.appendChild(h3);
@@ -642,4 +691,5 @@ const generateLvlStats = (rerolls, percentages) => {
             lvlupSelect.appendChild(button);
         }
     } catch (err) { }
+    maybeAutoPickLevelUpStat(selectedStats, rerolls);
 }

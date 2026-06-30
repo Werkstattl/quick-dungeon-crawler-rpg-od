@@ -795,6 +795,24 @@ function openMenu(isTitle = false) {
         const autoSellLevelOptionsMarkup = autoSellLevelOptions.map((value) => (
             `<option value="${value}" ${autoSellBelowLevelSelected === value ? 'selected' : ''}>${value}</option>`
         )).join('');
+        const autoLevelUpStats = typeof AUTO_LEVEL_UP_STATS !== 'undefined' ? AUTO_LEVEL_UP_STATS : [];
+        const autoLevelUpPriorityLimit = typeof AUTO_LEVEL_UP_PRIORITY_LIMIT !== 'undefined' ? AUTO_LEVEL_UP_PRIORITY_LIMIT : 3;
+        const autoLevelUpPriorityValues = typeof getAutoLevelUpPriorities === 'function' ? getAutoLevelUpPriorities() : [];
+        const autoLevelUpPrioritySelectsMarkup = Array.from({ length: autoLevelUpPriorityLimit }, (_, index) => {
+            const selectedStat = autoLevelUpPriorityValues[index] || '';
+            const statOptions = autoLevelUpStats.map((stat) => {
+                const label = typeof getAutoLevelUpStatLabel === 'function' ? getAutoLevelUpStatLabel(stat) : stat;
+                return `<option value="${stat}" ${selectedStat === stat ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+            return `
+                <label class="auto-levelup-priority-row">
+                    <span>${index + 1}</span>
+                    <select class="auto-levelup-priority-select" data-priority-index="${index}">
+                        <option value="" ${selectedStat === '' ? 'selected' : ''}>${t('none')}</option>
+                        ${statOptions}
+                    </select>
+                </label>`;
+        }).join('');
 
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
@@ -812,6 +830,10 @@ function openMenu(isTitle = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
+                <div id="auto-levelup-priority" class="auto-levelup-priority-block">
+                    <p data-i18n="auto-level-up-stats">Level-up stats</p>
+                    ${autoLevelUpPrioritySelectsMarkup}
+                </div>
                 <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
                 <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">"Auto-sell below rarity"</span> <select id="auto-sell-rarity-select">
                     <option value="none" ${autoSellRarity === 'none' ? 'selected' : ''} data-i18n="auto-sell-off">Off</option>
@@ -847,10 +869,18 @@ function openMenu(isTitle = false) {
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
         let autoSellLevelSelect = document.querySelector('#auto-sell-level-input');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
+        let autoLevelUpPrioritySelects = Array.from(document.querySelectorAll('.auto-levelup-priority-select'));
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
-        autoTab.style.width = "15rem";
+        autoTab.style.width = "18rem";
         let autoClose = document.querySelector('#auto-close');
+        const updateAutoLevelUpPriorityControls = () => {
+            autoLevelUpPrioritySelects.forEach(select => {
+                select.disabled = autoLevelUpToggle.checked;
+            });
+        };
+        autoLevelUpToggle.addEventListener('change', updateAutoLevelUpPriorityControls);
+        updateAutoLevelUpPriorityControls();
         const closeAutoModeModal = () => {
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
@@ -882,6 +912,9 @@ function openMenu(isTitle = false) {
             autoBossDoors = autoBossDoorToggle.checked;
             autoSellRarity = autoSellRaritySelect.value;
             autoSellBelowLevel = parseInt(autoSellLevelSelect.value, 10);
+            if (typeof setAutoLevelUpPriorities === 'function') {
+                setAutoLevelUpPriorities(autoLevelUpPrioritySelects.map(select => select.value));
+            }
             if (Number.isNaN(autoSellBelowLevel) || autoSellBelowLevel < 0) {
                 autoSellBelowLevel = 0;
             }

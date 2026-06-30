@@ -154,6 +154,7 @@
   "auto-mode-description": "自動的に敵に攻撃し、戦利品を獲得し、扉を開きます。",
   "auto-mode-show-button": "オートボタン表示",
   "auto-mode-level-up": "レベルアップ時に停止",
+  "auto-level-up-stats": "レベルアップ能力値",
   "luck-as-level-up-option": "運をレベルアップ候補にする",
   "active": "アクティブ",
   "blessings": "祝福",

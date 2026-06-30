@@ -171,6 +171,27 @@ main {
     text-align: center;
 }
 
+.auto-levelup-priority-block {
+    margin: 0.5rem 0;
+}
+
+.auto-levelup-priority-block p {
+    margin-bottom: 0.3rem;
+}
+
+.auto-levelup-priority-row {
+    display: grid;
+    grid-template-columns: 1.4rem 1fr;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.35rem 0;
+}
+
+.auto-levelup-priority-row span {
+    opacity: 0.8;
+    text-align: center;
+}
+
 .center-text {
     text-align: center;
 }

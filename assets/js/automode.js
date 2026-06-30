@@ -17,6 +17,59 @@ if (localStorage.getItem("autoSpecialAbility") === "false") {
     autoSpecialAbility = false;
 }
 let autoStopLevelUp = localStorage.getItem("autoStopLevelUp") === "true";
+const AUTO_LEVEL_UP_STATS = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
+const AUTO_LEVEL_UP_PRIORITY_LIMIT = 3;
+const AUTO_LEVEL_UP_STAT_LABEL_KEYS = {
+    hp: "stat-display.health",
+    atk: "stat-display.attack",
+    def: "stat-display.defense",
+    atkSpd: "stat-display.attack-speed",
+    vamp: "stat-display.vampirism",
+    critRate: "stat-display.crit-rate",
+    critDmg: "stat-display.crit-dmg",
+    dodge: "stat-display.dodge",
+    luck: "stat-display.luck"
+};
+const normalizeAutoLevelUpPriorities = (priorities) => {
+    let parsed = priorities;
+    if (typeof parsed === "string") {
+        try {
+            parsed = JSON.parse(parsed);
+        } catch (err) {
+            parsed = parsed.split(",");
+        }
+    }
+    if (!Array.isArray(parsed)) {
+        parsed = [];
+    }
+
+    const seen = new Set();
+    const normalized = [];
+    for (const stat of parsed) {
+        if (AUTO_LEVEL_UP_STATS.includes(stat) && !seen.has(stat)) {
+            normalized.push(stat);
+            seen.add(stat);
+        }
+        if (normalized.length >= AUTO_LEVEL_UP_PRIORITY_LIMIT) {
+            break;
+        }
+    }
+    return normalized;
+};
+let autoLevelUpPriorities = normalizeAutoLevelUpPriorities(localStorage.getItem("autoLevelUpPriorities"));
+const getAutoLevelUpPriorities = () => normalizeAutoLevelUpPriorities(autoLevelUpPriorities);
+const setAutoLevelUpPriorities = (priorities) => {
+    autoLevelUpPriorities = normalizeAutoLevelUpPriorities(priorities);
+    localStorage.setItem("autoLevelUpPriorities", JSON.stringify(autoLevelUpPriorities));
+    return autoLevelUpPriorities;
+};
+const getAutoLevelUpStatLabel = (stat) => {
+    const key = AUTO_LEVEL_UP_STAT_LABEL_KEYS[stat];
+    if (key && typeof t === 'function') {
+        return t(key);
+    }
+    return stat;
+};
 const autoAttackSetting = localStorage.getItem("autoAttack");
 let autoAttack = autoAttackSetting === "true";
 let autoBossDoors = true

@@ -155,6 +155,7 @@
   "auto-mode-description": "Automatically engage enemies, claim loot and open doors.",
   "auto-mode-show-button": "Show Auto Button",
   "auto-mode-level-up": "Stop at level-up",
+  "auto-level-up-stats": "Level-up stats",
   "luck-as-level-up-option": "Luck as level up option",
   "active": "Active",
   "blessings": "Blessings",
