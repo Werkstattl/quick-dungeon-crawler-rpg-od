@@ -52,6 +52,26 @@ for (const id in enemyData) {
 }
 
 const ENEMY_CUSTOMIZATION_PRODUCT_ID = 'unlock_enemy_customization';
+const ENEMY_DAMAGE_UNLOCK_KILLS = 1000;
+const ENEMY_DAMAGE_UNLOCK_BONUS = 0.01;
+
+function getEnemyDamageUnlockBonus(enemyId) {
+  const entry = bestiary[String(enemyId)];
+  const kills = entry && Number.isFinite(Number(entry.k)) ? Math.floor(Number(entry.k)) : 0;
+  return kills >= ENEMY_DAMAGE_UNLOCK_KILLS ? ENEMY_DAMAGE_UNLOCK_BONUS : 0;
+}
+
+function getEnemyDamageUnlockPercent(enemyId) {
+  return Math.round(getEnemyDamageUnlockBonus(enemyId) * 100);
+}
+
+function applyEnemyDamageUnlock(enemyId, damage) {
+  const value = Number(damage);
+  if (!Number.isFinite(value) || value <= 0) return damage;
+  const bonus = getEnemyDamageUnlockBonus(enemyId);
+  if (bonus <= 0) return damage;
+  return Math.round(value * (1 + bonus));
+}
 
 function unlockEnemyCustomization() {
   enemyCustomizationUnlocked = true;
@@ -124,8 +144,13 @@ function recordBestiaryKill(id) {
     if (!bestiary[key]) {
         bestiary[key] = { e: 0, k: 0 };
     }
-    bestiary[key].k++;
+    const previousKills = Number.isFinite(Number(bestiary[key].k)) ? Math.floor(Number(bestiary[key].k)) : 0;
+    bestiary[key].k = previousKills + 1;
     saveBestiary();
+    return {
+        kills: bestiary[key].k,
+        damageUnlockUnlocked: previousKills < ENEMY_DAMAGE_UNLOCK_KILLS && bestiary[key].k >= ENEMY_DAMAGE_UNLOCK_KILLS,
+    };
 }
 
 function getBestiaryDisplayName(enemyId) {
@@ -465,7 +490,8 @@ function openBestiaryModal() {
       const stats = bestiary[id];
       const statEl = document.createElement('span');
       statEl.className = 'stats';
-      statEl.textContent = `E:${stats.e} K:${stats.k}`;
+      const damageBonus = getEnemyDamageUnlockPercent(id);
+      statEl.textContent = damageBonus > 0 ? `E:${stats.e} K:${stats.k} DMG:+${damageBonus}%` : `E:${stats.e} K:${stats.k}`;
 
       // Image - lazy + async decode + explicit size (use thumbnails if possible)
       const spriteSrc = getBestiaryEnemySpriteSrc(id, sprite);

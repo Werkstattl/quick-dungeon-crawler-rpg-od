@@ -132,6 +132,7 @@
   "curse": "Curse",
   "curse-level-unlocked": "New curse level unlocked! (Lv.{level})",
   "bestiary": "Bestiary",
+  "enemy-damage-unlock": "{enemy} mastery unlocked: +{value}% damage against this enemy.",
   "rename": "Rename",
   "change-image": "Change image",
   "remove-image": "Remove custom image",

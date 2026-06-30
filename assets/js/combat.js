@@ -649,10 +649,15 @@ const hpValidation = () => {
         enemyDead = true;
         latestCombatLoot = null;
         player.kills++;
+        let bestiaryKillResult = null;
         if (typeof recordBestiaryKill === 'function') {
-            recordBestiaryKill(enemy.id);
+            bestiaryKillResult = recordBestiaryKill(enemy.id);
         }
         dungeon.statistics.kills++;
+        if (bestiaryKillResult && bestiaryKillResult.damageUnlockUnlocked) {
+            const damageBonus = typeof getEnemyDamageUnlockPercent === 'function' ? getEnemyDamageUnlockPercent(enemy.id) : 1;
+            addCombatLog(t('enemy-damage-unlock', { enemy: getDisplayEnemyName(enemy.id, enemy.name), value: damageBonus }));
+        }
         if (enemy && (enemy.condition === 'guardian' || enemy.condition === 'sboss')) {
             if (typeof recordRunBossDefeat === 'function') {
                 recordRunBossDefeat();
@@ -760,6 +765,9 @@ const playerAttack = () => {
     if (player.skills.includes("Devastator")) {
         // Deal 30% more damage but you lose 30% base attack speed
         damage = Math.round(damage + ((30 * damage) / 100));
+    }
+    if (typeof applyEnemyDamageUnlock === 'function') {
+        damage = applyEnemyDamageUnlock(enemy.id, damage);
     }
 
     // Lifesteal formula
@@ -1452,6 +1460,9 @@ const useSpecialAbility = () => {
         if (player.skills.includes("Devastator")) {
             // Deal 30% more damage but you lose 30% base attack speed
             damage = Math.round(damage + ((30 * damage) / 100));
+        }
+        if (typeof applyEnemyDamageUnlock === 'function') {
+            damage = applyEnemyDamageUnlock(enemy.id, damage);
         }
 
         // Lifesteal formula
