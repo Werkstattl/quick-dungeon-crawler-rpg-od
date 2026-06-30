@@ -481,6 +481,10 @@ const selectForgeEquipment = (equipmentStr, index, source = 'inventory', sourceI
 };
 
 const selectRerollEquipment = (equipmentStr, source = 'inventory', sourceIndex = -1, equipmentOverride = null) => {
+    if (selectedRerollItem && selectedRerollItem.equipmentStr !== equipmentStr) {
+        sfxDeny.play();
+        return;
+    }
     const equipment = equipmentOverride || JSON.parse(equipmentStr);
     selectedRerollItem = { equipment, equipmentStr, source, sourceIndex };
     calculateRerollPreview();
@@ -1071,16 +1075,55 @@ const applyRerolledEquipment = (equipment, rerolledEquipment) => {
     equipment.icon = rerolledEquipment.icon;
 };
 
+const showForgedResultPopup = (equipment) => {
+    if (!defaultModalElement || !equipment) {
+        return;
+    }
+
+    const icon = equipment.icon || equipmentIcon(equipment.baseCategory || equipment.category);
+    const totals = getEquipmentStatTotals(equipment);
+
+    defaultModalElement.style.zIndex = "3";
+    defaultModalElement.style.display = "flex";
+    defaultModalElement.innerHTML = `
+        <div class="content forged-result-modal">
+            <div class="content-head">
+                <h3><i class="ra ra-anvil"></i> <span data-i18n="combined-into">${t('combined-into')}</span></h3>
+                <p onclick="closeDefaultModal()" data-i18n-attr="aria-label:close" aria-label="${t('close')}"><i class="fa fa-xmark"></i></p>
+            </div>
+            <div class="forged-result-modal-body">
+                ${renderEquipmentCard({
+                    item: equipment,
+                    icon,
+                    totals,
+                    labelKey: 'forged-equipment',
+                    labelFallback: 'Forged Equipment'
+                })}
+                <button id="forged-result-close" type="button" data-i18n="close">${t('close')}</button>
+            </div>
+        </div>`;
+    applyTranslations(defaultModalElement);
+
+    const closeButton = document.querySelector('#forged-result-close');
+    if (closeButton) {
+        closeButton.onclick = closeDefaultModal;
+    }
+};
+
 const executeReroll = () => {
     if (!forgeUnlocked || !selectedRerollItem || player.gold < rerollCost) {
         sfxDeny.play();
         return;
     }
 
+    const paidRerollCost = rerollCost;
     const rerolledEquipment = cloneEquipment(selectedRerollItem.equipment);
     rerollEquipmentStats(rerolledEquipment);
 
     let updated = false;
+    let updatedEquipment = null;
+    let updatedEquipmentStr = selectedRerollItem.equipmentStr;
+    let updatedSourceIndex = selectedRerollItem.sourceIndex;
     if (selectedRerollItem.source === 'inventory') {
         let itemIndex = Number.isInteger(selectedRerollItem.sourceIndex) ? selectedRerollItem.sourceIndex : -1;
         if (itemIndex < 0 || player.inventory.equipment[itemIndex] !== selectedRerollItem.equipmentStr) {
@@ -1089,7 +1132,10 @@ const executeReroll = () => {
         if (itemIndex !== -1) {
             const equipment = JSON.parse(player.inventory.equipment[itemIndex]);
             applyRerolledEquipment(equipment, rerolledEquipment);
-            player.inventory.equipment[itemIndex] = JSON.stringify(equipment);
+            updatedEquipment = equipment;
+            updatedEquipmentStr = JSON.stringify(equipment);
+            updatedSourceIndex = itemIndex;
+            player.inventory.equipment[itemIndex] = updatedEquipmentStr;
             updated = true;
         }
     } else if (selectedRerollItem.source === 'equipped') {
@@ -1102,6 +1148,9 @@ const executeReroll = () => {
         }
         if (itemIndex !== -1) {
             applyRerolledEquipment(player.equipped[itemIndex], rerolledEquipment);
+            updatedEquipment = player.equipped[itemIndex];
+            updatedEquipmentStr = JSON.stringify(updatedEquipment);
+            updatedSourceIndex = itemIndex;
             updated = true;
         }
     }
@@ -1111,14 +1160,20 @@ const executeReroll = () => {
         return;
     }
 
-    player.gold -= rerollCost;
+    selectedRerollItem = {
+        equipment: updatedEquipment,
+        equipmentStr: updatedEquipmentStr,
+        source: selectedRerollItem.source,
+        sourceIndex: updatedSourceIndex
+    };
+    player.gold -= paidRerollCost;
     saveData();
     playerLoadStats();
     if (typeof updateCompanionUI === 'function') {
         updateCompanionUI();
     }
     sfxEquip.play();
-    resetRerollState();
+    calculateRerollPreview();
     loadForgeEquipment();
     updateForgeDisplay();
 };
@@ -1230,6 +1285,8 @@ const executeForging = () => {
         return;
     }
 
+    const completedForgeResult = cloneEquipment(forgeResult);
+
     // Add forged item to inventory or auto equip if slots are available
     receiveEquipment(forgeResult);
     sfxEquip.play();
@@ -1242,5 +1299,6 @@ const executeForging = () => {
     document.querySelector('#forge-result').style.display = 'none';
     loadForgeEquipment();
     updateForgeDisplay();
+    showForgedResultPopup(completedForgeResult);
 
 };

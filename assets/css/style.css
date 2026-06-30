@@ -2208,8 +2208,15 @@ header button i {
 .forge-buttons {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    margin: 0.5rem -0.5rem 1rem;
+    padding: 0.6rem 0.5rem;
+    background: linear-gradient(360deg, rgba(3, 3, 3, 0.97) 10%, rgba(31, 31, 31, 0.97) 360%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .forge-buttons button {
@@ -2237,6 +2244,59 @@ header button i {
 
 .forge-current-gold i {
     margin: 0 0.3rem;
+}
+
+.forged-result-modal {
+    width: min(24rem, 95vw);
+}
+
+.forged-result-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.forged-result-modal .equipment-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.4rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.forged-result-modal .equipment-card-label {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: #bbb;
+}
+
+.forged-result-modal .equipment-stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+}
+
+.forged-result-modal .equipment-stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.forged-result-modal .stat-name {
+    color: #ccc;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.forged-result-modal .stat-numbers {
+    font-weight: 600;
 }
 
 /* Anvil icon styling */
