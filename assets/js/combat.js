@@ -794,13 +794,17 @@ const playerAttack = () => {
     player.stats.hp += lifesteal;
     if (!dodged) {
         const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
-        addCombatLog(t('player-attack-hit', {
+        let logMsg = t('player-attack-hit', {
             player: player.name,
             enemy: getDisplayEnemyName(enemy.id, enemy.name),
             value: nFormatter(damage),
             type: dmgtype,
             lifesteal: lifestealText
-        }));
+        });
+        if (crit) {
+            logMsg = `<span class="crit-player">${logMsg}</span>`;
+        }
+        addCombatLog(logMsg);
     }
     hpValidation();
     playerLoadStats();
@@ -882,7 +886,11 @@ const companionAttack = () => {
         recordRunDamageDealt(damage);
     }
     if (!dodged) {
-        addCombatLog(t('companion-attack-hit', { companion: activeCompanion.name, enemy: getDisplayEnemyName(enemy.id, enemy.name), value: nFormatter(damage), type: dmgtype }));
+        let logMsg = t('companion-attack-hit', { companion: activeCompanion.name, enemy: getDisplayEnemyName(enemy.id, enemy.name), value: nFormatter(damage), type: dmgtype });
+        if (crit) {
+            logMsg = `<span class="crit-player">${logMsg}</span>`;
+        }
+        addCombatLog(logMsg);
     }
     hpValidation();
     playerLoadStats();
@@ -931,10 +939,13 @@ const enemyAttack = () => {
     let dmgRange = 0.9 + Math.random() * 0.2;
     damage = damage * dmgRange;
     // Check if the attack is a critical hit
+    let crit = false;
     if (Math.floor(Math.random() * 100) < enemy.stats.critRate) {
+        crit = true;
         dmgtype = t('crit-damage');
         damage = Math.round(damage * (1 + (enemy.stats.critDmg / 100)));
     } else {
+        crit = false;
         dmgtype = t('damage');
         damage = Math.round(damage);
     }
@@ -980,13 +991,17 @@ const enemyAttack = () => {
     if (!dodged) {
         const lifestealText = lifesteal > 0 ? t('enemy-vamp-heal', { value: nFormatter(lifesteal) }) : '';
         const thornsText = reflectedDamage > 0 ? t('aegis-thorns-reflect', { value: nFormatter(reflectedDamage) }) : '';
-        addCombatLog(t('enemy-attack-hit', {
+        let logMsg = t('enemy-attack-hit', {
             enemy: getDisplayEnemyName(enemy.id, enemy.name),
             player: player.name,
             value: nFormatter(damage),
             type: dmgtype,
             lifesteal: `${lifestealText}${thornsText}`
-        }));
+        });
+        if (crit) {
+            logMsg = `<span class="crit-enemy">${logMsg}</span>`;
+        }
+        addCombatLog(logMsg);
     }
     hpValidation();
     playerLoadStats();
@@ -1489,12 +1504,16 @@ const useSpecialAbility = () => {
         player.stats.hp += lifesteal;
         if (!dodged) {
             const lifestealText = lifesteal > 0 ? t('player-vamp-heal', { value: nFormatter(lifesteal) }) : '';
-            addCombatLog(t('special-ability-attack-hit', {
+            let logMsg = t('special-ability-attack-hit', {
                 player: player.name,
                 value: nFormatter(damage),
                 type: dmgtype,
                 lifesteal: lifestealText
-            }));
+            });
+            if (crit) {
+                logMsg = `<span class="crit-player">${logMsg}</span>`;
+            }
+            addCombatLog(logMsg);
         }
         hpValidation();
         playerLoadStats();

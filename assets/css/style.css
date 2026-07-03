@@ -506,6 +506,14 @@ button:focus {
     color: #7dd3fc;
 }
 
+.crit-player {
+    color: #ffd700;
+}
+
+.crit-enemy {
+    color: #ff5252;
+}
+
 /* Game */
 .game-container {
     display: inline-block;
