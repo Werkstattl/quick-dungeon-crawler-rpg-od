@@ -256,20 +256,6 @@ color: black;
     padding: 0.3rem;
 }
 
-.combat-log-crit {
-    font-weight: 700;
-}
-
-.combat-log-crit--outgoing {
-    color: #ffd84d;
-    text-shadow: 0 0 0.35rem rgba(255, 190, 40, 0.45);
-}
-
-.combat-log-crit--incoming {
-    color: #ff5a4f;
-    text-shadow: 0 0 0.35rem rgba(255, 60, 40, 0.5);
-}
-
 #dungeonLog {
     overflow: auto;
     flex: 1;
