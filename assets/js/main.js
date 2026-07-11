@@ -1525,7 +1525,7 @@ const showEndgameScreen = (summary) => {
 
             if (key === "class") {
                 const normalized = stringValue.toLowerCase();
-                const classTranslationKeys = new Set(["knight", "paladin", "beastmaster", "scout", "rogue"]);
+                const classTranslationKeys = new Set(["knight", "paladin", "beastmaster", "scout", "rogue", "necromancer"]);
                 if (classTranslationKeys.has(normalized) && typeof t === "function") {
                     const translatedValue = t(normalized);
                     if (translatedValue && typeof translatedValue === "string") {
@@ -1717,7 +1717,8 @@ const allocationPopup = () => {
         "Paladin": { hp: 100, atk: 0, def: 20, atkSpd: 0 },
         "Beastmaster": { hp: 0, atk: 0, def: 0, atkSpd: 0 },
         "Scout": { hp: -50, atk: 10, def: -10, atkSpd: 0.02 },
-        "Rogue": { hp: -100, atk: 20, def: -10, atkSpd: 0.04 }
+        "Rogue": { hp: -100, atk: 20, def: -10, atkSpd: 0.04 },
+        "Necromancer": { hp: 50, atk: 15, def: -5, atkSpd: 0.01 }
     };
 
     let currentClass = player.selectedClass || "Knight";
@@ -1755,6 +1756,7 @@ const allocationPopup = () => {
                     <option value="Beastmaster" data-i18n="beastmaster">Beastmaster</option>
                     <option value="Scout" data-i18n="scout">Scout</option>
                     <option value="Rogue" data-i18n="rogue">Rogue</option>
+                    <option value="Necromancer" data-i18n="necromancer">Necromancer</option>
                 </select>
             </div>
             <div class="row primary-panel pad">
@@ -1962,6 +1964,9 @@ const allocationPopup = () => {
                     selectSkill.value = PASSIVE_OPEN_WOUNDS;
                     selectSkill.onchange();
                 }
+            }
+            if (selectClass.value == "Necromancer") {
+                classDesc.setAttribute('data-i18n', 'necromancer-class-description');
             }
             applyTranslations(defaultModalElement);
             updateStats();

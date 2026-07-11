@@ -65,6 +65,7 @@ const SPECIAL_ABILITY_TRANSLATIONS = {
     Beastmaster: 'special-ability-beastmaster',
     Scout: 'special-ability-scout',
     Rogue: 'special-ability-rogue',
+    Necromancer: 'special-ability-necromancer',
 };
 
 // ========== Status Effects ==========
@@ -1446,6 +1447,9 @@ const useSpecialAbility = () => {
             baseAtk = player.stats.atk * 1.1;
             baseAtk = baseAtk * stackMultiplier;
         }
+        if (player.selectedClass === "Necromancer") {
+            baseAtk = player.stats.atk * 1.3;
+        }
         let damage = baseAtk * (baseAtk / (baseAtk + enemy.stats.def));
         // Randomize the damage by 90% - 110%
         let dmgRange = 0.9 + Math.random() * 0.2;
@@ -1482,6 +1486,9 @@ const useSpecialAbility = () => {
 
         // Lifesteal formula
         let lifesteal = Math.round(damage * (player.stats.vamp / 100));
+        if (player.selectedClass === "Necromancer") {
+            lifesteal += Math.round(player.stats.hpMax * 0.10);
+        }
 
         // Enemy dodge chance
         let dodged = false;
