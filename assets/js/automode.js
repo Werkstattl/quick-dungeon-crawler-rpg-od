@@ -219,6 +219,7 @@ const autoConfirm = () => {
     if (autoMode && autoEngage) {
         // Slight delay to ensure button exists
         setTimeout(() => {
+            if (!autoMode || !autoEngage) return;
             const btn = document.querySelector('#choice1');
             if (btn) btn.click();
         }, 100);
@@ -228,6 +229,7 @@ const autoConfirm = () => {
 const autoDecline = () => {
     if (autoMode && autoEngage) {
         setTimeout(() => {
+            if (!autoMode || !autoEngage) return;
             const btn = document.querySelector('#choice2');
             if (btn) btn.click();
         }, 100);
@@ -237,6 +239,7 @@ const autoDecline = () => {
 const autoClaim = () => {
     if (autoMode && autoEngage) {
         setTimeout(() => {
+            if (!autoMode || !autoEngage) return;
             const btn = document.querySelector('#battleButton');
             if (btn) btn.click();
         }, 100);
@@ -246,10 +249,14 @@ const autoClaim = () => {
 const autoModeBtn = document.querySelector("#auto-mode-btn");
 
 const updateAutoModeBtn = () => {
-    if (autoMode) {
-        autoModeBtn.classList.add("active");
-    } else {
-        autoModeBtn.classList.remove("active");
+    const buttons = [
+        autoModeBtn,
+        document.querySelector("#combat-auto-mode-btn"),
+    ].filter(Boolean);
+
+    for (const button of buttons) {
+        button.classList.toggle("active", autoMode);
+        button.setAttribute("aria-pressed", autoMode ? "true" : "false");
     }
 };
 
@@ -266,13 +273,20 @@ const updateAutoModeBtnVisibility = () => {
     }
 };
 
-autoModeBtn.addEventListener('click', function () {
-    if (autoMode) {
-        sfxUnpause.play();
-    } else {
-        sfxPause.play();
+const setAutoModeEnabled = (enabled) => {
+    const nextAutoMode = !!enabled;
+    if (nextAutoMode === autoMode) {
+        updateAutoModeBtn();
+        return;
     }
-    autoMode = !autoMode;
+
+    if (nextAutoMode) {
+        sfxPause.play();
+    } else {
+        sfxUnpause.play();
+    }
+
+    autoMode = nextAutoMode;
     updateAutoModeBtn();
     localStorage.setItem("autoMode", autoMode);
     if (autoMode && typeof window !== 'undefined' && typeof window.maybeAutoAttack === 'function') {
@@ -281,6 +295,19 @@ autoModeBtn.addEventListener('click', function () {
     if (autoMode && dungeon.status.paused) {
         dungeonStartPause();
     }
+};
+
+const toggleAutoMode = () => {
+    setAutoModeEnabled(!autoMode);
+};
+
+if (typeof window !== 'undefined') {
+    window.setAutoModeEnabled = setAutoModeEnabled;
+    window.toggleAutoMode = toggleAutoMode;
+}
+
+autoModeBtn.addEventListener('click', function () {
+    toggleAutoMode();
 });
 
 updateAutoModeBtnVisibility();

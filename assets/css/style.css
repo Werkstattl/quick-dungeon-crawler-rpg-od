@@ -1002,6 +1002,16 @@ button:focus {
     overflow-y: auto;
 }
 
+.combat-auto-mode-controls {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#combat-auto-mode-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
 .battle-info-panel {
     display: flex;
     flex-direction: column;

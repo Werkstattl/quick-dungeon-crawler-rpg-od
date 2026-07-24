@@ -593,8 +593,12 @@ const maybeAutoAttack = () => {
     if (typeof autoMode !== 'undefined' && autoMode) {
         if (!specialAbilityCooldown && shouldAutoUseSpecialAbility()) {
             autoAttackDelayTimeout = setTimeout(() => {
-                useSpecialAbility();
-                return;
+                autoAttackDelayTimeout = null;
+                if (typeof autoMode !== 'undefined' && autoMode && shouldAutoUseSpecialAbility()) {
+                    useSpecialAbility();
+                } else {
+                    maybeAutoAttack();
+                }
             }, 200);
         }
     }
@@ -1583,12 +1587,31 @@ const showCombatInfo = () => {
     enemy.name = getDisplayEnemyName(enemy.id);
     const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
     const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';
+    const autoModeEnabled = typeof autoMode === 'undefined' ? false : autoMode;
+    const autoModeActiveClass = autoModeEnabled ? ' active' : '';
+    const autoModePressed = autoModeEnabled ? 'true' : 'false';
+    const autoModeControlVisible = autoModeEnabled
+        || (
+            typeof autoModeUnlocked !== 'undefined'
+            && autoModeUnlocked
+            && typeof autoModeBtnVisible !== 'undefined'
+            && autoModeBtnVisible
+        );
+    const combatAutoModeControl = autoModeControlVisible
+        ? `
+        <div class="combat-auto-mode-controls">
+            <button id="combat-auto-mode-btn" class="${autoModeActiveClass.trim()}" type="button" aria-pressed="${autoModePressed}">
+                <i class="fas fa-play"></i><span data-i18n="auto-mode">${t('auto-mode')}</span>
+            </button>
+        </div>`
+        : '';
     const defaultEnemySpriteSrc = `./assets/sprites/${enemy.image.name}.webp`;
     const enemySpriteSrc = (typeof getBestiaryEnemySpriteSrc === 'function')
         ? (getBestiaryEnemySpriteSrc(enemy.id, enemy.image.name) || defaultEnemySpriteSrc)
         : defaultEnemySpriteSrc;
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
+        ${combatAutoModeControl}
         <div class="battle-info-panel center" id="enemyPanel">
             <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>
             <div class="battle-bar empty-bar hp bb-hp">
@@ -1629,6 +1652,14 @@ const showCombatInfo = () => {
     if (attackBtn) {
         attackBtn.addEventListener('click', () => {
             playerAttack();
+        });
+    }
+    const combatAutoModeBtn = document.querySelector('#combat-auto-mode-btn');
+    if (combatAutoModeBtn) {
+        combatAutoModeBtn.addEventListener('click', () => {
+            if (typeof window !== 'undefined' && typeof window.toggleAutoMode === 'function') {
+                window.toggleAutoMode();
+            }
         });
     }
     const autoAttackToggle = document.querySelector('#auto-attack-combat-toggle');
