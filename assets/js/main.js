@@ -553,7 +553,7 @@ function openMenu(isTitle = false) {
                     </div>
                     <p>${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
                     <p>${t('blessings')}: Lvl.${player.blessing}</p>
-                    <p>${t('curse')}: Lvl.${Math.round((dungeon.settings.enemyScaling - 1) * 10)}</p>
+                    <p>${t('curse')}: Lvl.${getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling)}</p>
                     <p>${t('kills')}: ${nFormatter(dungeon.statistics.kills)}</p>
                     <p>${t('runtime')}: ${runTime}</p>
                 </div>`;
@@ -1330,7 +1330,7 @@ const progressReset = (fromDeath = false) => {
         enemyBaseLvl: 1,
         enemyLvlGap: 5,
         enemyBaseStats: 1,
-        enemyScaling: 1 + (storedCurseLevel / 10),
+        enemyScaling: getEnemyScalingFromCurseLevel(storedCurseLevel),
     };
     dungeon.floorBuffs = {
         atk: 0,
@@ -1949,7 +1949,7 @@ const allocationPopup = () => {
         selectClass.onchange();
     
         let selectCurse = document.querySelector("#select-curse");
-        let defaultCurseLevel = clampCurseLevel(Math.round((dungeon.settings.enemyScaling - 1) * 10));
+        let defaultCurseLevel = getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling);
         if (player && typeof player.selectedCurseLevel === "number") {
             defaultCurseLevel = clampCurseLevel(player.selectedCurseLevel);
         }
@@ -2009,7 +2009,6 @@ const allocationPopup = () => {
             selectedCurseLevel = maxUnlockedCurse;
         }
         player.selectedCurseLevel = selectedCurseLevel;
-        dungeon.settings.enemyScaling = 1 + (selectedCurseLevel / 10);
         // Set player skill
         objectValidation();
         player.skills = [selectSkill.value];
@@ -2020,6 +2019,7 @@ const allocationPopup = () => {
         // Proceed to dungeon
         player.allocated = true;
         enterDungeon();
+        dungeon.settings.enemyScaling = getEnemyScalingFromCurseLevel(selectedCurseLevel);
         player.stats.hp = player.stats.hpMax;
         playerLoadStats();
         saveData();
@@ -2117,7 +2117,7 @@ const objectValidation = () => {
         changed = true;
     }
     if (dungeon && dungeon.settings) {
-        const desiredScaling = 1 + (player.selectedCurseLevel / 10);
+        const desiredScaling = getEnemyScalingFromCurseLevel(player.selectedCurseLevel);
         if (!Number.isFinite(dungeon.settings.enemyScaling) || Math.abs(dungeon.settings.enemyScaling - desiredScaling) > 0.0001) {
             dungeon.settings.enemyScaling = desiredScaling;
             changed = true;

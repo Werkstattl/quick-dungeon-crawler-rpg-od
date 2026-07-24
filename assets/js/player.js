@@ -57,7 +57,7 @@ if (player) {
                     ? JSON.parse(savedDungeon)
                     : savedDungeon;
                 if (parsedDungeon.settings && Number.isFinite(parsedDungeon.settings.enemyScaling)) {
-                    player.selectedCurseLevel = Math.round((parsedDungeon.settings.enemyScaling - 1) * 10);
+                    player.selectedCurseLevel = getCurseLevelFromEnemyScaling(parsedDungeon.settings.enemyScaling);
                 }
             } catch (err) {
                 player.selectedCurseLevel = MIN_CURSE_LEVEL;

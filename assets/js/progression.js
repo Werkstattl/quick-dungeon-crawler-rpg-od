@@ -4,7 +4,7 @@ const MAX_CURSE_LEVEL = 15;
 const MAX_EQUIPMENT_LEVEL = 100;
 const MIN_EQUIPMENT_TIER = 1;
 const MAX_EQUIPMENT_TIER = MAX_CURSE_LEVEL;
-const EQUIPMENT_TIER_SCALING_FACTOR = 10;
+const PROGRESSION_SCALING_FACTOR = 10;
 const STANDARD_CURSE_UNLOCK_FLOOR = 10;
 const CURSE_UNLOCK_TRIGGER_FLOOR = 'floor';
 const CURSE_UNLOCK_TRIGGER_MONARCH = 'monarch';
@@ -16,6 +16,18 @@ const clampCurseLevel = (value) => {
     }
     level = Math.round(level);
     return Math.min(MAX_CURSE_LEVEL, Math.max(MIN_CURSE_LEVEL, level));
+};
+
+const getEnemyScalingFromCurseLevel = (curseLevel) => (
+    1 + (clampCurseLevel(curseLevel) / PROGRESSION_SCALING_FACTOR)
+);
+
+const getCurseLevelFromEnemyScaling = (enemyScaling) => {
+    const scaling = Number(enemyScaling);
+    if (!Number.isFinite(scaling)) {
+        return MIN_CURSE_LEVEL;
+    }
+    return clampCurseLevel((scaling - 1) * PROGRESSION_SCALING_FACTOR);
 };
 
 const normalizePlayerCurseProgress = (playerData) => {
@@ -56,16 +68,12 @@ const clampEquipmentTier = (value) => {
     return Math.min(MAX_EQUIPMENT_TIER, Math.max(MIN_EQUIPMENT_TIER, tier));
 };
 
-const getEquipmentTierFromEnemyScaling = (enemyScaling) => {
-    const scaling = Number(enemyScaling);
-    if (!Number.isFinite(scaling)) {
-        return MIN_EQUIPMENT_TIER;
-    }
-    return clampEquipmentTier((scaling - 1) * EQUIPMENT_TIER_SCALING_FACTOR);
-};
+const getEquipmentTierFromEnemyScaling = (enemyScaling) => (
+    clampEquipmentTier(getCurseLevelFromEnemyScaling(enemyScaling))
+);
 
 const getEnemyScalingFromEquipmentTier = (tier) => (
-    1 + (clampEquipmentTier(tier) / EQUIPMENT_TIER_SCALING_FACTOR)
+    1 + (clampEquipmentTier(tier) / PROGRESSION_SCALING_FACTOR)
 );
 
 const getCurseLevelRange = () => Array.from(
