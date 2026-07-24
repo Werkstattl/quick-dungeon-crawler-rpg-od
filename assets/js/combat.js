@@ -1084,6 +1084,9 @@ const bindRunSummaryButton = () => {
 };
 
 const handleSpecialBossVictory = () => {
+    if (typeof maybeUnlockNextCurseLevel === 'function') {
+        maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH);
+    }
     pendingRunSummary = createRunSummary('victory');
     runSummaryReadyInCombat = true;
     addCombatLog(t('combat-victory-monarch-defeated'));

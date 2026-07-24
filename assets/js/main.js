@@ -1118,39 +1118,37 @@ const saveData = () => {
     }
 }
 
-const maybeUnlockNextCurseLevel = () => {
+const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR) => {
     if (!player || !dungeon || !dungeon.progress || !dungeon.settings) {
-        return;
+        return false;
     }
     if (typeof player.maxUnlockedCurseLevel !== "number") {
-        player.maxUnlockedCurseLevel = 1;
+        player.maxUnlockedCurseLevel = MIN_CURSE_LEVEL;
     }
     player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
-    const maxUnlocked = player.maxUnlockedCurseLevel;
-    if (maxUnlocked >= MAX_CURSE_LEVEL) {
-        return;
+    const newMax = getNextCurseUnlockLevel({
+        maxUnlockedCurseLevel: player.maxUnlockedCurseLevel,
+        selectedCurseLevel: player.selectedCurseLevel,
+        floor: dungeon.progress.floor,
+        trigger,
+    });
+    if (newMax === null) {
+        return false;
     }
-    const selectedLevel = clampCurseLevel(player.selectedCurseLevel || 1);
-    if (selectedLevel !== maxUnlocked) {
-        return;
+
+    player.maxUnlockedCurseLevel = newMax;
+    if (typeof ensureRunStatisticsShape === 'function') {
+        ensureRunStatisticsShape();
     }
-    if (dungeon.progress.floor >= 10) {
-        const newMax = clampCurseLevel(maxUnlocked + 1);
-        if (newMax > player.maxUnlockedCurseLevel) {
-            player.maxUnlockedCurseLevel = newMax;
-            if (typeof ensureRunStatisticsShape === 'function') {
-                ensureRunStatisticsShape();
-            }
-            if (dungeon && dungeon.statistics) {
-                dungeon.statistics.latestCurseUnlock = newMax;
-            }
-            if (typeof addDungeonLog === 'function') {
-                const unlockMessage = t('curse-level-unlocked', { level: newMax });
-                addDungeonLog(`<span class="CurseUnlock">${unlockMessage}</span>`);
-            }
-            saveData();
-        }
+    if (dungeon && dungeon.statistics) {
+        dungeon.statistics.latestCurseUnlock = newMax;
     }
+    if (typeof addDungeonLog === 'function') {
+        const unlockMessage = t('curse-level-unlocked', { level: newMax });
+        addDungeonLog(`<span class="CurseUnlock">${unlockMessage}</span>`);
+    }
+    saveData();
+    return true;
 };
 
 if (typeof window !== 'undefined') {
