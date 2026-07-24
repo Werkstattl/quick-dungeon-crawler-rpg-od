@@ -49,34 +49,22 @@ if (player) {
     if (player.companionCharm === undefined) {
         player.companionCharm = null;
     }
-    if (player.maxUnlockedCurseLevel === undefined) {
-        player.maxUnlockedCurseLevel = 1;
-    }
-    player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
     if (player.selectedCurseLevel === undefined) {
         const savedDungeon = safeLoad(STORAGE_KEYS.dungeon, STORAGE_KEYS.dungeonBackup);
         if (savedDungeon) {
             try {
-                const parsedDungeon = JSON.parse(savedDungeon);
-                if (parsedDungeon && parsedDungeon.settings && Number.isFinite(parsedDungeon.settings.enemyScaling)) {
-                    const inferredLevel = clampCurseLevel(Math.round((parsedDungeon.settings.enemyScaling - 1) * 10));
-                    player.selectedCurseLevel = inferredLevel;
+                const parsedDungeon = typeof savedDungeon === 'string'
+                    ? JSON.parse(savedDungeon)
+                    : savedDungeon;
+                if (parsedDungeon.settings && Number.isFinite(parsedDungeon.settings.enemyScaling)) {
+                    player.selectedCurseLevel = Math.round((parsedDungeon.settings.enemyScaling - 1) * 10);
                 }
             } catch (err) {
-                player.selectedCurseLevel = 1;
+                player.selectedCurseLevel = MIN_CURSE_LEVEL;
             }
         }
     }
-    if (player.selectedCurseLevel === undefined) {
-        player.selectedCurseLevel = 1;
-    }
-    player.selectedCurseLevel = clampCurseLevel(player.selectedCurseLevel);
-    if (player.selectedCurseLevel > player.maxUnlockedCurseLevel) {
-        player.maxUnlockedCurseLevel = player.selectedCurseLevel;
-    }
-    if (player.selectedCurseLevel > player.maxUnlockedCurseLevel) {
-        player.selectedCurseLevel = player.maxUnlockedCurseLevel;
-    }
+    normalizePlayerCurseProgress(player);
 }
 
 let inventoryOpen = false;
