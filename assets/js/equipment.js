@@ -261,11 +261,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
             equipment.rarity = minRarity;
         }
     }
-    let enemyScaling = dungeon.settings.enemyScaling;
-    if (enemyScaling > 2) {
-        enemyScaling = 2;
-    }
-    equipment.tier = Math.round((enemyScaling - 1) * 10);
+    equipment.tier = getEquipmentTierFromEnemyScaling(dungeon.settings.enemyScaling);
     rerollEquipmentStats(equipment);
     if (addToInventory) {
         if (isCompanionCharm(equipment) && !player.companionCharm) {
@@ -348,10 +344,8 @@ const getEquipmentRerollStatPool = (equipment) => {
 };
 
 const rerollEquipmentStats = (equipment) => {
-    let enemyScaling = 1 + (equipment.tier / 10);
-    if (enemyScaling > 2) {
-        enemyScaling = 2;
-    }
+    equipment.tier = clampEquipmentTier(equipment.tier);
+    const enemyScaling = getEnemyScalingFromEquipmentTier(equipment.tier);
     if (isCompanionCharm(equipment)) {
         rerollCompanionCharmStats(equipment, enemyScaling);
         return;
