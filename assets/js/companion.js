@@ -565,7 +565,7 @@ function getPermanentCompanionFindCredit() {
         curseLevel = Math.round((Number(dungeon.settings.enemyScaling) - 1) * 10);
     }
 
-    return Math.max(1, Math.min(10, Math.round(curseLevel)));
+    return Math.max(MIN_CURSE_LEVEL, Math.min(MAX_STANDARD_CURSE_LEVEL, Math.round(curseLevel)));
 }
 
 function announcePermanentCompanionUnlock(companionId) {

@@ -980,7 +980,7 @@ const calculateForgeResult = () => {
     // Determine possible level range
     const avgLvl = Math.round((item1.lvl + item2.lvl + item3.lvl) / 3);
     const minLvl = Math.max(1, avgLvl - 1);
-    const maxLvl = Math.min(100, avgLvl + 2);
+    const maxLvl = clampEquipmentLevel(avgLvl + 2);
     forgeLevelRange = { min: minLvl, max: maxLvl };
 
     // Calculate result equipment
@@ -1004,7 +1004,7 @@ const createForgedEquipment = (item1, item2, item3) => {
     // Set level roughly around the average of the input items
     const avgLvl = Math.round((item1.lvl + item2.lvl + item3.lvl) / 3);
     const minLvl = Math.max(1, avgLvl - 1);
-    const maxLvl = Math.min(100, avgLvl + 2);
+    const maxLvl = clampEquipmentLevel(avgLvl + 2);
     forgedEquipment.lvl = randomizeNum(minLvl, maxLvl);
 
     // Increase rarity by one step if possible

@@ -1118,21 +1118,6 @@ const saveData = () => {
     }
 }
 
-const clampCurseLevel = (value) => {
-    let level = Number(value);
-    if (!Number.isFinite(level)) {
-        level = 1;
-    }
-    level = Math.round(level);
-    if (level < 1) {
-        level = 1;
-    }
-    if (level > 10) {
-        level = 10;
-    }
-    return level;
-};
-
 const maybeUnlockNextCurseLevel = () => {
     if (!player || !dungeon || !dungeon.progress || !dungeon.settings) {
         return;
@@ -1142,7 +1127,7 @@ const maybeUnlockNextCurseLevel = () => {
     }
     player.maxUnlockedCurseLevel = clampCurseLevel(player.maxUnlockedCurseLevel);
     const maxUnlocked = player.maxUnlockedCurseLevel;
-    if (maxUnlocked >= 10) {
+    if (maxUnlocked >= MAX_CURSE_LEVEL) {
         return;
     }
     const selectedLevel = clampCurseLevel(player.selectedCurseLevel || 1);
