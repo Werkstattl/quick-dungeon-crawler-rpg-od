@@ -562,7 +562,7 @@ function getPermanentCompanionFindCredit() {
     if (typeof player !== 'undefined' && player && Number.isFinite(Number(player.selectedCurseLevel))) {
         curseLevel = Number(player.selectedCurseLevel);
     } else if (typeof dungeon !== 'undefined' && dungeon && dungeon.settings && Number.isFinite(Number(dungeon.settings.enemyScaling))) {
-        curseLevel = Math.round((Number(dungeon.settings.enemyScaling) - 1) * 10);
+        curseLevel = getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling);
     }
 
     return Math.max(MIN_CURSE_LEVEL, Math.min(MAX_STANDARD_CURSE_LEVEL, Math.round(curseLevel)));

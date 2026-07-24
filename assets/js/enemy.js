@@ -286,7 +286,7 @@ const setEnemyStats = (type, condition) => {
     enemy.stats.critDmg = enemy.stats.critDmg * dungeon.enemyMultipliers.critDmg;
 
     // Calculate dodge chance based on curse level and enemy level
-    let curseLvl = Math.round((dungeon.settings.enemyScaling - 1) * 10);
+    const curseLvl = getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling);
     enemy.stats.dodge = ((curseLvl - 1) * 2) + (enemy.lvl / 10);
     if (enemy.stats.dodge < 0) {
         enemy.stats.dodge = 0;
