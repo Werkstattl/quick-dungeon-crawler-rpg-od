@@ -1806,8 +1806,8 @@ const allocationPopup = () => {
             </div>
             <div class="curse-progression-info">
                 <p class="curse-progress" data-i18n="curse-levels-unlocked" data-i18n-params='{"current":${maxUnlockedCurse},"max":${MAX_CURSE_LEVEL}}'>${t('curse-levels-unlocked', { current: maxUnlockedCurse, max: MAX_CURSE_LEVEL })}</p>
-                <p data-i18n="curse-standard-unlock-hint">Curse Levels 2-10 unlock by reaching Floor 10 on your highest unlocked Curse.</p>
-                <p data-i18n="curse-monarch-unlock-hint">Curse Levels 11-15 unlock by defeating the Dungeon Monarch on your highest unlocked Curse.</p>
+                <p data-i18n="curse-standard-unlock-hint">Curse Levels 2-10 unlock by reaching Floor 10.</p>
+                <p data-i18n="curse-monarch-unlock-hint">Curse Levels 11-15 unlock by defeating the Dungeon Monarch.</p>
             </div>
             <div class="row" id="forge-button-row" style="margin-top: 15px">
                 <button id="open-forge-btn" style="width: 100%; margin-bottom: 10px;"><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></button>

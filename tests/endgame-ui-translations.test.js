@@ -38,10 +38,8 @@ test('English unlock guidance describes the implemented progression rules', () =
     const english = JSON.parse(fs.readFileSync(path.join(localesDirectory, 'en.json'), 'utf8'));
 
     assert.equal(english['curse-levels-unlocked'], 'Curse Levels unlocked: {current}/{max}');
-    assert.match(english['curse-standard-unlock-hint'], /Floor 10/);
-    assert.match(english['curse-standard-unlock-hint'], /highest unlocked Curse/);
-    assert.match(english['curse-monarch-unlock-hint'], /Dungeon Monarch/);
-    assert.match(english['curse-monarch-unlock-hint'], /highest unlocked Curse/);
+    assert.equal(english['curse-standard-unlock-hint'], 'Curse Levels 2-10 unlock by reaching Floor 10.');
+    assert.equal(english['curse-monarch-unlock-hint'], 'Curse Levels 11-15 unlock by defeating the Dungeon Monarch.');
 });
 
 test('allocation UI renders progress, both unlock rules, and translated locked options', () => {
