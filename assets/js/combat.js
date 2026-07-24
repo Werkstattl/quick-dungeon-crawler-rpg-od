@@ -1599,11 +1599,9 @@ const showCombatInfo = () => {
         );
     const combatAutoModeControl = autoModeControlVisible
         ? `
-        <div class="combat-auto-mode-controls">
-            <button id="combat-auto-mode-btn" class="${autoModeActiveClass.trim()}" type="button" aria-pressed="${autoModePressed}">
-                <i class="fas fa-play"></i><span data-i18n="auto-mode">${t('auto-mode')}</span>
-            </button>
-        </div>`
+        <button id="combat-auto-mode-btn" class="${autoModeActiveClass.trim()}" type="button" aria-pressed="${autoModePressed}" aria-label="${t('auto-mode')}" title="${t('auto-mode')}">
+            <i class="fas fa-play" aria-hidden="true"></i><span class="sr-only" data-i18n="auto-mode">${t('auto-mode')}</span>
+        </button>`
         : '';
     const defaultEnemySpriteSrc = `./assets/sprites/${enemy.image.name}.webp`;
     const enemySpriteSrc = (typeof getBestiaryEnemySpriteSrc === 'function')
@@ -1611,7 +1609,6 @@ const showCombatInfo = () => {
         : defaultEnemySpriteSrc;
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
-        ${combatAutoModeControl}
         <div class="battle-info-panel center" id="enemyPanel">
             <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>
             <div class="battle-bar empty-bar hp bb-hp">
@@ -1640,6 +1637,7 @@ const showCombatInfo = () => {
                     <input type="checkbox" id="auto-attack-combat-toggle" ${autoAttackCheckedAttr}>
                     <span data-i18n="auto-attack">${t('auto-attack')}</span>
                 </label>
+                ${combatAutoModeControl}
             </div>
             <button id="special-ability-btn" data-i18n="special-ability">${t('special-ability')}</button>
         </div>

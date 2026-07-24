@@ -80,3 +80,15 @@ test('combat Auto Mode button uses the shared toggle and respects feature visibi
     assert.match(combatSource, /window\.toggleAutoMode\(\)/);
     assert.match(combatSource, /autoModeUnlocked[\s\S]*autoModeBtnVisible/);
 });
+
+test('combat Auto Mode button is compact and rendered with the attack controls', () => {
+    const attackControlsIndex = combatSource.indexOf('<div class="attack-controls">');
+    const autoModeControlIndex = combatSource.indexOf('${combatAutoModeControl}');
+    const specialAbilityIndex = combatSource.indexOf('<button id="special-ability-btn"');
+
+    assert.ok(attackControlsIndex >= 0);
+    assert.ok(autoModeControlIndex > attackControlsIndex);
+    assert.ok(autoModeControlIndex < specialAbilityIndex);
+    assert.match(combatSource, /id="combat-auto-mode-btn"[\s\S]*<span class="sr-only"/);
+    assert.doesNotMatch(combatSource, /class="combat-auto-mode-controls"/);
+});
