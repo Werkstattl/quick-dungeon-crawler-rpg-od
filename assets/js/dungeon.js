@@ -274,7 +274,7 @@ const ensureRunStatisticsShape = () => {
         stats.latestCurseUnlock = null;
     } else {
         const normalized = Math.round(stats.latestCurseUnlock);
-        stats.latestCurseUnlock = Math.min(10, Math.max(1, normalized));
+        stats.latestCurseUnlock = Math.min(MAX_CURSE_LEVEL, Math.max(MIN_CURSE_LEVEL, normalized));
     }
 };
 

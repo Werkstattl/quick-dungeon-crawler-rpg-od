@@ -4,20 +4,6 @@ let luckAsLevelUpOption = localStorage.getItem("luckAsLevelUpOption") === "true"
 
 // Ensure newly added stats exist on old saves
 if (player) {
-    const clampCurseLevel = (value) => {
-        let level = Number(value);
-        if (!Number.isFinite(level)) {
-            level = 1;
-        }
-        level = Math.round(level);
-        if (level < 1) {
-            level = 1;
-        }
-        if (level > 10) {
-            level = 10;
-        }
-        return level;
-    };
     if (typeof player.preferences !== 'object' || player.preferences === null) {
         player.preferences = {};
     }

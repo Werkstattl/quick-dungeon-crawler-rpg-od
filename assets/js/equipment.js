@@ -204,10 +204,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
     };
     const maxLvl = dungeon.progress.floor * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1);
     const minLvl = maxLvl - (dungeon.settings.enemyLvlGap - 1);
-    equipment.lvl = randomizeNum(minLvl, maxLvl);
-    if (equipment.lvl > 100) {
-        equipment.lvl = 100;
-    }
+    equipment.lvl = clampEquipmentLevel(randomizeNum(minLvl, maxLvl));
     const shouldCreateCompanionCharm = allowCompanionCharm && Math.random() < COMPANION_CHARM_DROP_CHANCE;
     if (shouldCreateCompanionCharm) {
         equipment.attribute = 'Companion';
