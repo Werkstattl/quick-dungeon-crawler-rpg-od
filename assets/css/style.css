@@ -1188,6 +1188,25 @@ button:focus {
     overflow-y: auto;
 }
 
+.curse-progression-info {
+    margin: 0.5rem 0;
+    padding: 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.3rem;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: calc(0.82rem * var(--font-scale));
+    line-height: 1.35;
+}
+
+.curse-progression-info p {
+    margin: 0.25rem 0;
+}
+
+.curse-progression-info .curse-progress {
+    color: #FFD700;
+    font-weight: bold;
+}
+
 /* Header */
 header {
     border-radius: 0.3rem;
