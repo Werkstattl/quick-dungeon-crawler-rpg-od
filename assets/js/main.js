@@ -1630,6 +1630,7 @@ const importData = (importedData) => {
     try {
         let playerImport = JSON.parse(atob(importedData));
         if (playerImport.inventory !== undefined) {
+            normalizePlayerCurseProgress(playerImport);
             if (typeof normalizePermanentCompanionUnlockProgress === 'function') {
                 playerImport.permanentCompanionUnlockProgress = normalizePermanentCompanionUnlockProgress(playerImport.permanentCompanionUnlockProgress);
             }
@@ -1800,16 +1801,7 @@ const allocationPopup = () => {
             <div class="row">
                 <p data-i18n="curse">Curse</p>
                 <select id="select-curse">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
+                    ${getCurseLevelRange().map((level) => `<option value="${level}">${level}</option>`).join('')}
                 </select>
             </div>
             <div class="row" id="forge-button-row" style="margin-top: 15px">

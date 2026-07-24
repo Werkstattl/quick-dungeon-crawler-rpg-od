@@ -1,6 +1,6 @@
 const MIN_CURSE_LEVEL = 1;
 const MAX_STANDARD_CURSE_LEVEL = 10;
-const MAX_CURSE_LEVEL = MAX_STANDARD_CURSE_LEVEL;
+const MAX_CURSE_LEVEL = 15;
 const MAX_EQUIPMENT_LEVEL = 100;
 const STANDARD_CURSE_UNLOCK_FLOOR = 10;
 const CURSE_UNLOCK_TRIGGER_FLOOR = 'floor';
@@ -15,6 +15,26 @@ const clampCurseLevel = (value) => {
     return Math.min(MAX_CURSE_LEVEL, Math.max(MIN_CURSE_LEVEL, level));
 };
 
+const normalizePlayerCurseProgress = (playerData) => {
+    if (!playerData || typeof playerData !== 'object') {
+        return playerData;
+    }
+
+    const rawMaximum = playerData.maxUnlockedCurseLevel;
+    const hasSavedMaximum = rawMaximum !== undefined
+        && rawMaximum !== null
+        && rawMaximum !== ''
+        && Number.isFinite(Number(rawMaximum));
+    const selectedLevel = clampCurseLevel(playerData.selectedCurseLevel);
+    const maxUnlockedLevel = hasSavedMaximum
+        ? clampCurseLevel(rawMaximum)
+        : selectedLevel;
+
+    playerData.maxUnlockedCurseLevel = maxUnlockedLevel;
+    playerData.selectedCurseLevel = Math.min(selectedLevel, maxUnlockedLevel);
+    return playerData;
+};
+
 const clampEquipmentLevel = (value) => {
     let level = Number(value);
     if (!Number.isFinite(level)) {
@@ -23,6 +43,11 @@ const clampEquipmentLevel = (value) => {
     level = Math.round(level);
     return Math.min(MAX_EQUIPMENT_LEVEL, Math.max(1, level));
 };
+
+const getCurseLevelRange = () => Array.from(
+    { length: MAX_CURSE_LEVEL - MIN_CURSE_LEVEL + 1 },
+    (_, index) => index + MIN_CURSE_LEVEL,
+);
 
 const getNextCurseUnlockLevel = ({
     maxUnlockedCurseLevel,
