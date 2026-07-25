@@ -9,6 +9,7 @@ let companionAttackTimeout;
 let specialAbilityTimeout;
 let specialAbilityCooldown = false;
 let specialAbilityCooldownInterval = null;
+let specialAbilityQueued = false;
 let playerAttackReady = false;
 let autoAttackDelayTimeout = null;
 let combatPaused = false;
@@ -459,6 +460,15 @@ const updateSpecialAbilityCooldownDisplay = () => {
         return;
     }
 
+    if (specialAbilityQueued && !specialAbilityCooldown) {
+        const baseLabel = t(getSpecialAbilityTranslationKey());
+        const queuedLabel = t('special-ability-queued');
+        btn.textContent = `${baseLabel} (${queuedLabel})`;
+        btn.setAttribute('aria-label', `${baseLabel}: ${queuedLabel}`);
+        btn.removeAttribute('data-i18n');
+        return;
+    }
+
     if (!specialAbilityCooldown) {
         showDefaultLabel();
         return;
@@ -474,6 +484,7 @@ const updateSpecialAbilityCooldownDisplay = () => {
     const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
     const baseLabel = t(getSpecialAbilityTranslationKey());
     btn.textContent = `${baseLabel} (${seconds}s)`;
+    btn.setAttribute('aria-label', btn.textContent);
     btn.removeAttribute('data-i18n');
 };
 
@@ -502,14 +513,20 @@ const updateSpecialAbilityButtonState = () => {
 
     applySpecialAbilityLabel(btn);
     btn.title = '';
+    const inCombat = Boolean(player && player.inCombat);
+    const isQueued = inCombat && specialAbilityQueued && !specialAbilityCooldown;
+    const isReady = inCombat && !combatPaused && !specialAbilityCooldown && !isQueued;
+    btn.classList.toggle('is-ready', isReady);
+    btn.classList.toggle('is-queued', isQueued);
+    btn.classList.toggle('is-cooldown', inCombat && specialAbilityCooldown);
 
-    if (!player || !player.inCombat) {
+    if (!inCombat || combatPaused) {
         btn.disabled = true;
         updateSpecialAbilityCooldownDisplay();
         return;
     }
 
-    if (specialAbilityCooldown || !playerAttackReady) {
+    if (specialAbilityCooldown) {
         btn.disabled = true;
         btn.title = t('cooling');
         updateSpecialAbilityCooldownDisplay();
@@ -517,6 +534,9 @@ const updateSpecialAbilityButtonState = () => {
     }
 
     btn.disabled = false;
+    if (isQueued) {
+        btn.title = t('special-ability-queued');
+    }
     updateSpecialAbilityCooldownDisplay();
 };
 
@@ -536,7 +556,9 @@ const getSpecialAbilityTranslationKey = () => {
 
 const applySpecialAbilityLabel = (btn) => {
     const translationKey = getSpecialAbilityTranslationKey();
-    btn.textContent = t(translationKey);
+    const label = t(translationKey);
+    btn.textContent = label;
+    btn.setAttribute('aria-label', label);
     btn.setAttribute('data-i18n', translationKey);
 };
 
@@ -548,6 +570,10 @@ const setPlayerAttackReady = (ready) => {
     updateAttackButtonState();
     updateSpecialAbilityButtonState();
     if (playerAttackReady) {
+        if (specialAbilityQueued) {
+            useSpecialAbility();
+            return;
+        }
         maybeAutoAttack();
     }
 };
@@ -587,6 +613,10 @@ const maybeAutoAttack = () => {
         return;
     }
     if (combatPaused) {
+        return;
+    }
+    if (specialAbilityQueued && !specialAbilityCooldown) {
+        useSpecialAbility();
         return;
     }
 
@@ -1323,6 +1353,7 @@ const startCombat = (battleMusic) => {
         specialAbilityTimeout = null;
     }
     specialAbilityCooldown = false;
+    specialAbilityQueued = false;
     specialAbilityDueAt = null;
     specialAbilityRemaining = null;
     combatTimerWasRunning = false;
@@ -1380,6 +1411,7 @@ const endCombat = () => {
         specialAbilityTimeout = null;
     }
     specialAbilityCooldown = false;
+    specialAbilityQueued = false;
     specialAbilityDueAt = null;
     specialAbilityRemaining = null;
     stopSpecialAbilityCooldownTicker();
@@ -1408,9 +1440,16 @@ const combatCounter = () => {
 }
 
 const useSpecialAbility = () => {
-    if (!player || !player.inCombat || specialAbilityCooldown || !playerAttackReady || combatPaused) {
+    if (!player || !player.inCombat || specialAbilityCooldown || combatPaused) {
         return;
     }
+    if (!playerAttackReady) {
+        specialAbilityQueued = true;
+        clearAutoAttackDelay();
+        updateSpecialAbilityButtonState();
+        return;
+    }
+    specialAbilityQueued = false;
     setPlayerAttackReady(false);
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
@@ -1578,6 +1617,7 @@ const showCombatInfo = () => {
             specialAbilityTimeout = null;
         }
         specialAbilityCooldown = false;
+        specialAbilityQueued = false;
         specialAbilityDueAt = null;
         specialAbilityRemaining = null;
         stopSpecialAbilityCooldownTicker();
@@ -1639,7 +1679,7 @@ const showCombatInfo = () => {
                 </label>
                 ${combatAutoModeControl}
             </div>
-            <button id="special-ability-btn" data-i18n="special-ability">${t('special-ability')}</button>
+            <button id="special-ability-btn" type="button" data-i18n="special-ability">${t('special-ability')}</button>
         </div>
         <div class="logBox primary-panel">
             <div id="combatLogBox"></div>
