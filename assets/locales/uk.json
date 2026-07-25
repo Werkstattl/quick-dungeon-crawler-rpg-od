@@ -226,6 +226,8 @@
   "material-1": "Матеріал 1",
   "select-equipment": "Виберіть спорядження",
   "selected-equipment": "Вибране спорядження",
+  "crafted-gear-piece": "Створюваний предмет спорядження",
+  "choose-gear-piece": "Виберіть предмет спорядження",
   "material-2": "Матеріал 2",
   "material-3": "Матеріал 3",
   "result-preview": "Попередній результат",

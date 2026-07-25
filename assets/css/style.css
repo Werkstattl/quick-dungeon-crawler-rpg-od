@@ -1896,6 +1896,34 @@ header button i {
     opacity: 0.8;
 }
 
+.forge-target {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0.75rem auto 0;
+}
+
+.forge-target label {
+    font-weight: bold;
+}
+
+.forge-target select {
+    min-width: 11rem;
+    max-width: 15rem;
+    padding: 0.55rem 2rem 0.55rem 0.7rem;
+    border: 1px solid #666;
+    border-radius: 0.3rem;
+    background-color: #1f1f1f;
+    color: white;
+    font: inherit;
+}
+
+.forge-target select:focus {
+    border-color: #FFD700;
+    outline: 1px solid #FFD700;
+}
+
 .forge-slots {
     display: flex;
     justify-content: center;
@@ -2372,6 +2400,15 @@ header button i {
 
 /* Adjust Forge layout for small screens */
 @media (max-width: 480px) {
+    .forge-target {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 0 0.5rem;
+    }
+    .forge-target select {
+        max-width: none;
+        width: 100%;
+    }
     .reroll-preview {
         grid-template-columns: 1fr;
     }

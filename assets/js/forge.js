@@ -5,6 +5,7 @@ let forgeModalElement = null;
 let forgeGoldElement = null;
 let forgeMode = 'merge';
 let selectedForgeItems = [null, null, null];
+let selectedForgeCategory = '';
 let forgeResult = null;
 let forgeLevelRange = null;
 let forgeCost = 0;
@@ -17,6 +18,24 @@ let forgeUnlocked = false;
 
 const FORGE_PRODUCT_ID = 'forge_unlock_premium';
 const FORGE_PURCHASE_URL = 'https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase';
+const FORGE_CATEGORY_CONFIG = Object.freeze([
+    { category: 'Sword', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Axe', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Hammer', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Dagger', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Flail', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Scythe', attribute: 'Damage', type: 'Weapon' },
+    { category: 'Plate', attribute: 'Defense', type: 'Armor' },
+    { category: 'Chain', attribute: 'Defense', type: 'Armor' },
+    { category: 'Leather', attribute: 'Defense', type: 'Armor' },
+    { category: 'Tower', attribute: 'Defense', type: 'Shield' },
+    { category: 'Kite', attribute: 'Defense', type: 'Shield' },
+    { category: 'Buckler', attribute: 'Defense', type: 'Shield' },
+    { category: 'Great Helm', attribute: 'Defense', type: 'Helmet' },
+    { category: 'Horned Helm', attribute: 'Defense', type: 'Helmet' },
+    { category: 'Mask', attribute: 'Defense', type: 'Mask' },
+    { category: 'Boots', attribute: 'Defense', type: 'Boots' },
+]);
 
 const closeForgeUnlockModal = () => {
     closeDefaultModal();
@@ -135,10 +154,43 @@ const setForgeUnlockButton = (confirmButton) => {
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
     forgeGoldElement = document.querySelector('#forge-player-gold');
+    populateForgeCategoryOptions();
+    const targetCategorySelect = document.querySelector('#forge-target-category');
+    if (targetCategorySelect) {
+        targetCategorySelect.onchange = () => {
+            selectedForgeCategory = targetCategorySelect.value;
+            forgeResult = null;
+            forgeLevelRange = null;
+            calculateForgeResult();
+            updateForgeDisplay();
+        };
+    }
     const modeButtons = document.querySelectorAll('[data-forge-mode]');
     modeButtons.forEach(button => {
         button.onclick = () => setForgeMode(button.dataset.forgeMode);
     });
+};
+
+const populateForgeCategoryOptions = () => {
+    const targetCategorySelect = document.querySelector('#forge-target-category');
+    if (!targetCategorySelect) {
+        return;
+    }
+
+    targetCategorySelect.innerHTML = '';
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.setAttribute('data-i18n', 'choose-gear-piece');
+    placeholder.textContent = t('choose-gear-piece');
+    targetCategorySelect.appendChild(placeholder);
+
+    FORGE_CATEGORY_CONFIG.forEach(({ category }) => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = equipmentName(category);
+        targetCategorySelect.appendChild(option);
+    });
+    targetCategorySelect.value = selectedForgeCategory;
 };
 
 function unlockForge() {
@@ -157,6 +209,7 @@ const updateForgeGold = () => {
 
 const resetMergeState = () => {
     selectedForgeItems = [null, null, null];
+    selectedForgeCategory = '';
     forgeResult = null;
     forgeLevelRange = null;
     forgeCost = 0;
@@ -167,6 +220,10 @@ const resetMergeState = () => {
     const resultItem = document.querySelector('#forge-result-item');
     if (resultItem) {
         resultItem.innerHTML = '';
+    }
+    const targetCategorySelect = document.querySelector('#forge-target-category');
+    if (targetCategorySelect) {
+        targetCategorySelect.value = '';
     }
 };
 
@@ -221,6 +278,7 @@ const resetForgeState = () => {
 
 const updateForgeModeVisibility = () => {
     const mergePanel = document.querySelector('#forge-merge-panel');
+    const targetPanel = document.querySelector('#forge-target-panel');
     const rerollPanel = document.querySelector('#forge-reroll-panel');
     const refinePanel = document.querySelector('#forge-refine-panel');
     const forgeResultPanel = document.querySelector('#forge-result');
@@ -229,6 +287,9 @@ const updateForgeModeVisibility = () => {
 
     if (mergePanel) {
         mergePanel.style.display = forgeMode === 'merge' ? 'flex' : 'none';
+    }
+    if (targetPanel) {
+        targetPanel.style.display = forgeMode === 'merge' ? 'flex' : 'none';
     }
     if (rerollPanel) {
         rerollPanel.style.display = forgeMode === 'reroll' ? 'block' : 'none';
@@ -475,9 +536,9 @@ const selectForgeEquipment = (equipmentStr, index, source = 'inventory', sourceI
         sfxEquip.play();
     }
     
-    updateForgeDisplay();
-    loadForgeEquipment(); // <-- update equipment list after selection
     calculateForgeResult();
+    updateForgeDisplay();
+    loadForgeEquipment();
 };
 
 const selectRerollEquipment = (equipmentStr, source = 'inventory', sourceIndex = -1, equipmentOverride = null) => {
@@ -892,13 +953,9 @@ const updateForgeDisplay = () => {
     const clearButton = document.querySelector('#forge-clear');
 
     clearButton.onclick = () => {
-        selectedForgeItems = [null, null, null];
-        forgeResult = null;
-        forgeLevelRange = null;
-        forgeCost = 0;
+        resetMergeState();
         updateForgeDisplay();
         loadForgeEquipment();
-        document.querySelector('#forge-result').style.display = 'none';
         sfxUnequip.play();
     };
 
@@ -914,6 +971,7 @@ const updateForgeDisplay = () => {
     const sameRarity = allSelected &&
         selectedForgeItems[0].equipment.rarity === selectedForgeItems[1].equipment.rarity &&
         selectedForgeItems[0].equipment.rarity === selectedForgeItems[2].equipment.rarity;
+    const hasTargetCategory = FORGE_CATEGORY_CONFIG.some(({ category }) => category === selectedForgeCategory);
 
     if (allSelected && (!sameTier || !sameRarity)) {
         confirmButton.disabled = true;
@@ -924,6 +982,10 @@ const updateForgeDisplay = () => {
             confirmButton.setAttribute('data-i18n', 'items-must-share-rarity');
             confirmButton.textContent = `${t('items-must-share-rarity')}`;
         }
+    } else if (allSelected && !hasTargetCategory) {
+        confirmButton.disabled = true;
+        confirmButton.setAttribute('data-i18n', 'choose-gear-piece');
+        confirmButton.textContent = t('choose-gear-piece');
     } else if (allSelected && player.gold >= forgeCost) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'forge-equipment');
@@ -947,8 +1009,11 @@ const updateForgeDisplay = () => {
         const sameRarityConfirm = allSelectedConfirm &&
             selectedForgeItems[0].equipment.rarity === selectedForgeItems[1].equipment.rarity &&
             selectedForgeItems[0].equipment.rarity === selectedForgeItems[2].equipment.rarity;
+        const hasTargetCategoryConfirm = FORGE_CATEGORY_CONFIG.some(
+            ({ category }) => category === selectedForgeCategory
+        );
 
-        if (allSelectedConfirm && sameTierConfirm && sameRarityConfirm && player.gold >= forgeCost) {
+        if (allSelectedConfirm && sameTierConfirm && sameRarityConfirm && hasTargetCategoryConfirm && player.gold >= forgeCost) {
             executeForging();
         } else {
             sfxDeny.play();
@@ -958,8 +1023,12 @@ const updateForgeDisplay = () => {
 
 // Calculate forge result
 const calculateForgeResult = () => {
-    if (!selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2]) {
+    const hasTargetCategory = FORGE_CATEGORY_CONFIG.some(({ category }) => category === selectedForgeCategory);
+    if (!selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2] || !hasTargetCategory) {
         document.querySelector('#forge-result').style.display = 'none';
+        forgeResult = null;
+        forgeLevelRange = null;
+        forgeCost = 0;
         return;
     }
 
@@ -984,7 +1053,7 @@ const calculateForgeResult = () => {
     forgeLevelRange = { min: minLvl, max: maxLvl };
 
     // Calculate result equipment
-    forgeResult = createForgedEquipment(item1, item2, item3);
+    forgeResult = createForgedEquipment(item1, item2, item3, selectedForgeCategory);
 
     // Calculate cost (based on input item values)
     forgeCost = Math.round((item1.value + item2.value + item3.value) * 2.5);
@@ -994,9 +1063,19 @@ const calculateForgeResult = () => {
 };
 
 // Create forged equipment
-const createForgedEquipment = (item1, item2, item3) => {
+const createForgedEquipment = (item1, item2, item3, targetCategory) => {
     // Generate a fresh piece of equipment similar to a normal dungeon drop
     const forgedEquipment = createEquipment(false, { allowCompanionCharm: false });
+    const targetConfig = FORGE_CATEGORY_CONFIG.find(({ category }) => category === targetCategory);
+    if (!targetConfig) {
+        return null;
+    }
+
+    // Use the player's chosen gear piece and its matching stat pool.
+    forgedEquipment.category = targetConfig.category;
+    forgedEquipment.attribute = targetConfig.attribute;
+    forgedEquipment.type = targetConfig.type;
+    forgedEquipment.slot = null;
 
     // Set tier to the same as input items
     forgedEquipment.tier = item1.tier;
@@ -1237,7 +1316,9 @@ const executeRefine = () => {
 
 // Execute forging
 const executeForging = () => {
-    if (!forgeUnlocked || !selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2] || player.gold < forgeCost) {
+    const hasTargetCategory = FORGE_CATEGORY_CONFIG.some(({ category }) => category === selectedForgeCategory);
+    if (!forgeUnlocked || !selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2]
+        || !hasTargetCategory || !forgeResult || player.gold < forgeCost) {
         sfxDeny.play();
         return;
     }
@@ -1292,11 +1373,7 @@ const executeForging = () => {
     sfxEquip.play();
 
     // Reset forge state and UI
-    selectedForgeItems = [null, null, null];
-    forgeResult = null;
-    forgeLevelRange = null;
-    forgeCost = 0;
-    document.querySelector('#forge-result').style.display = 'none';
+    resetMergeState();
     loadForgeEquipment();
     updateForgeDisplay();
     showForgedResultPopup(completedForgeResult);
