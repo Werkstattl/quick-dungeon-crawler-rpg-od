@@ -168,9 +168,9 @@ const setEnemyStats = (type, condition) => {
     if (type == 'Offensive') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(330, 400),
+            hpMax: randomizeNum(350, 420),
             atk: randomizeNum(70, 100),
-            def: randomizeNum(20, 50),
+            def: randomizeNum(30, 60),
             atkSpd: randomizeDecimal(0.2, 0.4),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
@@ -180,9 +180,9 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Defensive') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(430, 530),
+            hpMax: randomizeNum(470, 570),
             atk: randomizeNum(40, 70),
-            def: randomizeNum(40, 70),
+            def: randomizeNum(50, 80),
             atkSpd: randomizeDecimal(0.1, 0.3),
             vamp: 0,
             critRate: 0,
@@ -192,9 +192,9 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Balanced') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(350, 450),
+            hpMax: randomizeNum(390, 490),
             atk: randomizeNum(50, 80),
-            def: randomizeNum(30, 60),
+            def: randomizeNum(40, 70),
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(0.5, 1.5),
@@ -204,9 +204,9 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Quick') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(330, 400),
+            hpMax: randomizeNum(350, 420),
             atk: randomizeNum(50, 80),
-            def: randomizeNum(30, 60),
+            def: randomizeNum(40, 70),
             atkSpd: randomizeDecimal(0.35, 0.45),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
@@ -216,9 +216,9 @@ const setEnemyStats = (type, condition) => {
     } else if (type == 'Lethal') {
         enemy.stats = {
             hp: 0,
-            hpMax: randomizeNum(330, 400),
+            hpMax: randomizeNum(350, 420),
             atk: randomizeNum(70, 100),
-            def: randomizeNum(20, 50),
+            def: randomizeNum(30, 60),
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(4, 8),
