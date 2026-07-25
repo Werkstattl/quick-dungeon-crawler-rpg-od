@@ -83,12 +83,13 @@ function applyTranslations(root = document) {
   });
 
   // Attributes (placeholder, title, aria-label, etc.)
+  const SAFE_ATTRS = new Set(['placeholder', 'title', 'aria-label', 'aria-placeholder', 'aria-description', 'alt', 'label']);
   root.querySelectorAll('[data-i18n-attr]').forEach(el => {
     // data-i18n-attr="placeholder:ui.search,title:ui.tooltip"
     const pairs = el.getAttribute('data-i18n-attr').split(',').map(s => s.trim());
     for (const pair of pairs) {
       const [attr, key] = pair.split(':').map(s => s.trim());
-      if (attr && key) el.setAttribute(attr, t(key));
+      if (attr && key && SAFE_ATTRS.has(attr)) el.setAttribute(attr, t(key));
     }
   });
 }
