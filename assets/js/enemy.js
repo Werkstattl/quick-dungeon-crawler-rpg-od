@@ -287,6 +287,10 @@ const setEnemyStats = (type, condition) => {
 
     // Calculate dodge chance based on curse level and enemy level
     const curseLvl = getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling);
+    const curseHpMultiplier = 1 + (Math.max(0, curseLvl - 1) * 0.04);
+    const curseDefMultiplier = 1 + (Math.max(0, curseLvl - 1) * 0.02);
+    enemy.stats.hpMax = Math.round(enemy.stats.hpMax * curseHpMultiplier);
+    enemy.stats.def = Math.round(enemy.stats.def * curseDefMultiplier);
     enemy.stats.dodge = ((curseLvl - 1) * 2) + (enemy.lvl / 10);
     if (enemy.stats.dodge < 0) {
         enemy.stats.dodge = 0;
