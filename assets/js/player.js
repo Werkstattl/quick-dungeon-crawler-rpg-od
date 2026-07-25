@@ -514,7 +514,7 @@ const lvlupPopup = () => {
     }
 
     const percentages = {
-        "hp": 11,
+        "hp": 12,
         "atk": 9,
         "def": 9,
         "atkSpd": 3.5,
