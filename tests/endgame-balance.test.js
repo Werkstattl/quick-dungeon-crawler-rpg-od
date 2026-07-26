@@ -85,6 +85,4 @@ test('Dungeon Monarch availability and encounter weight remain unchanged', () =>
 
     assert.match(dungeonSource, /if \(dungeon\.story\.phase >= 4\) \{\s*dungeon\.story\.monarchUnlocked = true;/);
     assert.match(dungeonSource, /eventTypes\.push\("monarch", "monarch", "monarch"\);/);
-    assert.match(dungeonSource, /dungeon\.story\.monarchUnlocked && !dungeon\.story\.monarchSeen/);
-    assert.match(dungeonSource, /const specialBossBattle = \(\) => \{\s*dungeon\.story\.monarchSeen = true;/);
 });

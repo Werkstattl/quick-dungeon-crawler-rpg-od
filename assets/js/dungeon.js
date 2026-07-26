@@ -30,7 +30,6 @@ const createDefaultDungeonStory = () => ({
     phase: 0,
     lastFloorBeat: 0,
     monarchUnlocked: false,
-    monarchSeen: false,
 });
 
 const createDefaultSpecialEvents = () => ({
@@ -575,7 +574,7 @@ const dungeonEvent = () => {
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
         }
-        if (dungeon.story.monarchUnlocked && !dungeon.story.monarchSeen) {
+        if (dungeon.story.monarchUnlocked) {
             eventTypes.push("monarch", "monarch");
         }
         if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && player.lvl > 2 && player.lvl > dungeon.progress.floor && !dungeon.roomEvents.stairsIgnored) {
@@ -776,7 +775,7 @@ const dungeonEvent = () => {
                 }
                 break;
             case "monarch":
-                if (dungeon.story.monarchUnlocked && !dungeon.story.monarchSeen) {
+                if (dungeon.story.monarchUnlocked) {
                     dungeon.status.event = true;
                     choices = `
                             <div class="decision-panel">
@@ -868,7 +867,6 @@ const guardianBattle = () => {
 
 // mysterious chamber fight
 const specialBossBattle = () => {
-    dungeon.story.monarchSeen = true;
     generateRandomEnemy("sboss");
     showCombatInfo();
     addCombatLog(t('enemy-awoken', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
