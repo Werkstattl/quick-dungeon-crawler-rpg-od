@@ -718,7 +718,10 @@ const hpValidation = () => {
         }
         playerLoadStats();
         if (enemy.rewards.drop) {
-            const lootDetails = createEquipmentPrint("combat");
+            const lootOptions = enemy.condition === 'sboss'
+                ? { minRarity: 'Heirloom' }
+                : {};
+            const lootDetails = createEquipmentPrint("combat", lootOptions);
             if (lootDetails && lootDetails.item) {
                 if (!lootDetails.autoSold) {
                     latestCombatLoot = {

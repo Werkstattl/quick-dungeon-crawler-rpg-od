@@ -326,6 +326,10 @@ const setEnemyStats = (type, condition) => {
     // Cap maximum chance for balance
     if (dropChance > 0.8) dropChance = 0.8;
     enemy.rewards.drop = Math.random() < dropChance;
+    // Monarchs always drop loot
+    if (condition === 'sboss') {
+        enemy.rewards.drop = true;
+    }
 
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
