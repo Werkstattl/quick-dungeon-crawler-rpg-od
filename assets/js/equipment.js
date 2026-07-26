@@ -150,7 +150,7 @@ const rollCompanionCharmStatValue = (statType, equipment, enemyScaling) => {
         return Math.min(18, randomizeDecimal(1.5 * rarityScale, 4 * rarityScale * levelScale));
     }
     if (statType === 'critRate') {
-        return Math.min(16, randomizeDecimal(1 * rarityScale, 3.25 * rarityScale * levelScale));
+        return Math.min(18, randomizeDecimal(1.4 * rarityScale, 4.25 * rarityScale * levelScale));
     }
     if (statType === 'critDmg') {
         return Math.min(35, randomizeDecimal(4 * rarityScale, 9 * rarityScale * levelScale * enemyScaling));
