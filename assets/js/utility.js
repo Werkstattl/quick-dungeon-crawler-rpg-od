@@ -279,9 +279,24 @@ function closeDefaultModal() {
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
 }
 
+const STATS_HELP_SEEN_KEY = 'statsHelpSeen';
+
+function initStatsHelpHint() {
+    const link = document.getElementById('stats-help-link');
+    if (!link) return;
+    if (!localStorage.getItem(STATS_HELP_SEEN_KEY)) {
+        link.classList.add('hint-unseen');
+    }
+}
+
+window.addEventListener('DOMContentLoaded', initStatsHelpHint);
+
 function openStatsModal() {
     const statsModal = document.getElementById('statsModal');
     if (!statsModal) return;
+    localStorage.setItem(STATS_HELP_SEEN_KEY, 'true');
+    const statsHelpLink = document.getElementById('stats-help-link');
+    if (statsHelpLink) statsHelpLink.classList.remove('hint-unseen');
     if (typeof sfxConfirm !== 'undefined' && sfxConfirm && typeof sfxConfirm.play === 'function') {
         sfxConfirm.play();
     }

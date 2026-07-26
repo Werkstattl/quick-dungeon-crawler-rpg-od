@@ -52,9 +52,9 @@
             <div class="stat-panel">
                 <div class="box" id="dungeon-stats-panel">
                     <h4>
-                        <a class="stats-title-link" href="#" onclick="openStatsModal(); event.stopPropagation(); return false;" aria-label="Open stats details">
+                        <a class="stats-title-link" id="stats-help-link" href="#" onclick="openStatsModal(); event.stopPropagation(); return false;" data-i18n-attr="aria-label:stats-help,title:stats-help" aria-label="What do these stats do?" title="What do these stats do?">
                             <span data-i18n="stats">Stats</span>
-                            <i class="fa fa-link" aria-hidden="true"></i>
+                            <i class="fa fa-circle-question stats-help-icon" aria-hidden="true"></i>
                         </a>
                     </h4>
                     <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>

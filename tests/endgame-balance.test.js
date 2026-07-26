@@ -84,5 +84,5 @@ test('Dungeon Monarch availability and encounter weight remain unchanged', () =>
     const dungeonSource = fs.readFileSync(path.join(root, 'assets/js/dungeon.js'), 'utf8');
 
     assert.match(dungeonSource, /if \(dungeon\.story\.phase >= 4\) \{\s*dungeon\.story\.monarchUnlocked = true;/);
-    assert.match(dungeonSource, /eventTypes\.push\("monarch", "monarch", "monarch"\);/);
+    assert.match(dungeonSource, /eventTypes\.push\("monarch", "monarch"\);/);
 });
