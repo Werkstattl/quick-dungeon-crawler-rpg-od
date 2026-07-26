@@ -147,7 +147,7 @@ const rollCompanionCharmStatValue = (statType, equipment, enemyScaling) => {
         return randomizeNum(12 * rarityScale, 20 * rarityScale * levelScale);
     }
     if (statType === 'atkSpd') {
-        return Math.min(18, randomizeDecimal(1.5 * rarityScale, 4 * rarityScale * levelScale));
+        return Math.min(19, randomizeDecimal(1.7 * rarityScale, 4.5 * rarityScale * levelScale));
     }
     if (statType === 'critRate') {
         return Math.min(18, randomizeDecimal(1.4 * rarityScale, 4.25 * rarityScale * levelScale));
