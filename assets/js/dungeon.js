@@ -576,7 +576,7 @@ const dungeonEvent = () => {
             eventTypes.unshift("blessing");
         }
         if (dungeon.story.monarchUnlocked && !dungeon.story.monarchSeen) {
-            eventTypes.push("monarch", "monarch", "monarch");
+            eventTypes.push("monarch", "monarch");
         }
         if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && player.lvl > 2 && player.lvl > dungeon.progress.floor && !dungeon.roomEvents.stairsIgnored) {
         	eventTypes.push("stairs");
