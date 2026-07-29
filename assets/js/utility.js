@@ -297,8 +297,8 @@ function openStatsModal() {
     localStorage.setItem(STATS_HELP_SEEN_KEY, 'true');
     const statsHelpLink = document.getElementById('stats-help-link');
     if (statsHelpLink) statsHelpLink.classList.remove('hint-unseen');
-    if (typeof sfxConfirm !== 'undefined' && sfxConfirm && typeof sfxConfirm.play === 'function') {
-        sfxConfirm.play();
+    if (typeof sfxOpen !== 'undefined' && sfxOpen && typeof sfxOpen.play === 'function') {
+        sfxOpen.play();
     }
     statsModal.style.display = "flex";
     const dimDungeon = document.querySelector('#dungeon-main');
