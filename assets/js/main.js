@@ -791,7 +791,7 @@ function openMenu(isTitle = false) {
         const autoSellLevelOptions = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         const autoSellBelowLevelSelected = Number.isNaN(autoSellBelowLevel)
             ? 0
-            : Math.max(0, Math.min(90, Math.floor(autoSellBelowLevel / 10) * 10));
+            : Math.max(0, Math.min(MAX_EQUIPMENT_LEVEL, Math.floor(autoSellBelowLevel / 10) * 10));
         const autoSellLevelOptionsMarkup = autoSellLevelOptions.map((value) => (
             `<option value="${value}" ${autoSellBelowLevelSelected === value ? 'selected' : ''}>${value}</option>`
         )).join('');
