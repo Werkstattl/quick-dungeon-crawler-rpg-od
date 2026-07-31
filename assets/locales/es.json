@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Recibes 25% menos de daño permanentemente.",
   "aegis-thorns-desc": "Los enemigos reciben 30% del daño que causan.",
   "companions-insight-desc": "Los compañeros obtienen el doble de experiencia en las batallas.",
-  "open-wounds-desc": "Los golpes aplican Sangrado durante 5s. El Sangrado se acumula (hasta 25). El Sangrado inflige 0.15% de la Salud Máxima del objetivo por acumulación cada segundo.",
+  "open-wounds-desc": "Los golpes aplican Sangrado durante 5s. El Sangrado se acumula (hasta 25). El Sangrado inflige 0.2% de la Salud Máxima del objetivo por acumulación cada segundo.",
   "enter": "Entrar",
   "ignore": "Ignorar",
   "open-the-chest": "Abrir el cofre",

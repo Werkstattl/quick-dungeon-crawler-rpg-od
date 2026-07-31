@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Trwale otrzymujesz o 25% mniej obrażeń.",
   "aegis-thorns-desc": "Wrogowie otrzymują 30% obrażeń, które sami zadali.",
   "companions-insight-desc": "Towarzysze otrzymują podwójne doświadczenie z walk.",
-  "open-wounds-desc": "Trafienia nakładają Krwawienie na 5 s. Krwawienie się kumuluje (do 25). Każdy ładunek zadaje co sekundę 0,15% maksymalnego zdrowia celu.",
+  "open-wounds-desc": "Trafienia nakładają Krwawienie na 5 s. Krwawienie się kumuluje (do 25). Każdy ładunek zadaje co sekundę 0,2% maksymalnego zdrowia celu.",
   "enter": "Wejdź",
   "ignore": "Ignoruj",
   "open-the-chest": "Otwórz skrzynię",

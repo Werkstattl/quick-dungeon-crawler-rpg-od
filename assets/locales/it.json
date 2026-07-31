@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Subisci permanentemente il 25% di danni in meno.",
   "aegis-thorns-desc": "I nemici ricevono il 30% dei danni che hanno inflitto.",
   "companions-insight-desc": "I compagni ottengono il doppio dell'esperienza dalle battaglie.",
-  "open-wounds-desc": "I colpi applicano Sanguinamento per 5 s. Il sanguinamento si accumula (fino a 25). Ogni accumulo infligge lo 0,15% della salute massima del bersaglio ogni secondo.",
+  "open-wounds-desc": "I colpi applicano Sanguinamento per 5 s. Il sanguinamento si accumula (fino a 25). Ogni accumulo infligge lo 0,2% della salute massima del bersaglio ogni secondo.",
   "enter": "Entra",
   "ignore": "Ignora",
   "open-the-chest": "Apri il forziere",

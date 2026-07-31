@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Vous subissez définitivement 25 % de dégâts en moins.",
   "aegis-thorns-desc": "Les ennemis reçoivent 30 % des dégâts qu'ils ont infligés.",
   "companions-insight-desc": "Les compagnons gagnent le double d'expérience lors des combats.",
-  "open-wounds-desc": "Les coups appliquent Saignement pendant 5 s. Le saignement se cumule (jusqu'à 25). Chaque cumul inflige 0,15 % de la santé max de la cible par seconde.",
+  "open-wounds-desc": "Les coups appliquent Saignement pendant 5 s. Le saignement se cumule (jusqu'à 25). Chaque cumul inflige 0,2 % de la santé max de la cible par seconde.",
   "enter": "Entrer",
   "ignore": "Ignorer",
   "open-the-chest": "Ouvrir le coffre",

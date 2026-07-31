@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Du erhältst dauerhaft 25% weniger Schaden.",
   "aegis-thorns-desc": "Gegner erhalten 30% des Schadens, den sie verursacht haben.",
   "companions-insight-desc": "Begleiter erhalten doppelte Erfahrung aus Kämpfen.",
-  "open-wounds-desc": "Treffer verursachen 5 Sek. Blutung. Blutung stapelt sich (bis zu 25). Blutung verursacht pro Stapel jede Sekunde 0,15% der max. Gesundheit des Ziels.",
+  "open-wounds-desc": "Treffer verursachen 5 Sek. Blutung. Blutung stapelt sich (bis zu 25). Blutung verursacht pro Stapel jede Sekunde 0,2% der max. Gesundheit des Ziels.",
   "enter": "Betreten",
   "ignore": "Ignorieren",
   "open-the-chest": "Truhe öffnen",

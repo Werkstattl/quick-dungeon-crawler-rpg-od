@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Kalıcı olarak %25 daha az hasar alırsın.",
   "aegis-thorns-desc": "Düşmanlar verdikleri hasarın %30'unu geri alır.",
   "companions-insight-desc": "Yoldaşlar savaşlardan iki kat deneyim kazanır.",
-  "open-wounds-desc": "Vuruşlar 5 sn Kanama uygular. Kanama birikir (en fazla 25). Kanama, her yük için hedefin Maks. Sağlığının her saniye %0.15'i kadar hasar verir.",
+  "open-wounds-desc": "Vuruşlar 5 sn Kanama uygular. Kanama birikir (en fazla 25). Kanama, her yük için hedefin Maks. Sağlığının her saniye %0.2'si kadar hasar verir.",
   "enter": "Gir",
   "ignore": "Yok say",
   "open-the-chest": "Sandığı aç",

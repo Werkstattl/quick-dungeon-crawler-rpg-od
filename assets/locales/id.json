@@ -345,7 +345,7 @@
   "paladins-heart-desc": "Kamu menerima 25% lebih sedikit damage secara permanen.",
   "aegis-thorns-desc": "Musuh menerima 30% dari damage yang mereka berikan.",
   "companions-insight-desc": "Pendamping mendapat pengalaman ganda dari pertarungan.",
-  "open-wounds-desc": "Hit menerapkan Bleed selama 5 dtk. Bleed dapat menumpuk (hingga 25). Bleed memberikan 0.15% dari Kesehatan Maks target per stack setiap detik.",
+  "open-wounds-desc": "Hit menerapkan Bleed selama 5 dtk. Bleed dapat menumpuk (hingga 25). Bleed memberikan 0.2% dari Kesehatan Maks target per stack setiap detik.",
   "enter": "Masuk",
   "ignore": "Abaikan",
   "open-the-chest": "Buka peti",
