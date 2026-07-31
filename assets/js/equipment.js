@@ -1,6 +1,8 @@
 const COMPANION_CHARM_SLOT_KEY = 'companionCharm';
 const COMPANION_CHARM_DROP_CHANCE = 0.05;
 const COMPANION_CHARM_STAT_KEYS = ['atk', 'atkSpd', 'critRate', 'critDmg'];
+// Charm stats that buff the player instead of the companion.
+const COMPANION_CHARM_PLAYER_STAT_KEYS = ['vamp', 'luck', 'fasterRun'];
 const EQUIPMENT_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
 const REFINE_MAX_LEVEL = 10;
 const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
@@ -93,6 +95,12 @@ const defaultCompanionCharmStats = () => ({
     critDmg: 0,
 });
 
+const defaultCompanionCharmPlayerStats = () => ({
+    vamp: 0,
+    luck: 0,
+    fasterRun: 0,
+});
+
 const isCompanionCharm = (equipment) => Boolean(equipment)
     && (equipment.slot === COMPANION_CHARM_SLOT_KEY
         || (equipment.category === 'Charm' && equipment.attribute === 'Companion'));
@@ -111,6 +119,18 @@ const getCompanionCharmBonuses = (equipment = getEquippedCompanionCharm()) => {
     }
     const stats = getEquipmentStatTotals(equipment);
     COMPANION_CHARM_STAT_KEYS.forEach((key) => {
+        totals[key] = Number(stats[key] || 0);
+    });
+    return totals;
+};
+
+const getCompanionCharmPlayerBonuses = (equipment = getEquippedCompanionCharm()) => {
+    const totals = defaultCompanionCharmPlayerStats();
+    if (!isCompanionCharm(equipment) || typeof getEquipmentStatTotals !== 'function') {
+        return totals;
+    }
+    const stats = getEquipmentStatTotals(equipment);
+    COMPANION_CHARM_PLAYER_STAT_KEYS.forEach((key) => {
         totals[key] = Number(stats[key] || 0);
     });
     return totals;
@@ -155,6 +175,15 @@ const rollCompanionCharmStatValue = (statType, equipment, enemyScaling) => {
     if (statType === 'critDmg') {
         return Math.min(35, randomizeDecimal(4 * rarityScale, 9 * rarityScale * levelScale * enemyScaling));
     }
+    if (statType === 'vamp') {
+        return Math.min(5, randomizeDecimal(0.4 * rarityScale, 1.6 * rarityScale * levelScale));
+    }
+    if (statType === 'luck') {
+        return Math.min(8, randomizeDecimal(0.6 * rarityScale, 2.4 * rarityScale * levelScale));
+    }
+    if (statType === 'fasterRun') {
+        return Math.min(6, randomizeDecimal(0.5 * rarityScale, 1.8 * rarityScale * levelScale));
+    }
     return 0;
 };
 
@@ -162,7 +191,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
     equipment.stats = [];
     let equipmentValue = 0;
     const loopCount = getCompanionCharmLoopCount(equipment.rarity);
-    const statPool = ['atk', 'atk', 'atkSpd', 'critRate', 'critDmg'];
+    const statPool = ['atk', 'atk', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'luck', 'fasterRun'];
 
     for (let i = 0; i < loopCount; i++) {
         const statType = statPool[Math.floor(Math.random() * statPool.length)];
@@ -182,6 +211,12 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
             equipmentValue += statValue * 22;
         } else if (statType === 'critDmg') {
             equipmentValue += statValue * 12;
+        } else if (statType === 'vamp') {
+            equipmentValue += statValue * 21;
+        } else if (statType === 'luck') {
+            equipmentValue += statValue * 21;
+        } else if (statType === 'fasterRun') {
+            equipmentValue += statValue * 15;
         }
     }
 
@@ -1107,6 +1142,12 @@ const applyEquipmentStats = () => {
             player.equippedStats[key] += totals[key];
         });
     }
+
+    const charmPlayerBonuses = getCompanionCharmPlayerBonuses();
+    Object.keys(charmPlayerBonuses).forEach(key => {
+        player.equippedStats[key] += charmPlayerBonuses[key];
+    });
+
     calculateStats();
 }
 
