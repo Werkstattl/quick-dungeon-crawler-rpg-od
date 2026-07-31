@@ -1676,11 +1676,13 @@ const showCombatInfo = () => {
             </div>
             <div class="attack-controls">
                 <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
-                <label class="auto-attack-toggle">
-                    <input type="checkbox" id="auto-attack-combat-toggle" ${autoAttackCheckedAttr}>
-                    <span data-i18n="auto-attack">${t('auto-attack')}</span>
-                </label>
-                ${combatAutoModeControl}
+                <div class="attack-controls-secondary">
+                    <label class="auto-attack-toggle">
+                        <input type="checkbox" id="auto-attack-combat-toggle" ${autoAttackCheckedAttr}>
+                        <span data-i18n="auto-attack">${t('auto-attack')}</span>
+                    </label>
+                    ${combatAutoModeControl}
+                </div>
             </div>
             <button id="special-ability-btn" type="button" data-i18n="special-ability">${t('special-ability')}</button>
         </div>
