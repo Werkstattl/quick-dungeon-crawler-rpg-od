@@ -34,6 +34,8 @@ const createDefaultDungeonStory = () => ({
 
 const createDefaultSpecialEvents = () => ({
     floor6WanderingShopVisited: false,
+    // Floor on which the monarch chamber was declined (0 = never)
+    monarchIgnoredFloor: 0,
 });
 
 const DUNGEON_ROUTE_KEYS = ["balanced", "spoils", "sanctuary", "descent"];
@@ -574,7 +576,7 @@ const dungeonEvent = () => {
         if (!dungeon.roomEvents.blessingOccurred) {
             eventTypes.unshift("blessing");
         }
-        if (dungeon.story.monarchUnlocked) {
+        if (dungeon.story.monarchUnlocked && dungeon.specialEvents.monarchIgnoredFloor !== dungeon.progress.floor) {
             eventTypes.push("monarch", "monarch");
         }
         if ( dungeon.progress.floor < 5 && dungeon.progress.room === 1 && player.equipped.length === 6 && player.lvl > 2 && player.lvl > dungeon.progress.floor && !dungeon.roomEvents.stairsIgnored) {
@@ -1065,6 +1067,10 @@ const ignoreEvent = () => {
         if (dungeon.nothingBias < 40) {
             dungeon.nothingBias++;
         }
+    }
+    if (currentEvent === "monarch") {
+        ensureSpecialEventsState();
+        dungeon.specialEvents.monarchIgnoredFloor = dungeon.progress.floor;
     }
     dungeon.status.event = false;
     currentEvent = null;
