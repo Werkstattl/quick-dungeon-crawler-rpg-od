@@ -554,5 +554,29 @@
   "enemy-type-defensive": "防御型",
   "enemy-type-balanced": "均衡型",
   "enemy-type-quick": "速度型",
-  "enemy-type-lethal": "致命型"
+  "enemy-type-lethal": "致命型",
+  "affix-name-format": "{affix}{name}",
+  "enemy-thorns-damage": "{enemy}身上的尖刺对你造成了{value}点伤害。",
+  "enemy-volatile-death": "{enemy}死亡时爆炸，对你造成了{value}点伤害！",
+  "enemy-boss-enrage": "{enemy}咆哮着变得更加危险！",
+  "affix-names": {
+    "enraged": "狂怒",
+    "armored": "重甲",
+    "swift": "迅捷",
+    "vampiric": "吸血",
+    "elusive": "灵避",
+    "regenerating": "再生",
+    "thorned": "尖刺",
+    "volatile": "易爆"
+  },
+  "affix-descriptions": {
+    "enraged": "攻击力大幅提升，但生命值较低。",
+    "armored": "极难被击伤，但攻击速度较慢。",
+    "swift": "攻击速度大幅提升，但生命值较低。",
+    "vampiric": "每次命中都会治疗自身。",
+    "elusive": "闪避攻击的几率大幅提升。",
+    "regenerating": "每秒恢复生命，但更加脆弱。",
+    "thorned": "将你造成的部分伤害反弹给你。",
+    "volatile": "被击杀时爆炸，对你造成伤害。"
+  }
 }

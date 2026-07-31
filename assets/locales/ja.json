@@ -554,5 +554,29 @@
   "enemy-type-defensive": "防御型",
   "enemy-type-balanced": "バランス型",
   "enemy-type-quick": "速度型",
-  "enemy-type-lethal": "致命型"
+  "enemy-type-lethal": "致命型",
+  "affix-name-format": "{affix}の{name}",
+  "enemy-thorns-damage": "{enemy}のトゲがあなたに{value}のダメージを与えた。",
+  "enemy-volatile-death": "{enemy}が死亡時に爆発し、あなたに{value}のダメージを与えた！",
+  "enemy-boss-enrage": "{enemy}が咆哮し、さらに危険になった！",
+  "affix-names": {
+    "enraged": "激昂",
+    "armored": "重装甲",
+    "swift": "俊敏",
+    "vampiric": "吸血",
+    "elusive": "回避",
+    "regenerating": "再生",
+    "thorned": "棘持ち",
+    "volatile": "爆発"
+  },
+  "affix-descriptions": {
+    "enraged": "攻撃力が大幅に上がるが、体力は低い。",
+    "armored": "非常に傷つけにくいが、攻撃が遅い。",
+    "swift": "攻撃速度が大幅に上がるが、体力は低い。",
+    "vampiric": "攻撃を当てるたびに自身を回復する。",
+    "elusive": "攻撃を回避する頻度が大幅に上がる。",
+    "regenerating": "毎秒体力を回復するが、打たれ弱い。",
+    "thorned": "与えたダメージの一部を反射する。",
+    "volatile": "倒されると爆発してダメージを与える。"
+  }
 }

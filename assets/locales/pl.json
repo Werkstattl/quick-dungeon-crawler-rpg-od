@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Defensywny",
   "enemy-type-balanced": "Zrównoważony",
   "enemy-type-quick": "Szybki",
-  "enemy-type-lethal": "Śmiertelny"
+  "enemy-type-lethal": "Śmiertelny",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Kolce {enemy} rozdarły cię, zadając {value} obrażeń.",
+  "enemy-volatile-death": "{enemy} eksplodował po śmierci, zadając ci {value} obrażeń!",
+  "enemy-boss-enrage": "{enemy} ryczy i staje się groźniejszy!",
+  "affix-names": {
+    "enraged": "Rozwścieczony",
+    "armored": "Opancerzony",
+    "swift": "Zwinny",
+    "vampiric": "Wampiryczny",
+    "elusive": "Nieuchwytny",
+    "regenerating": "Regenerujący",
+    "thorned": "Kolczasty",
+    "volatile": "Niestabilny"
+  },
+  "affix-descriptions": {
+    "enraged": "Uderza znacznie mocniej, ale ma mniej zdrowia.",
+    "armored": "Dużo trudniej go zranić, ale atakuje wolniej.",
+    "swift": "Atakuje znacznie szybciej, ale ma mniej zdrowia.",
+    "vampiric": "Leczy się przy każdym trafieniu.",
+    "elusive": "Znacznie częściej unika ataków.",
+    "regenerating": "Odzyskuje zdrowie co sekundę, ale jest kruchszy.",
+    "thorned": "Odbija część zadawanych przez ciebie obrażeń.",
+    "volatile": "Eksploduje po śmierci, raniąc cię."
+  }
 }

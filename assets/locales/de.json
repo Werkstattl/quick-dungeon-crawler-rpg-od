@@ -572,5 +572,29 @@
   "enemy-type-defensive": "Defensiv",
   "enemy-type-balanced": "Ausgewogen",
   "enemy-type-quick": "Schnell",
-  "enemy-type-lethal": "Tödlich"
+  "enemy-type-lethal": "Tödlich",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Dornen an {enemy} rissen dich für {value} Schaden auf.",
+  "enemy-volatile-death": "{enemy} explodierte im Tod und fügte dir {value} Schaden zu!",
+  "enemy-boss-enrage": "{enemy} brüllt und wird noch gefährlicher!",
+  "affix-names": {
+    "enraged": "Wütend",
+    "armored": "Gepanzert",
+    "swift": "Flink",
+    "vampiric": "Vampirisch",
+    "elusive": "Ausweichend",
+    "regenerating": "Regenerierend",
+    "thorned": "Dornig",
+    "volatile": "Explosiv"
+  },
+  "affix-descriptions": {
+    "enraged": "Schlägt viel härter zu, hat aber weniger Leben.",
+    "armored": "Deutlich schwerer zu verwunden, greift aber langsamer an.",
+    "swift": "Greift viel schneller an, hat aber weniger Leben.",
+    "vampiric": "Heilt sich mit jedem Treffer.",
+    "elusive": "Weicht Angriffen viel häufiger aus.",
+    "regenerating": "Regeneriert jede Sekunde Leben, ist aber zerbrechlicher.",
+    "thorned": "Wirft einen Teil deines Schadens auf dich zurück.",
+    "volatile": "Explodiert beim Tod und verletzt dich."
+  }
 }

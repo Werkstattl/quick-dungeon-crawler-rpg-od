@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Захисний",
   "enemy-type-balanced": "Збалансований",
   "enemy-type-quick": "Швидкий",
-  "enemy-type-lethal": "Смертельний"
+  "enemy-type-lethal": "Смертельний",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Шипи {enemy} завдали вам {value} шкоди.",
+  "enemy-volatile-death": "{enemy} вибухнув після смерті, завдавши вам {value} шкоди!",
+  "enemy-boss-enrage": "{enemy} реве й стає небезпечнішим!",
+  "affix-names": {
+    "enraged": "Розлючений",
+    "armored": "Броньований",
+    "swift": "Стрімкий",
+    "vampiric": "Вампіричний",
+    "elusive": "Невловимий",
+    "regenerating": "Регенеруючий",
+    "thorned": "Шипастий",
+    "volatile": "Вибуховий"
+  },
+  "affix-descriptions": {
+    "enraged": "Б'є значно сильніше, але має менше здоров'я.",
+    "armored": "Значно важче поранити, але атакує повільніше.",
+    "swift": "Атакує значно швидше, але має менше здоров'я.",
+    "vampiric": "Зцілюється з кожним влучним ударом.",
+    "elusive": "Значно частіше ухиляється від атак.",
+    "regenerating": "Відновлює здоров'я щосекунди, але крихкіший.",
+    "thorned": "Відбиває частину завданої вами шкоди.",
+    "volatile": "Вибухає при смерті, ранячи вас."
+  }
 }

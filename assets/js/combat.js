@@ -16,6 +16,7 @@ let combatPaused = false;
 let companionSpecialBuffTimeout = null;
 let companionSpecialBuffRevert = null;
 let scoutDodgeReady = false;
+let volatileDetonated = false;
 
 let enemyAttackDueAt = null;
 let playerAttackDueAt = null;
@@ -147,8 +148,128 @@ const tickEnemyBleed = () => {
     hpValidation();
 };
 
-const nowMs = () => {
-    if (typeof performance !== "undefined" && typeof performance.now === "function") {
+// ========== Enemy affixes ==========
+const currentEnemyHasAffix = (id) => {
+    if (!enemy || typeof enemyHasAffix !== 'function') {
+        return false;
+    }
+    return enemyHasAffix(enemy.affixes, id);
+};
+
+const tickEnemyRegen = () => {
+    if (!player || !player.inCombat || combatPaused || !enemy || !enemy.stats) {
+        return;
+    }
+    if (!currentEnemyHasAffix('regenerating')) {
+        return;
+    }
+    if (!Number.isFinite(enemy.stats.hp) || enemy.stats.hp <= 0) {
+        return;
+    }
+    if (enemy.stats.hp >= enemy.stats.hpMax) {
+        return;
+    }
+
+    const hpMax = Math.max(1, Number(enemy.stats.hpMax) || 1);
+    const healed = Math.max(1, Math.round(hpMax * AFFIX_REGEN_HP_PCT_PER_SECOND));
+    enemy.stats.hp = Math.min(hpMax, enemy.stats.hp + healed);
+    enemyLoadStats();
+};
+
+const applyThornsReflect = (damageDealt) => {
+    if (!player || !player.stats || !currentEnemyHasAffix('thorned')) {
+        return 0;
+    }
+    if (!Number.isFinite(damageDealt) || damageDealt <= 0) {
+        return 0;
+    }
+    const reflected = Math.max(1, Math.round(damageDealt * AFFIX_THORNS_REFLECT_PCT));
+    player.stats.hp -= reflected;
+    if (typeof recordRunDamageTaken === 'function') {
+        recordRunDamageTaken(reflected);
+    }
+    addCombatLog(t('enemy-thorns-damage', {
+        enemy: getDisplayEnemyName(enemy.id, enemy.name),
+        value: nFormatter(reflected)
+    }));
+    return reflected;
+};
+
+// Detonates before the death/loot path so a Volatile enemy can legitimately trade kills.
+const applyVolatileDeath = () => {
+    if (!player || !player.stats || !currentEnemyHasAffix('volatile')) {
+        return 0;
+    }
+    if (volatileDetonated) {
+        return 0;
+    }
+    volatileDetonated = true;
+    const damage = Math.max(1, Math.round(player.stats.hpMax * AFFIX_VOLATILE_PLAYER_HP_PCT));
+    player.stats.hp -= damage;
+    if (typeof recordRunDamageTaken === 'function') {
+        recordRunDamageTaken(damage);
+    }
+    addCombatLog(t('enemy-volatile-death', {
+        enemy: getDisplayEnemyName(enemy.id, enemy.name),
+        value: nFormatter(damage)
+    }));
+    playerLoadStats();
+    return damage;
+};
+
+// ========== Boss phases ==========
+const BOSS_PHASE_THRESHOLDS = { guardian: [0.5], sboss: [0.5, 0.25] };
+const BOSS_PHASE_ATK_MULT = 1.25;
+const BOSS_PHASE_ATKSPD_MULT = 1.15;
+const BOSS_PHASE_ATKSPD_CAP = 2.75;
+
+const ensureEnemyPhaseState = () => {
+    if (!enemy || typeof enemy !== 'object') {
+        return null;
+    }
+    if (!enemy.phase || typeof enemy.phase !== 'object') {
+        enemy.phase = { index: 0 };
+    }
+    if (!Number.isFinite(enemy.phase.index) || enemy.phase.index < 0) {
+        enemy.phase.index = 0;
+    }
+    return enemy.phase;
+};
+
+// Crossing several thresholds in one hit still only grants one enrage per threshold.
+const checkBossPhase = () => {
+    if (!enemy || !enemy.stats || !player || !player.inCombat) {
+        return;
+    }
+    const thresholds = BOSS_PHASE_THRESHOLDS[enemy.condition];
+    if (!thresholds) {
+        return;
+    }
+    const phase = ensureEnemyPhaseState();
+    if (!phase || phase.index >= thresholds.length) {
+        return;
+    }
+    const hpMax = Math.max(1, Number(enemy.stats.hpMax) || 1);
+    const hpPercent = enemy.stats.hp / hpMax;
+    if (enemy.stats.hp <= 0 || hpPercent > thresholds[phase.index]) {
+        return;
+    }
+
+    while (phase.index < thresholds.length && hpPercent <= thresholds[phase.index]) {
+        enemy.stats.atk = Math.round(enemy.stats.atk * BOSS_PHASE_ATK_MULT);
+        enemy.stats.atkSpd = Math.min(BOSS_PHASE_ATKSPD_CAP, enemy.stats.atkSpd * BOSS_PHASE_ATKSPD_MULT);
+        phase.index += 1;
+    }
+
+    if (typeof sfxBuff !== 'undefined' && sfxBuff && typeof sfxBuff.play === 'function') {
+        sfxBuff.play();
+    }
+    addCombatLog(`<span class="crit-enemy">${t('enemy-boss-enrage', {
+        enemy: getDisplayEnemyName(enemy.id, enemy.name)
+    })}</span>`);
+};
+
+const nowMs = () => {    if (typeof performance !== "undefined" && typeof performance.now === "function") {
         return performance.now();
     }
     return Date.now();
@@ -661,25 +782,34 @@ if (typeof window !== 'undefined') {
     window.maybeAutoAttack = maybeAutoAttack;
 }
 // ========== Validation ==========
+const resolvePlayerDeath = () => {
+    player.stats.hp = 0;
+    playerDead = true;
+    player.deaths++;
+    pendingRunSummary = createRunSummary('defeat');
+    if (player.hardcore) {
+        addCombatLog(t('you-died-hardcore'));
+    } else {
+        addCombatLog(t('you-died-softcore'));
+    }
+    endCombat();
+};
+
 const hpValidation = () => {
     const deathMessage = player.hardcore
         ? "Hardcore mode: you lose all <b>inventory</b> and <b>gold</b>."
         : "You keep your <b>inventory</b> and <b>gold</b>.";
     // Prioritizes player death before the enemy
     if (player.stats.hp < 1) {
-        player.stats.hp = 0;
-        playerDead = true;
-        player.deaths++;
-        pendingRunSummary = createRunSummary('defeat');
-        if (player.hardcore) {
-            addCombatLog(t('you-died-hardcore'));
-        } else {
-            addCombatLog(t('you-died-softcore'));
-        }
-        endCombat();
+        resolvePlayerDeath();
     } else if (enemy.stats.hp < 1) {
         // Gives out all the reward and show the claim button
         enemy.stats.hp = 0;
+        applyVolatileDeath();
+        if (player.stats.hp < 1) {
+            resolvePlayerDeath();
+            return;
+        }
         enemyDead = true;
         latestCombatLoot = null;
         player.kills++;
@@ -754,6 +884,8 @@ const hpValidation = () => {
         }
         bindClaimButton();
         autoClaim();
+    } else {
+        checkBossPhase();
     }
 }
 
@@ -842,6 +974,9 @@ const playerAttack = () => {
             logMsg = `<span class="crit-player">${logMsg}</span>`;
         }
         addCombatLog(logMsg);
+    }
+    if (!dodged && damage > 0) {
+        applyThornsReflect(damage);
     }
     hpValidation();
     playerLoadStats();
@@ -1332,6 +1467,11 @@ const startCombat = (battleMusic) => {
     player.inCombat = true;
     combatPaused = false;
     scoutDodgeReady = false;
+    volatileDetonated = false;
+    if (typeof ensureEnemyAffixState === 'function') {
+        ensureEnemyAffixState();
+    }
+    ensureEnemyPhaseState();
     clearCompanionSpecialBuff();
     if (playerAttackTimeout) {
         clearTimeout(playerAttackTimeout);
@@ -1434,11 +1574,13 @@ const endCombat = () => {
     if (enemy && enemy.bleed) {
         delete enemy.bleed;
     }
+    volatileDetonated = false;
     combatSeconds = 0;
 }
 
 const combatCounter = () => {
     combatSeconds++;
+    tickEnemyRegen();
     tickEnemyBleed();
 }
 
@@ -1565,6 +1707,9 @@ const useSpecialAbility = () => {
             }
             addCombatLog(logMsg);
         }
+        if (!dodged && damage > 0) {
+            applyThornsReflect(damage);
+        }
         hpValidation();
         playerLoadStats();
         enemyLoadStats();
@@ -1628,7 +1773,7 @@ const showCombatInfo = () => {
         updateSpecialAbilityCooldownDisplay();
     }
     // Re-evaluate enemy name in case language changed after spawn
-    enemy.name = getDisplayEnemyName(enemy.id);
+    enemy.name = getBaseEnemyName(enemy.id);
     const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
     const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';
     const autoModeEnabled = typeof autoMode === 'undefined' ? false : autoMode;
@@ -1651,10 +1796,17 @@ const showCombatInfo = () => {
     const enemySpriteSrc = (typeof getBestiaryEnemySpriteSrc === 'function')
         ? (getBestiaryEnemySpriteSrc(enemy.id, enemy.image.name) || defaultEnemySpriteSrc)
         : defaultEnemySpriteSrc;
+    const enemyAffixes = typeof normalizeAffixList === 'function' ? normalizeAffixList(enemy.affixes) : [];
+    const enemyAffixBadges = enemyAffixes.length === 0 ? '' : `
+            <div class="enemy-affix-row">${enemyAffixes.map((affixId) => {
+                const affixLabel = getAffixName(affixId);
+                const affixTooltip = getAffixDescription(affixId);
+                return `<span class="enemy-affix-badge affix-${affixId}" title="${affixTooltip}">${affixLabel}</span>`;
+            }).join('')}</div>`;
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
-            <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>
+            <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>${enemyAffixBadges}
             <div class="battle-bar empty-bar hp bb-hp">
                 <div class="battle-bar dmg bb-hp" id="enemy-hp-dmg"></div>
                 <div class="battle-bar current bb-hp" id="enemy-hp-battle">

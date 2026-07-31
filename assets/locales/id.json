@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Defensif",
   "enemy-type-balanced": "Seimbang",
   "enemy-type-quick": "Cepat",
-  "enemy-type-lethal": "Mematikan"
+  "enemy-type-lethal": "Mematikan",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Duri pada {enemy} merobekmu sebesar {value} kerusakan.",
+  "enemy-volatile-death": "{enemy} meledak saat mati, memberimu {value} kerusakan!",
+  "enemy-boss-enrage": "{enemy} mengaum dan menjadi lebih berbahaya!",
+  "affix-names": {
+    "enraged": "Murka",
+    "armored": "Berzirah",
+    "swift": "Gesit",
+    "vampiric": "Vampirik",
+    "elusive": "Licin",
+    "regenerating": "Meregenerasi",
+    "thorned": "Berduri",
+    "volatile": "Mudah Meledak"
+  },
+  "affix-descriptions": {
+    "enraged": "Memukul jauh lebih keras, tetapi darahnya lebih sedikit.",
+    "armored": "Jauh lebih sulit dilukai, tetapi menyerang lebih lambat.",
+    "swift": "Menyerang jauh lebih cepat, tetapi darahnya lebih sedikit.",
+    "vampiric": "Memulihkan diri setiap kali serangannya mengenai.",
+    "elusive": "Jauh lebih sering menghindari serangan.",
+    "regenerating": "Memulihkan darah setiap detik, tetapi lebih rapuh.",
+    "thorned": "Memantulkan sebagian kerusakan yang kamu berikan.",
+    "volatile": "Meledak saat terbunuh dan melukaimu."
+  }
 }

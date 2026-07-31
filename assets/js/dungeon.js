@@ -729,7 +729,7 @@ const dungeonEvent = () => {
                     </div>`;
                 generateRandomEnemy();
                 // Ensure name reflects current language and bestiary custom name
-                enemy.name = getDisplayEnemyName(enemy.id);
+                enemy.name = getBaseEnemyName(enemy.id);
                 addDungeonLog(t('encountered-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }), choices);
                 // player.inCombat = true;
                 document.querySelector("#choice1").onclick = function () {

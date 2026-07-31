@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Défensif",
   "enemy-type-balanced": "Équilibré",
   "enemy-type-quick": "Rapide",
-  "enemy-type-lethal": "Létal"
+  "enemy-type-lethal": "Létal",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Les épines de {enemy} vous ont infligé {value} dégâts.",
+  "enemy-volatile-death": "{enemy} a explosé en mourant, vous infligeant {value} dégâts !",
+  "enemy-boss-enrage": "{enemy} rugit et devient plus dangereux !",
+  "affix-names": {
+    "enraged": "Enragé",
+    "armored": "Blindé",
+    "swift": "Rapide",
+    "vampiric": "Vampirique",
+    "elusive": "Insaisissable",
+    "regenerating": "Régénérant",
+    "thorned": "Épineux",
+    "volatile": "Instable"
+  },
+  "affix-descriptions": {
+    "enraged": "Frappe bien plus fort, mais a moins de vie.",
+    "armored": "Bien plus dur à blesser, mais attaque plus lentement.",
+    "swift": "Attaque bien plus vite, mais a moins de vie.",
+    "vampiric": "Se soigne à chaque coup porté.",
+    "elusive": "Esquive les attaques bien plus souvent.",
+    "regenerating": "Récupère de la vie chaque seconde, mais est plus fragile.",
+    "thorned": "Renvoie une partie des dégâts que vous infligez.",
+    "volatile": "Explose à sa mort et vous blesse."
+  }
 }

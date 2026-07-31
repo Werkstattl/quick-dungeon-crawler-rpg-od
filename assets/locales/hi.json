@@ -554,5 +554,29 @@
   "enemy-type-defensive": "रक्षात्मक",
   "enemy-type-balanced": "संतुलित",
   "enemy-type-quick": "तेज़",
-  "enemy-type-lethal": "घातक"
+  "enemy-type-lethal": "घातक",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "{enemy} के काँटों ने आपको {value} नुकसान पहुँचाया।",
+  "enemy-volatile-death": "{enemy} मरते समय फट गया और आपको {value} नुकसान पहुँचाया!",
+  "enemy-boss-enrage": "{enemy} दहाड़ता है और और भी खतरनाक हो जाता है!",
+  "affix-names": {
+    "enraged": "क्रोधित",
+    "armored": "कवचधारी",
+    "swift": "तीव्र",
+    "vampiric": "रक्तपिपासु",
+    "elusive": "फुर्तीला",
+    "regenerating": "पुनर्जीवित",
+    "thorned": "काँटेदार",
+    "volatile": "विस्फोटक"
+  },
+  "affix-descriptions": {
+    "enraged": "बहुत ज़्यादा ज़ोर से मारता है, पर इसका स्वास्थ्य कम है।",
+    "armored": "इसे घायल करना बहुत कठिन है, पर यह धीरे हमला करता है।",
+    "swift": "बहुत तेज़ी से हमला करता है, पर इसका स्वास्थ्य कम है।",
+    "vampiric": "हर सफल प्रहार से स्वयं को ठीक करता है।",
+    "elusive": "हमलों से बहुत अधिक बार बचता है।",
+    "regenerating": "हर सेकंड स्वास्थ्य वापस पाता है, पर अधिक कमज़ोर है।",
+    "thorned": "आपके द्वारा किए गए नुकसान का कुछ हिस्सा वापस करता है।",
+    "volatile": "मरने पर फटता है और आपको नुकसान पहुँचाता है।"
+  }
 }

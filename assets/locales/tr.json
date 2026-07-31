@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Savunmacı",
   "enemy-type-balanced": "Dengeli",
   "enemy-type-quick": "Hızlı",
-  "enemy-type-lethal": "Öldürücü"
+  "enemy-type-lethal": "Öldürücü",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "{enemy} üzerindeki dikenler sana {value} hasar verdi.",
+  "enemy-volatile-death": "{enemy} ölürken patladı ve sana {value} hasar verdi!",
+  "enemy-boss-enrage": "{enemy} kükrüyor ve daha tehlikeli hale geliyor!",
+  "affix-names": {
+    "enraged": "Öfkeli",
+    "armored": "Zırhlı",
+    "swift": "Çevik",
+    "vampiric": "Vampirik",
+    "elusive": "Kaçamak",
+    "regenerating": "Yenilenen",
+    "thorned": "Dikenli",
+    "volatile": "Patlayıcı"
+  },
+  "affix-descriptions": {
+    "enraged": "Çok daha sert vurur ama canı daha azdır.",
+    "armored": "Yaralaması çok daha zordur ama daha yavaş saldırır.",
+    "swift": "Çok daha hızlı saldırır ama canı daha azdır.",
+    "vampiric": "İsabet ettirdiği her vuruşla kendini iyileştirir.",
+    "elusive": "Saldırılardan çok daha sık kaçar.",
+    "regenerating": "Her saniye can yeniler ama daha kırılgandır.",
+    "thorned": "Verdiğin hasarın bir kısmını sana geri yansıtır.",
+    "volatile": "Öldüğünde patlar ve sana hasar verir."
+  }
 }

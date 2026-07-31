@@ -130,7 +130,7 @@ const randomizeDecimal = (min, max) => {
     return Math.random() * (max - min) + min;
 }
 
-const getDisplayEnemyName = (enemyId, fallbackName) => {
+const getBaseEnemyName = (enemyId, fallbackName) => {
     try {
         if (typeof getBestiaryDisplayName === 'function') {
             const displayName = getBestiaryDisplayName(enemyId);
@@ -146,6 +146,19 @@ const getDisplayEnemyName = (enemyId, fallbackName) => {
         }
     } catch (e) {}
     return String(enemyId || 'Unknown');
+};
+
+// Callers store the base name on enemy.name and feed it back here, so the prefix is added
+// at display time only and never compounds into "Enraged Enraged Goblin".
+const getDisplayEnemyName = (enemyId, fallbackName) => {
+    const baseName = getBaseEnemyName(enemyId, fallbackName);
+    try {
+        if (typeof enemy !== 'undefined' && enemy && enemy.id === enemyId
+            && typeof formatAffixedEnemyName === 'function') {
+            return formatAffixedEnemyName(baseName, enemy.affixes);
+        }
+    } catch (e) {}
+    return baseName;
 };
 
 // Rating system - prompts user to rate the app after certain conditions

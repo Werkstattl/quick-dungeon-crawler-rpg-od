@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Defensive",
   "enemy-type-balanced": "Balanced",
   "enemy-type-quick": "Quick",
-  "enemy-type-lethal": "Lethal"
+  "enemy-type-lethal": "Lethal",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Thorns on {enemy} tore into you for {value} damage.",
+  "enemy-volatile-death": "{enemy} erupted on death, dealing {value} damage to you!",
+  "enemy-boss-enrage": "{enemy} roars and grows more dangerous!",
+  "affix-names": {
+    "enraged": "Enraged",
+    "armored": "Armored",
+    "swift": "Swift",
+    "vampiric": "Vampiric",
+    "elusive": "Elusive",
+    "regenerating": "Regenerating",
+    "thorned": "Thorned",
+    "volatile": "Volatile"
+  },
+  "affix-descriptions": {
+    "enraged": "Hits far harder, but has less health.",
+    "armored": "Much tougher to wound, but attacks slower.",
+    "swift": "Attacks much faster, but has less health.",
+    "vampiric": "Heals itself with every hit it lands.",
+    "elusive": "Evades attacks far more often.",
+    "regenerating": "Recovers health every second, but is frailer.",
+    "thorned": "Reflects part of the damage you deal back at you.",
+    "volatile": "Explodes when slain, damaging you."
+  }
 }

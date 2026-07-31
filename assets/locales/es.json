@@ -554,5 +554,29 @@
   "enemy-type-defensive": "Defensivo",
   "enemy-type-balanced": "Equilibrado",
   "enemy-type-quick": "Rápido",
-  "enemy-type-lethal": "Letal"
+  "enemy-type-lethal": "Letal",
+  "affix-name-format": "{affix} {name}",
+  "enemy-thorns-damage": "Las espinas de {enemy} te desgarraron causando {value} de daño.",
+  "enemy-volatile-death": "¡{enemy} estalló al morir, causándote {value} de daño!",
+  "enemy-boss-enrage": "¡{enemy} ruge y se vuelve más peligroso!",
+  "affix-names": {
+    "enraged": "Enfurecido",
+    "armored": "Acorazado",
+    "swift": "Veloz",
+    "vampiric": "Vampírico",
+    "elusive": "Escurridizo",
+    "regenerating": "Regenerativo",
+    "thorned": "Espinoso",
+    "volatile": "Volátil"
+  },
+  "affix-descriptions": {
+    "enraged": "Golpea mucho más fuerte, pero tiene menos vida.",
+    "armored": "Mucho más difícil de herir, pero ataca más lento.",
+    "swift": "Ataca mucho más rápido, pero tiene menos vida.",
+    "vampiric": "Se cura con cada golpe que acierta.",
+    "elusive": "Esquiva los ataques con mucha más frecuencia.",
+    "regenerating": "Recupera vida cada segundo, pero es más frágil.",
+    "thorned": "Refleja parte del daño que causas.",
+    "volatile": "Explota al morir, dañándote."
+  }
 }

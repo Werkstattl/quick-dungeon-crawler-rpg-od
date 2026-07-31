@@ -1071,6 +1071,9 @@ const enterDungeon = () => {
     initCompanions();
     if (player.inCombat) {
         enemy = JSON.parse(localStorage.getItem("enemyData"));
+        if (typeof ensureEnemyAffixState === 'function') {
+            ensureEnemyAffixState();
+        }
         showCombatInfo();
         startCombat(bgmBattleMain);
     } else {

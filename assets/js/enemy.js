@@ -5,6 +5,8 @@ let enemy = {
     type: null,
     lvl: null,
     condition: null,
+    affixes: [],
+    phase: { index: 0 },
     stats: {
         hp: null,
         hpMax: null,
@@ -299,6 +301,14 @@ const setEnemyStats = (type, condition) => {
         enemy.stats.dodge = 50;
     }
 
+    // Rolled before the reward maths below so exp/gold scale with the added difficulty.
+    enemy.affixes = typeof rollEnemyAffixes === 'function'
+        ? rollEnemyAffixes(condition, curseLvl, dungeon.progress.floor)
+        : [];
+    if (typeof applyAffixStats === 'function') {
+        applyAffixStats(enemy.stats, enemy.affixes);
+    }
+
     const expYield = [];
     for (const stat in enemy.stats) {
         let statExp;
@@ -318,11 +328,19 @@ const setEnemyStats = (type, condition) => {
         enemy.rewards.exp = 900000 * randomizeDecimal(0.9, 1.1);
     }
     enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.3);
+    if (typeof getAffixRewardMultiplier === 'function') {
+        const affixRewardMultiplier = getAffixRewardMultiplier(enemy.affixes);
+        enemy.rewards.exp = Math.round(enemy.rewards.exp * affixRewardMultiplier);
+        enemy.rewards.gold = Math.round(enemy.rewards.gold * affixRewardMultiplier);
+    }
     // Calculate equipment drop chance. Base 33%, increased by player's Luck.
     // Luck is additive multiplier on base chance and capped to avoid guaranteed drops.
     const baseDropChance = 1 / 3; // ~33%
     const playerLuck = (player && player.stats && Number.isFinite(player.stats.luck)) ? player.stats.luck : 0;
     let dropChance = baseDropChance * (1 + (playerLuck / 100));
+    if (typeof getAffixDropBonus === 'function') {
+        dropChance += getAffixDropBonus(enemy.affixes);
+    }
     // Cap maximum chance for balance
     if (dropChance > 0.8) dropChance = 0.8;
     enemy.rewards.drop = Math.random() < dropChance;
@@ -333,10 +351,22 @@ const setEnemyStats = (type, condition) => {
 
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
+    enemy.phase = { index: 0 };
 
     if (enemy.stats.atkSpd > 2.75) {
         enemy.stats.atkSpd = 2.75;
     }
+};
+
+// Saves written before affixes existed have no list, so rebuild it as empty rather than undefined.
+const ensureEnemyAffixState = () => {
+    if (!enemy || typeof enemy !== 'object') {
+        return [];
+    }
+    enemy.affixes = typeof normalizeAffixList === 'function'
+        ? normalizeAffixList(enemy.affixes)
+        : [];
+    return enemy.affixes;
 };
 
 const setEnemyImg = () => {

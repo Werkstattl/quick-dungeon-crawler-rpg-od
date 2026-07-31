@@ -554,5 +554,29 @@
   "enemy-type-defensive": "دفاعي",
   "enemy-type-balanced": "متوازن",
   "enemy-type-quick": "سريع",
-  "enemy-type-lethal": "فتاك"
+  "enemy-type-lethal": "فتاك",
+  "affix-name-format": "{name} {affix}",
+  "enemy-thorns-damage": "أشواك {enemy} مزّقتك وألحقت بك {value} من الضرر.",
+  "enemy-volatile-death": "انفجر {enemy} عند موته وألحق بك {value} من الضرر!",
+  "enemy-boss-enrage": "يزأر {enemy} ويصبح أكثر خطورة!",
+  "affix-names": {
+    "enraged": "الغاضب",
+    "armored": "المدرّع",
+    "swift": "السريع",
+    "vampiric": "المصّاص",
+    "elusive": "المراوغ",
+    "regenerating": "المتجدد",
+    "thorned": "الشائك",
+    "volatile": "المتفجر"
+  },
+  "affix-descriptions": {
+    "enraged": "يضرب بقوة أكبر بكثير، لكن صحته أقل.",
+    "armored": "يصعب جرحه كثيرًا، لكنه يهاجم ببطء.",
+    "swift": "يهاجم بسرعة أكبر بكثير، لكن صحته أقل.",
+    "vampiric": "يشفي نفسه مع كل ضربة يصيبها.",
+    "elusive": "يتفادى الهجمات أكثر بكثير.",
+    "regenerating": "يستعيد صحته كل ثانية، لكنه أضعف.",
+    "thorned": "يعكس جزءًا من الضرر الذي تُلحقه به.",
+    "volatile": "ينفجر عند مقتله ويُلحق بك الضرر."
+  }
 }
