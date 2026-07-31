@@ -92,7 +92,7 @@ function isCordova() {
   }
 
 function openExternal(url) {
-    if (window.__TAURI__ && window.__TAURI__.opener?.openUrl) {
+    if (window.__TAURI__ && window.__TAURI__.opener && window.__TAURI__.opener.openUrl) {
         window.__TAURI__.opener.openUrl(url);
     } else if (window.electronAPI && typeof window.electronAPI.openExternal === 'function') {
         window.electronAPI.openExternal(url);

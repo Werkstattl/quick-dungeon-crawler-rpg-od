@@ -74,7 +74,7 @@ function applyTranslations(root = document) {
     const params = el.getAttribute('data-i18n-params');
     let parsed = null;
     if (params) {
-      try { parsed = JSON.parse(params); } catch {}
+      try { parsed = JSON.parse(params); } catch (e) {}
     }
     const text = t(key, parsed);
     if (text !== key) {
@@ -127,7 +127,7 @@ async function setLanguage(lang) {
     try {
       d = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || null;
       if (d) d = String(d).split('-')[0];
-    } catch {}
+    } catch (e) {}
     return d;
   })();
 

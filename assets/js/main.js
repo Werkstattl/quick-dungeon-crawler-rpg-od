@@ -772,7 +772,7 @@ function openMenu(isTitle = false) {
                     localStorage.setItem('logFlow', logFlow);
                     if (typeof updateDungeonLog === 'function') {
                         // Refresh the current log rendering to reflect flow setting
-                        try { updateDungeonLog(); } catch {}
+                        try { updateDungeonLog(); } catch (e) {}
                     }
                 }
             }
@@ -1049,8 +1049,10 @@ const showCharacterCreation = () => {
 }
 
 const isFreshDungeonRun = () => {
-    const onFirstRoom = dungeon?.progress?.floor === 1 && dungeon?.progress?.room === 1;
-    const hasNoDungeonHistory = Array.isArray(dungeon?.backlog) && dungeon.backlog.length === 0;
+    const progress = (typeof dungeon !== 'undefined' && dungeon) ? dungeon.progress : null;
+    const onFirstRoom = !!progress && progress.floor === 1 && progress.room === 1;
+    const backlog = (typeof dungeon !== 'undefined' && dungeon) ? dungeon.backlog : null;
+    const hasNoDungeonHistory = Array.isArray(backlog) && backlog.length === 0;
     return onFirstRoom && hasNoDungeonHistory;
 };
 
@@ -1472,13 +1474,14 @@ const showEndgameScreen = (summary) => {
             }
             return rarityLabel;
         };
+        const statOr = (value, fallback) => (value === undefined || value === null ? fallback : value);
         const stats = [
-            { key: "level", value: safeSummary.level ?? 1 },
+            { key: "level", value: statOr(safeSummary.level, 1) },
             { key: "runtime", value: formatRunDuration(safeSummary.runtime) },
-            { key: "floor", value: safeSummary.floor ?? 1 },
-            { key: "room", value: safeSummary.room ?? 1 },
-            { key: "kills", value: safeSummary.kills ?? 0 },
-            { key: "bosses-defeated", value: safeSummary.bossesDefeated ?? 0 },
+            { key: "floor", value: statOr(safeSummary.floor, 1) },
+            { key: "room", value: statOr(safeSummary.room, 1) },
+            { key: "kills", value: statOr(safeSummary.kills, 0) },
+            { key: "bosses-defeated", value: statOr(safeSummary.bossesDefeated, 0) },
             { key: "damage-dealt", value: formatNumberStat(safeSummary.damageDealt) },
             { key: "damage-taken", value: formatNumberStat(safeSummary.damageTaken) },
             { key: "gold-earned", value: formatNumberStat(safeSummary.goldEarned) },

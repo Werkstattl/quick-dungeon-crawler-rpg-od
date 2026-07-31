@@ -136,7 +136,7 @@ const getDisplayEnemyName = (enemyId, fallbackName) => {
             const displayName = getBestiaryDisplayName(enemyId);
             if (displayName) return displayName;
         }
-    } catch {}
+    } catch (e) {}
     if (typeof fallbackName === 'string' && fallbackName.trim()) {
         return fallbackName.trim();
     }
@@ -144,7 +144,7 @@ const getDisplayEnemyName = (enemyId, fallbackName) => {
         if (typeof getEnemyTranslatedName === 'function') {
             return getEnemyTranslatedName(enemyId);
         }
-    } catch {}
+    } catch (e) {}
     return String(enemyId || 'Unknown');
 };
 

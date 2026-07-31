@@ -82,7 +82,7 @@ function unlockEnemyCustomization() {
 function isEnemyCustomizationUnlocked() {
   try {
     if (typeof isPremium === 'function' && isPremium()) return true;
-  } catch {}
+  } catch (e) {}
   return enemyCustomizationUnlocked;
 }
 
@@ -161,7 +161,7 @@ function getBestiaryDisplayName(enemyId) {
       const translated = getEnemyTranslatedName(enemyId);
       if (translated) return translated;
     }
-  } catch {}
+  } catch (e) {}
   return String(enemyId);
 }
 
@@ -170,7 +170,7 @@ function getRenamePromptText(currentName) {
     if (typeof t === 'function') {
       return t('bestiary-rename-prompt', { name: currentName });
     }
-  } catch {}
+  } catch (e) {}
   return `Enter a custom name for ${currentName}. Leave empty to reset.`;
 }
 
@@ -180,7 +180,7 @@ function getBestiaryActionLabel(key, fallback) {
       const label = t(key);
       if (label && label !== key) return label;
     }
-  } catch {}
+  } catch (e) {}
   return fallback;
 }
 
@@ -199,7 +199,7 @@ function getBestiaryOutputMimeType() {
     const canvas = document.createElement('canvas');
     const webpData = canvas.toDataURL('image/webp');
     if (webpData.startsWith('data:image/webp')) return 'image/webp';
-  } catch {}
+  } catch (e) {}
   return 'image/png';
 }
 

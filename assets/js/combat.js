@@ -1490,7 +1490,8 @@ const useSpecialAbility = () => {
         let crit;
         let baseAtk = player.stats.atk * 1.5;
         if (player.selectedClass === "Rogue") {
-            const bleedStacks = ensureEnemyBleedState()?.stacks || 0;
+            const bleedState = ensureEnemyBleedState();
+            const bleedStacks = (bleedState && bleedState.stacks) || 0;
             const stackMultiplier = 1 + (bleedStacks * ROGUE_SPECIAL_BLEED_BONUS_PER_STACK);
             baseAtk = player.stats.atk * 1.1;
             baseAtk = baseAtk * stackMultiplier;

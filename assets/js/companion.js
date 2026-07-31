@@ -164,6 +164,8 @@ function applyActiveCompanionBonuses(companion) {
     if (typeof playerLoadStats === 'function') playerLoadStats();
 }
 
+const valueOr = (value, fallback) => (value === undefined || value === null ? fallback : value);
+
 class Companion {
     constructor(id, nameKey, rarity, baseHp, baseAtk, options = {}) {
         this.id = id;
@@ -175,10 +177,10 @@ class Companion {
         this.baseAtk = baseAtk;
         this.passives = options.passives || [];
         this.passiveDescriptionKey = options.passiveDescriptionKey || null;
-        this.baseCritRate = options.baseCritRate ?? 50;
-        this.baseCritDmg = options.baseCritDmg ?? 50;
-        this.atkSpdBase = options.atkSpdBase ?? 0.4;
-        this.atkSpdGrowth = options.atkSpdGrowth ?? 0.02;
+        this.baseCritRate = valueOr(options.baseCritRate, 50);
+        this.baseCritDmg = valueOr(options.baseCritDmg, 50);
+        this.atkSpdBase = valueOr(options.atkSpdBase, 0.4);
+        this.atkSpdGrowth = valueOr(options.atkSpdGrowth, 0.02);
         this.isActive = false;
         this.refreshBaseStats();
     }
@@ -793,8 +795,8 @@ function initCompanions() {
                 data.id,
                 data.nameKey || type.nameKey,
                 data.rarity || type.rarity,
-                data.baseHp ?? type.baseHp,
-                data.baseAtk ?? type.baseAtk,
+                valueOr(data.baseHp, type.baseHp),
+                valueOr(data.baseAtk, type.baseAtk),
                 getCompanionOptionsFromTemplate(type)
             );
             comp.level = data.level;
