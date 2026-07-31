@@ -389,11 +389,14 @@ const loadForgeEquipment = () => {
     
     // Collect forgeable equipment from both inventory and equipped items
     const forgeableEquipment = [];
+    // Charms can only be rerolled or refined, never merged.
+    const allowCharms = forgeMode === 'reroll' || forgeMode === 'refine';
+    const isCharm = (equip) => typeof isCompanionCharm === 'function' && isCompanionCharm(equip);
 
     // Add inventory equipment
     player.inventory.equipment.forEach((equipStr, sourceIndex) => {
         const equip = JSON.parse(equipStr);
-        if (typeof isCompanionCharm === 'function' && isCompanionCharm(equip)) {
+        if (!allowCharms && isCharm(equip)) {
             return;
         }
         forgeableEquipment.push({
@@ -406,7 +409,7 @@ const loadForgeEquipment = () => {
 
     // Add equipped items
     player.equipped.forEach((equip, sourceIndex) => {
-        if (typeof isCompanionCharm === 'function' && isCompanionCharm(equip)) {
+        if (!allowCharms && isCharm(equip)) {
             return;
         }
         forgeableEquipment.push({
@@ -416,6 +419,19 @@ const loadForgeEquipment = () => {
             sourceIndex
         });
     });
+
+    // The equipped charm lives outside player.equipped
+    if (allowCharms && typeof getEquippedCompanionCharm === 'function') {
+        const equippedCharm = getEquippedCompanionCharm();
+        if (equippedCharm) {
+            forgeableEquipment.push({
+                equipStr: JSON.stringify(equippedCharm),
+                equip: equippedCharm,
+                source: 'companionCharm',
+                sourceIndex: -1
+            });
+        }
+    }
     
     if (forgeableEquipment.length === 0) {
         equipmentGrid.innerHTML = `<p class="forge-empty">${t('no-forge-equipment')}</p>`;
@@ -484,7 +500,7 @@ const loadForgeEquipment = () => {
                     ${statsHtml}
                 </ul>
                 <p class="equipment-value">${t('value')}: ${nFormatter(typeof getEquipmentEffectiveValue === 'function' ? getEquipmentEffectiveValue(equip) : equip.value)}</p>
-                ${source === 'equipped' ? `<p class="equipped-indicator">⚔️ ${t('equipped')}</p>` : ''}
+                ${source !== 'inventory' ? `<p class="equipped-indicator">⚔️ ${t('equipped')}</p>` : ''}
             </div>
         `;
         // Only allow click if a slot is free
@@ -1232,6 +1248,15 @@ const executeReroll = () => {
             updatedSourceIndex = itemIndex;
             updated = true;
         }
+    } else if (selectedRerollItem.source === 'companionCharm') {
+        const charm = typeof getEquippedCompanionCharm === 'function' ? getEquippedCompanionCharm() : null;
+        if (charm) {
+            applyRerolledEquipment(charm, rerolledEquipment);
+            updatedEquipment = charm;
+            updatedEquipmentStr = JSON.stringify(charm);
+            updatedSourceIndex = -1;
+            updated = true;
+        }
     }
 
     if (!updated) {
@@ -1291,6 +1316,12 @@ const executeRefine = () => {
         }
         if (itemIndex !== -1) {
             applyRefinedEquipment(player.equipped[itemIndex]);
+            updated = true;
+        }
+    } else if (selectedRefineItem.source === 'companionCharm') {
+        const charm = typeof getEquippedCompanionCharm === 'function' ? getEquippedCompanionCharm() : null;
+        if (charm) {
+            applyRefinedEquipment(charm);
             updated = true;
         }
     }

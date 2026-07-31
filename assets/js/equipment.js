@@ -3,6 +3,7 @@ const COMPANION_CHARM_DROP_CHANCE = 0.05;
 const COMPANION_CHARM_STAT_KEYS = ['atk', 'atkSpd', 'critRate', 'critDmg'];
 // Charm stats that buff the player instead of the companion.
 const COMPANION_CHARM_PLAYER_STAT_KEYS = ['vamp', 'luck', 'fasterRun'];
+const COMPANION_CHARM_STAT_POOL = ['atk', 'atk', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'luck', 'fasterRun'];
 const EQUIPMENT_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
 const REFINE_MAX_LEVEL = 10;
 const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
@@ -191,7 +192,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
     equipment.stats = [];
     let equipmentValue = 0;
     const loopCount = getCompanionCharmLoopCount(equipment.rarity);
-    const statPool = ['atk', 'atk', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'luck', 'fasterRun'];
+    const statPool = COMPANION_CHARM_STAT_POOL;
 
     for (let i = 0; i < loopCount; i++) {
         const statType = statPool[Math.floor(Math.random() * statPool.length)];
@@ -351,8 +352,11 @@ const EQUIPMENT_REROLL_STAT_POOLS = {
 };
 
 const getEquipmentRerollStatPool = (equipment) => {
-    if (!equipment || isCompanionCharm(equipment)) {
+    if (!equipment) {
         return [];
+    }
+    if (isCompanionCharm(equipment)) {
+        return COMPANION_CHARM_STAT_POOL;
     }
     if (equipment.attribute == "Damage") {
         if (equipment.category == "Axe" || equipment.category == "Scythe") {
