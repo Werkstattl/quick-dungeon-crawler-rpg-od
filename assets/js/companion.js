@@ -188,19 +188,23 @@ class Companion {
     }
 
     checkEvolution() {
-        const current = companionTypes.find(c => c.id === this.id);
-        if (current && current.evolvesTo && this.level >= current.evolveLevel) {
+        let current = companionTypes.find(c => c.id === this.id);
+        while (current && current.evolvesTo && this.level >= current.evolveLevel) {
             const next = companionTypes.find(c => c.id === current.evolvesTo);
-            if (next) {
-                const oldName = this.name;
-                this.id = next.id;
-                this.applyTemplate(next);
-                this.refreshBaseStats();
-                if (this.isActive) {
-                    applyActiveCompanionBonuses(this);
-                }
+            if (!next) {
+                break;
+            }
+            const oldName = this.name;
+            this.id = next.id;
+            this.applyTemplate(next);
+            this.refreshBaseStats();
+            if (this.isActive) {
+                applyActiveCompanionBonuses(this);
+            }
+            if (typeof addCombatLog === 'function') {
                 addCombatLog(`${oldName} evolved into ${this.name}!`);
             }
+            current = next;
         }
     }
 
@@ -418,6 +422,8 @@ const companionTypes = [
         baseHp: 40,
         baseAtk: 150,
         obtainable: false,
+        evolvesTo: 11,
+        evolveLevel: 30,
         passives: [
             { stat: 'atk', base: 1, perLevel: 0.1 },
             { stat: 'critRate', base: 1, perLevel: 0.1 },
@@ -432,12 +438,14 @@ const companionTypes = [
         id: 7,
         nameKey: "companion-fairy-guardian",
         rarity: "Rare",
-        baseHp: 25,
+        baseHp: 55,
         baseAtk: 250,
         obtainable: false,
+        evolvesTo: 14,
+        evolveLevel: 45,
         passives: [
-            { stat: 'hp', base: 1, perLevel: 0.1 },
-            { stat: 'vamp', base: 1, perLevel: 0.1 },
+            { stat: 'hp', base: 1.5, perLevel: 0.11 },
+            { stat: 'vamp', base: 1.5, perLevel: 0.11 },
         ],
         passiveDescriptionKey: 'companion-passive-fairy-guardian',
         baseCritRate: 30,
@@ -449,12 +457,14 @@ const companionTypes = [
         id: 8,
         nameKey: "companion-young-dragon",
         rarity: "Epic",
-        baseHp: 60,
+        baseHp: 70,
         baseAtk: 420,
         obtainable: false,
+        evolvesTo: 16,
+        evolveLevel: 60,
         passives: [
-            { stat: 'atk', base: 1, perLevel: 0.1 },
-            { stat: 'critDmg', base: 1, perLevel: 0.1 },
+            { stat: 'atk', base: 2, perLevel: 0.12 },
+            { stat: 'critDmg', base: 2, perLevel: 0.12 },
         ],
         passiveDescriptionKey: 'companion-passive-young-dragon',
         baseCritRate: 50,
@@ -466,12 +476,12 @@ const companionTypes = [
         id: 9,
         nameKey: "companion-night-panther",
         rarity: "Legendary",
-        baseHp: 80,
-        baseAtk: 600,
+        baseHp: 90,
+        baseAtk: 700,
         obtainable: false,
         passives: [
-            { stat: 'atkSpd', base: 1, perLevel: 0.1 },
-            { stat: 'dodge', base: 1, perLevel: 0.1 },
+            { stat: 'atkSpd', base: 2.5, perLevel: 0.13 },
+            { stat: 'dodge', base: 2.5, perLevel: 0.13 },
         ],
         passiveDescriptionKey: 'companion-passive-night-panther',
         baseCritRate: 45,
@@ -487,9 +497,9 @@ const companionTypes = [
         baseAtk: 700,
         obtainable: false,
         passives: [
-            { stat: 'hp', base: 1, perLevel: 0.1 },
-            { stat: 'atk', base: 0.1, perLevel: 0.1 },
-            { stat: 'luck', base: 1, perLevel: 0.1 },
+            { stat: 'hp', base: 2.5, perLevel: 0.13 },
+            { stat: 'atk', base: 1, perLevel: 0.08 },
+            { stat: 'luck', base: 2.5, perLevel: 0.13 },
         ],
         passiveDescriptionKey: 'companion-passive-phoenix',
         baseCritRate: 35,
@@ -497,7 +507,144 @@ const companionTypes = [
         atkSpdBase: 0.52,
         atkSpdGrowth: 0.025,
     },
+    {
+        id: 11,
+        nameKey: "companion-dire-wolf",
+        rarity: "Rare",
+        baseHp: 55,
+        baseAtk: 250,
+        obtainable: false,
+        evolvesTo: 12,
+        evolveLevel: 50,
+        passives: [
+            { stat: 'atk', base: 1.5, perLevel: 0.11 },
+            { stat: 'critRate', base: 1.5, perLevel: 0.11 },
+        ],
+        passiveDescriptionKey: 'companion-passive-dire-wolf',
+        baseCritRate: 45,
+        baseCritDmg: 72,
+        atkSpdBase: 0.67,
+        atkSpdGrowth: 0.026,
+    },
+    {
+        id: 12,
+        nameKey: "companion-moonfang-alpha",
+        rarity: "Epic",
+        baseHp: 70,
+        baseAtk: 420,
+        obtainable: false,
+        evolvesTo: 13,
+        evolveLevel: 70,
+        passives: [
+            { stat: 'atk', base: 2, perLevel: 0.12 },
+            { stat: 'critRate', base: 2, perLevel: 0.12 },
+        ],
+        passiveDescriptionKey: 'companion-passive-moonfang-alpha',
+        baseCritRate: 50,
+        baseCritDmg: 76,
+        atkSpdBase: 0.69,
+        atkSpdGrowth: 0.027,
+    },
+    {
+        id: 13,
+        nameKey: "companion-fenrir",
+        rarity: "Legendary",
+        baseHp: 90,
+        baseAtk: 700,
+        obtainable: false,
+        passives: [
+            { stat: 'atk', base: 2.5, perLevel: 0.13 },
+            { stat: 'critRate', base: 2.5, perLevel: 0.13 },
+        ],
+        passiveDescriptionKey: 'companion-passive-fenrir',
+        baseCritRate: 55,
+        baseCritDmg: 80,
+        atkSpdBase: 0.72,
+        atkSpdGrowth: 0.028,
+    },
+    {
+        id: 14,
+        nameKey: "companion-fairy-sovereign",
+        rarity: "Epic",
+        baseHp: 70,
+        baseAtk: 420,
+        obtainable: false,
+        evolvesTo: 15,
+        evolveLevel: 70,
+        passives: [
+            { stat: 'hp', base: 2, perLevel: 0.12 },
+            { stat: 'vamp', base: 2, perLevel: 0.12 },
+        ],
+        passiveDescriptionKey: 'companion-passive-fairy-sovereign',
+        baseCritRate: 35,
+        baseCritDmg: 58,
+        atkSpdBase: 0.55,
+        atkSpdGrowth: 0.022,
+    },
+    {
+        id: 15,
+        nameKey: "companion-lifebloom-seraph",
+        rarity: "Legendary",
+        baseHp: 90,
+        baseAtk: 700,
+        obtainable: false,
+        passives: [
+            { stat: 'hp', base: 2.5, perLevel: 0.13 },
+            { stat: 'vamp', base: 2.5, perLevel: 0.13 },
+        ],
+        passiveDescriptionKey: 'companion-passive-lifebloom-seraph',
+        baseCritRate: 40,
+        baseCritDmg: 62,
+        atkSpdBase: 0.58,
+        atkSpdGrowth: 0.024,
+    },
+    {
+        id: 16,
+        nameKey: "companion-elder-dragon",
+        rarity: "Legendary",
+        baseHp: 90,
+        baseAtk: 700,
+        obtainable: false,
+        passives: [
+            { stat: 'atk', base: 2.5, perLevel: 0.13 },
+            { stat: 'critDmg', base: 2.5, perLevel: 0.13 },
+        ],
+        passiveDescriptionKey: 'companion-passive-elder-dragon',
+        baseCritRate: 55,
+        baseCritDmg: 90,
+        atkSpdBase: 0.6,
+        atkSpdGrowth: 0.026,
+    },
 ];
+
+// Walks the evolvesTo links to list every later form of a companion line.
+const getCompanionEvolutionChain = (companionId) => {
+    const chain = [];
+    const seen = new Set([companionId]);
+    let current = companionTypes.find(c => c.id === companionId);
+    while (current && current.evolvesTo && !seen.has(current.evolvesTo)) {
+        const next = companionTypes.find(c => c.id === current.evolvesTo);
+        if (!next) {
+            break;
+        }
+        chain.push(next.id);
+        seen.add(next.id);
+        current = next;
+    }
+    return chain;
+};
+
+const getNextCompanionEvolution = (companion) => {
+    if (!companion) {
+        return null;
+    }
+    const template = companionTypes.find(c => c.id === companion.id);
+    if (!template || !template.evolvesTo) {
+        return null;
+    }
+    const next = companionTypes.find(c => c.id === template.evolvesTo);
+    return next ? { template: next, evolveLevel: template.evolveLevel } : null;
+};
 
 // Player's companions
 let playerCompanions = [];
@@ -657,6 +804,8 @@ function initCompanions() {
             if (Array.isArray(data.passives) && data.passives.length && !type.passives) {
                 comp.passives = data.passives;
             }
+            // Saved companions may already exceed newly added evolution levels
+            comp.checkEvolution();
             return comp;
         });
 
@@ -785,6 +934,7 @@ function openCompanionModal() {
         const passiveKey = companion.passiveDescriptionKey;
         const combatStats = getCompanionCombatStats(companion);
         const unlockProgress = getPermanentCompanionUnlockProgressHtml(companion.id);
+        const nextEvolution = getNextCompanionEvolution(companion);
         option.innerHTML = `
             <h4>${companion.name}</h4>
             <p><span data-i18n="level">Level</span>: ${companion.level}</p>
@@ -792,6 +942,7 @@ function openCompanionModal() {
             <p><span data-i18n="aps">APS:</span> ${combatStats.atkSpd.toFixed(2)}</p>
             ${bonusSummary.html}
             ${passiveKey ? `<p class="companion-passive" data-i18n="${passiveKey}"></p>` : ''}
+            ${nextEvolution ? `<p class="companion-evolution ${nextEvolution.template.rarity}">${t('companion-evolves-at', { level: nextEvolution.evolveLevel, rarity: t(nextEvolution.template.rarity.toLowerCase()) })}</p>` : ''}
             ${unlockProgress}
         `;
         if (companion.isActive) {
@@ -882,11 +1033,10 @@ function findCompanionAfterCombat(enemyLevel) {
         };
 
         // Filter out companions player already has
-        // Also exclude base forms if the player owns their evolutions
-        const evolvedMap = {1: 6, 2: 7, 3: 8, 4: 9, 5: 10};
+        // Also exclude base forms if the player owns any later form of that line
         const ownedIds = new Set(playerCompanions.map(pc => pc.id));
         const availableCompanions = companionTypes.filter(c => {
-            if (evolvedMap[c.id] && ownedIds.has(evolvedMap[c.id])) return false;
+            if (getCompanionEvolutionChain(c.id).some(id => ownedIds.has(id))) return false;
             return (c.obtainable !== false) &&
                    rarityPool.includes(rarityMap[c.rarity]) &&
                    !ownedIds.has(c.id);

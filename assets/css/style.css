@@ -1440,6 +1440,13 @@ header button i {
     opacity: 0.85;
 }
 
+.companion-option .companion-evolution {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
 .companion-option.active-companion {
     border-color: rgba(255, 215, 0, 0.7);
     box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
