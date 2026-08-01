@@ -1094,7 +1094,8 @@ const createForgedEquipment = (item1, item2, item3, targetCategory) => {
     forgedEquipment.category = targetConfig.category;
     forgedEquipment.attribute = targetConfig.attribute;
     forgedEquipment.type = targetConfig.type;
-    forgedEquipment.slot = typeof getEquipmentSlot === 'function' ? getEquipmentSlot(forgedEquipment) : null;
+    forgedEquipment.slot = null;
+    forgedEquipment.slot = getEquipmentSlot(forgedEquipment);
 
     // Set tier to the same as input items
     forgedEquipment.tier = item1.tier;

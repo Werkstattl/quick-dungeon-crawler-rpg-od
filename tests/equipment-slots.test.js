@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const equipmentSource = fs.readFileSync(path.join(root, 'assets/js/equipment.js'), 'utf8');
 const dungeonSource = fs.readFileSync(path.join(root, 'assets/js/dungeon.js'), 'utf8');
+const mainSource = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
 
 const createContext = () => {
     const context = vm.createContext({
@@ -154,6 +155,19 @@ test('drop and equip paths use slot availability instead of a generic six-item c
     assert.doesNotMatch(equipmentSource, /const maxEquippedSlots = 6/);
     assert.match(dungeonSource, /hasCompleteEquipmentLoadout\(\)/);
     assert.doesNotMatch(dungeonSource, /player\.equipped\.length === 6/);
+});
+
+test('legacy slot migration runs during application initialization when saveData is available', () => {
+    const migrationCall = 'normalizePlayerEquipmentSlots();';
+    const migrationIndex = mainSource.indexOf(migrationCall);
+    const initialPlayerRoutingIndex = mainSource.indexOf('if (player === null)');
+
+    assert.ok(migrationIndex >= 0, 'main.js is missing the startup equipment migration');
+    assert.ok(migrationIndex < initialPlayerRoutingIndex, 'equipment migration must run before initial player routing');
+    assert.doesNotMatch(
+        equipmentSource,
+        /if \(typeof player !== 'undefined' && player\) \{\s*normalizePlayerEquipmentSlots\(\);/,
+    );
 });
 
 test('every locale includes slot labels and accessory item names', () => {

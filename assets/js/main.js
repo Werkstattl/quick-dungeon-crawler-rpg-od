@@ -1,6 +1,10 @@
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
+    if (player && typeof normalizePlayerEquipmentSlots === 'function') {
+        normalizePlayerEquipmentSlots();
+    }
+
     // Apply saved font size on page load
     const advancedStatsDetails = document.querySelector('#advanced-stats');
     const bonusStatsBox = document.querySelector('#bonus-stats');

@@ -2122,7 +2122,3 @@ const createEquipmentPrint = (condition, options = {}) => {
         serialized: serializedItem
     };
 }
-
-if (typeof player !== 'undefined' && player) {
-    normalizePlayerEquipmentSlots();
-}
