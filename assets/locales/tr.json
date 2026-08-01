@@ -125,6 +125,15 @@
   "rarity": "Nadirlik",
   "tier": "Kademe",
   "equipment": "Ekipman",
+  "equipment-slot": {
+    "weapon": "Silah",
+    "offHand": "İkinci El",
+    "head": "Baş",
+    "body": "Gövde",
+    "feet": "Ayak",
+    "accessory": "Aksesuar"
+  },
+  "empty-slot": "Boş",
   "menu": "Menü",
   "statistics": "İstatistikler",
   "more": "Daha fazla",
@@ -454,6 +463,9 @@
     "horned-helm": "Boynuzlu Miğfer",
     "mask": "Maske",
     "boots": "Botlar",
+    "ring": "Yüzük",
+    "amulet": "Muska",
+    "talisman": "Tılsım",
     "charm": "Tılsım"
   },
   "enemy-names": {

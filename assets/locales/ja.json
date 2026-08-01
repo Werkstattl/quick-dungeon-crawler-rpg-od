@@ -125,6 +125,15 @@
   "rarity": "レア度",
   "tier": "ティア",
   "equipment": "装備",
+  "equipment-slot": {
+    "weapon": "武器",
+    "offHand": "オフハンド",
+    "head": "頭",
+    "body": "胴",
+    "feet": "足",
+    "accessory": "アクセサリー"
+  },
+  "empty-slot": "空き",
   "menu": "メニュー",
   "statistics": "統計",
   "more": "もっと見る",
@@ -454,6 +463,9 @@
     "horned-helm": "ホーンヘルム",
     "mask": "マスク",
     "boots": "ブーツ",
+    "ring": "指輪",
+    "amulet": "アミュレット",
+    "talisman": "タリスマン",
     "charm": "チャーム"
   },
   "enemy-names": {

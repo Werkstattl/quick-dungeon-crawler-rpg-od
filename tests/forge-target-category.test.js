@@ -57,14 +57,18 @@ test('every forge target maps to a valid non-charm equipment category', () => {
     const context = createForgeContext();
     const configs = vm.runInContext('FORGE_CATEGORY_CONFIG', context);
 
-    assert.equal(configs.length, 16);
+    assert.equal(configs.length, 19);
     assert.equal(new Set(configs.map(({ category }) => category)).size, configs.length);
     assert.equal(configs.some(({ category }) => category === 'Charm'), false);
     for (const config of configs) {
         assert.ok(config.category);
-        assert.ok(config.attribute === 'Damage' || config.attribute === 'Defense');
+        assert.ok(['Damage', 'Defense', 'Utility'].includes(config.attribute));
         assert.ok(config.type);
     }
+    assert.deepEqual(
+        JSON.parse(JSON.stringify(configs.filter(({ type }) => type === 'Accessory').map(({ category }) => category))),
+        ['Ring', 'Amulet', 'Talisman'],
+    );
 });
 
 test('forging rejects an unknown target category', () => {

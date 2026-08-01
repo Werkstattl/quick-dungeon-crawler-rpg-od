@@ -155,6 +155,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                         refineStones: 0
                     },
                     equipped: [],
+                    equipmentSlotVersion: EQUIPMENT_SLOT_VERSION,
                     companionCharm: null,
                     gold: 0,
                     playtime: 0,

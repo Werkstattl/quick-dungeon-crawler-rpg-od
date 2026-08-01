@@ -125,6 +125,15 @@
   "rarity": "Raritate",
   "tier": "Nivel",
   "equipment": "Echipament",
+  "equipment-slot": {
+    "weapon": "Armă",
+    "offHand": "Mâna secundară",
+    "head": "Cap",
+    "body": "Corp",
+    "feet": "Picioare",
+    "accessory": "Accesoriu"
+  },
+  "empty-slot": "Gol",
   "menu": "Meniu",
   "statistics": "Statistici",
   "more": "Mai multe",
@@ -452,6 +461,9 @@
     "horned-helm": "Coif cu coarne",
     "mask": "Mască",
     "boots": "Cizme",
+    "ring": "Inel",
+    "amulet": "Amuletă",
+    "talisman": "Talisman",
     "charm": "Amuletă"
   },
   "enemy-names": {

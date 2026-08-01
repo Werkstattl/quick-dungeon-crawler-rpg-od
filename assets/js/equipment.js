@@ -10,6 +10,68 @@ const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
 const REFINE_STONE_COMBAT_DROP_CHANCE = 0.16;
 const REFINE_STONE_CHEST_DROP_CHANCE = 0.35;
 
+const EQUIPMENT_SLOT_VERSION = 1;
+const EQUIPMENT_SLOT_DEFINITIONS = Object.freeze([
+    { key: 'weapon', label: 'Weapon', icon: '<i class="ra ra-crossed-swords"></i>' },
+    { key: 'offHand', label: 'Off Hand', icon: '<i class="ra ra-shield"></i>' },
+    { key: 'head', label: 'Head', icon: '<i class="ra ra-knight-helmet"></i>' },
+    { key: 'body', label: 'Body', icon: '<i class="ra ra-vest"></i>' },
+    { key: 'feet', label: 'Feet', icon: '<i class="ra ra-boot-stomp"></i>' },
+    { key: 'accessory', label: 'Accessory', icon: '<i class="fas fa-ring"></i>' },
+]);
+const EQUIPMENT_SLOT_KEYS = EQUIPMENT_SLOT_DEFINITIONS.map((slot) => slot.key);
+
+const getEquipmentSlot = (equipment) => {
+    if (!equipment) {
+        return null;
+    }
+    if (equipment.slot === COMPANION_CHARM_SLOT_KEY
+        || (equipment.category === 'Charm' && equipment.attribute === 'Companion')) {
+        return COMPANION_CHARM_SLOT_KEY;
+    }
+    if (EQUIPMENT_SLOT_KEYS.includes(equipment.slot)) {
+        return equipment.slot;
+    }
+
+    const category = equipment.baseCategory || equipment.category;
+    const type = equipment.type;
+    if (type === 'Weapon' || ['Sword', 'Axe', 'Hammer', 'Dagger', 'Flail', 'Scythe'].includes(category)) {
+        return 'weapon';
+    }
+    if (type === 'Shield' || ['Tower', 'Kite', 'Buckler'].includes(category)) {
+        return 'offHand';
+    }
+    if (type === 'Helmet' || type === 'Mask' || ['Great Helm', 'Horned Helm', 'Mask'].includes(category)) {
+        return 'head';
+    }
+    if (type === 'Armor' || ['Plate', 'Chain', 'Leather'].includes(category)) {
+        return 'body';
+    }
+    if (type === 'Boots' || category === 'Boots') {
+        return 'feet';
+    }
+    if (type === 'Accessory' || ['Ring', 'Amulet', 'Talisman'].includes(category)) {
+        return 'accessory';
+    }
+    return null;
+};
+
+const getEquipmentSlotDefinition = (slotKey) => EQUIPMENT_SLOT_DEFINITIONS.find((slot) => slot.key === slotKey) || null;
+
+const getEquippedItemForSlot = (slotKey) => {
+    if (!player || !Array.isArray(player.equipped)) {
+        return null;
+    }
+    return player.equipped.find((item) => item && getEquipmentSlot(item) === slotKey) || null;
+};
+
+const hasEmptyEquipmentSlotFor = (equipment) => {
+    const slotKey = getEquipmentSlot(equipment);
+    return Boolean(slotKey && slotKey !== COMPANION_CHARM_SLOT_KEY && !getEquippedItemForSlot(slotKey));
+};
+
+const hasCompleteEquipmentLoadout = () => EQUIPMENT_SLOT_KEYS.every((slotKey) => Boolean(getEquippedItemForSlot(slotKey)));
+
 const ensureRefineInventory = () => {
     if (!player) {
         return 0;
@@ -226,7 +288,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
 };
 
 const createEquipment = (addToInventory = true, options = {}) => {
-    const { allowCompanionCharm = true, minRarity = null } = options;
+    const { allowCompanionCharm = true, minRarity = null, forcedSlot = null } = options;
     const equipment = {
         category: null,
         attribute: null,
@@ -248,29 +310,49 @@ const createEquipment = (addToInventory = true, options = {}) => {
         equipment.category = 'Charm';
         equipment.slot = COMPANION_CHARM_SLOT_KEY;
     } else {
-        const equipmentAttributes = ["Damage", "Defense"];
-        equipment.attribute = equipmentAttributes[Math.floor(Math.random() * equipmentAttributes.length)];
-        if (equipment.attribute == "Damage") {
+        const emptySlots = player && Array.isArray(player.equipped)
+            ? EQUIPMENT_SLOT_KEYS.filter((slotKey) => !getEquippedItemForSlot(slotKey))
+            : [];
+        const preferEmptySlot = emptySlots.length > 0 && Math.random() < 0.7;
+        const slotPool = preferEmptySlot ? emptySlots : EQUIPMENT_SLOT_KEYS;
+        const selectedSlot = EQUIPMENT_SLOT_KEYS.includes(forcedSlot)
+            ? forcedSlot
+            : slotPool[Math.floor(Math.random() * slotPool.length)];
+        equipment.slot = selectedSlot;
+
+        if (selectedSlot === 'weapon') {
+            equipment.attribute = 'Damage';
             const equipmentCategories = ["Sword", "Axe", "Hammer", "Dagger", "Flail", "Scythe"];
             equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
             equipment.type = "Weapon";
-        } else if (equipment.attribute == "Defense") {
-            const equipmentTypes = ["Armor", "Shield", "Helmet", "Mask", "Boots"];
-            equipment.type = equipmentTypes[Math.floor(Math.random() * equipmentTypes.length)];
-            if (equipment.type == "Armor") {
-                const equipmentCategories = ["Plate", "Chain", "Leather"];
-                equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
-            } else if (equipment.type == "Shield") {
-                const equipmentCategories = ["Tower", "Kite", "Buckler"];
-                equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
-            } else if (equipment.type == "Helmet") {
+        } else if (selectedSlot === 'offHand') {
+            equipment.attribute = 'Defense';
+            equipment.type = 'Shield';
+            const equipmentCategories = ["Tower", "Kite", "Buckler"];
+            equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
+        } else if (selectedSlot === 'head') {
+            equipment.attribute = 'Defense';
+            equipment.type = Math.random() < 0.75 ? 'Helmet' : 'Mask';
+            if (equipment.type === 'Helmet') {
                 const equipmentCategories = ["Great Helm", "Horned Helm"];
                 equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
-            } else if (equipment.type == "Mask") {
+            } else {
                 equipment.category = "Mask";
-            } else if (equipment.type == "Boots") {
-                equipment.category = "Boots";
             }
+        } else if (selectedSlot === 'body') {
+            equipment.attribute = 'Defense';
+            equipment.type = 'Armor';
+            const equipmentCategories = ["Plate", "Chain", "Leather"];
+            equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
+        } else if (selectedSlot === 'feet') {
+            equipment.attribute = 'Defense';
+            equipment.type = 'Boots';
+            equipment.category = 'Boots';
+        } else if (selectedSlot === 'accessory') {
+            equipment.attribute = 'Utility';
+            equipment.type = 'Accessory';
+            const equipmentCategories = ['Ring', 'Amulet', 'Talisman'];
+            equipment.category = equipmentCategories[Math.floor(Math.random() * equipmentCategories.length)];
         }
     }
     const rarityChances = {
@@ -329,7 +411,11 @@ const receiveEquipment = (equipment) => {
         }
         return;
     }
-    if (player.equipped.length < 6) {
+    const slotKey = getEquipmentSlot(equipment);
+    if (slotKey) {
+        equipment.slot = slotKey;
+    }
+    if (hasEmptyEquipmentSlotFor(equipment)) {
         player.equipped.push(equipment);
     } else {
         player.inventory.equipment.push(JSON.stringify(equipment));
@@ -349,6 +435,7 @@ const EQUIPMENT_REROLL_STAT_POOLS = {
     evasive: ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"],
     boots: ["dodge", "fasterRun", "hp", "def", "hp", "def"],
     damageDefense: ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"],
+    utility: ["atk", "hp", "def", "atkSpd", "critRate", "critDmg", "vamp", "dodge", "luck", "fasterRun"],
 };
 
 const getEquipmentRerollStatPool = (equipment) => {
@@ -378,6 +465,9 @@ const getEquipmentRerollStatPool = (equipment) => {
             return EQUIPMENT_REROLL_STAT_POOLS.boots;
         }
         return EQUIPMENT_REROLL_STAT_POOLS.defense;
+    }
+    if (equipment.attribute == "Utility" || equipment.type === "Accessory") {
+        return EQUIPMENT_REROLL_STAT_POOLS.utility;
     }
     return [];
 };
@@ -632,6 +722,12 @@ const equipmentIcon = (equipment) => {
         return '<i class="ra ra-arcane-mask"></i>';
     } else if (equipment == "Boots") {
         return '<i class="ra ra-boot-stomp"></i>';
+    } else if (equipment == "Ring") {
+        return '<i class="fas fa-ring"></i>';
+    } else if (equipment == "Amulet") {
+        return '<i class="ra ra-gem-pendant"></i>';
+    } else if (equipment == "Talisman") {
+        return '<i class="ra ra-crystal-ball"></i>';
     } else if (equipment == "Charm") {
         return '<i class="fas fa-gem"></i>';
     }
@@ -664,8 +760,9 @@ const showItemInfo = (item, icon, action, i) => {
     const lockButtonMarkup = `<button id="toggle-lock">${lockButtonLabel}</button>`;
     itemInfo.style.display = "flex";
     dimContainer.style.filter = "brightness(50%)";
+    const itemSlot = getEquipmentSlot(item);
     const equippedItems = action === 'equip'
-        ? (Array.isArray(player.equipped) ? player.equipped.filter(Boolean) : [])
+        ? [getEquippedItemForSlot(itemSlot)].filter(Boolean)
         : (action === 'equip-companion' && getEquippedCompanionCharm() ? [getEquippedCompanionCharm()] : []);
     let comparisonIndex = 0;
     if (isEquipAction && equippedItems.length > 0) {
@@ -757,7 +854,7 @@ const showItemInfo = (item, icon, action, i) => {
                         ? 'Currently Equipped Charm'
                         : translateEquipText('currently-equipped', 'Currently Equipped');
                     const label = equippedItems.length > 1 ? `${baseLabel} (${comparisonIndex + 1}/${equippedItems.length})` : baseLabel;
-                    const navMarkup = hasComparisonItems && !isCompanionAction ? `
+                    const navMarkup = equippedItems.length > 1 && !isCompanionAction ? `
                         <div class="equipment-compare-nav-group">
                             <button type="button" class="equipment-compare-nav equipment-compare-nav--prev" aria-label="${prevLabel}" title="${prevLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9664;</button>
                             <button type="button" class="equipment-compare-nav equipment-compare-nav--next" aria-label="${nextLabel}" title="${nextLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9654;</button>
@@ -803,25 +900,22 @@ const showItemInfo = (item, icon, action, i) => {
     let unEquip = document.querySelector("#un-equip");
     unEquip.onclick = function () {
         if (action === "equip") {
-            if (player.equipped.length >= 6) {
-                const comparisonItem = equippedItems.length ? equippedItems[comparisonIndex] || equippedItems[0] : null;
-                const comparisonIndexInEquipped = comparisonItem ? player.equipped.indexOf(comparisonItem) : -1;
+            const slotKey = itemSlot;
+            if (!slotKey || slotKey === COMPANION_CHARM_SLOT_KEY) {
+                sfxDeny.play();
+                return;
+            }
 
-                if (comparisonIndexInEquipped === -1) {
-                    sfxDeny.play();
-                    return;
-                }
+            const comparisonItem = getEquippedItemForSlot(slotKey);
+            const comparisonIndexInEquipped = comparisonItem ? player.equipped.indexOf(comparisonItem) : -1;
+            sfxEquip.play();
+            player.inventory.equipment.splice(i, 1);
+            item.slot = slotKey;
 
-                sfxEquip.play();
-
-                player.inventory.equipment.splice(i, 1);
+            if (comparisonIndexInEquipped >= 0) {
                 player.inventory.equipment.push(JSON.stringify(comparisonItem));
                 player.equipped[comparisonIndexInEquipped] = item;
             } else {
-                sfxEquip.play();
-
-                // Equip the item
-                player.inventory.equipment.splice(i, 1);
                 player.equipped.push(item);
             }
         } else if (action === "unequip") {
@@ -1030,6 +1124,14 @@ const showInventory = () => {
         itemLabel.className = item.rarity;
         itemLabel.innerHTML = `${icon}${equipmentDisplayLabel(item)}`;
         itemDiv.appendChild(itemLabel);
+        const slotDefinition = getEquipmentSlotDefinition(getEquipmentSlot(item));
+        if (slotDefinition) {
+            const slotBadge = document.createElement('span');
+            slotBadge.className = 'inventory-slot-badge';
+            slotBadge.textContent = translateEquipText(`equipment-slot.${slotDefinition.key}`, slotDefinition.label);
+            slotBadge.title = slotBadge.textContent;
+            itemDiv.appendChild(slotBadge);
+        }
         if (isLocked) {
             const lockLabel = translateEquipText('locked', 'Locked');
             const lockIndicator = document.createElement('span');
@@ -1081,27 +1183,46 @@ const showCompanionCharmSlot = () => {
     charmSlot.appendChild(charmDiv);
 };
 
-// Show equipment
+// Show equipment in fixed category slots
 const showEquipment = () => {
-    // Clear the inventory container
-    let playerEquipmentList = document.getElementById("playerEquipment");
+    const playerEquipmentList = document.getElementById("playerEquipment");
+    if (!playerEquipmentList) {
+        return;
+    }
     playerEquipmentList.innerHTML = "";
     showCompanionCharmSlot();
 
-    // Show a message if a player has no equipment
-    if (player.equipped.length == 0) {
-        playerEquipmentList.innerHTML = t('nothing-equipped');
-    }
+    EQUIPMENT_SLOT_DEFINITIONS.forEach((slotDefinition) => {
+        const item = getEquippedItemForSlot(slotDefinition.key);
+        const slotCard = document.createElement('div');
+        slotCard.className = item ? 'equipment-slot-card equipment-slot-card--filled' : 'equipment-slot-card equipment-slot-card--empty';
+        slotCard.dataset.slot = slotDefinition.key;
 
-    for (let i = 0; i < player.equipped.length; i++) {
-        const item = player.equipped[i];
+        const label = translateEquipText(`equipment-slot.${slotDefinition.key}`, slotDefinition.label);
+        const labelElement = document.createElement('span');
+        labelElement.className = 'equipment-slot-card__label';
+        labelElement.textContent = label;
+        slotCard.appendChild(labelElement);
 
-        // Create an element to display the item's name
-        const equipDiv = document.createElement('div');
+        if (!item) {
+            const emptySlot = document.createElement('div');
+            emptySlot.className = 'equipment-slot-card__item equipment-slot-card__item--empty';
+            emptySlot.innerHTML = `${slotDefinition.icon}<span>${translateEquipText('empty-slot', 'Empty')}</span>`;
+            emptySlot.setAttribute('aria-label', `${label}: ${translateEquipText('empty-slot', 'Empty')}`);
+            slotCard.appendChild(emptySlot);
+            playerEquipmentList.appendChild(slotCard);
+            return;
+        }
+
         const icon = equipmentIcon(item.baseCategory || item.category);
         const isLocked = Boolean(item.locked);
-        equipDiv.className = isLocked ? "items locked-item" : "items";
-        equipDiv.innerHTML = `<button class="${item.rarity}">${icon}</button>`;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = isLocked ? 'items locked-item equipment-slot-card__item' : 'items equipment-slot-card__item';
+        const itemButton = document.createElement('button');
+        itemButton.className = item.rarity;
+        itemButton.title = equipmentDisplayLabel(item);
+        itemButton.innerHTML = icon;
+        itemDiv.appendChild(itemButton);
         if (isLocked) {
             const lockLabel = translateEquipText('locked', 'Locked');
             const lockIndicator = document.createElement('span');
@@ -1109,17 +1230,18 @@ const showEquipment = () => {
             lockIndicator.innerHTML = '<i class="fas fa-lock"></i>';
             lockIndicator.setAttribute('aria-hidden', 'true');
             lockIndicator.setAttribute('title', lockLabel);
-            equipDiv.setAttribute('title', lockLabel);
-            equipDiv.appendChild(lockIndicator);
+            itemDiv.appendChild(lockIndicator);
         }
-        equipDiv.addEventListener('click', function () {
-            showItemInfo(item, icon, 'unequip', i);
+        itemDiv.addEventListener('click', function () {
+            const currentIndex = player.equipped.indexOf(item);
+            if (currentIndex >= 0) {
+                showItemInfo(item, icon, 'unequip', currentIndex);
+            }
         });
-
-        // Add the equipDiv to the inventory container
-        playerEquipmentList.appendChild(equipDiv);
-    }
-}
+        slotCard.appendChild(itemDiv);
+        playerEquipmentList.appendChild(slotCard);
+    });
+};
 
 // Apply the equipment stats to the player
 const applyEquipmentStats = () => {
@@ -1228,6 +1350,97 @@ const getEquipmentEffectiveValue = (item) => {
     return Math.max(0, Math.round(value * getEquipmentRefineStatMultiplier(item)));
 };
 
+const normalizePlayerEquipmentSlots = () => {
+    if (!player) {
+        return { movedToInventory: 0, changed: false };
+    }
+    if (!Array.isArray(player.equipped)) {
+        player.equipped = [];
+    }
+    if (!player.inventory || !Array.isArray(player.inventory.equipment)) {
+        ensureRefineInventory();
+    }
+
+    let changed = player.equipmentSlotVersion !== EQUIPMENT_SLOT_VERSION;
+    let movedToInventory = 0;
+    const equippedBySlot = new Map();
+    const movedItems = [];
+
+    const shouldReplaceEquipped = (current, candidate) => {
+        if (Boolean(current.locked) !== Boolean(candidate.locked)) {
+            return Boolean(candidate.locked);
+        }
+        return getEquipmentEffectiveValue(candidate) > getEquipmentEffectiveValue(current);
+    };
+
+    player.equipped.filter(Boolean).forEach((item) => {
+        const slotKey = getEquipmentSlot(item);
+        if (slotKey === COMPANION_CHARM_SLOT_KEY) {
+            if (!player.companionCharm) {
+                player.companionCharm = item;
+            } else {
+                movedItems.push(item);
+                movedToInventory++;
+            }
+            changed = true;
+            return;
+        }
+        if (!slotKey) {
+            movedItems.push(item);
+            movedToInventory++;
+            changed = true;
+            return;
+        }
+        if (item.slot !== slotKey) {
+            item.slot = slotKey;
+            changed = true;
+        }
+        const current = equippedBySlot.get(slotKey);
+        if (!current) {
+            equippedBySlot.set(slotKey, item);
+            return;
+        }
+        if (shouldReplaceEquipped(current, item)) {
+            equippedBySlot.set(slotKey, item);
+            movedItems.push(current);
+        } else {
+            movedItems.push(item);
+        }
+        movedToInventory++;
+        changed = true;
+    });
+
+    const normalizedEquipped = EQUIPMENT_SLOT_KEYS
+        .map((slotKey) => equippedBySlot.get(slotKey))
+        .filter(Boolean);
+    if (normalizedEquipped.length !== player.equipped.length
+        || normalizedEquipped.some((item, index) => item !== player.equipped[index])) {
+        changed = true;
+    }
+    player.equipped = normalizedEquipped;
+
+    const normalizedInventory = player.inventory.equipment.map((serializedItem) => {
+        try {
+            const item = typeof serializedItem === 'string' ? JSON.parse(serializedItem) : serializedItem;
+            const slotKey = getEquipmentSlot(item);
+            if (slotKey && item.slot !== slotKey) {
+                item.slot = slotKey;
+                changed = true;
+            }
+            return JSON.stringify(item);
+        } catch (error) {
+            return serializedItem;
+        }
+    });
+    player.inventory.equipment = normalizedInventory.concat(movedItems.map((item) => JSON.stringify(item)));
+    player.equipmentSlotVersion = EQUIPMENT_SLOT_VERSION;
+
+    if (changed && typeof saveData === 'function') {
+        saveData();
+    }
+    return { movedToInventory, changed };
+};
+
 const legacyEquipmentStatLabel = (stat) => {
     if (stat === 'fasterRun') {
         return 'Faster Run';
@@ -1324,29 +1537,11 @@ const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labe
 };
 
 const findComparableEquippedItem = (item) => {
-    if (!Array.isArray(player.equipped) || player.equipped.length === 0) {
+    const slotKey = getEquipmentSlot(item);
+    if (!slotKey || slotKey === COMPANION_CHARM_SLOT_KEY) {
         return null;
     }
-    const category = item.baseCategory || item.category;
-    const type = item.type || null;
-    const attribute = item.attribute || null;
-    const categoryMatch = player.equipped.find(eq => (eq.baseCategory || eq.category) === category);
-    if (categoryMatch) {
-        return categoryMatch;
-    }
-    if (type) {
-        const typeMatch = player.equipped.find(eq => eq.type === type);
-        if (typeMatch) {
-            return typeMatch;
-        }
-    }
-    if (attribute) {
-        const attributeMatch = player.equipped.find(eq => eq.attribute === attribute);
-        if (attributeMatch) {
-            return attributeMatch;
-        }
-    }
-    return player.equipped[0];
+    return getEquippedItemForSlot(slotKey);
 };
 
 const ensureEquipBestPriorities = () => {
@@ -1630,19 +1825,39 @@ const equipBest = () => {
         return;
     }
     if (typeof sfxEquip !== 'undefined') sfxEquip.play();
-    const maxEquippedSlots = 6;
-    const lockedItems = equippedItems.filter(item => item && item.locked);
-    const unlockedEquipped = equippedItems.filter(item => item && !item.locked);
-    const candidateItems = [...unlockedEquipped];
-    for (const eq of inventoryEquipment) {
-        candidateItems.push(eq);
-    }
-    sortEquipBestCandidates(candidateItems);
-    const lockedSlots = Math.min(lockedItems.length, maxEquippedSlots);
-    const availableSlots = Math.max(0, maxEquippedSlots - lockedSlots);
-    const selected = candidateItems.slice(0, availableSlots);
-    const remaining = candidateItems.slice(availableSlots);
-    const overflowLocked = lockedItems.slice(maxEquippedSlots);
+    const allEquipment = equippedItems.concat(inventoryEquipment);
+    const selected = [];
+    const remaining = [];
+
+    EQUIPMENT_SLOT_KEYS.forEach((slotKey) => {
+        const slotCandidates = allEquipment.filter((item) => getEquipmentSlot(item) === slotKey);
+        if (slotCandidates.length === 0) {
+            return;
+        }
+        const lockedEquipped = equippedItems.find((item) => item.locked && getEquipmentSlot(item) === slotKey);
+        if (lockedEquipped) {
+            lockedEquipped.slot = slotKey;
+            selected.push(lockedEquipped);
+            slotCandidates.forEach((item) => {
+                if (item !== lockedEquipped) {
+                    remaining.push(item);
+                }
+            });
+            return;
+        }
+        sortEquipBestCandidates(slotCandidates);
+        const bestItem = slotCandidates[0];
+        bestItem.slot = slotKey;
+        selected.push(bestItem);
+        remaining.push(...slotCandidates.slice(1));
+    });
+
+    allEquipment.forEach((item) => {
+        if (!getEquipmentSlot(item) && !remaining.includes(item)) {
+            remaining.push(item);
+        }
+    });
+
     let selectedCompanionCharm = equippedCompanionCharm && equippedCompanionCharm.locked
         ? equippedCompanionCharm
         : null;
@@ -1655,10 +1870,9 @@ const equipBest = () => {
         selectedCompanionCharm = companionCharmCandidates[0] || null;
         remainingCompanionCharms = companionCharmCandidates.slice(1);
     }
-    player.equipped = lockedItems.slice(0, maxEquippedSlots).concat(selected).filter(Boolean);
+    player.equipped = selected;
     player.companionCharm = selectedCompanionCharm;
     player.inventory.equipment = remaining
-        .concat(overflowLocked)
         .concat(remainingCompanionCharms)
         .filter(Boolean)
         .map(item => JSON.stringify(item));
@@ -1834,7 +2048,7 @@ const createEquipmentPrint = (condition, options = {}) => {
     const { messageKey = null, ...equipmentOptions } = options;
     let item = createEquipment(false, equipmentOptions);
     const willAutoEquipCompanionCharm = isCompanionCharm(item) && !player.companionCharm;
-    const willAutoEquip = !isCompanionCharm(item) && Array.isArray(player.equipped) ? player.equipped.length < 6 : false;
+    const willAutoEquip = !isCompanionCharm(item) && hasEmptyEquipmentSlotFor(item);
     const placementIndex = willAutoEquipCompanionCharm
         ? -1
         : (willAutoEquip
@@ -1907,4 +2121,8 @@ const createEquipmentPrint = (condition, options = {}) => {
         index: placementIndex,
         serialized: serializedItem
     };
+}
+
+if (typeof player !== 'undefined' && player) {
+    normalizePlayerEquipmentSlots();
 }

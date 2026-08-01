@@ -125,6 +125,15 @@
   "rarity": "Редкость",
   "tier": "Тир",
   "equipment": "Экипировка",
+  "equipment-slot": {
+    "weapon": "Оружие",
+    "offHand": "Левая рука",
+    "head": "Голова",
+    "body": "Тело",
+    "feet": "Обувь",
+    "accessory": "Аксессуар"
+  },
+  "empty-slot": "Пусто",
   "menu": "Меню",
   "statistics": "Статистика",
   "more": "Ещё",
@@ -454,6 +463,9 @@
     "horned-helm": "Рогатый шлем",
     "mask": "Маска",
     "boots": "Ботинки",
+    "ring": "Кольцо",
+    "amulet": "Амулет",
+    "talisman": "Талисман",
     "charm": "Амулет"
   },
   "enemy-names": {

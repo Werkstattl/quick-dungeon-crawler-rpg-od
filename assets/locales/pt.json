@@ -125,6 +125,15 @@
   "rarity": "Raridade",
   "tier": "Patamar",
   "equipment": "Equipamento",
+  "equipment-slot": {
+    "weapon": "Arma",
+    "offHand": "Mão secundária",
+    "head": "Cabeça",
+    "body": "Corpo",
+    "feet": "Pés",
+    "accessory": "Acessório"
+  },
+  "empty-slot": "Vazio",
   "menu": "Menu",
   "statistics": "Estatísticas",
   "more": "Mais",
@@ -454,6 +463,9 @@
     "horned-helm": "Elmo com chifres",
     "mask": "Máscara",
     "boots": "Botas",
+    "ring": "Anel",
+    "amulet": "Amuleto",
+    "talisman": "Talismã",
     "charm": "Amuleto"
   },
   "equipment-genders": {
@@ -472,7 +484,10 @@
     "great-helm": "m",
     "horned-helm": "m",
     "mask": "f",
-    "boots": "f"
+    "boots": "f",
+    "ring": "m",
+    "amulet": "m",
+    "talisman": "m"
   },
   "enemy-names": {
     "goblin": "Goblin",

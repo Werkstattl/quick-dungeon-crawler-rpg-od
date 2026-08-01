@@ -125,6 +125,15 @@
   "rarity": "Rareté",
   "tier": "Palier",
   "equipment": "Équipement",
+  "equipment-slot": {
+    "weapon": "Arme",
+    "offHand": "Main secondaire",
+    "head": "Tête",
+    "body": "Torse",
+    "feet": "Pieds",
+    "accessory": "Accessoire"
+  },
+  "empty-slot": "Vide",
   "menu": "Menu",
   "statistics": "Statistiques",
   "more": "Plus",
@@ -454,6 +463,9 @@
     "horned-helm": "Heaume cornu",
     "mask": "Masque",
     "boots": "Bottes",
+    "ring": "Anneau",
+    "amulet": "Amulette",
+    "talisman": "Talisman",
     "charm": "Charme"
   },
   "enemy-names": {

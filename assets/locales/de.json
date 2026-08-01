@@ -125,6 +125,15 @@
   "rarity": "Seltenheit",
   "tier": "Tier",
   "equipment": "Ausrüstung",
+  "equipment-slot": {
+    "weapon": "Waffe",
+    "offHand": "Nebenhand",
+    "head": "Kopf",
+    "body": "Körper",
+    "feet": "Füße",
+    "accessory": "Zubehör"
+  },
+  "empty-slot": "Leer",
   "menu": "Menü",
   "statistics": "Statistiken",
   "more": "Mehr",
@@ -454,6 +463,9 @@
     "horned-helm": "Hornhelm",
     "mask": "Maske",
     "boots": "Stiefel",
+    "ring": "Ring",
+    "amulet": "Amulett",
+    "talisman": "Talisman",
     "charm": "Talisman"
   },
   "enemy-names": {
@@ -525,7 +537,10 @@
     "great-helm": "m",
     "horned-helm": "m",
     "mask": "f",
-    "boots": "m"
+    "boots": "m",
+    "ring": "m",
+    "amulet": "n",
+    "talisman": "m"
   },
   "level-up-option": {
     "hp": {

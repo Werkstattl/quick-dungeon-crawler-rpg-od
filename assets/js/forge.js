@@ -35,6 +35,9 @@ const FORGE_CATEGORY_CONFIG = Object.freeze([
     { category: 'Horned Helm', attribute: 'Defense', type: 'Helmet' },
     { category: 'Mask', attribute: 'Defense', type: 'Mask' },
     { category: 'Boots', attribute: 'Defense', type: 'Boots' },
+    { category: 'Ring', attribute: 'Utility', type: 'Accessory' },
+    { category: 'Amulet', attribute: 'Utility', type: 'Accessory' },
+    { category: 'Talisman', attribute: 'Utility', type: 'Accessory' },
 ]);
 
 const closeForgeUnlockModal = () => {
@@ -1091,7 +1094,7 @@ const createForgedEquipment = (item1, item2, item3, targetCategory) => {
     forgedEquipment.category = targetConfig.category;
     forgedEquipment.attribute = targetConfig.attribute;
     forgedEquipment.type = targetConfig.type;
-    forgedEquipment.slot = null;
+    forgedEquipment.slot = typeof getEquipmentSlot === 'function' ? getEquipmentSlot(forgedEquipment) : null;
 
     // Set tier to the same as input items
     forgedEquipment.tier = item1.tier;

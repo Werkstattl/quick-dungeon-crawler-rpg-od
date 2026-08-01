@@ -125,6 +125,15 @@
   "rarity": "Rzadkość",
   "tier": "Stopień",
   "equipment": "Ekwipunek",
+  "equipment-slot": {
+    "weapon": "Broń",
+    "offHand": "Druga ręka",
+    "head": "Głowa",
+    "body": "Tułów",
+    "feet": "Stopy",
+    "accessory": "Akcesorium"
+  },
+  "empty-slot": "Pusty",
   "menu": "Menu",
   "statistics": "Statystyki",
   "more": "Więcej",
@@ -454,6 +463,9 @@
     "horned-helm": "Rogaty hełm",
     "mask": "Maska",
     "boots": "Buty",
+    "ring": "Pierścień",
+    "amulet": "Amulet",
+    "talisman": "Talizman",
     "charm": "Amulet"
   },
   "enemy-names": {

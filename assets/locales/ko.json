@@ -125,6 +125,15 @@
   "rarity": "희귀도",
   "tier": "티어",
   "equipment": "장비",
+  "equipment-slot": {
+    "weapon": "무기",
+    "offHand": "보조 장비",
+    "head": "머리",
+    "body": "몸통",
+    "feet": "발",
+    "accessory": "장신구"
+  },
+  "empty-slot": "비어 있음",
   "menu": "메뉴",
   "statistics": "통계",
   "more": "더보기",
@@ -454,6 +463,9 @@
     "horned-helm": "뿔 투구",
     "mask": "가면",
     "boots": "부츠",
+    "ring": "반지",
+    "amulet": "부적",
+    "talisman": "탈리스만",
     "charm": "부적"
   },
   "enemy-names": {

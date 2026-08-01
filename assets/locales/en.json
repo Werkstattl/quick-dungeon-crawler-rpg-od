@@ -125,6 +125,15 @@
   "rarity": "Rarity",
   "tier": "Tier",
   "equipment": "Equipment",
+  "equipment-slot": {
+    "weapon": "Weapon",
+    "offHand": "Off Hand",
+    "head": "Head",
+    "body": "Body",
+    "feet": "Feet",
+    "accessory": "Accessory"
+  },
+  "empty-slot": "Empty",
   "menu": "Menu",
   "statistics": "Statistics",
   "more": "More",
@@ -454,6 +463,9 @@
     "horned-helm": "Horned Helm",
     "mask": "Mask",
     "boots": "Boots",
+    "ring": "Ring",
+    "amulet": "Amulet",
+    "talisman": "Talisman",
     "charm": "Charm"
   },
   "enemy-names": {

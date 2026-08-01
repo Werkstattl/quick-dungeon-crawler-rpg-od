@@ -119,6 +119,15 @@
   "rarity": "稀有度",
   "tier": "阶级",
   "equipment": "装备",
+  "equipment-slot": {
+    "weapon": "武器",
+    "offHand": "副手",
+    "head": "头部",
+    "body": "身体",
+    "feet": "脚部",
+    "accessory": "饰品"
+  },
+  "empty-slot": "空",
   "menu": "菜单",
   "statistics": "统计",
   "more": "更多",
@@ -457,6 +466,9 @@
     "horned-helm": "角盔",
     "mask": "面具",
     "boots": "靴子",
+    "ring": "戒指",
+    "amulet": "护身符",
+    "talisman": "符咒",
     "charm": "护符"
   },
   "enemy-names": {
