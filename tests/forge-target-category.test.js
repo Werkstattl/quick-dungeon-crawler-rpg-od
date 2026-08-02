@@ -6,27 +6,30 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const forgeSource = fs.readFileSync(path.join(root, 'assets/js/forge.js'), 'utf8');
+const equipmentSource = fs.readFileSync(path.join(root, 'assets/js/equipment.js'), 'utf8');
+const equipmentSlotHelpersSource = equipmentSource.split('const ensureRefineInventory')[0];
 const indexSource = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
 const createForgeContext = () => {
     const context = vm.createContext({
-        createEquipment: () => ({
-            category: 'Sword',
-            attribute: 'Damage',
-            type: 'Weapon',
-            rarity: 'Common',
-            lvl: 1,
-            tier: 1,
-            value: 1,
-            stats: [],
-            slot: null,
-        }),
         clampEquipmentLevel: (level) => Math.min(100, level),
         randomizeNum: (min) => min,
         rerollEquipmentStats: (equipment) => {
             equipment.stats = [{ pool: `${equipment.attribute}:${equipment.type}` }];
             equipment.icon = `icon:${equipment.category}`;
         },
+    });
+    vm.runInContext(equipmentSlotHelpersSource, context);
+    context.createEquipment = () => ({
+        category: 'Sword',
+        attribute: 'Damage',
+        type: 'Weapon',
+        rarity: 'Common',
+        lvl: 1,
+        tier: 1,
+        value: 1,
+        stats: [],
+        slot: 'weapon',
     });
     vm.runInContext(forgeSource, context);
     return context;
@@ -46,6 +49,7 @@ test('forging creates the exact gear piece selected by the player', () => {
     assert.equal(result.category, 'Great Helm');
     assert.equal(result.attribute, 'Defense');
     assert.equal(result.type, 'Helmet');
+    assert.equal(result.slot, 'head');
     assert.equal(result.tier, 4);
     assert.equal(result.rarity, 'Epic');
     assert.deepEqual(JSON.parse(JSON.stringify(result.stats)), [{ pool: 'Defense:Helmet' }]);
@@ -57,14 +61,33 @@ test('every forge target maps to a valid non-charm equipment category', () => {
     const context = createForgeContext();
     const configs = vm.runInContext('FORGE_CATEGORY_CONFIG', context);
 
-    assert.equal(configs.length, 16);
+    assert.equal(configs.length, 19);
     assert.equal(new Set(configs.map(({ category }) => category)).size, configs.length);
     assert.equal(configs.some(({ category }) => category === 'Charm'), false);
     for (const config of configs) {
         assert.ok(config.category);
-        assert.ok(config.attribute === 'Damage' || config.attribute === 'Defense');
+        assert.ok(['Damage', 'Defense', 'Utility'].includes(config.attribute));
         assert.ok(config.type);
+        const result = vm.runInContext(`
+            createForgedEquipment(
+                { tier: 1, lvl: 1, rarity: 'Common' },
+                { tier: 1, lvl: 1, rarity: 'Common' },
+                { tier: 1, lvl: 1, rarity: 'Common' },
+                ${JSON.stringify(config.category)}
+            )
+        `, context);
+        const expectedSlot = vm.runInContext(`getEquipmentSlot(${JSON.stringify({
+            category: config.category,
+            attribute: config.attribute,
+            type: config.type,
+            slot: null,
+        })})`, context);
+        assert.equal(result.slot, expectedSlot, `${config.category} forged into the wrong slot`);
     }
+    assert.deepEqual(
+        JSON.parse(JSON.stringify(configs.filter(({ type }) => type === 'Accessory').map(({ category }) => category))),
+        ['Ring', 'Amulet', 'Talisman'],
+    );
 });
 
 test('forging rejects an unknown target category', () => {

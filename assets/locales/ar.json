@@ -125,6 +125,15 @@
   "rarity": "الندرة",
   "tier": "الرتبة",
   "equipment": "المعدات",
+  "equipment-slot": {
+    "weapon": "سلاح",
+    "offHand": "اليد الثانوية",
+    "head": "الرأس",
+    "body": "الجسم",
+    "feet": "القدمان",
+    "accessory": "إكسسوار"
+  },
+  "empty-slot": "فارغ",
   "menu": "القائمة",
   "statistics": "الإحصاءات",
   "more": "المزيد",
@@ -454,6 +463,9 @@
     "horned-helm": "خوذة بقرون",
     "mask": "قناع",
     "boots": "حذاء",
+    "ring": "خاتم",
+    "amulet": "تميمة",
+    "talisman": "تعويذة",
     "charm": "تعويذة"
   },
   "enemy-names": {

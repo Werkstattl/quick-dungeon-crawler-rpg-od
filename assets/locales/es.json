@@ -125,6 +125,15 @@
   "rarity": "Rareza",
   "tier": "Grado",
   "equipment": "Equipo",
+  "equipment-slot": {
+    "weapon": "Arma",
+    "offHand": "Mano secundaria",
+    "head": "Cabeza",
+    "body": "Cuerpo",
+    "feet": "Pies",
+    "accessory": "Accesorio"
+  },
+  "empty-slot": "Vacío",
   "menu": "Menú",
   "statistics": "Estadísticas",
   "more": "Más",
@@ -454,6 +463,9 @@
     "horned-helm": "Yelmo con cuernos",
     "mask": "Máscara",
     "boots": "Botas",
+    "ring": "Anillo",
+    "amulet": "Amuleto",
+    "talisman": "Talismán",
     "charm": "Amuleto"
   },
   "enemy-names": {

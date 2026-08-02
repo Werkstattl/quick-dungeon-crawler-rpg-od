@@ -125,6 +125,15 @@
   "rarity": "Kelangkaan",
   "tier": "Tier",
   "equipment": "Perlengkapan",
+  "equipment-slot": {
+    "weapon": "Senjata",
+    "offHand": "Tangan Kedua",
+    "head": "Kepala",
+    "body": "Tubuh",
+    "feet": "Kaki",
+    "accessory": "Aksesori"
+  },
+  "empty-slot": "Kosong",
   "menu": "Menu",
   "statistics": "Statistik",
   "more": "Lainnya",
@@ -454,6 +463,9 @@
     "horned-helm": "Helm Bertanduk",
     "mask": "Topeng",
     "boots": "Sepatu",
+    "ring": "Cincin",
+    "amulet": "Amulet",
+    "talisman": "Jimat",
     "charm": "Jimat"
   },
   "enemy-names": {

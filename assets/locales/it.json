@@ -125,6 +125,15 @@
   "rarity": "Rarità",
   "tier": "Grado",
   "equipment": "Equipaggiamento",
+  "equipment-slot": {
+    "weapon": "Arma",
+    "offHand": "Mano secondaria",
+    "head": "Testa",
+    "body": "Corpo",
+    "feet": "Piedi",
+    "accessory": "Accessorio"
+  },
+  "empty-slot": "Vuoto",
   "menu": "Menu",
   "statistics": "Statistiche",
   "more": "Altro",
@@ -454,6 +463,9 @@
     "horned-helm": "Elmo cornuto",
     "mask": "Maschera",
     "boots": "Stivali",
+    "ring": "Anello",
+    "amulet": "Amuleto",
+    "talisman": "Talismano",
     "charm": "Amuleto"
   },
   "enemy-names": {

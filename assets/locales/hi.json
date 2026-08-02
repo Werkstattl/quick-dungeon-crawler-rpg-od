@@ -125,6 +125,15 @@
   "rarity": "दुर्लभता",
   "tier": "टियर",
   "equipment": "उपकरण",
+  "equipment-slot": {
+    "weapon": "हथियार",
+    "offHand": "सहायक हाथ",
+    "head": "सिर",
+    "body": "शरीर",
+    "feet": "पैर",
+    "accessory": "सहायक वस्तु"
+  },
+  "empty-slot": "खाली",
   "menu": "मेनू",
   "statistics": "सांख्यिकी",
   "more": "और",
@@ -454,6 +463,9 @@
     "horned-helm": "सींगदार हेल्म",
     "mask": "मुखौटा",
     "boots": "बूट",
+    "ring": "अंगूठी",
+    "amulet": "ताबीज",
+    "talisman": "तावीज़",
     "charm": "चार्म"
   },
   "enemy-names": {

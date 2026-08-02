@@ -125,6 +125,15 @@
   "rarity": "Рідкісність",
   "tier": "Тир",
   "equipment": "Спорядження",
+  "equipment-slot": {
+    "weapon": "Зброя",
+    "offHand": "Друга рука",
+    "head": "Голова",
+    "body": "Тіло",
+    "feet": "Ноги",
+    "accessory": "Аксесуар"
+  },
+  "empty-slot": "Порожньо",
   "menu": "Меню",
   "statistics": "Статистика",
   "more": "Більше",
@@ -454,6 +463,9 @@
     "horned-helm": "Рогатий шолом",
     "mask": "Маска",
     "boots": "Чоботи",
+    "ring": "Перстень",
+    "amulet": "Амулет",
+    "talisman": "Талісман",
     "charm": "Амулет"
   },
   "enemy-names": {
