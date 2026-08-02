@@ -441,6 +441,13 @@ color: black;
 
 #companionCharmSlot .items {
     position: relative;
+    cursor: pointer;
+}
+
+#companionCharmSlot .items button {
+    /* Keep pointer activation on the wrapper so focusing this button cannot
+       scroll the nested inventory before its click handler runs. */
+    pointer-events: none;
 }
 
 .companion-slot-empty {
@@ -773,6 +780,11 @@ button:focus {
 }
 
 /* Equipment Info */
+#equipmentInfo,
+#defaultModal.equipment-confirmation-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 #equipmentInfo .content ul {
     margin-left: 1rem;
 }

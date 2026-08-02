@@ -736,10 +736,8 @@ const equipmentIcon = (equipment) => {
 // Close equipment info modal helper (used by click-away)
 function closeEquipmentInfo() {
     const itemInfo = document.querySelector('#equipmentInfo');
-    const dimContainer = document.querySelector('#inventory');
     if (typeof sfxDecline !== 'undefined' && sfxDecline && typeof sfxDecline.play === 'function') sfxDecline.play();
     if (itemInfo) itemInfo.style.display = 'none';
-    if (dimContainer) dimContainer.style.filter = 'brightness(100%)';
     if (typeof continueExploring === 'function') continueExploring();
 }
 
@@ -749,7 +747,6 @@ const showItemInfo = (item, icon, action, i) => {
 
     dungeon.status.exploring = false;
     let itemInfo = document.querySelector("#equipmentInfo");
-    let dimContainer = document.querySelector(`#inventory`);
     if (item.tier == undefined) {
         item.tier = 1;
     }
@@ -759,7 +756,6 @@ const showItemInfo = (item, icon, action, i) => {
     const lockButtonLabel = translateEquipText(isLocked ? 'unlock-item' : 'lock-item', isLocked ? 'Unlock item' : 'Lock item');
     const lockButtonMarkup = `<button id="toggle-lock">${lockButtonLabel}</button>`;
     itemInfo.style.display = "flex";
-    dimContainer.style.filter = "brightness(50%)";
     const itemSlot = getEquipmentSlot(item);
     const equippedItems = action === 'equip'
         ? [getEquippedItemForSlot(itemSlot)].filter(Boolean)
@@ -936,7 +932,6 @@ const showItemInfo = (item, icon, action, i) => {
         }
 
         itemInfo.style.display = "none";
-        dimContainer.style.filter = "brightness(100%)";
         playerLoadStats();
         if (typeof updateCompanionUI === 'function') {
             updateCompanionUI();
@@ -982,6 +977,7 @@ const showItemInfo = (item, icon, action, i) => {
         }
         sfxOpen.play();
         itemInfo.style.display = "none";
+        defaultModalElement.classList.add('equipment-confirmation-backdrop');
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
         <div class="content">
@@ -1026,7 +1022,7 @@ const showItemInfo = (item, icon, action, i) => {
 
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
-            dimContainer.style.filter = "brightness(100%)";
+            defaultModalElement.classList.remove('equipment-confirmation-backdrop');
             playerLoadStats();
             if (typeof updateCompanionUI === 'function') {
                 updateCompanionUI();
@@ -1037,6 +1033,7 @@ const showItemInfo = (item, icon, action, i) => {
             sfxDecline.play();
             defaultModalElement.style.display = "none";
             defaultModalElement.innerHTML = "";
+            defaultModalElement.classList.remove('equipment-confirmation-backdrop');
             itemInfo.style.display = "flex";
             continueExploring();
         }
@@ -1048,7 +1045,6 @@ const showItemInfo = (item, icon, action, i) => {
         sfxDecline.play();
 
         itemInfo.style.display = "none";
-        dimContainer.style.filter = "brightness(100%)";
         continueExploring();
     };
 }
@@ -1151,6 +1147,30 @@ const showInventory = () => {
     }
 }
 
+const captureInventoryScrollState = () => {
+    const playerInventoryList = document.getElementById('playerInventory');
+    const inventoryContent = document.querySelector('#inventory .content');
+
+    return {
+        playerInventoryList,
+        playerInventoryScrollTop: playerInventoryList ? playerInventoryList.scrollTop : 0,
+        inventoryContent,
+        inventoryContentScrollTop: inventoryContent ? inventoryContent.scrollTop : 0,
+    };
+};
+
+const restoreInventoryScrollState = (scrollState) => {
+    if (!scrollState) {
+        return;
+    }
+    if (scrollState.playerInventoryList) {
+        scrollState.playerInventoryList.scrollTop = scrollState.playerInventoryScrollTop;
+    }
+    if (scrollState.inventoryContent) {
+        scrollState.inventoryContent.scrollTop = scrollState.inventoryContentScrollTop;
+    }
+};
+
 const showCompanionCharmSlot = () => {
     const charmSlot = document.getElementById('companionCharmSlot');
     if (!charmSlot) {
@@ -1177,8 +1197,23 @@ const showCompanionCharmSlot = () => {
         charmDiv.setAttribute('title', lockLabel);
         charmDiv.appendChild(lockIndicator);
     }
-    charmDiv.addEventListener('click', function () {
+    let inventoryScrollState = null;
+    charmDiv.addEventListener('pointerdown', function () {
+        // Capture before the button receives focus, which can scroll a nested
+        // inventory container while bringing the charm into view.
+        inventoryScrollState = captureInventoryScrollState();
+    });
+    charmDiv.addEventListener('click', function (event) {
+        const scrollState = inventoryScrollState || captureInventoryScrollState();
+        inventoryScrollState = null;
+        event.preventDefault();
         showItemInfo(equippedCharm, icon, 'unequip-companion');
+        restoreInventoryScrollState(scrollState);
+        if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(function () {
+                restoreInventoryScrollState(scrollState);
+            });
+        }
     });
     charmSlot.appendChild(charmDiv);
 };

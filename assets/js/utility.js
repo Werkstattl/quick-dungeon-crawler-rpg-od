@@ -290,6 +290,7 @@ function closeDefaultModal() {
     defaultModal.style.display = "none";
     defaultModal.innerHTML = "";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
+    defaultModal.classList.remove('equipment-confirmation-backdrop');
     delete defaultModal.dataset.modalType;
 }
 

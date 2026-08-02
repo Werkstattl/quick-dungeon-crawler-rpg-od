@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const equipmentSource = fs.readFileSync(path.join(root, 'assets/js/equipment.js'), 'utf8');
+const styleSource = fs.readFileSync(path.join(root, 'assets/css/style.css'), 'utf8');
 const dungeonSource = fs.readFileSync(path.join(root, 'assets/js/dungeon.js'), 'utf8');
 const mainSource = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
 
@@ -50,6 +51,35 @@ test('legacy item categories map to the six fixed equipment slots', () => {
     ])`);
     assert.deepEqual(plain(slots), ['weapon', 'offHand', 'head', 'body', 'feet', 'accessory']);
     assert.equal(evaluate(context, 'EQUIPMENT_SLOT_DEFINITIONS.length'), 6);
+});
+
+test('inventory scroll state restores both nested scroll containers', () => {
+    const context = createContext();
+    const playerInventoryList = { scrollTop: 137 };
+    const inventoryContent = { scrollTop: 42 };
+    context.document = {
+        getElementById: (id) => id === 'playerInventory' ? playerInventoryList : null,
+        querySelector: (selector) => selector === '#inventory .content' ? inventoryContent : null,
+    };
+
+    context.scrollState = evaluate(context, 'captureInventoryScrollState()');
+    playerInventoryList.scrollTop = 0;
+    inventoryContent.scrollTop = 0;
+    evaluate(context, 'restoreInventoryScrollState(scrollState)');
+
+    assert.equal(playerInventoryList.scrollTop, 137);
+    assert.equal(inventoryContent.scrollTop, 42);
+});
+
+test('opening companion charm details does not focus or filter the inventory scroll tree', () => {
+    const showItemInfoSource = equipmentSource.slice(
+        equipmentSource.indexOf('const showItemInfo ='),
+        equipmentSource.indexOf('// Sort inventory'),
+    );
+
+    assert.doesNotMatch(showItemInfoSource, /dimContainer\.style\.filter/);
+    assert.match(styleSource, /#companionCharmSlot \.items button\s*{[^}]*pointer-events:\s*none;/s);
+    assert.match(styleSource, /#equipmentInfo,[^{]*{[^}]*background-color:/s);
 });
 
 test('accessories are obtainable through normal equipment generation', () => {
