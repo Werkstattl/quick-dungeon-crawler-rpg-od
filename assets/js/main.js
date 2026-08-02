@@ -1,9 +1,27 @@
+const EQUIPMENT_SLOT_NOTICE_VERSION = 1;
+let equipmentSlotMigrationNoticePending = false;
+
+const migratePlayerEquipmentSlots = () => {
+    if (!player || typeof normalizePlayerEquipmentSlots !== 'function') {
+        return null;
+    }
+
+    const migration = normalizePlayerEquipmentSlots();
+    const migratedToDedicatedSlots = Boolean(
+        migration && migration.migrated
+        && EQUIPMENT_SLOT_VERSION === EQUIPMENT_SLOT_NOTICE_VERSION
+    );
+    equipmentSlotMigrationNoticePending = Boolean(
+        migratedToDedicatedSlots
+        || player.equipmentSlotNoticeVersion !== EQUIPMENT_SLOT_NOTICE_VERSION
+    );
+    return migration;
+};
+
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
-    if (player && typeof normalizePlayerEquipmentSlots === 'function') {
-        normalizePlayerEquipmentSlots();
-    }
+    migratePlayerEquipmentSlots();
 
     // Apply saved font size on page load
     const advancedStatsDetails = document.querySelector('#advanced-stats');
@@ -160,6 +178,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                     },
                     equipped: [],
                     equipmentSlotVersion: EQUIPMENT_SLOT_VERSION,
+                    equipmentSlotNoticeVersion: EQUIPMENT_SLOT_NOTICE_VERSION,
                     companionCharm: null,
                     gold: 0,
                     playtime: 0,
@@ -1068,6 +1087,61 @@ const addNewRunIntroLog = () => {
     addDungeonLog(`<span class="storyBeatLog">${tRandom("new-run-intro")}</span>`);
 };
 
+const dismissEquipmentSlotMigrationNotice = () => {
+    equipmentSlotMigrationNoticePending = false;
+    if (player) {
+        player.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_NOTICE_VERSION;
+        saveData();
+    }
+    closeDefaultModal();
+
+    const inventory = document.querySelector('#inventory');
+    if (inventory) {
+        inventory.style.filter = "brightness(100%)";
+    }
+};
+
+const showEquipmentSlotMigrationNotice = () => {
+    if (!equipmentSlotMigrationNoticePending) {
+        return;
+    }
+
+    openInventory();
+    const inventory = document.querySelector('#inventory');
+    if (inventory) {
+        inventory.style.filter = "brightness(50%)";
+    }
+
+    const title = translateEquipText('equipment-slots-update-title', 'Equipment slots are here');
+    const message = translateEquipText(
+        'equipment-slots-update-message',
+        'Equipment now uses six dedicated slots: Weapon, Off Hand, Head, Body, Feet, and Accessory. Any extra equipped items were moved safely to your inventory.'
+    );
+    const closeLabel = translateEquipText('close', 'Close');
+
+    defaultModalElement.dataset.modalType = 'equipment-slot-migration';
+    defaultModalElement.style.zIndex = "2";
+    defaultModalElement.style.display = "flex";
+    defaultModalElement.innerHTML = `
+        <div class="content equipment-slots-update-modal">
+            <div class="content-head">
+                <h3 data-i18n="equipment-slots-update-title">${title}</h3>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="equipment-slots-update-message">${message}</p>
+            </div>
+            <div class="button-container">
+                <button id="equipment-slots-update-close" type="button" data-i18n="close">${closeLabel}</button>
+            </div>
+        </div>`;
+    applyTranslations(defaultModalElement);
+
+    document.querySelector('#equipment-slots-update-close').onclick = () => {
+        sfxConfirm.play();
+        dismissEquipmentSlotMigrationNotice();
+    };
+};
+
 // Start the game
 const enterDungeon = () => {
     sfxConfirm.play();
@@ -1090,6 +1164,7 @@ const enterDungeon = () => {
     initialDungeonLoad();
     addNewRunIntroLog();
     playerLoadStats();
+    showEquipmentSlotMigrationNotice();
     if (!localStorage.getItem('introHintShown')) {
         addDungeonLog(t('summon-explore-hint'));
     }
@@ -1664,6 +1739,7 @@ const importData = (importedData) => {
                     playerImport.playtime = 0;
                 }
                 player = playerImport;
+                migratePlayerEquipmentSlots();
                 saveData();
                 bgmDungeon.stop();
                 let dimDungeon = document.querySelector('#dungeon-main');

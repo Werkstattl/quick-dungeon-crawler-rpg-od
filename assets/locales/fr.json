@@ -133,6 +133,8 @@
     "feet": "Pieds",
     "accessory": "Accessoire"
   },
+  "equipment-slots-update-title": "Les emplacements d'équipement sont arrivés",
+  "equipment-slots-update-message": "L'équipement utilise désormais six emplacements dédiés : arme, main secondaire, tête, torse, pieds et accessoire. Les objets équipés en trop ont été déplacés en toute sécurité dans votre inventaire.",
   "empty-slot": "Vide",
   "menu": "Menu",
   "statistics": "Statistiques",

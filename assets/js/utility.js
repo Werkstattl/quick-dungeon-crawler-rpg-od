@@ -290,6 +290,7 @@ function closeDefaultModal() {
     defaultModal.style.display = "none";
     defaultModal.innerHTML = "";
     defaultModal.style.zIndex = "1"; // Reset z-index when closing
+    delete defaultModal.dataset.modalType;
 }
 
 const STATS_HELP_SEEN_KEY = 'statsHelpSeen';

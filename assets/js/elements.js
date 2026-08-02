@@ -45,7 +45,10 @@ const sortInventoryElement = document.querySelector('#sort-inventory');
       switch (container.id) {
         case 'defaultModal':
           if (typeof sfxDecline !== 'undefined' && sfxDecline && typeof sfxDecline.play === 'function') sfxDecline.play();
-          if (typeof closeDefaultModal === 'function') {
+          if (container.dataset.modalType === 'equipment-slot-migration'
+            && typeof dismissEquipmentSlotMigrationNotice === 'function') {
+            dismissEquipmentSlotMigrationNotice();
+          } else if (typeof closeDefaultModal === 'function') {
             closeDefaultModal();
           } else {
             container.style.display = 'none';
@@ -53,6 +56,11 @@ const sortInventoryElement = document.querySelector('#sort-inventory');
           restoreDimmedUI();
           const forgeModal = document.getElementById('forgeModal');
           if (forgeModal && forgeModal.style.display === 'flex') {
+            const dungeonMain = document.getElementById('dungeon-main');
+            if (dungeonMain) dungeonMain.style.filter = 'brightness(50%)';
+          }
+          const inventory = document.getElementById('inventory');
+          if (inventory && inventory.style.display === 'flex') {
             const dungeonMain = document.getElementById('dungeon-main');
             if (dungeonMain) dungeonMain.style.filter = 'brightness(50%)';
           }

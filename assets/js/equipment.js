@@ -1352,7 +1352,7 @@ const getEquipmentEffectiveValue = (item) => {
 
 const normalizePlayerEquipmentSlots = () => {
     if (!player) {
-        return { movedToInventory: 0, changed: false };
+        return { movedToInventory: 0, changed: false, migrated: false };
     }
     if (!Array.isArray(player.equipped)) {
         player.equipped = [];
@@ -1361,7 +1361,8 @@ const normalizePlayerEquipmentSlots = () => {
         ensureRefineInventory();
     }
 
-    let changed = player.equipmentSlotVersion !== EQUIPMENT_SLOT_VERSION;
+    const migrated = player.equipmentSlotVersion !== EQUIPMENT_SLOT_VERSION;
+    let changed = migrated;
     let movedToInventory = 0;
     const equippedBySlot = new Map();
     const movedItems = [];
@@ -1438,7 +1439,7 @@ const normalizePlayerEquipmentSlots = () => {
     if (changed && typeof saveData === 'function') {
         saveData();
     }
-    return { movedToInventory, changed };
+    return { movedToInventory, changed, migrated };
 };
 
 const legacyEquipmentStatLabel = (stat) => {

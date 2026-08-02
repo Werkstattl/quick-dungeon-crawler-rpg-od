@@ -133,6 +133,8 @@
     "feet": "足",
     "accessory": "アクセサリー"
   },
+  "equipment-slots-update-title": "装備スロットが追加されました",
+  "equipment-slots-update-message": "装備は武器、オフハンド、頭、胴、足、アクセサリーの6つの専用スロットを使用するようになりました。装備しきれないアイテムは安全にインベントリへ移動しました。",
   "empty-slot": "空き",
   "menu": "メニュー",
   "statistics": "統計",

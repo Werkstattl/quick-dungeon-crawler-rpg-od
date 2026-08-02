@@ -133,6 +133,8 @@
     "feet": "Kaki",
     "accessory": "Aksesori"
   },
+  "equipment-slots-update-title": "Slot perlengkapan telah hadir",
+  "equipment-slots-update-message": "Perlengkapan kini memakai enam slot khusus: senjata, tangan kedua, kepala, tubuh, kaki, dan aksesori. Item terpasang yang berlebih telah dipindahkan dengan aman ke inventarismu.",
   "empty-slot": "Kosong",
   "menu": "Menu",
   "statistics": "Statistik",

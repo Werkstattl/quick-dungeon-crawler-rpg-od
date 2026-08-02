@@ -125,7 +125,7 @@ test('legacy migration is lossless and keeps a locked duplicate equipped', () =>
     };
 
     const result = evaluate(context, 'normalizePlayerEquipmentSlots()');
-    assert.deepEqual(plain(result), { movedToInventory: 1, changed: true });
+    assert.deepEqual(plain(result), { movedToInventory: 1, changed: true, migrated: true });
     assert.equal(context.player.equipmentSlotVersion, 1);
     assert.equal(context.player.equipped.length, 3);
     assert.equal(context.player.equipped.find((entry) => entry.slot === 'weapon').category, 'Dagger');
@@ -141,7 +141,7 @@ test('legacy migration is lossless and keeps a locked duplicate equipped', () =>
 
     const migratedState = JSON.stringify(context.player);
     const secondResult = evaluate(context, 'normalizePlayerEquipmentSlots()');
-    assert.deepEqual(plain(secondResult), { movedToInventory: 0, changed: false });
+    assert.deepEqual(plain(secondResult), { movedToInventory: 0, changed: false, migrated: false });
     assert.equal(JSON.stringify(context.player), migratedState);
     assert.equal(context.saveCalls, 1);
 });
@@ -186,7 +186,7 @@ test('drop and equip paths use slot availability instead of a generic six-item c
 });
 
 test('legacy slot migration runs during application initialization when saveData is available', () => {
-    const migrationCall = 'normalizePlayerEquipmentSlots();';
+    const migrationCall = 'migratePlayerEquipmentSlots();';
     const migrationIndex = mainSource.indexOf(migrationCall);
     const initialPlayerRoutingIndex = mainSource.indexOf('if (player === null)');
 
@@ -196,6 +196,37 @@ test('legacy slot migration runs during application initialization when saveData
         equipmentSource,
         /if \(typeof player !== 'undefined' && player\) \{\s*normalizePlayerEquipmentSlots\(\);/,
     );
+});
+
+test('migrated players see the inventory notice once while new players skip it', () => {
+    assert.match(mainSource, /migration && migration\.migrated/);
+    assert.match(mainSource, /player\.equipmentSlotNoticeVersion !== EQUIPMENT_SLOT_NOTICE_VERSION/);
+    assert.match(mainSource, /openInventory\(\);/);
+    assert.match(mainSource, /showEquipmentSlotMigrationNotice\(\);/);
+    assert.match(mainSource, /player\.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_NOTICE_VERSION/);
+    assert.match(mainSource, /equipmentSlotNoticeVersion: EQUIPMENT_SLOT_NOTICE_VERSION/);
+});
+
+test('equipment slot notice state covers prior migrations and acknowledged saves', () => {
+    const migrationStateSource = mainSource.split('// Use DOMContentLoaded')[0];
+    const context = vm.createContext({
+        EQUIPMENT_SLOT_VERSION: 1,
+        player: { equipmentSlotVersion: 1 },
+        normalizePlayerEquipmentSlots: () => ({ movedToInventory: 0, changed: false, migrated: false }),
+    });
+    vm.runInContext(migrationStateSource, context);
+
+    evaluate(context, 'migratePlayerEquipmentSlots()');
+    assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), true);
+
+    context.player.equipmentSlotNoticeVersion = 1;
+    evaluate(context, 'migratePlayerEquipmentSlots()');
+    assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), false);
+
+    context.player = { equipmentSlotVersion: 0, equipmentSlotNoticeVersion: 1 };
+    context.normalizePlayerEquipmentSlots = () => ({ movedToInventory: 0, changed: true, migrated: true });
+    evaluate(context, 'migratePlayerEquipmentSlots()');
+    assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), true);
 });
 
 test('every locale includes slot labels and accessory item names', () => {
@@ -208,6 +239,8 @@ test('every locale includes slot labels and accessory item names', () => {
         const locale = JSON.parse(fs.readFileSync(path.join(localeDirectory, file), 'utf8'));
         assert.ok(locale['equipment-slot'], `${file} is missing equipment-slot`);
         assert.ok(locale['empty-slot'], `${file} is missing empty-slot`);
+        assert.ok(locale['equipment-slots-update-title'], `${file} is missing equipment-slots-update-title`);
+        assert.ok(locale['equipment-slots-update-message'], `${file} is missing equipment-slots-update-message`);
         for (const slotKey of slotKeys) {
             assert.ok(locale['equipment-slot'][slotKey], `${file} is missing equipment-slot.${slotKey}`);
         }

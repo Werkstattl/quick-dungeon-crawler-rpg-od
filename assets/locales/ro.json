@@ -133,6 +133,8 @@
     "feet": "Picioare",
     "accessory": "Accesoriu"
   },
+  "equipment-slots-update-title": "Sloturile de echipament au sosit",
+  "equipment-slots-update-message": "Echipamentul folosește acum șase sloturi dedicate: armă, mâna secundară, cap, corp, picioare și accesoriu. Obiectele echipate în plus au fost mutate în siguranță în inventar.",
   "empty-slot": "Gol",
   "menu": "Meniu",
   "statistics": "Statistici",
