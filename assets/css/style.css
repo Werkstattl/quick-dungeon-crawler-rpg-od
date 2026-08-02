@@ -964,7 +964,9 @@ button:focus {
 #inventory .content {
     padding: 0;
     gap: 0;
-    height: 35rem;
+    height: 43rem;
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
     width: 16rem;
     overflow-y: auto;
 }
