@@ -82,6 +82,34 @@ test('accessories are obtainable through normal equipment generation', () => {
     assert.ok(generated.stats.length > 0);
 });
 
+test('accessory rerolls never include Faster Run', () => {
+    const context = createContext();
+    context.player = {
+        equipped: [],
+        inventory: { consumables: [], equipment: [], refineStones: 0 },
+        companionCharm: null,
+    };
+    context.dungeon = {
+        progress: { floor: 1 },
+        settings: { enemyLvlGap: 1, enemyBaseLvl: 1, enemyScaling: 1.1 },
+    };
+    context.randomizeNum = (min) => Math.round(min);
+    context.randomizeDecimal = (min) => min;
+    context.clampEquipmentLevel = (level) => level;
+    context.clampEquipmentTier = (tier) => tier;
+    context.getEquipmentTierFromEnemyScaling = () => 1;
+    context.getEnemyScalingFromEquipmentTier = () => 1.1;
+    evaluate(context, 'Math.random = () => 0.999');
+
+    const generated = evaluate(context, `createEquipment(false, {
+        allowCompanionCharm: false,
+        forcedSlot: 'accessory',
+        minRarity: 'Rare'
+    })`);
+    const statKeys = generated.stats.map((stat) => Object.keys(stat)[0]);
+    assert.equal(statKeys.includes('fasterRun'), false);
+});
+
 test('legacy migration is lossless and keeps a locked duplicate equipped', () => {
     const context = createContext();
     const highValueSword = item({ category: 'Sword', type: 'Weapon', attribute: 'Damage', value: 500 });
