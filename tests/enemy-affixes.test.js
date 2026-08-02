@@ -287,7 +287,7 @@ test('formatAffixedEnemyName prefixes only the first affix', () => {
 // ========== Combat behaviour ==========
 const combatSource = fs.readFileSync(path.join(root, 'assets/js/combat.js'), 'utf8');
 
-const createCombatContext = ({ condition, affixes, hpMax, atk, atkSpd }) => {
+const createCombatContext = ({ condition, affixes, hpMax, atk, atkSpd, playerDef = 0, skills = [] }) => {
     const logs = [];
     const context = vm.createContext({
         document: {
@@ -302,8 +302,8 @@ const createCombatContext = ({ condition, affixes, hpMax, atk, atkSpd }) => {
             hardcore: false,
             deaths: 0,
             kills: 0,
-            skills: [],
-            stats: { hp: 1000, hpMax: 1000, atkSpd: 1 },
+            skills,
+            stats: { hp: 1000, hpMax: 1000, def: playerDef, atkSpd: 1 },
         },
         enemy: {
             id: 1,
@@ -435,6 +435,33 @@ test('volatile detonates once and only for volatile enemies', () => {
 
     assert.equal(vm.runInContext('applyVolatileDeath()', volatileEnemy), 0, 'volatile must not double-trigger');
     assert.equal(volatileEnemy.player.stats.hp, 1000 - first);
+});
+
+test('volatile damage scales with enemy attack and player defense instead of maximum HP', () => {
+    const lowDefense = createCombatContext({
+        condition: 'base', affixes: ['volatile'], hpMax: 1000, atk: 100, atkSpd: 1, playerDef: 0,
+    });
+    lowDefense.player.stats.hp = 100000;
+    lowDefense.player.stats.hpMax = 100000;
+    assert.equal(vm.runInContext('applyVolatileDeath()', lowDefense), 125);
+
+    const highDefense = createCombatContext({
+        condition: 'base', affixes: ['volatile'], hpMax: 1000, atk: 100, atkSpd: 1, playerDef: 100,
+    });
+    assert.equal(vm.runInContext('applyVolatileDeath()', highDefense), 63);
+});
+
+test("Paladin's Heart reduces volatile damage", () => {
+    const context = createCombatContext({
+        condition: 'base',
+        affixes: ['volatile'],
+        hpMax: 1000,
+        atk: 100,
+        atkSpd: 1,
+        playerDef: 100,
+        skills: ["Paladin's Heart"],
+    });
+    assert.equal(vm.runInContext('applyVolatileDeath()', context), 47);
 });
 
 test('regeneration heals only regenerating enemies and never overheals', () => {

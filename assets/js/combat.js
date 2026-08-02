@@ -204,7 +204,11 @@ const applyVolatileDeath = () => {
         return 0;
     }
     volatileDetonated = true;
-    const damage = Math.max(1, Math.round(player.stats.hpMax * AFFIX_VOLATILE_PLAYER_HP_PCT));
+    const defenseAdjustedDamage = enemy.stats.atk * (enemy.stats.atk / (enemy.stats.atk + player.stats.def));
+    let damage = Math.max(1, Math.round(defenseAdjustedDamage * AFFIX_VOLATILE_ATTACK_MULT));
+    if (player.skills.includes("Paladin's Heart")) {
+        damage = Math.max(1, Math.round(damage - ((25 * damage) / 100)));
+    }
     player.stats.hp -= damage;
     if (typeof recordRunDamageTaken === 'function') {
         recordRunDamageTaken(damage);
