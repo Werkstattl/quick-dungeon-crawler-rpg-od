@@ -52,6 +52,65 @@ test('legacy item categories map to the six fixed equipment slots', () => {
     assert.equal(evaluate(context, 'EQUIPMENT_SLOT_DEFINITIONS.length'), 6);
 });
 
+test('inventory refresh preserves scroll position while equipment info is open', () => {
+    const context = createContext();
+    const inventoryList = {
+        children: [],
+        scrollTop: 120,
+        _innerHTML: '',
+        set innerHTML(value) {
+            this._innerHTML = value;
+            this.children = [];
+            this.scrollTop = 0;
+        },
+        get innerHTML() {
+            return this._innerHTML;
+        },
+        appendChild(child) {
+            this.children.push(child);
+        },
+    };
+    const createElement = () => ({
+        className: '',
+        textContent: '',
+        innerHTML: '',
+        title: '',
+        children: [],
+        appendChild(child) { this.children.push(child); },
+        setAttribute() {},
+        addEventListener() {},
+    });
+    const count = createElement();
+    const limit = createElement();
+    const equipmentInfo = { style: { display: 'flex' } };
+    context.document = {
+        getElementById(id) {
+            if (id === 'playerInventory') return inventoryList;
+            if (id === 'inventory-item-count') return count;
+            if (id === 'inventory-item-limit') return limit;
+            if (id === 'equipmentInfo') return equipmentInfo;
+            return null;
+        },
+        createElement,
+    };
+    context.t = (key) => key;
+    context.player = {
+        equipped: [],
+        inventory: { consumables: [], equipment: [JSON.stringify(item({ category: 'Sword', type: 'Weapon', attribute: 'Damage' }))], refineStones: 0 },
+        companionCharm: null,
+    };
+
+    evaluate(context, 'showInventory()');
+
+    assert.equal(inventoryList.scrollTop, 120);
+    assert.equal(inventoryList.children.length, 1);
+
+    equipmentInfo.style.display = 'none';
+    inventoryList.scrollTop = 80;
+    evaluate(context, 'showInventory()');
+    assert.equal(inventoryList.scrollTop, 0, 'normal inventory rebuilds should retain their existing reset behavior');
+});
+
 test('accessories are obtainable through normal equipment generation', () => {
     const context = createContext();
     context.player = {

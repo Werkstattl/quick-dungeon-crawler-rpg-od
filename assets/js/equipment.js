@@ -1104,6 +1104,9 @@ const updateInventoryItemCount = () => {
 
 const showInventory = () => {
     let playerInventoryList = document.getElementById("playerInventory");
+    const itemInfo = document.getElementById("equipmentInfo");
+    const preserveScrollPosition = itemInfo && itemInfo.style.display === "flex";
+    const previousScrollTop = preserveScrollPosition ? playerInventoryList.scrollTop : 0;
     playerInventoryList.innerHTML = "";
 
     updateInventoryItemCount();
@@ -1149,6 +1152,7 @@ const showInventory = () => {
         // Add the itemDiv to the inventory container
         playerInventoryList.appendChild(itemDiv);
     }
+    playerInventoryList.scrollTop = previousScrollTop;
 }
 
 const showCompanionCharmSlot = () => {
