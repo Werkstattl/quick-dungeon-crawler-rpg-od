@@ -918,7 +918,8 @@ function openMenu(isTitle = false) {
         if (!autoModeUnlocked) {
             let unlockAuto = document.querySelector('#unlock-auto');
             unlockAuto.onclick = function () {
-                openAutoModeUnlockModal();
+                sfxConfirm.play();
+                buyPermanentAutoModeUnlock();
             };
         }
 
