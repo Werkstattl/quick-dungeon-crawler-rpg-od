@@ -1117,6 +1117,10 @@ const showEquipmentSlotMigrationNotice = () => {
         'equipment-slots-update-message',
         'Equipment now uses six dedicated slots: Weapon, Off Hand, Head, Body, Feet, and Accessory. Any extra equipped items were moved safely to your inventory.'
     );
+    const giftMessage = translateEquipText(
+        'equipment-slots-update-gift',
+        'To celebrate the new inventory system, you received a free Heirloom Accessory matched to your current progress.'
+    );
     const closeLabel = translateEquipText('close', 'Close');
 
     defaultModalElement.dataset.modalType = 'equipment-slot-migration';
@@ -1129,6 +1133,7 @@ const showEquipmentSlotMigrationNotice = () => {
             </div>
             <div class="modal-body">
                 <p data-i18n="equipment-slots-update-message">${message}</p>
+                <p data-i18n="equipment-slots-update-gift">${giftMessage}</p>
             </div>
             <div class="button-container">
                 <button id="equipment-slots-update-close" type="button" data-i18n="close">${closeLabel}</button>
@@ -1162,6 +1167,7 @@ const enterDungeon = () => {
         progressReset(true);
     }
     initialDungeonLoad();
+    grantEquipmentSlotMigrationAccessory(equipmentSlotMigrationNoticePending);
     addNewRunIntroLog();
     playerLoadStats();
     showEquipmentSlotMigrationNotice();

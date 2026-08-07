@@ -288,7 +288,13 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
 };
 
 const createEquipment = (addToInventory = true, options = {}) => {
-    const { allowCompanionCharm = true, minRarity = null, forcedSlot = null } = options;
+    const {
+        allowCompanionCharm = true,
+        minRarity = null,
+        forcedSlot = null,
+        forcedLevel = null,
+        forcedTier = null,
+    } = options;
     const equipment = {
         category: null,
         attribute: null,
@@ -302,7 +308,9 @@ const createEquipment = (addToInventory = true, options = {}) => {
     };
     const maxLvl = dungeon.progress.floor * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1);
     const minLvl = maxLvl - (dungeon.settings.enemyLvlGap - 1);
-    equipment.lvl = clampEquipmentLevel(randomizeNum(minLvl, maxLvl));
+    equipment.lvl = forcedLevel === null
+        ? clampEquipmentLevel(randomizeNum(minLvl, maxLvl))
+        : clampEquipmentLevel(forcedLevel);
     const shouldCreateCompanionCharm = allowCompanionCharm && Math.random() < COMPANION_CHARM_DROP_CHANCE;
     if (shouldCreateCompanionCharm) {
         equipment.attribute = 'Companion';
@@ -380,6 +388,9 @@ const createEquipment = (addToInventory = true, options = {}) => {
         }
     }
     equipment.tier = getEquipmentTierFromEnemyScaling(dungeon.settings.enemyScaling);
+    if (forcedTier !== null) {
+        equipment.tier = clampEquipmentTier(forcedTier);
+    }
     rerollEquipmentStats(equipment);
     if (addToInventory) {
         if (isCompanionCharm(equipment) && !player.companionCharm) {
@@ -425,6 +436,25 @@ const receiveEquipment = (equipment) => {
     if (typeof updateCompanionUI === 'function') {
         updateCompanionUI();
     }
+};
+
+const grantEquipmentSlotMigrationAccessory = (migrationNoticePending) => {
+    if (!migrationNoticePending
+        || !player
+        || player.equipmentSlotNoticeVersion === EQUIPMENT_SLOT_VERSION) {
+        return null;
+    }
+
+    const accessory = createEquipment(false, {
+        allowCompanionCharm: false,
+        forcedSlot: 'accessory',
+        forcedLevel: MAX_EQUIPMENT_LEVEL,
+        forcedTier: player.maxUnlockedCurseLevel,
+        minRarity: 'Heirloom',
+    });
+    player.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_VERSION;
+    receiveEquipment(accessory);
+    return accessory;
 };
 
 const EQUIPMENT_REROLL_STAT_POOLS = {

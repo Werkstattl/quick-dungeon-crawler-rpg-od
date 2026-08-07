@@ -135,6 +135,7 @@
   },
   "equipment-slots-update-title": "Sono arrivati gli slot equipaggiamento",
   "equipment-slots-update-message": "L'equipaggiamento ora usa sei slot dedicati: arma, mano secondaria, testa, corpo, piedi e accessorio. Gli oggetti equipaggiati in eccesso sono stati spostati al sicuro nel tuo inventario.",
+  "equipment-slots-update-gift": "Per celebrare il nuovo sistema dell'inventario, hai ricevuto gratuitamente un Accessorio Cimelio adatto ai tuoi progressi attuali.",
   "empty-slot": "Vuoto",
   "menu": "Menu",
   "statistics": "Statistiche",

@@ -135,6 +135,7 @@
   },
   "equipment-slots-update-title": "装備スロットが追加されました",
   "equipment-slots-update-message": "装備は武器、オフハンド、頭、胴、足、アクセサリーの6つの専用スロットを使用するようになりました。装備しきれないアイテムは安全にインベントリへ移動しました。",
+  "equipment-slots-update-gift": "新しいインベントリシステムを記念して、現在の進行度に合った家宝品質のアクセサリーを無料で受け取りました。",
   "empty-slot": "空き",
   "menu": "メニュー",
   "statistics": "統計",
