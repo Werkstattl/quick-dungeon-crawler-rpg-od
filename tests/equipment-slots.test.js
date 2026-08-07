@@ -112,6 +112,16 @@ test('accessories are obtainable through normal equipment generation', () => {
     assert.ok(generated.stats.length > 0);
 });
 
+test('accessory rerolls weight Dodge twice in the stat pool', () => {
+    const context = createContext();
+    const dodgeEntries = evaluate(
+        context,
+        "EQUIPMENT_REROLL_STAT_POOLS.utility.filter((stat) => stat === 'dodge').length",
+    );
+
+    assert.equal(dodgeEntries, 2);
+});
+
 test('accessory rerolls never include Faster Run', () => {
     const context = createContext();
     context.player = {

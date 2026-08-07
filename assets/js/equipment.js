@@ -435,7 +435,7 @@ const EQUIPMENT_REROLL_STAT_POOLS = {
     evasive: ["dodge", "dodge", "luck", "luck", "atkSpd", "critRate"],
     boots: ["dodge", "fasterRun", "hp", "def", "hp", "def"],
     damageDefense: ["hp", "def", "atk", "atk", "critRate", "critDmg", "luck"],
-    utility: ["atk", "hp", "def", "atkSpd", "critRate", "critDmg", "vamp", "dodge", "luck"],
+    utility: ["atk", "hp", "def", "atkSpd", "critRate", "critDmg", "vamp", "dodge", "dodge", "luck"],
 };
 
 const getEquipmentRerollStatPool = (equipment) => {
