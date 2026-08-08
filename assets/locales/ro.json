@@ -591,5 +591,9 @@
     "regenerating": "Recuperează viață în fiecare secundă, dar e mai fragil.",
     "thorned": "Reflectă o parte din daunele pe care le provoci.",
     "volatile": "Explodează când moare, rănindu-te."
-  }
+  },
+  "forge-token": "Jeton de forjă",
+  "forge-tokens": "Jetoane de forjă",
+  "forge-token-merchant-offer": "Apare un fierar rătăcitor: cumperi un jeton de forjă pentru {cost} aur?",
+  "forge-token-merchant-purchase": "Ai cumpărat un jeton de forjă pentru {cost} aur."
 }

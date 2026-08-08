@@ -593,5 +593,9 @@
     "regenerating": "每秒恢复生命，但更加脆弱。",
     "thorned": "将你造成的部分伤害反弹给你。",
     "volatile": "被击杀时爆炸，对你造成伤害。"
-  }
+  },
+  "forge-token": "锻造代币",
+  "forge-tokens": "锻造代币",
+  "forge-token-merchant-offer": "一位流浪铁匠出现了：花费{cost}金币购买一枚锻造代币？",
+  "forge-token-merchant-purchase": "你花费{cost}金币购买了一枚锻造代币。"
 }

@@ -166,7 +166,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                     inventory: {
                         consumables: [],
                         equipment: [],
-                        refineStones: 0
+                        refineStones: 0,
+                        forgeTokens: 0
                     },
                     equipped: [],
                     equipmentSlotVersion: EQUIPMENT_SLOT_VERSION,
@@ -200,7 +201,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                         player.inventory = {
                             consumables: [],
                             equipment: [],
-                            refineStones: 0
+                            refineStones: 0,
+                            forgeTokens: 0
                         };
                         player.equipped = [];
                         player.companionCharm = null;
@@ -1318,7 +1320,8 @@ const progressReset = (fromDeath = false) => {
         player.inventory = {
             consumables: [],
             equipment: [],
-            refineStones: 0
+            refineStones: 0,
+            forgeTokens: 0
         };
         player.equipped = [];
         player.equippedStats = {

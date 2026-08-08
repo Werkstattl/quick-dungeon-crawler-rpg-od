@@ -614,5 +614,9 @@
     "regenerating": "Regeneriert jede Sekunde Leben, ist aber zerbrechlicher.",
     "thorned": "Wirft einen Teil deines Schadens auf dich zurück.",
     "volatile": "Explodiert beim Tod und verletzt dich."
-  }
+  },
+  "forge-token": "Schmiede-Token",
+  "forge-tokens": "Schmiede-Tokens",
+  "forge-token-merchant-offer": "Ein wandernder Schmied erscheint: Einen Schmiede-Token für {cost} Gold kaufen?",
+  "forge-token-merchant-purchase": "Du hast einen Schmiede-Token für {cost} Gold gekauft."
 }
