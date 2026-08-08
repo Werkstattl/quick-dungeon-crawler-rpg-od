@@ -135,7 +135,7 @@
   },
   "equipment-slots-update-title": "Les emplacements d'équipement sont arrivés",
   "equipment-slots-update-message": "L'équipement utilise désormais six emplacements dédiés : arme, main secondaire, tête, torse, pieds et accessoire. Les objets équipés en trop ont été déplacés en toute sécurité dans votre inventaire.",
-  "equipment-slots-update-gift": "Pour célébrer le nouveau système d'inventaire, vous avez reçu gratuitement un accessoire Héritage adapté à votre progression actuelle.",
+  "equipment-slots-update-gift": "Pour célébrer le nouveau système d'inventaire, vous avez reçu gratuitement un accessoire Héritage.",
   "empty-slot": "Vide",
   "menu": "Menu",
   "statistics": "Statistiques",
