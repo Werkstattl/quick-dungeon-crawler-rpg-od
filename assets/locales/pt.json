@@ -614,5 +614,9 @@
     "regenerating": "Recupera vida a cada segundo, mas é mais frágil.",
     "thorned": "Reflete parte do dano que você causa.",
     "volatile": "Explode ao morrer, ferindo você."
-  }
+  },
+  "forge-token": "Ficha da forja",
+  "forge-tokens": "Fichas da forja",
+  "forge-token-merchant-offer": "Um ferreiro viajante aparece: comprar uma ficha da forja por {cost} de ouro?",
+  "forge-token-merchant-purchase": "Você comprou uma ficha da forja por {cost} de ouro."
 }

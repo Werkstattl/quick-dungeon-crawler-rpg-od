@@ -593,5 +593,9 @@
     "regenerating": "매초 체력을 회복하지만 더 약합니다.",
     "thorned": "당신이 준 피해의 일부를 반사합니다.",
     "volatile": "죽을 때 폭발하여 당신에게 피해를 줍니다."
-  }
+  },
+  "forge-token": "대장간 토큰",
+  "forge-tokens": "대장간 토큰",
+  "forge-token-merchant-offer": "떠돌이 대장장이가 나타났습니다: {cost} 골드로 대장간 토큰을 구매할까요?",
+  "forge-token-merchant-purchase": "{cost} 골드로 대장간 토큰을 구매했습니다."
 }

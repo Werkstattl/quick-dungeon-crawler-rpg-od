@@ -40,6 +40,36 @@ const FORGE_CATEGORY_CONFIG = Object.freeze([
     { category: 'Talisman', attribute: 'Utility', type: 'Accessory' },
 ]);
 
+const ensureForgeTokenInventory = () => {
+    if (!player.inventory || typeof player.inventory !== 'object') {
+        player.inventory = { consumables: [], equipment: [], refineStones: 0, forgeTokens: 0 };
+    }
+    const parsedCount = Number(player.inventory.forgeTokens);
+    player.inventory.forgeTokens = Number.isFinite(parsedCount)
+        ? Math.max(0, Math.floor(parsedCount))
+        : 0;
+    return player.inventory.forgeTokens;
+};
+
+const getForgeTokenCount = () => ensureForgeTokenInventory();
+const hasForgeToken = () => getForgeTokenCount() > 0;
+const getForgeActionGoldCost = (goldCost) => hasForgeToken() ? 0 : goldCost;
+const hasForgeActionAccess = () => forgeUnlocked || hasForgeToken();
+const canPayForgeAction = (goldCost) => hasForgeActionAccess()
+    && (hasForgeToken() || player.gold >= goldCost);
+
+const payForForgeAction = (goldCost) => {
+    if (!canPayForgeAction(goldCost)) {
+        return false;
+    }
+    if (hasForgeToken()) {
+        player.inventory.forgeTokens -= 1;
+    } else {
+        player.gold -= goldCost;
+    }
+    return true;
+};
+
 const closeForgeUnlockModal = () => {
     closeDefaultModal();
 };
@@ -206,7 +236,7 @@ function unlockForge() {
 const updateForgeGold = () => {
     if (forgeGoldElement) {
         const refineStoneCount = typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0;
-        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span>`;
+        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span> <span class="forge-material-count" title="${t('forge-tokens')}"><i class="ra ra-anvil"></i>${nFormatter(getForgeTokenCount())}</span>`;
     }
 };
 
@@ -664,9 +694,9 @@ const displayRefinePreview = () => {
         highlightDiff: true
     });
 
-    costAmount.textContent = nFormatter(refineCost);
+    costAmount.textContent = nFormatter(getForgeActionGoldCost(refineCost));
     stoneAmount.textContent = nFormatter(refineStoneCost);
-    const hasGold = player.gold >= refineCost;
+    const hasGold = canPayForgeAction(refineCost);
     const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
     const costElement = costAmount.parentElement;
     if (costElement) {
@@ -700,10 +730,10 @@ const displayRerollPreview = () => {
     });
     previewItem.innerHTML = renderPossibleRerollStats(currentEquipment);
 
-    costAmount.textContent = nFormatter(rerollCost);
+    costAmount.textContent = nFormatter(getForgeActionGoldCost(rerollCost));
     const costElement = costAmount.parentElement;
     if (costElement) {
-        costElement.style.color = player.gold >= rerollCost ? '#4CAF50' : '#F44336';
+        costElement.style.color = canPayForgeAction(rerollCost) ? '#4CAF50' : '#F44336';
     }
     previewContainer.style.display = 'grid';
     costContainer.style.display = 'block';
@@ -759,12 +789,12 @@ const updateRerollDisplay = () => {
         return;
     }
 
-    if (!forgeUnlocked) {
+    if (!hasForgeActionAccess()) {
         setForgeUnlockButton(confirmButton);
         return;
     }
 
-    if (selectedRerollItem && player.gold >= rerollCost) {
+    if (selectedRerollItem && canPayForgeAction(rerollCost)) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'reroll-equipment');
         confirmButton.textContent = t('reroll-equipment');
@@ -779,7 +809,7 @@ const updateRerollDisplay = () => {
     }
 
     confirmButton.onclick = () => {
-        if (selectedRerollItem && player.gold >= rerollCost) {
+        if (selectedRerollItem && canPayForgeAction(rerollCost)) {
             executeReroll();
         } else {
             sfxDeny.play();
@@ -836,13 +866,13 @@ const updateRefineDisplay = () => {
         return;
     }
 
-    if (!forgeUnlocked) {
+    if (!hasForgeActionAccess()) {
         setForgeUnlockButton(confirmButton);
         return;
     }
 
     const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
-    if (selectedRefineItem && player.gold >= refineCost && hasStones) {
+    if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'refine-equipment');
         confirmButton.textContent = t('refine-equipment');
@@ -861,7 +891,7 @@ const updateRefineDisplay = () => {
     }
 
     confirmButton.onclick = () => {
-        if (selectedRefineItem && player.gold >= refineCost && hasStones) {
+        if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones) {
             executeRefine();
         } else {
             sfxDeny.play();
@@ -978,7 +1008,7 @@ const updateForgeDisplay = () => {
         sfxUnequip.play();
     };
 
-    if (!forgeUnlocked) {
+    if (!hasForgeActionAccess()) {
         setForgeUnlockButton(confirmButton);
         return;
     }
@@ -1005,7 +1035,7 @@ const updateForgeDisplay = () => {
         confirmButton.disabled = true;
         confirmButton.setAttribute('data-i18n', 'choose-gear-piece');
         confirmButton.textContent = t('choose-gear-piece');
-    } else if (allSelected && player.gold >= forgeCost) {
+    } else if (allSelected && canPayForgeAction(forgeCost)) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'forge-equipment');
         confirmButton.textContent = `${t('forge-equipment')}`;
@@ -1032,7 +1062,7 @@ const updateForgeDisplay = () => {
             ({ category }) => category === selectedForgeCategory
         );
 
-        if (allSelectedConfirm && sameTierConfirm && sameRarityConfirm && hasTargetCategoryConfirm && player.gold >= forgeCost) {
+        if (allSelectedConfirm && sameTierConfirm && sameRarityConfirm && hasTargetCategoryConfirm && canPayForgeAction(forgeCost)) {
             executeForging();
         } else {
             sfxDeny.play();
@@ -1156,11 +1186,11 @@ const displayForgeResult = () => {
         </div>
     `;
     
-    costAmount.textContent = nFormatter(forgeCost);
+    costAmount.textContent = nFormatter(getForgeActionGoldCost(forgeCost));
     
     // Color cost based on affordability
     const costElement = costAmount.parentElement;
-    if (player.gold >= forgeCost) {
+    if (canPayForgeAction(forgeCost)) {
         costElement.style.color = '#4CAF50';
     } else {
         costElement.style.color = '#F44336';
@@ -1210,7 +1240,7 @@ const showForgedResultPopup = (equipment) => {
 };
 
 const executeReroll = () => {
-    if (!forgeUnlocked || !selectedRerollItem || player.gold < rerollCost) {
+    if (!selectedRerollItem || !canPayForgeAction(rerollCost)) {
         sfxDeny.play();
         return;
     }
@@ -1274,7 +1304,7 @@ const executeReroll = () => {
         source: selectedRerollItem.source,
         sourceIndex: updatedSourceIndex
     };
-    player.gold -= paidRerollCost;
+    payForForgeAction(paidRerollCost);
     saveData();
     playerLoadStats();
     if (typeof updateCompanionUI === 'function') {
@@ -1293,7 +1323,7 @@ const applyRefinedEquipment = (equipment) => {
 
 const executeRefine = () => {
     const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
-    if (!forgeUnlocked || !selectedRefineItem || player.gold < refineCost || !hasStones) {
+    if (!selectedRefineItem || !canPayForgeAction(refineCost) || !hasStones) {
         sfxDeny.play();
         return;
     }
@@ -1336,7 +1366,7 @@ const executeRefine = () => {
     }
 
     ensureRefineInventory();
-    player.gold -= refineCost;
+    payForForgeAction(refineCost);
     player.inventory.refineStones -= refineStoneCost;
     saveData();
     playerLoadStats();
@@ -1352,8 +1382,8 @@ const executeRefine = () => {
 // Execute forging
 const executeForging = () => {
     const hasTargetCategory = FORGE_CATEGORY_CONFIG.some(({ category }) => category === selectedForgeCategory);
-    if (!forgeUnlocked || !selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2]
-        || !hasTargetCategory || !forgeResult || player.gold < forgeCost) {
+    if (!selectedForgeItems[0] || !selectedForgeItems[1] || !selectedForgeItems[2]
+        || !hasTargetCategory || !forgeResult || !canPayForgeAction(forgeCost)) {
         sfxDeny.play();
         return;
     }
@@ -1391,8 +1421,8 @@ const executeForging = () => {
     removeItem(item2);
     removeItem(item3);
 
-    // Deduct gold
-    player.gold -= forgeCost;
+    // Pay with one Forge Token when available, otherwise use gold.
+    payForForgeAction(forgeCost);
     updateForgeGold();
 
     // Validate forgeResult before adding to inventory

@@ -24,6 +24,10 @@ if (player) {
         player.inventory.refineStones = 0;
     }
     player.inventory.refineStones = Math.max(0, Math.floor(Number(player.inventory.refineStones)));
+    if (!Number.isFinite(Number(player.inventory.forgeTokens))) {
+        player.inventory.forgeTokens = 0;
+    }
+    player.inventory.forgeTokens = Math.max(0, Math.floor(Number(player.inventory.forgeTokens)));
     if (typeof player.preferences.equipBestUseCustom !== 'boolean') {
         player.preferences.equipBestUseCustom = false;
     }

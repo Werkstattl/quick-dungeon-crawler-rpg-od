@@ -593,5 +593,9 @@
     "regenerating": "Recupera salute ogni secondo, ma è più fragile.",
     "thorned": "Riflette parte dei danni che infliggi.",
     "volatile": "Esplode quando muore, ferendoti."
-  }
+  },
+  "forge-token": "Gettone della forgia",
+  "forge-tokens": "Gettoni della forgia",
+  "forge-token-merchant-offer": "Appare un fabbro errante: comprare un gettone della forgia per {cost} oro?",
+  "forge-token-merchant-purchase": "Hai comprato un gettone della forgia per {cost} oro."
 }

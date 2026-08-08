@@ -34,6 +34,7 @@ const createDefaultDungeonStory = () => ({
 
 const createDefaultSpecialEvents = () => ({
     floor6WanderingShopVisited: false,
+    floor13ForgeTokenMerchantVisited: false,
     // Floor on which the monarch chamber was declined (0 = never)
     monarchIgnoredFloor: 0,
 });
@@ -60,6 +61,8 @@ const MIN_DUNGEON_EVENT_INTERVAL_MS = 100;
 const DUNGEON_TIMER_TICK_MS = 100;
 const WANDERING_SHOP_FLOOR = 6;
 const WANDERING_SHOP_MIN_RARITY = 'Rare';
+const FORGE_TOKEN_MERCHANT_FLOOR = 13;
+const FORGE_TOKEN_MERCHANT_COST = 10000;
 let lastDungeonEventTimestamp = Date.now();
 
 let dungeon = {
@@ -204,6 +207,12 @@ const shouldTriggerWanderingShop = () => {
     ensureSpecialEventsState();
     return dungeon.progress.floor === WANDERING_SHOP_FLOOR
         && !dungeon.specialEvents.floor6WanderingShopVisited;
+};
+
+const shouldTriggerForgeTokenMerchant = () => {
+    ensureSpecialEventsState();
+    return dungeon.progress.floor === FORGE_TOKEN_MERCHANT_FLOOR
+        && !dungeon.specialEvents.floor13ForgeTokenMerchantVisited;
 };
 
 const getWanderingShopCost = () => {
@@ -592,9 +601,11 @@ const dungeonEvent = () => {
         } else if (dungeon.action > 5) {
             eventTypes = ["nextroom"];
         }
-        event = shouldTriggerWanderingShop()
-            ? "wanderingShop"
-            : eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        event = shouldTriggerForgeTokenMerchant()
+            ? "forgeTokenMerchant"
+            : (shouldTriggerWanderingShop()
+                ? "wanderingShop"
+                : eventTypes[Math.floor(Math.random() * eventTypes.length)]);
         if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1 && dungeon.nothingBias === 0) {
             if (!localStorage.getItem('introHintShown')) {
                 localStorage.setItem('introHintShown', true);
@@ -719,6 +730,9 @@ const dungeonEvent = () => {
                 break;
             case "wanderingShop":
                 wanderingShopEvent();
+                break;
+            case "forgeTokenMerchant":
+                forgeTokenMerchantEvent();
                 break;
             case "enemy":
                 dungeon.status.event = true;
@@ -962,6 +976,48 @@ const wanderingShopEvent = () => {
             messageKey: 'wandering-shop-item-received',
         });
         playerLoadStats();
+        dungeon.status.event = false;
+        currentEvent = null;
+    }
+    document.querySelector("#choice2").onclick = function () {
+        ignoreEvent();
+    };
+    autoDecline();
+}
+
+const forgeTokenMerchantEvent = () => {
+    dungeon.status.event = true;
+    ensureSpecialEventsState();
+    dungeon.specialEvents.floor13ForgeTokenMerchantVisited = true;
+    const costMarkup = `<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>${nFormatter(FORGE_TOKEN_MERCHANT_COST)}</span>`;
+    const choices = `
+        <div class="decision-panel">
+            <button id="choice1" data-i18n="buy">${t('buy')}</button>
+            <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
+        </div>`;
+    addDungeonLog(`<span class='Legendary'>${t('forge-token-merchant-offer', { cost: costMarkup })}</span>`, choices);
+    document.querySelector("#choice1").onclick = function () {
+        if (!dungeon.status.event) {
+            return;
+        }
+        if (player.gold < FORGE_TOKEN_MERCHANT_COST) {
+            sfxDeny.play();
+            addDungeonLog(t('not-enough-gold'));
+            dungeon.status.event = false;
+            currentEvent = null;
+            return;
+        }
+        if (typeof ensureForgeTokenInventory === 'function') {
+            ensureForgeTokenInventory();
+        } else if (!Number.isFinite(Number(player.inventory.forgeTokens))) {
+            player.inventory.forgeTokens = 0;
+        }
+        player.gold -= FORGE_TOKEN_MERCHANT_COST;
+        player.inventory.forgeTokens += 1;
+        sfxSell.play();
+        addDungeonLog(t('forge-token-merchant-purchase', { cost: costMarkup }));
+        playerLoadStats();
+        saveData();
         dungeon.status.event = false;
         currentEvent = null;
     }
