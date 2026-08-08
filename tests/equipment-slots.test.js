@@ -300,6 +300,24 @@ test('migrated players see the inventory notice once while new players skip it',
     assert.doesNotMatch(equipmentSource, /equipmentSlotNoticeVersion|EQUIPMENT_SLOT_NOTICE_VERSION/);
 });
 
+test('stat allocation modal closes before entering the dungeon so it cannot erase the migration notice', () => {
+    const allocationStart = mainSource.indexOf('const allocationPopup = () => {');
+    const confirmStart = mainSource.indexOf('confirm.onclick = function () {', allocationStart);
+    const confirmEnd = mainSource.indexOf('reset.onclick = function () {', confirmStart);
+    const confirmSource = mainSource.slice(confirmStart, confirmEnd);
+    const clearModalIndex = confirmSource.indexOf('defaultModalElement.innerHTML = "";');
+    const enterDungeonIndex = confirmSource.indexOf('enterDungeon();');
+
+    assert.ok(confirmStart >= 0 && confirmEnd > confirmStart, 'allocation confirm handler is missing');
+    assert.ok(clearModalIndex >= 0, 'allocation modal is not cleared');
+    assert.ok(enterDungeonIndex > clearModalIndex, 'allocation modal must be cleared before the migration notice is shown');
+    assert.equal(
+        confirmSource.indexOf('defaultModalElement.innerHTML = "";', enterDungeonIndex),
+        -1,
+        'allocation handler must not erase the migration notice after entering the dungeon',
+    );
+});
+
 test('equipment slot notice is pending only when the slot version requires migration', () => {
     const migrationStateSource = mainSource.split('// Use DOMContentLoaded')[0];
     const context = vm.createContext({

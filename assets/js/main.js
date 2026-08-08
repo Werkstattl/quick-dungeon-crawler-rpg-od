@@ -2106,14 +2106,14 @@ const allocationPopup = () => {
 
         // Proceed to dungeon
         player.allocated = true;
+        defaultModalElement.style.display = "none";
+        defaultModalElement.innerHTML = "";
+        document.querySelector("#title-screen").style.filter = "brightness(100%)";
         enterDungeon();
         dungeon.settings.enemyScaling = getEnemyScalingFromCurseLevel(selectedCurseLevel);
         player.stats.hp = player.stats.hpMax;
         playerLoadStats();
         saveData();
-        defaultModalElement.style.display = "none";
-        defaultModalElement.innerHTML = "";
-        document.querySelector("#title-screen").style.filter = "brightness(100%)";
     }
     reset.onclick = function () {
         sfxDecline.play();
