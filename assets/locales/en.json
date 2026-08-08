@@ -406,7 +406,7 @@
   "nothing-here": "There is nothing in this area.",
   "blessing-gain": "You gained {value}% bonus {stat} from the blessing. (Blessing Lv.{old} > Blessing Lv.{new})",
   "divine-light-heals": "Divine light heals <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Reflexes sharpen! (+2% ATK.SPD this floor)",
+  "reflexes-sharpen": "Reflexes sharpen! (+2% APS this floor)",
   "weapons-glow": "Weapons glow! (+5% ATK this floor)",
   "armor-fortifies": "Armor fortifies! (+3% DEF this floor)",
   "ignored-move-on": "You ignored it and decided to move on.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "A slow pulse travels through the walls, as if something below has stirred.",
   "story-beat-floor-15": "The dark is no longer empty. Something ancient has noticed your descent.",
   "story-beat-floor-20": "A sealed chamber shudders somewhere below. The Dungeon Monarch is waking.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 You feel mentally focused! (+10% ATK.SPD until next floor)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 You feel mentally focused! (+10% APS until next floor)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 You feel physically energized! (+15% ATK until next floor)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ You feel inner peace! (+12% DEF until next floor)</span>",
   "pray": "Pray",
@@ -538,8 +538,8 @@
       "desc": "Increase bonus DEF by {value}%."
     },
     "atkSpd": {
-      "title": "ATK.SPD UP",
-      "desc": "Increase bonus ATK.SPD by {value}%."
+      "title": "APS UP",
+      "desc": "Increase bonus APS by {value}%."
     },
     "vamp": {
       "title": "VAMP UP",

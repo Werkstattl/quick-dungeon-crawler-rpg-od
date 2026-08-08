@@ -404,7 +404,7 @@
   "nothing-here": "Nu există nimic aici.",
   "blessing-gain": "Ai câștigat {value}% bonus {stat} din binecuvântare. (Binecuvântare Lv.{old} > Binecuvântare Lv.{new})",
   "divine-light-heals": "Lumina divină vindecă <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Reflexele se îmbunătățesc! (+2% ATK.SPD la acest etaj)",
+  "reflexes-sharpen": "Reflexele se îmbunătățesc! (+2% APS la acest etaj)",
   "weapons-glow": "Armele strălucesc! (+5% ATK la acest etaj)",
   "armor-fortifies": "Armura se întărește! (+3% DEF la acest etaj)",
   "ignored-move-on": "L-ai ignorat și ai decis să mergi mai departe.",
@@ -413,7 +413,7 @@
   "story-beat-floor-10": "Un puls lent străbate pereții, de parcă ceva de dedesubt s-ar fi trezit.",
   "story-beat-floor-15": "Întunericul nu mai este gol. Ceva străvechi ți-a observat coborârea.",
   "story-beat-floor-20": "O cameră sigilată tremură undeva mai jos. Monarhul Temniței se trezește.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Te simți concentrat mental! (+10% ATK.SPD până la etajul următor)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Te simți concentrat mental! (+10% APS până la etajul următor)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Te simți energizat fizic! (+15% ATK până la etajul următor)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Simți pace interioară! (+12% DEF până la etajul următor)</span>",
   "pray": "Roagă-te",
@@ -536,8 +536,8 @@
       "desc": "Mărește bonusul de DEF cu {value}%."
     },
     "atkSpd": {
-      "title": "ATK.SPD +",
-      "desc": "Mărește bonusul de ATK.SPD cu {value}%."
+      "title": "APS +",
+      "desc": "Mărește bonusul de APS cu {value}%."
     },
     "vamp": {
       "title": "VAMP +",

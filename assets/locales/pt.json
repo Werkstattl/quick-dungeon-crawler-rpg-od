@@ -406,7 +406,7 @@
   "nothing-here": "Não há nada nesta área.",
   "blessing-gain": "Você recebeu {value}% de bônus em {stat} pela bênção. (Bênção Nv.{old} > Bênção Nv.{new})",
   "divine-light-heals": "A luz divina cura <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Reflexos aguçados! (+2% VEL.ATQ neste andar)",
+  "reflexes-sharpen": "Reflexos aguçados! (+2% APS neste andar)",
   "weapons-glow": "Armas brilhando! (+5% ATQ neste andar)",
   "armor-fortifies": "Armadura reforçada! (+3% DEF neste andar)",
   "ignored-move-on": "Você ignorou e decidiu seguir em frente.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Um pulso lento percorre as paredes, como se algo lá embaixo tivesse despertado.",
   "story-beat-floor-15": "A escuridão não está mais vazia. Algo antigo percebeu sua descida.",
   "story-beat-floor-20": "Uma câmara selada treme em algum lugar abaixo. O Monarca da Masmorra está despertando.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Você se sente mentalmente focado! (+10% VEL.ATQ até o próximo andar)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Você se sente mentalmente focado! (+10% APS até o próximo andar)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Você se sente energizado! (+15% ATQ até o próximo andar)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Você sente paz interior! (+12% DEF até o próximo andar)</span>",
   "pray": "Rezar",
@@ -559,8 +559,8 @@
       "desc": "Aumenta a DEF bônus em {value}%."
     },
     "atkSpd": {
-      "title": "VEL.ATQ +",
-      "desc": "Aumenta a VEL.ATQ bônus em {value}%."
+      "title": "APS +",
+      "desc": "Aumenta a APS bônus em {value}%."
     },
     "vamp": {
       "title": "VAMP +",

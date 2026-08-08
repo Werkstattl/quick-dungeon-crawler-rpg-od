@@ -406,7 +406,7 @@
   "nothing-here": "Non c'è niente in quest'area.",
   "blessing-gain": "Hai ottenuto {value}% di bonus {stat} dalla benedizione. (Benedizione Liv.{old} > Benedizione Liv.{new})",
   "divine-light-heals": "La luce divina cura <span class='Epic'>{hp} PV</span>.",
-  "reflexes-sharpen": "Riflessi affinati! (+2% VEL.ATT in questo piano)",
+  "reflexes-sharpen": "Riflessi affinati! (+2% APS in questo piano)",
   "weapons-glow": "Le armi brillano! (+5% ATT in questo piano)",
   "armor-fortifies": "L'armatura si rinforza! (+3% DIF in questo piano)",
   "ignored-move-on": "L'hai ignorato e hai deciso di proseguire.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Un lento battito attraversa le pareti, come se qualcosa sotto si fosse mosso.",
   "story-beat-floor-15": "L'oscurità non è più vuota. Qualcosa di antico ha notato la tua discesa.",
   "story-beat-floor-20": "Una camera sigillata trema da qualche parte più in basso. Il Monarca del dungeon si sta svegliando.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Ti senti mentalmente concentrato! (+10% VEL.ATT fino al prossimo piano)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Ti senti mentalmente concentrato! (+10% APS fino al prossimo piano)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Ti senti fisicamente energizzato! (+15% ATT fino al prossimo piano)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Senti pace interiore! (+12% DIF fino al prossimo piano)</span>",
   "pray": "Prega",
@@ -538,8 +538,8 @@
       "desc": "Aumenta la DIF bonus di {value}%."
     },
     "atkSpd": {
-      "title": "VEL.ATT SU",
-      "desc": "Aumenta la VEL.ATT bonus di {value}%."
+      "title": "APS SU",
+      "desc": "Aumenta la APS bonus di {value}%."
     },
     "vamp": {
       "title": "VAMP SU",

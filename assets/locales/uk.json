@@ -406,7 +406,7 @@
   "nothing-here": "У цій зоні нічого немає.",
   "blessing-gain": "Ви отримали {value}% бонусу {stat} від благословення. (Рів. благословення {old} > {new})",
   "divine-light-heals": "Божественне світло зцілює <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Рефлекси загострилися! (+2% ATK.SPD на цей поверх)",
+  "reflexes-sharpen": "Рефлекси загострилися! (+2% APS на цей поверх)",
   "weapons-glow": "Зброя сяє! (+5% ATK на цей поверх)",
   "armor-fortifies": "Броня міцнішає! (+3% DEF на цей поверх)",
   "ignored-move-on": "Ви ігнорували й вирішили йти далі.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Повільний пульс проходить крізь стіни, ніби внизу щось ворухнулося.",
   "story-beat-floor-15": "Пітьма більше не порожня. Щось прадавнє помітило твій спуск.",
   "story-beat-floor-20": "Десь нижче здригається запечатана камера. Монарх Підземелля прокидається.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Ви відчуваєте ментальну зосередженість! (+10% ATK.SPD до наступного поверху)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Ви відчуваєте ментальну зосередженість! (+10% APS до наступного поверху)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Ви відчуваєте фізичну енергію! (+15% ATK до наступного поверху)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Ви відчуваєте внутрішній спокій! (+12% DEF до наступного поверху)</span>",
   "pray": "Молитися",
@@ -538,8 +538,8 @@
       "desc": "Збільшує бонусний DEF на {value}%."
     },
     "atkSpd": {
-      "title": "ATK.SPD UP",
-      "desc": "Збільшує бонусний ATK.SPD на {value}%."
+      "title": "APS UP",
+      "desc": "Збільшує бонусний APS на {value}%."
     },
     "vamp": {
       "title": "VAMP UP",

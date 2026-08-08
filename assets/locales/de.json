@@ -406,7 +406,7 @@
   "nothing-here": "Hier gibt es nichts.",
   "blessing-gain": "Du hast durch den Segen {value}% Bonus auf {stat} erhalten. (Segen Lv.{old} > Segen Lv.{new})",
   "divine-light-heals": "Göttliches Licht heilt <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Reflexe schärfen sich! (+2% ATK.GES auf dieser Etage)",
+  "reflexes-sharpen": "Reflexe schärfen sich! (+2% APS auf dieser Etage)",
   "weapons-glow": "Waffen glühen! (+5% ATK auf dieser Etage)",
   "armor-fortifies": "Rüstung verstärkt sich! (+3% DEF auf dieser Etage)",
   "ignored-move-on": "Du hast es ignoriert und bist weitergegangen.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Ein langsamer Puls wandert durch die Wände, als hätte sich tief unten etwas geregt.",
   "story-beat-floor-15": "Die Dunkelheit ist nicht länger leer. Etwas Uraltes hat deinen Abstieg bemerkt.",
   "story-beat-floor-20": "Irgendwo tiefer unten erzittert eine versiegelte Kammer. Der Dungeon-Monarch erwacht.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Du fühlst dich geistig fokussiert! (+10% ATK.GES bis zur nächsten Etage)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Du fühlst dich geistig fokussiert! (+10% APS bis zur nächsten Etage)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Du fühlst dich körperlich energiegeladen! (+15% ATK bis zur nächsten Etage)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Du fühlst inneren Frieden! (+12% DEF bis zur nächsten Etage)</span>",
   "pray": "Beten",
@@ -559,8 +559,8 @@
       "desc": "Erhöhe Bonus-DEF um {value}%."
     },
     "atkSpd": {
-      "title": "ATK.GES UP",
-      "desc": "Erhöhe Bonus-ATK.GES um {value}%."
+      "title": "APS UP",
+      "desc": "Erhöhe Bonus-APS um {value}%."
     },
     "vamp": {
       "title": "VAMP UP",

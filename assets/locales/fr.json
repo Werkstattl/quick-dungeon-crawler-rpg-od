@@ -406,7 +406,7 @@
   "nothing-here": "Il n'y a rien dans cette zone.",
   "blessing-gain": "Vous avez gagné {value} % de bonus de {stat} grâce à la bénédiction. (Bénédiction niv.{old} > Bénédiction niv.{new})",
   "divine-light-heals": "La lumière divine soigne <span class='Epic'>{hp} PV</span>.",
-  "reflexes-sharpen": "Réflexes aiguisés ! (+2 % VIT.ATQ à cet étage)",
+  "reflexes-sharpen": "Réflexes aiguisés ! (+2 % APS à cet étage)",
   "weapons-glow": "Les armes brillent ! (+5 % ATQ à cet étage)",
   "armor-fortifies": "L'armure se renforce ! (+3 % DÉF à cet étage)",
   "ignored-move-on": "Vous l'avez ignoré et avez décidé de continuer.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Une lente pulsation traverse les murs, comme si quelque chose en dessous s'était éveillé.",
   "story-beat-floor-15": "Les ténèbres ne sont plus vides. Quelque chose d'ancien a remarqué votre descente.",
   "story-beat-floor-20": "Une chambre scellée tremble quelque part plus bas. Le Monarque du donjon s'éveille.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Vous vous sentez mentalement concentré ! (+10 % VIT.ATQ jusqu'au prochain étage)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Vous vous sentez mentalement concentré ! (+10 % APS jusqu'au prochain étage)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Vous vous sentez physiquement plein d'énergie ! (+15 % ATQ jusqu'au prochain étage)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Vous ressentez une paix intérieure ! (+12 % DÉF jusqu'au prochain étage)</span>",
   "pray": "Prier",
@@ -538,8 +538,8 @@
       "desc": "Augmente la DÉF bonus de {value} %."
     },
     "atkSpd": {
-      "title": "VIT.ATQ +",
-      "desc": "Augmente la VIT.ATQ bonus de {value} %."
+      "title": "APS +",
+      "desc": "Augmente l'APS bonus de {value} %."
     },
     "vamp": {
       "title": "VAMP +",

@@ -406,7 +406,7 @@
   "nothing-here": "Bu bölgede hiçbir şey yok.",
   "blessing-gain": "Kutsamadan %{value} bonus {stat} kazandın. (Kutsama Sv.{old} > Kutsama Sv.{new})",
   "divine-light-heals": "İlahi ışık <span class='Epic'>{hp} HP</span> iyileştirir.",
-  "reflexes-sharpen": "Reflekslerin keskinleşti! (Bu katta +2% ATK.SPD)",
+  "reflexes-sharpen": "Reflekslerin keskinleşti! (Bu katta +2% APS)",
   "weapons-glow": "Silahların parlıyor! (Bu katta +5% ATK)",
   "armor-fortifies": "Zırhın güçleniyor! (Bu katta +3% DEF)",
   "ignored-move-on": "Onu yok saydın ve ilerlemeye karar verdin.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Duvarlardan yavaş bir nabız geçiyor; sanki aşağıda bir şey kıpırdamış gibi.",
   "story-beat-floor-15": "Karanlık artık boş değil. Kadim bir şey inişini fark etti.",
   "story-beat-floor-20": "Aşağıda bir yerde mühürlü bir oda sarsılıyor. Zindan Hükümdarı uyanıyor.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Zihinsel olarak odaklanmış hissediyorsun! (Sonraki kata kadar +10% ATK.SPD)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Zihinsel olarak odaklanmış hissediyorsun! (Sonraki kata kadar +10% APS)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Fiziksel olarak enerjik hissediyorsun! (Sonraki kata kadar +15% ATK)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ İç huzur hissediyorsun! (Sonraki kata kadar +12% DEF)</span>",
   "pray": "Dua et",
@@ -538,8 +538,8 @@
       "desc": "Bonus DEF'i %{value} artır."
     },
     "atkSpd": {
-      "title": "ATK.SPD ARTIR",
-      "desc": "Bonus ATK.SPD'yi %{value} artır."
+      "title": "APS ARTIR",
+      "desc": "Bonus APS'yi %{value} artır."
     },
     "vamp": {
       "title": "VAMP ARTIR",

@@ -406,7 +406,7 @@
   "nothing-here": "لا يوجد شيء في هذه المنطقة.",
   "blessing-gain": "حصلت على مكافأة {value}% لـ {stat} من البركة. (مستوى البركة {old} > مستوى البركة {new})",
   "divine-light-heals": "النور الإلهي يشفي <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "ازدادت ردود فعلك حدة! (+2% ATK.SPD في هذا الطابق)",
+  "reflexes-sharpen": "ازدادت ردود فعلك حدة! (+2% APS في هذا الطابق)",
   "weapons-glow": "تتوهج الأسلحة! (+5% ATK في هذا الطابق)",
   "armor-fortifies": "يتحصن الدرع! (+3% DEF في هذا الطابق)",
   "ignored-move-on": "تجاهلت الأمر وقررت المتابعة.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "نبض بطيء يسري في الجدران، كأن شيئا في الأسفل قد تحرك.",
   "story-beat-floor-15": "لم يعد الظلام فارغا. شيء قديم لاحظ نزولك.",
   "story-beat-floor-20": "تهتز غرفة مختومة في مكان ما بالأسفل. ملك الزنزانة يستيقظ.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 تشعر بتركيز ذهني! (+10% ATK.SPD حتى الطابق التالي)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 تشعر بتركيز ذهني! (+10% APS حتى الطابق التالي)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 تشعر بطاقة جسدية! (+15% ATK حتى الطابق التالي)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ تشعر بسلام داخلي! (+12% DEF حتى الطابق التالي)</span>",
   "pray": "صلّ",
@@ -538,8 +538,8 @@
       "desc": "زيادة مكافأة DEF بنسبة {value}%."
     },
     "atkSpd": {
-      "title": "زيادة ATK.SPD",
-      "desc": "زيادة مكافأة ATK.SPD بنسبة {value}%."
+      "title": "زيادة APS",
+      "desc": "زيادة مكافأة APS بنسبة {value}%."
     },
     "vamp": {
       "title": "زيادة VAMP",

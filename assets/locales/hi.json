@@ -406,7 +406,7 @@
   "nothing-here": "इस क्षेत्र में कुछ नहीं है।",
   "blessing-gain": "आपको आशीर्वाद से {value}% बोनस {stat} मिला। (आशीर्वाद स्तर {old} > आशीर्वाद स्तर {new})",
   "divine-light-heals": "दैवीय प्रकाश <span class='Epic'>{hp} HP</span> ठीक करता है।",
-  "reflexes-sharpen": "प्रतिक्रियाएँ तेज हुईं! (+2% ATK.SPD इस मंजिल पर)",
+  "reflexes-sharpen": "प्रतिक्रियाएँ तेज हुईं! (+2% APS इस मंजिल पर)",
   "weapons-glow": "हथियार चमक उठे! (+5% ATK इस मंजिल पर)",
   "armor-fortifies": "कवच मजबूत हुआ! (+3% DEF इस मंजिल पर)",
   "ignored-move-on": "आपने उसे अनदेखा किया और आगे बढ़ने का फैसला किया।",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "दीवारों में धीमी धड़कन दौड़ती है, मानो नीचे कुछ जाग उठा हो।",
   "story-beat-floor-15": "अंधेरा अब खाली नहीं है। किसी प्राचीन चीज ने आपकी उतराई देख ली है।",
   "story-beat-floor-20": "नीचे कहीं एक सीलबंद कक्ष काँपता है। डंजन मोनार्क जाग रहा है।",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 आप मानसिक रूप से केंद्रित महसूस करते हैं! (+10% ATK.SPD अगली मंजिल तक)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 आप मानसिक रूप से केंद्रित महसूस करते हैं! (+10% APS अगली मंजिल तक)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 आप शारीरिक रूप से ऊर्जावान महसूस करते हैं! (+15% ATK अगली मंजिल तक)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ आपको आंतरिक शांति महसूस होती है! (+12% DEF अगली मंजिल तक)</span>",
   "pray": "प्रार्थना करें",
@@ -538,8 +538,8 @@
       "desc": "बोनस DEF को {value}% बढ़ाएँ।"
     },
     "atkSpd": {
-      "title": "ATK.SPD बढ़ाएँ",
-      "desc": "बोनस ATK.SPD को {value}% बढ़ाएँ।"
+      "title": "APS बढ़ाएँ",
+      "desc": "बोनस APS को {value}% बढ़ाएँ।"
     },
     "vamp": {
       "title": "VAMP बढ़ाएँ",

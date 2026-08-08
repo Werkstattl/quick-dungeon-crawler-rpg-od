@@ -406,7 +406,7 @@
   "nothing-here": "이 구역에는 아무것도 없습니다.",
   "blessing-gain": "축복으로 {stat} 보너스 {value}%를 얻었습니다. (축복 Lv.{old} > 축복 Lv.{new})",
   "divine-light-heals": "신성한 빛이 <span class='Epic'>{hp} HP</span>를 회복합니다.",
-  "reflexes-sharpen": "반사 신경이 날카로워졌습니다! (이 층에서 +2% ATK.SPD)",
+  "reflexes-sharpen": "반사 신경이 날카로워졌습니다! (이 층에서 +2% APS)",
   "weapons-glow": "무기가 빛납니다! (이 층에서 +5% ATK)",
   "armor-fortifies": "방어구가 강화됩니다! (이 층에서 +3% DEF)",
   "ignored-move-on": "그것을 무시하고 계속 나아가기로 했습니다.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "벽을 따라 느린 맥동이 흐릅니다. 아래의 무언가가 꿈틀댄 듯합니다.",
   "story-beat-floor-15": "어둠은 더 이상 비어 있지 않습니다. 고대의 무언가가 당신의 하강을 알아챘습니다.",
   "story-beat-floor-20": "어딘가 아래에서 봉인된 방이 떨립니다. 던전 군주가 깨어나고 있습니다.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 정신이 집중됩니다! (다음 층까지 +10% ATK.SPD)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 정신이 집중됩니다! (다음 층까지 +10% APS)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 몸에 활력이 넘칩니다! (다음 층까지 +15% ATK)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ 내면의 평화를 느낍니다! (다음 층까지 +12% DEF)</span>",
   "pray": "기도",
@@ -538,8 +538,8 @@
       "desc": "보너스 DEF를 {value}% 증가시킵니다."
     },
     "atkSpd": {
-      "title": "ATK.SPD 증가",
-      "desc": "보너스 ATK.SPD를 {value}% 증가시킵니다."
+      "title": "APS 증가",
+      "desc": "보너스 APS를 {value}% 증가시킵니다."
     },
     "vamp": {
       "title": "VAMP 증가",

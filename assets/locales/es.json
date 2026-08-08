@@ -406,7 +406,7 @@
   "nothing-here": "No hay nada en esta área.",
   "blessing-gain": "Obtienes {value}% de bonificación de {stat} de la bendición. (Bendición Nv.{old} > Bendición Nv.{new})",
   "divine-light-heals": "La luz divina cura <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "¡Los reflejos se agudizan! (+2% VEL.ATQ en este piso)",
+  "reflexes-sharpen": "¡Los reflejos se agudizan! (+2% APS en este piso)",
   "weapons-glow": "¡Las armas brillan! (+5% ATQ en este piso)",
   "armor-fortifies": "¡La armadura se fortalece! (+3% DEF en este piso)",
   "ignored-move-on": "Lo ignoraste y decidiste seguir adelante.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Un pulso lento recorre las paredes, como si algo abajo se hubiera agitado.",
   "story-beat-floor-15": "La oscuridad ya no está vacía. Algo antiguo ha notado tu descenso.",
   "story-beat-floor-20": "Una cámara sellada tiembla en algún lugar más abajo. El Monarca de la Mazmorra está despertando.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 ¡Te sientes mentalmente enfocado! (+10% VEL.ATQ hasta el próximo piso)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 ¡Te sientes mentalmente enfocado! (+10% APS hasta el próximo piso)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 ¡Te sientes físicamente energizado! (+15% ATQ hasta el próximo piso)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ ¡Sientes paz interior! (+12% DEF hasta el próximo piso)</span>",
   "pray": "Rezar",
@@ -538,8 +538,8 @@
       "desc": "Incrementa la DEF adicional en {value}%."
     },
     "atkSpd": {
-      "title": "VEL.ATQ +",
-      "desc": "Incrementa la VEL.ATQ adicional en {value}%."
+      "title": "APS +",
+      "desc": "Incrementa la APS adicional en {value}%."
     },
     "vamp": {
       "title": "VAMP +",

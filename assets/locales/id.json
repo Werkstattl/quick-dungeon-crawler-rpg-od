@@ -406,7 +406,7 @@
   "nothing-here": "Tidak ada apa pun di area ini.",
   "blessing-gain": "Kamu mendapat bonus {stat} sebesar {value}% dari berkat. (Berkat Lv.{old} > Berkat Lv.{new})",
   "divine-light-heals": "Cahaya ilahi menyembuhkan <span class='Epic'>{hp} HP</span>.",
-  "reflexes-sharpen": "Refleks menajam! (+2% ATK.SPD di lantai ini)",
+  "reflexes-sharpen": "Refleks menajam! (+2% APS di lantai ini)",
   "weapons-glow": "Senjata bercahaya! (+5% ATK di lantai ini)",
   "armor-fortifies": "Armor menguat! (+3% DEF di lantai ini)",
   "ignored-move-on": "Kamu mengabaikannya dan memutuskan untuk lanjut.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Denyut pelan menjalar melalui dinding, seolah sesuatu di bawah telah bergerak.",
   "story-beat-floor-15": "Kegelapan tidak lagi kosong. Sesuatu yang kuno telah menyadari turunnya dirimu.",
   "story-beat-floor-20": "Sebuah ruang tersegel bergetar di suatu tempat di bawah. Dungeon Monarch sedang bangkit.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Kamu merasa fokus secara mental! (+10% ATK.SPD sampai lantai berikutnya)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Kamu merasa fokus secara mental! (+10% APS sampai lantai berikutnya)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Kamu merasa bertenaga secara fisik! (+15% ATK sampai lantai berikutnya)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Kamu merasakan kedamaian batin! (+12% DEF sampai lantai berikutnya)</span>",
   "pray": "Berdoa",
@@ -538,8 +538,8 @@
       "desc": "Tingkatkan bonus DEF sebesar {value}%."
     },
     "atkSpd": {
-      "title": "ATK.SPD NAIK",
-      "desc": "Tingkatkan bonus ATK.SPD sebesar {value}%."
+      "title": "APS NAIK",
+      "desc": "Tingkatkan bonus APS sebesar {value}%."
     },
     "vamp": {
       "title": "VAMP NAIK",

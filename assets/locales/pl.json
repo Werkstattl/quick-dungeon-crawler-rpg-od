@@ -406,7 +406,7 @@
   "nothing-here": "W tym obszarze nic nie ma.",
   "blessing-gain": "Zyskałeś {value}% bonusu do {stat} z błogosławieństwa. (Błogosławieństwo Poz.{old} > Błogosławieństwo Poz.{new})",
   "divine-light-heals": "Boskie światło leczy <span class='Epic'>{hp} PW</span>.",
-  "reflexes-sharpen": "Refleks się wyostrza! (+2% SZ. ATK na tym piętrze)",
+  "reflexes-sharpen": "Refleks się wyostrza! (+2% APS na tym piętrze)",
   "weapons-glow": "Broń rozbłyska! (+5% ATK na tym piętrze)",
   "armor-fortifies": "Pancerz się wzmacnia! (+3% OBR na tym piętrze)",
   "ignored-move-on": "Zignorowałeś to i postanowiłeś iść dalej.",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "Powolny puls przebiega przez ściany, jakby coś poniżej się poruszyło.",
   "story-beat-floor-15": "Mrok nie jest już pusty. Coś starożytnego zauważyło twoje zejście.",
   "story-beat-floor-20": "Gdzieś niżej drży zapieczętowana komnata. Monarcha lochu się budzi.",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Czujesz mentalne skupienie! (+10% SZ. ATK do następnego piętra)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 Czujesz mentalne skupienie! (+10% APS do następnego piętra)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 Czujesz fizyczną energię! (+15% ATK do następnego piętra)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ Czujesz wewnętrzny spokój! (+12% OBR do następnego piętra)</span>",
   "pray": "Módl się",
@@ -538,8 +538,8 @@
       "desc": "Zwiększ bonus OBR o {value}%."
     },
     "atkSpd": {
-      "title": "SZ. ATK W GÓRĘ",
-      "desc": "Zwiększ bonus SZ. ATK o {value}%."
+      "title": "APS W GÓRĘ",
+      "desc": "Zwiększ bonus APS o {value}%."
     },
     "vamp": {
       "title": "WAMP W GÓRĘ",

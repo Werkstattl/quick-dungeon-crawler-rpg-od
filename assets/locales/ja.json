@@ -406,7 +406,7 @@
   "nothing-here": "このエリアには何もない。",
   "blessing-gain": "祝福により{stat}が{value}%増加した。(祝福Lv.{old} > 祝福Lv.{new})",
   "divine-light-heals": "神聖な光が<span class='Epic'>{hp} HP</span>回復させる。",
-  "reflexes-sharpen": "反射神経が研ぎ澄まされた！ (この階でATK.SPD+2%)",
+  "reflexes-sharpen": "反射神経が研ぎ澄まされた！ (この階でAPS+2%)",
   "weapons-glow": "武器が輝いた！ (この階でATK+5%)",
   "armor-fortifies": "鎧が強化された！ (この階でDEF+3%)",
   "ignored-move-on": "無視して先へ進むことにした。",
@@ -415,7 +415,7 @@
   "story-beat-floor-10": "ゆっくりとした脈動が壁を伝う。まるで下層で何かが目覚めたかのようだ。",
   "story-beat-floor-15": "闇はもはや空ではない。古き何かが、あなたの降下に気づいた。",
   "story-beat-floor-20": "さらに下で封印された間が震える。ダンジョンモナークが目覚めつつある。",
-  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 精神が集中した！ (次の階までATK.SPD+10%)</span>",
+  "resting-bonus-focus": "<span style='color: #FFD700;'>🧠 精神が集中した！ (次の階までAPS+10%)</span>",
   "resting-bonus-vitality": "<span style='color: #FF5722;'>💪 体が活力に満ちた！ (次の階までATK+15%)</span>",
   "resting-bonus-serenity": "<span style='color: #2196F3;'>🛡️ 心が安らいだ！ (次の階までDEF+12%)</span>",
   "pray": "祈る",
@@ -538,8 +538,8 @@
       "desc": "ボーナスDEFが{value}%増加する。"
     },
     "atkSpd": {
-      "title": "ATK.SPD UP",
-      "desc": "ボーナスATK.SPDが{value}%増加する。"
+      "title": "APS UP",
+      "desc": "ボーナスAPSが{value}%増加する。"
     },
     "vamp": {
       "title": "VAMP UP",
