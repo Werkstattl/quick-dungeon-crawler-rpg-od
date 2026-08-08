@@ -135,6 +135,7 @@
   },
   "equipment-slots-update-title": "Ya están aquí las ranuras de equipo",
   "equipment-slots-update-message": "El equipo ahora usa seis ranuras específicas: arma, mano secundaria, cabeza, cuerpo, pies y accesorio. Los objetos equipados sobrantes se trasladaron de forma segura a tu inventario.",
+  "equipment-slots-update-gift": "Para celebrar el nuevo sistema de inventario, has recibido gratis un accesorio de reliquia adaptado a tu progreso actual.",
   "empty-slot": "Vacío",
   "menu": "Menú",
   "statistics": "Estadísticas",

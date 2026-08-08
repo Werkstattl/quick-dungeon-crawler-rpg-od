@@ -135,6 +135,7 @@
   },
   "equipment-slots-update-title": "장비 슬롯이 추가되었습니다",
   "equipment-slots-update-message": "이제 장비는 무기, 보조 장비, 머리, 몸통, 발, 장신구의 전용 슬롯 6개를 사용합니다. 남는 장착 아이템은 인벤토리로 안전하게 이동했습니다.",
+  "equipment-slots-update-gift": "새 인벤토리 시스템을 기념해 현재 진행도에 맞는 가보 등급 장신구를 무료로 받았습니다.",
   "empty-slot": "비어 있음",
   "menu": "메뉴",
   "statistics": "통계",

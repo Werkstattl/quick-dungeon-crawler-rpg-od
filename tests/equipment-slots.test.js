@@ -14,6 +14,7 @@ const createContext = () => {
     const context = vm.createContext({
         console,
         saveCalls: 0,
+        MAX_EQUIPMENT_LEVEL: 100,
         playerLoadStats() {},
         sfxEquip: { play() {} },
         sfxDeny: { play() {} },
@@ -110,6 +111,44 @@ test('accessories are obtainable through normal equipment generation', () => {
     assert.equal(generated.attribute, 'Utility');
     assert.ok(['Ring', 'Amulet', 'Talisman'].includes(generated.category));
     assert.ok(generated.stats.length > 0);
+});
+
+test('slot migration grants a Level 100 Heirloom Accessory at the highest unlocked Curse tier', () => {
+    const context = createContext();
+    context.player = {
+        equipped: [],
+        inventory: { consumables: [], equipment: [], refineStones: 0 },
+        companionCharm: null,
+        equipmentSlotNoticeVersion: 0,
+        maxUnlockedCurseLevel: 9,
+    };
+    context.dungeon = {
+        progress: { floor: 12 },
+        settings: { enemyLvlGap: 5, enemyBaseLvl: 1, enemyScaling: 1.3 },
+    };
+    context.randomizeNum = (min) => Math.round(min);
+    context.randomizeDecimal = (min) => min;
+    context.clampEquipmentLevel = (level) => level;
+    context.clampEquipmentTier = (tier) => tier;
+    context.getEquipmentTierFromEnemyScaling = () => 3;
+    context.getEnemyScalingFromEquipmentTier = () => 1.3;
+    evaluate(context, 'Math.random = () => 0');
+
+    const firstGrant = evaluate(context, 'grantEquipmentSlotMigrationAccessory(true)');
+    const secondGrant = evaluate(context, 'grantEquipmentSlotMigrationAccessory(true)');
+
+    assert.equal(firstGrant.slot, 'accessory');
+    assert.equal(firstGrant.type, 'Accessory');
+    assert.equal(firstGrant.attribute, 'Utility');
+    assert.equal(firstGrant.rarity, 'Heirloom');
+    assert.equal(firstGrant.lvl, 100);
+    assert.equal(firstGrant.tier, 9);
+    assert.equal(context.player.equipped.length, 1);
+    assert.equal(context.player.inventory.equipment.length, 0);
+    assert.equal(context.player.equipmentSlotNoticeVersion, 1);
+    assert.equal(Object.hasOwn(context.player, 'freeAccessoryGrantVersion'), false);
+    assert.equal(secondGrant, null);
+    assert.equal(context.saveCalls, 1);
 });
 
 test('accessory rerolls weight Dodge twice in the stat pool', () => {
@@ -238,6 +277,18 @@ test('legacy slot migration runs during application initialization when saveData
     );
 });
 
+test('slot migration gift runs after dungeon load and reuses the notice version', () => {
+    const dungeonLoadIndex = mainSource.indexOf('initialDungeonLoad();');
+    const grantIndex = mainSource.indexOf('grantEquipmentSlotMigrationAccessory(equipmentSlotMigrationNoticePending);');
+    const playerStatsIndex = mainSource.indexOf('playerLoadStats();', dungeonLoadIndex);
+
+    assert.ok(dungeonLoadIndex >= 0, 'main.js is missing the initial dungeon load');
+    assert.ok(grantIndex > dungeonLoadIndex, 'free Accessory must use the loaded floor and Curse');
+    assert.ok(playerStatsIndex > grantIndex, 'player stats must load after equipping the free Accessory');
+    assert.doesNotMatch(equipmentSource, /FREE_ACCESSORY_GRANT_VERSION|freeAccessoryGrantVersion/);
+    assert.doesNotMatch(mainSource, /FREE_ACCESSORY_GRANT_VERSION|freeAccessoryGrantVersion/);
+});
+
 test('migrated players see the inventory notice once while new players skip it', () => {
     assert.match(mainSource, /migration && migration\.migrated/);
     assert.match(mainSource, /player\.equipmentSlotNoticeVersion !== EQUIPMENT_SLOT_NOTICE_VERSION/);
@@ -281,6 +332,7 @@ test('every locale includes slot labels and accessory item names', () => {
         assert.ok(locale['empty-slot'], `${file} is missing empty-slot`);
         assert.ok(locale['equipment-slots-update-title'], `${file} is missing equipment-slots-update-title`);
         assert.ok(locale['equipment-slots-update-message'], `${file} is missing equipment-slots-update-message`);
+        assert.ok(locale['equipment-slots-update-gift'], `${file} is missing equipment-slots-update-gift`);
         for (const slotKey of slotKeys) {
             assert.ok(locale['equipment-slot'][slotKey], `${file} is missing equipment-slot.${slotKey}`);
         }

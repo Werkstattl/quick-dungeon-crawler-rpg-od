@@ -135,6 +135,7 @@
   },
   "equipment-slots-update-title": "Equipment slots are here",
   "equipment-slots-update-message": "Equipment now uses six dedicated slots: Weapon, Off Hand, Head, Body, Feet, and Accessory. Any extra equipped items were moved safely to your inventory.",
+  "equipment-slots-update-gift": "To celebrate the new inventory system, you received a free Heirloom Accessory matched to your current progress.",
   "empty-slot": "Empty",
   "menu": "Menu",
   "statistics": "Statistics",

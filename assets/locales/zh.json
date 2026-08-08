@@ -129,6 +129,7 @@
   },
   "equipment-slots-update-title": "装备栏位已上线",
   "equipment-slots-update-message": "装备现在使用六个专属栏位：武器、副手、头部、身体、脚部和饰品。多余的已装备物品已安全移至背包。",
+  "equipment-slots-update-gift": "为庆祝新的背包系统，你获得了一件与当前进度匹配的免费传家宝品质饰品。",
   "empty-slot": "空",
   "menu": "菜单",
   "statistics": "统计",
