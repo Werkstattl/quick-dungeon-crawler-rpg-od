@@ -143,6 +143,7 @@ test('slot migration grants a Level 100 Heirloom Accessory at the highest unlock
     assert.equal(firstGrant.rarity, 'Heirloom');
     assert.equal(firstGrant.lvl, 100);
     assert.equal(firstGrant.tier, 9);
+    assert.ok(firstGrant.stats.some((stat) => Object.hasOwn(stat, 'dodge')));
     assert.equal(context.player.equipped.length, 1);
     assert.equal(context.player.inventory.equipment.length, 0);
     assert.equal(context.player.equipmentSlotNoticeVersion, 1);

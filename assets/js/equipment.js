@@ -294,6 +294,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
         forcedSlot = null,
         forcedLevel = null,
         forcedTier = null,
+        forcedStat = null,
     } = options;
     const equipment = {
         category: null,
@@ -391,7 +392,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
     if (forcedTier !== null) {
         equipment.tier = clampEquipmentTier(forcedTier);
     }
-    rerollEquipmentStats(equipment);
+    rerollEquipmentStats(equipment, forcedStat);
     if (addToInventory) {
         if (isCompanionCharm(equipment) && !player.companionCharm) {
             player.companionCharm = equipment;
@@ -451,6 +452,7 @@ const grantEquipmentSlotMigrationAccessory = (migrationNoticePending) => {
         forcedLevel: MAX_EQUIPMENT_LEVEL,
         forcedTier: player.maxUnlockedCurseLevel,
         minRarity: 'Heirloom',
+        forcedStat: 'dodge',
     });
     player.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_VERSION;
     receiveEquipment(accessory);
@@ -502,7 +504,7 @@ const getEquipmentRerollStatPool = (equipment) => {
     return [];
 };
 
-const rerollEquipmentStats = (equipment) => {
+const rerollEquipmentStats = (equipment, forcedStat = null) => {
     equipment.tier = clampEquipmentTier(equipment.tier);
     const enemyScaling = getEnemyScalingFromEquipmentTier(equipment.tier);
     if (isCompanionCharm(equipment)) {
@@ -538,7 +540,9 @@ const rerollEquipmentStats = (equipment) => {
         return;
     }
     for (let i = 0; i < loopCount; i++) {
-        let statType = statTypes[Math.floor(Math.random() * statTypes.length)];
+        let statType = i === 0 && statTypes.includes(forcedStat)
+            ? forcedStat
+            : statTypes[Math.floor(Math.random() * statTypes.length)];
         let statMultiplier = (enemyScaling - 1) * equipment.lvl;
         let hpScaling = (40 * randomizeDecimal(0.5, 1.5)) + ((40 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
         let atkDefScaling = (16 * randomizeDecimal(0.5, 1.5)) + ((16 * randomizeDecimal(0.5, 1.5)) * statMultiplier);
