@@ -1,4 +1,3 @@
-const EQUIPMENT_SLOT_NOTICE_VERSION = 1;
 let equipmentSlotMigrationNoticePending = false;
 
 const migratePlayerEquipmentSlots = () => {
@@ -7,14 +6,7 @@ const migratePlayerEquipmentSlots = () => {
     }
 
     const migration = normalizePlayerEquipmentSlots();
-    const migratedToDedicatedSlots = Boolean(
-        migration && migration.migrated
-        && EQUIPMENT_SLOT_VERSION === EQUIPMENT_SLOT_NOTICE_VERSION
-    );
-    equipmentSlotMigrationNoticePending = Boolean(
-        migratedToDedicatedSlots
-        || player.equipmentSlotNoticeVersion !== EQUIPMENT_SLOT_NOTICE_VERSION
-    );
+    equipmentSlotMigrationNoticePending = Boolean(migration && migration.migrated);
     return migration;
 };
 
@@ -178,7 +170,6 @@ window.addEventListener("DOMContentLoaded", async function () {
                     },
                     equipped: [],
                     equipmentSlotVersion: EQUIPMENT_SLOT_VERSION,
-                    equipmentSlotNoticeVersion: EQUIPMENT_SLOT_NOTICE_VERSION,
                     companionCharm: null,
                     gold: 0,
                     playtime: 0,
@@ -1089,10 +1080,6 @@ const addNewRunIntroLog = () => {
 
 const dismissEquipmentSlotMigrationNotice = () => {
     equipmentSlotMigrationNoticePending = false;
-    if (player) {
-        player.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_NOTICE_VERSION;
-        saveData();
-    }
     closeDefaultModal();
 
     const inventory = document.querySelector('#inventory');

@@ -442,7 +442,7 @@ const receiveEquipment = (equipment) => {
 const grantEquipmentSlotMigrationAccessory = (migrationNoticePending) => {
     if (!migrationNoticePending
         || !player
-        || player.equipmentSlotNoticeVersion === EQUIPMENT_SLOT_VERSION) {
+        || player.equipmentSlotVersion === EQUIPMENT_SLOT_VERSION) {
         return null;
     }
 
@@ -454,7 +454,7 @@ const grantEquipmentSlotMigrationAccessory = (migrationNoticePending) => {
         minRarity: 'Heirloom',
         forcedStat: 'dodge',
     });
-    player.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_VERSION;
+    player.equipmentSlotVersion = EQUIPMENT_SLOT_VERSION;
     receiveEquipment(accessory);
     return accessory;
 };
@@ -1431,7 +1431,7 @@ const normalizePlayerEquipmentSlots = () => {
     }
 
     const migrated = player.equipmentSlotVersion !== EQUIPMENT_SLOT_VERSION;
-    let changed = migrated;
+    let changed = false;
     let movedToInventory = 0;
     const equippedBySlot = new Map();
     const movedItems = [];
@@ -1503,8 +1503,6 @@ const normalizePlayerEquipmentSlots = () => {
         }
     });
     player.inventory.equipment = normalizedInventory.concat(movedItems.map((item) => JSON.stringify(item)));
-    player.equipmentSlotVersion = EQUIPMENT_SLOT_VERSION;
-
     if (changed && typeof saveData === 'function') {
         saveData();
     }

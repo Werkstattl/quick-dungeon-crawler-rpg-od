@@ -119,7 +119,7 @@ test('slot migration grants a Level 100 Heirloom Accessory at the highest unlock
         equipped: [],
         inventory: { consumables: [], equipment: [], refineStones: 0 },
         companionCharm: null,
-        equipmentSlotNoticeVersion: 0,
+        equipmentSlotVersion: 0,
         maxUnlockedCurseLevel: 9,
     };
     context.dungeon = {
@@ -146,7 +146,8 @@ test('slot migration grants a Level 100 Heirloom Accessory at the highest unlock
     assert.ok(firstGrant.stats.some((stat) => Object.hasOwn(stat, 'dodge')));
     assert.equal(context.player.equipped.length, 1);
     assert.equal(context.player.inventory.equipment.length, 0);
-    assert.equal(context.player.equipmentSlotNoticeVersion, 1);
+    assert.equal(context.player.equipmentSlotVersion, 1);
+    assert.equal(Object.hasOwn(context.player, 'equipmentSlotNoticeVersion'), false);
     assert.equal(Object.hasOwn(context.player, 'freeAccessoryGrantVersion'), false);
     assert.equal(secondGrant, null);
     assert.equal(context.saveCalls, 1);
@@ -206,7 +207,7 @@ test('legacy migration is lossless and keeps a locked duplicate equipped', () =>
 
     const result = evaluate(context, 'normalizePlayerEquipmentSlots()');
     assert.deepEqual(plain(result), { movedToInventory: 1, changed: true, migrated: true });
-    assert.equal(context.player.equipmentSlotVersion, 1);
+    assert.equal(Object.hasOwn(context.player, 'equipmentSlotVersion'), false);
     assert.equal(context.player.equipped.length, 3);
     assert.equal(context.player.equipped.find((entry) => entry.slot === 'weapon').category, 'Dagger');
     assert.equal(context.player.equipped.find((entry) => entry.slot === 'body').category, 'Plate');
@@ -219,10 +220,10 @@ test('legacy migration is lossless and keeps a locked duplicate equipped', () =>
     assert.equal(context.player.equipped.length + inventory.length, 5);
     assert.equal(context.saveCalls, 1);
 
-    const migratedState = JSON.stringify(context.player);
+    const normalizedState = JSON.stringify(context.player);
     const secondResult = evaluate(context, 'normalizePlayerEquipmentSlots()');
-    assert.deepEqual(plain(secondResult), { movedToInventory: 0, changed: false, migrated: false });
-    assert.equal(JSON.stringify(context.player), migratedState);
+    assert.deepEqual(plain(secondResult), { movedToInventory: 0, changed: false, migrated: true });
+    assert.equal(JSON.stringify(context.player), normalizedState);
     assert.equal(context.saveCalls, 1);
 });
 
@@ -278,7 +279,7 @@ test('legacy slot migration runs during application initialization when saveData
     );
 });
 
-test('slot migration gift runs after dungeon load and reuses the notice version', () => {
+test('slot migration gift runs after dungeon load and completes the slot version', () => {
     const dungeonLoadIndex = mainSource.indexOf('initialDungeonLoad();');
     const grantIndex = mainSource.indexOf('grantEquipmentSlotMigrationAccessory(equipmentSlotMigrationNoticePending);');
     const playerStatsIndex = mainSource.indexOf('playerLoadStats();', dungeonLoadIndex);
@@ -292,14 +293,14 @@ test('slot migration gift runs after dungeon load and reuses the notice version'
 
 test('migrated players see the inventory notice once while new players skip it', () => {
     assert.match(mainSource, /migration && migration\.migrated/);
-    assert.match(mainSource, /player\.equipmentSlotNoticeVersion !== EQUIPMENT_SLOT_NOTICE_VERSION/);
     assert.match(mainSource, /openInventory\(\);/);
     assert.match(mainSource, /showEquipmentSlotMigrationNotice\(\);/);
-    assert.match(mainSource, /player\.equipmentSlotNoticeVersion = EQUIPMENT_SLOT_NOTICE_VERSION/);
-    assert.match(mainSource, /equipmentSlotNoticeVersion: EQUIPMENT_SLOT_NOTICE_VERSION/);
+    assert.match(equipmentSource, /player\.equipmentSlotVersion = EQUIPMENT_SLOT_VERSION/);
+    assert.doesNotMatch(mainSource, /equipmentSlotNoticeVersion|EQUIPMENT_SLOT_NOTICE_VERSION/);
+    assert.doesNotMatch(equipmentSource, /equipmentSlotNoticeVersion|EQUIPMENT_SLOT_NOTICE_VERSION/);
 });
 
-test('equipment slot notice state covers prior migrations and acknowledged saves', () => {
+test('equipment slot notice is pending only when the slot version requires migration', () => {
     const migrationStateSource = mainSource.split('// Use DOMContentLoaded')[0];
     const context = vm.createContext({
         EQUIPMENT_SLOT_VERSION: 1,
@@ -309,13 +310,9 @@ test('equipment slot notice state covers prior migrations and acknowledged saves
     vm.runInContext(migrationStateSource, context);
 
     evaluate(context, 'migratePlayerEquipmentSlots()');
-    assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), true);
-
-    context.player.equipmentSlotNoticeVersion = 1;
-    evaluate(context, 'migratePlayerEquipmentSlots()');
     assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), false);
 
-    context.player = { equipmentSlotVersion: 0, equipmentSlotNoticeVersion: 1 };
+    context.player = { equipmentSlotVersion: 0 };
     context.normalizePlayerEquipmentSlots = () => ({ movedToInventory: 0, changed: true, migrated: true });
     evaluate(context, 'migratePlayerEquipmentSlots()');
     assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), true);
