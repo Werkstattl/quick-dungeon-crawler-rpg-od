@@ -436,7 +436,6 @@ const continueExploring = () => {
 }
 
 const clickLevelUpStatOption = (stat) => {
-    console.log(`Attempting to click level up stat option for: ${stat}`);
     if (!lvlupSelect || !stat) {
         return false;
     }
