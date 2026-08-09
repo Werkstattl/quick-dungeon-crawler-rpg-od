@@ -83,6 +83,17 @@ test('opening companion charm details does not focus or filter the inventory scr
     assert.match(styleSource, /#equipmentInfo,[^{]*{[^}]*background-color:/s);
 });
 
+test('fixed-slot item comparison has no unreachable multi-item navigation', () => {
+    const showItemInfoSource = equipmentSource.slice(
+        equipmentSource.indexOf('const showItemInfo ='),
+        equipmentSource.indexOf('// Sort inventory'),
+    );
+
+    assert.doesNotMatch(showItemInfoSource, /\bcomparisonIndex\b|previous-equipped-item|next-equipped-item|equipment-compare-nav/);
+    assert.doesNotMatch(equipmentSource, /headerActions|equipment-card-header/);
+    assert.doesNotMatch(styleSource, /equipment-compare-nav|equipment-compare-slot--with-nav|equipment-card-header/);
+});
+
 test('accessories are obtainable through normal equipment generation', () => {
     const context = createContext();
     context.player = {
