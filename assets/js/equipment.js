@@ -791,17 +791,10 @@ const showItemInfo = (item, icon, action, i) => {
     const lockButtonMarkup = `<button id="toggle-lock">${lockButtonLabel}</button>`;
     itemInfo.style.display = "flex";
     const itemSlot = getEquipmentSlot(item);
-    const equippedItems = action === 'equip'
-        ? [getEquippedItemForSlot(itemSlot)].filter(Boolean)
-        : (action === 'equip-companion' && getEquippedCompanionCharm() ? [getEquippedCompanionCharm()] : []);
-    let comparisonIndex = 0;
-    if (isEquipAction && equippedItems.length > 0) {
-        const initialComparison = action === 'equip-companion'
-            ? equippedItems[0]
-            : findComparableEquippedItem(item);
-        const initialIndex = initialComparison ? equippedItems.indexOf(initialComparison) : -1;
-        comparisonIndex = initialIndex >= 0 ? initialIndex : 0;
-    }
+    const comparisonItem = action === 'equip'
+        ? findComparableEquippedItem(item)
+        : (action === 'equip-companion' ? getEquippedCompanionCharm() : null);
+    const comparisonTotals = comparisonItem ? getEquipmentStatTotals(comparisonItem) : null;
     const selectedTotals = getEquipmentStatTotals(item);
     const selectedLabelFallback = action === 'equip'
         ? 'Inventory Item'
@@ -810,7 +803,7 @@ const showItemInfo = (item, icon, action, i) => {
             : action === 'unequip-companion'
                 ? 'Equipped Charm'
                 : 'Equipped Item';
-    const renderSelectedCard = (comparisonTotals = null) => renderEquipmentCard({
+    const renderSelectedCard = () => renderEquipmentCard({
         item,
         icon,
         totals: selectedTotals,
@@ -818,22 +811,15 @@ const showItemInfo = (item, icon, action, i) => {
         labelFallback: selectedLabelFallback,
         highlightDiff: Boolean(comparisonTotals)
     });
-    const hasComparisonItems = isEquipAction && equippedItems.length > 0;
-    let prevLabel = '';
-    let nextLabel = '';
+    const hasComparisonItem = isEquipAction && Boolean(comparisonItem);
     let comparisonSection = renderSelectedCard();
     if (isEquipAction) {
-        prevLabel = translateEquipText('previous-equipped-item', 'Previous equipped item');
-        nextLabel = translateEquipText('next-equipped-item', 'Next equipped item');
         comparisonSection = `
             <div class="equipment-compare-grid">
                 <div id="equipment-selected-card" class="equipment-compare-slot"></div>
-                ${hasComparisonItems ? `
-                <div class="equipment-compare-slot equipment-compare-slot--with-nav">
-                    <div id="equipment-comparison-card" class="equipment-compare-card-slot"></div>
-                </div>` : ''}
+                ${hasComparisonItem ? '<div id="equipment-comparison-card" class="equipment-compare-slot"></div>' : ''}
             </div>`;
-        if (!hasComparisonItems) {
+        if (!hasComparisonItem) {
             const hintKey = isCompanionAction
                 ? 'no-companion-charm'
                 : (player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items');
@@ -853,7 +839,7 @@ const showItemInfo = (item, icon, action, i) => {
     const sellButtonDisabled = isLocked ? ' disabled' : '';
     const sellButtonTitle = isLocked ? ` title="${lockedSellLabel}"` : '';
     itemInfo.innerHTML = `
-            <div class="content equipment-info-content${hasComparisonItems ? ' equipment-info-content--with-compare' : ''}">
+            <div class="content equipment-info-content${hasComparisonItem ? ' equipment-info-content--with-compare' : ''}">
                 ${comparisonSection}
                 <div class="button-container">
                     <button id="un-equip">${actionLabel}</button>
@@ -866,64 +852,23 @@ const showItemInfo = (item, icon, action, i) => {
     if (isEquipAction) {
         const selectedCardContainer = itemInfo.querySelector('#equipment-selected-card');
         const comparisonCardContainer = itemInfo.querySelector('#equipment-comparison-card');
-        const updateComparisonDisplay = () => {
-            let comparisonTotals = null;
-            let comparisonItem = null;
-            if (equippedItems.length > 0) {
-                comparisonIndex = ((comparisonIndex % equippedItems.length) + equippedItems.length) % equippedItems.length;
-                comparisonItem = equippedItems[comparisonIndex];
-                comparisonTotals = getEquipmentStatTotals(comparisonItem);
-            }
-            if (selectedCardContainer) {
-                selectedCardContainer.innerHTML = renderSelectedCard(comparisonTotals);
-            }
-            if (comparisonCardContainer) {
-                if (comparisonItem && comparisonTotals) {
-                    const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
-                    const baseLabel = isCompanionAction
-                        ? 'Currently Equipped Charm'
-                        : translateEquipText('currently-equipped', 'Currently Equipped');
-                    const label = equippedItems.length > 1 ? `${baseLabel} (${comparisonIndex + 1}/${equippedItems.length})` : baseLabel;
-                    const navMarkup = equippedItems.length > 1 && !isCompanionAction ? `
-                        <div class="equipment-compare-nav-group">
-                            <button type="button" class="equipment-compare-nav equipment-compare-nav--prev" aria-label="${prevLabel}" title="${prevLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9664;</button>
-                            <button type="button" class="equipment-compare-nav equipment-compare-nav--next" aria-label="${nextLabel}" title="${nextLabel}"${equippedItems.length <= 1 ? ' disabled' : ''}>&#9654;</button>
-                        </div>` : '';
-                    const comparisonCard = renderEquipmentCard({
-                        item: comparisonItem,
-                        icon: comparisonIcon,
-                        totals: comparisonTotals,
-                        comparisonTotals: selectedTotals,
-                        labelFallback: label,
-                        highlightDiff: false,
-                        headerActions: navMarkup
-                    });
-                    comparisonCardContainer.innerHTML = comparisonCard;
-                } else {
-                    comparisonCardContainer.innerHTML = '';
-                }
-            }
-        };
-        if (comparisonCardContainer) {
-            comparisonCardContainer.addEventListener('click', (event) => {
-                const button = event.target.closest('.equipment-compare-nav');
-                if (!button || button.disabled) {
-                    return;
-                }
-                if (!equippedItems.length) {
-                    return;
-                }
-                if (button.classList.contains('equipment-compare-nav--prev')) {
-                    comparisonIndex = (comparisonIndex - 1 + equippedItems.length) % equippedItems.length;
-                } else if (button.classList.contains('equipment-compare-nav--next')) {
-                    comparisonIndex = (comparisonIndex + 1) % equippedItems.length;
-                } else {
-                    return;
-                }
-                updateComparisonDisplay();
+        if (selectedCardContainer) {
+            selectedCardContainer.innerHTML = renderSelectedCard();
+        }
+        if (comparisonCardContainer && comparisonItem && comparisonTotals) {
+            const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
+            const label = isCompanionAction
+                ? 'Currently Equipped Charm'
+                : translateEquipText('currently-equipped', 'Currently Equipped');
+            comparisonCardContainer.innerHTML = renderEquipmentCard({
+                item: comparisonItem,
+                icon: comparisonIcon,
+                totals: comparisonTotals,
+                comparisonTotals: selectedTotals,
+                labelFallback: label,
+                highlightDiff: false
             });
         }
-        updateComparisonDisplay();
     }
 
     // Equip/Unequip button for the item
@@ -1567,7 +1512,7 @@ const getOrderedEquipmentStats = (primaryTotals, comparisonTotals) => {
     return ordered.concat(remaining);
 };
 
-const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false, headerActions = '' }) => {
+const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false }) => {
     const label = labelKey ? translateEquipText(labelKey, labelFallback || labelKey) : (labelFallback || '');
     const tier = item.tier === undefined ? 1 : item.tier;
     const statKeys = getOrderedEquipmentStats(totals, comparisonTotals);
@@ -1585,14 +1530,7 @@ const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labe
                 </li>`;
     }).join('');
     const statsList = statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`;
-    let headerMarkup = '';
-    if (label) {
-        headerMarkup = headerActions ? `
-            <div class="equipment-card-header">
-                <p class="equipment-card-label">${label}</p>
-                ${headerActions}
-            </div>` : `<p class="equipment-card-label">${label}</p>`;
-    }
+    const headerMarkup = label ? `<p class="equipment-card-label">${label}</p>` : '';
     return `
         <div class="equipment-card">
             ${headerMarkup}

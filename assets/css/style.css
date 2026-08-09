@@ -810,70 +810,6 @@ button:focus {
     justify-content: center;
 }
 
-#equipmentInfo .content .equipment-compare-slot--with-nav {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#equipmentInfo .content .equipment-compare-card-slot {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#equipmentInfo .content .equipment-compare-slot--with-nav > .equipment-compare-card-slot {
-    min-width: 0;
-}
-
-#equipmentInfo .content .equipment-compare-slot--with-nav > .equipment-compare-card-slot:only-child {
-    flex: 1 1 auto;
-}
-
-#equipmentInfo .content .equipment-compare-nav {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 999px;
-    color: #fff;
-    width: 1.8rem;
-    height: 1.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-#equipmentInfo .content .equipment-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-}
-
-#equipmentInfo .content .equipment-compare-nav-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-#equipmentInfo .content .equipment-compare-nav:disabled {
-    opacity: 0.35;
-    cursor: default;
-    transform: none;
-}
-
-#equipmentInfo .content .equipment-compare-nav:not(:disabled):hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: scale(1.05);
-}
-
-#equipmentInfo .content .equipment-compare-nav:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.6);
-    outline-offset: 2px;
-}
-
 #equipmentInfo .content .equipment-card {
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -957,14 +893,6 @@ button:focus {
     #equipmentInfo .content.equipment-info-content,
     #equipmentInfo .content.equipment-info-content--with-compare {
         max-width: calc(100vw - 1.5rem);
-    }
-    #equipmentInfo .content .equipment-compare-slot--with-nav {
-        justify-content: center;
-    }
-    #equipmentInfo .content .equipment-compare-nav {
-        width: 1.6rem;
-        height: 1.6rem;
-        font-size: 0.85rem;
     }
 }
 
