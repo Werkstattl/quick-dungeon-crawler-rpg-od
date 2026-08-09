@@ -593,5 +593,9 @@
     "regenerating": "Her saniye can yeniler ama daha kırılgandır.",
     "thorned": "Verdiğin hasarın bir kısmını sana geri yansıtır.",
     "volatile": "Öldüğünde patlar ve sana hasar verir."
-  }
+  },
+  "forge-token": "Demirhane Jetonu",
+  "forge-tokens": "Demirhane Jetonları",
+  "forge-token-merchant-offer": "Gezgin bir demirci belirir: {cost} altına bir Demirhane Jetonu satın al?",
+  "forge-token-merchant-purchase": "{cost} altına bir Demirhane Jetonu satın aldın."
 }

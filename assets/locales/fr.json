@@ -593,5 +593,9 @@
     "regenerating": "Récupère de la vie chaque seconde, mais est plus fragile.",
     "thorned": "Renvoie une partie des dégâts que vous infligez.",
     "volatile": "Explose à sa mort et vous blesse."
-  }
+  },
+  "forge-token": "Jeton de forge",
+  "forge-tokens": "Jetons de forge",
+  "forge-token-merchant-offer": "Un forgeron itinérant apparaît : acheter un jeton de forge pour {cost} pièces d’or ?",
+  "forge-token-merchant-purchase": "Vous avez acheté un jeton de forge pour {cost} pièces d’or."
 }

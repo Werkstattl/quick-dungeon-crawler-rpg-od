@@ -593,5 +593,9 @@
     "regenerating": "Recovers health every second, but is frailer.",
     "thorned": "Reflects part of the damage you deal back at you.",
     "volatile": "Explodes when slain, damaging you."
-  }
+  },
+  "forge-token": "Forge Token",
+  "forge-tokens": "Forge Tokens",
+  "forge-token-merchant-offer": "A wandering blacksmith appears: Buy a Forge Token for {cost} gold?",
+  "forge-token-merchant-purchase": "You bought a Forge Token for {cost} gold."
 }

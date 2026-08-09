@@ -593,5 +593,9 @@
     "regenerating": "Odzyskuje zdrowie co sekundę, ale jest kruchszy.",
     "thorned": "Odbija część zadawanych przez ciebie obrażeń.",
     "volatile": "Eksploduje po śmierci, raniąc cię."
-  }
+  },
+  "forge-token": "Żeton kuźni",
+  "forge-tokens": "Żetony kuźni",
+  "forge-token-merchant-offer": "Pojawia się wędrowny kowal: kupić żeton kuźni za {cost} złota?",
+  "forge-token-merchant-purchase": "Kupiono żeton kuźni za {cost} złota."
 }

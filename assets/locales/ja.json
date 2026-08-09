@@ -593,5 +593,9 @@
     "regenerating": "毎秒体力を回復するが、打たれ弱い。",
     "thorned": "与えたダメージの一部を反射する。",
     "volatile": "倒されると爆発してダメージを与える。"
-  }
+  },
+  "forge-token": "鍛冶トークン",
+  "forge-tokens": "鍛冶トークン",
+  "forge-token-merchant-offer": "旅の鍛冶屋が現れた：{cost}ゴールドで鍛冶トークンを購入しますか？",
+  "forge-token-merchant-purchase": "{cost}ゴールドで鍛冶トークンを購入した。"
 }
