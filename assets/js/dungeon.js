@@ -939,7 +939,7 @@ const chestEvent = () => {
 // Calculates Gold Drop
 const goldDrop = () => {
     sfxSell.play();
-    let goldValue = applyForgeMembershipGoldBonus(randomizeNum(50, 500) * dungeon.progress.floor);
+    let goldValue = applyForgeMembershipGoldBonus(randomizeNum(45, 425) * dungeon.progress.floor);
     addDungeonLog(t('gold-found', { gold: nFormatter(goldValue) }));
     player.gold += goldValue;
     if (typeof recordRunGoldEarned === 'function') {

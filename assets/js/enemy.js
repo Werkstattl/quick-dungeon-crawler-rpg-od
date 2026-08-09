@@ -327,7 +327,7 @@ const setEnemyStats = (type, condition) => {
     if (enemy.rewards.exp > 900000) {
         enemy.rewards.exp = 900000 * randomizeDecimal(0.9, 1.1);
     }
-    enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.3);
+    enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.1);
     if (typeof getAffixRewardMultiplier === 'function') {
         const affixRewardMultiplier = getAffixRewardMultiplier(enemy.affixes);
         enemy.rewards.exp = Math.round(enemy.rewards.exp * affixRewardMultiplier);

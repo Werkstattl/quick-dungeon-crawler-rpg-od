@@ -283,7 +283,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
         }
     }
 
-    equipment.value = Math.max(10, Math.round(equipmentValue * 3));
+    equipment.value = Math.max(10, Math.round(equipmentValue * 2.55));
     equipment.icon = equipmentIcon(equipment.category);
 };
 
@@ -639,7 +639,7 @@ const rerollEquipmentStats = (equipment, forcedStat = null) => {
             equipment.stats.push({ [statType]: statValue });
         }
     }
-    equipment.value = Math.round(equipmentValue * 3);
+    equipment.value = Math.round(equipmentValue * 2.55);
     equipment.icon = equipmentIcon(equipment.category);
 };
 const equipmentName = (category) => {
