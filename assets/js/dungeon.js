@@ -63,6 +63,7 @@ const WANDERING_SHOP_FLOOR = 6;
 const WANDERING_SHOP_MIN_RARITY = 'Rare';
 const FORGE_TOKEN_MERCHANT_FLOOR = 13;
 const FORGE_TOKEN_MERCHANT_COST = 10000;
+const BLESSING_CURSE_COST_STEP = 0.05;
 let lastDungeonEventTimestamp = Date.now();
 
 let dungeon = {
@@ -217,6 +218,13 @@ const shouldTriggerForgeTokenMerchant = () => {
 
 const getWanderingShopCost = () => {
     return Math.round(((WANDERING_SHOP_FLOOR * 500) + (player.lvl * 150)) * player.selectedCurseLevel);
+};
+
+const getBlessingCost = (blessingLevel, curseLevel) => {
+    const baseCost = blessingLevel * (500 * (blessingLevel * 0.5)) + 750;
+    const normalizedCurseLevel = clampCurseLevel(curseLevel);
+    const curseMultiplier = 1 + ((normalizedCurseLevel - MIN_CURSE_LEVEL) * BLESSING_CURSE_COST_STEP);
+    return Math.round(baseCost * curseMultiplier);
 };
 
 const getDungeonStoryBeatKey = (floor) => {
@@ -760,7 +768,7 @@ const dungeonEvent = () => {
                     dungeon.status.event = true;
                     dungeon.roomEvents.blessingOccurred = true;
                     blessingValidation();
-                    let cost = player.blessing * (500 * (player.blessing * 0.5)) + 750;
+                    let cost = getBlessingCost(player.blessing, player.selectedCurseLevel);
                     choices = `
                         <div class="decision-panel">
                             <button id="choice1">${t('offer')}</button>
