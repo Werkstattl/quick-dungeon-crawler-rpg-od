@@ -10,6 +10,30 @@ const migratePlayerEquipmentSlots = () => {
     return migration;
 };
 
+const restoreSavedCombatState = () => {
+    if (!player || !player.inCombat) {
+        return false;
+    }
+
+    const savedEnemy = safeLoad(STORAGE_KEYS.enemy, STORAGE_KEYS.enemyBackup);
+    if (typeof isSavedEnemyValidForDungeon !== 'function'
+        || !isSavedEnemyValidForDungeon(savedEnemy, dungeon, player)) {
+        player.inCombat = false;
+        if (typeof resetEnemyState === 'function') {
+            resetEnemyState();
+        }
+        return false;
+    }
+
+    enemy = savedEnemy;
+    enemy.stats.hpPercent = Math.max(0, Math.min(100,
+        (enemy.stats.hp / enemy.stats.hpMax) * 100));
+    if (typeof ensureEnemyAffixState === 'function') {
+        ensureEnemyAffixState();
+    }
+    return true;
+};
+
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
@@ -1142,20 +1166,20 @@ const enterDungeon = () => {
     document.querySelector("#title-screen").style.display = "none";
     runLoad("dungeon-main", "flex");
     initCompanions();
-    if (player.inCombat) {
-        enemy = JSON.parse(localStorage.getItem("enemyData"));
-        if (typeof ensureEnemyAffixState === 'function') {
-            ensureEnemyAffixState();
-        }
+    initialDungeonLoad();
+    const hadSavedCombat = player.inCombat;
+    if (restoreSavedCombatState()) {
         showCombatInfo();
         startCombat(bgmBattleMain);
     } else {
+        if (hadSavedCombat) {
+            saveData();
+        }
         bgmDungeon.play();
     }
     if (player.stats.hp == 0) {
         progressReset(true);
     }
-    initialDungeonLoad();
     grantEquipmentSlotMigrationAccessory(equipmentSlotMigrationNoticePending);
     addNewRunIntroLog();
     playerLoadStats();
@@ -1168,7 +1192,7 @@ const enterDungeon = () => {
 // Save all the data into local storage
 let isSaving = false;
 let lastSaveTime = Date.now();
-const saveData = () => {
+const saveData = ({ forceDungeon = false } = {}) => {
     if (isSaving) return; // Prevent overlapping saves
     isSaving = true;
     try {
@@ -1185,7 +1209,8 @@ const saveData = () => {
         // Only save if all data is valid JSON
         const playerSaved = safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
         const existingDungeonData = localStorage.getItem("dungeonData");
-        const canPersistDungeon = dungeon && (dungeon.initialized || existingDungeonData === null);
+        const canPersistDungeon = dungeon
+            && (forceDungeon || dungeon.initialized || existingDungeonData === null);
         if (canPersistDungeon) {
             safeSave(STORAGE_KEYS.dungeon, dungeon, STORAGE_KEYS.dungeonBackup, STORAGE_KEYS.dungeonTemp);
         }
@@ -1434,6 +1459,9 @@ const progressReset = (fromDeath = false) => {
     dungeon.action = 0;
     dungeon.nothingBias = 0;
     combatBacklog.length = 0;
+    if (typeof resetEnemyState === 'function') {
+        resetEnemyState();
+    }
     playerCompanions = [];
     activeCompanion = null;
     if (typeof grantStartingCompanions === 'function') {
@@ -1441,7 +1469,7 @@ const progressReset = (fromDeath = false) => {
     } else {
         saveCompanions();
     }
-    saveData();
+    saveData({ forceDungeon: true });
 }
 
 const formatRunDuration = (seconds) => {
