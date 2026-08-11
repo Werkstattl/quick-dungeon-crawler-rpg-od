@@ -1,5 +1,5 @@
 // Enemy
-let enemy = {
+const createEmptyEnemyState = () => ({
     id: null,
     name: null,
     type: null,
@@ -27,6 +27,13 @@ let enemy = {
         gold: null,
         drop: null
     }
+});
+
+let enemy = createEmptyEnemyState();
+
+const resetEnemyState = () => {
+    enemy = createEmptyEnemyState();
+    return enemy;
 };
 
 // Data for all enemies keyed by ID
@@ -122,6 +129,71 @@ const enemyPools = {
         guardian: [42, 31, 32],
         sboss: [48]
     }
+};
+
+const isSavedEnemyValidForDungeon = (candidate, savedDungeon, savedPlayer) => {
+    if (!candidate || typeof candidate !== 'object') {
+        return false;
+    }
+    if (!Number.isInteger(candidate.id) || !enemyData[candidate.id]) {
+        return false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(enemyPools, candidate.type)) {
+        return false;
+    }
+    if (!Number.isFinite(candidate.lvl) || candidate.lvl < 1) {
+        return false;
+    }
+    if (!candidate.stats || typeof candidate.stats !== 'object') {
+        return false;
+    }
+    const requiredStats = ['hp', 'hpMax', 'atk', 'def', 'atkSpd', 'vamp', 'critRate', 'critDmg', 'dodge'];
+    if (requiredStats.some((stat) => !Number.isFinite(candidate.stats[stat]))) {
+        return false;
+    }
+    if (candidate.stats.hp <= 0 || candidate.stats.hpMax <= 0
+        || candidate.stats.hp > candidate.stats.hpMax
+        || candidate.stats.atk < 0 || candidate.stats.def < 0 || candidate.stats.atkSpd <= 0
+        || candidate.stats.vamp < 0 || candidate.stats.critRate < 0
+        || candidate.stats.critDmg < 0 || candidate.stats.dodge < 0) {
+        return false;
+    }
+
+    const canonicalEnemy = enemyData[candidate.id];
+    const canonicalSprites = Array.isArray(canonicalEnemy.sprite)
+        ? canonicalEnemy.sprite
+        : [canonicalEnemy.sprite];
+    const canonicalSize = canonicalEnemy.size || '50%';
+    if (!candidate.image || !canonicalSprites.includes(candidate.image.name)
+        || candidate.image.size !== canonicalSize) {
+        return false;
+    }
+    if (!candidate.rewards || !Number.isFinite(candidate.rewards.exp)
+        || !Number.isFinite(candidate.rewards.gold)
+        || candidate.rewards.exp < 0 || candidate.rewards.gold < 0
+        || typeof candidate.rewards.drop !== 'boolean') {
+        return false;
+    }
+
+    const floor = savedDungeon && savedDungeon.progress && savedDungeon.progress.floor;
+    const settings = savedDungeon && savedDungeon.settings;
+    if (!Number.isFinite(floor) || floor < 1 || !settings) {
+        return false;
+    }
+    if (!Number.isFinite(settings.enemyLvlGap) || settings.enemyLvlGap < 1
+        || !Number.isFinite(settings.enemyBaseLvl)) {
+        return false;
+    }
+    const maxGeneratedLevel = floor * settings.enemyLvlGap + (settings.enemyBaseLvl - 1);
+    const minGeneratedLevel = maxGeneratedLevel - (settings.enemyLvlGap - 1);
+    const levelOneAdjustment = savedPlayer && savedPlayer.lvl === 1 ? 2 : 0;
+    const minLevel = minGeneratedLevel > 3
+        ? minGeneratedLevel - levelOneAdjustment
+        : minGeneratedLevel;
+    const maxLevel = maxGeneratedLevel > 3
+        ? maxGeneratedLevel - levelOneAdjustment
+        : maxGeneratedLevel;
+    return candidate.lvl >= minLevel && candidate.lvl <= maxLevel;
 };
 
 const generateRandomEnemy = (condition) => {
