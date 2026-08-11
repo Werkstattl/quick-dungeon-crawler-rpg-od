@@ -212,7 +212,8 @@ const shouldTriggerWanderingShop = () => {
 
 const shouldTriggerForgeTokenMerchant = () => {
     ensureSpecialEventsState();
-    return dungeon.progress.floor === FORGE_TOKEN_MERCHANT_FLOOR
+    return !forgeUnlocked
+        && dungeon.progress.floor === FORGE_TOKEN_MERCHANT_FLOOR
         && !dungeon.specialEvents.floor13ForgeTokenMerchantVisited;
 };
 
