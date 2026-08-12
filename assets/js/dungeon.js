@@ -217,8 +217,32 @@ const shouldTriggerForgeTokenMerchant = () => {
         && !dungeon.specialEvents.floor13ForgeTokenMerchantVisited;
 };
 
+const getWanderingShopLevelRange = () => {
+    const floorMaximum = clampEquipmentLevel(
+        WANDERING_SHOP_FLOOR * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1)
+    );
+    const floorMinimum = clampEquipmentLevel(floorMaximum - (dungeon.settings.enemyLvlGap - 1));
+    const equippedLevels = Array.isArray(player.equipped)
+        ? player.equipped
+            .map((item) => Number(item && item.lvl))
+            .filter((level) => Number.isFinite(level) && level > 0)
+        : [];
+    if (equippedLevels.length < 6) {
+        return { minimum: floorMinimum, maximum: floorMaximum };
+    }
+
+    const weakestEquippedLevel = Math.min(...equippedLevels);
+    return {
+        minimum: Math.max(floorMinimum, clampEquipmentLevel(weakestEquippedLevel - 5)),
+        maximum: Math.max(floorMaximum, clampEquipmentLevel(weakestEquippedLevel + 5)),
+    };
+};
+
 const getWanderingShopCost = () => {
-    return Math.round(((WANDERING_SHOP_FLOOR * 500) + (player.lvl * 150)) * player.selectedCurseLevel);
+    const baseCost = ((WANDERING_SHOP_FLOOR * 500) + (player.lvl * 150)) * player.selectedCurseLevel;
+    const floorMaximum = WANDERING_SHOP_FLOOR * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1);
+    const offerMaximum = getWanderingShopLevelRange().maximum;
+    return Math.round(baseCost * (offerMaximum / floorMaximum));
 };
 
 const getBlessingCost = (blessingLevel, curseLevel) => {
@@ -962,6 +986,7 @@ const wanderingShopEvent = () => {
     ensureSpecialEventsState();
     dungeon.specialEvents.floor6WanderingShopVisited = true;
     const cost = getWanderingShopCost();
+    const itemLevelRange = getWanderingShopLevelRange();
     const choices = `
         <div class="decision-panel">
             <button id="choice1" data-i18n="buy">${t('buy')}</button>
@@ -982,6 +1007,7 @@ const wanderingShopEvent = () => {
         createEquipmentPrint("dungeon", {
             allowCompanionCharm: false,
             minRarity: WANDERING_SHOP_MIN_RARITY,
+            forcedLevel: randomizeNum(itemLevelRange.minimum, itemLevelRange.maximum),
             messageKey: 'wandering-shop-item-received',
         });
         playerLoadStats();

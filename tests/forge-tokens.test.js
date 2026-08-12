@@ -50,6 +50,14 @@ const createDungeonContext = () => {
         playerLoadStats() {},
         saveData() {},
         forgeUnlocked: false,
+        MAX_EQUIPMENT_LEVEL: 100,
+        clampEquipmentLevel(value) {
+            return Math.min(100, Math.max(1, Math.round(Number(value) || 1)));
+        },
+        randomizeNum(minimum, maximum) {
+            return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+        },
+        createEquipmentPrint() {},
     });
     vm.runInContext(dungeonSource, context);
     context.addDungeonLog = () => {};
@@ -70,6 +78,81 @@ const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visite
         dungeon.specialEvents.floor13ForgeTokenMerchantVisited = ${visited};
     `);
 };
+
+test('the Wandering Merchant scales its item level around the weakest equipped item', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.lvl = 100;
+    context.player.selectedCurseLevel = 11;
+    context.player.equipped = [91, 94, 96, 97, 99, 100].map((lvl) => ({ lvl }));
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 86, maximum: 96 }
+    );
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 633600);
+});
+
+test('the Wandering Merchant keeps its Floor 6 item levels for early progression', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.lvl = 20;
+    context.player.selectedCurseLevel = 1;
+    context.player.equipped = [{ lvl: 12 }, { lvl: 25 }];
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 26, maximum: 30 }
+    );
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 6000);
+});
+
+test('the Wandering Merchant keeps Floor 6 levels until all six equipment slots are filled', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.equipped = [96, 97, 98, 99, 100].map((lvl) => ({ lvl }));
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 26, maximum: 30 }
+    );
+});
+
+test('the Wandering Merchant caps progression-scaled item levels at 100', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.equipped = Array.from({ length: 6 }, () => ({ lvl: 100 }));
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 95, maximum: 100 }
+    );
+});
+
+test('the Wandering Merchant purchase generates an item inside the scaled range', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6, gold: 1000000 });
+    context.player.lvl = 100;
+    context.player.selectedCurseLevel = 11;
+    context.player.equipped = [91, 94, 96, 97, 99, 100].map((lvl) => ({ lvl }));
+    context.merchantItemOptions = null;
+    context.randomizeNum = (minimum, maximum) => maximum;
+    context.createEquipmentPrint = (condition, options) => {
+        context.merchantItemOptions = { condition, ...options };
+    };
+
+    evaluate(context, 'wanderingShopEvent()');
+    context.buttons['#choice1'].onclick();
+
+    assert.deepEqual(context.merchantItemOptions, {
+        condition: 'dungeon',
+        allowCompanionCharm: false,
+        minRarity: 'Rare',
+        forcedLevel: 96,
+        messageKey: 'wandering-shop-item-received',
+    });
+    assert.equal(context.player.gold, 366400);
+});
 
 test('Auto Mode buys from both wandering merchants', () => {
     const wanderingShopBody = dungeonSource.slice(
