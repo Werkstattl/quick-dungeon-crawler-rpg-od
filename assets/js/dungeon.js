@@ -991,7 +991,7 @@ const wanderingShopEvent = () => {
     document.querySelector("#choice2").onclick = function () {
         ignoreEvent();
     };
-    autoDecline();
+    autoConfirm();
 }
 
 const forgeTokenMerchantEvent = () => {
@@ -1033,7 +1033,7 @@ const forgeTokenMerchantEvent = () => {
     document.querySelector("#choice2").onclick = function () {
         ignoreEvent();
     };
-    autoDecline();
+    autoConfirm();
 }
 
 // Non choices dungeon event messages

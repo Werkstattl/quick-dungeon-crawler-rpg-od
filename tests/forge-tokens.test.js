@@ -43,6 +43,7 @@ const createDungeonContext = () => {
             return String(value);
         },
         addDungeonLog() {},
+        autoConfirm() {},
         autoDecline() {},
         sfxSell: { play() {} },
         sfxDeny: { play() {} },
@@ -69,6 +70,22 @@ const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visite
         dungeon.specialEvents.floor13ForgeTokenMerchantVisited = ${visited};
     `);
 };
+
+test('Auto Mode buys from both wandering merchants', () => {
+    const wanderingShopBody = dungeonSource.slice(
+        dungeonSource.indexOf('const wanderingShopEvent ='),
+        dungeonSource.indexOf('const forgeTokenMerchantEvent =')
+    );
+    const forgeTokenMerchantBody = dungeonSource.slice(
+        dungeonSource.indexOf('const forgeTokenMerchantEvent ='),
+        dungeonSource.indexOf('const nothingEvent =')
+    );
+
+    for (const body of [wanderingShopBody, forgeTokenMerchantBody]) {
+        assert.match(body, /autoConfirm\(\)/);
+        assert.doesNotMatch(body, /autoDecline\(\)/);
+    }
+});
 
 test('the Forge Token merchant is forced once on Floor 13 each run', () => {
     const context = createDungeonContext();
