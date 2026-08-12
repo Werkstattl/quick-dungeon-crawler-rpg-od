@@ -144,13 +144,23 @@ test('old saves normalize Forge Tokens to a non-negative integer', () => {
     assert.equal(evaluate(context, 'ensureForgeTokenInventory()'), 0);
 });
 
-test('a free player can spend one token for access and zero gold cost', () => {
-    const context = createForgeContext({ unlocked: false, gold: 0, tokens: 2 });
+test('a free player spends one token for access and still pays the normal gold cost', () => {
+    const context = createForgeContext({ unlocked: false, gold: 5000, tokens: 2 });
     assert.equal(evaluate(context, 'hasForgeActionAccess()'), true);
-    assert.equal(evaluate(context, 'canPayForgeAction(999999)'), true);
-    assert.equal(evaluate(context, 'payForForgeAction(999999)'), true);
-    assert.equal(context.player.gold, 0);
+    assert.equal(evaluate(context, 'getForgeActionGoldCost(1200)'), 1200);
+    assert.equal(evaluate(context, 'canPayForgeAction(1200)'), true);
+    assert.equal(evaluate(context, 'payForForgeAction(1200)'), true);
+    assert.equal(context.player.gold, 3800);
     assert.equal(context.player.inventory.forgeTokens, 1);
+});
+
+test('a Forge Token does not bypass insufficient gold', () => {
+    const context = createForgeContext({ unlocked: false, gold: 1199, tokens: 2 });
+
+    assert.equal(evaluate(context, 'canPayForgeAction(1200)'), false);
+    assert.equal(evaluate(context, 'payForForgeAction(1200)'), false);
+    assert.equal(context.player.gold, 1199);
+    assert.equal(context.player.inventory.forgeTokens, 2);
 });
 
 test('Merge, Reroll, and Refine all use the shared token-aware payment path', () => {
@@ -171,21 +181,13 @@ test('Merge, Reroll, and Refine all use the shared token-aware payment path', ()
     assert.match(refineBody, /player\.inventory\.refineStones -= refineStoneCost/);
 });
 
-test('a Forge owner automatically spends tokens before gold', () => {
+test('a Forge owner pays gold without spending tokens', () => {
     const context = createForgeContext({ unlocked: true, gold: 5000, tokens: 2 });
 
-    assert.equal(evaluate(context, 'getForgeActionGoldCost(1200)'), 0);
-    assert.equal(evaluate(context, 'payForForgeAction(1200)'), true);
-    assert.equal(context.player.gold, 5000);
-    assert.equal(context.player.inventory.forgeTokens, 1);
-
-    assert.equal(evaluate(context, 'payForForgeAction(999999)'), true);
-    assert.equal(context.player.gold, 5000);
-    assert.equal(context.player.inventory.forgeTokens, 0);
     assert.equal(evaluate(context, 'getForgeActionGoldCost(1200)'), 1200);
-
     assert.equal(evaluate(context, 'payForForgeAction(1200)'), true);
     assert.equal(context.player.gold, 3800);
+    assert.equal(context.player.inventory.forgeTokens, 2);
 });
 
 test('Forge Token count and save defaults are wired without a payment checkbox', () => {

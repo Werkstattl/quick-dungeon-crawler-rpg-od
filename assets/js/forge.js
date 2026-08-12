@@ -53,19 +53,17 @@ const ensureForgeTokenInventory = () => {
 
 const getForgeTokenCount = () => ensureForgeTokenInventory();
 const hasForgeToken = () => getForgeTokenCount() > 0;
-const getForgeActionGoldCost = (goldCost) => hasForgeToken() ? 0 : goldCost;
+const getForgeActionGoldCost = (goldCost) => goldCost;
 const hasForgeActionAccess = () => forgeUnlocked || hasForgeToken();
-const canPayForgeAction = (goldCost) => hasForgeActionAccess()
-    && (hasForgeToken() || player.gold >= goldCost);
+const canPayForgeAction = (goldCost) => hasForgeActionAccess() && player.gold >= goldCost;
 
 const payForForgeAction = (goldCost) => {
     if (!canPayForgeAction(goldCost)) {
         return false;
     }
-    if (hasForgeToken()) {
+    player.gold -= goldCost;
+    if (!forgeUnlocked) {
         player.inventory.forgeTokens -= 1;
-    } else {
-        player.gold -= goldCost;
     }
     return true;
 };
