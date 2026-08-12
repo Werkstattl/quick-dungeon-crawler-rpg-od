@@ -48,6 +48,7 @@ const createDungeonContext = () => {
         sfxDeny: { play() {} },
         playerLoadStats() {},
         saveData() {},
+        forgeUnlocked: false,
     });
     vm.runInContext(dungeonSource, context);
     context.addDungeonLog = () => {};
@@ -81,6 +82,14 @@ test('the Forge Token merchant is forced once on Floor 13 each run', () => {
     evaluate(context, 'resetSpecialEvents()');
     assert.equal(evaluate(context, 'shouldTriggerForgeTokenMerchant()'), true);
     setDungeonState(context, { floor: 12 });
+    assert.equal(evaluate(context, 'shouldTriggerForgeTokenMerchant()'), false);
+});
+
+test('the Forge Token merchant is hidden from players with an unlocked Forge', () => {
+    const context = createDungeonContext();
+    setDungeonState(context);
+    context.forgeUnlocked = true;
+
     assert.equal(evaluate(context, 'shouldTriggerForgeTokenMerchant()'), false);
 });
 
