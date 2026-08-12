@@ -234,7 +234,10 @@ function unlockForge() {
 const updateForgeGold = () => {
     if (forgeGoldElement) {
         const refineStoneCount = typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0;
-        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span> <span class="forge-material-count" title="${t('forge-tokens')}"><i class="ra ra-anvil"></i>${nFormatter(getForgeTokenCount())}</span>`;
+        const forgeTokenCount = forgeUnlocked
+            ? ''
+            : ` <span class="forge-material-count" title="${t('forge-tokens')}"><i class="ra ra-anvil"></i>${nFormatter(getForgeTokenCount())}</span>`;
+        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span>${forgeTokenCount}`;
     }
 };
 

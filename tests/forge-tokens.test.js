@@ -199,6 +199,20 @@ test('a Forge owner pays gold without spending tokens', () => {
     assert.equal(context.player.inventory.forgeTokens, 2);
 });
 
+test('the Forge hides the token count from players with unlocked access', () => {
+    const context = createForgeContext({ unlocked: true, gold: 5000, tokens: 2 });
+    context.forgeGold = { innerHTML: '' };
+    context.nFormatter = (value) => String(value);
+    context.t = (key) => key;
+    context.getRefineStoneCount = () => 3;
+    evaluate(context, 'forgeGoldElement = forgeGold; updateForgeGold();');
+
+    assert.match(context.forgeGold.innerHTML, />5000/);
+    assert.match(context.forgeGold.innerHTML, />3<\/span>/);
+    assert.doesNotMatch(context.forgeGold.innerHTML, /forge-tokens/);
+    assert.doesNotMatch(context.forgeGold.innerHTML, /ra-anvil/);
+});
+
 test('Forge Token count and save defaults are wired without a payment checkbox', () => {
     assert.doesNotMatch(indexSource, /id="forge-use-token"/);
     assert.doesNotMatch(forgeSource, /useForgeToken/);
