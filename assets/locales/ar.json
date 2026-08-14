@@ -597,5 +597,7 @@
   "forge-token": "رمز الحدادة",
   "forge-tokens": "رموز الحدادة",
   "forge-token-merchant-offer": "يظهر حداد متجول: هل تشتري رمز حدادة مقابل {cost} من الذهب؟",
-  "forge-token-merchant-purchase": "اشتريت رمز حدادة مقابل {cost} من الذهب."
+  "forge-token-merchant-purchase": "اشتريت رمز حدادة مقابل {cost} من الذهب.",
+  "stat-lock": "قفل الإحصائيات",
+  "stat-lock-help": "تحافظ الإحصائيات المقفلة على نوعها وقيمتها. يجب أن يبقى إحصاء واحد على الأقل غير مقفل."
 }

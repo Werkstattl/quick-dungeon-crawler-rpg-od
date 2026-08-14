@@ -597,5 +597,7 @@
   "forge-token": "锻造代币",
   "forge-tokens": "锻造代币",
   "forge-token-merchant-offer": "一位流浪铁匠出现了：花费{cost}金币购买一枚锻造代币？",
-  "forge-token-merchant-purchase": "你花费{cost}金币购买了一枚锻造代币。"
+  "forge-token-merchant-purchase": "你花费{cost}金币购买了一枚锻造代币。",
+  "stat-lock": "锁定属性",
+  "stat-lock-help": "锁定的属性会保留类型和数值。至少必须有一项属性保持未锁定。"
 }

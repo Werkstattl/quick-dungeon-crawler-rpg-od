@@ -597,5 +597,7 @@
   "forge-token": "Demirhane Jetonu",
   "forge-tokens": "Demirhane Jetonları",
   "forge-token-merchant-offer": "Gezgin bir demirci belirir: {cost} altına bir Demirhane Jetonu satın al?",
-  "forge-token-merchant-purchase": "{cost} altına bir Demirhane Jetonu satın aldın."
+  "forge-token-merchant-purchase": "{cost} altına bir Demirhane Jetonu satın aldın.",
+  "stat-lock": "Özellikleri Kilitle",
+  "stat-lock-help": "Kilitli özellikler türlerini ve değerlerini korur. En az bir özellik kilitsiz kalmalıdır."
 }

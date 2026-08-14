@@ -618,5 +618,7 @@
   "forge-token": "Ficha da forja",
   "forge-tokens": "Fichas da forja",
   "forge-token-merchant-offer": "Um ferreiro viajante aparece: comprar uma ficha da forja por {cost} de ouro?",
-  "forge-token-merchant-purchase": "Você comprou uma ficha da forja por {cost} de ouro."
+  "forge-token-merchant-purchase": "Você comprou uma ficha da forja por {cost} de ouro.",
+  "stat-lock": "Bloquear atributos",
+  "stat-lock-help": "Atributos bloqueados mantêm o tipo e o valor. Pelo menos um atributo deve permanecer desbloqueado."
 }

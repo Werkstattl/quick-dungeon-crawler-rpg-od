@@ -597,5 +597,7 @@
   "forge-token": "फोर्ज टोकन",
   "forge-tokens": "फोर्ज टोकन",
   "forge-token-merchant-offer": "एक घूमता हुआ लोहार दिखाई देता है: {cost} सोने में एक फोर्ज टोकन खरीदें?",
-  "forge-token-merchant-purchase": "आपने {cost} सोने में एक फोर्ज टोकन खरीदा।"
+  "forge-token-merchant-purchase": "आपने {cost} सोने में एक फोर्ज टोकन खरीदा।",
+  "stat-lock": "आँकड़े लॉक करें",
+  "stat-lock-help": "लॉक किए गए आँकड़ों का प्रकार और मान बरकरार रहता है। कम से कम एक आँकड़ा अनलॉक रहना चाहिए।"
 }

@@ -595,5 +595,7 @@
   "forge-token": "Jeton de forjă",
   "forge-tokens": "Jetoane de forjă",
   "forge-token-merchant-offer": "Apare un fierar rătăcitor: cumperi un jeton de forjă pentru {cost} aur?",
-  "forge-token-merchant-purchase": "Ai cumpărat un jeton de forjă pentru {cost} aur."
+  "forge-token-merchant-purchase": "Ai cumpărat un jeton de forjă pentru {cost} aur.",
+  "stat-lock": "Blochează atributele",
+  "stat-lock-help": "Atributele blocate își păstrează tipul și valoarea. Cel puțin un atribut trebuie să rămână deblocat."
 }
