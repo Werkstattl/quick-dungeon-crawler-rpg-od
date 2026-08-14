@@ -467,6 +467,7 @@ function openMenu(isTitle = false) {
             ${isTitle ? '<button id="hero-return"><i class="fas fa-user-circle"></i> <span data-i18n="hero-creation">Hero Creation</span></button>' : '<button id="quit-run"><i class="fas fa-door-open"></i> <span data-i18n="abandon">Abandon</span></button>'}
             <button id="forge-membership"><i class="fas fa-hammer"></i> <span data-i18n="forge-membership">The Forge Membership</span></button>
             <button id="rate-game"><i class="fas fa-star"></i> <span data-i18n="rate-game">Rate Game</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
+            <button id="discord-link"><i class="fab fa-discord"></i> Discord <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
             <button id="reddit-link" style="background:#ff4500;color:#fff;"><i class="fab fa-reddit"></i> <span data-i18n="subreddit">Subreddit</span> <i class="fas fa-arrow-up-right-from-square external-link-icon"></i></button>
         </div>`;
     applyTranslations();
@@ -480,8 +481,14 @@ function openMenu(isTitle = false) {
     let volumeSettings = document.querySelector('#volume-btn');
     let autoModeSettings = document.querySelector('#auto-mode-settings');
     let forgeMembership = document.querySelector('#forge-membership');
+    let discordLink = document.querySelector('#discord-link');
     let redditLink = document.querySelector('#reddit-link');
     let rateGameBtn = document.querySelector('#rate-game');
+    // Discord button click function
+    discordLink.onclick = function () {
+        openExternal('https://discord.gg/U4DvQT3qfQ');
+    }
+
     // Reddit button click function
     redditLink.onclick = function () {
         openExternal('https://www.reddit.com/r/QuickDungeonCrawler/');

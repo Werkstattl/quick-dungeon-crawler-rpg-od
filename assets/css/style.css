@@ -926,6 +926,11 @@ button:focus {
     padding: 0;
 }
 
+#discord-link {
+    background: #5865f2;
+    color: #fff;
+}
+
 /* Default Modal */
 #defaultModal .content-head {
     padding: 0;
