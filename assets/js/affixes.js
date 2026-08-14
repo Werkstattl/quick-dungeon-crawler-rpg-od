@@ -24,7 +24,7 @@ const AFFIX_ENEMY_ATKSPD_CAP = 2.75;
 
 // mult = multiplicative on the rolled stat, flat = added after. behavior is handled in combat.js.
 const ENEMY_AFFIXES = [
-    { id: 'enraged', behavior: null, mult: { atk: 1.35, hpMax: 0.80 }, flat: null },
+    { id: 'enraged', behavior: null, mult: { atk: 1.30, hpMax: 0.80 }, flat: null },
     { id: 'armored', behavior: null, mult: { def: 1.60, atkSpd: 0.85 }, flat: null },
     { id: 'swift', behavior: null, mult: { atkSpd: 1.35, hpMax: 0.85 }, flat: null },
     { id: 'vampiric', behavior: null, mult: null, flat: { vamp: 20 } },
