@@ -247,6 +247,9 @@ const getWanderingShopItemTier = () => {
 // Keeps the offer relevant for players whose gear outscales the current floor
 const getWanderingShopItemLevel = () => {
     const floorLevel = (dungeon.progress.floor * dungeon.settings.enemyLvlGap) + (dungeon.settings.enemyBaseLvl - 1);
+    if (typeof hasCompleteEquipmentLoadout !== 'function' || !hasCompleteEquipmentLoadout()) {
+        return typeof clampEquipmentLevel === 'function' ? clampEquipmentLevel(floorLevel) : floorLevel;
+    }
     // A higher tier is already an upgrade on its own, so trade tier gaps for levels
     const tierGap = Math.max(0, getWanderingShopItemTier() - getEquippedMedian('tier'));
     const gearLevel = getEquippedMedian('lvl') - (tierGap * WANDERING_SHOP_TIER_GAP_LEVEL_PENALTY);
