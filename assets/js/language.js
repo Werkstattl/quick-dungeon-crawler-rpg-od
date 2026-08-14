@@ -118,6 +118,7 @@ async function setLanguage(lang) {
   document.documentElement.lang = loaded;
   localStorage.setItem('lang', loaded);
   applyTranslations(document);
+  if (typeof refreshPurchaseUI === 'function') refreshPurchaseUI(document);
 }
 
 (function initLanguage() {

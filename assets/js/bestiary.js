@@ -2,6 +2,7 @@
 // Structure: { [id]: { e: Number, k: Number, n?: String, img?: String } }
 let bestiary = {};
 let enemyCustomizationUnlocked = localStorage.getItem('enemyCustomizationUnlocked') === 'true';
+let enemyCustomizationMembershipActive = false;
 
 const BESTIARY_DB = 'qdc';
 const BESTIARY_STORE = 'bestiary';
@@ -73,9 +74,18 @@ function applyEnemyDamageUnlock(enemyId, damage) {
   return Math.round(value * (1 + bonus));
 }
 
-function unlockEnemyCustomization() {
-  enemyCustomizationUnlocked = true;
-  localStorage.setItem('enemyCustomizationUnlocked', 'true');
+function unlockEnemyCustomization(persist = true) {
+  if (persist) {
+    enemyCustomizationUnlocked = true;
+    localStorage.setItem('enemyCustomizationUnlocked', 'true');
+  } else {
+    enemyCustomizationMembershipActive = true;
+  }
+  refreshBestiaryModalIfOpen();
+}
+
+function setEnemyCustomizationMembershipActive(active) {
+  enemyCustomizationMembershipActive = Boolean(active);
   refreshBestiaryModalIfOpen();
 }
 
@@ -83,7 +93,7 @@ function isEnemyCustomizationUnlocked() {
   try {
     if (typeof isPremium === 'function' && isPremium()) return true;
   } catch (e) {}
-  return enemyCustomizationUnlocked;
+  return enemyCustomizationUnlocked || enemyCustomizationMembershipActive;
 }
 
 function refreshBestiaryModalIfOpen() {

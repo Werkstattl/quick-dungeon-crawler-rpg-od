@@ -971,6 +971,38 @@ button:focus {
     width: 100%;
 }
 
+.iap-secondary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 0.6rem;
+}
+
+.iap-secondary-actions button {
+    flex: 1 1 9rem;
+}
+
+.iap-legal-links,
+.iap-status {
+    color: #b7b7b7;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.iap-legal-links a {
+    color: #d6d6d6;
+}
+
+.iap-status {
+    min-height: 1.2em;
+    margin-bottom: 0;
+}
+
+.iap-status-error {
+    color: #ff9b9b;
+}
+
 .forge-unlock-modal {
     width: min(25rem, calc(100vw - 1rem));
 }

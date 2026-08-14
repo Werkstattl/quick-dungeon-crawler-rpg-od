@@ -418,13 +418,18 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadBestiary();
 });
 
-function unlockForgeMembership() {
-    localStorage.setItem(FORGE_MEMBERSHIP_STORAGE_KEY, 'true');
+function setForgeMembershipActive(active) {
+    if (active) {
+        localStorage.setItem(FORGE_MEMBERSHIP_STORAGE_KEY, 'true');
+    } else {
+        localStorage.removeItem(FORGE_MEMBERSHIP_STORAGE_KEY);
+    }
     const subscribeButton = document.querySelector('#forge-membership-subscribe');
     if (subscribeButton) {
-        subscribeButton.disabled = true;
-        subscribeButton.setAttribute('data-i18n', 'forge-membership-subscribed');
-        subscribeButton.textContent = t('forge-membership-subscribed');
+        subscribeButton.disabled = Boolean(active);
+        const key = active ? 'forge-membership-subscribed' : 'forge-membership-subscribe';
+        subscribeButton.setAttribute('data-i18n', key);
+        subscribeButton.textContent = t(key);
     }
     if (player && typeof playerLoadStats === 'function') {
         playerLoadStats();
@@ -432,9 +437,22 @@ function unlockForgeMembership() {
     if (typeof updateInventoryItemCount === 'function') {
         updateInventoryItemCount();
     }
-    unlockForge();
-    unlockAutoMode(false);
-    unlockEnemyCustomization();
+    if (typeof setForgeEntitlement === 'function') {
+        setForgeEntitlement('membership', active);
+    }
+    if (typeof setAutoModeEntitlement === 'function') {
+        setAutoModeEntitlement('membership', active, false);
+    }
+    if (typeof setEnemyCustomizationMembershipActive === 'function') {
+        setEnemyCustomizationMembershipActive(active);
+    } else if (active && typeof unlockEnemyCustomization === 'function') {
+        unlockEnemyCustomization(false);
+    }
+    if (typeof refreshPurchaseUI === 'function') refreshPurchaseUI();
+}
+
+function unlockForgeMembership() {
+    setForgeMembershipActive(true);
 }
 
 function openMenu(isTitle = false) {
@@ -520,13 +538,24 @@ function openMenu(isTitle = false) {
                     <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
                 </ul>
                 <p class="forge-membership-price">
-                    <span data-i18n="forge-membership-price">0.99 € + VAT / month</span>
+                    <span data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</span>
                     <span data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</span>
                 </p>
-                <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                <button id="forge-membership-subscribe" class="forge-membership-cta" data-i18n="forge-membership-subscribe">Subscribe</button>
+                <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+                <button id="forge-membership-subscribe" class="forge-membership-cta" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
+                <div class="iap-secondary-actions">
+                    <button type="button" data-iap-restore data-i18n="iap-restore-purchases">Restore purchases</button>
+                    <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
+                </div>
+                <p class="iap-legal-links">
+                    <a href="https://dungeon.werkstattl.com/PRIVACY.md" data-iap-legal-url="https://dungeon.werkstattl.com/PRIVACY.md" data-i18n="iap-privacy-policy">Privacy Policy</a>
+                    <span aria-hidden="true"> · </span>
+                    <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="iap-terms-of-use">Terms of Use</a>
+                </p>
+                <p class="iap-status" data-iap-status role="status" aria-live="polite"></p>
             </div>`;
         applyTranslations(defaultModalElement);
+        if (typeof preparePurchaseUI === 'function') preparePurchaseUI(defaultModalElement);
         let forgeMembershipTab = document.querySelector('#forge-membership-tab');
         forgeMembershipTab.style.width = "19rem";
         let forgeMembershipSubscribe = document.querySelector('#forge-membership-subscribe');

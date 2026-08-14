@@ -17,6 +17,11 @@ let selectedRefineItem = null;
 let refineCost = 0;
 let refineStoneCost = 0;
 let forgeUnlocked = false;
+const forgeEntitlements = {
+    desktop: false,
+    membership: false,
+    purchase: false,
+};
 
 const FORGE_PRODUCT_ID = 'forge_unlock_premium';
 const FORGE_PURCHASE_URL = 'https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase';
@@ -75,12 +80,12 @@ const closeForgeUnlockModal = () => {
 };
 
 const buyPermanentForgeUnlock = () => {
-    closeForgeUnlockModal();
     if (isCordova() && typeof buyForgeUnlock === 'function') {
         buyForgeUnlock();
         return;
     }
 
+    closeForgeUnlockModal();
     if (/Android/i.test(navigator.userAgent)) {
         ratingSystem.openGooglePlayForRating();
     } else {
@@ -89,12 +94,12 @@ const buyPermanentForgeUnlock = () => {
 };
 
 const buyForgeMembershipUnlock = () => {
-    closeForgeUnlockModal();
     if (isCordova() && typeof buyForgeMembership === 'function') {
         buyForgeMembership();
         return;
     }
 
+    closeForgeUnlockModal();
     if (/Android/i.test(navigator.userAgent)) {
         ratingSystem.openGooglePlayForRating();
     } else {
@@ -119,7 +124,7 @@ const openForgeUnlockModal = () => {
             <div class="forge-unlock-options">
                 <section class="forge-unlock-option">
                     <h4 data-i18n="forge-permanent-unlock">Permanent Unlock</h4>
-                    <p class="forge-unlock-price" data-i18n="forge-permanent-unlock-price">€2.99 + VAT one-time</p>
+                    <p class="forge-unlock-price" data-iap-product="${FORGE_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-permanent-unlock-keep-forever">Keep forever</li>
                     </ul>
@@ -127,7 +132,7 @@ const openForgeUnlockModal = () => {
                 </section>
                 <section class="forge-unlock-option">
                     <h4 data-i18n="forge-membership">The Forge Membership</h4>
-                    <p class="forge-unlock-price" data-i18n="forge-membership-price">€0.99 + VAT / month</p>
+                    <p class="forge-unlock-price" data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
                         <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
@@ -137,12 +142,23 @@ const openForgeUnlockModal = () => {
                         <li data-i18n="forge-membership-benefit-supports-development">Supports ongoing development</li>
                     </ul>
                     <p class="forge-membership-terms" data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</p>
-                    <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                    <button id="forge-buy-membership" type="button" data-i18n="forge-membership-subscribe">Subscribe</button>
+                    <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+                    <button id="forge-buy-membership" type="button" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
                 </section>
             </div>
+            <div class="iap-secondary-actions">
+                <button type="button" data-iap-restore data-i18n="iap-restore-purchases">Restore purchases</button>
+                <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
+            </div>
+            <p class="iap-legal-links">
+                <a href="https://dungeon.werkstattl.com/PRIVACY.md" data-iap-legal-url="https://dungeon.werkstattl.com/PRIVACY.md" data-i18n="iap-privacy-policy">Privacy Policy</a>
+                <span aria-hidden="true"> · </span>
+                <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="iap-terms-of-use">Terms of Use</a>
+            </p>
+            <p class="iap-status" data-iap-status role="status" aria-live="polite"></p>
         </div>`;
     applyTranslations(defaultModalElement);
+    if (typeof preparePurchaseUI === 'function') preparePurchaseUI(defaultModalElement);
 
     const buyPermanentButton = document.querySelector('#forge-buy-permanent');
     const buyMembershipButton = document.querySelector('#forge-buy-membership');
@@ -226,11 +242,18 @@ const populateForgeCategoryOptions = () => {
     targetCategorySelect.value = selectedForgeCategory;
 };
 
-function unlockForge() {
-    forgeUnlocked = true;
+function setForgeEntitlement(source, active) {
+    if (Object.prototype.hasOwnProperty.call(forgeEntitlements, source)) {
+        forgeEntitlements[source] = Boolean(active);
+    }
+    forgeUnlocked = Object.values(forgeEntitlements).some(Boolean);
     if (forgeModalElement && forgeModalElement.style.display === 'flex') {
         updateForgeDisplay();
     }
+}
+
+function unlockForge(source = 'purchase') {
+    setForgeEntitlement(source, true);
 }
 
 const updateForgeGold = () => {

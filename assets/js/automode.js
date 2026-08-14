@@ -81,14 +81,17 @@ if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";
 let autoSellBelowLevel = parseInt(localStorage.getItem("autoSellBelowLevel"), 10);
 if (Number.isNaN(autoSellBelowLevel)) autoSellBelowLevel = 0;
-let autoModeUnlocked = autoModeBtnVisible;
-
-if ( !autoModeUnlocked ) {
-    old = localStorage.getItem("autoMode");
-    if ( old !== null ) {
-        autoModeUnlocked = true;
-    }
-}
+const autoModeHasCachedMembership = typeof isForgeMembershipActive === 'function' && isForgeMembershipActive();
+const autoModeLegacyUnlocked = !autoModeHasCachedMembership && (
+    autoModeBtnVisible || localStorage.getItem("autoMode") !== null
+);
+let autoModeUnlocked = autoModeLegacyUnlocked;
+const autoModeEntitlements = {
+    desktop: false,
+    legacy: autoModeLegacyUnlocked,
+    membership: false,
+    purchase: false,
+};
 
 const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
 const AUTO_MODE_PURCHASE_URL = 'https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase';
@@ -101,12 +104,12 @@ const closeAutoModeUnlockModal = () => {
 };
 
 const buyPermanentAutoModeUnlock = () => {
-    closeAutoModeUnlockModal();
     if (isCordova() && typeof buyAutoModeUnlock === 'function') {
         buyAutoModeUnlock();
         return;
     }
 
+    closeAutoModeUnlockModal();
     if (/Android/i.test(navigator.userAgent)) {
         ratingSystem.openGooglePlayForRating();
     } else {
@@ -115,12 +118,12 @@ const buyPermanentAutoModeUnlock = () => {
 };
 
 const buyAutoModeMembershipUnlock = () => {
-    closeAutoModeUnlockModal();
     if (isCordova() && typeof buyForgeMembership === 'function') {
         buyForgeMembership();
         return;
     }
 
+    closeAutoModeUnlockModal();
     if (/Android/i.test(navigator.userAgent)) {
         ratingSystem.openGooglePlayForRating();
     } else {
@@ -149,7 +152,7 @@ const openAutoModeUnlockModal = () => {
             <div class="forge-unlock-options">
                 <section class="forge-unlock-option">
                     <h4 data-i18n="forge-permanent-unlock">Permanent Unlock</h4>
-                    <p class="forge-unlock-price" data-i18n="forge-permanent-unlock-price">€2.99 + VAT one-time</p>
+                    <p class="forge-unlock-price" data-iap-product="${AUTO_MODE_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-permanent-unlock-keep-forever">Keep forever</li>
                     </ul>
@@ -157,7 +160,7 @@ const openAutoModeUnlockModal = () => {
                 </section>
                 <section class="forge-unlock-option">
                     <h4 data-i18n="forge-membership">The Forge Membership</h4>
-                    <p class="forge-unlock-price" data-i18n="forge-membership-price">€0.99 + VAT / month</p>
+                    <p class="forge-unlock-price" data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
                         <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
@@ -167,12 +170,23 @@ const openAutoModeUnlockModal = () => {
                         <li data-i18n="forge-membership-benefit-supports-development">Supports ongoing development</li>
                     </ul>
                     <p class="forge-membership-terms" data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</p>
-                    <p class="forge-membership-terms" data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                    <button id="auto-mode-buy-membership" type="button" data-i18n="forge-membership-subscribe">Subscribe</button>
+                    <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+                    <button id="auto-mode-buy-membership" type="button" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
                 </section>
             </div>
+            <div class="iap-secondary-actions">
+                <button type="button" data-iap-restore data-i18n="iap-restore-purchases">Restore purchases</button>
+                <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
+            </div>
+            <p class="iap-legal-links">
+                <a href="https://dungeon.werkstattl.com/PRIVACY.md" data-iap-legal-url="https://dungeon.werkstattl.com/PRIVACY.md" data-i18n="iap-privacy-policy">Privacy Policy</a>
+                <span aria-hidden="true"> · </span>
+                <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="iap-terms-of-use">Terms of Use</a>
+            </p>
+            <p class="iap-status" data-iap-status role="status" aria-live="polite"></p>
         </div>`;
     applyTranslations(defaultModalElement);
+    if (typeof preparePurchaseUI === 'function') preparePurchaseUI(defaultModalElement);
 
     const buyPermanentButton = document.querySelector('#auto-mode-buy-permanent');
     const buyMembershipButton = document.querySelector('#auto-mode-buy-membership');
@@ -204,15 +218,28 @@ const openAutoModeUnlockModal = () => {
     }
 };
 
-function unlockAutoMode(openSettings = true) {
+function setAutoModeEntitlement(source, active, openSettings = false) {
     let old = autoModeUnlocked;
-    autoModeUnlocked = true;
+    if (Object.prototype.hasOwnProperty.call(autoModeEntitlements, source)) {
+        autoModeEntitlements[source] = Boolean(active);
+    }
+    autoModeUnlocked = Object.values(autoModeEntitlements).some(Boolean);
+    if (!autoModeUnlocked) {
+        autoMode = false;
+        autoModeBtnVisible = false;
+        localStorage.setItem('autoMode', 'false');
+        localStorage.setItem('autoModeBtnVisible', 'false');
+    }
     updateAutoModeBtnVisibility();
     if (openSettings && typeof window.renderAutoModeSettingsModal === 'function') {
-        if (!old) {
+        if (!old && autoModeUnlocked) {
             window.renderAutoModeSettingsModal();
         }
     }
+}
+
+function unlockAutoMode(openSettings = true, source = 'purchase') {
+    setAutoModeEntitlement(source, true, openSettings);
 }
 
 const autoConfirm = () => {
