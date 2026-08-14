@@ -81,11 +81,11 @@ test('the Wandering Merchant scales from gear only with all six equipment slots 
 
     context.hasCompleteEquipmentLoadout = () => false;
     assert.equal(evaluate(context, 'getWanderingShopItemLevel()'), 30);
-    assert.equal(evaluate(context, 'getWanderingShopCost()'), 18000);
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 24000);
 
     context.hasCompleteEquipmentLoadout = () => true;
     assert.equal(evaluate(context, 'getWanderingShopItemLevel()'), 100);
-    assert.equal(evaluate(context, 'getWanderingShopCost()'), 25000);
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 45000);
 });
 
 test('Auto Mode buys from both wandering merchants', () => {
