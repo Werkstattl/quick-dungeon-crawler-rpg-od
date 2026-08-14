@@ -93,6 +93,63 @@ test('the Wandering Merchant scales its item level around the rounded average eq
     assert.equal(evaluate(context, 'getWanderingShopCost()'), 660000);
 });
 
+test('the Wandering Merchant subtracts ten levels from below-Curse equipment before averaging', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.selectedCurseLevel = 11;
+    context.player.equipped = [
+        { lvl: 80, tier: 10 },
+        { lvl: 80, tier: 10 },
+        { lvl: 80, tier: 11 },
+        { lvl: 80, tier: 11 },
+        { lvl: 80, tier: 11 },
+        { lvl: 80, tier: 11 },
+    ];
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 72, maximum: 82 }
+    );
+});
+
+for (const [label, invalidLevel] of [
+    ['null', null],
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+    ['zero', 0],
+    ['negative', -1],
+]) {
+    test(`the Wandering Merchant excludes a ${label} raw item level from six-slot detection`, () => {
+        const context = createDungeonContext();
+        setDungeonState(context, { floor: 6 });
+        context.player.selectedCurseLevel = 11;
+        context.player.equipped = [
+            ...Array.from({ length: 5 }, () => ({ lvl: 100, tier: 11 })),
+            { lvl: invalidLevel, tier: 10 },
+        ];
+
+        assert.deepEqual(
+            JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+            { minimum: 26, maximum: 30 }
+        );
+    });
+}
+
+test('the Wandering Merchant floors a penalized positive item level at one', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { floor: 6 });
+    context.player.selectedCurseLevel = 11;
+    context.player.equipped = [
+        { lvl: 1, tier: 10 },
+        ...Array.from({ length: 5 }, () => ({ lvl: 40, tier: 11 })),
+    ];
+
+    assert.deepEqual(
+        JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
+        { minimum: 29, maximum: 39 }
+    );
+});
+
 test('the Wandering Merchant keeps its Floor 6 item levels for early progression', () => {
     const context = createDungeonContext();
     setDungeonState(context, { floor: 6 });

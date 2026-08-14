@@ -222,9 +222,22 @@ const getWanderingShopLevelRange = () => {
         WANDERING_SHOP_FLOOR * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1)
     );
     const floorMinimum = clampEquipmentLevel(floorMaximum - (dungeon.settings.enemyLvlGap - 1));
+    const currentCurseLevel = Number(player.selectedCurseLevel);
     const equippedLevels = Array.isArray(player.equipped)
         ? player.equipped
-            .map((item) => Number(item && item.lvl))
+            .map((item) => {
+                const level = Number(item && item.lvl);
+                if (!Number.isFinite(level) || level <= 0) {
+                    return null;
+                }
+                const tier = Number(item && item.tier);
+                const tierPenalty = Number.isFinite(tier)
+                    && Number.isFinite(currentCurseLevel)
+                    && tier < currentCurseLevel
+                    ? 10
+                    : 0;
+                return Math.max(1, level - tierPenalty);
+            })
             .filter((level) => Number.isFinite(level) && level > 0)
         : [];
     if (equippedLevels.length < 6) {
