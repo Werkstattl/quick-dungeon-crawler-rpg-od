@@ -75,17 +75,17 @@ const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visite
 test('the Wandering Merchant scales from gear only with all six equipment slots filled', () => {
     const context = createDungeonContext();
     setDungeonState(context, { floor: 6 });
-    context.player.lvl = 100;
+    context.player.lvl = 25;
     context.player.selectedCurseLevel = 1;
     context.player.equipped = Array.from({ length: 6 }, () => ({ lvl: 100, tier: 1 }));
 
     context.hasCompleteEquipmentLoadout = () => false;
     assert.equal(evaluate(context, 'getWanderingShopItemLevel()'), 30);
-    assert.equal(evaluate(context, 'getWanderingShopCost()'), 18000);
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 12750);
 
     context.hasCompleteEquipmentLoadout = () => true;
     assert.equal(evaluate(context, 'getWanderingShopItemLevel()'), 100);
-    assert.equal(evaluate(context, 'getWanderingShopCost()'), 25000);
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 33750);
 });
 
 test('Auto Mode buys from both wandering merchants', () => {
