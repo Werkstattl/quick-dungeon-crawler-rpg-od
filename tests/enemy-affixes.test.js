@@ -161,12 +161,12 @@ test('affix stats respect the enemy dodge and attack speed caps', () => {
     assert.ok(result.atkSpd <= 2.75, `atkSpd ${result.atkSpd} exceeded the cap`);
 });
 
-test('Enraged trades thirty-five percent more attack for twenty percent less health', () => {
+test('Enraged trades thirty percent more attack for twenty percent less health', () => {
     const context = createAffixContext();
     context.__stats = { hpMax: 1000, atk: 100, def: 50, atkSpd: 1.5, dodge: 10, vamp: 0 };
     const result = vm.runInContext(`applyAffixStats(__stats, ['enraged'])`, context);
 
-    assert.equal(result.atk, 135);
+    assert.equal(result.atk, 130);
     assert.equal(result.hpMax, 800);
 });
 
