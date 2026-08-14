@@ -61,6 +61,8 @@ const MIN_DUNGEON_EVENT_INTERVAL_MS = 100;
 const DUNGEON_TIMER_TICK_MS = 100;
 const WANDERING_SHOP_FLOOR = 6;
 const WANDERING_SHOP_MIN_RARITY = 'Rare';
+const WANDERING_SHOP_COST_PER_LEVEL = 100;
+const WANDERING_SHOP_TIER_GAP_LEVEL_PENALTY = 10;
 const FORGE_TOKEN_MERCHANT_FLOOR = 13;
 const FORGE_TOKEN_MERCHANT_COST = 10000;
 const BLESSING_CURSE_COST_STEP = 0.05;
@@ -217,8 +219,43 @@ const shouldTriggerForgeTokenMerchant = () => {
         && !dungeon.specialEvents.floor13ForgeTokenMerchantVisited;
 };
 
-const getWanderingShopCost = () => {
-    return Math.round(((WANDERING_SHOP_FLOOR * 500) + (player.lvl * 150)) * player.selectedCurseLevel);
+// Median instead of max so a single leftover high level item cannot inflate the offer
+const getEquippedMedian = (field) => {
+    if (!player || !Array.isArray(player.equipped)) {
+        return 0;
+    }
+    const values = player.equipped
+        .map((item) => Number(item && item[field]))
+        .filter((value) => Number.isFinite(value) && value > 0)
+        .sort((a, b) => a - b);
+    if (values.length === 0) {
+        return 0;
+    }
+    const middle = Math.floor(values.length / 2);
+    return values.length % 2 === 0
+        ? Math.round((values[middle - 1] + values[middle]) / 2)
+        : values[middle];
+};
+
+const getWanderingShopItemTier = () => {
+    if (typeof getEquipmentTierFromEnemyScaling === 'function') {
+        return getEquipmentTierFromEnemyScaling(dungeon.settings.enemyScaling);
+    }
+    return player.selectedCurseLevel;
+};
+
+// Keeps the offer relevant for players whose gear outscales the current floor
+const getWanderingShopItemLevel = () => {
+    const floorLevel = (dungeon.progress.floor * dungeon.settings.enemyLvlGap) + (dungeon.settings.enemyBaseLvl - 1);
+    // A higher tier is already an upgrade on its own, so trade tier gaps for levels
+    const tierGap = Math.max(0, getWanderingShopItemTier() - getEquippedMedian('tier'));
+    const gearLevel = getEquippedMedian('lvl') - (tierGap * WANDERING_SHOP_TIER_GAP_LEVEL_PENALTY);
+    const level = Math.max(floorLevel, gearLevel);
+    return typeof clampEquipmentLevel === 'function' ? clampEquipmentLevel(level) : level;
+};
+
+const getWanderingShopCost = (itemLevel = getWanderingShopItemLevel()) => {
+    return Math.round(((itemLevel * WANDERING_SHOP_COST_PER_LEVEL) + (player.lvl * 150)) * player.selectedCurseLevel);
 };
 
 const getBlessingCost = (blessingLevel, curseLevel) => {
@@ -961,7 +998,8 @@ const wanderingShopEvent = () => {
     dungeon.status.event = true;
     ensureSpecialEventsState();
     dungeon.specialEvents.floor6WanderingShopVisited = true;
-    const cost = getWanderingShopCost();
+    const itemLevel = getWanderingShopItemLevel();
+    const cost = getWanderingShopCost(itemLevel);
     const choices = `
         <div class="decision-panel">
             <button id="choice1" data-i18n="buy">${t('buy')}</button>
@@ -982,6 +1020,7 @@ const wanderingShopEvent = () => {
         createEquipmentPrint("dungeon", {
             allowCompanionCharm: false,
             minRarity: WANDERING_SHOP_MIN_RARITY,
+            forcedLevel: itemLevel,
             messageKey: 'wandering-shop-item-received',
         });
         playerLoadStats();
