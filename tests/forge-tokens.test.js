@@ -79,7 +79,7 @@ const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visite
     `);
 };
 
-test('the Wandering Merchant scales its item level around the weakest equipped item', () => {
+test('the Wandering Merchant scales its item level around the rounded average equipped level', () => {
     const context = createDungeonContext();
     setDungeonState(context, { floor: 6 });
     context.player.lvl = 100;
@@ -88,9 +88,9 @@ test('the Wandering Merchant scales its item level around the weakest equipped i
 
     assert.deepEqual(
         JSON.parse(evaluate(context, 'JSON.stringify(getWanderingShopLevelRange())')),
-        { minimum: 86, maximum: 96 }
+        { minimum: 91, maximum: 100 }
     );
-    assert.equal(evaluate(context, 'getWanderingShopCost()'), 633600);
+    assert.equal(evaluate(context, 'getWanderingShopCost()'), 660000);
 });
 
 test('the Wandering Merchant keeps its Floor 6 item levels for early progression', () => {
@@ -148,10 +148,10 @@ test('the Wandering Merchant purchase generates an item inside the scaled range'
         condition: 'dungeon',
         allowCompanionCharm: false,
         minRarity: 'Rare',
-        forcedLevel: 96,
+        forcedLevel: 100,
         messageKey: 'wandering-shop-item-received',
     });
-    assert.equal(context.player.gold, 366400);
+    assert.equal(context.player.gold, 340000);
 });
 
 test('Auto Mode buys from both wandering merchants', () => {

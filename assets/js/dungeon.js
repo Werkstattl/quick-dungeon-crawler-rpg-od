@@ -231,10 +231,12 @@ const getWanderingShopLevelRange = () => {
         return { minimum: floorMinimum, maximum: floorMaximum };
     }
 
-    const weakestEquippedLevel = Math.min(...equippedLevels);
+    const averageEquippedLevel = Math.round(
+        equippedLevels.reduce((total, level) => total + level, 0) / equippedLevels.length
+    );
     return {
-        minimum: Math.max(floorMinimum, clampEquipmentLevel(weakestEquippedLevel - 5)),
-        maximum: Math.max(floorMaximum, clampEquipmentLevel(weakestEquippedLevel + 5)),
+        minimum: Math.max(floorMinimum, clampEquipmentLevel(averageEquippedLevel - 5)),
+        maximum: Math.max(floorMaximum, clampEquipmentLevel(averageEquippedLevel + 5)),
     };
 };
 
