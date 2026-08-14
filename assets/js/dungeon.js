@@ -62,6 +62,7 @@ const DUNGEON_TIMER_TICK_MS = 100;
 const WANDERING_SHOP_FLOOR = 6;
 const WANDERING_SHOP_MIN_RARITY = 'Rare';
 const WANDERING_SHOP_COST_PER_LEVEL = 300;
+const WANDERING_SHOP_COST_MULTIPLIER = 1.5;
 const WANDERING_SHOP_TIER_GAP_LEVEL_PENALTY = 10;
 const FORGE_TOKEN_MERCHANT_FLOOR = 13;
 const FORGE_TOKEN_MERCHANT_COST = 10000;
@@ -258,7 +259,7 @@ const getWanderingShopItemLevel = () => {
 };
 
 const getWanderingShopCost = (itemLevel = getWanderingShopItemLevel()) => {
-    return Math.round(((itemLevel * WANDERING_SHOP_COST_PER_LEVEL) + (player.lvl * 150)) * player.selectedCurseLevel);
+    return Math.round(((itemLevel * WANDERING_SHOP_COST_PER_LEVEL) + (player.lvl * 150)) * player.selectedCurseLevel * WANDERING_SHOP_COST_MULTIPLIER);
 };
 
 const getBlessingCost = (blessingLevel, curseLevel) => {
