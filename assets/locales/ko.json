@@ -597,5 +597,7 @@
   "forge-token": "대장간 토큰",
   "forge-tokens": "대장간 토큰",
   "forge-token-merchant-offer": "떠돌이 대장장이가 나타났습니다: {cost} 골드로 대장간 토큰을 구매할까요?",
-  "forge-token-merchant-purchase": "{cost} 골드로 대장간 토큰을 구매했습니다."
+  "forge-token-merchant-purchase": "{cost} 골드로 대장간 토큰을 구매했습니다.",
+  "stat-lock": "능력치 잠금",
+  "stat-lock-help": "잠긴 능력치는 종류와 수치를 유지합니다. 최소 하나의 능력치는 잠금 해제 상태여야 합니다."
 }

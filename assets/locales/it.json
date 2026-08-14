@@ -597,5 +597,7 @@
   "forge-token": "Gettone della forgia",
   "forge-tokens": "Gettoni della forgia",
   "forge-token-merchant-offer": "Appare un fabbro errante: comprare un gettone della forgia per {cost} oro?",
-  "forge-token-merchant-purchase": "Hai comprato un gettone della forgia per {cost} oro."
+  "forge-token-merchant-purchase": "Hai comprato un gettone della forgia per {cost} oro.",
+  "stat-lock": "Blocca statistiche",
+  "stat-lock-help": "Le statistiche bloccate mantengono tipo e valore. Almeno una statistica deve restare sbloccata."
 }

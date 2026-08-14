@@ -250,11 +250,70 @@ const rollCompanionCharmStatValue = (statType, equipment, enemyScaling) => {
     return 0;
 };
 
-const rerollCompanionCharmStats = (equipment, enemyScaling) => {
-    equipment.stats = [];
-    let equipmentValue = 0;
-    const loopCount = getCompanionCharmLoopCount(equipment.rarity);
-    const statPool = COMPANION_CHARM_STAT_POOL;
+const getEquipmentStatValueWeight = (statType, companionCharm = false) => {
+    if (companionCharm) {
+        return {
+            atk: 3,
+            atkSpd: 20,
+            critRate: 22,
+            critDmg: 12,
+            vamp: 21,
+            luck: 21,
+            fasterRun: 15,
+        }[statType] || 0;
+    }
+    return {
+        hp: 1,
+        atk: 2.5,
+        def: 2.5,
+        atkSpd: 8.33,
+        vamp: 20.83,
+        critRate: 20.83,
+        critDmg: 10.83,
+        dodge: 33.33,
+        fasterRun: 15,
+        luck: 20.83,
+    }[statType] || 0;
+};
+
+const isFiniteEquipmentStatValue = (value) => typeof value === 'number' && Number.isFinite(value);
+
+const getLockedEquipmentStats = (equipment, lockedStatKeys, statPool) => {
+    const requestedKeys = new Set(Array.isArray(lockedStatKeys) ? lockedStatKeys : []);
+    const allowedKeys = new Set(statPool);
+    const sourceStats = equipment && Array.isArray(equipment.stats) ? equipment.stats : [];
+    return sourceStats
+        .filter((entry) => {
+            const statType = entry && Object.keys(entry)[0];
+            return statType
+                && isFiniteEquipmentStatValue(entry[statType])
+                && requestedKeys.has(statType)
+                && allowedKeys.has(statType);
+        })
+        .map((entry) => ({ ...entry }));
+};
+
+const rerollCompanionCharmStats = (equipment, enemyScaling, lockedStatKeys = []) => {
+    const baseLoopCount = getCompanionCharmLoopCount(equipment.rarity);
+    const fullStatPool = COMPANION_CHARM_STAT_POOL;
+    const sourceStatCount = new Set((Array.isArray(equipment.stats) ? equipment.stats : [])
+        .map((entry) => {
+            const statType = entry && Object.keys(entry)[0];
+            return statType && isFiniteEquipmentStatValue(entry[statType]) ? statType : null;
+        })
+        .filter((statType) => statType && fullStatPool.includes(statType))).size;
+    const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
+        .slice(0, Math.max(0, sourceStatCount - 1));
+    const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
+    const statPool = fullStatPool.filter((statType) => !lockedKeys.has(statType));
+    equipment.stats = lockedStats;
+    let equipmentValue = lockedStats.reduce((total, entry) => {
+        const statType = Object.keys(entry)[0];
+        return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType, true));
+    }, 0);
+    const loopCount = lockedStats.length > 0
+        ? Math.max(1, sourceStatCount - lockedStats.length)
+        : baseLoopCount;
 
     for (let i = 0; i < loopCount; i++) {
         const statType = statPool[Math.floor(Math.random() * statPool.length)];
@@ -266,21 +325,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling) => {
             equipment.stats.push({ [statType]: statValue });
         }
 
-        if (statType === 'atk') {
-            equipmentValue += statValue * 3;
-        } else if (statType === 'atkSpd') {
-            equipmentValue += statValue * 20;
-        } else if (statType === 'critRate') {
-            equipmentValue += statValue * 22;
-        } else if (statType === 'critDmg') {
-            equipmentValue += statValue * 12;
-        } else if (statType === 'vamp') {
-            equipmentValue += statValue * 21;
-        } else if (statType === 'luck') {
-            equipmentValue += statValue * 21;
-        } else if (statType === 'fasterRun') {
-            equipmentValue += statValue * 15;
-        }
+        equipmentValue += statValue * getEquipmentStatValueWeight(statType, true);
     }
 
     equipment.value = Math.max(10, Math.round(equipmentValue * 2.55));
@@ -504,41 +549,62 @@ const getEquipmentRerollStatPool = (equipment) => {
     return [];
 };
 
-const rerollEquipmentStats = (equipment, forcedStat = null) => {
+const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
     equipment.tier = clampEquipmentTier(equipment.tier);
     const enemyScaling = getEnemyScalingFromEquipmentTier(equipment.tier);
+    const lockedStatKeys = Array.isArray(options.lockedStatKeys) ? options.lockedStatKeys : [];
     if (isCompanionCharm(equipment)) {
-        rerollCompanionCharmStats(equipment, enemyScaling);
+        rerollCompanionCharmStats(equipment, enemyScaling, lockedStatKeys);
         return;
     }
-    equipment.stats = [];
-    let loopCount;
-    let equipmentValue = 0;
-    let statValue;
+    let baseLoopCount;
     switch (equipment.rarity) {
         case "Common":
-            loopCount = 2;
+            baseLoopCount = 2;
             break;
         case "Uncommon":
-            loopCount = 3;
+            baseLoopCount = 3;
             break;
         case "Rare":
-            loopCount = 4;
+            baseLoopCount = 4;
             break;
         case "Epic":
-            loopCount = 5;
+            baseLoopCount = 5;
             break;
         case "Legendary":
-            loopCount = 6;
+            baseLoopCount = 6;
             break;
         case "Heirloom":
-            loopCount = 8;
+            baseLoopCount = 8;
+            break;
+        default:
+            baseLoopCount = 2;
             break;
     }
-    let statTypes = getEquipmentRerollStatPool(equipment);
-    if (!statTypes.length) {
+    const fullStatPool = getEquipmentRerollStatPool(equipment);
+    if (!fullStatPool.length) {
         return;
     }
+    const sourceStatCount = new Set((Array.isArray(equipment.stats) ? equipment.stats : [])
+        .map((entry) => {
+            const statType = entry && Object.keys(entry)[0];
+            return statType && isFiniteEquipmentStatValue(entry[statType]) ? statType : null;
+        })
+        .filter((statType) => statType && fullStatPool.includes(statType))).size;
+    const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
+        .slice(0, Math.max(0, sourceStatCount - 1));
+    const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
+    const statTypes = fullStatPool.filter((statType) => !lockedKeys.has(statType));
+    equipment.stats = lockedStats;
+    let equipmentValue = lockedStats.reduce((total, entry) => {
+        const statType = Object.keys(entry)[0];
+        return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType));
+    }, 0);
+    let statValue;
+    let loopCount = lockedStats.length > 0
+        ? Math.max(1, sourceStatCount - lockedStats.length)
+        : baseLoopCount;
+    const maxLoopCount = lockedStats.length > 0 ? loopCount : loopCount + 1;
     for (let i = 0; i < loopCount; i++) {
         let statType = i === 0 && statTypes.includes(forcedStat)
             ? forcedStat
@@ -608,17 +674,7 @@ const rerollEquipmentStats = (equipment, forcedStat = null) => {
             }
             equipmentValue += statValue * 20.83;
         }
-        if (equipment.rarity == "Common" && loopCount > 3) {
-            loopCount--;
-        } else if (equipment.rarity == "Uncommon" && loopCount > 4) {
-            loopCount--;
-        } else if (equipment.rarity == "Rare" && loopCount > 5) {
-            loopCount--;
-        } else if (equipment.rarity == "Epic" && loopCount > 6) {
-            loopCount--;
-        } else if (equipment.rarity == "Legendary" && loopCount > 7) {
-            loopCount--;
-        } else if (equipment.rarity == "Heirloom" && loopCount > 9) {
+        if (loopCount > maxLoopCount) {
             loopCount--;
         }
         let statExists = false;

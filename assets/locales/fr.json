@@ -597,5 +597,7 @@
   "forge-token": "Jeton de forge",
   "forge-tokens": "Jetons de forge",
   "forge-token-merchant-offer": "Un forgeron itinérant apparaît : acheter un jeton de forge pour {cost} pièces d’or ?",
-  "forge-token-merchant-purchase": "Vous avez acheté un jeton de forge pour {cost} pièces d’or."
+  "forge-token-merchant-purchase": "Vous avez acheté un jeton de forge pour {cost} pièces d’or.",
+  "stat-lock": "Verrouiller les stats",
+  "stat-lock-help": "Les stats verrouillées conservent leur type et leur valeur. Au moins une stat doit rester déverrouillée."
 }

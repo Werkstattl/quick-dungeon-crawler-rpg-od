@@ -10,7 +10,9 @@ let forgeResult = null;
 let forgeLevelRange = null;
 let forgeCost = 0;
 let selectedRerollItem = null;
+let selectedRerollStatLocks = [];
 let rerollCost = 0;
+let rerollStoneCost = 0;
 let selectedRefineItem = null;
 let refineCost = 0;
 let refineStoneCost = 0;
@@ -263,7 +265,9 @@ const resetMergeState = () => {
 
 const resetRerollState = () => {
     selectedRerollItem = null;
+    selectedRerollStatLocks = [];
     rerollCost = 0;
+    rerollStoneCost = 0;
     const rerollPreviewContainer = document.querySelector('#reroll-preview');
     if (rerollPreviewContainer) {
         rerollPreviewContainer.style.display = 'none';
@@ -365,6 +369,51 @@ const setForgeMode = (mode) => {
 };
 
 const getRerollCost = (equipment) => Math.max(1000, Math.round((equipment.value || 0) * 10));
+const isFiniteRerollStatValue = (value) => typeof value === 'number' && Number.isFinite(value);
+const getRerollEquipmentStatKeys = (equipment) => {
+    const stats = equipment && Array.isArray(equipment.stats) ? equipment.stats : [];
+    const supportedStats = typeof getEquipmentRerollStatPool === 'function'
+        ? new Set(getEquipmentRerollStatPool(equipment))
+        : null;
+    return stats
+        .map((entry) => {
+            const statType = entry && Object.keys(entry)[0];
+            return statType && isFiniteRerollStatValue(entry[statType]) ? statType : null;
+        })
+        .filter((statType, index, keys) => statType
+            && (!supportedStats || supportedStats.has(statType))
+            && keys.indexOf(statType) === index);
+};
+const getValidRerollStatLockKeys = (equipment, requestedKeys) => {
+    const availableKeys = getRerollEquipmentStatKeys(equipment);
+    const maximumLocks = Math.max(0, availableKeys.length - 1);
+    const requested = Array.isArray(requestedKeys) ? requestedKeys : [];
+    return requested
+        .filter((statType, index) => availableKeys.includes(statType) && requested.indexOf(statType) === index)
+        .slice(0, maximumLocks);
+};
+const STAT_LOCK_RARITY_RANK = Object.freeze({
+    Common: 1,
+    Uncommon: 2,
+    Rare: 3,
+    Epic: 4,
+    Legendary: 5,
+    Heirloom: 6,
+});
+const getStatLockRerollCosts = (equipment, lockedStatCount) => {
+    const baseGold = getRerollCost(equipment);
+    const locks = Math.max(0, Math.floor(Number(lockedStatCount) || 0));
+    if (locks === 0) {
+        return { gold: baseGold, stones: 0 };
+    }
+
+    const rarityRank = STAT_LOCK_RARITY_RANK[equipment && equipment.rarity] || 1;
+    const tier = Math.max(1, Math.min(15, Math.floor(Number(equipment && equipment.tier) || 1)));
+    const perLockGoldScale = 0.5 + ((rarityRank - 1) * 0.25) + ((tier - 1) * 0.1);
+    const gold = Math.round(baseGold * (1 + (locks * perLockGoldScale)));
+    const stones = Math.ceil(locks * rarityRank * (1 + ((tier - 1) * 0.2)));
+    return { gold, stones };
+};
 const getRefineCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
     return Math.max(500, Math.round((equipment.value || 0) * (currentLevel + 1) * 0.75));
@@ -598,6 +647,7 @@ const selectRerollEquipment = (equipmentStr, source = 'inventory', sourceIndex =
     }
     const equipment = equipmentOverride || JSON.parse(equipmentStr);
     selectedRerollItem = { equipment, equipmentStr, source, sourceIndex };
+    selectedRerollStatLocks = [];
     calculateRerollPreview();
     updateForgeDisplay();
     loadForgeEquipment();
@@ -620,9 +670,16 @@ const selectRefineEquipment = (equipmentStr, source = 'inventory', sourceIndex =
 const calculateRerollPreview = () => {
     if (!selectedRerollItem) {
         rerollCost = 0;
+        rerollStoneCost = 0;
         return;
     }
-    rerollCost = getRerollCost(selectedRerollItem.equipment);
+    selectedRerollStatLocks = getValidRerollStatLockKeys(
+        selectedRerollItem.equipment,
+        selectedRerollStatLocks,
+    );
+    const costs = getStatLockRerollCosts(selectedRerollItem.equipment, selectedRerollStatLocks.length);
+    rerollCost = costs.gold;
+    rerollStoneCost = costs.stones;
     displayRerollPreview();
 };
 
@@ -637,9 +694,10 @@ const calculateRefinePreview = () => {
     displayRefinePreview();
 };
 
-const renderPossibleRerollStats = (equipment) => {
+const renderPossibleRerollStats = (equipment, excludedStats = []) => {
+    const excluded = new Set(Array.isArray(excludedStats) ? excludedStats : []);
     const statPool = typeof getEquipmentRerollStatPool === 'function'
-        ? getEquipmentRerollStatPool(equipment)
+        ? getEquipmentRerollStatPool(equipment).filter((statType) => !excluded.has(statType))
         : [];
     const uniqueStats = Array.from(new Set(statPool));
     const orderedStats = getOrderedEquipmentStats(uniqueStats.reduce((totals, stat) => {
@@ -708,12 +766,62 @@ const displayRefinePreview = () => {
     updateForgeGold();
 };
 
+const renderRerollStatLocks = () => {
+    const container = document.querySelector('#reroll-stat-locks');
+    const optionsContainer = document.querySelector('#reroll-stat-lock-options');
+    if (!container || !optionsContainer || !selectedRerollItem) {
+        if (container) {
+            container.style.display = 'none';
+        }
+        return;
+    }
+
+    const equipment = selectedRerollItem.equipment;
+    const statKeys = getRerollEquipmentStatKeys(equipment);
+    if (statKeys.length < 2) {
+        selectedRerollStatLocks = [];
+        container.style.display = 'none';
+        return;
+    }
+
+    selectedRerollStatLocks = getValidRerollStatLockKeys(equipment, selectedRerollStatLocks);
+    const totals = getEquipmentStatTotals(equipment);
+    optionsContainer.innerHTML = statKeys.map((statType) => `
+        <label class="reroll-stat-lock-option ${selectedRerollStatLocks.includes(statType) ? 'selected' : ''}">
+            <input type="checkbox" data-reroll-stat-lock="${statType}" ${selectedRerollStatLocks.includes(statType) ? 'checked' : ''}>
+            <span>${formatEquipmentStatLabel(statType)}</span>
+            <span class="reroll-stat-lock-value">${formatEquipmentValue(statType, totals[statType] || 0, { includeSign: true })}</span>
+        </label>
+    `).join('');
+
+    optionsContainer.querySelectorAll('input[data-reroll-stat-lock]').forEach((input) => {
+        input.addEventListener('change', () => {
+            const statType = input.getAttribute('data-reroll-stat-lock');
+            const requestedLocks = input.checked
+                ? [...selectedRerollStatLocks, statType]
+                : selectedRerollStatLocks.filter((key) => key !== statType);
+            const validLocks = getValidRerollStatLockKeys(equipment, requestedLocks);
+            if (input.checked && !validLocks.includes(statType)) {
+                sfxDeny.play();
+                input.checked = false;
+                return;
+            }
+            selectedRerollStatLocks = validLocks;
+            calculateRerollPreview();
+            updateRerollDisplay();
+        });
+    });
+    container.style.display = 'block';
+};
+
 const displayRerollPreview = () => {
     const previewContainer = document.querySelector('#reroll-preview');
     const costContainer = document.querySelector('#reroll-cost');
     const currentItem = document.querySelector('#reroll-current-item');
     const previewItem = document.querySelector('#reroll-preview-item');
     const costAmount = document.querySelector('#reroll-cost-amount');
+    const stoneCostContainer = document.querySelector('#reroll-stone-cost');
+    const stoneAmount = document.querySelector('#reroll-stone-cost-amount');
 
     if (!selectedRerollItem || !previewContainer || !costContainer || !currentItem || !previewItem || !costAmount) {
         return;
@@ -729,12 +837,18 @@ const displayRerollPreview = () => {
         totals: currentTotals,
         labelFallback: ''
     });
-    previewItem.innerHTML = renderPossibleRerollStats(currentEquipment);
+    previewItem.innerHTML = renderPossibleRerollStats(currentEquipment, selectedRerollStatLocks);
 
     costAmount.textContent = nFormatter(getForgeActionGoldCost(rerollCost));
+    if (stoneAmount && stoneCostContainer) {
+        stoneAmount.textContent = nFormatter(rerollStoneCost);
+        stoneCostContainer.style.display = rerollStoneCost > 0 ? 'inline-flex' : 'none';
+    }
+    const hasGold = canPayForgeAction(rerollCost);
+    const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= rerollStoneCost;
     const costElement = costAmount.parentElement;
     if (costElement) {
-        costElement.style.color = canPayForgeAction(rerollCost) ? '#4CAF50' : '#F44336';
+        costElement.style.color = hasGold && hasStones ? '#4CAF50' : '#F44336';
     }
     previewContainer.style.display = 'grid';
     costContainer.style.display = 'block';
@@ -770,6 +884,7 @@ const updateRerollDisplay = () => {
         }
     }
 
+    renderRerollStatLocks();
     if (selectedRerollItem) {
         displayRerollPreview();
     }
@@ -795,10 +910,17 @@ const updateRerollDisplay = () => {
         return;
     }
 
-    if (selectedRerollItem && canPayForgeAction(rerollCost)) {
+    const hasRerollGold = selectedRerollItem && canPayForgeAction(rerollCost);
+    const hasRerollStones = selectedRerollItem
+        && (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= rerollStoneCost;
+    if (hasRerollGold && hasRerollStones) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'reroll-equipment');
         confirmButton.textContent = t('reroll-equipment');
+    } else if (selectedRerollItem && !hasRerollStones) {
+        confirmButton.disabled = true;
+        confirmButton.setAttribute('data-i18n', 'not-enough-refine-stones');
+        confirmButton.textContent = t('not-enough-refine-stones');
     } else if (selectedRerollItem) {
         confirmButton.disabled = true;
         confirmButton.setAttribute('data-i18n', 'not-enough-gold');
@@ -810,7 +932,7 @@ const updateRerollDisplay = () => {
     }
 
     confirmButton.onclick = () => {
-        if (selectedRerollItem && canPayForgeAction(rerollCost)) {
+        if (hasRerollGold && hasRerollStones) {
             executeReroll();
         } else {
             sfxDeny.play();
@@ -1241,14 +1363,20 @@ const showForgedResultPopup = (equipment) => {
 };
 
 const executeReroll = () => {
-    if (!selectedRerollItem || !canPayForgeAction(rerollCost)) {
+    const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= rerollStoneCost;
+    if (!selectedRerollItem || !canPayForgeAction(rerollCost) || !hasStones) {
         sfxDeny.play();
         return;
     }
 
     const paidRerollCost = rerollCost;
+    const paidRerollStoneCost = rerollStoneCost;
+    const lockedStatKeys = getValidRerollStatLockKeys(
+        selectedRerollItem.equipment,
+        selectedRerollStatLocks,
+    );
     const rerolledEquipment = cloneEquipment(selectedRerollItem.equipment);
-    rerollEquipmentStats(rerolledEquipment);
+    rerollEquipmentStats(rerolledEquipment, null, { lockedStatKeys });
 
     let updated = false;
     let updatedEquipment = null;
@@ -1306,6 +1434,10 @@ const executeReroll = () => {
         sourceIndex: updatedSourceIndex
     };
     payForForgeAction(paidRerollCost);
+    if (paidRerollStoneCost > 0) {
+        ensureRefineInventory();
+        player.inventory.refineStones -= paidRerollStoneCost;
+    }
     saveData();
     playerLoadStats();
     if (typeof updateCompanionUI === 'function') {

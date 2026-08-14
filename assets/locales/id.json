@@ -597,5 +597,7 @@
   "forge-token": "Token Tempa",
   "forge-tokens": "Token Tempa",
   "forge-token-merchant-offer": "Seorang pandai besi pengembara muncul: beli Token Tempa seharga {cost} emas?",
-  "forge-token-merchant-purchase": "Kamu membeli Token Tempa seharga {cost} emas."
+  "forge-token-merchant-purchase": "Kamu membeli Token Tempa seharga {cost} emas.",
+  "stat-lock": "Kunci Stat",
+  "stat-lock-help": "Stat yang dikunci mempertahankan jenis dan nilainya. Setidaknya satu stat harus tetap terbuka."
 }

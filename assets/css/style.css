@@ -2155,6 +2155,58 @@ header button i {
     min-height: 7rem;
 }
 
+.reroll-stat-locks {
+    max-width: 34rem;
+    margin: 0 auto 1rem;
+    padding: 0.8rem;
+    border: 1px solid #555;
+    border-radius: 0.4rem;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.reroll-stat-locks h4 {
+    margin-bottom: 0.35rem;
+    text-align: center;
+}
+
+.reroll-stat-locks > p {
+    margin-bottom: 0.7rem;
+    color: #bbb;
+    font-size: calc(0.78rem * var(--font-scale));
+    text-align: center;
+}
+
+.reroll-stat-lock-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.5rem;
+}
+
+.reroll-stat-lock-option {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #555;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.reroll-stat-lock-option.selected {
+    border-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.reroll-stat-lock-option input {
+    accent-color: #FFD700;
+}
+
+.reroll-stat-lock-value {
+    margin-left: auto;
+    color: #ddd;
+}
+
 .reroll-preview {
     display: grid;
     grid-template-columns: 1fr 1fr;

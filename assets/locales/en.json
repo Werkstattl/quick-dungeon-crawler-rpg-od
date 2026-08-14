@@ -597,5 +597,7 @@
   "forge-token": "Forge Token",
   "forge-tokens": "Forge Tokens",
   "forge-token-merchant-offer": "A wandering blacksmith appears: Buy a Forge Token for {cost} gold?",
-  "forge-token-merchant-purchase": "You bought a Forge Token for {cost} gold."
+  "forge-token-merchant-purchase": "You bought a Forge Token for {cost} gold.",
+  "stat-lock": "Lock Stats",
+  "stat-lock-help": "Locked stats keep their type and value. At least one stat must remain unlocked."
 }
