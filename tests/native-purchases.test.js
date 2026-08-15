@@ -143,3 +143,37 @@ test('approved local purchases are granted and restore uses the store adapter', 
     await vm.runInContext('restoreNativePurchases()', state.context);
     assert.equal(state.restoreCount, 1);
 });
+
+test('Apple legal terms are shown only for App Store purchases', () => {
+    for (const [platform, expectedHidden] of [
+        ['ios-appstore', false],
+        ['android-playstore', true],
+        ['web', true],
+    ]) {
+        const state = createPurchaseContext(platform);
+        const appleLegal = { hidden: true };
+        state.context.testRoot = {
+            querySelectorAll: selector => selector === '[data-iap-apple-only]'
+                ? [appleLegal]
+                : [],
+        };
+
+        vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+
+        assert.equal(appleLegal.hidden, expectedHidden, platform);
+    }
+});
+
+test('every purchase dialog marks the Apple EULA as iOS-only', () => {
+    for (const file of ['automode.js', 'main.js', 'forge.js']) {
+        const dialogSource = fs.readFileSync(
+            path.resolve(__dirname, '../assets/js', file),
+            'utf8'
+        );
+        assert.match(
+            dialogSource,
+            /<span data-iap-apple-only hidden>.*stdeula\/.*<\/span>/,
+            file
+        );
+    }
+});

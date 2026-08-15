@@ -316,6 +316,9 @@ function refreshPurchaseUI(root = document) {
     button.hidden = !platform || !isForgeMembershipActive();
     button.disabled = Boolean(platform) && !purchasesReady;
   });
+  root.querySelectorAll('[data-iap-apple-only]').forEach(element => {
+    element.hidden = !isApplePurchasePlatform();
+  });
   root.querySelectorAll('[data-iap-subscribe]').forEach(button => {
     if (!platform) return;
     const active = isForgeMembershipActive();
