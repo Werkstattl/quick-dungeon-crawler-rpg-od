@@ -36,6 +36,16 @@ test('stat lock costs require Gold and Refine Stones and rise with rarity, tier,
     assert.equal(normalReroll.stones, 0);
 });
 
+test('each additional stat lock costs more than the previous one', () => {
+    const context = createForgeContext();
+    const item = '{ value: 1000, rarity: "Legendary", tier: 10 }';
+    const [one, two, three] = [1, 2, 3].map((locks) => evaluate(context, `getStatLockRerollCosts(${item}, ${locks})`));
+
+    assert.ok(two.gold - one.gold > one.gold - evaluate(context, `getStatLockRerollCosts(${item}, 0)`).gold);
+    assert.ok(three.gold - two.gold > two.gold - one.gold);
+    assert.ok(three.stones - two.stones > two.stones - one.stones);
+});
+
 const createEquipmentContext = (randomValues = [0]) => {
     const deterministicMath = Object.create(Math);
     let randomIndex = 0;

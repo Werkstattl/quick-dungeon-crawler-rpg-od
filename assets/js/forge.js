@@ -423,6 +423,15 @@ const STAT_LOCK_RARITY_RANK = Object.freeze({
     Legendary: 5,
     Heirloom: 6,
 });
+// Every additional lock costs more than the previous one instead of a flat per-lock factor.
+const STAT_LOCK_ESCALATION = 2.25;
+const getStatLockWeight = (locks) => {
+    let weight = 0;
+    for (let index = 0; index < locks; index += 1) {
+        weight += Math.pow(STAT_LOCK_ESCALATION, index);
+    }
+    return weight;
+};
 const getStatLockRerollCosts = (equipment, lockedStatCount) => {
     const baseGold = getRerollCost(equipment);
     const locks = Math.max(0, Math.floor(Number(lockedStatCount) || 0));
@@ -433,8 +442,9 @@ const getStatLockRerollCosts = (equipment, lockedStatCount) => {
     const rarityRank = STAT_LOCK_RARITY_RANK[equipment && equipment.rarity] || 1;
     const tier = Math.max(1, Math.min(15, Math.floor(Number(equipment && equipment.tier) || 1)));
     const perLockGoldScale = 0.5 + ((rarityRank - 1) * 0.25) + ((tier - 1) * 0.1);
-    const gold = Math.round(baseGold * (1 + (locks * perLockGoldScale)));
-    const stones = Math.ceil(locks * rarityRank * (1 + ((tier - 1) * 0.2)));
+    const lockWeight = getStatLockWeight(locks);
+    const gold = Math.round(baseGold * (1 + (lockWeight * perLockGoldScale)));
+    const stones = Math.ceil(lockWeight * rarityRank * (1 + ((tier - 1) * 0.2)));
     return { gold, stones };
 };
 const getRefineCost = (equipment) => {
