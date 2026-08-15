@@ -2232,6 +2232,8 @@ header button i {
 
 .reroll-stat-lock-option input {
     accent-color: #FFD700;
+    position: relative;
+    top: -4px;
 }
 
 .reroll-stat-lock-value {
