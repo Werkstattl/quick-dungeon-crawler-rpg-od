@@ -619,7 +619,7 @@
   "forge-tokens": "Demirhane Jetonları",
   "forge-token-merchant-offer": "Gezgin bir demirci belirir: {cost} altına bir Demirhane Jetonu satın al?",
   "forge-token-merchant-purchase": "{cost} altına bir Demirhane Jetonu satın aldın.",
-  "forge-free-access-hint": "Gerçek parayla satın alma gerekmez: Her koşuda bir kez 13. Kattaki gezgin demirciden 10.000 altına bir Demirhane Jetonu satın al. Her jeton bir Demirhane işlemi sağlar; normal ücretler yine uygulanır.",
+  "forge-free-access-hint": "İpucu: 13. Kattaki gezgin demirci, altın karşılığında bir Demirhane Jetonu satar.",
   "stat-lock": "Özellikleri Kilitle",
   "stat-lock-help": "Kilitli özellikler türlerini ve değerlerini korur. En az bir özellik kilitsiz kalmalıdır."
 }

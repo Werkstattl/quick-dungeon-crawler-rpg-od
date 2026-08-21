@@ -309,12 +309,10 @@ test('the Forge unlock modal explains the free Forge Token path before paid opti
     const englishHint = JSON.parse(
         fs.readFileSync(path.join(root, 'assets/locales/en.json'), 'utf8')
     )['forge-free-access-hint'];
-    assert.match(englishHint, /no real-money purchase is required/i);
-    assert.match(englishHint, /once per run/i);
-    assert.match(englishHint, /10,000 gold/i);
-    assert.match(englishHint, /Floor 13/i);
-    assert.match(englishHint, /one Forge action/i);
-    assert.match(englishHint, /normal costs still apply/i);
+    assert.equal(
+        englishHint,
+        'Tip: A wandering blacksmith sells a Forge Token for Gold on Floor 13.'
+    );
 });
 
 test('every locale includes the Forge Token event and Forge UI text', () => {

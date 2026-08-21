@@ -619,7 +619,7 @@
   "forge-tokens": "Fichas de forja",
   "forge-token-merchant-offer": "Aparece un herrero ambulante: ¿comprar una ficha de forja por {cost} de oro?",
   "forge-token-merchant-purchase": "Has comprado una ficha de forja por {cost} de oro.",
-  "forge-free-access-hint": "No se requiere ninguna compra con dinero real: una vez por partida, compra una ficha de forja por 10.000 de oro al herrero ambulante del piso 13. Cada ficha permite una acción de forja; los costes normales siguen aplicándose.",
+  "forge-free-access-hint": "Consejo: En el piso 13, un herrero ambulante vende una ficha de forja por oro.",
   "stat-lock": "Bloquear atributos",
   "stat-lock-help": "Los atributos bloqueados conservan su tipo y valor. Al menos uno debe quedar desbloqueado."
 }

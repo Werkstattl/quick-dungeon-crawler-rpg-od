@@ -619,7 +619,7 @@
   "forge-tokens": "Token Tempa",
   "forge-token-merchant-offer": "Seorang pandai besi pengembara muncul: beli Token Tempa seharga {cost} emas?",
   "forge-token-merchant-purchase": "Kamu membeli Token Tempa seharga {cost} emas.",
-  "forge-free-access-hint": "Tidak perlu pembelian dengan uang sungguhan: sekali setiap perjalanan, beli satu Token Tempa seharga 10.000 emas dari pandai besi pengembara di Lantai 13. Setiap token memberikan satu aksi Tempa; biaya normal tetap berlaku.",
+  "forge-free-access-hint": "Tips: Di Lantai 13, pandai besi pengembara menjual Token Tempa dengan Emas.",
   "stat-lock": "Kunci Stat",
   "stat-lock-help": "Stat yang dikunci mempertahankan jenis dan nilainya. Setidaknya satu stat harus tetap terbuka."
 }
