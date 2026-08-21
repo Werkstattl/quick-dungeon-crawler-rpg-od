@@ -619,6 +619,7 @@
   "forge-tokens": "Gettoni della forgia",
   "forge-token-merchant-offer": "Appare un fabbro errante: comprare un gettone della forgia per {cost} oro?",
   "forge-token-merchant-purchase": "Hai comprato un gettone della forgia per {cost} oro.",
+  "forge-free-access-hint": "Non è richiesto alcun acquisto con denaro reale: una volta per partita, acquista un Gettone della Forgia per 10.000 oro dal fabbro itinerante al Piano 13. Ogni gettone consente un’azione della Forgia; si applicano comunque i costi normali.",
   "stat-lock": "Blocca statistiche",
   "stat-lock-help": "Le statistiche bloccate mantengono tipo e valore. Almeno una statistica deve restare sbloccata."
 }

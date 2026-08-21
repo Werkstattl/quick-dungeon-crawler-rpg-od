@@ -619,6 +619,7 @@
   "forge-tokens": "锻造代币",
   "forge-token-merchant-offer": "一位流浪铁匠出现了：花费{cost}金币购买一枚锻造代币？",
   "forge-token-merchant-purchase": "你花费{cost}金币购买了一枚锻造代币。",
+  "forge-free-access-hint": "无需使用现实货币购买：每次冒险可在第13层向流浪铁匠花费10,000金币购买一枚锻造代币。每枚代币可进行一次锻造操作；仍需支付正常费用。",
   "stat-lock": "锁定属性",
   "stat-lock-help": "锁定的属性会保留类型和数值。至少必须有一项属性保持未锁定。"
 }

@@ -619,6 +619,7 @@
   "forge-tokens": "Forge Tokens",
   "forge-token-merchant-offer": "A wandering blacksmith appears: Buy a Forge Token for {cost} gold?",
   "forge-token-merchant-purchase": "You bought a Forge Token for {cost} gold.",
+  "forge-free-access-hint": "No real-money purchase is required: Once per run, buy a Forge Token for 10,000 gold from the wandering blacksmith on Floor 13. Each token grants one Forge action; normal costs still apply.",
   "stat-lock": "Lock Stats",
   "stat-lock-help": "Locked stats keep their type and value. At least one stat must remain unlocked."
 }

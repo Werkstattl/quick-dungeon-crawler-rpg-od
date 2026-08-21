@@ -617,6 +617,7 @@
   "forge-tokens": "Jetoane de forjă",
   "forge-token-merchant-offer": "Apare un fierar rătăcitor: cumperi un jeton de forjă pentru {cost} aur?",
   "forge-token-merchant-purchase": "Ai cumpărat un jeton de forjă pentru {cost} aur.",
+  "forge-free-access-hint": "Nu este necesară nicio achiziție cu bani reali: o dată pe aventură, cumpără un Jeton de Forjă pentru 10.000 de aur de la fierarul rătăcitor de la Etajul 13. Fiecare jeton permite o acțiune la Forjă; costurile normale se aplică în continuare.",
   "stat-lock": "Blochează atributele",
   "stat-lock-help": "Atributele blocate își păstrează tipul și valoarea. Cel puțin un atribut trebuie să rămână deblocat."
 }

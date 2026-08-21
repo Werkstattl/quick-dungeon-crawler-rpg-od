@@ -619,6 +619,7 @@
   "forge-tokens": "Żetony kuźni",
   "forge-token-merchant-offer": "Pojawia się wędrowny kowal: kupić żeton kuźni za {cost} złota?",
   "forge-token-merchant-purchase": "Kupiono żeton kuźni za {cost} złota.",
+  "forge-free-access-hint": "Zakup za prawdziwe pieniądze nie jest wymagany: raz na wyprawę kup Żeton Kuźni za 10 000 złota od wędrownego kowala na 13. piętrze. Każdy żeton umożliwia jedną akcję w Kuźni; nadal obowiązują normalne koszty.",
   "stat-lock": "Zablokuj statystyki",
   "stat-lock-help": "Zablokowane statystyki zachowują typ i wartość. Co najmniej jedna statystyka musi pozostać odblokowana."
 }

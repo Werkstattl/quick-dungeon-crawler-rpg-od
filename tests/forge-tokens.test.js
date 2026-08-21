@@ -257,12 +257,35 @@ test('Forge Token count and save defaults are wired without a payment checkbox',
     assert.match(playerSource, /player\.inventory\.forgeTokens/);
 });
 
+test('the Forge unlock modal explains the free Forge Token path before paid options', () => {
+    const modalBody = forgeSource.slice(
+        forgeSource.indexOf('const openForgeUnlockModal ='),
+        forgeSource.indexOf('const setForgeUnlockButton =')
+    );
+    const hintPosition = modalBody.indexOf('data-i18n="forge-free-access-hint"');
+    const paidOptionsPosition = modalBody.indexOf('class="forge-unlock-options"');
+
+    assert.ok(hintPosition >= 0, 'the free access hint is missing');
+    assert.ok(hintPosition < paidOptionsPosition, 'the free access hint must appear before paid options');
+
+    const englishHint = JSON.parse(
+        fs.readFileSync(path.join(root, 'assets/locales/en.json'), 'utf8')
+    )['forge-free-access-hint'];
+    assert.match(englishHint, /no real-money purchase is required/i);
+    assert.match(englishHint, /once per run/i);
+    assert.match(englishHint, /10,000 gold/i);
+    assert.match(englishHint, /Floor 13/i);
+    assert.match(englishHint, /one Forge action/i);
+    assert.match(englishHint, /normal costs still apply/i);
+});
+
 test('every locale includes the Forge Token event and Forge UI text', () => {
     const requiredKeys = [
         'forge-token',
         'forge-tokens',
         'forge-token-merchant-offer',
         'forge-token-merchant-purchase',
+        'forge-free-access-hint',
     ];
     const localesDirectory = path.join(root, 'assets/locales');
     const localeFiles = fs.readdirSync(localesDirectory).filter((file) => file.endsWith('.json'));
