@@ -151,7 +151,7 @@ const openForgeUnlockModal = () => {
             </div>
             <p class="forge-free-access-hint">
                 <i class="fas fa-circle-info" aria-hidden="true"></i>
-                <span data-i18n="forge-free-access-hint">No real-money purchase is required: Once per run, buy a Forge Token for 10,000 gold from the wandering blacksmith on Floor 13. Each token grants one Forge action; normal costs still apply.</span>
+                <span data-i18n="forge-free-access-hint">Tip: A wandering blacksmith sells a Forge Token for Gold on Floor 13.</span>
             </p>
             <div class="forge-unlock-options">
                 <section class="forge-unlock-option">
