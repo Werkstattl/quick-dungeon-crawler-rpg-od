@@ -182,6 +182,44 @@ const createForgeContext = ({ unlocked = false, gold = 5000, tokens = 0 } = {}) 
     return context;
 };
 
+const createPersistentForgeContext = (storage) => {
+    const localStorage = {
+        getItem(key) {
+            return storage.has(key) ? storage.get(key) : null;
+        },
+        setItem(key, value) {
+            storage.set(key, String(value));
+        },
+        removeItem(key) {
+            storage.delete(key);
+        },
+    };
+    const context = vm.createContext({ console, localStorage });
+    vm.runInContext(forgeSource, context);
+    return context;
+};
+
+test('a permanent Forge purchase stays unlocked after an app relaunch', () => {
+    const storage = new Map();
+    const purchaseSession = createPersistentForgeContext(storage);
+
+    assert.equal(evaluate(purchaseSession, 'forgeUnlocked'), false);
+    evaluate(purchaseSession, "unlockForge('purchase')");
+    assert.equal(storage.get('forgePermanentUnlocked'), 'true');
+
+    const relaunchedSession = createPersistentForgeContext(storage);
+    assert.equal(evaluate(relaunchedSession, 'forgeEntitlements.purchase'), true);
+    assert.equal(evaluate(relaunchedSession, 'forgeUnlocked'), true);
+});
+
+test('temporary Forge entitlements are not cached as permanent purchases', () => {
+    const storage = new Map();
+    const context = createPersistentForgeContext(storage);
+
+    evaluate(context, "setForgeEntitlement('membership', true)");
+    assert.equal(storage.has('forgePermanentUnlocked'), false);
+});
+
 test('old saves normalize Forge Tokens to a non-negative integer', () => {
     const context = createForgeContext({ tokens: 0 });
     context.player.inventory.forgeTokens = '2.9';

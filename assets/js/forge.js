@@ -16,11 +16,39 @@ let rerollStoneCost = 0;
 let selectedRefineItem = null;
 let refineCost = 0;
 let refineStoneCost = 0;
-let forgeUnlocked = false;
+const FORGE_PERMANENT_UNLOCK_STORAGE_KEY = 'forgePermanentUnlocked';
+
+const hasCachedPermanentForgeUnlock = () => {
+    try {
+        return typeof localStorage !== 'undefined'
+            && localStorage.getItem(FORGE_PERMANENT_UNLOCK_STORAGE_KEY) === 'true';
+    } catch (error) {
+        console.warn('Unable to read the cached Forge entitlement:', error);
+        return false;
+    }
+};
+
+const persistPermanentForgeUnlock = (active) => {
+    try {
+        if (typeof localStorage === 'undefined') {
+            return;
+        }
+        if (active) {
+            localStorage.setItem(FORGE_PERMANENT_UNLOCK_STORAGE_KEY, 'true');
+        } else {
+            localStorage.removeItem(FORGE_PERMANENT_UNLOCK_STORAGE_KEY);
+        }
+    } catch (error) {
+        console.warn('Unable to save the Forge entitlement:', error);
+    }
+};
+
+const cachedPermanentForgeUnlock = hasCachedPermanentForgeUnlock();
+let forgeUnlocked = cachedPermanentForgeUnlock;
 const forgeEntitlements = {
     desktop: false,
     membership: false,
-    purchase: false,
+    purchase: cachedPermanentForgeUnlock,
 };
 
 const FORGE_PRODUCT_ID = 'forge_unlock_premium';
@@ -248,6 +276,9 @@ const populateForgeCategoryOptions = () => {
 function setForgeEntitlement(source, active) {
     if (Object.prototype.hasOwnProperty.call(forgeEntitlements, source)) {
         forgeEntitlements[source] = Boolean(active);
+        if (source === 'purchase') {
+            persistPermanentForgeUnlock(active);
+        }
     }
     forgeUnlocked = Object.values(forgeEntitlements).some(Boolean);
     if (forgeModalElement && forgeModalElement.style.display === 'flex') {
