@@ -268,6 +268,94 @@ test('Equip Best chooses one best item per slot and preserves locked equipped it
     assert.equal(context.player.equipped.length + inventory.length, 5);
 });
 
+test('custom Equip Best uses normalized weighted stats instead of only the first priority', () => {
+    const context = createContext();
+    const highHp = item({ category: 'Sword', type: 'Weapon', attribute: 'Damage', value: 100, slot: 'weapon' });
+    highHp.stats = [{ hp: 100 }, { vamp: 0 }];
+    const balanced = item({ category: 'Axe', type: 'Weapon', attribute: 'Damage', value: 90, slot: 'weapon' });
+    balanced.stats = [{ hp: 60 }, { vamp: 10 }];
+    const baseline = item({ category: 'Dagger', type: 'Weapon', attribute: 'Damage', value: 80, slot: 'weapon' });
+    baseline.stats = [{ hp: 0 }, { vamp: 0 }];
+
+    context.player = {
+        equipped: [],
+        inventory: {
+            consumables: [],
+            equipment: [highHp, balanced, baseline].map((entry) => JSON.stringify(entry)),
+            refineStones: 0,
+        },
+        companionCharm: null,
+        preferences: {
+            equipBestUseCustom: true,
+            equipBestPriorities: ['hp', 'vamp'],
+            equipBestMinRarity: 'Common',
+            equipBestMinTier: 1,
+        },
+    };
+
+    evaluate(context, 'equipBest()');
+    assert.equal(context.player.equipped[0].category, 'Axe');
+});
+
+test('Equip Best applies rarity and tier thresholds before scoring candidates', () => {
+    const context = createContext();
+    const equipped = item({ category: 'Sword', type: 'Weapon', attribute: 'Damage', value: 10, slot: 'weapon' });
+    const belowRarity = item({ category: 'Axe', type: 'Weapon', attribute: 'Damage', value: 1000, slot: 'weapon' });
+    belowRarity.rarity = 'Rare';
+    belowRarity.tier = 10;
+    const belowTier = item({ category: 'Dagger', type: 'Weapon', attribute: 'Damage', value: 900, slot: 'weapon' });
+    belowTier.rarity = 'Heirloom';
+    belowTier.tier = 4;
+    const eligible = item({ category: 'Mace', type: 'Weapon', attribute: 'Damage', value: 20, slot: 'weapon' });
+    eligible.rarity = 'Epic';
+    eligible.tier = 5;
+
+    context.player = {
+        equipped: [equipped],
+        inventory: {
+            consumables: [],
+            equipment: [belowRarity, belowTier, eligible].map((entry) => JSON.stringify(entry)),
+            refineStones: 0,
+        },
+        companionCharm: null,
+        preferences: {
+            equipBestUseCustom: false,
+            equipBestPriorities: [],
+            equipBestMinRarity: 'Epic',
+            equipBestMinTier: 5,
+        },
+    };
+
+    evaluate(context, 'equipBest()');
+    assert.equal(context.player.equipped[0].category, 'Mace');
+});
+
+test('Equip Best keeps currently equipped gear when every candidate is below the thresholds', () => {
+    const context = createContext();
+    const equipped = item({ category: 'Sword', type: 'Weapon', attribute: 'Damage', value: 10, slot: 'weapon' });
+    const inventoryItem = item({ category: 'Axe', type: 'Weapon', attribute: 'Damage', value: 1000, slot: 'weapon' });
+
+    context.player = {
+        equipped: [equipped],
+        inventory: {
+            consumables: [],
+            equipment: [JSON.stringify(inventoryItem)],
+            refineStones: 0,
+        },
+        companionCharm: null,
+        preferences: {
+            equipBestUseCustom: true,
+            equipBestPriorities: ['hp', 'vamp'],
+            equipBestMinRarity: 'Legendary',
+            equipBestMinTier: 10,
+        },
+    };
+
+    evaluate(context, 'equipBest()');
+    assert.equal(context.player.equipped[0].category, 'Sword');
+    assert.equal(context.player.inventory.equipment.length, 1);
+});
+
 test('drop and equip paths use slot availability instead of a generic six-item cap', () => {
     assert.match(equipmentSource, /hasEmptyEquipmentSlotFor\(equipment\)/);
     assert.match(equipmentSource, /hasEmptyEquipmentSlotFor\(item\)/);

@@ -1357,6 +1357,9 @@ const unequipAll = () => {
 };
 
 const EQUIP_BEST_STATS = ['atk', 'critRate', 'critDmg', 'atkSpd', 'hp', 'def', 'vamp', 'dodge', 'luck', 'fasterRun'];
+const EQUIP_BEST_DEFAULT_MIN_RARITY = 'Common';
+const EQUIP_BEST_DEFAULT_MIN_TIER = 1;
+const EQUIP_BEST_MAX_TIER = 15;
 const EQUIP_BEST_LABEL_KEYS = {
     atk: 'stat-display.attack',
     critRate: 'stat-display.crit-rate',
@@ -1611,6 +1614,8 @@ const ensureEquipBestPriorities = () => {
         player.preferences = {
             equipBestUseCustom: false,
             equipBestPriorities: [...EQUIP_BEST_STATS],
+            equipBestMinRarity: EQUIP_BEST_DEFAULT_MIN_RARITY,
+            equipBestMinTier: EQUIP_BEST_DEFAULT_MIN_TIER,
         };
     }
     if (typeof player.preferences.equipBestUseCustom !== 'boolean') {
@@ -1619,6 +1624,13 @@ const ensureEquipBestPriorities = () => {
     if (!Array.isArray(player.preferences.equipBestPriorities)) {
         player.preferences.equipBestPriorities = [];
     }
+    if (!EQUIPMENT_RARITY_ORDER.includes(player.preferences.equipBestMinRarity)) {
+        player.preferences.equipBestMinRarity = EQUIP_BEST_DEFAULT_MIN_RARITY;
+    }
+    const minimumTier = Math.floor(Number(player.preferences.equipBestMinTier));
+    player.preferences.equipBestMinTier = Number.isFinite(minimumTier)
+        ? Math.max(EQUIP_BEST_DEFAULT_MIN_TIER, Math.min(EQUIP_BEST_MAX_TIER, minimumTier))
+        : EQUIP_BEST_DEFAULT_MIN_TIER;
 
     const unique = [];
     const seen = new Set();
@@ -1647,27 +1659,60 @@ const getEquipPriorityLabel = (stat) => {
     return fallback;
 };
 
-const getItemStatValue = (item, stat) => {
-    if (!item || !stat) {
-        return 0;
-    }
-    return getEquipmentStatTotals(item)[stat] || 0;
+const getEquipBestThresholds = () => {
+    ensureEquipBestPriorities();
+    return {
+        minimumRarity: player.preferences.equipBestMinRarity,
+        minimumTier: player.preferences.equipBestMinTier,
+    };
 };
 
-const compareItemsByPriority = (itemA, itemB, priorities) => {
-    for (const stat of priorities) {
-        const valueA = getItemStatValue(itemA, stat);
-        const valueB = getItemStatValue(itemB, stat);
-        if (valueA !== valueB) {
-            return valueB - valueA;
-        }
+const isEquipBestCandidateEligible = (item) => {
+    if (!item) {
+        return false;
     }
-    const aValue = getEquipmentEffectiveValue(itemA);
-    const bValue = getEquipmentEffectiveValue(itemB);
-    if (aValue !== bValue) {
-        return bValue - aValue;
-    }
-    return 0;
+    const thresholds = getEquipBestThresholds();
+    const rarityRank = EQUIPMENT_RARITY_ORDER.indexOf(item.rarity);
+    const minimumRarityRank = EQUIPMENT_RARITY_ORDER.indexOf(thresholds.minimumRarity);
+    const tier = Math.max(EQUIP_BEST_DEFAULT_MIN_TIER, Math.floor(Number(item.tier) || EQUIP_BEST_DEFAULT_MIN_TIER));
+    return rarityRank >= minimumRarityRank && tier >= thresholds.minimumTier;
+};
+
+const getEquipBestWeightedScores = (items, priorities) => {
+    const scores = new Map();
+    const totalsByItem = new Map();
+    const ranges = {};
+
+    items.forEach((item) => {
+        const totals = getEquipmentStatTotals(item);
+        totalsByItem.set(item, totals);
+        priorities.forEach((stat) => {
+            const value = Number(totals[stat]) || 0;
+            if (!ranges[stat]) {
+                ranges[stat] = { min: value, max: value };
+            } else {
+                ranges[stat].min = Math.min(ranges[stat].min, value);
+                ranges[stat].max = Math.max(ranges[stat].max, value);
+            }
+        });
+    });
+
+    items.forEach((item) => {
+        const totals = totalsByItem.get(item);
+        const score = priorities.reduce((sum, stat, index) => {
+            const range = ranges[stat];
+            const spread = range.max - range.min;
+            if (spread <= 0) {
+                return sum;
+            }
+            const normalizedValue = ((Number(totals[stat]) || 0) - range.min) / spread;
+            const rankWeight = priorities.length - index;
+            return sum + (normalizedValue * rankWeight);
+        }, 0);
+        scores.set(item, score);
+    });
+
+    return scores;
 };
 
 const sortEquipBestCandidates = (items) => {
@@ -1676,7 +1721,14 @@ const sortEquipBestCandidates = (items) => {
     }
     if (player.preferences && player.preferences.equipBestUseCustom) {
         const priorities = [...ensureEquipBestPriorities()];
-        items.sort((a, b) => compareItemsByPriority(a, b, priorities));
+        const scores = getEquipBestWeightedScores(items, priorities);
+        items.sort((a, b) => {
+            const scoreDifference = scores.get(b) - scores.get(a);
+            if (Math.abs(scoreDifference) > Number.EPSILON) {
+                return scoreDifference;
+            }
+            return getEquipmentEffectiveValue(b) - getEquipmentEffectiveValue(a);
+        });
         return items;
     }
     items.sort((a, b) => getEquipmentEffectiveValue(b) - getEquipmentEffectiveValue(a));
@@ -1701,11 +1753,16 @@ function openEquipBestSettings() {
 
     const priorities = [...ensureEquipBestPriorities()];
     let useCustom = Boolean(player.preferences && player.preferences.equipBestUseCustom);
+    const minimumRarity = player.preferences.equipBestMinRarity;
+    const minimumTier = player.preferences.equipBestMinTier;
 
     const title = translateEquipText('auto-equip-priorities', 'Auto Equip Priorities');
-    const help = translateEquipText('auto-equip-priorities-help', 'Reorder the stats to set their importance when using Auto Equip.');
+    const help = translateEquipText('auto-equip-priorities-help', 'Eligible items are normalized per stat, then scored with weights based on this order.');
     const toggleLabel = translateEquipText('use-custom-priorities', 'Use custom priorities');
-    const toggleHint = translateEquipText('use-custom-priorities-detail', 'When disabled, Auto Equip will choose gear by overall item value.');
+    const toggleHint = translateEquipText('use-custom-priorities-detail', 'When disabled, eligible gear is ranked by overall item value.');
+    const thresholdHelp = translateEquipText('auto-equip-threshold-help', 'Items below either minimum are excluded. Equipped gear is kept when no eligible replacement exists.');
+    const rarityLabel = translateEquipText('auto-equip-min-rarity', 'Minimum rarity');
+    const tierLabel = translateEquipText('auto-equip-min-tier', 'Minimum tier');
     const saveLabel = translateEquipText('apply', 'Apply');
     const closeLabel = translateEquipText('close', 'Close');
     const moveUpLabel = translateEquipText('move-up', 'Move up');
@@ -1716,6 +1773,19 @@ function openEquipBestSettings() {
         <div class="content equip-priority-modal">
             <h3>${title}</h3>
             <p class="equip-priority-description">${help}</p>
+            <div class="equip-priority-thresholds">
+                <label>${rarityLabel}
+                    <select id="equip-priority-min-rarity">
+                        ${EQUIPMENT_RARITY_ORDER.map(rarity => `<option value="${rarity}"${rarity === minimumRarity ? ' selected' : ''}>${translateEquipText(rarity.toLowerCase(), rarity)}+</option>`).join('')}
+                    </select>
+                </label>
+                <label>${tierLabel}
+                    <select id="equip-priority-min-tier">
+                        ${Array.from({ length: EQUIP_BEST_MAX_TIER }, (_, index) => index + 1).map(tier => `<option value="${tier}"${tier === minimumTier ? ' selected' : ''}>Tier ${tier}+</option>`).join('')}
+                    </select>
+                </label>
+            </div>
+            <p class="equip-priority-hint">${thresholdHelp}</p>
             <label class="equip-priority-toggle">
                 <input type="checkbox" id="equip-priority-toggle"${useCustom ? ' checked' : ''}>
                 <span>${toggleLabel}</span>
@@ -1730,6 +1800,8 @@ function openEquipBestSettings() {
 
     const listEl = modal.querySelector('#equip-priority-list');
     const toggleEl = modal.querySelector('#equip-priority-toggle');
+    const minimumRarityEl = modal.querySelector('#equip-priority-min-rarity');
+    const minimumTierEl = modal.querySelector('#equip-priority-min-tier');
     const saveBtn = modal.querySelector('#equip-priority-save');
     const cancelBtn = modal.querySelector('#equip-priority-cancel');
 
@@ -1852,6 +1924,9 @@ function openEquipBestSettings() {
             }
             player.preferences.equipBestUseCustom = useCustom;
             player.preferences.equipBestPriorities = [...priorities];
+            player.preferences.equipBestMinRarity = minimumRarityEl ? minimumRarityEl.value : minimumRarity;
+            player.preferences.equipBestMinTier = minimumTierEl ? Number(minimumTierEl.value) : minimumTier;
+            ensureEquipBestPriorities();
             saveData();
             if (typeof sfxConfirm !== 'undefined') {
                 sfxConfirm.play();
@@ -1907,11 +1982,29 @@ const equipBest = () => {
             });
             return;
         }
-        sortEquipBestCandidates(slotCandidates);
-        const bestItem = slotCandidates[0];
+        const eligibleCandidates = slotCandidates.filter(isEquipBestCandidateEligible);
+        const currentlyEquipped = equippedItems.find((item) => getEquipmentSlot(item) === slotKey);
+        if (eligibleCandidates.length === 0) {
+            if (currentlyEquipped) {
+                currentlyEquipped.slot = slotKey;
+                selected.push(currentlyEquipped);
+            }
+            slotCandidates.forEach((item) => {
+                if (item !== currentlyEquipped) {
+                    remaining.push(item);
+                }
+            });
+            return;
+        }
+        sortEquipBestCandidates(eligibleCandidates);
+        const bestItem = eligibleCandidates[0];
         bestItem.slot = slotKey;
         selected.push(bestItem);
-        remaining.push(...slotCandidates.slice(1));
+        slotCandidates.forEach((item) => {
+            if (item !== bestItem) {
+                remaining.push(item);
+            }
+        });
     });
 
     allEquipment.forEach((item) => {
@@ -1928,9 +2021,10 @@ const equipBest = () => {
         const companionCharmCandidates = equippedCompanionCharm
             ? [equippedCompanionCharm].concat(inventoryCompanionCharms)
             : [...inventoryCompanionCharms];
-        sortEquipBestCandidates(companionCharmCandidates);
-        selectedCompanionCharm = companionCharmCandidates[0] || null;
-        remainingCompanionCharms = companionCharmCandidates.slice(1);
+        const eligibleCompanionCharms = companionCharmCandidates.filter(isEquipBestCandidateEligible);
+        sortEquipBestCandidates(eligibleCompanionCharms);
+        selectedCompanionCharm = eligibleCompanionCharms[0] || equippedCompanionCharm || null;
+        remainingCompanionCharms = companionCharmCandidates.filter(item => item !== selectedCompanionCharm);
     }
     player.equipped = selected;
     player.companionCharm = selectedCompanionCharm;

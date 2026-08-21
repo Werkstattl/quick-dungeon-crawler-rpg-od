@@ -203,7 +203,9 @@ window.addEventListener("DOMContentLoaded", async function () {
                     inCombat: false,
                     preferences: {
                         equipBestUseCustom: false,
-                        equipBestPriorities: []
+                        equipBestPriorities: [],
+                        equipBestMinRarity: 'Common',
+                        equipBestMinTier: 1
                     },
                     allocationChoices: {
                         hp: 10,

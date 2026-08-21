@@ -34,6 +34,12 @@ if (player) {
     if (!Array.isArray(player.preferences.equipBestPriorities)) {
         player.preferences.equipBestPriorities = [];
     }
+    if (typeof player.preferences.equipBestMinRarity !== 'string') {
+        player.preferences.equipBestMinRarity = 'Common';
+    }
+    if (!Number.isFinite(Number(player.preferences.equipBestMinTier))) {
+        player.preferences.equipBestMinTier = 1;
+    }
     const ensureStat = (collection, key) => {
         if (collection && collection[key] === undefined) {
             collection[key] = 0;
