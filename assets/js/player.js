@@ -84,6 +84,7 @@ const PASSIVE_LIMIT_BREAKER = "Limit Breaker";
 const PASSIVE_EAGLE_EYE = "Eagle Eye";
 const PASSIVE_COMPANION_INSIGHT = "Companion's Insight";
 const PASSIVE_OPEN_WOUNDS = "Open Wounds";
+const PLAYER_VAMP_CAP = 80;
 
 const getPlayerAtkSpdCap = () => {
     if (player && Array.isArray(player.skills) && player.skills.includes(PASSIVE_LIMIT_BREAKER)) {
@@ -281,7 +282,15 @@ const playerLoadStats = () => {
     } else {
         playerAtkSpdElement.style.color = 'white';
     }
-    playerVampElement.innerHTML = (player.stats.vamp).toFixed(2).replace(rx, "$1") + "%";
+    const vampRaw = Number.isFinite(player.stats.vampUncapped) ? player.stats.vampUncapped : player.stats.vamp;
+    const vampDisplay = (player.stats.vamp).toFixed(2).replace(rx, "$1") + "%";
+    const vampRawDisplay = `${Math.round(vampRaw)}%`;
+    playerVampElement.innerHTML = vampRaw > PLAYER_VAMP_CAP ? `${vampDisplay} (${vampRawDisplay})` : vampDisplay;
+    if (player.stats.vamp >= PLAYER_VAMP_CAP) {
+        playerVampElement.style.color = '#e30b5c';
+    } else {
+        playerVampElement.style.color = 'white';
+    }
     const critRateRaw = Number.isFinite(player.stats.critRateUncapped) ? player.stats.critRateUncapped : player.stats.critRate;
     const critRateDisplay = (player.stats.critRate).toFixed(2).replace(rx, "$1") + "%";
     const critRateRawDisplay = `${Math.round(critRateRaw)}%`;
@@ -611,7 +620,7 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.atkSpd;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "vamp") {
-                    let statFinal = percentages["vamp"] + player.stats.vamp;
+                    let statFinal = Math.min(PLAYER_VAMP_CAP, percentages["vamp"] + player.stats.vamp);
                     let statInitial = player.stats.vamp;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "critRate") {

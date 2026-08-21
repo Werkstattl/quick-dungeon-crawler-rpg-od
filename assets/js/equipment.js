@@ -13,9 +13,20 @@ const BASE_EQUIPMENT_ROLL_FLOOR = 0.5;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER = 10;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_STEP = 0.05;
 const MAX_EQUIPMENT_ROLL_FLOOR = 0.75;
+const ENDGAME_EQUIPMENT_ROLL_CAP_STEP = 0.06;
+const MAX_ENDGAME_EQUIPMENT_ROLL_CAP_STEPS = 5;
+const BASE_EQUIPMENT_STAT_ROLL_CAPS = Object.freeze({
+    atkSpd: 16,
+    vamp: 8,
+    critRate: 10,
+    critDmg: 20,
+    dodge: 4,
+    fasterRun: 18,
+    luck: 8,
+});
 
-// Tier 10 keeps the legacy roll range. Each endgame tier after it trims another
-// five percentage points from the weak end without increasing perfect rolls.
+// Tier 10 keeps the legacy floor. Each endgame tier after it trims another five
+// percentage points from the weak end; percentage-stat ceilings scale separately.
 const getEquipmentRollFloor = (tier) => {
     const normalizedTier = Number.isFinite(Number(tier)) ? Math.round(Number(tier)) : 1;
     const endgameTierSteps = Math.max(0, normalizedTier - ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER);
@@ -23,6 +34,19 @@ const getEquipmentRollFloor = (tier) => {
         MAX_EQUIPMENT_ROLL_FLOOR,
         BASE_EQUIPMENT_ROLL_FLOOR + (endgameTierSteps * ENDGAME_EQUIPMENT_ROLL_FLOOR_STEP),
     );
+};
+
+const getEquipmentStatRollCap = (statType, tier) => {
+    const baseCap = BASE_EQUIPMENT_STAT_ROLL_CAPS[statType];
+    if (!baseCap) {
+        return null;
+    }
+    const normalizedTier = Number.isFinite(Number(tier)) ? Math.round(Number(tier)) : 1;
+    const endgameTierSteps = Math.min(
+        MAX_ENDGAME_EQUIPMENT_ROLL_CAP_STEPS,
+        Math.max(0, normalizedTier - ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER),
+    );
+    return Math.round(baseCap * (1 + (endgameTierSteps * ENDGAME_EQUIPMENT_ROLL_CAP_STEP)) * 100) / 100;
 };
 
 const EQUIPMENT_SLOT_VERSION = 1;
@@ -626,6 +650,7 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
         let statType = i === 0 && statTypes.includes(forcedStat)
             ? forcedStat
             : statTypes[Math.floor(Math.random() * statTypes.length)];
+        const statRollCap = getEquipmentStatRollCap(statType, equipment.tier);
         let statMultiplier = (enemyScaling - 1) * equipment.lvl;
         let hpScaling = (40 * randomizeDecimal(rollFloor, 1.5)) + ((40 * randomizeDecimal(rollFloor, 1.5)) * statMultiplier);
         let atkDefScaling = (16 * randomizeDecimal(rollFloor, 1.5)) + ((16 * randomizeDecimal(rollFloor, 1.5)) * statMultiplier);
@@ -642,51 +667,51 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
             equipmentValue += statValue * 2.5;
         } else if (statType === "atkSpd") {
             statValue = randomizeDecimal(cdAtkSpdScaling * rollFloor, cdAtkSpdScaling);
-            if (statValue > 16) {
-                statValue = 16 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 8.33;
         } else if (statType === "vamp") {
             statValue = randomizeDecimal(crVampScaling * rollFloor, crVampScaling);
-            if (statValue > 8) {
-                statValue = 8 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
         } else if (statType === "critRate") {
             statValue = randomizeDecimal(crVampScaling * rollFloor, crVampScaling);
-            if (statValue > 10) {
-                statValue = 10 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;
         } else if (statType === "critDmg") {
             statValue = randomizeDecimal(cdAtkSpdScaling * (0.2 * rollFloor), cdAtkSpdScaling * 0.2);
-            if (statValue > 20) {
-                statValue = 20 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 10.83;
         } else if (statType === "dodge") {
             statValue = randomizeDecimal(crVampScaling * (0.4 * rollFloor), crVampScaling * 0.4);
-            if (statValue > 4) {
-                statValue = 4 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 33.33;
         } else if (statType === "fasterRun") {
             const fasterRunScaling = (1 * randomizeDecimal(rollFloor, 1.5)) + ((2.5 * randomizeDecimal(rollFloor, 1.5)) * statMultiplier);
             statValue = randomizeDecimal(fasterRunScaling * rollFloor, fasterRunScaling);
-            if (statValue > 18) {
-                statValue = 18 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 15;
         } else if (statType === "luck") {
             statValue = randomizeDecimal(crVampScaling * (0.4 * rollFloor), crVampScaling * 0.4);
-            if (statValue > 8) {
-                statValue = 8 * randomizeDecimal(rollFloor, 1);
+            if (statValue > statRollCap) {
+                statValue = statRollCap * randomizeDecimal(rollFloor, 1);
                 loopCount++;
             }
             equipmentValue += statValue * 20.83;

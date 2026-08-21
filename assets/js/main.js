@@ -1348,7 +1348,9 @@ const calculateStats = () => {
     const atkSpdValue = (playerAtkSpdBase + playerAtkSpdBase * (atkSpdBonusPct / 100) + playerAtkSpdBase * (dungeon.floorBuffs.atkSpd / 100)) + equipmentAtkSpd + (equipmentAtkSpd * (player.equippedStats.atkSpd / 100));
     player.stats.atkSpdUncapped = atkSpdValue;
     player.stats.atkSpd = atkSpdValue;
-    player.stats.vamp = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionBonuses.vamp || 0);
+    const vampValue = playerVampBase + player.bonusStats.vamp + player.equippedStats.vamp + (companionBonuses.vamp || 0);
+    player.stats.vampUncapped = vampValue;
+    player.stats.vamp = Math.min(PLAYER_VAMP_CAP, vampValue);
     const equipmentCritRate = player.equippedStats.critRate;
     const hasEagleEye = (typeof PASSIVE_EAGLE_EYE !== 'undefined') && ((Array.isArray(player.skills) && player.skills.includes(PASSIVE_EAGLE_EYE)) || player.selectedPassive === PASSIVE_EAGLE_EYE);
     const eagleEyeBonus = hasEagleEye ? equipmentCritRate * 0.25 : 0;

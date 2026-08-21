@@ -43,6 +43,28 @@ test('equipment roll floors start rising after Tier 10', () => {
     assert.deepEqual(Array.from(floors), [0.5, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75]);
 });
 
+test('percentage-stat roll caps rise six percent per tier after Tier 10', () => {
+    const context = createContext();
+    const caps = evaluate(context, `
+        [10, 11, 12, 15].map((tier) => ({
+            atkSpd: getEquipmentStatRollCap('atkSpd', tier),
+            vamp: getEquipmentStatRollCap('vamp', tier),
+            critRate: getEquipmentStatRollCap('critRate', tier),
+            critDmg: getEquipmentStatRollCap('critDmg', tier),
+            dodge: getEquipmentStatRollCap('dodge', tier),
+            fasterRun: getEquipmentStatRollCap('fasterRun', tier),
+            luck: getEquipmentStatRollCap('luck', tier),
+        }))
+    `);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(caps)), [
+        { atkSpd: 16, vamp: 8, critRate: 10, critDmg: 20, dodge: 4, fasterRun: 18, luck: 8 },
+        { atkSpd: 16.96, vamp: 8.48, critRate: 10.6, critDmg: 21.2, dodge: 4.24, fasterRun: 19.08, luck: 8.48 },
+        { atkSpd: 17.92, vamp: 8.96, critRate: 11.2, critDmg: 22.4, dodge: 4.48, fasterRun: 20.16, luck: 8.96 },
+        { atkSpd: 20.8, vamp: 10.4, critRate: 13, critDmg: 26, dodge: 5.2, fasterRun: 23.4, luck: 10.4 },
+    ]);
+});
+
 test('endgame tiers substantially raise minimum primary-stat rolls', () => {
     const context = createContext();
     const tier10 = rollAttack(context, 10);
@@ -78,8 +100,8 @@ test('endgame roll floors also improve capped percentage-stat minimums', () => {
     `);
 
     assert.equal(rollCappedAttackSpeed(10), 8);
-    assert.equal(rollCappedAttackSpeed(11), 8.8);
-    assert.equal(rollCappedAttackSpeed(12), 9.6);
+    assert.ok(Math.abs(rollCappedAttackSpeed(11) - 9.328) < 1e-9);
+    assert.ok(Math.abs(rollCappedAttackSpeed(12) - 10.752) < 1e-9);
 });
 
 test('Companion Charm minimum rolls use the same endgame floor progression', () => {
