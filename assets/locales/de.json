@@ -637,6 +637,7 @@
   "forge-tokens": "Schmiede-Tokens",
   "forge-token-merchant-offer": "Ein wandernder Schmied erscheint: Einen Schmiede-Token für {cost} Gold kaufen?",
   "forge-token-merchant-purchase": "Du hast einen Schmiede-Token für {cost} Gold gekauft.",
+  "forge-free-access-hint": "Kein Echtgeldkauf erforderlich: Kaufe einmal pro Run auf Ebene 13 beim wandernden Schmied einen Schmiede-Token für 10.000 Gold. Jeder Token ermöglicht eine Schmiede-Aktion; die normalen Kosten fallen weiterhin an.",
   "stat-lock": "Werte sperren",
   "stat-lock-help": "Gesperrte Werte behalten Typ und Wert. Mindestens ein Wert muss entsperrt bleiben."
 }

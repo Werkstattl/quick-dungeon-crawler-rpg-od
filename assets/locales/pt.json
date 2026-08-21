@@ -637,6 +637,7 @@
   "forge-tokens": "Fichas da forja",
   "forge-token-merchant-offer": "Um ferreiro viajante aparece: comprar uma ficha da forja por {cost} de ouro?",
   "forge-token-merchant-purchase": "Você comprou uma ficha da forja por {cost} de ouro.",
+  "forge-free-access-hint": "Não é necessária nenhuma compra com dinheiro real: uma vez por partida, compre uma Ficha da Forja por 10.000 de ouro com o ferreiro viajante no Piso 13. Cada ficha permite uma ação da Forja; os custos normais continuam a ser aplicados.",
   "stat-lock": "Bloquear atributos",
   "stat-lock-help": "Atributos bloqueados mantêm o tipo e o valor. Pelo menos um atributo deve permanecer desbloqueado."
 }

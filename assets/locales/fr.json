@@ -616,6 +616,7 @@
   "forge-tokens": "Jetons de forge",
   "forge-token-merchant-offer": "Un forgeron itinérant apparaît : acheter un jeton de forge pour {cost} pièces d’or ?",
   "forge-token-merchant-purchase": "Vous avez acheté un jeton de forge pour {cost} pièces d’or.",
+  "forge-free-access-hint": "Aucun achat en argent réel n'est requis : une fois par partie, achetez un jeton de forge pour 10 000 pièces d'or auprès du forgeron itinérant à l'étage 13. Chaque jeton permet une action de forge ; les coûts habituels s'appliquent toujours.",
   "stat-lock": "Verrouiller les stats",
   "stat-lock-help": "Les stats verrouillées conservent leur type et leur valeur. Au moins une stat doit rester déverrouillée."
 }
