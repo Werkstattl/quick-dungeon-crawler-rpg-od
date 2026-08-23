@@ -2097,6 +2097,10 @@ header button i {
     font-weight: bold;
 }
 
+.forge-mode-toggle button i {
+    margin-right: 0.25rem;
+}
+
 .forge-mode-toggle button.active {
     border-color: #FFD700;
     background: rgba(255, 215, 0, 0.14);
