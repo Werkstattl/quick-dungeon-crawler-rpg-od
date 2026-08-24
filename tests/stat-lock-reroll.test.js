@@ -85,8 +85,31 @@ test('selective reroll preserves locked stat types and values while rerolling th
     assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.atk !== undefined))), { atk: 123 });
     assert.equal(result.stats.some((stat) => stat.critRate === 7.5), false);
     assert.equal(result.stats.some((stat) => stat.vamp === 3.25), false);
-    assert.equal(result.stats.find((stat) => stat.atkSpd !== undefined).atkSpd, 31.5);
+    assert.equal(result.stats.find((stat) => stat.atkSpd !== undefined).atkSpd, 15.75);
+    assert.equal(result.stats.length, 3);
     assert.ok(result.value > 0);
+});
+
+test('repeated selective rerolls preserve a four-stat item stat count', () => {
+    const context = createEquipmentContext([0]);
+    const result = evaluate(context, `
+        (() => {
+            const equipment = {
+                category: 'Sword', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+                tier: 5, lvl: 40, value: 5000,
+                stats: [{ atk: 123 }, { critRate: 7.5 }, { critDmg: 12 }, { vamp: 3.25 }],
+            };
+            const counts = [];
+            for (let reroll = 0; reroll < 10; reroll += 1) {
+                rerollEquipmentStats(equipment, null, { lockedStatKeys: ['atk'] });
+                counts.push(equipment.stats.length);
+            }
+            return { equipment, counts };
+        })()
+    `);
+
+    assert.deepEqual(Array.from(result.counts), Array(10).fill(4));
+    assert.deepEqual(JSON.parse(JSON.stringify(result.equipment.stats.find((stat) => stat.atk !== undefined))), { atk: 123 });
 });
 
 test('selective reroll preserves every accepted lock on an extra-roll item', () => {
@@ -143,7 +166,8 @@ test('selective reroll also preserves locked Companion Charm stats', () => {
 
     assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.fasterRun !== undefined))), { fasterRun: 3 });
     assert.equal(result.stats.some((stat) => stat.luck === 2), false);
-    assert.equal(result.stats.find((stat) => stat.atk !== undefined).atk, 36);
+    assert.equal(result.stats.find((stat) => stat.atk !== undefined).atk, 18);
+    assert.equal(result.stats.length, 3);
 });
 
 test('stat lock selection rejects unknown stats and always leaves one stat rerollable', () => {

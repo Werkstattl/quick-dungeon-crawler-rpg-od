@@ -344,6 +344,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling, lockedStatKeys = [])
         .filter((statType) => statType && fullStatPool.includes(statType))).size;
     const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
         .slice(0, Math.max(0, sourceStatCount - 1));
+    const hasLockedStats = lockedStats.length > 0;
     const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
     const statPool = fullStatPool.filter((statType) => !lockedKeys.has(statType));
     equipment.stats = lockedStats;
@@ -351,12 +352,20 @@ const rerollCompanionCharmStats = (equipment, enemyScaling, lockedStatKeys = [])
         const statType = Object.keys(entry)[0];
         return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType, true));
     }, 0);
-    const loopCount = lockedStats.length > 0
+    const loopCount = hasLockedStats
         ? Math.max(1, sourceStatCount - lockedStats.length)
         : baseLoopCount;
+    const rerolledStatKeys = new Set();
 
     for (let i = 0; i < loopCount; i++) {
-        const statType = statPool[Math.floor(Math.random() * statPool.length)];
+        const availableStatPool = hasLockedStats
+            ? statPool.filter((statType) => !rerolledStatKeys.has(statType))
+            : statPool;
+        if (!availableStatPool.length) {
+            break;
+        }
+        const statType = availableStatPool[Math.floor(Math.random() * availableStatPool.length)];
+        rerolledStatKeys.add(statType);
         const statValue = rollCompanionCharmStatValue(statType, equipment, enemyScaling);
         const existingEntry = equipment.stats.find((entry) => Object.keys(entry)[0] === statType);
         if (existingEntry) {
@@ -634,6 +643,7 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
         .filter((statType) => statType && fullStatPool.includes(statType))).size;
     const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
         .slice(0, Math.max(0, sourceStatCount - 1));
+    const hasLockedStats = lockedStats.length > 0;
     const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
     const statTypes = fullStatPool.filter((statType) => !lockedKeys.has(statType));
     equipment.stats = lockedStats;
@@ -642,14 +652,22 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
         return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType));
     }, 0);
     let statValue;
-    let loopCount = lockedStats.length > 0
+    let loopCount = hasLockedStats
         ? Math.max(1, sourceStatCount - lockedStats.length)
         : baseLoopCount;
-    const maxLoopCount = lockedStats.length > 0 ? loopCount : loopCount + 1;
+    const maxLoopCount = hasLockedStats ? loopCount : loopCount + 1;
+    const rerolledStatKeys = new Set();
     for (let i = 0; i < loopCount; i++) {
-        let statType = i === 0 && statTypes.includes(forcedStat)
+        const availableStatTypes = hasLockedStats
+            ? statTypes.filter((statType) => !rerolledStatKeys.has(statType))
+            : statTypes;
+        if (!availableStatTypes.length) {
+            break;
+        }
+        let statType = i === 0 && availableStatTypes.includes(forcedStat)
             ? forcedStat
-            : statTypes[Math.floor(Math.random() * statTypes.length)];
+            : availableStatTypes[Math.floor(Math.random() * availableStatTypes.length)];
+        rerolledStatKeys.add(statType);
         const statRollCap = getEquipmentStatRollCap(statType, equipment.tier);
         let statMultiplier = (enemyScaling - 1) * equipment.lvl;
         let hpScaling = (40 * randomizeDecimal(rollFloor, 1.5)) + ((40 * randomizeDecimal(rollFloor, 1.5)) * statMultiplier);
