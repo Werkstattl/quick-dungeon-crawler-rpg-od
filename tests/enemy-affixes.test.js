@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const affixSource = fs.readFileSync(path.join(root, 'assets/js/affixes.js'), 'utf8');
+const enemySource = fs.readFileSync(path.join(root, 'assets/js/enemy.js'), 'utf8');
 const localesDir = path.join(root, 'assets/locales');
 
 const createAffixContext = () => {
@@ -168,6 +169,56 @@ test('a depleted regeneration reserve is preserved instead of refilled', () => {
 
     assert.equal(vm.runInContext('ensureEnemyRegenerationReserve(__enemy)', context), 0);
     assert.equal(context.__enemy.regenerationReserve, 0);
+});
+
+test('consecutive regenerating encounters each start with a full reserve', () => {
+    const context = vm.createContext({
+        console,
+        player: { lvl: 10, stats: { luck: 0 } },
+        dungeon: {
+            progress: { floor: 10 },
+            settings: { enemyBaseLvl: 1, enemyLvlGap: 5, enemyScaling: 1 },
+            enemyMultipliers: {
+                hp: 1,
+                atk: 1,
+                def: 1,
+                atkSpd: 1,
+                vamp: 1,
+                critRate: 1,
+                critDmg: 1,
+            },
+        },
+        randomizeNum: (min) => min,
+        randomizeDecimal: (min) => min,
+        getCurseLevelFromEnemyScaling: () => 1,
+        rollEnemyAffixes: () => ['regenerating'],
+        applyAffixStats: (stats) => {
+            stats.hpMax = Math.round(stats.hpMax * 0.9);
+            return stats;
+        },
+        getAffixRewardMultiplier: () => 1,
+        getAffixDropBonus: () => 0,
+        ensureEnemyRegenerationReserve: (enemyState) => {
+            const reserveMax = Math.round(enemyState.stats.hpMax * 0.5);
+            if (!Number.isFinite(enemyState.regenerationReserve)) {
+                enemyState.regenerationReserve = reserveMax;
+            }
+            return enemyState.regenerationReserve;
+        },
+        t: (key) => key,
+        addToBestiary: () => {},
+    });
+    vm.runInContext(enemySource, context);
+
+    vm.runInContext('generateRandomEnemy()', context);
+    const firstReserve = vm.runInContext('enemy.regenerationReserve', context);
+    assert.ok(firstReserve > 0);
+
+    vm.runInContext('enemy.regenerationReserve = 0; generateRandomEnemy()', context);
+    const secondReserve = vm.runInContext('enemy.regenerationReserve', context);
+    const secondReserveMax = vm.runInContext('Math.round(enemy.stats.hpMax * 0.5)', context);
+
+    assert.equal(secondReserve, secondReserveMax);
 });
 
 test('affix stats respect the enemy dodge and attack speed caps', () => {

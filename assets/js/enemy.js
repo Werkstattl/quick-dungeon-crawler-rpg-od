@@ -425,6 +425,9 @@ const setEnemyStats = (type, condition) => {
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
     enemy.phase = { index: 0 };
+    // This is a fresh encounter. Do not carry a previous regenerating enemy's
+    // depleted reserve into the newly generated enemy.
+    enemy.regenerationReserve = null;
     if (typeof ensureEnemyRegenerationReserve === 'function') {
         ensureEnemyRegenerationReserve(enemy);
     }
