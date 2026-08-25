@@ -483,11 +483,10 @@ const enemyLoadStats = () => {
             ? getEnemyRegenerationReserveMax(enemy.stats.hpMax)
             : 0;
         const reservePercent = reserveMax > 0 ? (reserve / reserveMax) * 100 : 0;
-        const reserveText = `${nFormatter(reserve)}/${nFormatter(reserveMax)}`;
         const affixLabel = typeof getAffixName === 'function' ? getAffixName('regenerating') : 'Regenerating';
         const affixTooltip = typeof getAffixDescription === 'function' ? getAffixDescription('regenerating') : '';
-        reserveElement.textContent = `${affixLabel} ${reserveText}`;
-        reserveElement.title = `${affixTooltip} ${t('enemy-regeneration-reserve')}: ${reserveText}`;
+        reserveElement.textContent = `${affixLabel}`;
+        reserveElement.title = `${affixTooltip} ${t('enemy-regeneration-reserve')}`;
         reserveElement.style.setProperty('--regeneration-reserve-percent', `${reservePercent}%`);
         reserveElement.setAttribute('aria-valuenow', String(reserve));
         reserveElement.setAttribute('aria-valuemax', String(reserveMax));

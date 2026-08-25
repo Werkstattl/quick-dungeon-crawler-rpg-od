@@ -1820,14 +1820,13 @@ const showCombatInfo = () => {
                 const affixLabel = getAffixName(affixId);
                 const affixTooltip = getAffixDescription(affixId);
                 if (affixId === 'regenerating') {
-                    const reserveText = `${nFormatter(regenerationReserve)}/${nFormatter(regenerationReserveMax)}`;
                     return `<span class="enemy-affix-badge affix-regenerating${regenerationReserve <= 0 ? ' is-empty' : ''}"
                         id="enemy-regeneration-reserve" role="progressbar"
                         style="--regeneration-reserve-percent: ${regenerationReservePercent}%"
-                        title="${affixTooltip} ${t('enemy-regeneration-reserve')}: ${reserveText}"
+                        title="${affixTooltip} ${t('enemy-regeneration-reserve')}"
                         aria-label="${t('enemy-regeneration-reserve')}" aria-valuemin="0"
                         aria-valuenow="${regenerationReserve}" aria-valuemax="${regenerationReserveMax}">
-                        ${affixLabel} ${reserveText}</span>`;
+                        ${affixLabel}</span>`;
                 }
                 return `<span class="enemy-affix-badge affix-${affixId}" title="${affixTooltip}">${affixLabel}</span>`;
             }).join('')}</div>`;
