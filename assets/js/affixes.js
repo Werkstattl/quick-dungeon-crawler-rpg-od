@@ -2,6 +2,7 @@
 // Pure data + pure roll/apply helpers so combat.js and enemy.js stay the only stateful callers.
 
 const AFFIX_REGEN_HP_PCT_PER_SECOND = 0.015;
+const AFFIX_REGEN_RESERVE_HP_PCT = 0.50;
 const AFFIX_THORNS_REFLECT_PCT = 0.10;
 const AFFIX_VOLATILE_PLAYER_HP_PCT = 0.12;
 const AFFIX_REWARD_BONUS_PER_AFFIX = 0.25;
@@ -64,6 +65,34 @@ const normalizeAffixList = (affixes) => {
 };
 
 const enemyHasAffix = (affixes, id) => normalizeAffixList(affixes).indexOf(id) !== -1;
+
+const getEnemyRegenerationReserveMax = (hpMax) => (
+    Math.max(0, Math.round((Number(hpMax) || 0) * AFFIX_REGEN_RESERVE_HP_PCT))
+);
+
+// Missing reserve data comes from saves created before reserves existed. Initialize those
+// fights once, while preserving a legitimately depleted reserve of zero on future loads.
+const ensureEnemyRegenerationReserve = (enemyState) => {
+    if (!enemyState || typeof enemyState !== 'object') {
+        return 0;
+    }
+    if (!enemyHasAffix(enemyState.affixes, 'regenerating')) {
+        enemyState.regenerationReserve = 0;
+        return 0;
+    }
+
+    const hpMax = enemyState.stats && enemyState.stats.hpMax;
+    const reserveMax = getEnemyRegenerationReserveMax(hpMax);
+    if (!Number.isFinite(enemyState.regenerationReserve)) {
+        enemyState.regenerationReserve = reserveMax;
+    } else {
+        enemyState.regenerationReserve = Math.max(
+            0,
+            Math.min(reserveMax, Math.round(enemyState.regenerationReserve)),
+        );
+    }
+    return enemyState.regenerationReserve;
+};
 
 const getAffixCountForCondition = (condition, curseLevel, floor, roll) => {
     const curse = Number.isFinite(Number(curseLevel)) ? Number(curseLevel) : 1;
@@ -202,6 +231,8 @@ if (typeof window !== 'undefined') {
     window.applyAffixStats = applyAffixStats;
     window.normalizeAffixList = normalizeAffixList;
     window.enemyHasAffix = enemyHasAffix;
+    window.getEnemyRegenerationReserveMax = getEnemyRegenerationReserveMax;
+    window.ensureEnemyRegenerationReserve = ensureEnemyRegenerationReserve;
     window.getAffixRewardMultiplier = getAffixRewardMultiplier;
     window.getAffixDropBonus = getAffixDropBonus;
     window.getAffixName = getAffixName;

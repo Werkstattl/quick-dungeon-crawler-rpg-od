@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Thorns on {enemy} tore into you for {value} damage.",
   "enemy-volatile-death": "{enemy} erupted on death, dealing {value} damage to you!",
   "enemy-boss-enrage": "{enemy} roars and grows more dangerous!",
+  "enemy-regeneration-reserve": "Healing reserve",
   "affix-names": {
     "enraged": "Enraged",
     "armored": "Armored",
@@ -611,7 +612,7 @@
     "swift": "Attacks much faster, but has less health.",
     "vampiric": "Heals itself with every hit it lands.",
     "elusive": "Evades attacks far more often.",
-    "regenerating": "Recovers health every second, but is frailer.",
+    "regenerating": "Recovers health every second from a limited reserve equal to 50% of maximum health, but is frailer.",
     "thorned": "Reflects part of the damage you deal back at you.",
     "volatile": "Explodes when slain, damaging you."
   },

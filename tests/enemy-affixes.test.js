@@ -150,6 +150,26 @@ test('normalizeAffixList drops unknown ids, duplicates and non-arrays', () => {
     assert.deepEqual(toHostArray(vm.runInContext('normalizeAffixList("enraged")', context)), []);
 });
 
+test('regenerating enemies receive a reserve equal to half their maximum health', () => {
+    const context = createAffixContext();
+    context.__enemy = { affixes: ['regenerating'], stats: { hpMax: 1001 } };
+
+    assert.equal(vm.runInContext('ensureEnemyRegenerationReserve(__enemy)', context), 501);
+    assert.equal(context.__enemy.regenerationReserve, 501);
+});
+
+test('a depleted regeneration reserve is preserved instead of refilled', () => {
+    const context = createAffixContext();
+    context.__enemy = {
+        affixes: ['regenerating'],
+        regenerationReserve: 0,
+        stats: { hpMax: 1000 },
+    };
+
+    assert.equal(vm.runInContext('ensureEnemyRegenerationReserve(__enemy)', context), 0);
+    assert.equal(context.__enemy.regenerationReserve, 0);
+});
+
 test('affix stats respect the enemy dodge and attack speed caps', () => {
     const context = createAffixContext();
     context.__stats = { hpMax: 1000, atk: 100, def: 50, atkSpd: 2.7, dodge: 48, vamp: 0 };
@@ -269,6 +289,15 @@ test('all locales provide the affix name format and affix log lines', () => {
         for (const key of ['enemy-thorns-damage', 'enemy-volatile-death']) {
             assert.match(locale[key], /\{value\}/, `${file}: ${key} must interpolate {value}`);
         }
+    }
+});
+
+test('all locales provide the regeneration reserve label', () => {
+    const localeFiles = fs.readdirSync(localesDir).filter((file) => file.endsWith('.json'));
+    for (const file of localeFiles) {
+        const locale = JSON.parse(fs.readFileSync(path.join(localesDir, file), 'utf8'));
+        assert.equal(typeof locale['enemy-regeneration-reserve'], 'string', `${file} is missing the reserve label`);
+        assert.ok(locale['enemy-regeneration-reserve'].trim().length > 0, `${file} has an empty reserve label`);
     }
 });
 
@@ -459,11 +488,28 @@ test('regeneration heals only regenerating enemies and never overheals', () => {
     });
     regen.enemy.stats.hp = 500;
     vm.runInContext('tickEnemyRegen()', regen);
-    assert.ok(regen.enemy.stats.hp > 500, 'regenerating enemy should heal');
+    assert.equal(regen.enemy.stats.hp, 515, 'regenerating enemy should heal by 1.5% max HP');
+    assert.equal(regen.enemy.regenerationReserve, 485, 'healing should consume the reserve');
 
     regen.enemy.stats.hp = 999;
     vm.runInContext('tickEnemyRegen()', regen);
     assert.equal(regen.enemy.stats.hp, 1000, 'regen must clamp to hpMax');
+    assert.equal(regen.enemy.regenerationReserve, 484, 'only the health actually restored is consumed');
+});
+
+test('regeneration stops permanently once its reserve is empty', () => {
+    const regen = createCombatContext({
+        condition: 'base', affixes: ['regenerating'], hpMax: 1000, atk: 100, atkSpd: 1,
+    });
+    regen.enemy.stats.hp = 500;
+    regen.enemy.regenerationReserve = 10;
+
+    vm.runInContext('tickEnemyRegen()', regen);
+    assert.equal(regen.enemy.stats.hp, 510, 'the final tick should be limited by the remaining reserve');
+    assert.equal(regen.enemy.regenerationReserve, 0);
+
+    vm.runInContext('tickEnemyRegen()', regen);
+    assert.equal(regen.enemy.stats.hp, 510, 'an empty reserve must not refill or heal again');
 });
 
 test('a dead enemy never regenerates', () => {
@@ -483,4 +529,11 @@ test('every player damage path applies thorns', () => {
 
 test('the per-second combat tick drives affix regeneration', () => {
     assert.match(combatSource, /const combatCounter = \(\) => \{[\s\S]*?tickEnemyRegen\(\);/);
+});
+
+test('the combat UI renders and updates the regeneration reserve', () => {
+    assert.match(combatSource, /id="enemy-regeneration-reserve"/);
+    assert.match(combatSource, /id="enemy-regeneration-reserve-value"/);
+    assert.match(combatSource, /id="enemy-regeneration-reserve-bar"/);
+    assert.match(combatSource, /ensureEnemyRegenerationReserve\(enemy\)/);
 });

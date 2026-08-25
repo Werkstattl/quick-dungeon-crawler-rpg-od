@@ -593,6 +593,7 @@
   "enemy-thorns-damage": "Spinii lui {enemy} te-au sfâșiat pentru {value} daune.",
   "enemy-volatile-death": "{enemy} a explodat la moarte, provocându-ți {value} daune!",
   "enemy-boss-enrage": "{enemy} rage și devine mai periculos!",
+  "enemy-regeneration-reserve": "Rezervă de vindecare",
   "affix-names": {
     "enraged": "Înfuriat",
     "armored": "Blindat",
@@ -609,7 +610,7 @@
     "swift": "Atacă mult mai repede, dar are mai puțină viață.",
     "vampiric": "Se vindecă la fiecare lovitură reușită.",
     "elusive": "Evită atacurile mult mai des.",
-    "regenerating": "Recuperează viață în fiecare secundă, dar e mai fragil.",
+    "regenerating": "Recuperează viață în fiecare secundă dintr-o rezervă limitată egală cu 50% din viața maximă, dar e mai fragil.",
     "thorned": "Reflectă o parte din daunele pe care le provoci.",
     "volatile": "Explodează când moare, rănindu-te."
   },

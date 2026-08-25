@@ -6,6 +6,7 @@ const createEmptyEnemyState = () => ({
     lvl: null,
     condition: null,
     affixes: [],
+    regenerationReserve: null,
     phase: { index: 0 },
     stats: {
         hp: null,
@@ -424,6 +425,9 @@ const setEnemyStats = (type, condition) => {
     enemy.stats.hp = enemy.stats.hpMax;
     enemy.stats.hpPercent = 100;
     enemy.phase = { index: 0 };
+    if (typeof ensureEnemyRegenerationReserve === 'function') {
+        ensureEnemyRegenerationReserve(enemy);
+    }
 
     if (enemy.stats.atkSpd > 2.75) {
         enemy.stats.atkSpd = 2.75;
@@ -438,6 +442,11 @@ const ensureEnemyAffixState = () => {
     enemy.affixes = typeof normalizeAffixList === 'function'
         ? normalizeAffixList(enemy.affixes)
         : [];
+    if (typeof ensureEnemyRegenerationReserve === 'function') {
+        ensureEnemyRegenerationReserve(enemy);
+    } else if (!Number.isFinite(enemy.regenerationReserve)) {
+        enemy.regenerationReserve = 0;
+    }
     return enemy.affixes;
 };
 
@@ -464,4 +473,22 @@ const enemyLoadStats = () => {
     enemyHpElement.innerHTML = `&nbsp${nFormatter(enemy.stats.hp)}/${nFormatter(enemy.stats.hpMax)}(${enemy.stats.hpPercent}%)`;
     enemyHpElement.style.width = `${enemy.stats.hpPercent}%`;
     enemyHpDamageElement.style.width = `${enemy.stats.hpPercent}%`;
+
+    const reserveElement = document.querySelector('#enemy-regeneration-reserve');
+    const reserveBarElement = document.querySelector('#enemy-regeneration-reserve-bar');
+    const reserveValueElement = document.querySelector('#enemy-regeneration-reserve-value');
+    if (reserveElement && reserveBarElement && reserveValueElement) {
+        const reserve = typeof ensureEnemyRegenerationReserve === 'function'
+            ? ensureEnemyRegenerationReserve(enemy)
+            : 0;
+        const reserveMax = typeof getEnemyRegenerationReserveMax === 'function'
+            ? getEnemyRegenerationReserveMax(enemy.stats.hpMax)
+            : 0;
+        const reservePercent = reserveMax > 0 ? (reserve / reserveMax) * 100 : 0;
+        reserveValueElement.textContent = `${nFormatter(reserve)}/${nFormatter(reserveMax)}`;
+        reserveBarElement.style.width = `${reservePercent}%`;
+        reserveElement.setAttribute('aria-valuenow', String(reserve));
+        reserveElement.setAttribute('aria-valuemax', String(reserveMax));
+        reserveElement.classList.toggle('is-empty', reserve <= 0);
+    }
 };

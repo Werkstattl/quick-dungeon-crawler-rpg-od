@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "{enemy}의 가시가 당신에게 {value}의 피해를 입혔습니다.",
   "enemy-volatile-death": "{enemy}이(가) 죽으면서 폭발해 당신에게 {value}의 피해를 입혔습니다!",
   "enemy-boss-enrage": "{enemy}이(가) 포효하며 더욱 위험해졌습니다!",
+  "enemy-regeneration-reserve": "치유 비축량",
   "affix-names": {
     "enraged": "격노",
     "armored": "중장갑",
@@ -611,7 +612,7 @@
     "swift": "훨씬 빠르게 공격하지만 체력이 낮습니다.",
     "vampiric": "공격이 적중할 때마다 자신을 회복합니다.",
     "elusive": "공격을 훨씬 자주 회피합니다.",
-    "regenerating": "매초 체력을 회복하지만 더 약합니다.",
+    "regenerating": "최대 체력의 50%에 해당하는 한정된 비축량에서 매초 체력을 회복하지만 더 약합니다.",
     "thorned": "당신이 준 피해의 일부를 반사합니다.",
     "volatile": "죽을 때 폭발하여 당신에게 피해를 줍니다."
   },

@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Les épines de {enemy} vous ont infligé {value} dégâts.",
   "enemy-volatile-death": "{enemy} a explosé en mourant, vous infligeant {value} dégâts !",
   "enemy-boss-enrage": "{enemy} rugit et devient plus dangereux !",
+  "enemy-regeneration-reserve": "Réserve de soins",
   "affix-names": {
     "enraged": "Enragé",
     "armored": "Blindé",
@@ -611,7 +612,7 @@
     "swift": "Attaque bien plus vite, mais a moins de vie.",
     "vampiric": "Se soigne à chaque coup porté.",
     "elusive": "Esquive les attaques bien plus souvent.",
-    "regenerating": "Récupère de la vie chaque seconde, mais est plus fragile.",
+    "regenerating": "Récupère de la vie chaque seconde depuis une réserve limitée égale à 50 % de sa vie maximale, mais est plus fragile.",
     "thorned": "Renvoie une partie des dégâts que vous infligez.",
     "volatile": "Explose à sa mort et vous blesse."
   },

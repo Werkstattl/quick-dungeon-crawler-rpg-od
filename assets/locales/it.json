@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Le spine di {enemy} ti hanno lacerato per {value} danni.",
   "enemy-volatile-death": "{enemy} è esploso morendo, infliggendoti {value} danni!",
   "enemy-boss-enrage": "{enemy} ruggisce e diventa più pericoloso!",
+  "enemy-regeneration-reserve": "Riserva di cura",
   "affix-names": {
     "enraged": "Infuriato",
     "armored": "Corazzato",
@@ -611,7 +612,7 @@
     "swift": "Attacca molto più velocemente, ma ha meno salute.",
     "vampiric": "Si cura a ogni colpo messo a segno.",
     "elusive": "Schiva gli attacchi molto più spesso.",
-    "regenerating": "Recupera salute ogni secondo, ma è più fragile.",
+    "regenerating": "Recupera salute ogni secondo da una riserva limitata pari al 50% della salute massima, ma è più fragile.",
     "thorned": "Riflette parte dei danni che infliggi.",
     "volatile": "Esplode quando muore, ferendoti."
   },

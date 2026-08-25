@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Las espinas de {enemy} te desgarraron causando {value} de daño.",
   "enemy-volatile-death": "¡{enemy} estalló al morir, causándote {value} de daño!",
   "enemy-boss-enrage": "¡{enemy} ruge y se vuelve más peligroso!",
+  "enemy-regeneration-reserve": "Reserva de curación",
   "affix-names": {
     "enraged": "Enfurecido",
     "armored": "Acorazado",
@@ -611,7 +612,7 @@
     "swift": "Ataca mucho más rápido, pero tiene menos vida.",
     "vampiric": "Se cura con cada golpe que acierta.",
     "elusive": "Esquiva los ataques con mucha más frecuencia.",
-    "regenerating": "Recupera vida cada segundo, pero es más frágil.",
+    "regenerating": "Recupera vida cada segundo de una reserva limitada equivalente al 50 % de su vida máxima, pero es más frágil.",
     "thorned": "Refleja parte del daño que causas.",
     "volatile": "Explota al morir, dañándote."
   },

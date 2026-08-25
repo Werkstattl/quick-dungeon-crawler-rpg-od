@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Kolce {enemy} rozdarły cię, zadając {value} obrażeń.",
   "enemy-volatile-death": "{enemy} eksplodował po śmierci, zadając ci {value} obrażeń!",
   "enemy-boss-enrage": "{enemy} ryczy i staje się groźniejszy!",
+  "enemy-regeneration-reserve": "Rezerwa leczenia",
   "affix-names": {
     "enraged": "Rozwścieczony",
     "armored": "Opancerzony",
@@ -611,7 +612,7 @@
     "swift": "Atakuje znacznie szybciej, ale ma mniej zdrowia.",
     "vampiric": "Leczy się przy każdym trafieniu.",
     "elusive": "Znacznie częściej unika ataków.",
-    "regenerating": "Odzyskuje zdrowie co sekundę, ale jest kruchszy.",
+    "regenerating": "Odzyskuje zdrowie co sekundę z ograniczonej rezerwy równej 50% maksymalnego zdrowia, ale jest kruchszy.",
     "thorned": "Odbija część zadawanych przez ciebie obrażeń.",
     "volatile": "Eksploduje po śmierci, raniąc cię."
   },

@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const mainSource = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
+const affixSource = fs.readFileSync(path.join(root, 'assets/js/affixes.js'), 'utf8');
 const startupHelpersSource = mainSource.split('// Use DOMContentLoaded')[0];
 const saveDataSource = mainSource.slice(
     mainSource.indexOf('let isSaving = false;'),
@@ -85,6 +86,7 @@ const createStartupContext = ({ savedEnemy, floor = 1, playerLevel = 1 } = {}) =
         },
         safeLoad: () => context.savedEnemy,
     });
+    vm.runInContext(affixSource, context);
     vm.runInContext(enemySource, context);
     vm.runInContext('enemy = staleEnemy', context);
     vm.runInContext(startupHelpersSource, context);
@@ -170,6 +172,25 @@ test('valid enemy data resumes combat', () => {
     assert.equal(context.player.inCombat, true);
     assert.equal(vm.runInContext('enemy.id', context), savedEnemy.id);
     assert.equal(vm.runInContext('enemy.lvl', context), savedEnemy.lvl);
+});
+
+test('old regenerating enemy saves receive their reserve during combat recovery', () => {
+    const savedEnemy = createEnemy(3);
+    savedEnemy.affixes = ['regenerating'];
+    const context = createStartupContext({ savedEnemy, floor: 1 });
+
+    assert.equal(vm.runInContext('restoreSavedCombatState()', context), true);
+    assert.equal(vm.runInContext('enemy.regenerationReserve', context), 50);
+});
+
+test('combat recovery preserves a depleted regeneration reserve', () => {
+    const savedEnemy = createEnemy(3);
+    savedEnemy.affixes = ['regenerating'];
+    savedEnemy.regenerationReserve = 0;
+    const context = createStartupContext({ savedEnemy, floor: 1 });
+
+    assert.equal(vm.runInContext('restoreSavedCombatState()', context), true);
+    assert.equal(vm.runInContext('enemy.regenerationReserve', context), 0);
 });
 
 test('enemy reset replaces stale combat state with an empty enemy', () => {

@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "Duri pada {enemy} merobekmu sebesar {value} kerusakan.",
   "enemy-volatile-death": "{enemy} meledak saat mati, memberimu {value} kerusakan!",
   "enemy-boss-enrage": "{enemy} mengaum dan menjadi lebih berbahaya!",
+  "enemy-regeneration-reserve": "Cadangan penyembuhan",
   "affix-names": {
     "enraged": "Murka",
     "armored": "Berzirah",
@@ -611,7 +612,7 @@
     "swift": "Menyerang jauh lebih cepat, tetapi darahnya lebih sedikit.",
     "vampiric": "Memulihkan diri setiap kali serangannya mengenai.",
     "elusive": "Jauh lebih sering menghindari serangan.",
-    "regenerating": "Memulihkan darah setiap detik, tetapi lebih rapuh.",
+    "regenerating": "Memulihkan darah setiap detik dari cadangan terbatas sebesar 50% darah maksimum, tetapi lebih rapuh.",
     "thorned": "Memantulkan sebagian kerusakan yang kamu berikan.",
     "volatile": "Meledak saat terbunuh dan melukaimu."
   },

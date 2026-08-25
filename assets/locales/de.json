@@ -616,6 +616,7 @@
   "enemy-thorns-damage": "Dornen an {enemy} rissen dich für {value} Schaden auf.",
   "enemy-volatile-death": "{enemy} explodierte im Tod und fügte dir {value} Schaden zu!",
   "enemy-boss-enrage": "{enemy} brüllt und wird noch gefährlicher!",
+  "enemy-regeneration-reserve": "Heilungsreserve",
   "affix-names": {
     "enraged": "Wütend",
     "armored": "Gepanzert",
@@ -632,7 +633,7 @@
     "swift": "Greift viel schneller an, hat aber weniger Leben.",
     "vampiric": "Heilt sich mit jedem Treffer.",
     "elusive": "Weicht Angriffen viel häufiger aus.",
-    "regenerating": "Regeneriert jede Sekunde Leben, ist aber zerbrechlicher.",
+    "regenerating": "Regeneriert jede Sekunde Leben aus einer begrenzten Reserve von 50 % der maximalen LP, ist aber zerbrechlicher.",
     "thorned": "Wirft einen Teil deines Schadens auf dich zurück.",
     "volatile": "Explodiert beim Tod und verletzt dich."
   },

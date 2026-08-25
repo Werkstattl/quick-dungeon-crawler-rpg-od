@@ -595,6 +595,7 @@
   "enemy-thorns-damage": "{enemy}身上的尖刺对你造成了{value}点伤害。",
   "enemy-volatile-death": "{enemy}死亡时爆炸，对你造成了{value}点伤害！",
   "enemy-boss-enrage": "{enemy}咆哮着变得更加危险！",
+  "enemy-regeneration-reserve": "治疗储备",
   "affix-names": {
     "enraged": "狂怒",
     "armored": "重甲",
@@ -611,7 +612,7 @@
     "swift": "攻击速度大幅提升，但生命值较低。",
     "vampiric": "每次命中都会治疗自身。",
     "elusive": "闪避攻击的几率大幅提升。",
-    "regenerating": "每秒恢复生命，但更加脆弱。",
+    "regenerating": "每秒从相当于最大生命值50%的有限储备中恢复生命，但更加脆弱。",
     "thorned": "将你造成的部分伤害反弹给你。",
     "volatile": "被击杀时爆炸，对你造成伤害。"
   },
