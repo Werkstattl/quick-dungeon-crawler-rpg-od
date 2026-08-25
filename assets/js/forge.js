@@ -853,7 +853,15 @@ const renderRerollStatLocks = () => {
 
     selectedRerollStatLocks = getValidRerollStatLockKeys(equipment, selectedRerollStatLocks);
     const totals = getEquipmentStatTotals(equipment);
-    optionsContainer.innerHTML = statKeys.map((statType) => `
+    const sortedStatKeys = [...statKeys].sort((statA, statB) => {
+        const labelComparison = formatEquipmentStatLabel(statA).localeCompare(
+            formatEquipmentStatLabel(statB),
+            undefined,
+            { sensitivity: 'base' },
+        );
+        return labelComparison || statA.localeCompare(statB);
+    });
+    optionsContainer.innerHTML = sortedStatKeys.map((statType) => `
         <label class="reroll-stat-lock-option ${selectedRerollStatLocks.includes(statType) ? 'selected' : ''}">
             <input type="checkbox" data-reroll-stat-lock="${statType}" ${selectedRerollStatLocks.includes(statType) ? 'checked' : ''}>
             <span>${formatEquipmentStatLabel(statType)}</span>

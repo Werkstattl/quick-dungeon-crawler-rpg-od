@@ -218,6 +218,27 @@ test('the reroll preview excludes stats that are already locked', () => {
     assert.match(markup, /<span class="stat-name">critRate<\/span>/);
 });
 
+test('reroll stat lock options are sorted alphabetically by their displayed labels', () => {
+    const context = createForgeExecutionContext();
+    context.formatEquipmentStatLabel = (stat) => ({
+        vamp: 'Alpha',
+        atk: 'Bravo',
+        critRate: 'Charlie',
+    })[stat];
+    evaluate(context, `
+        selectedRerollItem = {
+            equipment: {
+                stats: [{ vamp: 3.25 }, { critRate: 7.5 }, { atk: 123 }],
+            },
+        };
+        renderRerollStatLocks();
+    `);
+
+    const markup = context.document.querySelector('#reroll-stat-lock-options').innerHTML;
+    assert.ok(markup.indexOf('data-reroll-stat-lock="vamp"') < markup.indexOf('data-reroll-stat-lock="atk"'));
+    assert.ok(markup.indexOf('data-reroll-stat-lock="atk"') < markup.indexOf('data-reroll-stat-lock="critRate"'));
+});
+
 const createForgeExecutionContext = ({ gold = 100000, stones = 50, tokens = 1 } = {}) => {
     const elements = new Map();
     const getElement = (selector) => {
