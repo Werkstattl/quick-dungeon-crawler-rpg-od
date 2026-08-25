@@ -531,9 +531,9 @@ test('the per-second combat tick drives affix regeneration', () => {
     assert.match(combatSource, /const combatCounter = \(\) => \{[\s\S]*?tickEnemyRegen\(\);/);
 });
 
-test('the combat UI renders and updates the regeneration reserve', () => {
+test('the regenerating affix badge renders and updates the regeneration reserve', () => {
     assert.match(combatSource, /id="enemy-regeneration-reserve"/);
-    assert.match(combatSource, /id="enemy-regeneration-reserve-value"/);
-    assert.match(combatSource, /id="enemy-regeneration-reserve-bar"/);
+    assert.match(combatSource, /--regeneration-reserve-percent/);
+    assert.doesNotMatch(combatSource, /enemy-regeneration-reserve-track/);
     assert.match(combatSource, /ensureEnemyRegenerationReserve\(enemy\)/);
 });

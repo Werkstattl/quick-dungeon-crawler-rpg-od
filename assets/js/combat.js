@@ -1805,12 +1805,6 @@ const showCombatInfo = () => {
         ? (getBestiaryEnemySpriteSrc(enemy.id, enemy.image.name) || defaultEnemySpriteSrc)
         : defaultEnemySpriteSrc;
     const enemyAffixes = typeof normalizeAffixList === 'function' ? normalizeAffixList(enemy.affixes) : [];
-    const enemyAffixBadges = enemyAffixes.length === 0 ? '' : `
-            <div class="enemy-affix-row">${enemyAffixes.map((affixId) => {
-                const affixLabel = getAffixName(affixId);
-                const affixTooltip = getAffixDescription(affixId);
-                return `<span class="enemy-affix-badge affix-${affixId}" title="${affixTooltip}">${affixLabel}</span>`;
-            }).join('')}</div>`;
     const hasRegenerationReserve = enemyAffixes.indexOf('regenerating') !== -1;
     const regenerationReserve = hasRegenerationReserve && typeof ensureEnemyRegenerationReserve === 'function'
         ? ensureEnemyRegenerationReserve(enemy)
@@ -1821,19 +1815,22 @@ const showCombatInfo = () => {
     const regenerationReservePercent = regenerationReserveMax > 0
         ? (regenerationReserve / regenerationReserveMax) * 100
         : 0;
-    const enemyRegenerationReserve = hasRegenerationReserve ? `
-            <div class="enemy-regeneration-reserve${regenerationReserve <= 0 ? ' is-empty' : ''}"
-                id="enemy-regeneration-reserve" role="progressbar"
-                aria-label="${t('enemy-regeneration-reserve')}"
-                aria-valuemin="0" aria-valuenow="${regenerationReserve}" aria-valuemax="${regenerationReserveMax}">
-                <div class="enemy-regeneration-reserve-label">
-                    <span><i class="ra ra-regeneration" aria-hidden="true"></i> ${t('enemy-regeneration-reserve')}</span>
-                    <span id="enemy-regeneration-reserve-value">${nFormatter(regenerationReserve)}/${nFormatter(regenerationReserveMax)}</span>
-                </div>
-                <div class="enemy-regeneration-reserve-track">
-                    <div id="enemy-regeneration-reserve-bar" style="width: ${regenerationReservePercent}%"></div>
-                </div>
-            </div>` : '';
+    const enemyAffixBadges = enemyAffixes.length === 0 ? '' : `
+            <div class="enemy-affix-row">${enemyAffixes.map((affixId) => {
+                const affixLabel = getAffixName(affixId);
+                const affixTooltip = getAffixDescription(affixId);
+                if (affixId === 'regenerating') {
+                    const reserveText = `${nFormatter(regenerationReserve)}/${nFormatter(regenerationReserveMax)}`;
+                    return `<span class="enemy-affix-badge affix-regenerating${regenerationReserve <= 0 ? ' is-empty' : ''}"
+                        id="enemy-regeneration-reserve" role="progressbar"
+                        style="--regeneration-reserve-percent: ${regenerationReservePercent}%"
+                        title="${affixTooltip} ${t('enemy-regeneration-reserve')}: ${reserveText}"
+                        aria-label="${t('enemy-regeneration-reserve')}" aria-valuemin="0"
+                        aria-valuenow="${regenerationReserve}" aria-valuemax="${regenerationReserveMax}">
+                        ${affixLabel} ${reserveText}</span>`;
+                }
+                return `<span class="enemy-affix-badge affix-${affixId}" title="${affixTooltip}">${affixLabel}</span>`;
+            }).join('')}</div>`;
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
@@ -1844,7 +1841,6 @@ const showCombatInfo = () => {
                     &nbsp${nFormatter(enemy.stats.hp)}/${nFormatter(enemy.stats.hpMax)}(${enemy.stats.hpPercent}%)
                 </div>
             </div>
-            ${enemyRegenerationReserve}
             <div id="dmg-container"></div>
             <img src="${enemySpriteSrc}" alt="${enemy.name}" width="${enemy.image.size}" id="enemy-sprite">
         </div>

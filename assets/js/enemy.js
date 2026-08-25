@@ -475,9 +475,7 @@ const enemyLoadStats = () => {
     enemyHpDamageElement.style.width = `${enemy.stats.hpPercent}%`;
 
     const reserveElement = document.querySelector('#enemy-regeneration-reserve');
-    const reserveBarElement = document.querySelector('#enemy-regeneration-reserve-bar');
-    const reserveValueElement = document.querySelector('#enemy-regeneration-reserve-value');
-    if (reserveElement && reserveBarElement && reserveValueElement) {
+    if (reserveElement) {
         const reserve = typeof ensureEnemyRegenerationReserve === 'function'
             ? ensureEnemyRegenerationReserve(enemy)
             : 0;
@@ -485,8 +483,12 @@ const enemyLoadStats = () => {
             ? getEnemyRegenerationReserveMax(enemy.stats.hpMax)
             : 0;
         const reservePercent = reserveMax > 0 ? (reserve / reserveMax) * 100 : 0;
-        reserveValueElement.textContent = `${nFormatter(reserve)}/${nFormatter(reserveMax)}`;
-        reserveBarElement.style.width = `${reservePercent}%`;
+        const reserveText = `${nFormatter(reserve)}/${nFormatter(reserveMax)}`;
+        const affixLabel = typeof getAffixName === 'function' ? getAffixName('regenerating') : 'Regenerating';
+        const affixTooltip = typeof getAffixDescription === 'function' ? getAffixDescription('regenerating') : '';
+        reserveElement.textContent = `${affixLabel} ${reserveText}`;
+        reserveElement.title = `${affixTooltip} ${t('enemy-regeneration-reserve')}: ${reserveText}`;
+        reserveElement.style.setProperty('--regeneration-reserve-percent', `${reservePercent}%`);
         reserveElement.setAttribute('aria-valuenow', String(reserve));
         reserveElement.setAttribute('aria-valuemax', String(reserveMax));
         reserveElement.classList.toggle('is-empty', reserve <= 0);
