@@ -104,7 +104,7 @@ test('queued special ability state is translated in every locale', () => {
     const localeDirectory = path.join(root, 'assets/locales');
     const localeFiles = fs.readdirSync(localeDirectory).filter((file) => file.endsWith('.json'));
 
-    assert.equal(localeFiles.length, 20);
+    assert.equal(localeFiles.length, 21);
     for (const localeFile of localeFiles) {
         const locale = JSON.parse(fs.readFileSync(path.join(localeDirectory, localeFile), 'utf8'));
         assert.equal(typeof locale['special-ability-queued'], 'string', localeFile);
