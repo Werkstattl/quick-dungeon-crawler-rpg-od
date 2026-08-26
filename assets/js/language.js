@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da','nb'];
+const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da','nb','cs'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -24,7 +24,8 @@ const LANGUAGE_LABELS = {
   sv: 'Svenska',
   ms: 'Bahasa Melayu',
   da: 'Dansk',
-  nb: 'Norsk bokmål'
+  nb: 'Norsk bokmål',
+  cs: 'Čeština'
 };
 const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
   code,
