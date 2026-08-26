@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','hi','bn','id','th','vi','nl','sv','fi','ms','da','nb','cs'];
+const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','th','vi','nl','sv','fi','ms','da','nb','cs'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -16,6 +16,7 @@ const LANGUAGE_LABELS = {
   pl: 'Polski',
   tr: 'Türkçe',
   ar: 'العربية',
+  fa: 'فارسی',
   hi: 'हिन्दी',
   bn: 'বাংলা',
   id: 'Bahasa Indonesia',
@@ -38,6 +39,7 @@ window.supportedLanguages = SUPPORTED.slice();
 window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
 const LANGUAGE_ALIASES = { no: 'nb' };
+const RTL_LANGUAGES = new Set(['ar', 'fa']);
 
 function normalizeLanguageTag(lang) {
   const tag = String(lang || '').trim().replace(/_/g, '-');
@@ -145,6 +147,7 @@ async function setLanguage(lang) {
   const loaded = await loadLanguage(lang);
   currentLanguage = loaded;
   document.documentElement.lang = loaded;
+  document.documentElement.dir = RTL_LANGUAGES.has(loaded) ? 'rtl' : 'ltr';
   localStorage.setItem('lang', loaded);
   applyTranslations(document);
   if (typeof refreshPurchaseUI === 'function') refreshPurchaseUI(document);

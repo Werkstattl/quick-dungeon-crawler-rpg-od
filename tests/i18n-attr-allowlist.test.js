@@ -11,6 +11,7 @@ const languageSource = fs.readFileSync(path.join(root, 'assets/js/language.js'),
 const harness = `
   globalThis._applyTranslations = applyTranslations;
   globalThis._loadLanguage = loadLanguage;
+  globalThis._setLanguage = setLanguage;
   globalThis._setDict = (lang, dict) => { dictionaries[lang] = dict; currentLanguage = lang; };
 `;
 
@@ -94,6 +95,20 @@ test('Simplified Chinese language tags continue to load the zh locale', async ()
     for (const tag of ['zh', 'zh-CN', 'zh-SG', 'zh-Hans']) {
         assert.equal(await ctx._loadLanguage(tag), 'zh');
     }
+});
+
+test('Persian is available and applies right-to-left document metadata', async () => {
+    const ctx = makeContext();
+
+    assert.ok(Array.from(ctx.window.supportedLanguages).includes('fa'));
+    assert.ok(Array.from(ctx.window.languageOptions).some((option) => (
+        option.code === 'fa' && option.label === 'فارسی'
+    )));
+    assert.equal(await ctx._loadLanguage('fa-IR'), 'fa');
+
+    await ctx._setLanguage('fa-IR');
+    assert.equal(ctx.document.documentElement.lang, 'fa');
+    assert.equal(ctx.document.documentElement.dir, 'rtl');
 });
 
 test('Traditional Chinese locale mirrors the Simplified Chinese key structure', () => {
