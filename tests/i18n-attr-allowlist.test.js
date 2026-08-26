@@ -77,6 +77,18 @@ test('Norwegian macrolanguage code loads the Bokmål locale', async () => {
     assert.equal(await ctx._loadLanguage('no'), 'nb');
 });
 
+test('Filipino is available and legacy Tagalog tags load the Filipino locale', async () => {
+    const ctx = makeContext();
+
+    for (const tag of ['fil', 'fil-PH', 'tl', 'tl-PH']) {
+        assert.equal(await ctx._loadLanguage(tag), 'fil');
+    }
+    assert.ok(Array.from(ctx.window.supportedLanguages).includes('fil'));
+    assert.ok(Array.from(ctx.window.languageOptions).some((option) => (
+        option.code === 'fil' && option.label === 'Filipino'
+    )));
+});
+
 test('Traditional Chinese language tags load the zh-Hant locale', async () => {
     const ctx = makeContext();
 

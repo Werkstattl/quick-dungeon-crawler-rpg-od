@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','th','vi','nl','sv','fi','ms','da','nb','cs'];
+const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -20,6 +20,7 @@ const LANGUAGE_LABELS = {
   hi: 'हिन्दी',
   bn: 'বাংলা',
   id: 'Bahasa Indonesia',
+  fil: 'Filipino',
   th: 'ไทย',
   vi: 'Tiếng Việt',
   nl: 'Nederlands',
@@ -38,7 +39,7 @@ const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
 window.supportedLanguages = SUPPORTED.slice();
 window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
-const LANGUAGE_ALIASES = { no: 'nb' };
+const LANGUAGE_ALIASES = { no: 'nb', tl: 'fil' };
 const RTL_LANGUAGES = new Set(['ar', 'fa']);
 
 function normalizeLanguageTag(lang) {
