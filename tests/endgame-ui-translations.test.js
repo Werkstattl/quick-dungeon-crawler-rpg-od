@@ -17,7 +17,7 @@ const localeFiles = fs.readdirSync(localesDirectory)
     .sort();
 
 test('all locale files are valid JSON and contain the endgame Curse UI text', () => {
-    assert.equal(localeFiles.length, 21);
+    assert.equal(localeFiles.length, 22);
 
     for (const file of localeFiles) {
         const locale = JSON.parse(fs.readFileSync(path.join(localesDirectory, file), 'utf8'));
