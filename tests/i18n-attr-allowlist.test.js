@@ -75,3 +75,39 @@ test('Norwegian macrolanguage code loads the Bokmål locale', async () => {
 
     assert.equal(await ctx._loadLanguage('no'), 'nb');
 });
+
+test('Traditional Chinese language tags load the zh-Hant locale', async () => {
+    const ctx = makeContext();
+
+    for (const tag of ['zh-Hant', 'zh-TW', 'zh-HK', 'zh-MO', 'zh_Hant_TW']) {
+        assert.equal(await ctx._loadLanguage(tag), 'zh-Hant');
+    }
+    assert.ok(Array.from(ctx.window.supportedLanguages).includes('zh-Hant'));
+    assert.ok(Array.from(ctx.window.languageOptions).some((option) => (
+        option.code === 'zh-Hant' && option.label === '繁體中文'
+    )));
+});
+
+test('Simplified Chinese language tags continue to load the zh locale', async () => {
+    const ctx = makeContext();
+
+    for (const tag of ['zh', 'zh-CN', 'zh-SG', 'zh-Hans']) {
+        assert.equal(await ctx._loadLanguage(tag), 'zh');
+    }
+});
+
+test('Traditional Chinese locale mirrors the Simplified Chinese key structure', () => {
+    const localeDir = path.join(root, 'assets/locales');
+    const simplified = JSON.parse(fs.readFileSync(path.join(localeDir, 'zh.json'), 'utf8'));
+    const traditional = JSON.parse(fs.readFileSync(path.join(localeDir, 'zh-Hant.json'), 'utf8'));
+
+    const valueShape = (value) => {
+        if (Array.isArray(value)) return value.map(valueShape);
+        if (value && typeof value === 'object') {
+            return Object.fromEntries(Object.entries(value).map(([key, nested]) => [key, valueShape(nested)]));
+        }
+        return typeof value;
+    };
+
+    assert.deepEqual(valueShape(traditional), valueShape(simplified));
+});

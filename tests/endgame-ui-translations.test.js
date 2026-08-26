@@ -15,9 +15,15 @@ const requiredKeys = [
 const localeFiles = fs.readdirSync(localesDirectory)
     .filter((file) => file.endsWith('.json'))
     .sort();
+const languageSource = fs.readFileSync(path.join(root, 'assets/js/language.js'), 'utf8');
+const supportedDeclaration = languageSource.match(/const SUPPORTED = \[([^\]]+)\];/);
+const supportedLocaleFiles = Array.from(
+    supportedDeclaration[1].matchAll(/'([^']+)'/g),
+    (match) => `${match[1]}.json`,
+).sort();
 
 test('all locale files are valid JSON and contain the endgame Curse UI text', () => {
-    assert.equal(localeFiles.length, 24);
+    assert.deepEqual(localeFiles, supportedLocaleFiles);
 
     for (const file of localeFiles) {
         const locale = JSON.parse(fs.readFileSync(path.join(localesDirectory, file), 'utf8'));

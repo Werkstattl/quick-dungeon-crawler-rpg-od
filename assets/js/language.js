@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da','nb'];
+const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da','nb'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -8,7 +8,8 @@ const LANGUAGE_LABELS = {
   ro: 'Română',
   ru: 'Русский',
   uk: 'Українська',
-  zh: '中文',
+  zh: '简体中文',
+  'zh-Hant': '繁體中文',
   fr: 'Français',
   it: 'Italiano',
   ko: '한국어',
@@ -34,6 +35,22 @@ window.supportedLanguages = SUPPORTED.slice();
 window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
 const LANGUAGE_ALIASES = { no: 'nb' };
+
+function normalizeLanguageTag(lang) {
+  const tag = String(lang || '').trim().replace(/_/g, '-');
+  const parts = tag.toLowerCase().split('-');
+  const base = parts[0];
+
+  if (base === 'zh') {
+    const traditionalRegions = ['tw', 'hk', 'mo'];
+    if (parts.includes('hant') || traditionalRegions.includes(parts[1])) {
+      return 'zh-Hant';
+    }
+    return 'zh';
+  }
+
+  return LANGUAGE_ALIASES[base] || base;
+}
 
 const dictionaries = Object.create(null); // in-memory cache
 let currentLanguage = DEFAULT_LANG;
@@ -103,7 +120,7 @@ function applyTranslations(root = document) {
 }
 
 async function loadLanguage(lang) {
-  lang = LANGUAGE_ALIASES[lang] || lang;
+  lang = normalizeLanguageTag(lang);
   if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
   if (dictionaries[lang]) return lang;
   try {
@@ -136,12 +153,12 @@ async function setLanguage(lang) {
     let d = null;
     try {
       d = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage || null;
-      if (d) d = String(d).split('-')[0];
+      if (d) d = String(d).trim();
     } catch (e) {}
     return d;
   })();
 
-  const initial = saved || (SUPPORTED.includes(browser) ? browser : DEFAULT_LANG);
+  const initial = saved || normalizeLanguageTag(browser);
 
   // Preload default for fallback; then load chosen language; then apply.
   loadLanguage(DEFAULT_LANG)
