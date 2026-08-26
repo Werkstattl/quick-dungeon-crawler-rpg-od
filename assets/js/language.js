@@ -1,10 +1,11 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs'];
+const SUPPORTED = ['en','de','ja','es','pt','pt-PT','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
   ja: '日本語',
   es: 'Español',
   pt: 'Português (Brasil)',
+  'pt-PT': 'Português (Portugal)',
   ro: 'Română',
   ru: 'Русский',
   uk: 'Українська',
@@ -53,6 +54,10 @@ function normalizeLanguageTag(lang) {
       return 'zh-Hant';
     }
     return 'zh';
+  }
+
+  if (base === 'pt' && parts[1] === 'pt') {
+    return 'pt-PT';
   }
 
   return LANGUAGE_ALIASES[base] || base;

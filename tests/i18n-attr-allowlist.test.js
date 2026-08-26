@@ -109,6 +109,20 @@ test('Simplified Chinese language tags continue to load the zh locale', async ()
     }
 });
 
+test('European Portuguese is available without changing Brazilian Portuguese fallback', async () => {
+    const ctx = makeContext();
+
+    for (const tag of ['pt-PT', 'pt_PT']) {
+        assert.equal(await ctx._loadLanguage(tag), 'pt-PT');
+    }
+    for (const tag of ['pt', 'pt-BR']) {
+        assert.equal(await ctx._loadLanguage(tag), 'pt');
+    }
+    assert.ok(Array.from(ctx.window.languageOptions).some((option) => (
+        option.code === 'pt-PT' && option.label === 'Português (Portugal)'
+    )));
+});
+
 test('Persian is available and applies right-to-left document metadata', async () => {
     const ctx = makeContext();
 
