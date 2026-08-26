@@ -10,6 +10,7 @@ const languageSource = fs.readFileSync(path.join(root, 'assets/js/language.js'),
 // Expose applyTranslations and a dict-setter for testing
 const harness = `
   globalThis._applyTranslations = applyTranslations;
+  globalThis._loadLanguage = loadLanguage;
   globalThis._setDict = (lang, dict) => { dictionaries[lang] = dict; currentLanguage = lang; };
 `;
 
@@ -67,4 +68,10 @@ test('non-allowlisted attribute onclick is silently ignored', () => {
     ctx._applyTranslations(mockRoot);
 
     assert.equal(mockRoot.el.attrs['onclick'], undefined);
+});
+
+test('Norwegian macrolanguage code loads the Bokmål locale', async () => {
+    const ctx = makeContext();
+
+    assert.equal(await ctx._loadLanguage('no'), 'nb');
 });

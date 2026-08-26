@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da'];
+const SUPPORTED = ['en','de','ja','es','pt','ro','ru','uk','zh','fr','it','ko','pl','tr','ar','hi','id','th','vi','nl','sv','ms','da','nb'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -22,7 +22,8 @@ const LANGUAGE_LABELS = {
   nl: 'Nederlands',
   sv: 'Svenska',
   ms: 'Bahasa Melayu',
-  da: 'Dansk'
+  da: 'Dansk',
+  nb: 'Norsk bokmål'
 };
 const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
   code,
@@ -32,6 +33,7 @@ const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
 window.supportedLanguages = SUPPORTED.slice();
 window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
+const LANGUAGE_ALIASES = { no: 'nb' };
 
 const dictionaries = Object.create(null); // in-memory cache
 let currentLanguage = DEFAULT_LANG;
@@ -101,6 +103,7 @@ function applyTranslations(root = document) {
 }
 
 async function loadLanguage(lang) {
+  lang = LANGUAGE_ALIASES[lang] || lang;
   if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
   if (dictionaries[lang]) return lang;
   try {
