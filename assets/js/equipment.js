@@ -254,6 +254,22 @@ const getCompanionCharmLoopCount = (rarity) => {
     }
 };
 
+const EQUIPMENT_RARITY_ROLL_COUNTS = Object.freeze({
+    Common: 2,
+    Uncommon: 3,
+    Rare: 4,
+    Epic: 5,
+    Legendary: 6,
+    Heirloom: 8,
+});
+
+const getEquipmentBaseRollCount = (equipment) => {
+    if (isCompanionCharm(equipment)) {
+        return getCompanionCharmLoopCount(equipment && equipment.rarity);
+    }
+    return EQUIPMENT_RARITY_ROLL_COUNTS[equipment && equipment.rarity] || 2;
+};
+
 const rollCompanionCharmStatValue = (statType, equipment, enemyScaling) => {
     const rarityScaleMap = {
         Common: 0.9,
@@ -318,6 +334,75 @@ const getEquipmentStatValueWeight = (statType, companionCharm = false) => {
 
 const isFiniteEquipmentStatValue = (value) => typeof value === 'number' && Number.isFinite(value);
 
+const getEquipmentStatEntries = (equipment, statPool) => {
+    const allowedKeys = new Set(statPool);
+    const entriesByKey = new Map();
+    const sourceStats = equipment && Array.isArray(equipment.stats) ? equipment.stats : [];
+    sourceStats.forEach((entry) => {
+        const statType = entry && Object.keys(entry)[0];
+        if (statType && isFiniteEquipmentStatValue(entry[statType]) && allowedKeys.has(statType)) {
+            entriesByKey.set(statType, entry);
+        }
+    });
+    return Array.from(entriesByKey.entries());
+};
+
+// Older saves only contain aggregated stat values. Give every visible stat one
+// roll, then assign the rarity's remaining rolls to the strongest normalized
+// value. This cannot recover the original RNG exactly, but reliably recognizes
+// obvious stacked stats without creating extra item power.
+const inferLegacyEquipmentStatRolls = (equipment, statPool) => {
+    const entries = getEquipmentStatEntries(equipment, statPool);
+    const rollCounts = {};
+    entries.forEach(([statType]) => {
+        rollCounts[statType] = 1;
+    });
+
+    const targetRollCount = Math.max(entries.length, getEquipmentBaseRollCount(equipment));
+    const companionCharm = isCompanionCharm(equipment);
+    for (let assigned = entries.length; assigned < targetRollCount && entries.length; assigned += 1) {
+        const [strongestStat] = entries.reduce((best, candidate) => {
+            const score = Math.abs(Number(candidate[1][candidate[0]]))
+                * getEquipmentStatValueWeight(candidate[0], companionCharm)
+                / rollCounts[candidate[0]];
+            const bestScore = Math.abs(Number(best[1][best[0]]))
+                * getEquipmentStatValueWeight(best[0], companionCharm)
+                / rollCounts[best[0]];
+            return score > bestScore ? candidate : best;
+        });
+        rollCounts[strongestStat] += 1;
+    }
+    return rollCounts;
+};
+
+const getEquipmentStatRollCounts = (equipment, statPool = getEquipmentRerollStatPool(equipment)) => {
+    if (!equipment || !Array.isArray(statPool) || !statPool.length) {
+        return {};
+    }
+    const entries = getEquipmentStatEntries(equipment, statPool);
+    const storedRolls = equipment.statRolls;
+    const storedRollCount = storedRolls && typeof storedRolls === 'object' && !Array.isArray(storedRolls)
+        ? entries.reduce((total, [statType]) => total + (Number(storedRolls[statType]) || 0), 0)
+        : 0;
+    const maximumPlausibleRollCount = Math.max(entries.length, getEquipmentBaseRollCount(equipment) + 1);
+    const hasCompleteStoredRolls = storedRolls && typeof storedRolls === 'object' && !Array.isArray(storedRolls)
+        && entries.every(([statType]) => Number.isInteger(storedRolls[statType]) && storedRolls[statType] > 0)
+        && storedRollCount >= entries.length
+        && storedRollCount <= maximumPlausibleRollCount;
+    if (!hasCompleteStoredRolls) {
+        return inferLegacyEquipmentStatRolls(equipment, statPool);
+    }
+
+    return entries.reduce((rollCounts, [statType]) => {
+        rollCounts[statType] = storedRolls[statType];
+        return rollCounts;
+    }, {});
+};
+
+const getEquipmentTotalRollCount = (equipment, statPool = getEquipmentRerollStatPool(equipment)) => Object.values(
+    getEquipmentStatRollCounts(equipment, statPool),
+).reduce((total, count) => total + count, 0);
+
 const getLockedEquipmentStats = (equipment, lockedStatKeys, statPool) => {
     const requestedKeys = new Set(Array.isArray(lockedStatKeys) ? lockedStatKeys : []);
     const allowedKeys = new Set(statPool);
@@ -336,36 +421,33 @@ const getLockedEquipmentStats = (equipment, lockedStatKeys, statPool) => {
 const rerollCompanionCharmStats = (equipment, enemyScaling, lockedStatKeys = []) => {
     const baseLoopCount = getCompanionCharmLoopCount(equipment.rarity);
     const fullStatPool = COMPANION_CHARM_STAT_POOL;
-    const sourceStatCount = new Set((Array.isArray(equipment.stats) ? equipment.stats : [])
-        .map((entry) => {
-            const statType = entry && Object.keys(entry)[0];
-            return statType && isFiniteEquipmentStatValue(entry[statType]) ? statType : null;
-        })
-        .filter((statType) => statType && fullStatPool.includes(statType))).size;
+    const sourceRollCounts = getEquipmentStatRollCounts(equipment, fullStatPool);
+    const sourceStatCount = Object.keys(sourceRollCounts).length;
     const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
         .slice(0, Math.max(0, sourceStatCount - 1));
     const hasLockedStats = lockedStats.length > 0;
     const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
     const statPool = fullStatPool.filter((statType) => !lockedKeys.has(statType));
     equipment.stats = lockedStats;
+    equipment.statRolls = lockedStats.reduce((rollCounts, entry) => {
+        const statType = Object.keys(entry)[0];
+        rollCounts[statType] = sourceRollCounts[statType] || 1;
+        return rollCounts;
+    }, {});
     let equipmentValue = lockedStats.reduce((total, entry) => {
         const statType = Object.keys(entry)[0];
         return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType, true));
     }, 0);
     const loopCount = hasLockedStats
-        ? Math.max(1, sourceStatCount - lockedStats.length)
+        ? Math.max(1, Object.values(sourceRollCounts).reduce((total, count) => total + count, 0)
+            - Object.values(equipment.statRolls).reduce((total, count) => total + count, 0))
         : baseLoopCount;
-    const rerolledStatKeys = new Set();
 
     for (let i = 0; i < loopCount; i++) {
-        const availableStatPool = hasLockedStats
-            ? statPool.filter((statType) => !rerolledStatKeys.has(statType))
-            : statPool;
-        if (!availableStatPool.length) {
+        if (!statPool.length) {
             break;
         }
-        const statType = availableStatPool[Math.floor(Math.random() * availableStatPool.length)];
-        rerolledStatKeys.add(statType);
+        const statType = statPool[Math.floor(Math.random() * statPool.length)];
         const statValue = rollCompanionCharmStatValue(statType, equipment, enemyScaling);
         const existingEntry = equipment.stats.find((entry) => Object.keys(entry)[0] === statType);
         if (existingEntry) {
@@ -373,6 +455,7 @@ const rerollCompanionCharmStats = (equipment, enemyScaling, lockedStatKeys = [])
         } else {
             equipment.stats.push({ [statType]: statValue });
         }
+        equipment.statRolls[statType] = (equipment.statRolls[statType] || 0) + 1;
 
         equipmentValue += statValue * getEquipmentStatValueWeight(statType, true);
     }
@@ -399,6 +482,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
         tier: null,
         value: null,
         stats: [],
+        statRolls: {},
         slot: null,
     };
     const maxLvl = dungeon.progress.floor * dungeon.settings.enemyLvlGap + (dungeon.settings.enemyBaseLvl - 1);
@@ -607,67 +691,41 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
         rerollCompanionCharmStats(equipment, enemyScaling, lockedStatKeys);
         return;
     }
-    let baseLoopCount;
-    switch (equipment.rarity) {
-        case "Common":
-            baseLoopCount = 2;
-            break;
-        case "Uncommon":
-            baseLoopCount = 3;
-            break;
-        case "Rare":
-            baseLoopCount = 4;
-            break;
-        case "Epic":
-            baseLoopCount = 5;
-            break;
-        case "Legendary":
-            baseLoopCount = 6;
-            break;
-        case "Heirloom":
-            baseLoopCount = 8;
-            break;
-        default:
-            baseLoopCount = 2;
-            break;
-    }
+    const baseLoopCount = getEquipmentBaseRollCount(equipment);
     const fullStatPool = getEquipmentRerollStatPool(equipment);
     if (!fullStatPool.length) {
         return;
     }
-    const sourceStatCount = new Set((Array.isArray(equipment.stats) ? equipment.stats : [])
-        .map((entry) => {
-            const statType = entry && Object.keys(entry)[0];
-            return statType && isFiniteEquipmentStatValue(entry[statType]) ? statType : null;
-        })
-        .filter((statType) => statType && fullStatPool.includes(statType))).size;
+    const sourceRollCounts = getEquipmentStatRollCounts(equipment, fullStatPool);
+    const sourceStatCount = Object.keys(sourceRollCounts).length;
     const lockedStats = getLockedEquipmentStats(equipment, lockedStatKeys, fullStatPool)
         .slice(0, Math.max(0, sourceStatCount - 1));
     const hasLockedStats = lockedStats.length > 0;
     const lockedKeys = new Set(lockedStats.map((entry) => Object.keys(entry)[0]));
     const statTypes = fullStatPool.filter((statType) => !lockedKeys.has(statType));
     equipment.stats = lockedStats;
+    equipment.statRolls = lockedStats.reduce((rollCounts, entry) => {
+        const statType = Object.keys(entry)[0];
+        rollCounts[statType] = sourceRollCounts[statType] || 1;
+        return rollCounts;
+    }, {});
     let equipmentValue = lockedStats.reduce((total, entry) => {
         const statType = Object.keys(entry)[0];
         return total + (Number(entry[statType]) * getEquipmentStatValueWeight(statType));
     }, 0);
     let statValue;
     let loopCount = hasLockedStats
-        ? Math.max(1, sourceStatCount - lockedStats.length)
+        ? Math.max(1, Object.values(sourceRollCounts).reduce((total, count) => total + count, 0)
+            - Object.values(equipment.statRolls).reduce((total, count) => total + count, 0))
         : baseLoopCount;
     const maxLoopCount = hasLockedStats ? loopCount : loopCount + 1;
-    const rerolledStatKeys = new Set();
     for (let i = 0; i < loopCount; i++) {
-        const availableStatTypes = hasLockedStats
-            ? statTypes.filter((statType) => !rerolledStatKeys.has(statType))
-            : statTypes;
-        if (!availableStatTypes.length) {
+        if (!statTypes.length) {
             break;
         }
-        let statType = i === 0 && availableStatTypes.includes(forcedStat)
+        let statType = i === 0 && statTypes.includes(forcedStat)
             ? forcedStat
-            : availableStatTypes[Math.floor(Math.random() * availableStatTypes.length)];
-        rerolledStatKeys.add(statType);
+            : statTypes[Math.floor(Math.random() * statTypes.length)];
         const statRollCap = getEquipmentStatRollCap(statType, equipment.tier);
         let statMultiplier = (enemyScaling - 1) * equipment.lvl;
         let hpScaling = (40 * randomizeDecimal(rollFloor, 1.5)) + ((40 * randomizeDecimal(rollFloor, 1.5)) * statMultiplier);
@@ -754,6 +812,7 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
         } else {
             equipment.stats.push({ [statType]: statValue });
         }
+        equipment.statRolls[statType] = (equipment.statRolls[statType] || 0) + 1;
     }
     equipment.value = Math.round(equipmentValue * 2.55);
     equipment.icon = equipmentIcon(equipment.category);
@@ -1631,17 +1690,30 @@ const getOrderedEquipmentStats = (primaryTotals, comparisonTotals) => {
     return ordered.concat(remaining);
 };
 
-const renderEquipmentCard = ({ item, icon, totals, comparisonTotals = null, labelKey = '', labelFallback = '', highlightDiff = false }) => {
+const renderEquipmentCard = ({
+    item,
+    icon,
+    totals,
+    comparisonTotals = null,
+    labelKey = '',
+    labelFallback = '',
+    highlightDiff = false,
+    showRollCounts = false,
+}) => {
     const label = labelKey ? translateEquipText(labelKey, labelFallback || labelKey) : (labelFallback || '');
     const tier = item.tier === undefined ? 1 : item.tier;
     const statKeys = getOrderedEquipmentStats(totals, comparisonTotals);
+    const statRollCounts = showRollCounts ? getEquipmentStatRollCounts(item) : {};
     const statsMarkup = statKeys.map(stat => {
         const value = totals[stat] || 0;
         const comparisonValue = comparisonTotals && comparisonTotals[stat] ? comparisonTotals[stat] : 0;
         const diffValue = highlightDiff && comparisonTotals ? normalizeEquipmentDiff(value - comparisonValue) : 0;
         const diffMarkup = diffValue !== 0 ? `<span class="stat-diff ${diffValue > 0 ? 'positive' : 'negative'}">(${formatEquipmentValue(stat, diffValue, { includeSign: true })})</span>` : '';
+        const rollCountMarkup = showRollCounts && statRollCounts[stat]
+            ? `<span class="stat-roll-count" aria-label="${statRollCounts[stat]}">🎲 ×${statRollCounts[stat]}</span>`
+            : '';
         return `<li class="equipment-stat-row">
-                    <span class="stat-name">${formatEquipmentStatLabel(stat)}</span>
+                    <span class="stat-name">${formatEquipmentStatLabel(stat)} ${rollCountMarkup}</span>
                     <span class="stat-numbers">
                         <span class="stat-value">${formatEquipmentValue(stat, value, { includeSign: true })}</span>
                         ${diffMarkup}

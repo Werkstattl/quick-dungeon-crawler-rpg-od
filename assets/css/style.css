@@ -2243,7 +2243,7 @@ header button i {
 
 .reroll-stat-lock-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     gap: 0.5rem;
 }
 
@@ -2274,6 +2274,22 @@ header button i {
     color: #ddd;
 }
 
+.reroll-stat-lock-rolls,
+.stat-roll-count {
+    color: #d7b85b;
+    font-size: calc(0.68rem * var(--font-scale));
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.reroll-stat-lock-rolls {
+    margin-left: auto;
+}
+
+.reroll-stat-lock-rolls + .reroll-stat-lock-value {
+    margin-left: 0;
+}
+
 .reroll-preview {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2301,6 +2317,14 @@ header button i {
 
 .reroll-preview .equipment-card h5 {
     margin: 0.1rem 0 0.5rem;
+}
+
+.reroll-roll-budget {
+    margin: 0 0 0.45rem;
+    color: #d7b85b;
+    font-size: calc(0.75rem * var(--font-scale));
+    font-weight: 700;
+    text-align: center;
 }
 
 .reroll-preview .equipment-stat-row {

@@ -63,7 +63,7 @@ const createEquipmentContext = (randomValues = [0]) => {
     return context;
 };
 
-test('selective reroll preserves locked stat types and values while rerolling the rest', () => {
+test('selective reroll preserves locked values and their inferred legacy roll budget', () => {
     const context = createEquipmentContext();
     const result = evaluate(context, `
         (() => {
@@ -85,12 +85,13 @@ test('selective reroll preserves locked stat types and values while rerolling th
     assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.atk !== undefined))), { atk: 123 });
     assert.equal(result.stats.some((stat) => stat.critRate === 7.5), false);
     assert.equal(result.stats.some((stat) => stat.vamp === 3.25), false);
-    assert.equal(result.stats.find((stat) => stat.atkSpd !== undefined).atkSpd, 15.75);
-    assert.equal(result.stats.length, 3);
+    assert.equal(result.stats.find((stat) => stat.atkSpd !== undefined).atkSpd, 31.5);
+    assert.equal(result.stats.length, 2);
+    assert.deepEqual(JSON.parse(JSON.stringify(result.statRolls)), { atk: 2, atkSpd: 2 });
     assert.ok(result.value > 0);
 });
 
-test('repeated selective rerolls preserve a four-stat item stat count', () => {
+test('repeated selective rerolls preserve total roll count while allowing stacked results', () => {
     const context = createEquipmentContext([0]);
     const result = evaluate(context, `
         (() => {
@@ -99,17 +100,96 @@ test('repeated selective rerolls preserve a four-stat item stat count', () => {
                 tier: 5, lvl: 40, value: 5000,
                 stats: [{ atk: 123 }, { critRate: 7.5 }, { critDmg: 12 }, { vamp: 3.25 }],
             };
-            const counts = [];
+            const rollCounts = [];
             for (let reroll = 0; reroll < 10; reroll += 1) {
                 rerollEquipmentStats(equipment, null, { lockedStatKeys: ['atk'] });
-                counts.push(equipment.stats.length);
+                rollCounts.push(Object.values(equipment.statRolls).reduce((total, count) => total + count, 0));
             }
-            return { equipment, counts };
+            return { equipment, rollCounts };
         })()
     `);
 
-    assert.deepEqual(Array.from(result.counts), Array(10).fill(4));
+    assert.deepEqual(Array.from(result.rollCounts), Array(10).fill(4));
     assert.deepEqual(JSON.parse(JSON.stringify(result.equipment.stats.find((stat) => stat.atk !== undefined))), { atk: 123 });
+    assert.deepEqual(JSON.parse(JSON.stringify(result.equipment.statRolls)), { atk: 1, atkSpd: 3 });
+});
+
+test('a three-roll locked stat leaves exactly one roll on a Rare item', () => {
+    const context = createEquipmentContext([0]);
+    const result = evaluate(context, `
+        (() => {
+            const equipment = {
+                category: 'Hammer', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+                tier: 5, lvl: 40, value: 5000,
+                stats: [{ atk: 270 }, { hp: 80 }],
+                statRolls: { atk: 3, hp: 1 },
+            };
+            rerollEquipmentStats(equipment, null, { lockedStatKeys: ['atk'] });
+            return equipment;
+        })()
+    `);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.atk !== undefined))), { atk: 270 });
+    assert.deepEqual(JSON.parse(JSON.stringify(result.statRolls)), { atk: 3, hp: 1 });
+    assert.equal(Object.values(result.statRolls).reduce((total, count) => total + count, 0), 4);
+});
+
+test('two remaining rolls can stack onto the same stat after a lock', () => {
+    const context = createEquipmentContext([0]);
+    const result = evaluate(context, `
+        (() => {
+            const equipment = {
+                category: 'Hammer', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+                tier: 5, lvl: 40, value: 5000,
+                stats: [{ atk: 180 }, { hp: 160 }],
+                statRolls: { atk: 2, hp: 2 },
+            };
+            rerollEquipmentStats(equipment, null, { lockedStatKeys: ['atk'] });
+            return equipment;
+        })()
+    `);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.atk !== undefined))), { atk: 180 });
+    assert.deepEqual(JSON.parse(JSON.stringify(result.statRolls)), { atk: 2, hp: 2 });
+    assert.equal(result.stats.length, 2);
+});
+
+test('legacy roll migration assigns obvious stacked values without increasing rarity budget', () => {
+    const context = createEquipmentContext();
+    const rolls = evaluate(context, `getEquipmentStatRollCounts({
+        category: 'Hammer', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+        tier: 5, lvl: 40, stats: [{ atk: 270 }, { hp: 80 }],
+    })`);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(rolls)), { atk: 3, hp: 1 });
+});
+
+test('invalid stored roll metadata falls back to the bounded legacy migration', () => {
+    const context = createEquipmentContext();
+    const rolls = evaluate(context, `getEquipmentStatRollCounts({
+        category: 'Hammer', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+        tier: 5, lvl: 40, stats: [{ atk: 270 }, { hp: 80 }],
+        statRolls: { atk: 999999, hp: 1 },
+    })`);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(rolls)), { atk: 3, hp: 1 });
+});
+
+test('a normal reroll records every generated roll', () => {
+    const context = createEquipmentContext([0]);
+    const result = evaluate(context, `
+        (() => {
+            const equipment = {
+                category: 'Sword', attribute: 'Damage', type: 'Weapon', rarity: 'Rare',
+                tier: 5, lvl: 40, value: 0, stats: [],
+            };
+            rerollEquipmentStats(equipment);
+            return equipment;
+        })()
+    `);
+
+    assert.deepEqual(JSON.parse(JSON.stringify(result.statRolls)), { atk: 4 });
+    assert.equal(result.stats.length, 1);
 });
 
 test('selective reroll preserves every accepted lock on an extra-roll item', () => {
@@ -166,8 +246,9 @@ test('selective reroll also preserves locked Companion Charm stats', () => {
 
     assert.deepEqual(JSON.parse(JSON.stringify(result.stats.find((stat) => stat.fasterRun !== undefined))), { fasterRun: 3 });
     assert.equal(result.stats.some((stat) => stat.luck === 2), false);
-    assert.equal(result.stats.find((stat) => stat.atk !== undefined).atk, 18);
-    assert.equal(result.stats.length, 3);
+    assert.equal(result.stats.find((stat) => stat.atk !== undefined).atk, 36);
+    assert.equal(result.stats.length, 2);
+    assert.deepEqual(JSON.parse(JSON.stringify(result.statRolls)), { fasterRun: 1, atk: 2 });
 });
 
 test('stat lock selection rejects unknown stats and always leaves one stat rerollable', () => {
@@ -216,6 +297,7 @@ test('the reroll preview excludes stats that are already locked', () => {
 
     assert.doesNotMatch(markup, /<span class="stat-name">atk<\/span>/);
     assert.match(markup, /<span class="stat-name">critRate<\/span>/);
+    assert.match(markup, /class="reroll-roll-budget"/);
 });
 
 test('reroll stat lock options are sorted alphabetically by their displayed labels', () => {
@@ -237,6 +319,25 @@ test('reroll stat lock options are sorted alphabetically by their displayed labe
     const markup = context.document.querySelector('#reroll-stat-lock-options').innerHTML;
     assert.ok(markup.indexOf('data-reroll-stat-lock="vamp"') < markup.indexOf('data-reroll-stat-lock="atk"'));
     assert.ok(markup.indexOf('data-reroll-stat-lock="atk"') < markup.indexOf('data-reroll-stat-lock="critRate"'));
+});
+
+test('stat lock options show how many rolls each value protects', () => {
+    const context = createForgeExecutionContext();
+    context.getEquipmentStatRollCounts = () => ({ atk: 3, hp: 1 });
+    context.getEquipmentRerollStatPool = () => ['atk', 'hp'];
+    evaluate(context, `
+        selectedRerollItem = {
+            equipment: {
+                stats: [{ atk: 270 }, { hp: 80 }],
+                statRolls: { atk: 3, hp: 1 },
+            },
+        };
+        renderRerollStatLocks();
+    `);
+
+    const markup = context.document.querySelector('#reroll-stat-lock-options').innerHTML;
+    assert.match(markup, /data-reroll-stat-lock="atk"[^]*🎲 ×3/);
+    assert.match(markup, /data-reroll-stat-lock="hp"[^]*🎲 ×1/);
 });
 
 const createForgeExecutionContext = ({ gold = 100000, stones = 50, tokens = 1 } = {}) => {
@@ -287,6 +388,7 @@ const createForgeExecutionContext = ({ gold = 100000, stones = 50, tokens = 1 } 
             context.receivedLockedStatKeys = options.lockedStatKeys;
             const locked = equipment.stats.filter((entry) => options.lockedStatKeys.includes(Object.keys(entry)[0]));
             equipment.stats = [...locked, { critDmg: 11 }];
+            equipment.statRolls = { atk: 2, critDmg: 2 };
             equipment.value = 4321;
         },
     });
@@ -322,6 +424,7 @@ test('a stat-locked reroll atomically spends Gold, Refine Stones, and Forge acce
     assert.equal(context.player.inventory.forgeTokens, 0);
     assert.deepEqual(JSON.parse(JSON.stringify(context.receivedLockedStatKeys)), ['atk']);
     assert.deepEqual(JSON.parse(context.player.inventory.equipment[0]).stats, [{ atk: 123 }, { critDmg: 11 }]);
+    assert.deepEqual(JSON.parse(context.player.inventory.equipment[0]).statRolls, { atk: 2, critDmg: 2 });
 });
 
 test('a stat-locked reroll does not spend Forge Tokens for an unlocked owner', () => {

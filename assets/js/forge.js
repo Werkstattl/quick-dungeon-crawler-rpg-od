@@ -441,6 +441,25 @@ const getRerollEquipmentStatKeys = (equipment) => {
             && (!supportedStats || supportedStats.has(statType))
             && keys.indexOf(statType) === index);
 };
+const getRerollStatRollCounts = (equipment) => {
+    if (typeof getEquipmentStatRollCounts === 'function') {
+        return getEquipmentStatRollCounts(equipment);
+    }
+    return getRerollEquipmentStatKeys(equipment).reduce((rollCounts, statType) => {
+        rollCounts[statType] = 1;
+        return rollCounts;
+    }, {});
+};
+const getRerollRollBudget = (equipment, lockedStatKeys = []) => {
+    const rollCounts = getRerollStatRollCounts(equipment);
+    const lockedKeys = new Set(Array.isArray(lockedStatKeys) ? lockedStatKeys : []);
+    const total = Object.values(rollCounts).reduce((sum, count) => sum + count, 0);
+    const locked = Object.entries(rollCounts).reduce(
+        (sum, [statType, count]) => sum + (lockedKeys.has(statType) ? count : 0),
+        0,
+    );
+    return { total, locked, remaining: Math.max(0, total - locked) };
+};
 const getValidRerollStatLockKeys = (equipment, requestedKeys) => {
     const availableKeys = getRerollEquipmentStatKeys(equipment);
     const maximumLocks = Math.max(0, availableKeys.length - 1);
@@ -775,11 +794,14 @@ const renderPossibleRerollStats = (equipment, excludedStats = []) => {
         <li class="equipment-stat-row">
             <span class="stat-name">${formatEquipmentStatLabel(stat)}</span>
         </li>`).join('');
+    const rollBudget = getRerollRollBudget(equipment, excludedStats);
+    const remainingLabel = t('remaining', { count: `${rollBudget.remaining}/${rollBudget.total} 🎲` });
 
     return `
         <div class="equipment-card reroll-possible-card">
             <h3 class="${equipment.rarity}">${equipmentIcon(equipment.baseCategory || equipment.category)}${typeof equipmentDisplayLabel === 'function' ? equipmentDisplayLabel(equipment) : equipmentLabel(equipment.rarity, equipment.category)}</h3>
             <h5 class="lvltier ${equipment.rarity}"><b>Lv.${equipment.lvl} ${t('tier')} ${equipment.tier === undefined ? 1 : equipment.tier}</b></h5>
+            <p class="reroll-roll-budget">${remainingLabel}</p>
             <ul class="equipment-stat-list reroll-possible-list">
                 ${statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`}
             </ul>
@@ -853,6 +875,7 @@ const renderRerollStatLocks = () => {
 
     selectedRerollStatLocks = getValidRerollStatLockKeys(equipment, selectedRerollStatLocks);
     const totals = getEquipmentStatTotals(equipment);
+    const statRollCounts = getRerollStatRollCounts(equipment);
     const sortedStatKeys = [...statKeys].sort((statA, statB) => {
         const labelComparison = formatEquipmentStatLabel(statA).localeCompare(
             formatEquipmentStatLabel(statB),
@@ -865,6 +888,7 @@ const renderRerollStatLocks = () => {
         <label class="reroll-stat-lock-option ${selectedRerollStatLocks.includes(statType) ? 'selected' : ''}">
             <input type="checkbox" data-reroll-stat-lock="${statType}" ${selectedRerollStatLocks.includes(statType) ? 'checked' : ''}>
             <span>${formatEquipmentStatLabel(statType)}</span>
+            <span class="reroll-stat-lock-rolls">🎲 ×${statRollCounts[statType] || 1}</span>
             <span class="reroll-stat-lock-value">${formatEquipmentValue(statType, totals[statType] || 0, { includeSign: true })}</span>
         </label>
     `).join('');
@@ -910,7 +934,8 @@ const displayRerollPreview = () => {
         item: currentEquipment,
         icon: currentIcon,
         totals: currentTotals,
-        labelFallback: ''
+        labelFallback: '',
+        showRollCounts: true,
     });
     previewItem.innerHTML = renderPossibleRerollStats(currentEquipment, selectedRerollStatLocks);
 
@@ -1398,6 +1423,11 @@ const displayForgeResult = () => {
 
 const applyRerolledEquipment = (equipment, rerolledEquipment) => {
     equipment.stats = cloneEquipment(rerolledEquipment.stats);
+    if (rerolledEquipment.statRolls && typeof rerolledEquipment.statRolls === 'object') {
+        equipment.statRolls = cloneEquipment(rerolledEquipment.statRolls);
+    } else {
+        delete equipment.statRolls;
+    }
     equipment.value = rerolledEquipment.value;
     equipment.icon = rerolledEquipment.icon;
 };
