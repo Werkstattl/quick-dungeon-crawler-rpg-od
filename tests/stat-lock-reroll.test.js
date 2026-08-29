@@ -46,6 +46,16 @@ test('each additional stat lock costs more than the previous one', () => {
     assert.ok(three.stones - two.stones > two.stones - one.stones);
 });
 
+test('high-tier stat lock rerolls use the reduced Refine Stone cost without reducing Gold', () => {
+    const context = createForgeContext();
+    const costs = evaluate(
+        context,
+        'getStatLockRerollCosts({ value: 74725, lvl: 98, rarity: "Heirloom", tier: 12 }, 3)',
+    );
+
+    assert.deepEqual({ ...costs }, { gold: 18450070, stones: 149 });
+});
+
 const createEquipmentContext = (randomValues = [0]) => {
     const deterministicMath = Object.create(Math);
     let randomIndex = 0;
