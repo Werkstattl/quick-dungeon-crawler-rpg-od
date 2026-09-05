@@ -1,7 +1,9 @@
 # Privacy
 
 Quick Dungeon Crawler on Demand is available 
-on Android and as a web version.
+on iOS, Android and as a web version.
+
+An HTML version of this policy is available at <https://dungeon.werkstattl.com/privacy.html>.
 
 ## Privacy policy for Quick Dungeon Crawler on Demand
 
@@ -22,6 +24,8 @@ Since we do not collect any personal information, we do not use it for any purpo
 ## Third-Party services
 
 Our game is hosted on GitHub Pages, which may collect certain non-personal information as described in GitHub's Privacy Policy. Please review GitHub's Privacy Policy separately to understand how they handle data.
+
+In-app purchases are processed by the platform's app store (Apple or Google). Purchase transactions are handled entirely between your device and the store; we do not receive or store any payment information.
 
 ## Children's privacy
 

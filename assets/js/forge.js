@@ -183,7 +183,7 @@ const openForgeUnlockModal = () => {
                 <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
             </div>
             <p class="iap-legal-links">
-                <a href="https://dungeon.werkstattl.com/PRIVACY.md" data-iap-legal-url="https://dungeon.werkstattl.com/PRIVACY.md" data-i18n="iap-privacy-policy">Privacy Policy</a>
+                <a href="https://dungeon.werkstattl.com/privacy.html" data-iap-legal-url="https://dungeon.werkstattl.com/privacy.html" data-i18n="iap-privacy-policy">Privacy Policy</a>
                 <span data-iap-apple-only hidden><span aria-hidden="true"> · </span><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="iap-terms-of-use">Terms of Use</a></span>
             </p>
             <p class="iap-status" data-iap-status role="status" aria-live="polite"></p>
