@@ -589,7 +589,7 @@ function openMenu(isTitle = false) {
     // Player profile click function
     playerMenu.onclick = function () {
         sfxOpen.play();
-        let playTime = new Date(player.playtime * 1000).toISOString().slice(11, 19);
+        let playTime = formatRunDuration(player.playtime);
         menuModalElement.style.display = "none";
         defaultModalElement.style.display = "flex";
         defaultModalElement.innerHTML = `
@@ -620,7 +620,7 @@ function openMenu(isTitle = false) {
     if (runMenu) {
         runMenu.onclick = function () {
             sfxOpen.play();
-            let runTime = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
+            let runTime = formatRunDuration(dungeon.statistics.runtime);
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
@@ -1510,15 +1510,6 @@ const progressReset = (fromDeath = false) => {
     }
     saveData({ forceDungeon: true });
 }
-
-const formatRunDuration = (seconds) => {
-    const totalSeconds = Math.max(0, Math.floor(Number(seconds) || 0));
-    const hrs = Math.floor(totalSeconds / 3600);
-    const mins = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-    const parts = [hrs, mins, secs].map(part => String(part).padStart(2, "0"));
-    return parts.join(":");
-};
 
 const hideEndgameScreen = () => {
     const modal = document.querySelector("#endgameModal");

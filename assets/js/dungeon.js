@@ -499,13 +499,12 @@ const initialDungeonLoad = () => {
     }
     
     loadDungeonProgress();
-    dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
+    dungeonTime.textContent = formatRunDuration(dungeon.statistics.runtime);
     updateRestingDisplay();
     dungeonActivity.setAttribute('data-i18n', 'explore');
     dungeonActivity.textContent = t('explore');
     updateExploreButtonAttention();
     dungeon.initialized = true;
-    dungeonTime.innerHTML = "00:00:00";
     lastDungeonEventTimestamp = Date.now();
     dungeonTimer = setInterval(dungeonEventTick, DUNGEON_TIMER_TICK_MS);
     playTimer = setInterval(dungeonCounter, 1000);
@@ -544,7 +543,7 @@ const dungeonStartPause = () => {
 const dungeonCounter = () => {
     player.playtime++;
     dungeon.statistics.runtime++;
-    dungeonTime.innerHTML = new Date(dungeon.statistics.runtime * 1000).toISOString().slice(11, 19);
+    dungeonTime.textContent = formatRunDuration(dungeon.statistics.runtime);
     if (Date.now() - lastSaveTime >= 3000) {
         saveData();
     }

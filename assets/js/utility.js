@@ -1,3 +1,13 @@
+// Format elapsed time with total hours, including durations beyond 24 hours.
+const formatRunDuration = (seconds) => {
+    const totalSeconds = Math.max(0, Math.floor(Number(seconds) || 0));
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    const parts = [hrs, mins, secs].map(part => String(part).padStart(2, "0"));
+    return parts.join(":");
+};
+
 // Format large numbers
 // Safe storage: write to temp key, verify, then swap to real key.
 // This protects against corrupt saves if the app is killed mid-write.
