@@ -3,6 +3,19 @@
     --font-scale: 1;
     --base-font-size: 1rem;
     --font-family-base: 'Germania One', Georgia, 'Times New Roman', serif;
+    --modal-safe-max-height: calc(100vh - 1rem);
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+    :root {
+        --modal-safe-max-height: calc(100vh - var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) - var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) - 1rem);
+    }
+}
+
+@supports (height: 100dvh) {
+    :root {
+        --modal-safe-max-height: calc(100dvh - var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) - var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) - 1rem);
+    }
 }
 
 * {
@@ -647,11 +660,27 @@ button:focus {
 .modal-container {
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     position: fixed;
     z-index: 1;
-    width: 100vw;
-    height: 100vh;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 0;
+    overflow-y: auto;
+}
+
+/* Safe-area-capable modal placement */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .modal-container {
+        top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+        bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+        left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+    }
 }
 
 .modal-container .content {
@@ -665,7 +694,10 @@ button:focus {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    margin: 0.5rem;
+    margin: auto 0.5rem;
+    box-sizing: border-box;
+    max-height: var(--modal-safe-max-height);
+    overflow-y: auto;
     -webkit-border-radius: 0.3rem;
     -moz-border-radius: 0.3rem;
     -ms-border-radius: 0.3rem;
@@ -797,7 +829,7 @@ button:focus {
 #equipmentInfo .content.equipment-info-content--with-compare {
     max-width: 48rem;
     overflow-y: auto;
-    max-height: 100vh;
+    max-height: var(--modal-safe-max-height);
 }
 
 #equipmentInfo .content .equipment-compare-grid {
@@ -906,8 +938,7 @@ button:focus {
     padding: 0;
     gap: 0;
     height: 43rem;
-    max-height: calc(100vh - 1rem);
-    max-height: calc(100dvh - 1rem);
+    max-height: var(--modal-safe-max-height);
     width: 16rem;
     overflow-y: auto;
 }
@@ -920,7 +951,7 @@ button:focus {
 #menuModal .content {
     min-width: 15rem;
     overflow-y: auto;
-    max-height: 100vh;
+    max-height: var(--modal-safe-max-height);
 }
 
 #menuModal .content-head {
@@ -1048,7 +1079,7 @@ button:focus {
     font-weight: bold;
 }
 
-.content-ei {
+.modal-container .content-ei {
     max-height: 85vh;
     overflow-y: auto;
 }
@@ -2095,6 +2126,52 @@ header button i {
     width: 95vw;
     max-height: 80vh;
     overflow-y: auto;
+}
+
+/* Safe-area height fallback for WebViews without min() */
+@supports (padding-top: env(safe-area-inset-top)) {
+    #endgameModal .content {
+        max-height: var(--modal-safe-max-height);
+    }
+
+    .modal-container .content-ei {
+        max-height: var(--modal-safe-max-height);
+    }
+
+    #combatPanel .content {
+        max-height: var(--modal-safe-max-height);
+    }
+
+    #defaultModal .content {
+        max-height: var(--modal-safe-max-height);
+    }
+
+    #forgeModal .content {
+        max-height: var(--modal-safe-max-height);
+    }
+}
+
+/* Preserve smaller modal caps when min() is supported */
+@supports (height: min(1px, 2px)) {
+    #endgameModal .content {
+        max-height: min(90vh, var(--modal-safe-max-height));
+    }
+
+    .modal-container .content-ei {
+        max-height: min(85vh, var(--modal-safe-max-height));
+    }
+
+    #combatPanel .content {
+        max-height: min(43rem, var(--modal-safe-max-height));
+    }
+
+    #defaultModal .content {
+        max-height: min(calc(100vh - 3rem), var(--modal-safe-max-height));
+    }
+
+    #forgeModal .content {
+        max-height: min(80vh, var(--modal-safe-max-height));
+    }
 }
 
 .forge-mode-toggle {
