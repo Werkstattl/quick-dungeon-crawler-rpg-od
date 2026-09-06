@@ -394,6 +394,7 @@
   "moved-to-next-room": "Anda berpindah ke bilik seterusnya.",
   "moved-to-next-floor": "Anda berpindah ke tingkat seterusnya.",
   "route-choice-found": "<span class='Rare'>Beberapa laluan bercabang dari pelantar. Pilih laluan untuk tingkat ini.</span>",
+  "auto-route": "Laluan",
   "route-balanced": "Seimbang",
   "route-spoils": "Rampasan",
   "route-sanctuary": "Tempat perlindungan",

@@ -394,6 +394,7 @@
   "moved-to-next-room": "Вы перешли в следующую комнату.",
   "moved-to-next-floor": "Вы спустились на следующий этаж.",
   "route-choice-found": "<span class='Rare'>От площадки расходятся несколько путей. Выберите маршрут для этого этажа.</span>",
+  "auto-route": "Путь",
   "route-balanced": "Сбалансированный",
   "route-spoils": "Добыча",
   "route-sanctuary": "Святилище",

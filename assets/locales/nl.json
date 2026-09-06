@@ -394,6 +394,7 @@
   "moved-to-next-room": "Je bent naar de volgende kamer gegaan.",
   "moved-to-next-floor": "Je bent naar de volgende verdieping gegaan.",
   "route-choice-found": "<span class='Rare'>Vanaf de overloop splitsen meerdere paden zich af. Kies je route voor deze verdieping.</span>",
+  "auto-route": "Pad",
   "route-balanced": "Evenwichtig",
   "route-spoils": "Buit",
   "route-sanctuary": "Toevluchtsoord",

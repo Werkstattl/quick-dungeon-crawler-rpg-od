@@ -394,6 +394,7 @@
   "moved-to-next-room": "Te moviste a la siguiente sala.",
   "moved-to-next-floor": "Te moviste al siguiente piso.",
   "route-choice-found": "<span class='Rare'>Varios caminos se separan desde el descansillo. Elige tu ruta para este piso.</span>",
+  "auto-route": "Ruta",
   "route-balanced": "Equilibrada",
   "route-spoils": "Botín",
   "route-sanctuary": "Santuario",

@@ -394,6 +394,7 @@
   "moved-to-next-room": "Avançaste para a sala seguinte.",
   "moved-to-next-floor": "Avançaste para o piso seguinte.",
   "route-choice-found": "<span class='Rare'>Vários caminhos separam-se a partir do patamar. Escolhe a tua rota para este piso.</span>",
+  "auto-route": "Caminho",
   "route-balanced": "Equilibrado",
   "route-spoils": "Espólios",
   "route-sanctuary": "Santuário",

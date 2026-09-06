@@ -394,6 +394,7 @@
   "moved-to-next-room": "다음 방으로 이동했습니다.",
   "moved-to-next-floor": "다음 층으로 이동했습니다.",
   "route-choice-found": "<span class='Rare'>계단참에서 여러 갈래 길이 나뉩니다. 이 층의 경로를 선택하세요.</span>",
+  "auto-route": "경로",
   "route-balanced": "균형",
   "route-spoils": "전리품",
   "route-sanctuary": "성역",

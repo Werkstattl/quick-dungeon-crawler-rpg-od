@@ -394,6 +394,7 @@
   "moved-to-next-room": "انتقلت إلى الغرفة التالية.",
   "moved-to-next-floor": "انتقلت إلى الطابق التالي.",
   "route-choice-found": "<span class='Rare'>تتشعب عدة مسارات من موضع الهبوط. اختر طريقك لهذا الطابق.</span>",
+  "auto-route": "المسار",
   "route-balanced": "متوازن",
   "route-spoils": "غنائم",
   "route-sanctuary": "ملاذ",

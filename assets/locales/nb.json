@@ -394,6 +394,7 @@
   "moved-to-next-room": "Du gikk videre til neste rom.",
   "moved-to-next-floor": "Du gikk videre til neste etasje.",
   "route-choice-found": "<span class='Rare'>Flere veier deler seg fra avsatsen. Velg rute for denne etasjen.</span>",
+  "auto-route": "Rute",
   "route-balanced": "Balansert",
   "route-spoils": "Bytte",
   "route-sanctuary": "Fristed",

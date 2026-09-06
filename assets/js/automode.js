@@ -1,5 +1,12 @@
 let autoMode = localStorage.getItem("autoMode") === "true";
 let autoModeBtnVisible = localStorage.getItem("autoModeBtnVisible") === "true";
+const AUTO_ROUTE_KEYS = ["balanced", "spoils", "sanctuary", "descent"];
+const normalizeAutoRoute = (route) => AUTO_ROUTE_KEYS.includes(route) ? route : "balanced";
+let autoRoute = normalizeAutoRoute(localStorage.getItem("autoRoute"));
+const setAutoRoute = (route) => {
+    autoRoute = normalizeAutoRoute(route);
+    localStorage.setItem("autoRoute", autoRoute);
+};
 let autoEngage = true;
 if (localStorage.getItem("autoEngage") === "false") {
     autoEngage = false;
@@ -246,7 +253,10 @@ const autoConfirm = () => {
         // Slight delay to ensure button exists
         setTimeout(() => {
             if (!autoMode || !autoEngage) return;
-            const btn = document.querySelector('#choice1');
+            const selector = typeof currentEvent !== 'undefined' && currentEvent === 'routeChoice'
+                ? `.route-choice-panel [data-route="${autoRoute}"]`
+                : '#choice1';
+            const btn = document.querySelector(selector);
             if (btn) btn.click();
         }, 100);
     }

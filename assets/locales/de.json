@@ -394,6 +394,7 @@
   "moved-to-next-room": "Du bist in den nächsten Raum gegangen.",
   "moved-to-next-floor": "Du bist in die nächste Etage gegangen.",
   "route-choice-found": "<span class='Rare'>Vom Treppenabsatz zweigen mehrere Wege ab. Wähle deine Route für diese Etage.</span>",
+  "auto-route": "Pfad",
   "route-balanced": "Ausgewogen",
   "route-spoils": "Beute",
   "route-sanctuary": "Zuflucht",

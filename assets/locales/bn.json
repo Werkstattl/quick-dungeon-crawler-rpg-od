@@ -394,6 +394,7 @@
   "moved-to-next-room": "আপনি পরের কক্ষে গেছেন।",
   "moved-to-next-floor": "আপনি পরের তলায় গেছেন।",
   "route-choice-found": "<span class='Rare'>অবতরণস্থল থেকে কয়েকটি পথ ভাগ হয়েছে। এই তলার পথ বেছে নিন।</span>",
+  "auto-route": "পথ",
   "route-balanced": "ভারসাম্যপূর্ণ",
   "route-spoils": "লুট",
   "route-sanctuary": "আশ্রয়",

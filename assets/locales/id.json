@@ -394,6 +394,7 @@
   "moved-to-next-room": "Kamu pindah ke ruangan berikutnya.",
   "moved-to-next-floor": "Kamu pindah ke lantai berikutnya.",
   "route-choice-found": "<span class='Rare'>Beberapa jalur bercabang dari bordes. Pilih rute untuk lantai ini.</span>",
+  "auto-route": "Jalur",
   "route-balanced": "Seimbang",
   "route-spoils": "Jarahan",
   "route-sanctuary": "Suaka",

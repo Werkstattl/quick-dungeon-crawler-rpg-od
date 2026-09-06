@@ -394,6 +394,7 @@
   "moved-to-next-room": "Siirryit seuraavaan huoneeseen.",
   "moved-to-next-floor": "Siirryit seuraavaan kerrokseen.",
   "route-choice-found": "<span class='Rare'>Tasanteelta haarautuu useita polkuja. Valitse reittisi tässä kerroksessa.</span>",
+  "auto-route": "Reitti",
   "route-balanced": "Tasapainoinen",
   "route-spoils": "Saaliit",
   "route-sanctuary": "Turvapaikka",

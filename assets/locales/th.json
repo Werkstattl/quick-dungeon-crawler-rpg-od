@@ -394,6 +394,7 @@
   "moved-to-next-room": "คุณไปยังห้องถัดไป",
   "moved-to-next-floor": "คุณไปยังชั้นถัดไป",
   "route-choice-found": "<span class='Rare'>มีหลายเส้นทางแยกจากจุดพัก เลือกเส้นทางสำหรับชั้นนี้</span>",
+  "auto-route": "เส้นทาง",
   "route-balanced": "สมดุล",
   "route-spoils": "ของรางวัล",
   "route-sanctuary": "เขตศักดิ์สิทธิ์",

@@ -394,6 +394,7 @@
   "moved-to-next-room": "Sonraki odaya geçtin.",
   "moved-to-next-floor": "Sonraki kata geçtin.",
   "route-choice-found": "<span class='Rare'>Sahanlıktan birkaç yol ayrılıyor. Bu kat için rotanı seç.</span>",
+  "auto-route": "Yol",
   "route-balanced": "Dengeli",
   "route-spoils": "Ganimet",
   "route-sanctuary": "Sığınak",

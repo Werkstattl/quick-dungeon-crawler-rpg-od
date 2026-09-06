@@ -394,6 +394,7 @@
   "moved-to-next-room": "You moved to the next room.",
   "moved-to-next-floor": "You moved to the next floor.",
   "route-choice-found": "<span class='Rare'>Several paths split from the landing. Choose your route for this floor.</span>",
+  "auto-route": "Path",
   "route-balanced": "Balanced",
   "route-spoils": "Spoils",
   "route-sanctuary": "Sanctuary",

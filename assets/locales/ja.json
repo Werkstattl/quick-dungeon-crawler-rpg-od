@@ -394,6 +394,7 @@
   "moved-to-next-room": "次の部屋へ移動した。",
   "moved-to-next-floor": "次の階へ移動した。",
   "route-choice-found": "<span class='Rare'>踊り場から複数の道が分かれています。この階層のルートを選んでください。</span>",
+  "auto-route": "ルート",
   "route-balanced": "バランス",
   "route-spoils": "戦利品",
   "route-sanctuary": "聖域",

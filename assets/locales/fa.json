@@ -394,6 +394,7 @@
   "moved-to-next-room": "به اتاق بعدی رفتید.",
   "moved-to-next-floor": "به طبقه بعدی رفتید.",
   "route-choice-found": "<span class='Rare'>چندین مسیر از پاگرد جدا می‌شوند. مسیر این طبقه را انتخاب کنید.</span>",
+  "auto-route": "مسیر",
   "route-balanced": "متعادل",
   "route-spoils": "غنیمت",
   "route-sanctuary": "پناهگاه",

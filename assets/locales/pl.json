@@ -394,6 +394,7 @@
   "moved-to-next-room": "Przeszedłeś do następnego pokoju.",
   "moved-to-next-floor": "Przeszedłeś na następne piętro.",
   "route-choice-found": "<span class='Rare'>Z podestu rozchodzi się kilka ścieżek. Wybierz trasę na to piętro.</span>",
+  "auto-route": "Ścieżka",
   "route-balanced": "Zrównoważona",
   "route-spoils": "Łupy",
   "route-sanctuary": "Sanktuarium",

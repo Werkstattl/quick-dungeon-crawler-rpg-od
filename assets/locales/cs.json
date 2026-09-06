@@ -394,6 +394,7 @@
   "moved-to-next-room": "Přešli jste do další místnosti.",
   "moved-to-next-floor": "Přešli jste do dalšího patra.",
   "route-choice-found": "<span class='Rare'>Od schodiště se odděluje několik cest. Vyberte si trasu pro toto patro.</span>",
+  "auto-route": "Cesta",
   "route-balanced": "Vyvážená",
   "route-spoils": "Kořist",
   "route-sanctuary": "Útočiště",

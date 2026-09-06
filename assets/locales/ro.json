@@ -392,6 +392,7 @@
   "moved-to-next-room": "Te-ai mutat în camera alăturată.",
   "moved-to-next-floor": "Te-ai mutat la etajul următor.",
   "route-choice-found": "<span class='Rare'>Mai multe căi se despart de pe palier. Alege-ți ruta pentru acest etaj.</span>",
+  "auto-route": "Cale",
   "route-balanced": "Echilibrată",
   "route-spoils": "Pradă",
   "route-sanctuary": "Sanctuar",

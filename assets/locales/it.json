@@ -394,6 +394,7 @@
   "moved-to-next-room": "Ti sei spostato nella stanza successiva.",
   "moved-to-next-floor": "Ti sei spostato al piano successivo.",
   "route-choice-found": "<span class='Rare'>Diversi sentieri si diramano dal pianerottolo. Scegli il percorso per questo piano.</span>",
+  "auto-route": "Percorso",
   "route-balanced": "Bilanciato",
   "route-spoils": "Bottino",
   "route-sanctuary": "Santuario",

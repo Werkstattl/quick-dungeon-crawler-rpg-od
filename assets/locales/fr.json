@@ -394,6 +394,7 @@
   "moved-to-next-room": "Vous êtes passé à la salle suivante.",
   "moved-to-next-floor": "Vous êtes passé à l'étage suivant.",
   "route-choice-found": "<span class='Rare'>Plusieurs chemins partent du palier. Choisis ta route pour cet étage.</span>",
+  "auto-route": "Chemin",
   "route-balanced": "Équilibré",
   "route-spoils": "Butin",
   "route-sanctuary": "Sanctuaire",

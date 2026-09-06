@@ -394,6 +394,7 @@
   "moved-to-next-room": "Bạn đã sang phòng tiếp theo.",
   "moved-to-next-floor": "Bạn đã sang tầng tiếp theo.",
   "route-choice-found": "<span class='Rare'>Nhiều con đường tách ra từ chiếu nghỉ. Hãy chọn lộ trình cho tầng này.</span>",
+  "auto-route": "Lộ trình",
   "route-balanced": "Cân bằng",
   "route-spoils": "Chiến lợi phẩm",
   "route-sanctuary": "Thánh địa",

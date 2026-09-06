@@ -594,10 +594,10 @@ const showRouteChoiceEvent = () => {
     currentEvent = "routeChoice";
     const choices = `
         <div class="decision-panel route-choice-panel">
-            <button id="choice1" data-i18n="route-balanced">${t('route-balanced')}</button>
-            <button id="choice2" data-i18n="route-spoils">${t('route-spoils')}</button>
-            <button id="choice3" data-i18n="route-sanctuary">${t('route-sanctuary')}</button>
-            <button id="choice4" data-i18n="route-descent">${t('route-descent')}</button>
+            <button id="choice1" data-route="balanced" data-i18n="route-balanced">${t('route-balanced')}</button>
+            <button id="choice2" data-route="spoils" data-i18n="route-spoils">${t('route-spoils')}</button>
+            <button id="choice3" data-route="sanctuary" data-i18n="route-sanctuary">${t('route-sanctuary')}</button>
+            <button id="choice4" data-route="descent" data-i18n="route-descent">${t('route-descent')}</button>
         </div>`;
     addDungeonLog(t('route-choice-found'), choices);
 

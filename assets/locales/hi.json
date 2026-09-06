@@ -394,6 +394,7 @@
   "moved-to-next-room": "आप अगले कमरे में चले गए।",
   "moved-to-next-floor": "आप अगली मंजिल पर चले गए।",
   "route-choice-found": "<span class='Rare'>लैंडिंग से कई रास्ते अलग होते हैं। इस मंज़िल के लिए अपना रास्ता चुनें।</span>",
+  "auto-route": "मार्ग",
   "route-balanced": "संतुलित",
   "route-spoils": "लूट",
   "route-sanctuary": "शरणस्थल",

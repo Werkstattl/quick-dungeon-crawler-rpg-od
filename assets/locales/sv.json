@@ -394,6 +394,7 @@
   "moved-to-next-room": "Du gick vidare till nästa rum.",
   "moved-to-next-floor": "Du gick vidare till nästa våning.",
   "route-choice-found": "<span class='Rare'>Flera vägar delar sig från avsatsen. Välj rutt för den här våningen.</span>",
+  "auto-route": "Väg",
   "route-balanced": "Balanserad",
   "route-spoils": "Byte",
   "route-sanctuary": "Fristad",

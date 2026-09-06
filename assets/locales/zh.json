@@ -394,6 +394,7 @@
   "moved-to-next-room": "你移动到了下一间房。",
   "moved-to-next-floor": "你前往了下一层。",
   "route-choice-found": "<span class='Rare'>平台处分出数条道路。选择本层的路线。</span>",
+  "auto-route": "路线",
   "route-balanced": "均衡",
   "route-spoils": "战利品",
   "route-sanctuary": "圣所",
