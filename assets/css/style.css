@@ -183,6 +183,17 @@ main {
     text-align: center;
 }
 
+/* Keep the auto settings clear of system bars, with room to scroll. */
+.modal-container #auto-tab {
+    max-height: 75vh;
+    max-height: calc((100dvh - var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) - var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))) * 0.75);
+    overflow-y: auto;
+}
+
+#auto-tab > * {
+    flex-shrink: 0;
+}
+
 .auto-levelup-priority-block {
     margin: 0.5rem 0;
 }
