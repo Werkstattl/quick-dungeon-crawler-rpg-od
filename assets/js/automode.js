@@ -283,6 +283,7 @@ const autoClaim = () => {
 };
 
 const autoModeBtn = document.querySelector("#auto-mode-btn");
+const autoModeSettingsBtn = document.querySelector("#auto-mode-settings-btn");
 
 const updateAutoModeBtn = () => {
     const buttons = [
@@ -297,6 +298,9 @@ const updateAutoModeBtn = () => {
 };
 
 const updateAutoModeBtnVisibility = () => {
+    if (autoModeSettingsBtn) {
+        autoModeSettingsBtn.classList.toggle("hidden", !autoModeUnlocked);
+    }
     if (autoModeBtnVisible && autoModeUnlocked) {
         autoModeBtn.classList.remove("hidden");
     } else {
@@ -345,6 +349,15 @@ if (typeof window !== 'undefined') {
 autoModeBtn.addEventListener('click', function () {
     toggleAutoMode();
 });
+
+if (autoModeSettingsBtn) {
+    autoModeSettingsBtn.addEventListener('click', function () {
+        if (typeof openMenu !== 'function') return;
+        openMenu();
+        const settingsButton = document.querySelector('#auto-mode-settings');
+        if (settingsButton) settingsButton.click();
+    });
+}
 
 updateAutoModeBtnVisibility();
 updateAutoModeBtn();

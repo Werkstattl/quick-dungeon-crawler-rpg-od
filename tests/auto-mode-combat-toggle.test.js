@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const autoModeSource = fs.readFileSync(path.join(root, 'assets/js/automode.js'), 'utf8');
 const combatSource = fs.readFileSync(path.join(root, 'assets/js/combat.js'), 'utf8');
+const indexSource = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
 const createButton = () => {
     const classes = new Set();
@@ -91,4 +92,54 @@ test('combat Auto Mode button is compact and rendered with the attack controls',
     assert.ok(autoModeControlIndex < specialAbilityIndex);
     assert.match(combatSource, /id="combat-auto-mode-btn"[\s\S]*<span class="sr-only"/);
     assert.doesNotMatch(combatSource, /class="combat-auto-mode-controls"/);
+});
+
+test('Auto Mode settings shortcut opens settings directly when the Auto button is hidden', () => {
+    assert.match(indexSource, /<button id="auto-mode-settings-btn"[^>]*>[\s\S]*?<span data-i18n="auto-mode">Auto Mode<\/span> <span data-i18n="settings">Settings<\/span><\/span><\/button>/);
+
+    const dungeonButton = createButton();
+    const settingsShortcut = createButton();
+    let shortcutClick = null;
+    let menuOpenCount = 0;
+    let settingsOpenCount = 0;
+    settingsShortcut.addEventListener = (event, callback) => {
+        if (event === 'click') shortcutClick = callback;
+    };
+
+    const storage = new Map([
+        ['autoMode', 'false'],
+        ['autoModeBtnVisible', 'false'],
+    ]);
+    const context = vm.createContext({
+        document: {
+            querySelector: (selector) => {
+                if (selector === '#auto-mode-btn') return dungeonButton;
+                if (selector === '#auto-mode-settings-btn') return settingsShortcut;
+                if (selector === '#auto-mode-settings') {
+                    return { click: () => settingsOpenCount++ };
+                }
+                return null;
+            },
+        },
+        dungeon: { status: { paused: false } },
+        localStorage: {
+            getItem: (key) => storage.has(key) ? storage.get(key) : null,
+            setItem: (key, value) => storage.set(key, String(value)),
+        },
+        openMenu: () => menuOpenCount++,
+        sfxPause: { play() {} },
+        sfxUnpause: { play() {} },
+        window: {},
+    });
+
+    vm.runInContext(autoModeSource, context);
+
+    assert.equal(dungeonButton.classList.contains('hidden'), true);
+    assert.equal(settingsShortcut.classList.contains('hidden'), false);
+    assert.equal(typeof shortcutClick, 'function');
+
+    shortcutClick();
+
+    assert.equal(menuOpenCount, 1);
+    assert.equal(settingsOpenCount, 1);
 });
