@@ -94,6 +94,32 @@ test('combat Auto Mode button is compact and rendered with the attack controls',
     assert.doesNotMatch(combatSource, /class="combat-auto-mode-controls"/);
 });
 
+test('Auto Mode settings shortcut remains hidden while Auto Mode is locked', () => {
+    const dungeonButton = createButton();
+    const settingsShortcut = createButton();
+    const context = vm.createContext({
+        document: {
+            querySelector: (selector) => {
+                if (selector === '#auto-mode-btn') return dungeonButton;
+                if (selector === '#auto-mode-settings-btn') return settingsShortcut;
+                return null;
+            },
+        },
+        dungeon: { status: { paused: false } },
+        localStorage: {
+            getItem: () => null,
+            setItem() {},
+        },
+        sfxPause: { play() {} },
+        sfxUnpause: { play() {} },
+        window: {},
+    });
+
+    vm.runInContext(autoModeSource, context);
+
+    assert.equal(settingsShortcut.classList.contains('hidden'), true);
+});
+
 test('Auto Mode settings shortcut opens settings directly when the Auto button is hidden', () => {
     assert.match(indexSource, /<button id="auto-mode-settings-btn"[^>]*>[\s\S]*?<span data-i18n="auto-mode">Auto Mode<\/span> <span data-i18n="settings">Settings<\/span><\/span><\/button>/);
 
