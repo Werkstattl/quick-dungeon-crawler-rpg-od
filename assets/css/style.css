@@ -650,8 +650,8 @@ button:focus {
     justify-content: center;
     position: fixed;
     z-index: 1;
-    width: 100vw;
-    height: 100vh;
+    width: 99vw;
+    height: 99vh;
 }
 
 .modal-container .content {
