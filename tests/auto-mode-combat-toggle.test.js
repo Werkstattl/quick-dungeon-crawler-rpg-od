@@ -158,7 +158,7 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
     const settingsShortcut = createButton();
     let shortcutClick = null;
     let menuOpenCount = 0;
-    let settingsOpenCount = 0;
+    const settingsOrigins = [];
     settingsShortcut.addEventListener = (event, callback) => {
         if (event === 'click') shortcutClick = callback;
     };
@@ -172,9 +172,6 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
             querySelector: (selector) => {
                 if (selector === '#auto-mode-btn') return dungeonButton;
                 if (selector === '#auto-mode-settings-btn') return settingsShortcut;
-                if (selector === '#auto-mode-settings') {
-                    return { click: () => settingsOpenCount++ };
-                }
                 return null;
             },
         },
@@ -186,7 +183,9 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
         openMenu: () => menuOpenCount++,
         sfxPause: { play() {} },
         sfxUnpause: { play() {} },
-        window: {},
+        window: {
+            renderAutoModeSettingsModal: (returnToMenu) => settingsOrigins.push(returnToMenu),
+        },
     });
 
     vm.runInContext(autoModeSource, context);
@@ -198,5 +197,52 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
     shortcutClick();
 
     assert.equal(menuOpenCount, 1);
-    assert.equal(settingsOpenCount, 1);
+    assert.deepEqual(settingsOrigins, [false]);
+});
+
+test('closing Auto Mode settings opened from the shortcut returns to the game', () => {
+    const dungeonButton = createButton();
+    const settingsShortcut = createButton();
+    const defaultModalElement = { style: { display: 'flex' }, innerHTML: 'settings' };
+    const menuModalElement = { style: { display: 'none' }, innerHTML: 'menu' };
+    const dungeonElement = { style: { display: 'flex', filter: 'brightness(50%)' } };
+    const titleElement = { style: { display: 'none', filter: '' } };
+    let continueCount = 0;
+    const storage = new Map([
+        ['autoMode', 'false'],
+        ['autoModeBtnVisible', 'true'],
+    ]);
+    const context = vm.createContext({
+        defaultModalElement,
+        menuModalElement,
+        document: {
+            querySelector: (selector) => {
+                if (selector === '#auto-mode-btn') return dungeonButton;
+                if (selector === '#auto-mode-settings-btn') return settingsShortcut;
+                if (selector === '#dungeon-main') return dungeonElement;
+                if (selector === '#title-screen') return titleElement;
+                return null;
+            },
+        },
+        localStorage: {
+            getItem: (key) => storage.has(key) ? storage.get(key) : null,
+            setItem: (key, value) => storage.set(key, String(value)),
+        },
+        continueExploring: () => continueCount++,
+        sfxPause: { play() {} },
+        sfxUnpause: { play() {} },
+        window: {
+            getComputedStyle: (element) => element.style,
+        },
+    });
+
+    vm.runInContext(autoModeSource, context);
+    context.window.closeAutoModeSettingsModal(false);
+
+    assert.equal(defaultModalElement.style.display, 'none');
+    assert.equal(defaultModalElement.innerHTML, '');
+    assert.equal(menuModalElement.style.display, 'none');
+    assert.equal(menuModalElement.innerHTML, '');
+    assert.equal(dungeonElement.style.filter, 'brightness(100%)');
+    assert.equal(continueCount, 1);
 });
