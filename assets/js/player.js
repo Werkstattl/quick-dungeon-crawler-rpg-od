@@ -615,8 +615,9 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.def;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "atkSpd") {
+                    const companionBonuses = getCurrentCompanionBonuses();
                     let equipmentAtkSpd = player.baseStats.atkSpd * (player.equippedStats.atkSpd / 100);
-                    let statFinal = Math.min(getPlayerAtkSpdCap(), player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd + percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
+                    let statFinal = Math.min(getPlayerAtkSpdCap(), player.baseStats.atkSpd + player.baseStats.atkSpd * ((player.bonusStats.atkSpd + (companionBonuses.atkSpd || 0) + percentages["atkSpd"]) / 100) + player.baseStats.atkSpd * (dungeon.floorBuffs.atkSpd / 100) + equipmentAtkSpd + equipmentAtkSpd * player.equippedStats.atkSpd / 100);
                     let statInitial = player.stats.atkSpd;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "vamp") {
