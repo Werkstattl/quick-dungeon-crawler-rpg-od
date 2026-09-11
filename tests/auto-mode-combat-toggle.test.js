@@ -120,7 +120,38 @@ test('Auto Mode settings shortcut remains hidden while Auto Mode is locked', () 
     assert.equal(settingsShortcut.classList.contains('hidden'), true);
 });
 
-test('Auto Mode settings shortcut opens settings directly when the Auto button is hidden', () => {
+test('Auto Mode settings shortcut remains hidden when the Auto button is hidden', () => {
+    const dungeonButton = createButton();
+    const settingsShortcut = createButton();
+    const storage = new Map([
+        ['autoMode', 'false'],
+        ['autoModeBtnVisible', 'false'],
+    ]);
+    const context = vm.createContext({
+        document: {
+            querySelector: (selector) => {
+                if (selector === '#auto-mode-btn') return dungeonButton;
+                if (selector === '#auto-mode-settings-btn') return settingsShortcut;
+                return null;
+            },
+        },
+        dungeon: { status: { paused: false } },
+        localStorage: {
+            getItem: (key) => storage.has(key) ? storage.get(key) : null,
+            setItem: (key, value) => storage.set(key, String(value)),
+        },
+        sfxPause: { play() {} },
+        sfxUnpause: { play() {} },
+        window: {},
+    });
+
+    vm.runInContext(autoModeSource, context);
+
+    assert.equal(dungeonButton.classList.contains('hidden'), true);
+    assert.equal(settingsShortcut.classList.contains('hidden'), true);
+});
+
+test('Auto Mode settings shortcut opens settings directly when the Auto button is visible', () => {
     assert.match(indexSource, /<button id="auto-mode-settings-btn"[^>]*>[\s\S]*?<span data-i18n="auto-mode">Auto Mode<\/span> <span data-i18n="settings">Settings<\/span><\/span><\/button>/);
 
     const dungeonButton = createButton();
@@ -134,7 +165,7 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
 
     const storage = new Map([
         ['autoMode', 'false'],
-        ['autoModeBtnVisible', 'false'],
+        ['autoModeBtnVisible', 'true'],
     ]);
     const context = vm.createContext({
         document: {
@@ -160,7 +191,7 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
 
     vm.runInContext(autoModeSource, context);
 
-    assert.equal(dungeonButton.classList.contains('hidden'), true);
+    assert.equal(dungeonButton.classList.contains('hidden'), false);
     assert.equal(settingsShortcut.classList.contains('hidden'), false);
     assert.equal(typeof shortcutClick, 'function');
 

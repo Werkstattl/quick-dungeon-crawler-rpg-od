@@ -298,10 +298,11 @@ const updateAutoModeBtn = () => {
 };
 
 const updateAutoModeBtnVisibility = () => {
+    const isVisible = autoModeBtnVisible && autoModeUnlocked;
     if (autoModeSettingsBtn) {
-        autoModeSettingsBtn.classList.toggle("hidden", !autoModeUnlocked);
+        autoModeSettingsBtn.classList.toggle("hidden", !isVisible);
     }
-    if (autoModeBtnVisible && autoModeUnlocked) {
+    if (isVisible) {
         autoModeBtn.classList.remove("hidden");
     } else {
         autoModeBtn.classList.add("hidden");
