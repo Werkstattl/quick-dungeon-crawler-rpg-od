@@ -285,6 +285,29 @@ const autoClaim = () => {
 const autoModeBtn = document.querySelector("#auto-mode-btn");
 const autoModeSettingsBtn = document.querySelector("#auto-mode-settings-btn");
 
+const closeAutoModeSettingsModal = (returnToMenu = true) => {
+    defaultModalElement.style.display = "none";
+    defaultModalElement.innerHTML = "";
+    if (returnToMenu) {
+        menuModalElement.style.display = "flex";
+        return;
+    }
+
+    continueExploring();
+    menuModalElement.style.display = "none";
+    menuModalElement.innerHTML = "";
+    const dimDungeon = document.querySelector('#dungeon-main');
+    const dimTitle = document.querySelector('#title-screen');
+    if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
+        dimDungeon.style.filter = "brightness(100%)";
+    }
+    if (dimTitle && window.getComputedStyle(dimTitle).display !== 'none') {
+        dimTitle.style.filter = "brightness(100%)";
+    }
+};
+
+window.closeAutoModeSettingsModal = closeAutoModeSettingsModal;
+
 const updateAutoModeBtn = () => {
     const buttons = [
         autoModeBtn,
@@ -355,8 +378,9 @@ if (autoModeSettingsBtn) {
     autoModeSettingsBtn.addEventListener('click', function () {
         if (typeof openMenu !== 'function') return;
         openMenu();
-        const settingsButton = document.querySelector('#auto-mode-settings');
-        if (settingsButton) settingsButton.click();
+        if (typeof window.renderAutoModeSettingsModal === 'function') {
+            window.renderAutoModeSettingsModal(false);
+        }
     });
 }
 

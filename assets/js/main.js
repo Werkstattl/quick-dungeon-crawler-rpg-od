@@ -864,7 +864,7 @@ function openMenu(isTitle = false) {
     };
 
     // Function to render the auto mode settings modal
-    window.renderAutoModeSettingsModal = function () {
+    window.renderAutoModeSettingsModal = function (returnToMenu = true) {
         sfxOpen.play();
         const autoSellLevelOptions = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         const autoSellBelowLevelSelected = Number.isNaN(autoSellBelowLevel)
@@ -963,14 +963,9 @@ function openMenu(isTitle = false) {
         };
         autoLevelUpToggle.addEventListener('change', updateAutoLevelUpPriorityControls);
         updateAutoLevelUpPriorityControls();
-        const closeAutoModeModal = () => {
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
-            menuModalElement.style.display = "flex";
-        };
         autoClose.onclick = function () {
             sfxDecline.play();
-            closeAutoModeModal();
+            closeAutoModeSettingsModal(returnToMenu);
         };
 
         if (!autoModeUnlocked) {
@@ -1017,7 +1012,7 @@ function openMenu(isTitle = false) {
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
-            closeAutoModeModal();
+            closeAutoModeSettingsModal(returnToMenu);
         };
     };
 
