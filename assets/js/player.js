@@ -602,7 +602,8 @@ const generateLvlStats = (rerolls, percentages) => {
             try {
                 let marginalValue = 0.0;
                 if (selectedStats[i] == "hp") {
-                    let statFinal = Math.round(player.baseStats.hp + player.baseStats.hp * (player.bonusStats.hp + percentages["hp"]) / 100 + player.equippedStats.hp);
+                    const companionBonuses = getCurrentCompanionBonuses();
+                    let statFinal = Math.round(player.baseStats.hp + player.baseStats.hp * (player.bonusStats.hp + (companionBonuses.hp || 0) + percentages["hp"]) / 100 + player.equippedStats.hp);
                     let statInitial = player.stats.hpMax;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "atk") {
@@ -611,7 +612,8 @@ const generateLvlStats = (rerolls, percentages) => {
                     let statInitial = player.stats.atk;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "def") {
-                    let statFinal = Math.round(((player.baseStats.def + player.baseStats.def * ((player.bonusStats.def + percentages["def"]) / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
+                    const companionBonuses = getCurrentCompanionBonuses();
+                    let statFinal = Math.round(((player.baseStats.def + player.baseStats.def * ((player.bonusStats.def + (companionBonuses.def || 0) + percentages["def"]) / 100)) + player.equippedStats.def) * (1 + (dungeon.floorBuffs.def / 100)));
                     let statInitial = player.stats.def;
                     marginalValue = (statFinal - statInitial) / statInitial;
                 } else if (selectedStats[i] == "atkSpd") {
