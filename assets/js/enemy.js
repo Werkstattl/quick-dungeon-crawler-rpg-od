@@ -249,7 +249,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.2, 0.4),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(40, 50),
+            critDmg: 50,
             dodge: 0
         };
     } else if (type == 'Defensive') {
@@ -261,7 +261,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.1, 0.3),
             vamp: 0,
             critRate: randomizeDecimal(0.1, 0.5),
-            critDmg: randomizeDecimal(10, 20),
+            critDmg: 50,
             dodge: 0
         };
     } else if (type == 'Balanced') {
@@ -273,7 +273,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(0.5, 1.5),
-            critDmg: randomizeDecimal(30, 40),
+            critDmg: 50,
             dodge: 0
         };
     } else if (type == 'Quick') {
@@ -285,7 +285,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.35, 0.45),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(30, 40),
+            critDmg: 50,
             dodge: 0
         };
     } else if (type == 'Lethal') {
@@ -297,7 +297,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(4, 8),
-            critDmg: randomizeDecimal(40, 50),
+            critDmg: 50,
             dodge: 0
         };
     }
