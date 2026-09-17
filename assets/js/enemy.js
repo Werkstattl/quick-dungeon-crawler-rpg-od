@@ -249,7 +249,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.2, 0.4),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(6.5, 7.5),
+            critDmg: randomizeDecimal(40, 50),
             dodge: 0
         };
     } else if (type == 'Defensive') {
@@ -260,8 +260,8 @@ const setEnemyStats = (type, condition) => {
             def: randomizeNum(50, 80),
             atkSpd: randomizeDecimal(0.1, 0.3),
             vamp: 0,
-            critRate: 0,
-            critDmg: 0,
+            critRate: randomizeDecimal(0.1, 0.5),
+            critDmg: randomizeDecimal(10, 20),
             dodge: 0
         };
     } else if (type == 'Balanced') {
@@ -273,7 +273,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(0.5, 1.5),
-            critDmg: randomizeDecimal(1, 3),
+            critDmg: randomizeDecimal(30, 40),
             dodge: 0
         };
     } else if (type == 'Quick') {
@@ -285,7 +285,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.35, 0.45),
             vamp: 0,
             critRate: randomizeDecimal(1, 4),
-            critDmg: randomizeDecimal(3, 6),
+            critDmg: randomizeDecimal(30, 40),
             dodge: 0
         };
     } else if (type == 'Lethal') {
@@ -297,7 +297,7 @@ const setEnemyStats = (type, condition) => {
             atkSpd: randomizeDecimal(0.15, 0.35),
             vamp: 0,
             critRate: randomizeDecimal(4, 8),
-            critDmg: randomizeDecimal(6, 9),
+            critDmg: randomizeDecimal(40, 50),
             dodge: 0
         };
     }
@@ -326,7 +326,6 @@ const setEnemyStats = (type, condition) => {
         } else if (["critDmg"].includes(stat)) {
             // Halve the curse contribution to critical damage at every curse level.
             const critDamageScaling = (dungeon.settings.enemyScaling - 1) * 0.5;
-            enemy.stats[stat] = 50;
             enemy.stats[stat] += enemy.stats[stat] * ((critDamageScaling / 8) * enemy.lvl);
         }
     }
