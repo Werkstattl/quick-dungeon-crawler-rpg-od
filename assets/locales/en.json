@@ -608,7 +608,7 @@
     "volatile": "Volatile"
   },
   "affix-descriptions": {
-    "enraged": "Hits far harder, but has less health.",
+    "enraged": "Hits harder, but has less health.",
     "armored": "Much tougher to wound, but attacks slower.",
     "swift": "Attacks much faster, but has less health.",
     "vampiric": "Heals itself with every hit it lands.",
