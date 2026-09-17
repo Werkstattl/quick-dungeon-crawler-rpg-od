@@ -377,7 +377,7 @@ autoModeBtn.addEventListener('click', function () {
 if (autoModeSettingsBtn) {
     autoModeSettingsBtn.addEventListener('click', function () {
         if (typeof openMenu !== 'function') return;
-        openMenu();
+        openMenu(false, true);
         if (typeof window.renderAutoModeSettingsModal === 'function') {
             window.renderAutoModeSettingsModal(false);
         }

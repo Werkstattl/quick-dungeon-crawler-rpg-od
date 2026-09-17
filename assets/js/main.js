@@ -457,8 +457,8 @@ function unlockForgeMembership() {
     setForgeMembershipActive(true);
 }
 
-function openMenu(isTitle = false) {
-    closeInventory();
+function openMenu(isTitle = false, silentInventoryClose = false) {
+    closeInventory(silentInventoryClose);
 
     dungeon.status.exploring = false;
     let dimDungeon = document.querySelector('#dungeon-main');
