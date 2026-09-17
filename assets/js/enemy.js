@@ -239,6 +239,8 @@ const generateRandomEnemy = (condition) => {
 };
 
 // Set a randomly generated stat for the enemy
+const ENEMY_CRIT_DAMAGE_CAP = 800;
+
 const setEnemyStats = (type, condition) => {
     if (type == 'Offensive') {
         enemy.stats = {
@@ -380,6 +382,7 @@ const setEnemyStats = (type, condition) => {
     if (typeof applyAffixStats === 'function') {
         applyAffixStats(enemy.stats, enemy.affixes);
     }
+    enemy.stats.critDmg = Math.min(ENEMY_CRIT_DAMAGE_CAP, enemy.stats.critDmg);
 
     const expYield = [];
     for (const stat in enemy.stats) {
@@ -440,6 +443,9 @@ const setEnemyStats = (type, condition) => {
 const ensureEnemyAffixState = () => {
     if (!enemy || typeof enemy !== 'object') {
         return [];
+    }
+    if (enemy.stats && Number.isFinite(enemy.stats.critDmg)) {
+        enemy.stats.critDmg = Math.min(ENEMY_CRIT_DAMAGE_CAP, enemy.stats.critDmg);
     }
     enemy.affixes = typeof normalizeAffixList === 'function'
         ? normalizeAffixList(enemy.affixes)
