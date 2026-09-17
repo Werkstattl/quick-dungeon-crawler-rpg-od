@@ -441,7 +441,7 @@ test('guardians enrage exactly once at half health', () => {
     vm.runInContext('checkBossPhase()', context);
 
     const enragedAtk = context.enemy.stats.atk;
-    assert.ok(enragedAtk > 100, 'guardian should gain attack');
+    assert.equal(enragedAtk, 120);
     assert.equal(context.enemy.phase.index, 1);
 
     // Further hits below the same threshold must not stack another enrage.
@@ -462,6 +462,7 @@ test('monarchs enrage at both thresholds but never more than twice', () => {
     context.enemy.stats.hp = 250;
     vm.runInContext('checkBossPhase()', context);
     assert.equal(context.enemy.phase.index, 2);
+    assert.equal(context.enemy.stats.atk, 144);
 
     const finalAtk = context.enemy.stats.atk;
     context.enemy.stats.hp = 10;

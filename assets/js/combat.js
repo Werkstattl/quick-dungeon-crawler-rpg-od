@@ -227,7 +227,7 @@ const applyVolatileDeath = () => {
 
 // ========== Boss phases ==========
 const BOSS_PHASE_THRESHOLDS = { guardian: [0.5], sboss: [0.5, 0.25] };
-const BOSS_PHASE_ATK_MULT = 1.25;
+const BOSS_PHASE_ATK_MULT = 1.20;
 const BOSS_PHASE_ATKSPD_MULT = 1.15;
 const BOSS_PHASE_ATKSPD_CAP = 2.75;
 
