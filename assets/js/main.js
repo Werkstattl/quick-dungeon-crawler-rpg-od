@@ -907,8 +907,8 @@ function openMenu(isTitle = false) {
                     ${AUTO_ROUTE_KEYS.map(route => `<option value="${route}" ${autoRoute === route ? 'selected' : ''} data-i18n="route-${route}">${t(`route-${route}`)}</option>`).join('')}
                 </select></label>
                 <label id="auto-engage-label"><input type="checkbox" id="auto-engage-toggle" ${autoEngage ? 'checked' : ''}> <span data-i18n="engage">Engage</span></label>
-                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span data-i18n="blessings">Blessings</span></label>
-                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span data-i18n="heal">Heal</span></label>
+                <label id="auto-bless-label"><input type="checkbox" id="auto-bless-toggle" ${autoBlessings ? 'checked' : ''}> <span class="Legendary" data-i18n="blessings">Blessings</span></label>
+                <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span class="Epic" data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
                 <div id="auto-levelup-priority" class="auto-levelup-priority-block">
