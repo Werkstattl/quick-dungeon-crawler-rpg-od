@@ -324,8 +324,10 @@ const setEnemyStats = (type, condition) => {
         } else if (["critRate"].includes(stat)) {
             enemy.stats[stat] += enemy.stats[stat] * (((dungeon.settings.enemyScaling - 1) / 4) * enemy.lvl);
         } else if (["critDmg"].includes(stat)) {
+            // Halve the curse contribution to critical damage at every curse level.
+            const critDamageScaling = (dungeon.settings.enemyScaling - 1) * 0.5;
             enemy.stats[stat] = 50;
-            enemy.stats[stat] += enemy.stats[stat] * (((dungeon.settings.enemyScaling - 1) / 8) * enemy.lvl);
+            enemy.stats[stat] += enemy.stats[stat] * ((critDamageScaling / 8) * enemy.lvl);
         }
     }
 
