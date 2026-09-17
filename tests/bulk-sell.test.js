@@ -4,6 +4,8 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const equipment = fs.readFileSync('assets/js/equipment.js', 'utf8');
 const playerSource = fs.readFileSync('assets/js/player.js', 'utf8');
+const utilitySource = fs.readFileSync('assets/js/utility.js', 'utf8');
+const nFormatterSource = utilitySource.slice(utilitySource.indexOf('const nFormatter ='), utilitySource.indexOf('}', utilitySource.indexOf('return item ?')) + 1);
 const saleSource = equipment.slice(equipment.indexOf('const matchesBulkSale ='), equipment.indexOf('const EQUIPMENT_STAT_ABBREVIATION_KEYS'));
 const modalSource = playerSource.slice(playerSource.indexOf('const openBulkSaleModal ='), playerSource.indexOf('// Opens inventory'));
 function setup(items) {
@@ -24,7 +26,7 @@ function setup(items) {
         const playerLoadStats = () => refreshes++;
         const sfxSell = { play: () => sales++ };
         const sfxDeny = { play: () => denied++ };
-        ${saleSource}\n${modalSource}`, context);
+        ${nFormatterSource}\n${saleSource}\n${modalSource}`, context);
     return { context, element, run: expression => vm.runInContext(expression, context) };
 }
 const items = [
@@ -77,7 +79,7 @@ test('modal previews changes, cancels without sale, and resets after confirming'
     element('#bulk-sell-threshold').value = '21';
     element('#bulk-sell-threshold').onchange();
     assert.notEqual(element('#sell-confirm').disabled, true);
-    assert.equal(element('#bulk-sell-preview').textContent, '{"count":2,"gold":30}');
+    assert.equal(element('#bulk-sell-preview').textContent, '{"count":2,"gold":"30"}');
     element('#sell-cancel').onclick();
     assert.equal(context.player.gold, 10);
     run("openBulkSaleModal('level')");
@@ -110,6 +112,14 @@ test('tier 10 sells tier 9 while preserving tier 10 and higher', () => {
     assert.deepEqual(context.player.inventory.equipment.map(item => JSON.parse(item).tier), [10, 15]);
 });
 
+test('bulk sell preview abbreviates large gold totals like the rest of the UI', () => {
+    const { run, element } = setup([{ tier: 1, lvl: 1, value: 82922 }]);
+    run("openBulkSaleModal('tier')");
+    element('#bulk-sell-threshold').value = '2';
+    element('#bulk-sell-threshold').onchange();
+    assert.equal(element('#bulk-sell-preview').textContent, '{"count":1,"gold":"165.84k"}');
+});
+
 for (const [type, threshold] of [['tier', '2'], ['level', '10']]) {
     test(`${type} Sell with no matching items plays the error sound`, () => {
         const { run, context, element } = setup([
@@ -119,7 +129,7 @@ for (const [type, threshold] of [['tier', '2'], ['level', '10']]) {
         run(`openBulkSaleModal('${type}')`);
         element('#bulk-sell-threshold').value = threshold;
         element('#bulk-sell-threshold').onchange();
-        assert.equal(element('#bulk-sell-preview').textContent, '{"count":0,"gold":0}');
+        assert.equal(element('#bulk-sell-preview').textContent, '{"count":0,"gold":"0"}');
         assert.notEqual(element('#sell-confirm').disabled, true);
         element('#sell-confirm').onclick();
         assert.equal(context.denied, 1);
