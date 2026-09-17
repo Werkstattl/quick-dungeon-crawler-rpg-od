@@ -2170,64 +2170,52 @@ const equipBest = () => {
     }
 };
 
-const sellAll = (rarity) => {
-    if (rarity == "All") {
-        if (player.inventory.equipment.length !== 0) {
-            let soldAny = false;
-            for (let i = 0; i < player.inventory.equipment.length; i++) {
-                const equipment = JSON.parse(player.inventory.equipment[i]);
-                if (equipment.locked) {
-                    continue;
-                }
-                if (!soldAny) {
-                    sfxSell.play();
-                    soldAny = true;
-                }
-                const payout = getEquipmentEffectiveValue(equipment);
-                player.gold += payout;
-                if (typeof recordRunGoldEarned === 'function') {
-                    recordRunGoldEarned(payout);
-                }
-                player.inventory.equipment.splice(i, 1);
-                i--;
-            }
-            if (soldAny) {
-                playerLoadStats();
-            } else {
-                sfxDeny.play();
-            }
-        } else {
-            sfxDeny.play();
-        }
-    } else {
-        let rarityCheck = false;
-        for (let i = 0; i < player.inventory.equipment.length; i++) {
-            const equipment = JSON.parse(player.inventory.equipment[i]);
-            if (equipment.rarity === rarity && !equipment.locked) {
-                rarityCheck = true;
-                break;
-            }
-        }
-        if (rarityCheck) {
-            sfxSell.play();
-            for (let i = 0; i < player.inventory.equipment.length; i++) {
-                const equipment = JSON.parse(player.inventory.equipment[i]);
-                if (equipment.rarity === rarity && !equipment.locked) {
-                    const payout = getEquipmentEffectiveValue(equipment);
-                    player.gold += payout;
-                    if (typeof recordRunGoldEarned === 'function') {
-                        recordRunGoldEarned(payout);
-                    }
-                    player.inventory.equipment.splice(i, 1);
-                    i--;
-                }
-            }
-            playerLoadStats();
-        } else {
-            sfxDeny.play();
-        }
+// Use the same eligibility check for the preview and the actual sale.
+const matchesBulkSale = (item, filter) => {
+    if (item.locked) return false;
+    if (filter.type === 'rarity') {
+        return filter.value === 'All' || item.rarity === filter.value;
     }
-}
+    if (filter.type !== 'tier' && filter.type !== 'level') return false;
+    const maximum = filter.type === 'tier' ? MAX_EQUIPMENT_TIER : MAX_EQUIPMENT_LEVEL;
+    const threshold = Number(filter.value);
+    if (!Number.isInteger(threshold) || threshold < 1 || threshold > maximum) return false;
+    const value = Number(filter.type === 'tier' ? (item.tier === undefined ? 1 : item.tier) : item.lvl);
+    return Number.isFinite(value) && value >= 1
+        && value < threshold;
+};
+
+const previewBulkSale = (filter) => {
+    return player.inventory.equipment.reduce((summary, serialized) => {
+        const item = JSON.parse(serialized);
+        if (matchesBulkSale(item, filter)) {
+            summary.count++;
+            summary.gold += getEquipmentEffectiveValue(item);
+        }
+        return summary;
+    }, { count: 0, gold: 0 });
+};
+
+const sellInventoryItems = (filter) => {
+    let soldAny = false;
+    player.inventory.equipment = player.inventory.equipment.filter((serialized) => {
+        const item = JSON.parse(serialized);
+        if (!matchesBulkSale(item, filter)) return true;
+        const payout = getEquipmentEffectiveValue(item);
+        player.gold += payout;
+        if (typeof recordRunGoldEarned === 'function') recordRunGoldEarned(payout);
+        soldAny = true;
+        return false;
+    });
+    if (soldAny) {
+        sfxSell.play();
+        playerLoadStats();
+    } else {
+        sfxDeny.play();
+    }
+};
+
+const sellAll = (rarity) => sellInventoryItems({ type: 'rarity', value: rarity });
 
 const EQUIPMENT_STAT_ABBREVIATION_KEYS = {
     atk: 'atk',
