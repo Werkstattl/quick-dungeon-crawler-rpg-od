@@ -73,10 +73,10 @@ test('existing rarity and All sales still protect locked items', () => {
 test('modal previews changes, cancels without sale, and resets after confirming', () => {
     const { run, context, element } = setup(items);
     run("openBulkSaleModal('level')");
-    assert.equal(element('#sell-confirm').disabled, true);
+    assert.notEqual(element('#sell-confirm').disabled, true);
     element('#bulk-sell-threshold').value = '21';
     element('#bulk-sell-threshold').onchange();
-    assert.equal(element('#sell-confirm').disabled, false);
+    assert.notEqual(element('#sell-confirm').disabled, true);
     assert.equal(element('#bulk-sell-preview').textContent, '{"count":2,"gold":30}');
     element('#sell-cancel').onclick();
     assert.equal(context.player.gold, 10);
@@ -109,3 +109,22 @@ test('tier 10 sells tier 9 while preserving tier 10 and higher', () => {
     assert.equal(context.player.gold, 20);
     assert.deepEqual(context.player.inventory.equipment.map(item => JSON.parse(item).tier), [10, 15]);
 });
+
+for (const [type, threshold] of [['tier', '2'], ['level', '10']]) {
+    test(`${type} Sell with no matching items plays the error sound`, () => {
+        const { run, context, element } = setup([
+            { tier: 2, lvl: 10, value: 5 },
+            { tier: 1, lvl: 1, value: 10, locked: true },
+        ]);
+        run(`openBulkSaleModal('${type}')`);
+        element('#bulk-sell-threshold').value = threshold;
+        element('#bulk-sell-threshold').onchange();
+        assert.equal(element('#bulk-sell-preview').textContent, '{"count":0,"gold":0}');
+        assert.notEqual(element('#sell-confirm').disabled, true);
+        element('#sell-confirm').onclick();
+        assert.equal(context.denied, 1);
+        assert.equal(context.sales, 0);
+        assert.equal(context.player.gold, 10);
+        assert.equal(context.player.inventory.equipment.length, 2);
+    });
+}

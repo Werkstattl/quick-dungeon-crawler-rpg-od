@@ -390,7 +390,6 @@ const openBulkSaleModal = (type) => {
     const updatePreview = () => {
         const summary = previewBulkSale(filter());
         document.querySelector('#bulk-sell-preview').textContent = t('bulk-sell-preview', summary);
-        confirm.disabled = summary.count === 0;
     };
     const close = () => {
         defaultModalElement.style.display = 'none';
