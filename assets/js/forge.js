@@ -300,9 +300,11 @@ const updateForgeGold = () => {
     }
 };
 
-const resetMergeState = () => {
+const resetMergeState = ({ keepTargetCategory = false } = {}) => {
     selectedForgeItems = [null, null, null];
-    selectedForgeCategory = '';
+    if (!keepTargetCategory) {
+        selectedForgeCategory = '';
+    }
     forgeResult = null;
     forgeLevelRange = null;
     forgeCost = 0;
@@ -316,7 +318,7 @@ const resetMergeState = () => {
     }
     const targetCategorySelect = document.querySelector('#forge-target-category');
     if (targetCategorySelect) {
-        targetCategorySelect.value = '';
+        targetCategorySelect.value = selectedForgeCategory;
     }
 };
 
@@ -1675,8 +1677,8 @@ const executeForging = () => {
     receiveEquipment(forgeResult);
     sfxEquip.play();
 
-    // Reset forge state and UI
-    resetMergeState();
+    // Clear consumed materials and the preview, keeping the target for another craft.
+    resetMergeState({ keepTargetCategory: true });
     loadForgeEquipment();
     updateForgeDisplay();
     showForgedResultPopup(completedForgeResult);
