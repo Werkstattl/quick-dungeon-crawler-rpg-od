@@ -389,7 +389,10 @@ const openBulkSaleModal = (type) => {
     const filter = () => ({ type, value: Number(threshold.value) });
     const updatePreview = () => {
         const summary = previewBulkSale(filter());
-        document.querySelector('#bulk-sell-preview').textContent = t('bulk-sell-preview', summary);
+        document.querySelector('#bulk-sell-preview').textContent = t('bulk-sell-preview', {
+            count: summary.count,
+            gold: nFormatter(summary.gold),
+        });
     };
     const close = () => {
         defaultModalElement.style.display = 'none';
