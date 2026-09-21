@@ -1,4 +1,5 @@
 {
+  "wiki-help": "說明與 Wiki",
   "language": "語言",
   "apply": "應用",
   "tap-to-explore": "點擊探索地牢",
@@ -628,4 +629,3 @@
   "stat-lock": "鎖定屬性",
   "stat-lock-help": "鎖定的屬性會保留類型和數值。至少必須有一項屬性保持未鎖定。"
 }
-
