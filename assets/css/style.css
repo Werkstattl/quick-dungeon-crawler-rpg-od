@@ -2639,7 +2639,7 @@ header button i {
     flex-wrap: wrap;
     gap: 1rem;
     position: sticky;
-    top: 0;
+    top: -8px;
     z-index: 2;
     margin: 0.5rem -0.5rem 1rem;
     padding: 0.6rem 0.5rem;
