@@ -53,7 +53,7 @@ test('high-tier stat lock rerolls use the reduced Refine Stone cost without redu
         'getStatLockRerollCosts({ value: 74725, lvl: 98, rarity: "Heirloom", tier: 12 }, 3)',
     );
 
-    assert.deepEqual({ ...costs }, { gold: 18450070, stones: 144 });
+    assert.deepEqual({ ...costs }, { gold: 18450070, stones: 138 });
 });
 
 const createEquipmentContext = (randomValues = [0]) => {
