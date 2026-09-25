@@ -922,6 +922,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     ${autoLevelUpPrioritySelectsMarkup}
                 </div>
                 <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
+                <label id="auto-monarch-label"><input type="checkbox" id="auto-monarch-toggle" ${autoMonarch ? 'checked' : ''}> <span data-i18n="dungeon-monarch">Dungeon Monarch</span></label>
                 <label id="auto-sell-rarity-label"><span data-i18n="auto-sell-rarity">"Auto-sell below rarity"</span> <select id="auto-sell-rarity-select">
                     <option value="none" ${autoSellRarity === 'none' ? 'selected' : ''} data-i18n="auto-sell-off">Off</option>
                     <option value="Uncommon" ${autoSellRarity === 'Uncommon' ? 'selected' : ''} data-i18n="uncommon">Uncommon</option>
@@ -954,6 +955,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoLevelUpToggle = document.querySelector('#auto-levelup-toggle');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
+        let autoMonarchToggle = document.querySelector('#auto-monarch-toggle');
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
         let autoSellLevelSelect = document.querySelector('#auto-sell-level-input');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
@@ -994,6 +996,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             autoSpecialAbility = autoSpecialToggle.checked;
             autoStopLevelUp = autoLevelUpToggle.checked;
             autoBossDoors = autoBossDoorToggle.checked;
+            autoMonarch = autoMonarchToggle.checked;
             autoSellRarity = autoSellRaritySelect.value;
             autoSellBelowLevel = parseInt(autoSellLevelSelect.value, 10);
             if (typeof setAutoLevelUpPriorities === 'function') {
@@ -1013,6 +1016,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
             localStorage.setItem("autoStopLevelUp", autoStopLevelUp);
             localStorage.setItem("autoBossDoors", autoBossDoors);
+            localStorage.setItem("autoMonarch", autoMonarch);
             localStorage.setItem("autoSellRarity", autoSellRarity);
             localStorage.setItem("autoSellBelowLevel", autoSellBelowLevel);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);

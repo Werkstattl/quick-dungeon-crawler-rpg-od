@@ -83,6 +83,7 @@ let autoBossDoors = true
 if (localStorage.getItem("autoBossDoors") === "false") {
     autoBossDoors = false;
 }
+let autoMonarch = localStorage.getItem("autoMonarch") !== "false";
 let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
 if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";

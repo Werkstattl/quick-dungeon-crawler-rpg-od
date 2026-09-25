@@ -854,7 +854,7 @@ const dungeonEvent = () => {
                     document.querySelector("#choice2").onclick = function () {
                         ignoreEvent();
                     };
-                    if (autoBossDoors) {
+                    if (autoMonarch) {
                         autoConfirm();
                     } else {
                         autoDecline();
