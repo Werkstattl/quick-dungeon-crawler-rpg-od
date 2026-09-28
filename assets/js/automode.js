@@ -23,6 +23,7 @@ let autoSpecialAbility = true;
 if (localStorage.getItem("autoSpecialAbility") === "false") {
     autoSpecialAbility = false;
 }
+let autoEquipBest = localStorage.getItem("autoEquipBest") === "true";
 let autoStopLevelUp = localStorage.getItem("autoStopLevelUp") === "true";
 const AUTO_LEVEL_UP_STATS = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
 const AUTO_LEVEL_UP_PRIORITY_LIMIT = 3;

@@ -2325,14 +2325,14 @@ const createEquipmentPrint = (condition, options = {}) => {
     let item = createEquipment(false, equipmentOptions);
     const willAutoEquipCompanionCharm = isCompanionCharm(item) && !player.companionCharm;
     const willAutoEquip = !isCompanionCharm(item) && hasEmptyEquipmentSlotFor(item);
-    const placementIndex = willAutoEquipCompanionCharm
+    let placementIndex = willAutoEquipCompanionCharm
         ? -1
         : (willAutoEquip
             ? (Array.isArray(player.equipped) ? player.equipped.length : -1)
             : (player.inventory && Array.isArray(player.inventory.equipment)
                 ? player.inventory.equipment.length
                 : -1));
-    const placement = willAutoEquipCompanionCharm
+    let placement = willAutoEquipCompanionCharm
         ? COMPANION_CHARM_SLOT_KEY
         : (willAutoEquip ? 'equipped' : 'inventory');
     const serializedItem = JSON.stringify(item);
@@ -2374,6 +2374,24 @@ const createEquipmentPrint = (condition, options = {}) => {
             serialized: serializedItem,
             autoSold: true
         };
+    }
+    if (typeof autoMode !== 'undefined' && autoMode
+        && typeof autoEquipBest !== 'undefined' && autoEquipBest) {
+        equipBest();
+        // Equip-best can move the drop; keep its sale controls pointing at its new location.
+        placementIndex = player.inventory.equipment.lastIndexOf(serializedItem);
+        if (placementIndex >= 0) {
+            placement = 'inventory';
+        } else if (isCompanionCharm(item)) {
+            placement = COMPANION_CHARM_SLOT_KEY;
+            placementIndex = -1;
+            item = player.companionCharm;
+        } else {
+            placement = 'equipped';
+            placementIndex = player.equipped.findIndex(equipped => JSON.stringify(equipped) === serializedItem);
+            item = player.equipped[placementIndex];
+        }
+        saveData();
     }
     if (condition == "combat") {
         const enemyLabel = getDisplayEnemyName(enemy.id, enemy.name);
