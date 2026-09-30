@@ -413,6 +413,8 @@
   "encountered-enemy": "Du bist {enemy} begegnet.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue des Segens: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Segen opfern? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Geheimnisvolle Kammer; etwas regt sich darin.</span>",
+  "monarch-depth-bonus": "Tiefenbonus (Ebene {floor}): Monarch-Beute +{heirlooms}× Erbstück, +{stones}× Veredelungsstein.",
+  "monarch-depth-next": "Stelle dich dem Monarchen auf Ebene {floor} oder tiefer für größere Beute.",
   "healing-shrine-offer": "<span class='Epic'>Heilschrein: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> für Heilung und einen Segen opfern?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Ein wandernder Händler erscheint: einen Gegenstand ab {rarity} für <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> kaufen?</span>",
   "wandering-shop-purchase": "Du hast dem wandernden Händler <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} gezahlt.",

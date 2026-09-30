@@ -877,6 +877,9 @@ const hpValidation = () => {
         if (typeof rollRefineStoneDrop === 'function') {
             rollRefineStoneDrop('combat');
         }
+        if (enemy.condition === 'sboss') {
+            grantMonarchDepthRewards();
+        }
 
         // Recover 20% of players health
         player.stats.hp += Math.round((player.stats.hpMax * 20) / 100);
@@ -1260,6 +1263,27 @@ const bindRunSummaryButton = () => {
     const battleButton = document.querySelector('#battleButton');
     if (battleButton) {
         battleButton.onclick = handleRunSummaryButtonClick;
+    }
+};
+
+const grantMonarchDepthRewards = () => {
+    if (typeof getMonarchDepthRewards !== 'function') {
+        return;
+    }
+    const rewards = getMonarchDepthRewards(dungeon.progress.floor);
+    if (rewards.tier <= 0) {
+        return;
+    }
+    addCombatLog(t('monarch-depth-bonus', {
+        floor: dungeon.progress.floor,
+        heirlooms: rewards.extraHeirlooms,
+        stones: rewards.refineStones,
+    }));
+    for (let i = 0; i < rewards.extraHeirlooms; i++) {
+        createEquipmentPrint('combat', { minRarity: 'Heirloom' });
+    }
+    if (rewards.refineStones > 0 && typeof addRefineStones === 'function') {
+        addRefineStones(rewards.refineStones, 'combat');
     }
 };
 

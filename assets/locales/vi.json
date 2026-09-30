@@ -413,6 +413,8 @@
   "encountered-enemy": "Bạn đã chạm trán {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Tượng Phúc lành: dâng <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> để nhận phúc lành? (Cấp {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Căn phòng bí ẩn; thứ gì đó đang cựa quậy bên trong.</span>",
+  "monarch-depth-bonus": "Thưởng độ sâu (tầng {floor}): chiến lợi phẩm Bạo chúa +{heirlooms}× Gia truyền, +{stones}× Đá Tinh luyện.",
+  "monarch-depth-next": "Đối đầu Bạo chúa ở tầng {floor} hoặc sâu hơn để nhận chiến lợi phẩm lớn hơn.",
   "healing-shrine-offer": "<span class='Epic'>Đền Hồi phục: dâng <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> để hồi máu và nhận phúc lành?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Một thương nhân lang thang xuất hiện: mua vật phẩm {rarity}+ với giá <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Bạn đã trả <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} cho thương nhân lang thang.",

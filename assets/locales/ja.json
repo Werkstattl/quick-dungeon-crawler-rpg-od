@@ -413,6 +413,8 @@
   "encountered-enemy": "{enemy}と遭遇した。",
   "statue-of-blessing-offer": "<span class='Legendary'>祝福の像: 祝福を得るために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？ (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>謎めいた部屋; 中で何かがうごめいている。</span>",
+  "monarch-depth-bonus": "深層ボーナス({floor}階): モナークの戦利品 +{heirlooms}× 家宝、+{stones}× 精錬石。",
+  "monarch-depth-next": "{floor}階以降でモナークに挑むと、戦利品が増える。",
   "healing-shrine-offer": "<span class='Epic'>癒しの祭壇: 回復と祝福のために<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>を奉納する？</span>",
   "wandering-shop-offer": "<span class='Legendary'>さすらいの商人が現れた: {rarity}+のアイテムを<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>で購入する？</span>",
   "wandering-shop-purchase": "さすらいの商人に<i class='fas fa-coins' style='color: #FFD700;'></i>{gold}を支払った。",

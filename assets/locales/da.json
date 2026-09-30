@@ -413,6 +413,8 @@
   "encountered-enemy": "Du mødte {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Velsignelsesstatue: ofr <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for velsignelser? (Niv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mystisk kammer; noget bevæger sig derinde.</span>",
+  "monarch-depth-bonus": "Dybdebonus (etage {floor}): Monarkens bytte +{heirlooms}× Arvestykke, +{stones}× Forædlingssten.",
+  "monarch-depth-next": "Mød monarken på etage {floor} eller dybere for større bytte.",
   "healing-shrine-offer": "<span class='Epic'>Helbredende helligdom: ofr <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for helbredelse og en velsignelse?</span>",
   "wandering-shop-offer": "<span class='Legendary'>En omrejsende købmand dukker op: køb en genstand af {rarity}+ for <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Du betalte den omrejsende købmand <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",

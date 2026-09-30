@@ -413,6 +413,8 @@
   "encountered-enemy": "Anda bertemu {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Patung Rahmat: tawarkan <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> untuk rahmat? (Tahap {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Bilik misteri; sesuatu bergerak di dalam.</span>",
+  "monarch-depth-bonus": "Bonus kedalaman (Tingkat {floor}): rampasan Maharaja +{heirlooms}× Pusaka, +{stones}× Batu Penghalus.",
+  "monarch-depth-next": "Hadapi Maharaja di Tingkat {floor} atau lebih dalam untuk rampasan yang lebih besar.",
   "healing-shrine-offer": "<span class='Epic'>Kuil pemulihan: tawarkan <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> untuk pemulihan dan rahmat?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Pedagang pengembara muncul: beli item {rarity}+ untuk <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Anda membayar <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} kepada pedagang pengembara.",

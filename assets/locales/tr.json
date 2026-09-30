@@ -413,6 +413,8 @@
   "encountered-enemy": "{enemy} ile karşılaştın.",
   "statue-of-blessing-offer": "<span class='Legendary'>Kutsama Heykeli: kutsamalar için <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> sunulsun mu? (Sv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Gizemli oda; içeride bir şey kıpırdanıyor.</span>",
+  "monarch-depth-bonus": "Derinlik bonusu ({floor}. kat): Hükümdar ganimeti +{heirlooms}× Yadigar, +{stones}× Geliştirme Taşı.",
+  "monarch-depth-next": "Daha büyük ganimet için Hükümdar ile {floor}. katta veya daha derinde yüzleş.",
   "healing-shrine-offer": "<span class='Epic'>Şifa sunağı: iyileşme ve kutsama için <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> sunulsun mu?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Gezgin bir tüccar belirir: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> karşılığında {rarity}+ eşya satın alınsın mı?</span>",
   "wandering-shop-purchase": "Gezgin tüccara <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} ödedin.",

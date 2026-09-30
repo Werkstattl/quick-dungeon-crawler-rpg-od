@@ -413,6 +413,8 @@
   "encountered-enemy": "Narazili jste na nepřítele {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Socha požehnání: obětovat <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> za požehnání? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Tajemná komnata; uvnitř se něco hýbe.</span>",
+  "monarch-depth-bonus": "Bonus hloubky (patro {floor}): kořist Vládce +{heirlooms}× Rodové, +{stones}× Kámen vylepšení.",
+  "monarch-depth-next": "Utkejte se s Vládcem na patře {floor} nebo hlouběji pro větší kořist.",
   "healing-shrine-offer": "<span class='Epic'>Léčivá svatyně: obětovat <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> za vyléčení a požehnání?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Objevil se potulný obchodník: koupit předmět vzácnosti {rarity}+ za <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Zaplatili jste potulnému obchodníkovi <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",

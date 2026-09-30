@@ -847,7 +847,21 @@ const dungeonEvent = () => {
                                 <button id="choice1" data-i18n="enter">${t('enter')}</button>
                                 <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
                             </div>`;
-                    addDungeonLog(t('mysterious-chamber'), choices);
+                    let chamberMessage = t('mysterious-chamber');
+                    const depthRewards = typeof getMonarchDepthRewards === 'function'
+                        ? getMonarchDepthRewards(dungeon.progress.floor)
+                        : null;
+                    if (depthRewards && depthRewards.tier > 0) {
+                        chamberMessage += `<br>${t('monarch-depth-bonus', {
+                            floor: dungeon.progress.floor,
+                            heirlooms: depthRewards.extraHeirlooms,
+                            stones: depthRewards.refineStones,
+                        })}`;
+                    }
+                    if (depthRewards && depthRewards.nextTierFloor) {
+                        chamberMessage += `<br>${t('monarch-depth-next', { floor: depthRewards.nextTierFloor })}`;
+                    }
+                    addDungeonLog(chamberMessage, choices);
                     document.querySelector("#choice1").onclick = function () {
                         specialBossBattle();
                     }

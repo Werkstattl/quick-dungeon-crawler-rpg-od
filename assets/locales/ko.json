@@ -413,6 +413,8 @@
   "encountered-enemy": "{enemy}와(과) 조우했습니다.",
   "statue-of-blessing-offer": "<span class='Legendary'>축복의 조각상: 축복을 위해 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>을(를) 바칠까요? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>수수께끼의 방입니다. 안에서 무언가가 꿈틀거립니다.</span>",
+  "monarch-depth-bonus": "깊이 보너스 ({floor}층): 군주 전리품 +{heirlooms}× 유산, +{stones}× 강화석.",
+  "monarch-depth-next": "{floor}층 이상 깊은 곳에서 군주와 맞서면 더 큰 전리품을 얻습니다.",
   "healing-shrine-offer": "<span class='Epic'>치유의 성소: 치유와 축복을 위해 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>을(를) 바칠까요?</span>",
   "wandering-shop-offer": "<span class='Legendary'>떠돌이 상인이 나타났습니다: {rarity}+ 아이템을 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>에 구매할까요?</span>",
   "wandering-shop-purchase": "떠돌이 상인에게 <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}을(를) 지불했습니다.",

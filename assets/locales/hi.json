@@ -413,6 +413,8 @@
   "encountered-enemy": "आपका सामना {enemy} से हुआ।",
   "statue-of-blessing-offer": "<span class='Legendary'>आशीर्वाद की प्रतिमा: आशीर्वाद के लिए <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> अर्पित करें? (स्तर {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>रहस्यमयी कक्ष; अंदर कुछ हिल रहा है।</span>",
+  "monarch-depth-bonus": "गहराई बोनस (मंजिल {floor}): मोनार्क की लूट +{heirlooms}× हेरलूम, +{stones}× परिष्करण पत्थर।",
+  "monarch-depth-next": "बड़ी लूट के लिए मंजिल {floor} या उससे गहराई में मोनार्क का सामना करें।",
   "healing-shrine-offer": "<span class='Epic'>उपचार मंदिर: उपचार और आशीर्वाद के लिए <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> अर्पित करें?</span>",
   "wandering-shop-offer": "<span class='Legendary'>एक घूमता व्यापारी प्रकट हुआ: {rarity}+ वस्तु <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> में खरीदें?</span>",
   "wandering-shop-purchase": "आपने घूमते व्यापारी को <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} चुकाए।",

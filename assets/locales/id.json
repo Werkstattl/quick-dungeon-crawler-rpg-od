@@ -413,6 +413,8 @@
   "encountered-enemy": "Kamu bertemu {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Patung Berkat: tawarkan <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> untuk berkat? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Ruang misterius; sesuatu bergerak di dalam.</span>",
+  "monarch-depth-bonus": "Bonus kedalaman (Lantai {floor}): jarahan Penguasa +{heirlooms}× Pusaka, +{stones}× Batu Penyempurna.",
+  "monarch-depth-next": "Hadapi Penguasa di Lantai {floor} atau lebih dalam untuk jarahan yang lebih besar.",
   "healing-shrine-offer": "<span class='Epic'>Kuil penyembuhan: tawarkan <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> untuk penyembuhan dan berkat?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Pedagang pengembara muncul: beli item {rarity}+ seharga <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Kamu membayar <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} kepada pedagang pengembara.",

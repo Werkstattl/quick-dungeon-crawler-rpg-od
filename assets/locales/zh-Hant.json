@@ -413,6 +413,8 @@
   "encountered-enemy": "你遭遇了 {enemy}。",
   "statue-of-blessing-offer": "<span class='Legendary'>祝福之像：獻上 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 獲取祝福？（等級 {level}）</span>",
   "mysterious-chamber": "<span class='Heirloom'>神祕房間，裏面有什麼在蠢動。</span>",
+  "monarch-depth-bonus": "深度獎勵(第 {floor} 層):君主戰利品 +{heirlooms}× 傳家寶、+{stones}× 精煉石。",
+  "monarch-depth-next": "在第 {floor} 層或更深處挑戰君主,可獲得更豐厚的戰利品。",
   "healing-shrine-offer": "<span class='Epic'>治療神殿：獻上 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 獲取治療與祝福？</span>",
   "wandering-shop-offer": "<span class='Legendary'>一名流浪商人出現了：花費 <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> 購買一件 {rarity}+ 物品？</span>",
   "wandering-shop-purchase": "你向流浪商人支付了 <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}。",

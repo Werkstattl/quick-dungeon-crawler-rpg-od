@@ -413,6 +413,8 @@
   "encountered-enemy": "Nakatagpo mo si {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Estatwa ng Pagpapala: mag-alay ng <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> para sa mga pagpapala? (Antas {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mahiwagang silid; may gumagalaw sa loob.</span>",
+  "monarch-depth-bonus": "Bonus sa lalim (Palapag {floor}): samsam ng Monarko +{heirlooms}× Pamana, +{stones}× Bato ng Pagpino.",
+  "monarch-depth-next": "Harapin ang Monarko sa Palapag {floor} o mas malalim para sa mas malaking samsam.",
   "healing-shrine-offer": "<span class='Epic'>Dambana ng Paggaling: mag-alay ng <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> para sa paggaling at pagpapala?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Lumilitaw ang isang naglalakbay na mangangalakal: bumili ng {rarity}+ na item sa halagang <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Nagbayad ka ng <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} sa naglalakbay na mangangalakal.",

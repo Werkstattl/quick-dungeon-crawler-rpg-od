@@ -413,6 +413,8 @@
   "encountered-enemy": "คุณพบ {enemy}",
   "statue-of-blessing-offer": "<span class='Legendary'>รูปปั้นแห่งพร: ถวาย <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> เพื่อรับพรหรือไม่? (เลเวล {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>ห้องลึกลับ มีบางสิ่งกำลังเคลื่อนไหวอยู่ภายใน</span>",
+  "monarch-depth-bonus": "โบนัสความลึก (ชั้น {floor}): ของรางวัลจอมราชัน +{heirlooms}× มรดกตกทอด, +{stones}× หินเสริมพลัง",
+  "monarch-depth-next": "เผชิญหน้าจอมราชันที่ชั้น {floor} หรือลึกกว่านั้นเพื่อรับของรางวัลที่มากขึ้น",
   "healing-shrine-offer": "<span class='Epic'>ศาลเจ้าแห่งการรักษา: ถวาย <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> เพื่อรับการรักษาและพรหรือไม่?</span>",
   "wandering-shop-offer": "<span class='Legendary'>พ่อค้าเร่ปรากฏตัว: ซื้อไอเทมระดับ {rarity}+ ในราคา <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> หรือไม่?</span>",
   "wandering-shop-purchase": "คุณจ่าย <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} ให้พ่อค้าเร่",

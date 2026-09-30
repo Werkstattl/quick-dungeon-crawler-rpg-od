@@ -413,6 +413,8 @@
   "encountered-enemy": "Kohtasit vihollisen {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Siunauksen patsas: uhraa <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> siunauksia varten? (Taso {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Salaperäinen kammio; jokin liikahtaa sisällä.</span>",
+  "monarch-depth-bonus": "Syvyysbonus (kerros {floor}): hallitsijan saalis +{heirlooms}× Perintökalleus, +{stones}× Parannuskivi.",
+  "monarch-depth-next": "Kohtaa hallitsija kerroksessa {floor} tai syvemmällä saadaksesi suuremman saaliin.",
   "healing-shrine-offer": "<span class='Epic'>Parannuspyhäkkö: uhraa <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> parannusta ja siunausta varten?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Kiertelevä kauppias ilmestyy: osta {rarity}+ -esine hintaan <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Maksoit kiertelevälle kauppiaalle <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",

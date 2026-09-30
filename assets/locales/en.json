@@ -413,6 +413,8 @@
   "encountered-enemy": "You encountered {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statue of Blessing: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for blessings? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mysterious chamber; something stirs inside.</span>",
+  "monarch-depth-bonus": "Depth bonus (Floor {floor}): Monarch spoils +{heirlooms}× Heirloom, +{stones}× Refine Stone.",
+  "monarch-depth-next": "Face the Monarch on Floor {floor} or deeper for greater spoils.",
   "healing-shrine-offer": "<span class='Epic'>Healing shrine: offer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> for healing and a blessing?</span>",
   "wandering-shop-offer": "<span class='Legendary'>A wandering merchant appears: buy a {rarity}+ item for <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "You paid <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} to the wandering merchant.",

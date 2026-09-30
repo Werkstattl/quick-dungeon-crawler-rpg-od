@@ -413,6 +413,8 @@
   "encountered-enemy": "Je bent {enemy} tegengekomen.",
   "statue-of-blessing-offer": "<span class='Legendary'>Zegeningsbeeld: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> offeren voor zegeningen? (Niv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mysterieuze kamer; binnen beweegt iets.</span>",
+  "monarch-depth-bonus": "Dieptebonus (verdieping {floor}): buit van de Kerkervorst +{heirlooms}× Erfstuk, +{stones}× Verfijnsteen.",
+  "monarch-depth-next": "Trotseer de Kerkervorst op verdieping {floor} of dieper voor een grotere buit.",
   "healing-shrine-offer": "<span class='Epic'>Genezingsaltaar: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> offeren voor genezing en een zegening?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Een rondreizende handelaar verschijnt: een voorwerp van {rarity}+ kopen voor <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Je hebt de rondreizende handelaar <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} betaald.",

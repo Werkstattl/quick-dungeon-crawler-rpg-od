@@ -413,6 +413,8 @@
   "encountered-enemy": "با {enemy} روبه‌رو شدید.",
   "statue-of-blessing-offer": "<span class='Legendary'>تندیس برکت: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> پیشکش می‌کنید تا برکت بگیرید؟ (سطح {level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>تالاری اسرارآمیز؛ چیزی درون آن تکان می‌خورد.</span>",
+  "monarch-depth-bonus": "پاداش عمق (طبقه {floor}): غنائم فرمانروا +{heirlooms}× میراثی، +{stones}× سنگ بهسازی.",
+  "monarch-depth-next": "برای غنائم بیشتر در طبقه {floor} یا عمیق‌تر با فرمانروا روبه‌رو شوید.",
   "healing-shrine-offer": "<span class='Epic'>زیارتگاه درمان: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> برای درمان و یک برکت پیشکش می‌کنید؟</span>",
   "wandering-shop-offer": "<span class='Legendary'>بازرگانی دوره‌گرد پدیدار می‌شود: یک آیتم {rarity}+ به قیمت <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> می‌خرید؟</span>",
   "wandering-shop-purchase": "<i class='fas fa-coins' style='color: #FFD700;'></i>{gold} به بازرگان دوره‌گرد پرداخت کردید.",

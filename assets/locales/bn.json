@@ -413,6 +413,8 @@
   "encountered-enemy": "আপনার সামনে {enemy} এসেছে।",
   "statue-of-blessing-offer": "<span class='Legendary'>আশীর্বাদের মূর্তি: আশীর্বাদের জন্য <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> নিবেদন করবেন? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>রহস্যময় কক্ষ; ভেতরে কিছু নড়ছে।</span>",
+  "monarch-depth-bonus": "গভীরতা বোনাস ({floor} তলা): সম্রাটের লুট +{heirlooms}× উত্তরাধিকার, +{stones}× পরিশোধন পাথর।",
+  "monarch-depth-next": "আরও বড় লুটের জন্য {floor} তলা বা আরও গভীরে সম্রাটের মুখোমুখি হন।",
   "healing-shrine-offer": "<span class='Epic'>আরোগ্যের মন্দির: নিরাময় ও আশীর্বাদের জন্য <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> নিবেদন করবেন?</span>",
   "wandering-shop-offer": "<span class='Legendary'>এক ভ্রাম্যমাণ ব্যবসায়ী এসেছে: <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> দিয়ে একটি {rarity}+ আইটেম কিনবেন?</span>",
   "wandering-shop-purchase": "আপনি ভ্রাম্যমাণ ব্যবসায়ীকে <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} দিয়েছেন।",

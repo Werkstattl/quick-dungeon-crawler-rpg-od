@@ -8,6 +8,10 @@ const PROGRESSION_SCALING_FACTOR = 10;
 const STANDARD_CURSE_UNLOCK_FLOOR = 10;
 const CURSE_UNLOCK_TRIGGER_FLOOR = 'floor';
 const CURSE_UNLOCK_TRIGGER_MONARCH = 'monarch';
+const MONARCH_DEPTH_BASE_FLOOR = 20;
+const MONARCH_DEPTH_FLOOR_STEP = 5;
+const MONARCH_DEPTH_MAX_TIER = 5;
+const MONARCH_DEPTH_REFINE_STONES_PER_TIER = 2;
 
 const clampCurseLevel = (value) => {
     let level = Number(value);
@@ -104,6 +108,23 @@ const getNextCurseUnlockLevel = ({
     return Number(floor) >= STANDARD_CURSE_UNLOCK_FLOOR && trigger === CURSE_UNLOCK_TRIGGER_FLOOR
         ? maxUnlocked + 1
         : null;
+};
+
+const getMonarchDepthTier = (floor) => {
+    const tier = Math.floor((Number(floor) - MONARCH_DEPTH_BASE_FLOOR) / MONARCH_DEPTH_FLOOR_STEP);
+    return Number.isFinite(tier) ? Math.min(MONARCH_DEPTH_MAX_TIER, Math.max(0, tier)) : 0;
+};
+
+const getMonarchDepthRewards = (floor) => {
+    const tier = getMonarchDepthTier(floor);
+    return {
+        tier,
+        extraHeirlooms: tier,
+        refineStones: tier * MONARCH_DEPTH_REFINE_STONES_PER_TIER,
+        nextTierFloor: tier < MONARCH_DEPTH_MAX_TIER
+            ? MONARCH_DEPTH_BASE_FLOOR + ((tier + 1) * MONARCH_DEPTH_FLOOR_STEP)
+            : null,
+    };
 };
 
 const getCurseUnlockHint = (maxUnlockedCurseLevel) => {

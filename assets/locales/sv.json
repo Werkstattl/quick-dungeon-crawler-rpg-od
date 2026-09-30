@@ -413,6 +413,8 @@
   "encountered-enemy": "Du mötte {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Välsignelsestaty: offra <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> för välsignelser? (Niv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Mystisk kammare; något rör sig därinne.</span>",
+  "monarch-depth-bonus": "Djupbonus (våning {floor}): monarkens byte +{heirlooms}× Arvegods, +{stones}× Förädlingssten.",
+  "monarch-depth-next": "Möt monarken på våning {floor} eller djupare för större byte.",
   "healing-shrine-offer": "<span class='Epic'>Läkande helgedom: offra <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> för läkning och en välsignelse?</span>",
   "wandering-shop-offer": "<span class='Legendary'>En vandrande köpman dyker upp: köp ett föremål av {rarity}+ för <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Du betalade den vandrande köpmannen <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",

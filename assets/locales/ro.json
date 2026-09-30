@@ -411,6 +411,8 @@
   "encountered-enemy": "Ai întâlnit {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Statuia binecuvântării: oferi <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> pentru binecuvântări? (Lv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Cameră misterioasă; ceva se mișcă înăuntru.</span>",
+  "monarch-depth-bonus": "Bonus de adâncime (etajul {floor}): prada Monarhului +{heirlooms}× Moștenire, +{stones}× Piatră de rafinare.",
+  "monarch-depth-next": "Înfruntă Monarhul la etajul {floor} sau mai jos pentru o pradă mai mare.",
   "healing-shrine-offer": "<span class='Epic'>Altar de vindecare: oferi <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> pentru vindecare și o binecuvântare?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Apare un negustor rătăcitor: cumperi un obiect {rarity}+ pentru <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Ai plătit <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} negustorului rătăcitor.",

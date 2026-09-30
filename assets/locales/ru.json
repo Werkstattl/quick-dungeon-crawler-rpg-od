@@ -413,6 +413,8 @@
   "encountered-enemy": "Вы встретили {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Статуя благословения: пожертвовать <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за благословения? (Ур.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Таинственная камера; внутри что-то шевелится.</span>",
+  "monarch-depth-bonus": "Бонус глубины (этаж {floor}): добыча Монарха +{heirlooms}× Реликтовый, +{stones}× Камень улучшения.",
+  "monarch-depth-next": "Сразитесь с Монархом на этаже {floor} или глубже, чтобы получить больше добычи.",
   "healing-shrine-offer": "<span class='Epic'>Святилище исцеления: пожертвовать <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> за исцеление и благословение?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Появляется странствующий торговец: купить предмет {rarity}+ за <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Вы заплатили странствующему торговцу <i class='fas fa-coins' style='color: #FFD700;'></i>{gold}.",

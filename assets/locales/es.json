@@ -413,6 +413,8 @@
   "encountered-enemy": "Te encontraste con {enemy}.",
   "statue-of-blessing-offer": "<span class='Legendary'>Estatua de la bendición: ¿ofrecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por bendiciones? (Nv.{level})</span>",
   "mysterious-chamber": "<span class='Heirloom'>Cámara misteriosa; algo se agita adentro.</span>",
+  "monarch-depth-bonus": "Bonificación de profundidad (piso {floor}): botín del Monarca +{heirlooms}× Reliquia, +{stones}× Piedra de mejora.",
+  "monarch-depth-next": "Enfréntate al Monarca en el piso {floor} o más abajo para obtener un botín mayor.",
   "healing-shrine-offer": "<span class='Epic'>Santuario curativo: ¿ofrecer <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span> por curación y una bendición?</span>",
   "wandering-shop-offer": "<span class='Legendary'>Aparece un mercader errante: ¿comprar un objeto de {rarity}+ por <i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>{cost}</span>?</span>",
   "wandering-shop-purchase": "Pagaste <i class='fas fa-coins' style='color: #FFD700;'></i>{gold} al mercader errante.",
