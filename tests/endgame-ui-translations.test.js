@@ -7,8 +7,9 @@ const root = path.resolve(__dirname, '..');
 const localesDirectory = path.join(root, 'assets/locales');
 const requiredKeys = [
     'curse-levels-unlocked',
-    'curse-standard-unlock-hint',
-    'curse-monarch-unlock-hint',
+    'curse-next-unlock-floor',
+    'curse-next-unlock-monarch',
+    'curse-all-unlocked',
 ];
 
 const localeFiles = fs.readdirSync(localesDirectory)
@@ -32,10 +33,14 @@ test('all locale files are valid JSON and contain the endgame Curse UI text', ()
         }
         assert.match(locale['curse-levels-unlocked'], /\{current\}/, `${file} must retain {current}`);
         assert.match(locale['curse-levels-unlocked'], /\{max\}/, `${file} must retain {max}`);
-        assert.match(locale['curse-standard-unlock-hint'], /2-10/, `${file} must describe Curse 2-10`);
-        assert.match(locale['curse-standard-unlock-hint'], /10/, `${file} must mention Floor 10`);
-        assert.match(locale['curse-monarch-unlock-hint'], /11-15/, `${file} must describe Curse 11-15`);
-        assert.equal(locale['curse-level-locked'], undefined, `${file} still contains unused curse-level-locked`);
+        for (const key of ['curse-next-unlock-floor', 'curse-next-unlock-monarch']) {
+            assert.match(locale[key], /\{current\}/, `${file} ${key} must retain {current}`);
+            assert.match(locale[key], /\{next\}/, `${file} ${key} must retain {next}`);
+        }
+        assert.match(locale['curse-next-unlock-floor'], /\{floor\}/, `${file} must retain {floor}`);
+        for (const key of ['curse-level-locked', 'curse-standard-unlock-hint', 'curse-monarch-unlock-hint']) {
+            assert.equal(locale[key], undefined, `${file} still contains unused ${key}`);
+        }
     }
 });
 
@@ -43,18 +48,19 @@ test('English unlock guidance describes the implemented progression rules', () =
     const english = JSON.parse(fs.readFileSync(path.join(localesDirectory, 'en.json'), 'utf8'));
 
     assert.equal(english['curse-levels-unlocked'], 'Curse Levels unlocked: {current}/{max}');
-    assert.equal(english['curse-standard-unlock-hint'], 'Curse Levels 2-10 unlock by reaching Floor 10.');
-    assert.equal(english['curse-monarch-unlock-hint'], 'Curse Levels 11-15 unlock by defeating the Dungeon Monarch.');
+    assert.equal(english['curse-next-unlock-floor'], 'Reach Floor {floor} on Curse Level {current} to unlock Curse Level {next}.');
+    assert.equal(english['curse-next-unlock-monarch'], 'Defeat the Dungeon Monarch on Curse Level {current} to unlock Curse Level {next}.');
+    assert.equal(english['curse-all-unlocked'], 'All Curse Levels unlocked.');
 });
 
-test('allocation UI renders progress, both unlock rules, and only unlocked curse options', () => {
+test('allocation UI renders progress, the next unlock step, and only unlocked curse options', () => {
     const mainSource = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
 
     assert.match(mainSource, /class="curse-progression-info"/);
     assert.match(mainSource, /data-i18n="curse-levels-unlocked"/);
     assert.match(mainSource, /data-i18n-params='\{"current":\$\{maxUnlockedCurse\},"max":\$\{MAX_CURSE_LEVEL\}\}'/);
-    assert.match(mainSource, /data-i18n="curse-standard-unlock-hint"/);
-    assert.match(mainSource, /data-i18n="curse-monarch-unlock-hint"/);
+    assert.match(mainSource, /const curseUnlockHint = getCurseUnlockHint\(maxUnlockedCurse\)/);
+    assert.match(mainSource, /data-i18n="\$\{curseUnlockHint\.key\}" data-i18n-params='\$\{JSON\.stringify\(curseUnlockHint\.params\)\}'/);
     assert.match(mainSource, /getCurseLevelRange\(\)\.filter\(\(level\) => level <= maxUnlockedCurse\)/);
     assert.doesNotMatch(mainSource, /'curse-level-locked'/);
     assert.match(mainSource, /<select id="select-curse" \$\{maxUnlockedCurse <= MIN_CURSE_LEVEL \? 'hidden' : ''\}>/);

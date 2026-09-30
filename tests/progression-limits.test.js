@@ -67,6 +67,21 @@ test('Curse selection contains every level from 1 through 15', () => {
     assert.deepEqual(JSON.parse(JSON.stringify(levels)), Array.from({ length: 15 }, (_, index) => index + 1));
 });
 
+test('Curse unlock hint names the next step for the highest unlocked level', () => {
+    const cases = [
+        [1, { key: 'curse-next-unlock-floor', params: { current: 1, next: 2, floor: 10 } }],
+        [9, { key: 'curse-next-unlock-floor', params: { current: 9, next: 10, floor: 10 } }],
+        [10, { key: 'curse-next-unlock-monarch', params: { current: 10, next: 11, floor: 10 } }],
+        [14, { key: 'curse-next-unlock-monarch', params: { current: 14, next: 15, floor: 10 } }],
+        [15, { key: 'curse-all-unlocked', params: {} }],
+    ];
+
+    for (const [level, expected] of cases) {
+        const actual = evaluateProgression(`getCurseUnlockHint(${level})`);
+        assert.deepEqual(JSON.parse(JSON.stringify(actual)), expected);
+    }
+});
+
 test('equipment levels remain bounded between 1 and 100', () => {
     const cases = [
         [undefined, 1],

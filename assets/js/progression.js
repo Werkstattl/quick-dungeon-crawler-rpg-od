@@ -105,3 +105,14 @@ const getNextCurseUnlockLevel = ({
         ? maxUnlocked + 1
         : null;
 };
+
+const getCurseUnlockHint = (maxUnlockedCurseLevel) => {
+    const current = clampCurseLevel(maxUnlockedCurseLevel);
+    if (current >= MAX_CURSE_LEVEL) {
+        return { key: 'curse-all-unlocked', params: {} };
+    }
+    return {
+        key: current >= MAX_STANDARD_CURSE_LEVEL ? 'curse-next-unlock-monarch' : 'curse-next-unlock-floor',
+        params: { current, next: current + 1, floor: STANDARD_CURSE_UNLOCK_FLOOR },
+    };
+};
