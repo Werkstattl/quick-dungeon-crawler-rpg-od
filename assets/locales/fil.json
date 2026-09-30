@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Mga Antas ng Sumpang na-unlock: {current}/{max}",
   "curse-standard-unlock-hint": "Naa-unlock ang mga Antas ng Sumpa 2-10 kapag naabot ang Palapag 10.",
   "curse-monarch-unlock-hint": "Naa-unlock ang mga Antas ng Sumpa 11-15 kapag natalo ang Monarko ng Piitan.",
-  "curse-level-locked": "Antas {level} (Naka-lock)",
   "bestiary": "Bestiaryo",
   "enemy-damage-unlock": "Na-unlock ang kahusayan laban kay {enemy}: +{value}% pinsala laban sa kaaway na ito.",
   "rename": "Palitan ang pangalan",

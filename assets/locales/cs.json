@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Odemčené úrovně kletby: {current}/{max}",
   "curse-standard-unlock-hint": "Úrovně kletby 2-10 odemknete dosažením 10. patra.",
   "curse-monarch-unlock-hint": "Úrovně kletby 11-15 odemknete poražením Vládce podzemí.",
-  "curse-level-locked": "Úroveň {level} (uzamčena)",
   "bestiary": "Bestiář",
   "enemy-damage-unlock": "Odemčeno mistrovství proti nepříteli {enemy}: +{value} % poškození proti tomuto nepříteli.",
   "rename": "Přejmenovat",

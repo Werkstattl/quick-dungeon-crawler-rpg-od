@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Oplåste forbandelsesniveauer: {current}/{max}",
   "curse-standard-unlock-hint": "Forbandelsesniveau 2-10 låses op ved at nå Etage 10.",
   "curse-monarch-unlock-hint": "Forbandelsesniveau 11-15 låses op ved at besejre Fangekælderens monark.",
-  "curse-level-locked": "Niveau {level} (Låst)",
   "bestiary": "Bestiarium",
   "enemy-damage-unlock": "Mesterskab mod {enemy} låst op: +{value}% skade mod denne fjende.",
   "rename": "Omdøb",

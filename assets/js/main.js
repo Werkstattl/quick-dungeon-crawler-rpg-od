@@ -1955,8 +1955,9 @@ const allocationPopup = () => {
             </div>
             <div class="row">
                 <p data-i18n="curse">Curse</p>
-                <select id="select-curse">
-                    ${getCurseLevelRange().map((level) => `<option value="${level}">${level}</option>`).join('')}
+                ${maxUnlockedCurse <= MIN_CURSE_LEVEL ? `<p>${MIN_CURSE_LEVEL}</p>` : ''}
+                <select id="select-curse" ${maxUnlockedCurse <= MIN_CURSE_LEVEL ? 'hidden' : ''}>
+                    ${getCurseLevelRange().filter((level) => level <= maxUnlockedCurse).map((level) => `<option value="${level}">${level}</option>`).join('')}
                 </select>
             </div>
             <div class="curse-progression-info">
@@ -2120,15 +2121,6 @@ const allocationPopup = () => {
         if (player) {
             player.selectedCurseLevel = defaultCurseLevel;
         }
-        Array.from(selectCurse.options).forEach((option) => {
-            const optionValue = clampCurseLevel(option.value);
-            if (optionValue > maxUnlockedCurse) {
-                option.disabled = true;
-                option.setAttribute('data-i18n', 'curse-level-locked');
-                option.setAttribute('data-i18n-params', JSON.stringify({ level: optionValue }));
-                option.textContent = t('curse-level-locked', { level: optionValue });
-            }
-        });
         selectCurse.onclick = function () {
             sfxConfirm.play();
         };

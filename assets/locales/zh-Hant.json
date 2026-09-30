@@ -145,7 +145,6 @@
   "curse-levels-unlocked": "已解鎖的詛咒等級：{current}/{max}",
   "curse-standard-unlock-hint": "到達第 10 層，可解鎖詛咒等級 2-10。",
   "curse-monarch-unlock-hint": "擊敗地下城君主，可解鎖詛咒等級 11-15。",
-  "curse-level-locked": "等級 {level}（未解鎖）",
   "bestiary": "怪物志",
   "enemy-damage-unlock": "{enemy}精通已解鎖：對該敵人造成+{value}%傷害。",
   "rename": "重命名",

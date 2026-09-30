@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Niveaux de malédiction débloqués : {current}/{max}",
   "curse-standard-unlock-hint": "Les niveaux de malédiction 2-10 se débloquent en atteignant l'étage 10.",
   "curse-monarch-unlock-hint": "Les niveaux de malédiction 11-15 se débloquent en battant le Monarque du donjon.",
-  "curse-level-locked": "Niveau {level} (Verrouillé)",
   "bestiary": "Bestiaire",
   "enemy-damage-unlock": "Maîtrise de {enemy} débloquée : +{value} % de dégâts contre cet ennemi.",
   "rename": "Renommer",

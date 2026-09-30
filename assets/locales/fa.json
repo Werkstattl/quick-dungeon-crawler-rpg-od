@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "سطوح نفرین بازشده: {current}/{max}",
   "curse-standard-unlock-hint": "سطوح نفرین 2-10 با رسیدن به طبقه 10 باز می‌شوند.",
   "curse-monarch-unlock-hint": "سطوح نفرین 11-15 با شکست فرمانروای سیاه‌چال باز می‌شوند.",
-  "curse-level-locked": "سطح {level} (قفل)",
   "bestiary": "جانورنامه",
   "enemy-damage-unlock": "مهارت {enemy} باز شد: +{value}٪ آسیب علیه این دشمن.",
   "rename": "تغییر نام",

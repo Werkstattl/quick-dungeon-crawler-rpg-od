@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "খোলা অভিশাপ লেভেল: {current}/{max}",
   "curse-standard-unlock-hint": "তলা 10-এ পৌঁছালে অভিশাপ লেভেল 2-10 খুলবে।",
   "curse-monarch-unlock-hint": "অন্ধকূপের সম্রাটকে হারালে অভিশাপ লেভেল 11-15 খুলবে।",
-  "curse-level-locked": "লেভেল {level} (লক করা)",
   "bestiary": "দানবকোষ",
   "enemy-damage-unlock": "{enemy}-এর ওপর দক্ষতা খুলেছে: এই শত্রুর বিরুদ্ধে +{value}% ক্ষতি।",
   "rename": "নাম বদলান",

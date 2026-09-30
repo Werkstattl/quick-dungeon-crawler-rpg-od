@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Livelli maledizione sbloccati: {current}/{max}",
   "curse-standard-unlock-hint": "I livelli maledizione 2-10 si sbloccano raggiungendo il piano 10.",
   "curse-monarch-unlock-hint": "I livelli maledizione 11-15 si sbloccano sconfiggendo il Monarca del dungeon.",
-  "curse-level-locked": "Livello {level} (Bloccato)",
   "bestiary": "Bestiario",
   "enemy-damage-unlock": "Maestria di {enemy} sbloccata: +{value}% danni contro questo nemico.",
   "rename": "Rinomina",

@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Cấp lời nguyền đã mở: {current}/{max}",
   "curse-standard-unlock-hint": "Cấp lời nguyền 2-10 mở khi đạt Tầng 10.",
   "curse-monarch-unlock-hint": "Cấp lời nguyền 11-15 mở khi đánh bại Bạo chúa Hầm ngục.",
-  "curse-level-locked": "Cấp {level} (Đã khóa)",
   "bestiary": "Sách quái vật",
   "enemy-damage-unlock": "Đã mở thành thạo {enemy}: +{value}% sát thương lên kẻ địch này.",
   "rename": "Đổi tên",

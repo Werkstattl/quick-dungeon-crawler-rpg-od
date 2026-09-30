@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "مستويات اللعنة المفتوحة: {current}/{max}",
   "curse-standard-unlock-hint": "تُفتح مستويات اللعنة 2-10 عند الوصول إلى الطابق 10.",
   "curse-monarch-unlock-hint": "تُفتح مستويات اللعنة 11-15 عند هزيمة حاكم الزنزانة.",
-  "curse-level-locked": "المستوى {level} (مغلق)",
   "bestiary": "دليل الوحوش",
   "enemy-damage-unlock": "تم فتح إتقان {enemy}: +{value}% ضرر ضد هذا العدو.",
   "rename": "إعادة تسمية",

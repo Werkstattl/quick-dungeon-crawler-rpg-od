@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Upplåsta förbannelsenivåer: {current}/{max}",
   "curse-standard-unlock-hint": "Förbannelsenivå 2-10 låses upp genom att nå Våning 10.",
   "curse-monarch-unlock-hint": "Förbannelsenivå 11-15 låses upp genom att besegra Fängelsehålans monark.",
-  "curse-level-locked": "Nivå {level} (Låst)",
   "bestiary": "Bestiarium",
   "enemy-damage-unlock": "Mästerskap mot {enemy} upplåst: +{value}% skada mot den här fienden.",
   "rename": "Byt namn",

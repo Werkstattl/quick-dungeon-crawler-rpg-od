@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "ระดับคำสาปที่ปลดล็อก: {current}/{max}",
   "curse-standard-unlock-hint": "ระดับคำสาป 2-10 จะปลดล็อกเมื่อไปถึงชั้น 10",
   "curse-monarch-unlock-hint": "ระดับคำสาป 11-15 จะปลดล็อกเมื่อกำจัดจอมราชันแห่งดันเจียน",
-  "curse-level-locked": "เลเวล {level} (ล็อก)",
   "bestiary": "สารานุกรมมอนสเตอร์",
   "enemy-damage-unlock": "ปลดล็อกความชำนาญต่อ {enemy}: สร้างความเสียหายต่อศัตรูนี้ +{value}%",
   "rename": "เปลี่ยนชื่อ",

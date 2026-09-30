@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Opplåste forbannelsesnivåer: {current}/{max}",
   "curse-standard-unlock-hint": "Forbannelsesnivå 2-10 låses opp ved å nå Etasje 10.",
   "curse-monarch-unlock-hint": "Forbannelsesnivå 11-15 låses opp ved å beseire Fangehullets monark.",
-  "curse-level-locked": "Nivå {level} (Låst)",
   "bestiary": "Bestiarium",
   "enemy-damage-unlock": "Mestring mot {enemy} låst opp: +{value}% skade mot denne fienden.",
   "rename": "Gi nytt navn",

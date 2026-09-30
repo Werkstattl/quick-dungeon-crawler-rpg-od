@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Ontgrendelde vloekniveaus: {current}/{max}",
   "curse-standard-unlock-hint": "Vloekniveaus 2-10 worden ontgrendeld door Verdieping 10 te bereiken.",
   "curse-monarch-unlock-hint": "Vloekniveaus 11-15 worden ontgrendeld door de Kerkervorst te verslaan.",
-  "curse-level-locked": "Niveau {level} (Vergrendeld)",
   "bestiary": "Bestiarium",
   "enemy-damage-unlock": "Meesterschap over {enemy} ontgrendeld: +{value}% schade tegen deze vijand.",
   "rename": "Hernoemen",

@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Niveluri de blestem deblocate: {current}/{max}",
   "curse-standard-unlock-hint": "Nivelurile de blestem 2-10 se deblochează când ajungi la etajul 10.",
   "curse-monarch-unlock-hint": "Nivelurile de blestem 11-15 se deblochează când învingi Monarhul Temniței.",
-  "curse-level-locked": "Nivel {level} (Blocat)",
   "bestiary": "Bestiar",
   "enemy-damage-unlock": "Măiestria contra {enemy} deblocată: +{value}% daune împotriva acestui inamic.",
   "rename": "Redenumește",

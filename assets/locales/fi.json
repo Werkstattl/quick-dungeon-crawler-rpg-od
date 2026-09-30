@@ -154,7 +154,6 @@
   "curse-levels-unlocked": "Avatut kiroustasot: {current}/{max}",
   "curse-standard-unlock-hint": "Kiroustasot 2-10 avautuvat saavuttamalla kerroksen 10.",
   "curse-monarch-unlock-hint": "Kiroustasot 11-15 avautuvat kukistamalla Luolaston hallitsijan.",
-  "curse-level-locked": "Taso {level} (lukittu)",
   "bestiary": "Hirviökokoelma",
   "enemy-damage-unlock": "Vihollisen {enemy} hallinta avattu: +{value} % vahinkoa tätä vihollista vastaan.",
   "rename": "Nimeä uudelleen",

@@ -9,7 +9,6 @@ const requiredKeys = [
     'curse-levels-unlocked',
     'curse-standard-unlock-hint',
     'curse-monarch-unlock-hint',
-    'curse-level-locked',
 ];
 
 const localeFiles = fs.readdirSync(localesDirectory)
@@ -36,7 +35,7 @@ test('all locale files are valid JSON and contain the endgame Curse UI text', ()
         assert.match(locale['curse-standard-unlock-hint'], /2-10/, `${file} must describe Curse 2-10`);
         assert.match(locale['curse-standard-unlock-hint'], /10/, `${file} must mention Floor 10`);
         assert.match(locale['curse-monarch-unlock-hint'], /11-15/, `${file} must describe Curse 11-15`);
-        assert.match(locale['curse-level-locked'], /\{level\}/, `${file} must retain {level}`);
+        assert.equal(locale['curse-level-locked'], undefined, `${file} still contains unused curse-level-locked`);
     }
 });
 
@@ -48,7 +47,7 @@ test('English unlock guidance describes the implemented progression rules', () =
     assert.equal(english['curse-monarch-unlock-hint'], 'Curse Levels 11-15 unlock by defeating the Dungeon Monarch.');
 });
 
-test('allocation UI renders progress, both unlock rules, and translated locked options', () => {
+test('allocation UI renders progress, both unlock rules, and only unlocked curse options', () => {
     const mainSource = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
 
     assert.match(mainSource, /class="curse-progression-info"/);
@@ -56,8 +55,9 @@ test('allocation UI renders progress, both unlock rules, and translated locked o
     assert.match(mainSource, /data-i18n-params='\{"current":\$\{maxUnlockedCurse\},"max":\$\{MAX_CURSE_LEVEL\}\}'/);
     assert.match(mainSource, /data-i18n="curse-standard-unlock-hint"/);
     assert.match(mainSource, /data-i18n="curse-monarch-unlock-hint"/);
-    assert.match(mainSource, /option\.setAttribute\('data-i18n', 'curse-level-locked'\)/);
-    assert.match(mainSource, /option\.textContent = t\('curse-level-locked', \{ level: optionValue \}\)/);
+    assert.match(mainSource, /getCurseLevelRange\(\)\.filter\(\(level\) => level <= maxUnlockedCurse\)/);
+    assert.doesNotMatch(mainSource, /'curse-level-locked'/);
+    assert.match(mainSource, /<select id="select-curse" \$\{maxUnlockedCurse <= MIN_CURSE_LEVEL \? 'hidden' : ''\}>/);
 });
 
 test('Curse progression guidance has dedicated compact styling', () => {
