@@ -3,6 +3,19 @@
     --font-scale: 1;
     --base-font-size: 1rem;
     --font-family-base: 'Germania One', Georgia, 'Times New Roman', serif;
+
+    /* Theme */
+    --bg-deep: #070608;
+    --text-main: #f1e9d8;
+    --text-muted: #a99f8c;
+    --accent: #e3b964;
+    --accent-strong: #ffd98a;
+    --border-soft: rgba(212, 170, 96, 0.28);
+    --border-strong: rgba(227, 185, 100, 0.65);
+    --surface: linear-gradient(180deg, rgba(38, 31, 27, 0.94) 0%, rgba(16, 13, 13, 0.96) 100%);
+    --surface-flat: rgba(22, 18, 17, 0.95);
+    --panel-shadow: 0 0.5rem 1.4rem rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 228, 170, 0.07);
+    --radius: 0.55rem;
 }
 
 * {
@@ -64,15 +77,31 @@ i {
 input {
     font-size: calc(1rem * var(--font-scale));
     font-family: var(--font-family-base);
-    padding: 0.4rem;
+    padding: 0.5rem 0.7rem;
     margin: 1rem 0 0.5rem 0;
-    background: transparent;
-    border: solid 1px;
-    color: white;
+    background: rgba(0, 0, 0, 0.45);
+    border: solid 1px var(--border-soft);
+    border-radius: 0.4rem;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+    color: var(--text-main);
+    transition: border-color 0.2s, box-shadow 0.2s;
     user-select: text;
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--border-strong);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(227, 185, 100, 0.18);
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+    box-shadow: none;
+    accent-color: var(--accent);
 }
 
 select {
@@ -80,11 +109,15 @@ select {
     font-size: calc(1rem * var(--font-scale));
     font-family: var(--font-family-base);
     width: 100%;
-    padding: 0.4rem;
-    background: transparent;
-    border: solid 1px white;
-    color: white;
-    border-radius: 0.3rem;
+    padding: 0.45rem 1.9rem 0.45rem 0.6rem;
+    background-color: rgba(0, 0, 0, 0.45);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23e3b964' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    border: solid 1px var(--border-soft);
+    color: var(--text-main);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    border-radius: 0.4rem;
     -webkit-border-radius: 0.3rem;
     -moz-border-radius: 0.3rem;
     -ms-border-radius: 0.3rem;
@@ -97,7 +130,7 @@ select {
 }
 
 option {
-    background-color: #030303;
+    background-color: #15110f;
     font-family: var(--font-family-base);
 }
 
@@ -119,11 +152,17 @@ html {
 }
 
 body {
-    background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
-    background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
+    background-color: var(--bg-deep);
+    background-image:
+        radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255, 150, 60, 0.13), transparent 70%),
+        radial-gradient(ellipse 60% 45% at 50% 110%, rgba(110, 60, 160, 0.12), transparent 70%),
+        radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.75) 100%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0, rgba(255, 255, 255, 0.012) 2px, transparent 2px, transparent 4px),
+        linear-gradient(180deg, #120e0d 0%, #0a0809 55%, #060507 100%);
+    background-attachment: fixed;
     font-family: var(--font-family-base);
     font-size: calc(var(--base-font-size) * var(--font-scale));
-    color: white;
+    color: var(--text-main);
     height: 100vh;
     height: 100dvh; 
     padding:
@@ -152,7 +191,7 @@ main {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
+    background-color: rgba(227, 185, 100, 0.45);
     border-radius: 1.25rem;
     border: 6px solid transparent;
     background-clip: content-box;
@@ -163,7 +202,7 @@ main {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #a8bbbf;
+    background-color: rgba(227, 185, 100, 0.7);
 }
 
 /* Utility */
@@ -246,27 +285,37 @@ main {
 .clear-log-button {
     font-size: 0.8rem;
     padding: 0.2rem 0.6rem;
-    border: 1px solid var(--primary-border-color, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--border-soft);
     border-radius: 0.35rem;
     background: rgba(0, 0, 0, 0.35);
-    color: inherit;
+    color: var(--text-muted);
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
 }
 
 .clear-log-button:hover {
-    background: white;
-color: black;
+    background: rgba(227, 185, 100, 0.15);
+    color: var(--text-main);
 }
 
 .logBox #dungeonAction {
     text-align: center;
+    color: var(--accent);
+    letter-spacing: 0.04em;
 }
 
 .logBox p {
     margin: 0.3rem 0;
     padding: 0.3rem;
+}
+
+#dungeonLog > p,
+#combatLogBox > p {
+    margin: 0;
+    padding: 0.4rem 0.35rem;
+    border-bottom: 1px solid rgba(212, 170, 96, 0.08);
+    line-height: 1.35;
 }
 
 #dungeonLog {
@@ -291,10 +340,10 @@ color: black;
     top: 50%;
     right: 0.45rem;
     padding: 0.12rem 0.35rem;
-    border: 1px solid rgba(130, 183, 218, 0.28);
+    border: 1px solid rgba(212, 170, 96, 0.28);
     border-radius: 9999px;
-    background: rgba(5, 11, 19, 0.72);
-    color: #9fb8cf;
+    background: rgba(12, 9, 8, 0.75);
+    color: var(--text-muted);
     font-size: 0.58rem;
     letter-spacing: 0.06em;
     line-height: 1;
@@ -336,24 +385,24 @@ color: black;
     min-width: 0;
     min-height: 6.3rem;
     padding: 0.55rem 0.4rem 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(212, 170, 96, 0.16);
     border-radius: 0.55rem;
-    background: linear-gradient(180deg, rgba(35, 45, 62, 0.92), rgba(8, 12, 20, 0.96));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0.35rem 0.8rem rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, rgba(48, 38, 32, 0.92), rgba(14, 11, 11, 0.96));
+    box-shadow: inset 0 1px 0 rgba(255, 228, 170, 0.06), 0 0.35rem 0.8rem rgba(0, 0, 0, 0.3);
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .equipment-slot-card--filled {
-    border-color: rgba(105, 188, 224, 0.42);
+    border-color: var(--border-strong);
 }
 
 .equipment-slot-card__label {
     display: flex;
     width: 100%;
     min-height: 1.3rem;
-    color: #9fb8cf;
+    color: var(--text-muted);
     font-size: 0.56rem;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -380,7 +429,7 @@ color: black;
     margin: 0;
     padding: 0;
     border-radius: 0.55rem;
-    background: rgba(3, 7, 13, 0.86);
+    background: rgba(8, 6, 6, 0.86);
 }
 
 .equipment-slot-card__item button i {
@@ -390,7 +439,7 @@ color: black;
 
 .equipment-slot-card__item--empty {
     gap: 0.35rem;
-    color: rgba(190, 206, 220, 0.45);
+    color: rgba(220, 200, 170, 0.4);
     flex-direction: column;
     font-size: 0.68rem;
 }
@@ -510,8 +559,7 @@ color: black;
 
 .inventorySlots p:hover,
 #playerEquipment p:hover {
-    background-color: grey;
-    color: white;
+    background-color: rgba(227, 185, 100, 0.12);
     cursor: pointer;
 }
 
@@ -531,11 +579,15 @@ color: black;
     right: 0.5rem;
     width: auto;
     border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-muted);
 }
 
 #title-menu-btn:hover {
-    background-color: transparent;
-    color: gray;
+    background: transparent;
+    box-shadow: none;
+    color: var(--accent);
 }
 
 #title-menu-btn i {
@@ -545,42 +597,50 @@ color: black;
 
 /* Shadows */
 .primary-panel {
-    border-radius: 0.3rem;
-    border: solid 1px;
+    border-radius: var(--radius);
+    border: solid 1px var(--border-soft);
+    background: var(--surface);
+    box-shadow: var(--panel-shadow);
 }
 
 /* Buttons */
 button {
     display: inline-block;
     text-align: center;
-    background-color: transparent;
-    color: white;
+    background-color: #2e241e;
+    /* Translucent bevel so background-color overrides (e.g. active toggles) still show through */
+    background-image: linear-gradient(180deg, rgba(255, 228, 180, 0.12) 0%, rgba(0, 0, 0, 0.28) 100%);
+    color: var(--text-main);
     font-family: var(--font-family-base);
     font-size: calc(1rem * var(--font-scale));
     padding: 0.4rem 1rem;
-    border-radius: 0.3rem;
-    border: solid 1px;
-    -webkit-border-radius: 0.3rem;
-    -moz-border-radius: 0.3rem;
-    -ms-border-radius: 0.3rem;
-    -o-border-radius: 0.3rem;
+    border-radius: 0.45rem;
+    border: solid 1px var(--border-soft);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 230, 180, 0.12);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
     cursor: pointer;
-    transition: .2s;
-    -webkit-transition: .2s;
-    -moz-transition: .2s;
-    -ms-transition: .2s;
-    -o-transition: .2s;
+    transition: background-color .2s, border-color .2s, box-shadow .2s, color .2s, transform .08s;
     -webkit-tap-highlight-color: transparent;
 }
 
-button:hover {
-    background-color: white;
-    color: black;
+button:hover:not(:disabled) {
+    border-color: var(--border-strong);
+    background-color: #45352a;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 10px rgba(227, 185, 100, 0.25), inset 0 1px 0 rgba(255, 230, 180, 0.18);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 button:focus {
     outline: none;
-    box-shadow: none;
+}
+
+button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 /* Rarity Colors */
@@ -594,18 +654,22 @@ button:focus {
 
 .Rare {
     color: #0070dd;
+    text-shadow: 0 0 6px rgba(0, 112, 221, 0.45);
 }
 
 .Epic {
     color: #a335ee;
+    text-shadow: 0 0 7px rgba(163, 53, 238, 0.55);
 }
 
 .Legendary {
     color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 190, 0, 0.55);
 }
 
 .Heirloom {
     color: #e30b5c;
+    text-shadow: 0 0 8px rgba(227, 11, 92, 0.6);
 }
 
 .CurseUnlock {
@@ -631,6 +695,7 @@ button:focus {
     width: 100%;
     max-width: 35rem;
     height: 100%;
+    transition: filter 0.25s ease;
 }
 
 .game {
@@ -655,21 +720,36 @@ button:focus {
 }
 
 .modal-container .content {
-    background: -webkit-linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
-    background: linear-gradient(360deg, #030303 10%, #1f1f1f 360%);
-    color: #fff;
-    border-radius: 0.3rem;
-    border: solid 1px;
+    background: var(--surface);
+    background-color: var(--surface-flat);
+    color: var(--text-main);
+    border-radius: 0.7rem;
+    border: solid 1px var(--border-soft);
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 228, 170, 0.08);
     max-width: 25rem;
     padding: 0.5em;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
     margin: 0.5rem;
-    -webkit-border-radius: 0.3rem;
-    -moz-border-radius: 0.3rem;
-    -ms-border-radius: 0.3rem;
-    -o-border-radius: 0.3rem;
+    animation: modal-in 0.2s ease-out;
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.6rem) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.modal-container .content-head h3 {
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(227, 185, 100, 0.3);
+    letter-spacing: 0.03em;
 }
 
 .modal-container .content .button-container {
@@ -1102,6 +1182,17 @@ button:focus {
 
 #enemyPanel {
     align-items: center;
+    border-radius: var(--radius);
+    background: radial-gradient(ellipse 65% 60% at 50% 72%, rgba(255, 120, 60, 0.14), transparent 70%);
+}
+
+#enemyPanel > p:first-child {
+    color: var(--accent-strong);
+    text-shadow: 0 0 10px rgba(255, 150, 60, 0.3);
+}
+
+#enemy-sprite {
+    filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.85));
 }
 
 .enemy-type-badge {
@@ -1256,6 +1347,8 @@ button:focus {
 
 #lvlupPanel h1 {
     text-align: center;
+    color: var(--accent-strong);
+    text-shadow: 0 0 14px rgba(255, 190, 80, 0.45);
 }
 
 #lvlupSelect button:disabled {
@@ -1266,15 +1359,12 @@ button:focus {
 /* Battle Bars */
 .battle-bar {
     font-size: calc(0.8rem * var(--font-scale));
-    border-radius: 0.3rem;
-    -webkit-border-radius: 0.3rem;
-    -moz-border-radius: 0.3rem;
-    -ms-border-radius: 0.3rem;
-    -o-border-radius: 0.3rem;
+    border-radius: 0.35rem;
 }
 
 .bb-hp {
     height: 1rem;
+    line-height: 1rem;
 }
 
 .bb-xb {
@@ -1283,31 +1373,35 @@ button:focus {
 
 .empty-bar {
     width: 100%;
-    background-color: grey;
+    overflow: hidden;
+    background-color: #1a1413;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 1px rgba(212, 170, 96, 0.18), inset 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .bb-hp .current {
-    background-color: #e40000;
+    background-color: #c0141b;
+    background-image: linear-gradient(180deg, #ff5a4e 0%, #d41f22 45%, #8e0b12 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 190, 170, 0.45), 0 0 8px rgba(255, 40, 30, 0.35);
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
     margin-top: -1rem;
     transition: .1s;
-    -webkit-transition: .1s;
-    -moz-transition: .1s;
-    -ms-transition: .1s;
-    -o-transition: .1s;
 }
 
 .bb-xb .current {
     color: transparent;
     background-color: #9a00b9;
+    background-image: linear-gradient(90deg, #6a1bd1 0%, #b43cff 100%);
+    box-shadow: 0 0 6px rgba(180, 60, 255, 0.55);
     transition: .1s;
-    -webkit-transition: .1s;
-    -moz-transition: .1s;
-    -ms-transition: .1s;
-    -o-transition: .1s;
 }
 
 .bb-hp .dmg {
-    background-color: #dbc72a;
+    background-color: #e8c34a;
+    background-image: linear-gradient(180deg, #ffe27a, #c79a21);
     transition-duration: 0.5s;
     transition-timing-function: cubic-bezier(1, 0.1, 0.1, 0.1);
 }
@@ -1320,26 +1414,52 @@ button:focus {
     text-align: center;
     flex-direction: column;
     cursor: pointer;
+    background: radial-gradient(ellipse 70% 45% at 50% 38%, rgba(255, 170, 80, 0.14), transparent 70%);
 }
 
 #title-screen h1 {
     font-size: calc(2.5rem * var(--font-scale));
     font-weight: 400;
-    margin: 0 1rem;
+    margin: 0.5rem 1rem 0;
+    color: #f3cf7a;
+    background-image: linear-gradient(180deg, #fff3c9 0%, #f0c76a 45%, #b5782b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 0 #2a1608) drop-shadow(0 0 14px rgba(255, 170, 60, 0.35));
+    letter-spacing: 0.02em;
 }
 
 #title-screen i {
     margin: 0 0 1rem;
 }
 
+#title-screen img {
+    filter: drop-shadow(0 0 18px rgba(90, 200, 190, 0.35)) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.8));
+    animation: title-float 4s ease-in-out infinite;
+}
+
 #title-screen p {
-    animation: blinker 1s linear infinite;
-    -webkit-animation: blinker 1s linear infinite;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: calc(0.9rem * var(--font-scale));
+    animation: blinker 2.2s ease-in-out infinite;
+    -webkit-animation: blinker 2.2s ease-in-out infinite;
 }
 
 @keyframes blinker {
     50% {
-        opacity: 0;
+        opacity: 0.25;
+    }
+}
+
+@keyframes title-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-0.5rem);
     }
 }
 
@@ -1352,8 +1472,23 @@ button:focus {
     flex-direction: column;
 }
 
+#character-creation form {
+    padding: 2rem 1.25rem;
+    margin: 0 0.75rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 0.8rem;
+    background: var(--surface);
+    box-shadow: var(--panel-shadow);
+}
+
+#character-creation h1 {
+    color: var(--accent);
+    text-shadow: 0 0 14px rgba(227, 185, 100, 0.3);
+}
+
 #character-creation button {
     margin: 2rem 0 0 0;
+    padding: 0.55rem 2.2rem;
 }
 
 #character-creation input {
@@ -1390,14 +1525,20 @@ button:focus {
 
 /* Header */
 header {
-    border-radius: 0.3rem;
-    border: solid 1px;
+    border-radius: var(--radius);
+    border: solid 1px var(--border-soft);
+    background: var(--surface);
+    box-shadow: var(--panel-shadow);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.35rem 0.6rem;
     margin: 0.5rem 0.5rem 0;
+}
+
+#player-gold {
+    color: #ffd76a;
 }
 
 header button {
@@ -1426,6 +1567,22 @@ header button i {
     justify-content: space-between;
     align-items: center;
     margin: 0.2rem 1rem;
+}
+
+#dungeonTime,
+#floorCount,
+#roomCount {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(212, 170, 96, 0.18);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--text-main);
+    font-size: calc(0.9rem * var(--font-scale));
+}
+
+#floorCount {
+    color: var(--accent);
+    border-color: var(--border-soft);
 }
 
 #auto-mode-btn,
@@ -1466,14 +1623,12 @@ header button i {
 
 .stat-panel .box {
     white-space: nowrap;
-    border: solid 1px;
-    border-radius: 0.3rem;
-    -webkit-border-radius: 0.3rem;
-    -moz-border-radius: 0.3rem;
-    -ms-border-radius: 0.3rem;
-    -o-border-radius: 0.3rem;
+    border: solid 1px var(--border-soft);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--panel-shadow);
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.5rem 0.6rem;
     overflow: hidden;
 }
 
@@ -1483,6 +1638,11 @@ header button i {
 
 .stat-panel .box h4 {
     font-weight: bold;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(212, 170, 96, 0.15);
 }
 
 .stat-panel .stats-title-link {
@@ -1801,12 +1961,13 @@ header button i {
 }
 
 .loader {
-    border: 0.5rem solid #f3f3f3;
-    border-top: 0.5rem solid grey;
+    border: 0.4rem solid rgba(227, 185, 100, 0.15);
+    border-top: 0.4rem solid var(--accent);
     border-radius: 50%;
     width: 3.8rem;
     height: 3.8rem;
-    animation: spin 2s linear infinite;
+    box-shadow: 0 0 18px rgba(227, 185, 100, 0.25);
+    animation: spin 1.1s linear infinite;
 }
 
 @keyframes spin {
@@ -1946,6 +2107,7 @@ header button i {
     color: white;
     font-size: calc(1.8em * var(--font-scale));
     font-weight: 500;
+    text-shadow: 0 2px 0 #000, 0 0 3px #000, 0 0 10px rgba(255, 90, 40, 0.6);
     animation: dmg-numbers 0.7s;
     -webkit-animation: dmg-numbers 0.7s;
     position: absolute;
@@ -1999,15 +2161,17 @@ header button i {
 }
 
 .companion-option {
-    border: 1px solid #444;
+    border: 1px solid var(--border-soft);
+    background: rgba(0, 0, 0, 0.3);
     padding: 10px;
-    border-radius: 5px;
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .companion-option:hover {
-    background-color: #222;
+    background-color: rgba(227, 185, 100, 0.08);
+    border-color: var(--border-strong);
 }
 
 .hidden {
@@ -2643,8 +2807,8 @@ header button i {
     z-index: 2;
     margin: 0.5rem -0.5rem 1rem;
     padding: 0.6rem 0.5rem;
-    background: linear-gradient(360deg, rgba(3, 3, 3, 0.97) 10%, rgba(31, 31, 31, 0.97) 360%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(24, 19, 17, 0.97);
+    border-bottom: 1px solid var(--border-soft);
 }
 
 .forge-buttons button {
@@ -2656,11 +2820,6 @@ header button i {
 #forge-confirm:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-#forge-confirm:disabled:hover {
-    background-color: transparent;
-    color: white;
 }
 
 .forge-current-gold {
@@ -2895,4 +3054,11 @@ header button i {
 .external-link-icon {
     margin-left: 0.3rem;
     margin-right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #title-screen img,
+    .modal-container .content {
+        animation: none;
+    }
 }
