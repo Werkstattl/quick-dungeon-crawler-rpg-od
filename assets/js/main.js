@@ -945,7 +945,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <option value="8" ${autoIgnoreDoors === 8 ? 'selected' : ''}>8</option>
                     <option value="9" ${autoIgnoreDoors === 9 ? 'selected' : ''}>9</option>
                 </select></label>
-                <br><button id="apply-auto" data-i18n="apply">Apply</button>
+                <button id="apply-auto" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations(defaultModalElement);
         let autoToggle = document.querySelector('#auto-mode-toggle');

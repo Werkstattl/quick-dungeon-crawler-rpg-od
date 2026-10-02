@@ -223,12 +223,31 @@ main {
 }
 
 
-.auto-levelup-priority-block {
-    margin: 0.5rem 0;
+#auto-tab {
+    gap: 0.35em;
+}
+
+#auto-tab > label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#auto-tab > label select {
+    flex: 0 0 45%;
+    margin-left: auto;
+}
+
+#auto-tab input[type="checkbox"] {
+    margin: 0;
+}
+
+#apply-auto {
+    margin-top: 0.3rem;
 }
 
 .auto-levelup-priority-block p {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
 }
 
 .auto-levelup-priority-row {
@@ -236,7 +255,7 @@ main {
     grid-template-columns: 1.4rem 1fr;
     align-items: center;
     gap: 0.4rem;
-    margin: 0.35rem 0;
+    margin: 0.2rem 0;
 }
 
 .auto-levelup-priority-row span {
@@ -1028,6 +1047,8 @@ button:focus-visible {
 /* Only the list scrolls so header, controls and load-more stay reachable */
 #defaultModal #bestiary-modal {
     overflow: hidden;
+    max-height: min(34rem, calc(100vh - 3rem));
+    max-height: min(34rem, calc(100dvh - 1rem));
 }
 
 .forge-membership-benefits {
@@ -2960,13 +2981,13 @@ header button i {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.15rem;
 }
 .bestiary-list li {
-    padding: 0.2rem 0;
+    padding: 0.1rem 0;
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -3049,7 +3070,7 @@ header button i {
 }
 
 .bestiary-list img {
-    width: 2.5rem;
+    width: 2rem;
     height: auto;
 }
 
