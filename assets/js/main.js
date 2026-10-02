@@ -701,7 +701,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         sfxOpen.play();
 
         let master = volume.master * 100;
-        let bgm = (volume.bgm * 100) * 2;
+        let bgm = Math.round((volume.bgm * 100) * 2);
         let sfx = volume.sfx * 100;
         let fontScale = Math.round(fontSize.scale * 100);
         const fontOptions = Array.isArray(window.fontFamilyOptions) ? window.fontFamilyOptions : [];
