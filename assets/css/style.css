@@ -2807,7 +2807,7 @@ header button i {
     z-index: 2;
     margin: 0.5rem -0.5rem 1rem;
     padding: 0.6rem 0.5rem;
-    background: rgba(24, 19, 17, 0.97);
+    background: rgb(36, 29, 25);
     border-bottom: 1px solid var(--border-soft);
 }
 
