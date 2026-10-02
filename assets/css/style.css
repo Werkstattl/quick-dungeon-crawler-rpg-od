@@ -752,18 +752,6 @@ button:focus-visible {
     flex-direction: column;
     gap: 0.5em;
     margin: 0.5rem;
-    animation: modal-in 0.2s ease-out;
-}
-
-@keyframes modal-in {
-    from {
-        opacity: 0;
-        transform: translateY(0.6rem) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: none;
-    }
 }
 
 .modal-container .content-head h3 {
@@ -3087,8 +3075,7 @@ header button i {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #title-screen img,
-    .modal-container .content {
+    #title-screen img {
         animation: none;
     }
 }
