@@ -9,6 +9,12 @@ const source = fs.readFileSync(
     path.resolve(__dirname, '../assets/js/native.js'),
     'utf8'
 );
+const autoModeSource = fs.readFileSync(
+    path.resolve(__dirname, '../assets/js/automode.js'), 'utf8'
+);
+const mainSource = fs.readFileSync(
+    path.resolve(__dirname, '../assets/js/main.js'), 'utf8'
+);
 
 function createPurchaseContext(platform = 'ios-appstore') {
     const callbacks = {};
@@ -107,6 +113,158 @@ function createPurchaseContext(platform = 'ios-appstore') {
             };
         },
     };
+}
+
+function createAutoModePurchaseContext(platform, storage = new Map()) {
+    const state = createPurchaseContext(platform);
+    const context = state.context;
+    context.localStorage = {
+        getItem: key => storage.has(key) ? storage.get(key) : null,
+        setItem: (key, value) => storage.set(key, String(value)),
+        removeItem: key => storage.delete(key),
+    };
+    context.document.querySelector = selector => selector === '#auto-mode-btn' ? {
+        classList: { add() {}, remove() {}, toggle() {} },
+        setAttribute() {},
+        addEventListener() {},
+    } : null;
+    context.FORGE_MEMBERSHIP_STORAGE_KEY = 'forgeMembershipActive';
+    context.isForgeMembershipActive = () => storage.get('forgeMembershipActive') === 'true';
+    context.player = null;
+    vm.runInContext(autoModeSource, context);
+    // Exercise the application's membership propagation, including its writes
+    // to Auto Mode settings, rather than replacing it with an entitlement stub.
+    vm.runInContext(mainSource.slice(
+        mainSource.indexOf('function setForgeMembershipActive('),
+        mainSource.indexOf('function unlockForgeMembership(')
+    ), context);
+    return state;
+}
+
+for (const platform of ['ios-appstore', 'android-playstore']) {
+    test(`${platform}: restore without purchases stays locked across repeated app starts`, async () => {
+        const storage = new Map();
+        for (let start = 0; start < 3; start++) {
+            const state = createAutoModePurchaseContext(platform, storage);
+            assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+            assert.equal(storage.get('autoModeEntitlementsMigrated'), 'true');
+            assert.equal(storage.has('autoModeLegacyUnlocked'), false);
+            await vm.runInContext('initializePurchases()', state.context);
+            state.callbacks.receiptsReady();
+            await vm.runInContext('restoreNativePurchases()', state.context);
+            assert.equal(state.restoreCount, 1);
+            assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+            assert.equal(storage.get('autoMode'), 'false');
+        }
+    });
+
+    test(`${platform}: restored permanent Auto Mode purchase survives a restart`, async () => {
+        const storage = new Map();
+        const state = createAutoModePurchaseContext(platform, storage);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.callbacks.receiptsReady();
+        state.owned.add('automode_unlock_premium');
+        await vm.runInContext('restoreNativePurchases()', state.context);
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+
+        const restarted = createAutoModePurchaseContext(platform, storage);
+        assert.equal(vm.runInContext('autoModeUnlocked', restarted.context), true);
+        assert.equal(storage.has('autoModeLegacyUnlocked'), false);
+        await vm.runInContext('initializePurchases()', restarted.context);
+        restarted.owned.add('automode_unlock_premium');
+        restarted.callbacks.receiptsReady();
+        assert.equal(vm.runInContext('autoModeUnlocked', restarted.context), true);
+    });
+
+    test(`${platform}: expired membership does not become a permanent Auto Mode unlock`, async () => {
+        const storage = new Map();
+        const state = createAutoModePurchaseContext(platform, storage);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.owned.add('the_forge_membership');
+        state.callbacks.receiptsReady();
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+        state.owned.clear();
+        state.callbacks.receiptUpdated({});
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+        assert.equal(vm.runInContext('autoModeUnlocked',
+            createAutoModePurchaseContext(platform, storage).context), false);
+    });
+
+    test(`${platform}: approved Auto Mode purchase remains unlocked after membership expires`, async () => {
+        const storage = new Map();
+        const state = createAutoModePurchaseContext(platform, storage);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.callbacks.receiptsReady();
+        state.callbacks.approved(state.transaction(['automode_unlock_premium']));
+        state.owned.add('the_forge_membership');
+        state.callbacks.receiptUpdated({});
+        state.owned.clear();
+        state.callbacks.receiptUpdated({});
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+        assert.equal(vm.runInContext('autoModeUnlocked',
+            createAutoModePurchaseContext(platform, storage).context), true);
+    });
+}
+
+test('Auto Mode settings written after migration never grant an entitlement', () => {
+    for (const autoMode of ['false', 'true']) {
+        for (const visible of ['false', 'true']) {
+            const storage = new Map([
+                ['autoModeEntitlementsMigrated', 'true'],
+                ['autoMode', autoMode], ['autoModeBtnVisible', visible],
+            ]);
+            const state = createAutoModePurchaseContext('ios-appstore', storage);
+            assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+            assert.equal(vm.runInContext('autoMode', state.context), false);
+        }
+    }
+});
+
+for (const platform of ['ios-appstore', 'android-playstore']) {
+    test(`${platform}: legacy unlocks survive migration, empty restores and restarts`, async () => {
+        // The old rule also treated a stored false setting as an unlock.
+        for (const settings of [
+            [['autoMode', 'false']],
+            [['autoMode', 'true'], ['autoModeBtnVisible', 'true']],
+            [['autoModeBtnVisible', 'true']],
+        ]) {
+            const storage = new Map(settings);
+            for (let start = 0; start < 3; start++) {
+                const state = createAutoModePurchaseContext(platform, storage);
+                assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+                await vm.runInContext('initializePurchases()', state.context);
+                state.callbacks.receiptsReady();
+                await vm.runInContext('restoreNativePurchases()', state.context);
+                assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+                if (start === 0) {
+                    for (const [key, value] of settings) {
+                        assert.equal(storage.get(key), value);
+                    }
+                }
+                // Legacy access is separate from an actual store purchase.
+                assert.equal(storage.has('autoModePermanentUnlocked'), false);
+                storage.delete('autoMode');
+                storage.delete('autoModeBtnVisible');
+            }
+        }
+    });
+
+    test(`${platform}: an existing membership stays temporary after migration`, async () => {
+        const storage = new Map([
+            ['forgeMembershipActive', 'true'],
+            ['autoMode', 'true'], ['autoModeBtnVisible', 'true'],
+        ]);
+        const state = createAutoModePurchaseContext(platform, storage);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.owned.add('the_forge_membership');
+        state.callbacks.receiptsReady();
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+        state.owned.clear();
+        state.callbacks.receiptUpdated({});
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+        assert.equal(vm.runInContext('autoModeUnlocked',
+            createAutoModePurchaseContext(platform, storage).context), false);
+    });
 }
 
 test('iOS registers every product with App Store using the StoreKit 2 adapter', async () => {

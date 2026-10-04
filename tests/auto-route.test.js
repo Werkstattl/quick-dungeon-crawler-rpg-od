@@ -9,7 +9,7 @@ const source = fs.readFileSync(path.join(root, 'assets/js/automode.js'), 'utf8')
 const dungeonSource = fs.readFileSync(path.join(root, 'assets/js/dungeon.js'), 'utf8');
 
 function setup(route) {
-    const storage = new Map([['autoMode', 'true'], ['autoModeBtnVisible', 'true'], ['autoRoute', route]]);
+    const storage = new Map([['autoModePermanentUnlocked', 'true'], ['autoMode', 'true'], ['autoModeBtnVisible', 'true'], ['autoRoute', route]]);
     const buttons = new Map();
     const pending = [];
     const selected = [];

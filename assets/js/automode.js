@@ -90,16 +90,29 @@ if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";
 let autoSellBelowLevel = parseInt(localStorage.getItem("autoSellBelowLevel"), 10);
 if (Number.isNaN(autoSellBelowLevel)) autoSellBelowLevel = 0;
-const autoModeHasCachedMembership = typeof isForgeMembershipActive === 'function' && isForgeMembershipActive();
-const autoModeLegacyUnlocked = !autoModeHasCachedMembership && (
-    autoModeBtnVisible || localStorage.getItem("autoMode") !== null
-);
-let autoModeUnlocked = autoModeLegacyUnlocked;
+// Preserve the old permanent unlock rule once, before this version writes any
+// settings. Mark fresh installs too so restore writes cannot grant legacy access.
+const AUTO_MODE_ENTITLEMENT_MIGRATION_STORAGE_KEY = 'autoModeEntitlementsMigrated';
+const AUTO_MODE_LEGACY_UNLOCK_STORAGE_KEY = 'autoModeLegacyUnlocked';
+const AUTO_MODE_PERMANENT_UNLOCK_STORAGE_KEY = 'autoModePermanentUnlocked';
+if (localStorage.getItem(AUTO_MODE_ENTITLEMENT_MIGRATION_STORAGE_KEY) !== 'true') {
+    const hasCachedMembership = typeof isForgeMembershipActive === 'function' && isForgeMembershipActive();
+    const hadLegacyUnlock = !hasCachedMembership && (
+        autoModeBtnVisible || localStorage.getItem('autoMode') !== null
+    );
+    if (hadLegacyUnlock) {
+        localStorage.setItem(AUTO_MODE_LEGACY_UNLOCK_STORAGE_KEY, 'true');
+    }
+    localStorage.setItem(AUTO_MODE_ENTITLEMENT_MIGRATION_STORAGE_KEY, 'true');
+}
+const cachedLegacyAutoModeUnlock = localStorage.getItem(AUTO_MODE_LEGACY_UNLOCK_STORAGE_KEY) === 'true';
+const cachedPermanentAutoModeUnlock = localStorage.getItem(AUTO_MODE_PERMANENT_UNLOCK_STORAGE_KEY) === 'true';
+let autoModeUnlocked = cachedLegacyAutoModeUnlock || cachedPermanentAutoModeUnlock;
 const autoModeEntitlements = {
     desktop: false,
-    legacy: autoModeLegacyUnlocked,
+    legacy: cachedLegacyAutoModeUnlock,
     membership: false,
-    purchase: false,
+    purchase: cachedPermanentAutoModeUnlock,
 };
 
 const AUTO_MODE_PRODUCT_ID = 'automode_unlock_premium';
@@ -230,6 +243,13 @@ function setAutoModeEntitlement(source, active, openSettings = false) {
     let old = autoModeUnlocked;
     if (Object.prototype.hasOwnProperty.call(autoModeEntitlements, source)) {
         autoModeEntitlements[source] = Boolean(active);
+        if (source === 'purchase') {
+            if (active) {
+                localStorage.setItem(AUTO_MODE_PERMANENT_UNLOCK_STORAGE_KEY, 'true');
+            } else {
+                localStorage.removeItem(AUTO_MODE_PERMANENT_UNLOCK_STORAGE_KEY);
+            }
+        }
     }
     autoModeUnlocked = Object.values(autoModeEntitlements).some(Boolean);
     if (!autoModeUnlocked) {

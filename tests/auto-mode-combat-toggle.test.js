@@ -32,6 +32,7 @@ test('auto mode can be disabled during combat and synchronizes both controls', (
     let delayedAutoAction = null;
     let claimClicks = 0;
     const storage = new Map([
+        ['autoModePermanentUnlocked', 'true'],
         ['autoMode', 'true'],
         ['autoModeBtnVisible', 'true'],
     ]);
@@ -164,6 +165,7 @@ test('Auto Mode settings shortcut opens settings directly when the Auto button i
     };
 
     const storage = new Map([
+        ['autoModePermanentUnlocked', 'true'],
         ['autoMode', 'false'],
         ['autoModeBtnVisible', 'true'],
     ]);
@@ -209,6 +211,7 @@ test('closing Auto Mode settings opened from the shortcut returns to the game', 
     const titleElement = { style: { display: 'none', filter: '' } };
     let continueCount = 0;
     const storage = new Map([
+        ['autoModePermanentUnlocked', 'true'],
         ['autoMode', 'false'],
         ['autoModeBtnVisible', 'true'],
     ]);
