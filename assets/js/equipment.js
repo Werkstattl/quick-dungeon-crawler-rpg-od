@@ -922,7 +922,7 @@ const equipmentIcon = (equipment) => {
     } else if (equipment == "Kite") {
         return '<i class="ra ra-heavy-shield"></i>';
     } else if (equipment == "Buckler") {
-        return '<i class="ra ra-round-shield"></i>';
+        return '<i class="ra ra-circular-shield"></i>';
     } else if (equipment == "Great Helm") {
         return '<i class="ra ra-knight-helmet"></i>';
     } else if (equipment == "Horned Helm") {
