@@ -221,10 +221,9 @@ test('Auto Mode settings written after migration never grant an entitlement', ()
 });
 
 for (const platform of ['ios-appstore', 'android-playstore']) {
-    test(`${platform}: legacy unlocks survive migration, empty restores and restarts`, async () => {
-        // The old rule also treated a stored false setting as an unlock.
+    test(`${platform}: a previously visible Auto button preserves access across restores and restarts`, async () => {
         for (const settings of [
-            [['autoMode', 'false']],
+            [['autoMode', 'false'], ['autoModeBtnVisible', 'true']],
             [['autoMode', 'true'], ['autoModeBtnVisible', 'true']],
             [['autoModeBtnVisible', 'true']],
         ]) {
@@ -245,6 +244,24 @@ for (const platform of ['ios-appstore', 'android-playstore']) {
                 assert.equal(storage.has('autoModePermanentUnlocked'), false);
                 storage.delete('autoMode');
                 storage.delete('autoModeBtnVisible');
+            }
+        }
+    });
+
+    test(`${platform}: old settings without a visible Auto button do not grant legacy access`, async () => {
+        for (const autoMode of ['false', 'true']) {
+            for (const visible of [null, 'false']) {
+                const storage = new Map([['autoMode', autoMode]]);
+                if (visible !== null) storage.set('autoModeBtnVisible', visible);
+                for (let start = 0; start < 2; start++) {
+                    const state = createAutoModePurchaseContext(platform, storage);
+                    assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+                    assert.equal(storage.has('autoModeLegacyUnlocked'), false);
+                    await vm.runInContext('initializePurchases()', state.context);
+                    state.callbacks.receiptsReady();
+                    await vm.runInContext('restoreNativePurchases()', state.context);
+                    assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+                }
             }
         }
     });

@@ -90,16 +90,14 @@ if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
 let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";
 let autoSellBelowLevel = parseInt(localStorage.getItem("autoSellBelowLevel"), 10);
 if (Number.isNaN(autoSellBelowLevel)) autoSellBelowLevel = 0;
-// Preserve the old permanent unlock rule once, before this version writes any
+// Preserve existing visible Auto Mode access once, before this version writes
 // settings. Mark fresh installs too so restore writes cannot grant legacy access.
 const AUTO_MODE_ENTITLEMENT_MIGRATION_STORAGE_KEY = 'autoModeEntitlementsMigrated';
 const AUTO_MODE_LEGACY_UNLOCK_STORAGE_KEY = 'autoModeLegacyUnlocked';
 const AUTO_MODE_PERMANENT_UNLOCK_STORAGE_KEY = 'autoModePermanentUnlocked';
 if (localStorage.getItem(AUTO_MODE_ENTITLEMENT_MIGRATION_STORAGE_KEY) !== 'true') {
     const hasCachedMembership = typeof isForgeMembershipActive === 'function' && isForgeMembershipActive();
-    const hadLegacyUnlock = !hasCachedMembership && (
-        autoModeBtnVisible || localStorage.getItem('autoMode') !== null
-    );
+    const hadLegacyUnlock = !hasCachedMembership && autoModeBtnVisible;
     if (hadLegacyUnlock) {
         localStorage.setItem(AUTO_MODE_LEGACY_UNLOCK_STORAGE_KEY, 'true');
     }
