@@ -574,7 +574,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         }
         forgeMembershipSubscribe.onclick = function () {
             const isAndroid = /Android/i.test(navigator.userAgent);
-            if (isCordova() && typeof buyForgeMembership === 'function') {
+            if (isNativePurchasePlatform() && typeof buyForgeMembership === 'function') {
                 buyForgeMembership();
             } else {
                 if (isAndroid) {

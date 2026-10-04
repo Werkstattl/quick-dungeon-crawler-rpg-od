@@ -1,4 +1,7 @@
+let purchaseApi = null;
+let purchaseApiLoading = null;
 let purchasePlatform = null;
+let pendingPurchaseProductId = null;
 let purchasesReady = false;
 let purchasesInitializing = false;
 
@@ -18,23 +21,43 @@ function isDesktopPremiumBuild() {
   return Boolean(window.__TAURI__ || window.electronAPI);
 }
 
+function isNativePurchasePlatform() {
+  const capacitor = window.Capacitor;
+  return Boolean(capacitor && typeof capacitor.isNativePlatform === 'function' &&
+    typeof capacitor.getPlatform === 'function' && capacitor.isNativePlatform() &&
+    ['ios', 'android'].includes(capacitor.getPlatform()));
+}
+
+async function loadPurchaseApi() {
+  if (purchaseApi && purchaseApi.store) return purchaseApi;
+  if (!purchaseApiLoading) {
+    purchaseApiLoading = import('./purchase-plugin.js').then(async ({ CdvPurchase }) => {
+      // The plugin defers store creation when a Cordova compatibility bridge exists.
+      if (!CdvPurchase.store) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+      purchaseApi = CdvPurchase;
+      return purchaseApi;
+    }).catch(error => {
+      purchaseApiLoading = null;
+      throw error;
+    });
+  }
+  return purchaseApiLoading;
+}
+
 function getPurchasePlatform() {
   if (purchasePlatform) return purchasePlatform;
-  if (typeof CdvPurchase === 'undefined' || !CdvPurchase.store) return null;
+  if (!isNativePurchasePlatform()) return null;
 
-  const platform = CdvPurchase.store.defaultPlatform();
-  if (
-    platform === CdvPurchase.Platform.GOOGLE_PLAY ||
-    platform === CdvPurchase.Platform.APPLE_APPSTORE
-  ) {
-    purchasePlatform = platform;
-  }
+  purchasePlatform = window.Capacitor.getPlatform() === 'ios'
+    ? 'ios-appstore'
+    : 'android-playstore';
   return purchasePlatform;
 }
 
 function isApplePurchasePlatform() {
-  return typeof CdvPurchase !== 'undefined' &&
-    getPurchasePlatform() === CdvPurchase.Platform.APPLE_APPSTORE;
+  return getPurchasePlatform() === 'ios-appstore';
 }
 
 async function nativeInit() {
@@ -47,15 +70,12 @@ async function nativeInit() {
     return;
   }
 
-  if (typeof CdvPurchase !== 'undefined' && CdvPurchase && CdvPurchase.store) {
-    // Capacitor exposes the Cordova bridge before all native plugins have
-    // necessarily completed their startup work.
-    setTimeout(() => {
-      initializePurchases().catch(err => {
-        console.error('Error initializing purchases:', err);
-        showPurchaseStatus('iap-status-unavailable', true);
-      });
-    }, 1500);
+  if (!isNativePurchasePlatform()) return;
+  try {
+    await initializePurchases();
+  } catch (error) {
+    console.error('Error initializing purchases:', error);
+    showPurchaseStatus('iap-status-unavailable', true);
   }
 }
 
@@ -68,8 +88,16 @@ async function initializePurchases() {
     return;
   }
   purchasesInitializing = true;
+  try {
+    await loadPurchaseApi();
+    await configurePurchaseStore(platform);
+  } finally {
+    purchasesInitializing = false;
+  }
+}
 
-  const store = CdvPurchase.store;
+async function configurePurchaseStore(platform) {
+  const store = purchaseApi.store;
   const validatorUrl = typeof window.IAP_VALIDATOR_URL === 'string'
     ? window.IAP_VALIDATOR_URL.trim()
     : '';
@@ -79,29 +107,29 @@ async function initializePurchases() {
 
   store.register([
     {
-      type: CdvPurchase.ProductType.NON_CONSUMABLE,
+      type: purchaseApi.ProductType.NON_CONSUMABLE,
       id: FORGE_PRODUCT_ID,
       platform,
     },
     {
-      type: CdvPurchase.ProductType.NON_CONSUMABLE,
+      type: purchaseApi.ProductType.NON_CONSUMABLE,
       id: AUTO_MODE_PRODUCT_ID,
       platform,
     },
     {
-      type: CdvPurchase.ProductType.NON_CONSUMABLE,
+      type: purchaseApi.ProductType.NON_CONSUMABLE,
       id: ENEMY_CUSTOMIZATION_PRODUCT_ID,
       platform,
     },
     {
-      type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+      type: purchaseApi.ProductType.PAID_SUBSCRIPTION,
       id: FORGE_MEMBERSHIP_PRODUCT_ID,
       platform,
     },
   ]);
 
   store.error(error => {
-    if (error && error.code === CdvPurchase.ErrorCode.PAYMENT_CANCELLED) return;
+    if (error && error.code === purchaseApi.ErrorCode.PAYMENT_CANCELLED) return;
     console.error('Purchase error:', error);
     showPurchaseStatus('iap-status-error', true);
   });
@@ -133,16 +161,7 @@ async function initializePurchases() {
       showPurchaseStatus('iap-status-verification-failed', true);
     });
 
-  const initializationOptions = platform === CdvPurchase.Platform.APPLE_APPSTORE
-    ? [{ platform, options: { needAppReceipt: true } }]
-    : [platform];
-
-  let errors;
-  try {
-    errors = await store.initialize(initializationOptions);
-  } finally {
-    purchasesInitializing = false;
-  }
+  const errors = await store.initialize([platform]);
   if (Array.isArray(errors) && errors.length) {
     console.error('Purchase initialization errors:', errors);
     showPurchaseStatus('iap-status-unavailable', true);
@@ -150,11 +169,17 @@ async function initializePurchases() {
 }
 
 function grantApprovedProducts(transaction) {
+  // StoreKit 2 also approves existing entitlements at launch and on restore.
+  // Reapply the boolean unlocks, but only show purchase UI for a user order.
+  const requestedPurchase = transaction.products.some(
+    product => product.id === pendingPurchaseProductId
+  );
+  if (requestedPurchase) pendingPurchaseProductId = null;
   transaction.products.forEach(product => {
     if (product.id === FORGE_PRODUCT_ID) {
       unlockForge('purchase');
     } else if (product.id === AUTO_MODE_PRODUCT_ID) {
-      unlockAutoMode(true, 'purchase');
+      unlockAutoMode(requestedPurchase, 'purchase');
     } else if (product.id === ENEMY_CUSTOMIZATION_PRODUCT_ID) {
       if (typeof unlockEnemyCustomization === 'function') {
         unlockEnemyCustomization(true);
@@ -163,13 +188,13 @@ function grantApprovedProducts(transaction) {
       setForgeMembershipActive(true);
     }
   });
-  showPurchaseStatus('iap-status-purchased');
+  if (requestedPurchase) showPurchaseStatus('iap-status-purchased');
   refreshPurchaseUI();
 }
 
 function syncPurchaseEntitlements() {
-  if (!purchasesReady || typeof CdvPurchase === 'undefined') return;
-  const store = CdvPurchase.store;
+  if (!purchasesReady || !purchaseApi) return;
+  const store = purchaseApi.store;
   const platform = getPurchasePlatform();
   if (!platform) return;
 
@@ -196,23 +221,26 @@ async function orderProduct(productId) {
     return;
   }
 
-  const product = CdvPurchase.store.get(productId, getPurchasePlatform());
+  const product = purchaseApi.store.get(productId, getPurchasePlatform());
   const offer = product && product.getOffer();
   if (!offer) {
     showPurchaseStatus('iap-status-unavailable', true);
     return;
   }
 
+  pendingPurchaseProductId = productId;
   showPurchaseStatus('iap-status-processing');
   try {
     const error = await offer.order();
-    if (error && error.code !== CdvPurchase.ErrorCode.PAYMENT_CANCELLED) {
+    if (error) pendingPurchaseProductId = null;
+    if (error && error.code !== purchaseApi.ErrorCode.PAYMENT_CANCELLED) {
       console.error('Purchase failed:', error);
       showPurchaseStatus('iap-status-error', true);
     } else if (error) {
       showPurchaseStatus('iap-status-cancelled');
     }
   } catch (error) {
+    pendingPurchaseProductId = null;
     console.error('Purchase failed:', error);
     showPurchaseStatus('iap-status-error', true);
   }
@@ -241,7 +269,7 @@ async function restoreNativePurchases() {
   }
   showPurchaseStatus('iap-status-restoring');
   try {
-    const error = await CdvPurchase.store.restorePurchases();
+    const error = await purchaseApi.store.restorePurchases();
     if (error) {
       console.error('Restore purchases failed:', error);
       showPurchaseStatus('iap-status-restore-error', true);
@@ -261,7 +289,7 @@ async function manageNativeSubscriptions() {
     showPurchaseStatus('iap-status-loading', true);
     return;
   }
-  const error = await CdvPurchase.store.manageSubscriptions(getPurchasePlatform());
+  const error = await purchaseApi.store.manageSubscriptions(getPurchasePlatform());
   if (error) {
     console.error('Manage subscriptions failed:', error);
     showPurchaseStatus('iap-status-error', true);
@@ -289,7 +317,7 @@ function refreshPurchaseUI(root = document) {
       return;
     }
     if (!purchasesReady) return;
-    const product = CdvPurchase.store.get(productId, platform);
+    const product = purchaseApi.store.get(productId, platform);
     const price = product && product.pricing && product.pricing.price;
     if (!price) return;
     const key = productId === FORGE_MEMBERSHIP_PRODUCT_ID

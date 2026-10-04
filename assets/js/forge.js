@@ -108,7 +108,7 @@ const closeForgeUnlockModal = () => {
 };
 
 const buyPermanentForgeUnlock = () => {
-    if (isCordova() && typeof buyForgeUnlock === 'function') {
+    if (isNativePurchasePlatform() && typeof buyForgeUnlock === 'function') {
         buyForgeUnlock();
         return;
     }
@@ -122,7 +122,7 @@ const buyPermanentForgeUnlock = () => {
 };
 
 const buyForgeMembershipUnlock = () => {
-    if (isCordova() && typeof buyForgeMembership === 'function') {
+    if (isNativePurchasePlatform() && typeof buyForgeMembership === 'function') {
         buyForgeMembership();
         return;
     }

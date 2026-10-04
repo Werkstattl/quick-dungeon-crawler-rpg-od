@@ -113,7 +113,7 @@ const closeAutoModeUnlockModal = () => {
 };
 
 const buyPermanentAutoModeUnlock = () => {
-    if (isCordova() && typeof buyAutoModeUnlock === 'function') {
+    if (isNativePurchasePlatform() && typeof buyAutoModeUnlock === 'function') {
         buyAutoModeUnlock();
         return;
     }
@@ -127,7 +127,7 @@ const buyPermanentAutoModeUnlock = () => {
 };
 
 const buyAutoModeMembershipUnlock = () => {
-    if (isCordova() && typeof buyForgeMembership === 'function') {
+    if (isNativePurchasePlatform() && typeof buyForgeMembership === 'function') {
         buyForgeMembership();
         return;
     }

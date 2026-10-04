@@ -315,7 +315,7 @@ function openBestiaryModal() {
   if (unlockCustomizationBtn) {
     unlockCustomizationBtn.onclick = () => {
       const isAndroid = /Android/i.test(navigator.userAgent);
-      if (isCordova()) {
+      if (isNativePurchasePlatform()) {
         if (typeof buyEnemyCustomizationUnlock === 'function') {
           buyEnemyCustomizationUnlock();
         }

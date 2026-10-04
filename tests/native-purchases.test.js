@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { spawnSync } = require('node:child_process');
 
 const source = fs.readFileSync(
     path.resolve(__dirname, '../assets/js/native.js'),
@@ -52,10 +53,16 @@ function createPurchaseContext(platform = 'ios-appstore') {
 
     const context = vm.createContext({
         console,
-        window: {},
+        window: {
+            Capacitor: {
+                isNativePlatform: () => platform !== 'web',
+                getPlatform: () => platform === 'ios-appstore' ? 'ios'
+                    : platform === 'android-playstore' ? 'android' : 'web',
+            },
+        },
         document: { querySelectorAll: () => [] },
         setTimeout: callback => callback(),
-        CdvPurchase: {
+        mockPurchaseApi: {
             store,
             Platform: {
                 APPLE_APPSTORE: 'ios-appstore',
@@ -79,6 +86,7 @@ function createPurchaseContext(platform = 'ios-appstore') {
         t: (key, params) => params && params.price ? `${key}:${params.price}` : key,
     });
     vm.runInContext(source, context);
+    vm.runInContext('purchaseApi = mockPurchaseApi', context);
 
     return {
         context,
@@ -101,7 +109,7 @@ function createPurchaseContext(platform = 'ios-appstore') {
     };
 }
 
-test('iOS registers every product with App Store and requests the app receipt', async () => {
+test('iOS registers every product with App Store using the StoreKit 2 adapter', async () => {
     const state = createPurchaseContext();
 
     await vm.runInContext('initializePurchases()', state.context);
@@ -110,8 +118,125 @@ test('iOS registers every product with App Store and requests the app receipt', 
     assert.ok(state.registered.every(product => product.platform === 'ios-appstore'));
     assert.deepEqual(
         JSON.parse(JSON.stringify(state.initialized)),
-        [{ platform: 'ios-appstore', options: { needAppReceipt: true } }]
+        ['ios-appstore']
     );
+});
+
+test('native startup works with Capacitor and no Cordova purchase global', async () => {
+    const state = createPurchaseContext('android-playstore');
+    assert.equal(state.context.CdvPurchase, undefined);
+    assert.equal(state.context.window.cordova, undefined);
+
+    await vm.runInContext('nativeInit()', state.context);
+    assert.equal(state.registered.length, 4);
+    assert.deepEqual(Array.from(state.initialized), ['android-playstore']);
+});
+
+test('the shipped bundle registers the Capacitor bridge and loads through nativeInit', () => {
+    // Use an isolated process for Node's experimental VM module loader so this
+    // test exercises the browser module without changing the other test globals.
+    const result = spawnSync(process.execPath, ['--experimental-vm-modules', '-e', `
+        const assert = require('node:assert/strict');
+        const fs = require('node:fs');
+        const vm = require('node:vm');
+        const nativeSource = fs.readFileSync('assets/js/native.js', 'utf8');
+        const bundle = fs.readFileSync('assets/js/purchase-plugin.js', 'utf8');
+        (async () => {
+            for (const platform of ['ios', 'android']) {
+                for (const cordovaBridge of [false, true]) {
+                    const context = vm.createContext({
+                        console, setTimeout, clearTimeout, setInterval, clearInterval,
+                        navigator: { userAgent: platform },
+                        document: { querySelectorAll: () => [] },
+                        Capacitor: {
+                            getPlatform: () => platform,
+                            isNativePlatform: () => true,
+                            PluginHeaders: [{ name: 'PurchasePlugin', methods: [] }],
+                        },
+                        FORGE_PRODUCT_ID: 'forge', AUTO_MODE_PRODUCT_ID: 'auto',
+                        ENEMY_CUSTOMIZATION_PRODUCT_ID: 'enemy',
+                        FORGE_MEMBERSHIP_PRODUCT_ID: 'membership',
+                    });
+                    context.window = context;
+                    if (cordovaBridge) context.cordova = { platformId: platform };
+                    let module;
+                    let initialized;
+                    const script = new vm.Script(nativeSource, {
+                        importModuleDynamically: async specifier => {
+                            assert.equal(specifier, './purchase-plugin.js');
+                            module = new vm.SourceTextModule(bundle, { context });
+                            await module.link(() => { throw new Error('Unbundled import'); });
+                            await module.evaluate();
+                            module.namespace.CdvPurchase.Store.prototype.initialize = async options => {
+                                initialized = Array.from(options);
+                                return [];
+                            };
+                            return module;
+                        },
+                    });
+                    script.runInContext(context);
+                    await vm.runInContext('nativeInit()', context);
+                    assert.ok(module.namespace.CdvPurchase.store);
+                    assert.equal(context.CdvPurchaseCapacitor.installed, true);
+                    assert.ok(context.Capacitor.Plugins.PurchasePlugin);
+                    assert.deepEqual(initialized, [platform === 'ios'
+                        ? 'ios-appstore' : 'android-playstore']);
+                }
+            }
+        })().then(() => process.exit(0)).catch(error => {
+            console.error(error);
+            process.exit(1);
+        });
+    `], { cwd: path.resolve(__dirname, '..'), encoding: 'utf8', timeout: 10000 });
+
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+});
+
+test('web and desktop builds skip the native purchase store', async () => {
+    const web = createPurchaseContext('web');
+    await vm.runInContext('nativeInit()', web.context);
+    assert.equal(web.registered.length, 0);
+
+    const desktop = createPurchaseContext();
+    desktop.context.window.electronAPI = {};
+    await vm.runInContext('nativeInit()', desktop.context);
+    assert.equal(desktop.registered.length, 0);
+    assert.ok(desktop.unlocked.some(entry => entry[0] === 'forge' && entry[1] === 'desktop'));
+});
+
+test('StoreKit 2 launch and restore approvals reapply unlocks without purchase UI', async () => {
+    const state = createPurchaseContext();
+    const statuses = [];
+    state.context.showPurchaseStatus = key => statuses.push(key);
+    await vm.runInContext('initializePurchases()', state.context);
+    state.callbacks.receiptsReady();
+
+    const transaction = state.transaction(['automode_unlock_premium']);
+    state.callbacks.approved(transaction);
+    state.callbacks.approved(transaction);
+
+    assert.ok(state.unlocked.filter(entry => entry[0] === 'auto').every(entry => entry[2] === false));
+    assert.equal(statuses.includes('iap-status-purchased'), false);
+    assert.equal(state.finishCount, 2);
+});
+
+test('an explicit purchase opens its UI once even when approved is redelivered', async () => {
+    const state = createPurchaseContext();
+    const statuses = [];
+    state.context.showPurchaseStatus = key => statuses.push(key);
+    await vm.runInContext('initializePurchases()', state.context);
+    state.callbacks.receiptsReady();
+    state.products.set('automode_unlock_premium', {
+        getOffer: () => ({ order: async () => undefined }),
+    });
+
+    await vm.runInContext('buyAutoModeUnlock()', state.context);
+    const transaction = state.transaction(['automode_unlock_premium']);
+    state.callbacks.approved(transaction);
+    state.callbacks.approved(transaction);
+
+    assert.equal(state.unlocked.filter(entry => entry[0] === 'auto' && entry[2] === true).length, 1);
+    assert.equal(statuses.filter(key => key === 'iap-status-purchased').length, 1);
 });
 
 test('loaded receipts activate and revoke the subscription entitlement', async () => {
