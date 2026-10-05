@@ -876,7 +876,7 @@ const renderRerollStatLocks = () => {
     }
 
     selectedRerollStatLocks = getValidRerollStatLockKeys(equipment, selectedRerollStatLocks);
-    const totals = getEquipmentStatTotals(equipment);
+    const totals = getEquipmentStatTotals({ ...equipment, refineLevel: 0 });
     const statRollCounts = getRerollStatRollCounts(equipment);
     const sortedStatKeys = [...statKeys].sort((statA, statB) => {
         const labelComparison = formatEquipmentStatLabel(statA).localeCompare(
@@ -929,7 +929,7 @@ const displayRerollPreview = () => {
     }
 
     const currentEquipment = selectedRerollItem.equipment;
-    const currentTotals = getEquipmentStatTotals(currentEquipment);
+    const currentTotals = getEquipmentStatTotals({ ...currentEquipment, refineLevel: 0 });
     const currentIcon = equipmentIcon(currentEquipment.baseCategory || currentEquipment.category);
 
     currentItem.innerHTML = renderEquipmentCard({
