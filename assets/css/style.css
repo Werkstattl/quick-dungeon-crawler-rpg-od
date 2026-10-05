@@ -691,6 +691,16 @@ button:focus-visible {
     text-shadow: 0 0 8px rgba(227, 11, 92, 0.6);
 }
 
+/* Bucklers share the Defense icon, but gear should inherit its rarity color. */
+.Common .ra-round-shield,
+.Uncommon .ra-round-shield,
+.Rare .ra-round-shield,
+.Epic .ra-round-shield,
+.Legendary .ra-round-shield,
+.Heirloom .ra-round-shield {
+    color: inherit;
+}
+
 .CurseUnlock {
     color: #c77dff;
 }
