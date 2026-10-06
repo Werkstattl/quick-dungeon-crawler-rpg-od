@@ -1789,6 +1789,14 @@ header button i {
     overflow-wrap: break-word;
 }
 
+#companion-panel #companion-exp {
+    margin: 0.1rem 0 0.25rem;
+    font-size: calc(0.65rem * var(--font-scale));
+    line-height: 1.2;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
 .companion-bonus-list {
     list-style: none;
     padding-left: 0;

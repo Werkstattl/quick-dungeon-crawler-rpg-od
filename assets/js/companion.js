@@ -266,6 +266,9 @@ class Companion {
             expRequired = this.getExperienceRequired();
         }
         saveCompanions();
+        if (this === activeCompanion) {
+            updateCompanionUI();
+        }
     }
 
     getExperienceRequired() {
@@ -859,6 +862,7 @@ function giveCompanion(companionId, options = {}) {
 
 function updateCompanionUI() {
     const companionName = document.getElementById('companion-name');
+    const companionExp = document.getElementById('companion-exp');
     const companionAtk = document.getElementById('companion-atk');
     const companionBonus = document.getElementById('companion-bonus');
     const companionAtkSpd = document.getElementById('companion-atkspd');
@@ -870,6 +874,8 @@ function updateCompanionUI() {
         companionName.removeAttribute('data-i18n-params');
         companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
         companionName.className = activeCompanion.rarity;
+        companionExp.textContent = `EXP ${nFormatter(Math.floor(activeCompanion.experience))} / ${nFormatter(activeCompanion.getExperienceRequired())}`;
+        companionExp.classList.remove('hidden');
         companionAtk.textContent = combatStats.atk;
         companionAtkSpd.textContent = combatStats.atkSpd.toFixed(2);
         const bonusSummary = buildCompanionBonusList(activeCompanion);
@@ -887,6 +893,8 @@ function updateCompanionUI() {
         companionName.setAttribute('data-i18n', 'none');
         companionName.textContent = t('none');
         companionName.className = "";
+        companionExp.textContent = '';
+        companionExp.classList.add('hidden');
         companionAtk.textContent = "0";
         companionBonus.innerHTML = '';
         companionAtkSpd.textContent = "0";
