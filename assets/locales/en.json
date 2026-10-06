@@ -277,6 +277,7 @@
   "cost": "Cost:",
   "gold": "gold",
   "available-equipment": "Available Equipment",
+  "forge-include-refinement": "Include refinement",
   "no-forge-equipment": "You don't have any equipment to forge yet.",
   "forge-equipment": "Forge Equipment",
   "reroll-equipment": "Reroll Stats",

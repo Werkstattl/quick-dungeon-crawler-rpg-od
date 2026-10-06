@@ -277,6 +277,7 @@
   "cost": "Hinta:",
   "gold": "kultaa",
   "available-equipment": "Saatavilla olevat varusteet",
+  "forge-include-refinement": "Sisällytä jalostus",
   "no-forge-equipment": "Sinulla ei ole vielä taottavia varusteita.",
   "forge-equipment": "Tao varuste",
   "reroll-equipment": "Arvo ominaisuudet uudelleen",

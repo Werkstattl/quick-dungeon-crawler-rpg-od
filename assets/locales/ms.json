@@ -277,6 +277,7 @@
   "cost": "Kos:",
   "gold": "emas",
   "available-equipment": "Peralatan tersedia",
+  "forge-include-refinement": "Sertakan pemurnian",
   "no-forge-equipment": "Anda belum mempunyai peralatan untuk ditempa.",
   "forge-equipment": "Tempa peralatan",
   "reroll-equipment": "Rawak semula statistik",

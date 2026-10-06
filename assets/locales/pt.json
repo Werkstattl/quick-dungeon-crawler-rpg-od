@@ -277,6 +277,7 @@
   "cost": "Custo:",
   "gold": "ouro",
   "available-equipment": "Equipamento disponível",
+  "forge-include-refinement": "Incluir refinamento",
   "no-forge-equipment": "Você ainda não tem equipamento para forjar.",
   "forge-equipment": "Forjar equipamento",
   "reroll-equipment": "Rerrolar atributos",

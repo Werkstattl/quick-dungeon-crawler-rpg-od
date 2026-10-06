@@ -277,6 +277,7 @@
   "cost": "비용:",
   "gold": "골드",
   "available-equipment": "사용 가능한 장비",
+  "forge-include-refinement": "제련 수치 포함",
   "no-forge-equipment": "아직 제련할 장비가 없습니다.",
   "forge-equipment": "장비 제련",
   "reroll-equipment": "능력치 재굴림",

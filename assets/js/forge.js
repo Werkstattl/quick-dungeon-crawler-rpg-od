@@ -16,6 +16,19 @@ let rerollStoneCost = 0;
 let selectedRefineItem = null;
 let refineCost = 0;
 let refineStoneCost = 0;
+const FORGE_INCLUDE_REFINEMENT_STORAGE_KEY = 'forgeIncludeRefinement';
+let forgeIncludeRefinement = false;
+try {
+    forgeIncludeRefinement = typeof localStorage !== 'undefined'
+        && localStorage.getItem(FORGE_INCLUDE_REFINEMENT_STORAGE_KEY) === 'true';
+} catch (error) {
+    console.warn('Unable to read the Forge stat display preference:', error);
+}
+
+const getForgeDisplayStatTotals = (equipment) => getEquipmentStatTotals(
+    forgeIncludeRefinement ? equipment : { ...equipment, refineLevel: 0 }
+);
+
 const FORGE_PERMANENT_UNLOCK_STORAGE_KEY = 'forgePermanentUnlocked';
 
 const hasCachedPermanentForgeUnlock = () => {
@@ -234,6 +247,22 @@ const setForgeUnlockButton = (confirmButton) => {
 const initializeForge = () => {
     forgeModalElement = document.querySelector('#forgeModal');
     forgeGoldElement = document.querySelector('#forge-player-gold');
+    const refinementToggle = document.querySelector('#forge-include-refinement');
+    if (refinementToggle) {
+        refinementToggle.checked = forgeIncludeRefinement;
+        refinementToggle.onchange = () => {
+            forgeIncludeRefinement = refinementToggle.checked;
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem(FORGE_INCLUDE_REFINEMENT_STORAGE_KEY, String(forgeIncludeRefinement));
+                }
+            } catch (error) {
+                console.warn('Unable to save the Forge stat display preference:', error);
+            }
+            loadForgeEquipment();
+            updateForgeDisplay();
+        };
+    }
     populateForgeCategoryOptions();
     const targetCategorySelect = document.querySelector('#forge-target-category');
     if (targetCategorySelect) {
@@ -650,17 +679,9 @@ const loadForgeEquipment = () => {
         equipDiv.className = `forge-equipment-item ${equip.rarity}`;
         
         // Format stats display
-        let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-        const statsHtml = equip.stats.map(stat => {
-            const statName = Object.keys(stat)[0];
-            const statValue = stat[statName];
-            // Treat luck as a percentage-based stat and round like others
-            if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck", "fasterRun"].includes(statName)) {
-                return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
-            } else {
-                return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
-            }
-        }).join('');
+        const statsHtml = Object.entries(getForgeDisplayStatTotals(equip)).map(([statName, statValue]) =>
+            `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}${formatEquipmentValue(statName, statValue, { includeSign: true })}</li>`
+        ).join('');
         
         equipDiv.innerHTML = `
             <div class="equipment-icon">${equipmentIcon(equip.category)}</div>
@@ -876,7 +897,7 @@ const renderRerollStatLocks = () => {
     }
 
     selectedRerollStatLocks = getValidRerollStatLockKeys(equipment, selectedRerollStatLocks);
-    const totals = getEquipmentStatTotals({ ...equipment, refineLevel: 0 });
+    const totals = getForgeDisplayStatTotals(equipment);
     const statRollCounts = getRerollStatRollCounts(equipment);
     const sortedStatKeys = [...statKeys].sort((statA, statB) => {
         const labelComparison = formatEquipmentStatLabel(statA).localeCompare(
@@ -929,7 +950,7 @@ const displayRerollPreview = () => {
     }
 
     const currentEquipment = selectedRerollItem.equipment;
-    const currentTotals = getEquipmentStatTotals({ ...currentEquipment, refineLevel: 0 });
+    const currentTotals = getForgeDisplayStatTotals(currentEquipment);
     const currentIcon = equipmentIcon(currentEquipment.baseCategory || currentEquipment.category);
 
     currentItem.innerHTML = renderEquipmentCard({

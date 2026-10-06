@@ -277,6 +277,7 @@
   "cost": "Biaya:",
   "gold": "gold",
   "available-equipment": "Perlengkapan Tersedia",
+  "forge-include-refinement": "Sertakan pemurnian",
   "no-forge-equipment": "Kamu belum punya perlengkapan untuk ditempa.",
   "forge-equipment": "Tempa Perlengkapan",
   "reroll-equipment": "Acak Ulang Stat",

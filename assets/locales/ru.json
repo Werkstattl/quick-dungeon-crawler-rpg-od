@@ -277,6 +277,7 @@
   "cost": "Стоимость:",
   "gold": "золота",
   "available-equipment": "Доступная экипировка",
+  "forge-include-refinement": "Учитывать улучшение",
   "no-forge-equipment": "У вас пока нет экипировки для ковки.",
   "forge-equipment": "Ковать экипировку",
   "reroll-equipment": "Перебросить характеристики",

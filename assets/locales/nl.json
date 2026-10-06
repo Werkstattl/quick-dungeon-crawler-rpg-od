@@ -277,6 +277,7 @@
   "cost": "Kosten:",
   "gold": "goud",
   "available-equipment": "Beschikbare uitrusting",
+  "forge-include-refinement": "Verfijning meenemen",
   "no-forge-equipment": "Je hebt nog geen uitrusting om te smeden.",
   "forge-equipment": "Uitrusting smeden",
   "reroll-equipment": "Eigenschappen opnieuw bepalen",

@@ -277,6 +277,7 @@
   "cost": "Вартість:",
   "gold": "золота",
   "available-equipment": "Доступне спорядження",
+  "forge-include-refinement": "Враховувати покращення",
   "no-forge-equipment": "У вас ще немає спорядження для кузні.",
   "forge-equipment": "Викувати спорядження",
   "reroll-equipment": "Перекинути характеристики",

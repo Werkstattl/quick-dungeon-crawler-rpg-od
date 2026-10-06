@@ -277,6 +277,7 @@
   "cost": "هزینه:",
   "gold": "طلا",
   "available-equipment": "تجهیزات موجود",
+  "forge-include-refinement": "احتساب پالایش",
   "no-forge-equipment": "هنوز تجهیزی برای آهنگری ندارید.",
   "forge-equipment": "آهنگری تجهیزات",
   "reroll-equipment": "بازگردانی ویژگی‌ها",

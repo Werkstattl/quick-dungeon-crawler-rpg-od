@@ -277,6 +277,7 @@
   "cost": "ราคา:",
   "gold": "ทอง",
   "available-equipment": "อุปกรณ์ที่ใช้ได้",
+  "forge-include-refinement": "รวมค่าการขัดเกลา",
   "no-forge-equipment": "คุณยังไม่มีอุปกรณ์สำหรับหลอม",
   "forge-equipment": "หลอมอุปกรณ์",
   "reroll-equipment": "สุ่มค่าสถานะใหม่",

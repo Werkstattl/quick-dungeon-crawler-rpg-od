@@ -277,6 +277,7 @@
   "cost": "लागत:",
   "gold": "सोना",
   "available-equipment": "उपलब्ध उपकरण",
+  "forge-include-refinement": "परिष्करण शामिल करें",
   "no-forge-equipment": "आपके पास अभी गढ़ने के लिए कोई उपकरण नहीं है।",
   "forge-equipment": "उपकरण गढ़ें",
   "reroll-equipment": "आँकड़े फिर से रोल करें",

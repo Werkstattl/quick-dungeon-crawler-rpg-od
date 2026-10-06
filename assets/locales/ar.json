@@ -277,6 +277,7 @@
   "cost": "التكلفة:",
   "gold": "ذهب",
   "available-equipment": "المعدات المتاحة",
+  "forge-include-refinement": "تضمين التحسين",
   "no-forge-equipment": "ليست لديك أي معدات لصهرها بعد.",
   "forge-equipment": "صهر المعدات",
   "reroll-equipment": "إعادة توليد الإحصاءات",

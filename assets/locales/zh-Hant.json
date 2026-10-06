@@ -268,6 +268,7 @@
   "cost": "花費：",
   "gold": "金幣",
   "available-equipment": "可用裝備",
+  "forge-include-refinement": "包含精煉數值",
   "no-forge-equipment": "你還沒有可用於鍛造的裝備。",
   "forge-equipment": "鍛造裝備",
   "reroll-equipment": "重隨屬性",

@@ -277,6 +277,7 @@
   "cost": "Pris:",
   "gold": "guld",
   "available-equipment": "Tilgængeligt udstyr",
+  "forge-include-refinement": "Inkluder forædling",
   "no-forge-equipment": "Du har endnu ikke noget udstyr at smede.",
   "forge-equipment": "Smed udstyr",
   "reroll-equipment": "Slå egenskaber om",

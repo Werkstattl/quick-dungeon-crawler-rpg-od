@@ -277,6 +277,7 @@
   "cost": "Cost:",
   "gold": "aur",
   "available-equipment": "Echipament disponibil",
+  "forge-include-refinement": "Include rafinarea",
   "no-forge-equipment": "Incă nu ai echipament de forjat.",
   "forge-equipment": "Forjează echipament",
   "reroll-equipment": "Realeatorizează atributele",

@@ -277,6 +277,7 @@
   "cost": "Kostnad:",
   "gold": "guld",
   "available-equipment": "Tillgänglig utrustning",
+  "forge-include-refinement": "Inkludera förädling",
   "no-forge-equipment": "Du har ingen utrustning att smida än.",
   "forge-equipment": "Smid utrustning",
   "reroll-equipment": "Slå om egenskaper",

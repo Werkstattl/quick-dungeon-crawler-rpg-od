@@ -277,6 +277,7 @@
   "cost": "Kosten:",
   "gold": "Gold",
   "available-equipment": "Verfügbare Ausrüstung",
+  "forge-include-refinement": "Veredelung einbeziehen",
   "no-forge-equipment": "Du hast noch keine Ausrüstung zum Schmieden.",
   "forge-equipment": "Ausrüstung schmieden",
   "reroll-equipment": "Werte neu würfeln",

@@ -277,6 +277,7 @@
   "cost": "Pris:",
   "gold": "gull",
   "available-equipment": "Tilgjengelig utstyr",
+  "forge-include-refinement": "Inkluder foredling",
   "no-forge-equipment": "Du har ikke noe utstyr å smi ennå.",
   "forge-equipment": "Smi utstyr",
   "reroll-equipment": "Slå egenskaper på nytt",

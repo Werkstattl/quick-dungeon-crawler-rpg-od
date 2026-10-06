@@ -277,6 +277,7 @@
   "cost": "খরচ:",
   "gold": "সোনা",
   "available-equipment": "উপলভ্য সরঞ্জাম",
+  "forge-include-refinement": "পরিশোধনের মান অন্তর্ভুক্ত করুন",
   "no-forge-equipment": "ফোর্জ করার মতো কোনো সরঞ্জাম এখনো নেই।",
   "forge-equipment": "সরঞ্জাম ফোর্জ করুন",
   "reroll-equipment": "স্ট্যাট পুনরায় রোল করুন",

@@ -277,6 +277,7 @@
   "cost": "Koszt:",
   "gold": "złoto",
   "available-equipment": "Dostępny ekwipunek",
+  "forge-include-refinement": "Uwzględnij uszlachetnienie",
   "no-forge-equipment": "Nie masz jeszcze ekwipunku do wykucia.",
   "forge-equipment": "Wykuj ekwipunek",
   "reroll-equipment": "Przelosuj statystyki",

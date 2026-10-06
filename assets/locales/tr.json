@@ -277,6 +277,7 @@
   "cost": "Maliyet:",
   "gold": "altın",
   "available-equipment": "Mevcut Ekipman",
+  "forge-include-refinement": "İyileştirmeyi dahil et",
   "no-forge-equipment": "Henüz dövebileceğin ekipmanın yok.",
   "forge-equipment": "Ekipman Döv",
   "reroll-equipment": "İstatistikleri Yeniden At",

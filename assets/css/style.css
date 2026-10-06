@@ -2701,6 +2701,37 @@ header button i {
     font-weight: bold;
 }
 
+.forge-equipment-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.forge-equipment-heading h4 {
+    margin-bottom: 0;
+}
+
+.forge-refinement-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.forge-refinement-toggle input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
 .forge-equipment-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

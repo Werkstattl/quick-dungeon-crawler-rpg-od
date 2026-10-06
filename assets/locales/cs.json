@@ -277,6 +277,7 @@
   "cost": "Cena:",
   "gold": "zlata",
   "available-equipment": "Dostupná výbava",
+  "forge-include-refinement": "Zahrnout vylepšení",
   "no-forge-equipment": "Zatím nemáte žádnou výbavu ke kování.",
   "forge-equipment": "Vykovat výbavu",
   "reroll-equipment": "Přehodit atributy",

@@ -277,6 +277,7 @@
   "cost": "コスト:",
   "gold": "ゴールド",
   "available-equipment": "使用可能な装備",
+  "forge-include-refinement": "精錬値を含める",
   "no-forge-equipment": "鍛造できる装備がまだありません。",
   "forge-equipment": "装備を鍛造",
   "reroll-equipment": "ステータス再抽選",
