@@ -674,11 +674,24 @@ test('web lifetime button opens the same stores as the other purchase buttons', 
     }
 });
 
-test('all purchase screens offer lifetime before monthly with translated membership terms', () => {
-    for (const file of ['main.js', 'forge.js', 'automode.js']) {
+test('all purchase screens share membership benefits and offer lifetime before monthly with translated terms', () => {
+    const state = createPurchaseContext('web');
+    for (const [file, buttonId] of [
+        ['main.js', 'forge-membership-subscribe'],
+        ['forge.js', 'forge-buy-membership'],
+        ['automode.js', 'auto-mode-buy-membership'],
+    ]) {
         const dialog = fs.readFileSync(path.resolve(__dirname, '../assets/js', file), 'utf8');
-        assert.ok(dialog.indexOf('${getForgeLifetimeMembershipMarkup()}') < dialog.indexOf('data-i18n="forge-membership-monthly"'), file);
-        assert.ok(dialog.includes('${getForgeLifetimeMembershipMarkup()}'), file);
+        assert.ok(dialog.includes(`\${getForgeMembershipMarkup("${buttonId}")}`), file);
+        const markup = vm.runInContext(`getForgeMembershipMarkup('${buttonId}')`, state.context);
+        for (const benefit of ['premium', 'inventory', 'resting', 'gold', 'title', 'supports-development']) {
+            assert.equal(markup.split(`data-i18n="forge-membership-benefit-${benefit}"`).length - 1, 1, `${file}: ${benefit}`);
+        }
+        assert.ok(markup.indexOf('data-i18n="forge-membership-lifetime"') < markup.indexOf('data-i18n="forge-membership-monthly"'), file);
+        assert.ok(markup.includes(`id="${buttonId}" type="button" data-iap-subscribe`), file);
+        assert.ok(markup.includes('data-iap-lifetime'), file);
+        assert.ok(markup.includes('data-iap-product="the_forge_membership_lifetime"'), file);
+        assert.ok(markup.includes('data-iap-product="the_forge_membership"'), file);
     }
     for (const file of fs.readdirSync(path.resolve(__dirname, '../assets/locales'))) {
         if (!file.endsWith('.json')) continue;

@@ -548,23 +548,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 </div>
                 <p data-i18n="forge-membership-description">Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.</p>
                 <div class="forge-unlock-options">
-                ${getForgeLifetimeMembershipMarkup()}
-                <section class="forge-unlock-option">
-                    <h4 data-i18n="forge-membership-monthly">Monthly Membership</h4>
-                    <ul class="forge-membership-benefits">
-                        <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
-                        <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
-                        <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
-                        <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
-                        <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
-                    </ul>
-                    <p class="forge-membership-price">
-                        <span data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</span>
-                        <span data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</span>
-                    </p>
-                    <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                    <button id="forge-membership-subscribe" class="forge-membership-cta" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
-                </section>
+                ${getForgeMembershipMarkup("forge-membership-subscribe")}
                 </div>
                 <div class="iap-secondary-actions">
                     <button type="button" data-iap-restore data-i18n="iap-restore-purchases">Restore purchases</button>

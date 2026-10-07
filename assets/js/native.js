@@ -407,20 +407,33 @@ function refreshPurchaseUI(root = document) {
   });
 }
 
-function getForgeLifetimeMembershipMarkup() {
+function getForgeMembershipMarkup(subscribeButtonId) {
   return `<section class="forge-unlock-option">
-    <h4 data-i18n="forge-membership-lifetime">Lifetime Membership</h4>
-    <p class="forge-unlock-price" data-iap-product="${FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
+    <h4 data-i18n="forge-membership">The Forge Membership</h4>
     <ul class="forge-membership-benefits">
       <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
       <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
       <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
       <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
       <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
+      <li data-i18n="forge-membership-benefit-supports-development">Supports ongoing development</li>
     </ul>
-    <p class="forge-membership-terms" data-i18n="forge-membership-lifetime-terms">All membership benefits forever. Pay once, no renewal.</p>
-    <p class="forge-membership-terms" data-iap-lifetime-subscription-note hidden data-i18n="forge-membership-lifetime-subscription-note">Buying lifetime does not cancel your monthly subscription. Manage it through your store.</p>
-    <button type="button" data-iap-lifetime data-i18n="forge-membership-buy-lifetime">Buy Lifetime</button>
+    <div class="forge-membership-plans">
+      <div class="forge-membership-plan">
+        <h5 data-i18n="forge-membership-lifetime">Lifetime Membership</h5>
+        <p class="forge-unlock-price" data-iap-product="${FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
+        <p class="forge-membership-terms" data-i18n="forge-membership-lifetime-terms">All membership benefits forever. Pay once, no renewal.</p>
+        <p class="forge-membership-terms" data-iap-lifetime-subscription-note hidden data-i18n="forge-membership-lifetime-subscription-note">Buying lifetime does not cancel your monthly subscription. Manage it through your store.</p>
+        <button type="button" data-iap-lifetime data-i18n="forge-membership-buy-lifetime">Buy Lifetime</button>
+      </div>
+      <div class="forge-membership-plan">
+        <h5 data-i18n="forge-membership-monthly">Monthly Membership</h5>
+        <p class="forge-unlock-price" data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
+        <p class="forge-membership-terms" data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</p>
+        <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+        <button id="${subscribeButtonId}" type="button" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
+      </div>
+    </div>
   </section>`;
 }
 

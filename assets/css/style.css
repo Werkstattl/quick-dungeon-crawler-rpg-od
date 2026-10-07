@@ -1154,6 +1154,33 @@ button:focus-visible {
     margin: 0;
 }
 
+.forge-membership-plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+}
+
+.forge-membership-plan {
+    flex: 1 1 10rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid #565656;
+    text-align: center;
+}
+
+.forge-membership-plan h5 {
+    font-size: calc(1em * var(--font-scale));
+}
+
+.forge-membership-plan button {
+    width: 100%;
+    margin-top: auto;
+}
+
 .forge-unlock-price {
     color: #ffd166;
     font-weight: bold;
