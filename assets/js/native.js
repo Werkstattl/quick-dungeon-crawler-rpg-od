@@ -61,6 +61,10 @@ function isApplePurchasePlatform() {
 }
 
 async function nativeInit() {
+  // Apply cached lifetime access before contacting the store, including offline.
+  if (isForgeLifetimeMembershipActive()) {
+    setForgeLifetimeMembershipActive(true);
+  }
   if (isDesktopPremiumBuild()) {
     unlockForge('desktop');
     unlockAutoMode(false, 'desktop');
@@ -126,6 +130,11 @@ async function configurePurchaseStore(platform) {
       id: FORGE_MEMBERSHIP_PRODUCT_ID,
       platform,
     },
+    {
+      type: purchaseApi.ProductType.NON_CONSUMABLE,
+      id: FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID,
+      platform,
+    },
   ]);
 
   store.error(error => {
@@ -186,6 +195,8 @@ function grantApprovedProducts(transaction) {
       }
     } else if (product.id === FORGE_MEMBERSHIP_PRODUCT_ID) {
       setForgeMembershipActive(true);
+    } else if (product.id === FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID) {
+      setForgeLifetimeMembershipActive(true);
     }
   });
   if (requestedPurchase) showPurchaseStatus('iap-status-purchased');
@@ -208,8 +219,11 @@ function syncPurchaseEntitlements() {
     unlockEnemyCustomization(true);
   }
 
-  // Unlike non-consumables, subscriptions must also be revoked when the
-  // current receipt no longer contains an active entitlement.
+  // Keep the sources separate so subscription expiry cannot remove lifetime
+  // benefits. Current receipts also revoke a refunded lifetime purchase.
+  setForgeLifetimeMembershipActive(
+    store.owned({ id: FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID, platform })
+  );
   setForgeMembershipActive(
     store.owned({ id: FORGE_MEMBERSHIP_PRODUCT_ID, platform })
   );
@@ -262,6 +276,11 @@ function buyForgeMembership() {
   return orderProduct(FORGE_MEMBERSHIP_PRODUCT_ID);
 }
 
+function buyForgeLifetimeMembership() {
+  if (isForgeLifetimeMembershipActive()) return;
+  return orderProduct(FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID);
+}
+
 async function restoreNativePurchases() {
   if (!purchasesReady) {
     showPurchaseStatus('iap-status-loading', true);
@@ -312,6 +331,8 @@ function refreshPurchaseUI(root = document) {
     if (!platform) {
       const fallbackKey = productId === FORGE_MEMBERSHIP_PRODUCT_ID
         ? 'forge-membership-price'
+        : productId === FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID
+        ? 'iap-status-unavailable'
         : 'forge-permanent-unlock-price';
       element.textContent = typeof t === 'function' ? t(fallbackKey) : fallbackKey;
       return;
@@ -319,7 +340,10 @@ function refreshPurchaseUI(root = document) {
     if (!purchasesReady) return;
     const product = purchaseApi.store.get(productId, platform);
     const price = product && product.pricing && product.pricing.price;
-    if (!price) return;
+    if (!price) {
+      element.textContent = typeof t === 'function' ? t('iap-status-unavailable') : 'iap-status-unavailable';
+      return;
+    }
     const key = productId === FORGE_MEMBERSHIP_PRODUCT_ID
       ? 'iap-price-per-month'
       : 'iap-price-one-time';
@@ -341,19 +365,31 @@ function refreshPurchaseUI(root = document) {
   });
   root.querySelectorAll('[data-iap-manage-subscriptions]').forEach(button => {
     button.onclick = manageNativeSubscriptions;
-    button.hidden = !platform || !isForgeMembershipActive();
+    button.hidden = !platform || !isForgeSubscriptionActive();
     button.disabled = Boolean(platform) && !purchasesReady;
   });
   root.querySelectorAll('[data-iap-apple-only]').forEach(element => {
     element.hidden = !isApplePurchasePlatform();
   });
   root.querySelectorAll('[data-iap-subscribe]').forEach(button => {
-    if (!platform) return;
     const active = isForgeMembershipActive();
-    const key = active ? 'forge-membership-subscribed' : 'forge-membership-subscribe';
-    button.disabled = active || !purchasesReady;
+    const key = isForgeLifetimeMembershipActive() ? 'forge-membership-lifetime-owned'
+      : active ? 'forge-membership-subscribed' : 'forge-membership-subscribe';
+    button.disabled = active || (Boolean(platform) && !purchasesReady);
     button.setAttribute('data-i18n', key);
     button.textContent = typeof t === 'function' ? t(key) : key;
+  });
+  root.querySelectorAll('[data-iap-lifetime]').forEach(button => {
+    const owned = isForgeLifetimeMembershipActive();
+    const product = platform && purchasesReady && purchaseApi.store.get(FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID, platform);
+    const key = owned ? 'forge-membership-lifetime-owned' : 'forge-membership-buy-lifetime';
+    button.disabled = owned || !product || !product.getOffer();
+    button.setAttribute('data-i18n', key);
+    button.textContent = typeof t === 'function' ? t(key) : key;
+    button.onclick = buyForgeLifetimeMembership;
+  });
+  root.querySelectorAll('[data-iap-lifetime-subscription-note]').forEach(element => {
+    element.hidden = !isForgeSubscriptionActive() || isForgeLifetimeMembershipActive();
   });
   root.querySelectorAll('[data-iap-legal-url]').forEach(link => {
     link.onclick = event => {
@@ -361,6 +397,23 @@ function refreshPurchaseUI(root = document) {
       openExternal(link.dataset.iapLegalUrl);
     };
   });
+}
+
+function getForgeLifetimeMembershipMarkup() {
+  return `<section class="forge-unlock-option">
+    <h4 data-i18n="forge-membership-lifetime">Lifetime Membership</h4>
+    <p class="forge-unlock-price" data-iap-product="${FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
+    <ul class="forge-membership-benefits">
+      <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
+      <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
+      <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
+      <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
+      <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
+    </ul>
+    <p class="forge-membership-terms" data-i18n="forge-membership-lifetime-terms">All membership benefits forever. Pay once, no renewal.</p>
+    <p class="forge-membership-terms" data-iap-lifetime-subscription-note hidden data-i18n="forge-membership-lifetime-subscription-note">Buying lifetime does not cancel your monthly subscription. Manage it through your store.</p>
+    <button type="button" data-iap-lifetime data-i18n="forge-membership-buy-lifetime">Buy Lifetime</button>
+  </section>`;
 }
 
 function preparePurchaseUI(root = document) {

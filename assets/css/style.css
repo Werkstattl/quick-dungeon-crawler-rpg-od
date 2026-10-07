@@ -1091,6 +1091,10 @@ button:focus-visible {
     flex: 1 1 9rem;
 }
 
+.iap-secondary-actions [hidden] {
+    display: none;
+}
+
 .iap-legal-links,
 .iap-status {
     color: #b7b7b7;

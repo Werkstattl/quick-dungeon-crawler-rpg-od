@@ -26,9 +26,19 @@ const STORAGE_KEYS = {
 
 const FORGE_MEMBERSHIP_PRODUCT_ID = 'the_forge_membership';
 const FORGE_MEMBERSHIP_STORAGE_KEY = 'forgeMembershipActive';
+const FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID = 'the_forge_membership_lifetime';
+const FORGE_LIFETIME_MEMBERSHIP_STORAGE_KEY = 'forgeLifetimeMembershipActive';
+
+function isForgeSubscriptionActive() {
+    return localStorage.getItem(FORGE_MEMBERSHIP_STORAGE_KEY) === 'true';
+}
+
+function isForgeLifetimeMembershipActive() {
+    return localStorage.getItem(FORGE_LIFETIME_MEMBERSHIP_STORAGE_KEY) === 'true';
+}
 
 function isForgeMembershipActive() {
-    return localStorage.getItem(FORGE_MEMBERSHIP_STORAGE_KEY) === 'true';
+    return isForgeSubscriptionActive() || isForgeLifetimeMembershipActive();
 }
 
 function applyForgeMembershipGoldBonus(amount) {

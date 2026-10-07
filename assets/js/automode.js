@@ -178,8 +178,9 @@ const openAutoModeUnlockModal = () => {
                     </ul>
                     <button id="auto-mode-buy-permanent" type="button" data-i18n="buy-permanently">Buy Permanently</button>
                 </section>
+                ${getForgeLifetimeMembershipMarkup()}
                 <section class="forge-unlock-option">
-                    <h4 data-i18n="forge-membership">The Forge Membership</h4>
+                    <h4 data-i18n="forge-membership-monthly">Monthly Membership</h4>
                     <p class="forge-unlock-price" data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</p>
                     <ul class="forge-membership-benefits">
                         <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
@@ -210,12 +211,6 @@ const openAutoModeUnlockModal = () => {
     const buyPermanentButton = document.querySelector('#auto-mode-buy-permanent');
     const buyMembershipButton = document.querySelector('#auto-mode-buy-membership');
     const closeButton = document.querySelector('#auto-mode-unlock-close');
-
-    if (isForgeMembershipActive() && buyMembershipButton) {
-        buyMembershipButton.disabled = true;
-        buyMembershipButton.setAttribute('data-i18n', 'forge-membership-subscribed');
-        buyMembershipButton.textContent = t('forge-membership-subscribed');
-    }
 
     if (buyPermanentButton) {
         buyPermanentButton.onclick = () => {

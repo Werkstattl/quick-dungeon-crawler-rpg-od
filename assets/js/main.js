@@ -420,16 +420,21 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadBestiary();
 });
 
-function setForgeMembershipActive(active) {
+function setForgeMembershipActive(active, source = 'subscription') {
+    const storageKey = source === 'lifetime'
+        ? FORGE_LIFETIME_MEMBERSHIP_STORAGE_KEY
+        : FORGE_MEMBERSHIP_STORAGE_KEY;
     if (active) {
-        localStorage.setItem(FORGE_MEMBERSHIP_STORAGE_KEY, 'true');
+        localStorage.setItem(storageKey, 'true');
     } else {
-        localStorage.removeItem(FORGE_MEMBERSHIP_STORAGE_KEY);
+        localStorage.removeItem(storageKey);
     }
+    active = isForgeMembershipActive();
     const subscribeButton = document.querySelector('#forge-membership-subscribe');
     if (subscribeButton) {
         subscribeButton.disabled = Boolean(active);
-        const key = active ? 'forge-membership-subscribed' : 'forge-membership-subscribe';
+        const key = isForgeLifetimeMembershipActive() ? 'forge-membership-lifetime-owned'
+            : active ? 'forge-membership-subscribed' : 'forge-membership-subscribe';
         subscribeButton.setAttribute('data-i18n', key);
         subscribeButton.textContent = t(key);
     }
@@ -451,6 +456,10 @@ function setForgeMembershipActive(active) {
         unlockEnemyCustomization(false);
     }
     if (typeof refreshPurchaseUI === 'function') refreshPurchaseUI();
+}
+
+function setForgeLifetimeMembershipActive(active) {
+    setForgeMembershipActive(active, 'lifetime');
 }
 
 function unlockForgeMembership() {
@@ -538,19 +547,25 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <p id="forge-membership-close"><i class="fa fa-xmark"></i></p>
                 </div>
                 <p data-i18n="forge-membership-description">Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.</p>
-                <ul class="forge-membership-benefits">
-                    <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
-                    <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
-                    <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
-                    <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
-                    <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
-                </ul>
-                <p class="forge-membership-price">
-                    <span data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</span>
-                    <span data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</span>
-                </p>
-                <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
-                <button id="forge-membership-subscribe" class="forge-membership-cta" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
+                <div class="forge-unlock-options">
+                ${getForgeLifetimeMembershipMarkup()}
+                <section class="forge-unlock-option">
+                    <h4 data-i18n="forge-membership-monthly">Monthly Membership</h4>
+                    <ul class="forge-membership-benefits">
+                        <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
+                        <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
+                        <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
+                        <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
+                        <li data-i18n="forge-membership-benefit-title">Exclusive Forge Member title</li>
+                    </ul>
+                    <p class="forge-membership-price">
+                        <span data-iap-product="${FORGE_MEMBERSHIP_PRODUCT_ID}" data-i18n="iap-price-loading">Price shown at checkout</span>
+                        <span data-i18n="forge-membership-auto-renewing">Auto-renewing subscription</span>
+                    </p>
+                    <p class="forge-membership-terms" data-iap-store-terms data-i18n="forge-membership-cancel-google-play">Cancel anytime through Google Play.</p>
+                    <button id="forge-membership-subscribe" class="forge-membership-cta" data-iap-subscribe data-i18n="forge-membership-subscribe">Subscribe</button>
+                </section>
+                </div>
                 <div class="iap-secondary-actions">
                     <button type="button" data-iap-restore data-i18n="iap-restore-purchases">Restore purchases</button>
                     <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
@@ -564,14 +579,9 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         applyTranslations(defaultModalElement);
         if (typeof preparePurchaseUI === 'function') preparePurchaseUI(defaultModalElement);
         let forgeMembershipTab = document.querySelector('#forge-membership-tab');
-        forgeMembershipTab.style.width = "19rem";
+        forgeMembershipTab.classList.add("forge-unlock-modal");
         let forgeMembershipSubscribe = document.querySelector('#forge-membership-subscribe');
         let forgeMembershipClose = document.querySelector('#forge-membership-close');
-        if (isForgeMembershipActive()) {
-            forgeMembershipSubscribe.disabled = true;
-            forgeMembershipSubscribe.setAttribute('data-i18n', 'forge-membership-subscribed');
-            forgeMembershipSubscribe.textContent = t('forge-membership-subscribed');
-        }
         forgeMembershipSubscribe.onclick = function () {
             const isAndroid = /Android/i.test(navigator.userAgent);
             if (isNativePurchasePlatform() && typeof buyForgeMembership === 'function') {

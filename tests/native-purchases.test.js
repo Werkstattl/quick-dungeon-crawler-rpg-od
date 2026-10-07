@@ -15,6 +15,9 @@ const autoModeSource = fs.readFileSync(
 const mainSource = fs.readFileSync(
     path.resolve(__dirname, '../assets/js/main.js'), 'utf8'
 );
+const utilitySource = fs.readFileSync(
+    path.resolve(__dirname, '../assets/js/utility.js'), 'utf8'
+);
 
 function createPurchaseContext(platform = 'ios-appstore') {
     const callbacks = {};
@@ -22,6 +25,7 @@ function createPurchaseContext(platform = 'ios-appstore') {
     const initialized = [];
     const owned = new Set();
     const activeMembershipStates = [];
+    const lifetimeMembershipStates = [];
     const unlocked = [];
     let restoreCount = 0;
     let finishCount = 0;
@@ -84,11 +88,15 @@ function createPurchaseContext(platform = 'ios-appstore') {
         AUTO_MODE_PRODUCT_ID: 'automode_unlock_premium',
         ENEMY_CUSTOMIZATION_PRODUCT_ID: 'unlock_enemy_customization',
         FORGE_MEMBERSHIP_PRODUCT_ID: 'the_forge_membership',
+        FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID: 'the_forge_membership_lifetime',
         unlockForge: source => unlocked.push(['forge', source]),
         unlockAutoMode: (open, source) => unlocked.push(['auto', source, open]),
         unlockEnemyCustomization: persist => unlocked.push(['enemy', persist]),
         setForgeMembershipActive: active => activeMembershipStates.push(active),
-        isForgeMembershipActive: () => activeMembershipStates.at(-1) === true,
+        setForgeLifetimeMembershipActive: active => lifetimeMembershipStates.push(active),
+        isForgeSubscriptionActive: () => activeMembershipStates.at(-1) === true,
+        isForgeLifetimeMembershipActive: () => lifetimeMembershipStates.at(-1) === true,
+        isForgeMembershipActive: () => activeMembershipStates.at(-1) === true || lifetimeMembershipStates.at(-1) === true,
         t: (key, params) => params && params.price ? `${key}:${params.price}` : key,
     });
     vm.runInContext(source, context);
@@ -102,6 +110,7 @@ function createPurchaseContext(platform = 'ios-appstore') {
         owned,
         products,
         activeMembershipStates,
+        lifetimeMembershipStates,
         unlocked,
         get restoreCount() { return restoreCount; },
         get finishCount() { return finishCount; },
@@ -128,8 +137,10 @@ function createAutoModePurchaseContext(platform, storage = new Map()) {
         setAttribute() {},
         addEventListener() {},
     } : null;
-    context.FORGE_MEMBERSHIP_STORAGE_KEY = 'forgeMembershipActive';
-    context.isForgeMembershipActive = () => storage.get('forgeMembershipActive') === 'true';
+    vm.runInContext(utilitySource.slice(
+        utilitySource.indexOf('const FORGE_MEMBERSHIP_PRODUCT_ID'),
+        utilitySource.indexOf('const safeSave =')
+    ), context);
     context.player = null;
     vm.runInContext(autoModeSource, context);
     // Exercise the application's membership propagation, including its writes
@@ -289,7 +300,7 @@ test('iOS registers every product with App Store using the StoreKit 2 adapter', 
 
     await vm.runInContext('initializePurchases()', state.context);
 
-    assert.equal(state.registered.length, 4);
+    assert.equal(state.registered.length, 5);
     assert.ok(state.registered.every(product => product.platform === 'ios-appstore'));
     assert.deepEqual(
         JSON.parse(JSON.stringify(state.initialized)),
@@ -303,7 +314,7 @@ test('native startup works with Capacitor and no Cordova purchase global', async
     assert.equal(state.context.window.cordova, undefined);
 
     await vm.runInContext('nativeInit()', state.context);
-    assert.equal(state.registered.length, 4);
+    assert.equal(state.registered.length, 5);
     assert.deepEqual(Array.from(state.initialized), ['android-playstore']);
 });
 
@@ -331,6 +342,8 @@ test('the shipped bundle registers the Capacitor bridge and loads through native
                         FORGE_PRODUCT_ID: 'forge', AUTO_MODE_PRODUCT_ID: 'auto',
                         ENEMY_CUSTOMIZATION_PRODUCT_ID: 'enemy',
                         FORGE_MEMBERSHIP_PRODUCT_ID: 'membership',
+                        FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID: 'membership_lifetime',
+                        isForgeLifetimeMembershipActive: () => false,
                     });
                     context.window = context;
                     if (cordovaBridge) context.cordova = { platformId: platform };
@@ -475,5 +488,172 @@ test('every purchase dialog marks the Apple EULA as iOS-only', () => {
             /<span data-iap-apple-only hidden>.*stdeula\/.*<\/span>/,
             file
         );
+    }
+});
+
+for (const platform of ['ios-appstore', 'android-playstore']) {
+    test(`${platform}: lifetime is a separate non-consumable and can be purchased while subscribed`, async () => {
+        const state = createPurchaseContext(platform);
+        await vm.runInContext('initializePurchases()', state.context);
+        const lifetime = state.registered.find(product => product.id === 'the_forge_membership_lifetime');
+        assert.equal(lifetime.type, 'non consumable');
+        state.owned.add('the_forge_membership');
+        state.callbacks.receiptsReady();
+        let orders = 0;
+        state.products.set(lifetime.id, { getOffer: () => ({ order: async () => { orders += 1; } }) });
+        await vm.runInContext('buyForgeLifetimeMembership()', state.context);
+        state.callbacks.approved(state.transaction([lifetime.id]));
+        assert.equal(orders, 1);
+        assert.equal(state.lifetimeMembershipStates.at(-1), true);
+        assert.equal(state.finishCount, 1);
+        await vm.runInContext('buyForgeLifetimeMembership()', state.context);
+        assert.equal(orders, 1, 'a lifetime owner cannot buy it again');
+    });
+
+    test(`${platform}: restored lifetime retains all benefits through subscription expiry and restart`, async () => {
+        const storage = new Map();
+        const state = createAutoModePurchaseContext(platform, storage);
+        const forgeStates = [];
+        const enemyStates = [];
+        state.context.setForgeEntitlement = (source, active) => forgeStates.push(active);
+        state.context.setEnemyCustomizationMembershipActive = active => enemyStates.push(active);
+        const playerSource = fs.readFileSync(path.resolve(__dirname, '../assets/js/player.js'), 'utf8');
+        vm.runInContext(playerSource.slice(
+            playerSource.indexOf('const BASE_MAX_INVENTORY_ITEMS'),
+            playerSource.indexOf('function getFallbackCompanionBonuses')
+        ), state.context);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.callbacks.receiptsReady();
+        state.owned.add('the_forge_membership_lifetime');
+        state.owned.add('the_forge_membership');
+        await vm.runInContext('restoreNativePurchases()', state.context);
+        state.owned.delete('the_forge_membership');
+        state.callbacks.receiptUpdated({});
+        assert.equal(storage.get('forgeLifetimeMembershipActive'), 'true');
+        assert.equal(storage.has('forgeMembershipActive'), false);
+        assert.equal(vm.runInContext('isForgeMembershipActive()', state.context), true);
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+        assert.equal(vm.runInContext('getMaxInventoryItems()', state.context), 150);
+        assert.equal(vm.runInContext('applyForgeMembershipGoldBonus(100)', state.context), 110);
+        assert.equal(vm.runInContext('applyForgeMembershipRestingRecoveryBonus(10)', state.context), 20);
+        assert.match(vm.runInContext('getPlayerDisplayName("Hero")', state.context), /Forge Member/);
+        assert.equal(forgeStates.at(-1), true);
+        assert.equal(enemyStates.at(-1), true);
+        // Cached ownership provides offline access before store receipts arrive.
+        const restarted = createAutoModePurchaseContext(platform, storage);
+        await vm.runInContext('nativeInit()', restarted.context);
+        assert.equal(vm.runInContext('isForgeMembershipActive()', restarted.context), true);
+        assert.equal(vm.runInContext('autoModeUnlocked', restarted.context), true);
+        assert.equal(storage.has('autoModePermanentUnlocked'), false);
+        await vm.runInContext('initializePurchases()', restarted.context);
+        restarted.owned.add('the_forge_membership_lifetime');
+        restarted.callbacks.receiptsReady();
+        assert.equal(vm.runInContext('isForgeMembershipActive()', restarted.context), true);
+    });
+
+    test(`${platform}: a revoked lifetime receipt removes benefits unless the subscription remains active`, async () => {
+        const state = createAutoModePurchaseContext(platform);
+        await vm.runInContext('initializePurchases()', state.context);
+        state.owned.add('the_forge_membership_lifetime');
+        state.callbacks.receiptsReady();
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+        state.owned.clear();
+        state.callbacks.receiptUpdated({});
+        assert.equal(vm.runInContext('isForgeLifetimeMembershipActive()', state.context), false);
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), false);
+        state.owned.add('the_forge_membership');
+        state.callbacks.receiptUpdated({});
+        assert.equal(vm.runInContext('isForgeMembershipActive()', state.context), true);
+        assert.equal(vm.runInContext('autoModeUnlocked', state.context), true);
+    });
+}
+
+test('a configured validator must verify lifetime before benefits are granted', async () => {
+    const state = createPurchaseContext();
+    state.context.window.IAP_VALIDATOR_URL = 'https://validator.example.test';
+    await vm.runInContext('initializePurchases()', state.context);
+    state.callbacks.receiptsReady();
+    const transaction = state.transaction(['the_forge_membership_lifetime']);
+    let verifications = 0;
+    transaction.verify = () => { verifications += 1; };
+    state.callbacks.approved(transaction);
+    assert.equal(verifications, 1);
+    assert.equal(state.lifetimeMembershipStates.at(-1), false);
+    state.callbacks.unverified({});
+    assert.equal(state.lifetimeMembershipStates.at(-1), false);
+    state.owned.add('the_forge_membership_lifetime');
+    state.callbacks.verified({ finish() {} });
+    assert.equal(state.lifetimeMembershipStates.at(-1), true);
+});
+
+test('membership UI shows store prices, permits subscription upgrades, and keeps subscription management separate', async () => {
+    const state = createPurchaseContext();
+    const lifetimePrice = { dataset: { iapProduct: 'the_forge_membership_lifetime' } };
+    const monthlyPrice = { dataset: { iapProduct: 'the_forge_membership' } };
+    const button = () => ({ setAttribute(key, value) { this[key] = value; } });
+    const lifetime = button();
+    const monthly = button();
+    const manage = button();
+    const note = {};
+    state.context.testRoot = {
+        querySelectorAll: selector => ({
+            '[data-iap-product]': [lifetimePrice, monthlyPrice],
+            '[data-iap-lifetime]': [lifetime],
+            '[data-iap-subscribe]': [monthly],
+            '[data-iap-manage-subscriptions]': [manage],
+            '[data-iap-lifetime-subscription-note]': [note],
+        })[selector] || [],
+    };
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(lifetime.disabled, true);
+    await vm.runInContext('initializePurchases()', state.context);
+    state.products.set('the_forge_membership_lifetime', {
+        pricing: { price: '$11.99' }, getOffer: () => ({ order: async () => undefined }),
+    });
+    state.products.set('the_forge_membership', { pricing: { price: '$1.29' } });
+    state.callbacks.receiptsReady();
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(lifetimePrice.textContent, 'iap-price-one-time:$11.99');
+    assert.equal(monthlyPrice.textContent, 'iap-price-per-month:$1.29');
+    assert.equal(lifetime.disabled, false);
+    assert.equal(monthly.disabled, false);
+    assert.equal(manage.hidden, true);
+    state.owned.add('the_forge_membership');
+    state.callbacks.receiptUpdated({});
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(lifetime.disabled, false);
+    assert.equal(monthly.disabled, true);
+    assert.equal(note.hidden, false);
+    state.owned.add('the_forge_membership_lifetime');
+    state.callbacks.receiptUpdated({});
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(lifetime.disabled, true);
+    assert.equal(monthly.textContent, 'forge-membership-lifetime-owned');
+    assert.equal(manage.hidden, false, 'both owned: existing subscription can still be cancelled');
+    state.owned.delete('the_forge_membership');
+    state.callbacks.receiptUpdated({});
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(manage.hidden, true, 'lifetime alone is not a subscription');
+    state.products.delete('the_forge_membership_lifetime');
+    state.owned.clear();
+    state.callbacks.receiptUpdated({});
+    vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+    assert.equal(lifetime.disabled, true, 'unconfigured products cannot be purchased');
+    assert.equal(lifetimePrice.textContent, 'iap-status-unavailable');
+});
+
+test('all purchase screens offer lifetime before monthly with translated membership terms', () => {
+    for (const file of ['main.js', 'forge.js', 'automode.js']) {
+        const dialog = fs.readFileSync(path.resolve(__dirname, '../assets/js', file), 'utf8');
+        assert.ok(dialog.indexOf('${getForgeLifetimeMembershipMarkup()}') < dialog.indexOf('data-i18n="forge-membership-monthly"'), file);
+        assert.ok(dialog.includes('${getForgeLifetimeMembershipMarkup()}'), file);
+    }
+    for (const file of fs.readdirSync(path.resolve(__dirname, '../assets/locales'))) {
+        if (!file.endsWith('.json')) continue;
+        const locale = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/locales', file), 'utf8'));
+        for (const key of [
+            'forge-membership-lifetime', 'forge-membership-monthly', 'forge-membership-lifetime-terms',
+            'forge-membership-buy-lifetime', 'forge-membership-lifetime-owned', 'forge-membership-lifetime-subscription-note',
+        ]) assert.ok(typeof locale[key] === 'string' && locale[key].trim(), `${file}: ${key}`);
     }
 });
