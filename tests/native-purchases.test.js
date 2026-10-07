@@ -661,7 +661,7 @@ test('web lifetime button opens the same stores as the other purchase buttons', 
 
         vm.runInContext('preparePurchaseUI(testRoot)', state.context);
         assert.equal(lifetime.disabled, false);
-        assert.equal(lifetimePrice.textContent, 'iap-price-loading');
+        assert.equal(lifetimePrice.textContent, 'forge-membership-lifetime-price');
         lifetime.onclick();
         assert.deepEqual(opened, [/Android/i.test(userAgent)
             ? 'google-play' : state.context.FORGE_PURCHASE_URL]);
@@ -684,7 +684,7 @@ test('all purchase screens offer lifetime before monthly with translated members
         if (!file.endsWith('.json')) continue;
         const locale = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/locales', file), 'utf8'));
         for (const key of [
-            'forge-membership-lifetime', 'forge-membership-monthly', 'forge-membership-lifetime-terms',
+            'forge-membership-lifetime', 'forge-membership-lifetime-price', 'forge-membership-monthly', 'forge-membership-lifetime-terms',
             'forge-membership-buy-lifetime', 'forge-membership-lifetime-owned', 'forge-membership-lifetime-subscription-note',
         ]) assert.ok(typeof locale[key] === 'string' && locale[key].trim(), `${file}: ${key}`);
     }

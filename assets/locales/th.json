@@ -200,6 +200,7 @@
   "export-import-data": "ส่งออก/นำเข้าข้อมูล",
   "forge-membership": "สมาชิกโรงตีเหล็ก",
   "forge-membership-lifetime": "สมาชิกตลอดชีพ",
+  "forge-membership-lifetime-price": "€10.59 + VAT จ่ายครั้งเดียว",
   "forge-membership-monthly": "สมาชิกรายเดือน",
   "forge-membership-lifetime-terms": "รับสิทธิประโยชน์สมาชิกทั้งหมดตลอดไป จ่ายครั้งเดียว ไม่มีการต่ออายุ",
   "forge-membership-buy-lifetime": "ซื้อตลอดชีพ",

@@ -340,7 +340,7 @@ function refreshPurchaseUI(root = document) {
       const fallbackKey = productId === FORGE_MEMBERSHIP_PRODUCT_ID
         ? 'forge-membership-price'
         : productId === FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID
-        ? 'iap-price-loading'
+        ? 'forge-membership-lifetime-price'
         : 'forge-permanent-unlock-price';
       element.textContent = typeof t === 'function' ? t(fallbackKey) : fallbackKey;
       return;
