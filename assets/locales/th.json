@@ -226,6 +226,7 @@
   "iap-restore-purchases": "กู้คืนการซื้อ",
   "iap-manage-subscription": "จัดการการสมัครสมาชิก",
   "iap-privacy-policy": "นโยบายความเป็นส่วนตัว",
+  "opens-in-browser": "(เปิดในเบราว์เซอร์)",
   "iap-terms-of-use": "ข้อกำหนดการใช้งาน",
   "iap-status-loading": "ร้านค้ายังกำลังโหลด โปรดลองอีกครั้งในอีกสักครู่",
   "iap-status-processing": "กำลังเปิดร้านค้า…",

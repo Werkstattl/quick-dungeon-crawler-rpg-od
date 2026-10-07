@@ -185,8 +185,8 @@ const openAutoModeUnlockModal = () => {
                 <button type="button" data-iap-manage-subscriptions data-i18n="iap-manage-subscription">Manage subscription</button>
             </div>
             <p class="iap-legal-links">
-                <a href="https://dungeon.werkstattl.com/privacy.html" data-iap-legal-url="https://dungeon.werkstattl.com/privacy.html" data-i18n="iap-privacy-policy">Privacy Policy</a>
-                <span data-iap-apple-only hidden><span aria-hidden="true"> · </span><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="iap-terms-of-use">Terms of Use</a></span>
+                <a href="https://dungeon.werkstattl.com/privacy.html" data-iap-legal-url="https://dungeon.werkstattl.com/privacy.html"><span data-i18n="iap-privacy-policy">Privacy Policy</span> <i class="fas fa-arrow-up-right-from-square external-link-icon" aria-hidden="true"></i> <span class="sr-only" data-i18n="opens-in-browser">(opens in browser)</span></a>
+                <span data-iap-apple-only hidden><span aria-hidden="true"> · </span><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-iap-legal-url="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"><span data-i18n="iap-terms-of-use">Terms of Use</span> <i class="fas fa-arrow-up-right-from-square external-link-icon" aria-hidden="true"></i> <span class="sr-only" data-i18n="opens-in-browser">(opens in browser)</span></a></span>
             </p>
             <p class="iap-status" data-iap-status role="status" aria-live="polite"></p>
         </div>`;

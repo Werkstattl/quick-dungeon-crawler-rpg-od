@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Käufe wiederherstellen",
   "iap-manage-subscription": "Abonnement verwalten",
   "iap-privacy-policy": "Datenschutzerklärung",
+  "opens-in-browser": "(öffnet im Browser)",
   "iap-terms-of-use": "Nutzungsbedingungen",
   "iap-status-loading": "Der Store wird noch geladen. Bitte versuche es gleich erneut.",
   "iap-status-processing": "Store wird geöffnet…",

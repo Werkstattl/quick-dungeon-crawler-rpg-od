@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Восстановить покупки",
   "iap-manage-subscription": "Управление подпиской",
   "iap-privacy-policy": "Политика конфиденциальности",
+  "opens-in-browser": "(открывается в браузере)",
   "iap-terms-of-use": "Условия использования",
   "iap-status-loading": "Магазин всё ещё загружается. Повторите попытку чуть позже.",
   "iap-status-processing": "Открываем магазин…",

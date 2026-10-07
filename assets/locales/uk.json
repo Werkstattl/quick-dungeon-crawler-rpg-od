@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Відновити покупки",
   "iap-manage-subscription": "Керувати підпискою",
   "iap-privacy-policy": "Політика конфіденційності",
+  "opens-in-browser": "(відкривається в браузері)",
   "iap-terms-of-use": "Умови використання",
   "iap-status-loading": "Магазин усе ще завантажується. Спробуйте ще раз трохи згодом.",
   "iap-status-processing": "Відкриваємо магазин…",

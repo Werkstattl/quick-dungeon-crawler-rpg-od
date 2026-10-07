@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Palauta ostokset",
   "iap-manage-subscription": "Hallitse tilausta",
   "iap-privacy-policy": "Tietosuojakäytäntö",
+  "opens-in-browser": "(avautuu selaimessa)",
   "iap-terms-of-use": "Käyttöehdot",
   "iap-status-loading": "Kauppa latautuu yhä. Yritä pian uudelleen.",
   "iap-status-processing": "Avataan kauppaa…",

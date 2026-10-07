@@ -226,6 +226,7 @@
   "iap-restore-purchases": "استعادة المشتريات",
   "iap-manage-subscription": "إدارة الاشتراك",
   "iap-privacy-policy": "سياسة الخصوصية",
+  "opens-in-browser": "(يفتح في المتصفح)",
   "iap-terms-of-use": "شروط الاستخدام",
   "iap-status-loading": "لا يزال المتجر قيد التحميل. يُرجى المحاولة مرة أخرى بعد قليل.",
   "iap-status-processing": "جارٍ فتح المتجر…",

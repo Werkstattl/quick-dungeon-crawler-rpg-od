@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Återställ köp",
   "iap-manage-subscription": "Hantera abonnemang",
   "iap-privacy-policy": "Integritetspolicy",
+  "opens-in-browser": "(öppnas i webbläsaren)",
   "iap-terms-of-use": "Användarvillkor",
   "iap-status-loading": "Butiken laddas fortfarande. Försök igen om en liten stund.",
   "iap-status-processing": "Öppnar butiken…",

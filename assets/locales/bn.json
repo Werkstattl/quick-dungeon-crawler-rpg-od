@@ -226,6 +226,7 @@
   "iap-restore-purchases": "কেনাকাটা পুনরুদ্ধার করুন",
   "iap-manage-subscription": "সাবস্ক্রিপশন পরিচালনা করুন",
   "iap-privacy-policy": "গোপনীয়তা নীতি",
+  "opens-in-browser": "(ব্রাউজারে খোলে)",
   "iap-terms-of-use": "ব্যবহারের শর্তাবলি",
   "iap-status-loading": "স্টোর এখনো লোড হচ্ছে। একটু পরে আবার চেষ্টা করুন।",
   "iap-status-processing": "স্টোর খোলা হচ্ছে…",

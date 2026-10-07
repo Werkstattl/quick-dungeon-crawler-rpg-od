@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Gendan køb",
   "iap-manage-subscription": "Administrér abonnement",
   "iap-privacy-policy": "Privatlivspolitik",
+  "opens-in-browser": "(åbner i browseren)",
   "iap-terms-of-use": "Brugsvilkår",
   "iap-status-loading": "Butikken indlæses stadig. Prøv igen om et øjeblik.",
   "iap-status-processing": "Åbner butikken…",

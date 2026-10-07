@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Ripristina acquisti",
   "iap-manage-subscription": "Gestisci abbonamento",
   "iap-privacy-policy": "Informativa sulla privacy",
+  "opens-in-browser": "(si apre nel browser)",
   "iap-terms-of-use": "Termini di utilizzo",
   "iap-status-loading": "Lo store è ancora in fase di caricamento. Riprova tra poco.",
   "iap-status-processing": "Apertura dello store…",

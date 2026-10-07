@@ -226,6 +226,7 @@
   "iap-restore-purchases": "Gjenopprett kjøp",
   "iap-manage-subscription": "Administrer abonnement",
   "iap-privacy-policy": "Personvernregler",
+  "opens-in-browser": "(åpnes i nettleseren)",
   "iap-terms-of-use": "Bruksvilkår",
   "iap-status-loading": "Butikken lastes fortsatt inn. Prøv igjen om et øyeblikk.",
   "iap-status-processing": "Åpner butikken…",
