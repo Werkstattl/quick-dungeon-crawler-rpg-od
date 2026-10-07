@@ -642,6 +642,38 @@ test('membership UI shows store prices, permits subscription upgrades, and keeps
     assert.equal(lifetimePrice.textContent, 'iap-status-unavailable');
 });
 
+test('web lifetime button opens the same stores as the other purchase buttons', () => {
+    for (const userAgent of ['Mozilla/5.0 (Linux; Android 15)', 'Mozilla/5.0 (iPhone)', 'Mozilla/5.0 (Macintosh)']) {
+        const state = createPurchaseContext('web');
+        const opened = [];
+        state.context.navigator = { userAgent };
+        state.context.ratingSystem = { openGooglePlayForRating: () => opened.push('google-play') };
+        state.context.FORGE_PURCHASE_URL = 'https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/purchase';
+        state.context.window.open = url => opened.push(url);
+        const lifetime = { setAttribute() {} };
+        const lifetimePrice = { dataset: { iapProduct: 'the_forge_membership_lifetime' } };
+        state.context.testRoot = {
+            querySelectorAll: selector => ({
+                '[data-iap-lifetime]': [lifetime],
+                '[data-iap-product]': [lifetimePrice],
+            })[selector] || [],
+        };
+
+        vm.runInContext('preparePurchaseUI(testRoot)', state.context);
+        assert.equal(lifetime.disabled, false);
+        assert.equal(lifetimePrice.textContent, 'iap-price-loading');
+        lifetime.onclick();
+        assert.deepEqual(opened, [/Android/i.test(userAgent)
+            ? 'google-play' : state.context.FORGE_PURCHASE_URL]);
+
+        state.lifetimeMembershipStates.push(true);
+        vm.runInContext('refreshPurchaseUI(testRoot)', state.context);
+        assert.equal(lifetime.disabled, true);
+        lifetime.onclick();
+        assert.equal(opened.length, 1, 'existing lifetime owners cannot buy again');
+    }
+});
+
 test('all purchase screens offer lifetime before monthly with translated membership terms', () => {
     for (const file of ['main.js', 'forge.js', 'automode.js']) {
         const dialog = fs.readFileSync(path.resolve(__dirname, '../assets/js', file), 'utf8');

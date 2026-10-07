@@ -278,6 +278,14 @@ function buyForgeMembership() {
 
 function buyForgeLifetimeMembership() {
   if (isForgeLifetimeMembershipActive()) return;
+  if (!isNativePurchasePlatform()) {
+    if (/Android/i.test(navigator.userAgent)) {
+      ratingSystem.openGooglePlayForRating();
+    } else {
+      openExternal(FORGE_PURCHASE_URL);
+    }
+    return;
+  }
   return orderProduct(FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID);
 }
 
@@ -332,7 +340,7 @@ function refreshPurchaseUI(root = document) {
       const fallbackKey = productId === FORGE_MEMBERSHIP_PRODUCT_ID
         ? 'forge-membership-price'
         : productId === FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID
-        ? 'iap-status-unavailable'
+        ? 'iap-price-loading'
         : 'forge-permanent-unlock-price';
       element.textContent = typeof t === 'function' ? t(fallbackKey) : fallbackKey;
       return;
@@ -383,7 +391,7 @@ function refreshPurchaseUI(root = document) {
     const owned = isForgeLifetimeMembershipActive();
     const product = platform && purchasesReady && purchaseApi.store.get(FORGE_LIFETIME_MEMBERSHIP_PRODUCT_ID, platform);
     const key = owned ? 'forge-membership-lifetime-owned' : 'forge-membership-buy-lifetime';
-    button.disabled = owned || !product || !product.getOffer();
+    button.disabled = owned || (Boolean(platform) && (!product || !product.getOffer()));
     button.setAttribute('data-i18n', key);
     button.textContent = typeof t === 'function' ? t(key) : key;
     button.onclick = buyForgeLifetimeMembership;
