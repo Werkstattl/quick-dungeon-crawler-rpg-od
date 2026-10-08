@@ -59,6 +59,7 @@ Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
 ## Community
 
 - [Official Subreddit](https://www.reddit.com/r/QuickDungeonCrawler/)
+- [Official Discord Server](https://discord.gg/U4DvQT3qfQ)
 
 ## Credits
 
