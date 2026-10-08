@@ -236,7 +236,7 @@ const playerLoadStats = () => {
             playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
             playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
             playerExpElement.style.width = `${player.exp.expPercent}%`;
-            playerInfoElement.innerHTML = `${getPlayerBaseName(player.name)} Lv.${player.lvl}${getPlayerForgeBadge()} (${player.exp.expPercent}%)`;
+            playerInfoElement.innerHTML = `${getPlayerDisplayName(player.name)} Lv.${player.lvl} (${player.exp.expPercent}%)`;
         }
     }
 
