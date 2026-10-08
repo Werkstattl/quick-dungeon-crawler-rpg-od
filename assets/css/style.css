@@ -1599,6 +1599,12 @@ header {
     color: #ffd76a;
 }
 
+.player-forge-title {
+    display: block;
+    font-size: 0.8em;
+    color: #ffd76a;
+}
+
 header button {
     width: auto;
     padding: 0.5rem 0.7rem;
