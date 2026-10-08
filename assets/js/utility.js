@@ -65,12 +65,19 @@ function getForgeMemberTitle() {
     return translated && translated !== 'forge-member-title' ? translated : 'Forge Member';
 }
 
-function getPlayerDisplayName(name) {
-    const baseName = typeof name === 'string' && name.trim() ? name.trim() : '';
+function getPlayerBaseName(name) {
+    return typeof name === 'string' && name.trim() ? name.trim() : '';
+}
+
+function getPlayerForgeBadge() {
     if (!isForgeMembershipActive()) {
-        return baseName;
+        return '';
     }
-    return `${baseName} [${getForgeMemberTitle()}]`;
+    return ` [${getForgeMemberTitle()}]`;
+}
+
+function getPlayerDisplayName(name) {
+    return `${getPlayerBaseName(name)}${getPlayerForgeBadge()}`;
 }
 
 const safeSave = (key, data, backupKey, tempKey) => {
