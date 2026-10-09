@@ -1578,6 +1578,12 @@ const showEndgameScreen = (summary) => {
         playerNameElement.textContent = safeSummary.playerName || "";
     }
 
+    const forgeTitleElement = modal.querySelector("#endgame-player-forge-title");
+    if (forgeTitleElement) {
+        forgeTitleElement.textContent = safeSummary.forgeTitle || "";
+        forgeTitleElement.hidden = !safeSummary.forgeTitle;
+    }
+
     const modeElement = modal.querySelector("#endgame-player-mode");
     if (modeElement) {
         if (safeSummary.hardcore) {

@@ -788,9 +788,20 @@ button:focus-visible {
 .endgame-player {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 0.5rem;
     font-weight: 600;
     font-size: 1.1rem;
+}
+
+.endgame-player-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.endgame-player .player-forge-title {
+    font-size: 0.85rem;
 }
 
 .endgame-mode-badge {
