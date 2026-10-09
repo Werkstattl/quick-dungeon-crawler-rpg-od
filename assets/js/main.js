@@ -598,7 +598,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <h3 data-i18n="statistics">Statistics</h3>
                     <p id="profile-close"><i class="fa fa-xmark"></i></p>
                 </div>
-                <p>${getPlayerDisplayName(player.name)}</p>
+                <p>${String(player.name || '').trim()}${getPlayerForgeTitleHTML()}</p>
                 <p><span data-i18n="hardcore">Hardcore</span>: ${player.hardcore ? '<span data-i18n="yes">Yes</span>' : '<span data-i18n="no">No</span>'}</p>
                 <p><span data-i18n="kills">Kills</span>: ${nFormatter(player.kills)}</p>
                 <p><span data-i18n="deaths">Deaths</span>: ${nFormatter(player.deaths)}</p>
