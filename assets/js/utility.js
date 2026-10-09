@@ -65,6 +65,13 @@ function getForgeMemberTitle() {
     return translated && translated !== 'forge-member-title' ? translated : 'Forge Member';
 }
 
+function getPlayerForgeTitleHTML() {
+    if (!isForgeMembershipActive()) {
+        return '';
+    }
+    return `<span class="player-forge-title">${getForgeMemberTitle()}</span>`;
+}
+
 function getPlayerDisplayName(name) {
     const baseName = typeof name === 'string' && name.trim() ? name.trim() : '';
     if (!isForgeMembershipActive()) {

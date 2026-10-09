@@ -226,7 +226,7 @@ const playerLoadStats = () => {
     player.exp.expPercent = Number((player.exp.expCurrLvl / player.exp.expMaxLvl) * 100).toFixed(2).replace(rx, "$1");
 
     const playerNameText = String(player.name || '').trim();
-    const forgeTitleHTML = isForgeMembershipActive() ? `<span class="player-forge-title">${getForgeMemberTitle()}</span>` : '';
+    const forgeTitleHTML = getPlayerForgeTitleHTML();
 
     // Generate battle info for player if in combat
     if (player.inCombat || (typeof playerDead !== 'undefined' && playerDead)) {
