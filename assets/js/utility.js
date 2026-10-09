@@ -34,8 +34,7 @@ function isForgeSubscriptionActive() {
 }
 
 function isForgeLifetimeMembershipActive() {
-    return true;
-    // return localStorage.getItem(FORGE_LIFETIME_MEMBERSHIP_STORAGE_KEY) === 'true';
+    return localStorage.getItem(FORGE_LIFETIME_MEMBERSHIP_STORAGE_KEY) === 'true';
 }
 
 function isForgeMembershipActive() {
