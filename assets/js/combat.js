@@ -37,7 +37,8 @@ let runSummaryReadyInCombat = false;
 
 const createRunSummary = (result = 'defeat') => ({
     playerName: player && player.name ? String(player.name).trim() : '',
-    forgeTitle: (typeof isForgeMembershipActive === 'function' && isForgeMembershipActive() && typeof getForgeMemberTitle === 'function') ? getForgeMemberTitle() : '',
+    titleId: typeof getSelectedPlayerTitle === 'function' && getSelectedPlayerTitle()
+        ? getSelectedPlayerTitle().id : null,
     level: player && typeof player.lvl === 'number' ? player.lvl : 1,
     hardcore: !!(player && player.hardcore),
     playerClass: player && player.selectedClass ? player.selectedClass : '',
@@ -894,6 +895,9 @@ const hpValidation = () => {
             handleSpecialBossVictory();
             return;
         }
+        if (typeof syncPlayerTitleUnlocks === 'function') {
+            syncPlayerTitleUnlocks({ announce: true, log: addCombatLog });
+        }
         bindClaimButton();
         autoClaim();
     } else {
@@ -1289,6 +1293,7 @@ const grantMonarchDepthRewards = () => {
 };
 
 const handleSpecialBossVictory = () => {
+    if (typeof recordPlayerMonarchVictory === 'function') recordPlayerMonarchVictory();
     if (typeof maybeUnlockNextCurseLevel === 'function') {
         maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH);
     }
@@ -1310,6 +1315,7 @@ const handleSpecialBossVictory = () => {
         playTimer = null;
     }
 	updateCombatLog();
+    if (typeof saveData === 'function') saveData();
 };
 
 const hasSellableCombatLoot = () => {

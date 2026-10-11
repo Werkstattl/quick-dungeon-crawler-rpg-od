@@ -65,15 +65,30 @@ function getForgeMemberTitle() {
     return translated && translated !== 'forge-member-title' ? translated : 'Forge Member';
 }
 
-function getPlayerForgeTitleHTML() {
+function getPlayerTitleHTML() {
+    if (typeof getSelectedPlayerTitle === 'function') {
+        const title = getSelectedPlayerTitle();
+        if (!title) return '';
+        const key = title.id === 'forge-member' ? 'forge-member-title' : `title-${title.id}`;
+        return `<span class="player-title ${title.rarity}" data-i18n="${key}">${escapeTitleHTML(getPlayerTitleName(title))}</span>`;
+    }
     if (!isForgeMembershipActive()) {
         return '';
     }
     return `<span class="player-forge-title">${getForgeMemberTitle()}</span>`;
 }
 
+// Kept for integrations that used the original membership-only helper.
+function getPlayerForgeTitleHTML() {
+    return getPlayerTitleHTML();
+}
+
 function getPlayerDisplayName(name) {
     const baseName = typeof name === 'string' && name.trim() ? name.trim() : '';
+    if (typeof getSelectedPlayerTitle === 'function') {
+        const title = getSelectedPlayerTitle();
+        return title ? `${baseName} [${getPlayerTitleName(title)}]` : baseName;
+    }
     if (!isForgeMembershipActive()) {
         return baseName;
     }

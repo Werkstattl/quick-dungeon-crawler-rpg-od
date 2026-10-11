@@ -572,6 +572,7 @@ const loadDungeonProgress = () => {
     if (typeof maybeUnlockNextCurseLevel === 'function') {
         maybeUnlockNextCurseLevel();
     }
+    if (typeof syncPlayerTitleUnlocks === 'function') syncPlayerTitleUnlocks({ announce: true });
     if (dungeon.progress.floor > 4 && dungeon.progress.room === 1) {
         maybeAdvanceDungeonStory();
     }

@@ -221,6 +221,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                 };
                 }
                 player.name = playerName;
+                if (typeof normalizePlayerTitles === 'function') normalizePlayerTitles(player);
                 if (hardcore && !wasHardcore) {
                     if ((player.inventory && (player.inventory.consumables.length > 0 || player.inventory.equipment.length > 0)) ||
                         (player.equipped && player.equipped.length > 0) || player.companionCharm || player.gold > 0) {
@@ -417,7 +418,10 @@ window.addEventListener("DOMContentLoaded", async function () {
     applyFontSize();
     setVolume();
     ratingSystem.init();
-    loadBestiary();
+    await loadBestiary();
+    if (typeof syncPlayerTitleUnlocks === 'function') {
+        syncPlayerTitleUnlocks({ dungeonData: safeLoad(STORAGE_KEYS.dungeon, STORAGE_KEYS.dungeonBackup) });
+    }
 });
 
 function setForgeMembershipActive(active, source = 'subscription') {
@@ -456,6 +460,7 @@ function setForgeMembershipActive(active, source = 'subscription') {
         unlockEnemyCustomization(false);
     }
     if (typeof refreshPurchaseUI === 'function') refreshPurchaseUI();
+    if (typeof refreshTitlesModalIfOpen === 'function') refreshTitlesModalIfOpen();
 }
 
 function setForgeLifetimeMembershipActive(active) {
@@ -464,6 +469,34 @@ function setForgeLifetimeMembershipActive(active) {
 
 function unlockForgeMembership() {
     setForgeMembershipActive(true);
+}
+
+function openPlayerProfile() {
+    if (!player) return;
+    if (typeof syncPlayerTitleUnlocks === 'function') syncPlayerTitleUnlocks();
+    sfxOpen.play();
+    menuModalElement.style.display = "none";
+    defaultModalElement.style.display = "flex";
+    defaultModalElement.innerHTML = `
+        <div class="content" id="profile-tab">
+            <div class="content-head">
+                <h3 data-i18n="statistics">Statistics</h3>
+                <button type="button" class="title-close" id="profile-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <p>${String(player.name || '').trim()}${getPlayerTitleHTML()}</p>
+            <p><span data-i18n="hardcore">Hardcore</span>: ${player.hardcore ? '<span data-i18n="yes">Yes</span>' : '<span data-i18n="no">No</span>'}</p>
+            <p><span data-i18n="kills">Kills</span>: ${nFormatter(player.kills)}</p>
+            <p><span data-i18n="deaths">Deaths</span>: ${nFormatter(player.deaths)}</p>
+            <p><span data-i18n="playtime">Playtime</span>: ${formatRunDuration(player.playtime)}</p>
+            <button type="button" id="profile-titles"><i class="fa fa-crown" aria-hidden="true"></i> <span data-i18n="titles">Titles</span></button>
+        </div>`;
+    applyTranslations(defaultModalElement);
+    document.querySelector('#profile-titles').onclick = () => openTitlesModal();
+    document.querySelector('#profile-close').onclick = () => {
+        sfxDecline.play();
+        closeDefaultModal();
+        menuModalElement.style.display = "flex";
+    };
 }
 
 function openMenu(isTitle = false, silentInventoryClose = false) {
@@ -587,34 +620,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
     }
 
     // Player profile click function
-    playerMenu.onclick = function () {
-        sfxOpen.play();
-        let playTime = formatRunDuration(player.playtime);
-        menuModalElement.style.display = "none";
-        defaultModalElement.style.display = "flex";
-        defaultModalElement.innerHTML = `
-            <div class="content" id="profile-tab">
-                <div class="content-head">
-                    <h3 data-i18n="statistics">Statistics</h3>
-                    <p id="profile-close"><i class="fa fa-xmark"></i></p>
-                </div>
-                <p>${String(player.name || '').trim()}${getPlayerForgeTitleHTML()}</p>
-                <p><span data-i18n="hardcore">Hardcore</span>: ${player.hardcore ? '<span data-i18n="yes">Yes</span>' : '<span data-i18n="no">No</span>'}</p>
-                <p><span data-i18n="kills">Kills</span>: ${nFormatter(player.kills)}</p>
-                <p><span data-i18n="deaths">Deaths</span>: ${nFormatter(player.deaths)}</p>
-                <p><span data-i18n="playtime">Playtime</span>: ${playTime}</p>
-            </div>`;
-        applyTranslations(defaultModalElement);
-        let profileTab = document.querySelector('#profile-tab');
-        profileTab.style.width = "15rem";
-        let profileClose = document.querySelector('#profile-close');
-        profileClose.onclick = function () {
-            sfxDecline.play();
-            defaultModalElement.style.display = "none";
-            defaultModalElement.innerHTML = "";
-            menuModalElement.style.display = "flex";
-        };
-    };
+    playerMenu.onclick = openPlayerProfile;
 
     // Dungeon run click function
     if (runMenu) {
@@ -1287,6 +1293,7 @@ const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR) => {
     }
 
     player.maxUnlockedCurseLevel = newMax;
+    if (typeof syncPlayerTitleUnlocks === 'function') syncPlayerTitleUnlocks({ announce: true });
     if (typeof ensureRunStatisticsShape === 'function') {
         ensureRunStatisticsShape();
     }
@@ -1578,10 +1585,12 @@ const showEndgameScreen = (summary) => {
         playerNameElement.textContent = safeSummary.playerName || "";
     }
 
-    const forgeTitleElement = modal.querySelector("#endgame-player-forge-title");
-    if (forgeTitleElement) {
-        forgeTitleElement.textContent = safeSummary.forgeTitle || "";
-        forgeTitleElement.hidden = !safeSummary.forgeTitle;
+    const titleElement = modal.querySelector("#endgame-player-title");
+    if (titleElement) {
+        const title = typeof getPlayerTitleDefinition === 'function' ? getPlayerTitleDefinition(safeSummary.titleId) : null;
+        titleElement.textContent = title ? getPlayerTitleName(title) : '';
+        titleElement.className = title ? `player-title ${title.rarity}` : 'player-title';
+        titleElement.hidden = !title;
     }
 
     const modeElement = modal.querySelector("#endgame-player-mode");
@@ -1785,6 +1794,7 @@ const importData = (importedData) => {
         let playerImport = JSON.parse(atob(importedData));
         if (playerImport.inventory !== undefined) {
             normalizePlayerCurseProgress(playerImport);
+            if (typeof normalizePlayerTitles === 'function') normalizePlayerTitles(playerImport);
             if (typeof normalizePermanentCompanionUnlockProgress === 'function') {
                 playerImport.permanentCompanionUnlockProgress = normalizePermanentCompanionUnlockProgress(playerImport.permanentCompanionUnlockProgress);
             }

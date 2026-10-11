@@ -800,7 +800,7 @@ button:focus-visible {
     align-items: center;
 }
 
-.endgame-player .player-forge-title {
+.endgame-player .player-title {
     font-size: 0.85rem;
 }
 
@@ -1610,10 +1610,106 @@ header {
     color: #ffd76a;
 }
 
+.player-title,
 .player-forge-title {
     display: block;
     font-size: 0.8em;
+}
+
+.player-forge-title {
     color: #ffd76a;
+}
+
+.player-title[hidden] {
+    display: none;
+}
+
+#profile-tab {
+    width: min(20rem, 100%);
+}
+
+.title-close {
+    width: auto;
+    min-width: 2.5rem;
+    padding: 0.35rem 0.55rem;
+    margin: 0;
+}
+
+.title-close i {
+    margin: 0;
+}
+
+#defaultModal .titles-modal {
+    width: min(28rem, 100%);
+    max-height: 90vh;
+    max-height: 90dvh;
+    min-height: 0;
+    gap: 0.65rem;
+    overflow: hidden;
+}
+
+.titles-description,
+.titles-count {
+    color: var(--text-muted);
+    font-size: calc(0.9rem * var(--font-scale));
+}
+
+.titles-current {
+    color: var(--accent);
+    font-size: calc(0.9rem * var(--font-scale));
+}
+
+.titles-list {
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0.1rem 0.3rem 0.3rem;
+    overscroll-behavior: contain;
+}
+
+.title-group h4 {
+    margin: 1rem 0 0.4rem;
+    color: var(--accent);
+}
+
+.title-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+    padding: 0.7rem;
+    margin: 0 0 0.5rem;
+    text-align: start;
+}
+
+.title-choice-selected {
+    border-color: var(--accent-strong);
+    background: rgba(227, 185, 100, 0.12);
+}
+
+.title-choice:disabled {
+    cursor: default;
+    opacity: 0.75;
+}
+
+.title-choice-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+    width: 100%;
+}
+
+.title-choice-status {
+    flex-shrink: 0;
+    font-size: calc(0.75rem * var(--font-scale));
+    color: var(--accent);
+}
+
+.title-choice-meta,
+.title-choice-requirement {
+    font-size: calc(0.8rem * var(--font-scale));
+    color: var(--text-muted);
+    line-height: 1.35;
 }
 
 header button {

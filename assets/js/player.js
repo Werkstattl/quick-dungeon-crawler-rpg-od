@@ -75,6 +75,7 @@ if (player) {
         }
     }
     normalizePlayerCurseProgress(player);
+    if (typeof normalizePlayerTitles === 'function') normalizePlayerTitles(player);
 }
 
 let inventoryOpen = false;
@@ -226,7 +227,7 @@ const playerLoadStats = () => {
     player.exp.expPercent = Number((player.exp.expCurrLvl / player.exp.expMaxLvl) * 100).toFixed(2).replace(rx, "$1");
 
     const playerNameText = String(player.name || '').trim();
-    const forgeTitleHTML = getPlayerForgeTitleHTML();
+    const titleHTML = getPlayerTitleHTML();
 
     // Generate battle info for player if in combat
     if (player.inCombat || (typeof playerDead !== 'undefined' && playerDead)) {
@@ -239,12 +240,12 @@ const playerLoadStats = () => {
             playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
             playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
             playerExpElement.style.width = `${player.exp.expPercent}%`;
-            playerInfoElement.innerHTML = `${playerNameText} Lv.${player.lvl} (${player.exp.expPercent}%)${forgeTitleHTML}`;
+            playerInfoElement.innerHTML = `${playerNameText} Lv.${player.lvl} (${player.exp.expPercent}%)${titleHTML}`;
         }
     }
 
     // Header
-    document.querySelector("#player-name").innerHTML = `<i class="fas fa-user"></i>${playerNameText} Lv.${player.lvl}${forgeTitleHTML}`;
+    document.querySelector("#player-name").innerHTML = `<i class="fas fa-user"></i>${playerNameText} Lv.${player.lvl}${titleHTML}`;
     document.querySelector("#player-exp").innerHTML = `<p>Exp</p> ${nFormatter(player.exp.expCurr)}/${nFormatter(player.exp.expMax)} (${player.exp.expPercent}%)`;
     document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
