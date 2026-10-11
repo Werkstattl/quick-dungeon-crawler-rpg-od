@@ -7,6 +7,10 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const source = name => fs.readFileSync(path.join(root, 'assets/js', name), 'utf8');
 const english = JSON.parse(fs.readFileSync(path.join(root, 'assets/locales/en.json'), 'utf8'));
+const supportedLanguages = Array.from(source('language.js').match(/const SUPPORTED = \[([^\]]+)\];/)[1]
+    .matchAll(/'([^']+)'/g), match => match[1]);
+const titleTranslationKeys = Object.keys(english).filter(key =>
+    key === 'titles' || key.startsWith('titles-') || key.startsWith('title-'));
 
 function createState(overrides = {}, storage = new Map()) {
     const logs = [];
@@ -335,14 +339,56 @@ test('title names are escaped for HTML and missing translations use readable fal
     assert.equal(state.run('getPlayerTitleRequirement(getPlayerTitleDefinition("cursebound"))'), 'Unlock Curse Level 5.');
 });
 
-test('English and German title translations retain parameter placeholders', () => {
-    for (const lang of ['en', 'de']) {
+test('every supported language has complete title translations and identical parameter placeholders', () => {
+    for (const lang of supportedLanguages) {
         const locale = JSON.parse(fs.readFileSync(path.join(root, `assets/locales/${lang}.json`), 'utf8'));
-        for (const key of Object.keys(english).filter(key => key === 'titles' || key.startsWith('titles-') || key.startsWith('title-'))) {
+        for (const key of [...titleTranslationKeys, 'forge-member-title']) {
+            assert.ok(Object.hasOwn(locale, key), `${lang} needs its own ${key}`);
             assert.equal(typeof locale[key], 'string', `${lang} needs ${key}`);
-            for (const parameter of english[key].match(/\{\w+\}/g) || []) {
-                assert.ok(locale[key].includes(parameter), `${lang} ${key} needs ${parameter}`);
-            }
+            assert.ok(locale[key].trim(), `${lang} ${key} must not be empty`);
+            assert.deepEqual((locale[key].match(/\{\w+\}/g) || []).sort(),
+                (english[key].match(/\{\w+\}/g) || []).sort(), `${lang} ${key} has incorrect placeholders`);
         }
+    }
+});
+
+test('changing language refreshes the open title picker and equipped title in every supported language', async () => {
+    const state = createState({ maxUnlockedCurseLevel: 10 });
+    state.run('syncPlayerTitleUnlocks(); setPlayerTitle("cursebound")');
+    const list = { scrollTop: 17 };
+    const close = {};
+    Object.assign(state.context.defaultModalElement, {
+        style: { display: 'flex' },
+        querySelector: selector => selector === '#titles-list' ? list : close,
+        querySelectorAll: () => [],
+    });
+    Object.assign(state.context, {
+        window: {},
+        document: { documentElement: {}, querySelectorAll: () => [] },
+        fetch: async url => ({ json: async () => JSON.parse(fs.readFileSync(
+            path.join(root, new URL(url, 'http://localhost/').pathname), 'utf8')) }),
+    });
+    vm.runInContext(source('language.js').split('(function initLanguage()')[0], state.context);
+
+    for (const lang of supportedLanguages) {
+        await state.run(`setLanguage(${JSON.stringify(lang)})`);
+        const locale = JSON.parse(fs.readFileSync(path.join(root, `assets/locales/${lang}.json`), 'utf8'));
+        const html = state.context.defaultModalElement.innerHTML;
+        assert.equal(state.context.document.documentElement.lang, lang);
+        assert.equal(state.context.document.documentElement.dir, ['ar', 'fa'].includes(lang) ? 'rtl' : 'ltr');
+        assert.equal(list.scrollTop, 17, `${lang} must preserve the picker position`);
+        assert.equal(state.run('getPlayerDisplayName("Hero")'), `Hero [${locale['title-cursebound']}]`);
+        for (const title of state.run('PLAYER_TITLES')) {
+            const key = title.id === 'forge-member' ? 'forge-member-title' : `title-${title.id}`;
+            assert.ok(html.includes(state.context.escapeTitleHTML(locale[key])), `${lang} must display ${key}`);
+        }
+        for (const key of ['titles', 'titles-description', 'title-none', 'title-none-description',
+            'title-equipped', 'title-unlocked-label', 'title-locked', 'title-source-membership',
+            'title-source-achievement', ...state.run('PLAYER_TITLE_GROUPS').map(group => `title-group-${group}`)]) {
+            assert.ok(html.includes(state.context.escapeTitleHTML(locale[key])), `${lang} must display ${key}`);
+        }
+        assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-back'])), `${lang} must translate the back button label`);
+        assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-current'].replace('{title}', locale['title-cursebound']))));
+        assert.doesNotMatch(html, /\{(?:current|target|total|title)\}/, `${lang} must interpolate progress and requirement values`);
     }
 });
