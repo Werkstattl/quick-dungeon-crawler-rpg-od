@@ -233,6 +233,8 @@
   "auto-sell-rarity": "ขายอัตโนมัติเมื่อต่ำกว่าระดับ",
   "auto-sell-level": "ขายอัตโนมัติเมื่อต่ำกว่าเลเวล",
   "auto-sell-off": "ปิด",
+  "auto-stop-floor": "หยุดที่ชั้น",
+  "auto-stopped-at-floor": "โหมดอัตโนมัติหยุดที่ชั้น {floor}.",
   "ignore-doors": "จำนวนประตูที่จะข้ามต่อห้อง",
   "auto-sold-item": "ขาย {item} อัตโนมัติในราคา {gold} ทอง",
   "log-flow": "ลำดับบันทึก",

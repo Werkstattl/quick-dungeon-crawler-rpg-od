@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Awtomatikong ibenta kapag mas mababa sa pambihirang ito",
   "auto-sell-level": "Awtomatikong ibenta kapag mas mababa sa antas",
   "auto-sell-off": "Naka-off",
+  "auto-stop-floor": "Huminto sa palapag",
+  "auto-stopped-at-floor": "Huminto ang Awtomatikong Mode sa palapag {floor}.",
   "ignore-doors": "Mga Pintong Hindi Papansinin sa Bawat Silid",
   "auto-sold-item": "Awtomatikong naibenta ang {item} sa halagang {gold} ginto.",
   "log-flow": "Daloy ng Tala",

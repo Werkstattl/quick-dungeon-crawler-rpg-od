@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Vendi auto sotto rarità",
   "auto-sell-level": "Vendi auto sotto livello",
   "auto-sell-off": "Disattivato",
+  "auto-stop-floor": "Fermati al piano",
+  "auto-stopped-at-floor": "Modalità auto fermata al piano {floor}.",
   "ignore-doors": "Porte da ignorare per stanza",
   "auto-sold-item": "{item} venduto automaticamente per {gold} oro.",
   "log-flow": "Flusso registro",

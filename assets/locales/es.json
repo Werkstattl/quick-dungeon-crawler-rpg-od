@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Vender automáticamente por debajo de",
   "auto-sell-level": "Vender automáticamente por debajo del nivel",
   "auto-sell-off": "Desactivado",
+  "auto-stop-floor": "Detener en piso",
+  "auto-stopped-at-floor": "Modo automático se detuvo en el piso {floor}.",
   "ignore-doors": "Puertas a ignorar por sala",
   "auto-sold-item": "Venta automática de {item} por {gold} de oro.",
   "log-flow": "Orden del registro",

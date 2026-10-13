@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Myy automaattisesti alle harvinaisuuden",
   "auto-sell-level": "Myy automaattisesti alle tason",
   "auto-sell-off": "Pois käytöstä",
+  "auto-stop-floor": "Pysähdy kerroksella",
+  "auto-stopped-at-floor": "Automaattitila pysähtyi kerrokseen {floor}.",
   "ignore-doors": "Ohitettavat ovet huonetta kohti",
   "auto-sold-item": "{item} myytiin automaattisesti: {gold} kultaa.",
   "log-flow": "Lokin suunta",

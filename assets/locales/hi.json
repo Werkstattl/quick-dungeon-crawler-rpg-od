@@ -233,6 +233,8 @@
   "auto-sell-rarity": "इस दुर्लभता से नीचे ऑटो-बेचें",
   "auto-sell-level": "इस स्तर से नीचे ऑटो-बेचें",
   "auto-sell-off": "बंद",
+  "auto-stop-floor": "मंजिल पर रुकें",
+  "auto-stopped-at-floor": "ऑटो मोड मंजिल {floor} पर रुक गया।",
   "ignore-doors": "प्रति कमरे अनदेखे दरवाजे",
   "auto-sold-item": "{item} अपने आप {gold} सोने में बिक गया।",
   "log-flow": "लॉग प्रवाह",

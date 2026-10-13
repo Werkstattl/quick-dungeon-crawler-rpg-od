@@ -233,6 +233,8 @@
   "auto-sell-rarity": "희귀도 미만 자동 판매",
   "auto-sell-level": "레벨 미만 자동 판매",
   "auto-sell-off": "끄기",
+  "auto-stop-floor": "층에서 중지",
+  "auto-stopped-at-floor": "자동 모드가 {floor}층에서 중지되었습니다.",
   "ignore-doors": "방마다 무시할 문",
   "auto-sold-item": "{item}을(를) {gold} 골드에 자동 판매했습니다.",
   "log-flow": "로그 흐름",

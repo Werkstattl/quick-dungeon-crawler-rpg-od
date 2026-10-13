@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Autosprzedaż poniżej rzadkości",
   "auto-sell-level": "Autosprzedaż poniżej poziomu",
   "auto-sell-off": "Wył.",
+  "auto-stop-floor": "Zatrzymaj na piętrze",
+  "auto-stopped-at-floor": "Tryb automatyczny zatrzymał się na piętrze {floor}.",
   "ignore-doors": "Drzwi do ignorowania na pokój",
   "auto-sold-item": "Automatycznie sprzedano {item} za {gold} złota.",
   "log-flow": "Kierunek dziennika",

@@ -576,6 +576,9 @@ const loadDungeonProgress = () => {
     if (dungeon.progress.floor > 4 && dungeon.progress.room === 1) {
         maybeAdvanceDungeonStory();
     }
+    if (typeof maybeAutoStopAtFloor === 'function') {
+        maybeAutoStopAtFloor();
+    }
 }
 
 // ========== Events in the Dungeon ==========

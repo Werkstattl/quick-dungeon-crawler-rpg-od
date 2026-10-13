@@ -233,6 +233,8 @@
   "auto-sell-rarity": "自動売却（以下）",
   "auto-sell-level": "自動売却（レベル以下）",
   "auto-sell-off": "オフ",
+  "auto-stop-floor": "停止する階",
+  "auto-stopped-at-floor": "オートモードは{floor}階で停止しました。",
   "ignore-doors": "部屋ごとに無視する扉の数",
   "auto-sold-item": "{item}を{gold}ゴールドで自動売却しました。",
   "log-flow": "ログの表示順",

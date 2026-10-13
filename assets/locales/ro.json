@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Vinde automat sub",
   "auto-sell-level": "Vinde automat sub nivelul",
   "auto-sell-off": "Dezactivat",
+  "auto-stop-floor": "Oprește la etaj",
+  "auto-stopped-at-floor": "Mod automat oprit la etajul {floor}.",
   "ignore-doors": "Uși de ignorat per cameră",
   "auto-sold-item": "Vândut automat {item} pentru {gold} aur.",
   "log-flow": "Flux de jurnal",

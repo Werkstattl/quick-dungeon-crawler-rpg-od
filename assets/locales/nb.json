@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Selg automatisk under sjeldenhet",
   "auto-sell-level": "Selg automatisk under nivå",
   "auto-sell-off": "Av",
+  "auto-stop-floor": "Stopp på etasje",
+  "auto-stopped-at-floor": "Automatisk modus stoppet på etasje {floor}.",
   "ignore-doors": "Dører som ignoreres per rom",
   "auto-sold-item": "Solgte automatisk {item} for {gold} gull.",
   "log-flow": "Retning på loggen",

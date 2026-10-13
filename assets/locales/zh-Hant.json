@@ -224,6 +224,8 @@
   "auto-sell-rarity": "自動出售低於",
   "auto-sell-level": "自動出售低於等級",
   "auto-sell-off": "關閉",
+  "auto-stop-floor": "停止於第幾層",
+  "auto-stopped-at-floor": "自動模式已在第 {floor} 層停止。",
   "ignore-doors": "每間忽略的房門數量",
   "auto-sold-item": "已自動出售 {item}，獲得 {gold} 金幣。",
   "log-flow": "日誌方向",

@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Bu nadirliğin altını otomatik sat",
   "auto-sell-level": "Bu seviyenin altını otomatik sat",
   "auto-sell-off": "Kapalı",
+  "auto-stop-floor": "Katta dur",
+  "auto-stopped-at-floor": "Otomatik Mod {floor}. katta durdu.",
   "ignore-doors": "Oda Başına Yok Sayılacak Kapılar",
   "auto-sold-item": "{item}, {gold} altına otomatik satıldı.",
   "log-flow": "Günlük Akışı",

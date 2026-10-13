@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Jual otomatis di bawah kelangkaan",
   "auto-sell-level": "Jual otomatis di bawah level",
   "auto-sell-off": "Mati",
+  "auto-stop-floor": "Berhenti di lantai",
+  "auto-stopped-at-floor": "Mode Auto berhenti di lantai {floor}.",
   "ignore-doors": "Pintu Diabaikan per Ruangan",
   "auto-sold-item": "{item} otomatis terjual seharga {gold} gold.",
   "log-flow": "Alur Log",

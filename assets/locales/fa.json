@@ -233,6 +233,8 @@
   "auto-sell-rarity": "فروش خودکار پایین‌تر از کمیابی",
   "auto-sell-level": "فروش خودکار پایین‌تر از سطح",
   "auto-sell-off": "خاموش",
+  "auto-stop-floor": "توقف در طبقه",
+  "auto-stopped-at-floor": "حالت خودکار در طبقه {floor} متوقف شد.",
   "ignore-doors": "درهای نادیده‌گرفته‌شده در هر اتاق",
   "auto-sold-item": "{item} به‌طور خودکار به قیمت {gold} طلا فروخته شد.",
   "log-flow": "جهت گزارش",

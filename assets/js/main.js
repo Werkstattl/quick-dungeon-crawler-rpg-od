@@ -873,6 +873,8 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
     window.renderAutoModeSettingsModal = function (returnToMenu = true) {
         sfxOpen.play();
         const autoSellLevelOptions = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        const autoStopFloorOptionsMarkup = Array.from({ length: (typeof AUTO_STOP_FLOOR_MAX !== 'undefined' ? AUTO_STOP_FLOOR_MAX : 100) + 1 },
+            (_, value) => `<option value="${value}" ${autoStopFloor === value ? 'selected' : ''}>${value === 0 ? t('auto-sell-off') : value}</option>`).join('');
         const autoSellBelowLevelSelected = Number.isNaN(autoSellBelowLevel)
             ? 0
             : Math.max(0, Math.min(MAX_EQUIPMENT_LEVEL, Math.floor(autoSellBelowLevel / 10) * 10));
@@ -921,6 +923,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <p data-i18n="auto-level-up-stats">Level-up stats</p>
                     ${autoLevelUpPrioritySelectsMarkup}
                 </div>
+                <label id="auto-stop-floor-label"><span data-i18n="auto-stop-floor">Stop at floor</span> <select id="auto-stop-floor-select">${autoStopFloorOptionsMarkup}</select></label>
                 <label id="auto-bossdoor-label"><input type="checkbox" id="auto-bossdoor-toggle" ${autoBossDoors ? 'checked' : ''}> <span data-i18n="boss-doors">Boss Doors</span></label>
                 <label id="auto-monarch-label"><input type="checkbox" id="auto-monarch-toggle" ${autoMonarch ? 'checked' : ''}> <span data-i18n="dungeon-monarch">Dungeon Monarch</span></label>
                 <label id="auto-equip-best-label"><input type="checkbox" id="auto-equip-best-toggle" ${autoEquipBest ? 'checked' : ''}> <span data-i18n="auto-equip-best">Equip best</span></label>
@@ -961,6 +964,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let autoSellRaritySelect = document.querySelector('#auto-sell-rarity-select');
         let autoSellLevelSelect = document.querySelector('#auto-sell-level-input');
         let autoDoorIgnoreSelect = document.querySelector('#auto-doorignore-select');
+        let autoStopFloorSelect = document.querySelector('#auto-stop-floor-select');
         let autoLevelUpPrioritySelects = Array.from(document.querySelectorAll('.auto-levelup-priority-select'));
         let applyAuto = document.querySelector('#apply-auto');
         let autoTab = document.querySelector('#auto-tab');
@@ -1009,6 +1013,16 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 autoSellBelowLevel = 0;
             }
             autoIgnoreDoors = parseInt(autoDoorIgnoreSelect.value, 10);
+            autoStopFloor = parseInt(autoStopFloorSelect.value, 10);
+            if (Number.isNaN(autoStopFloor) || autoStopFloor < 0) {
+                autoStopFloor = 0;
+            }
+            if (autoStopFloor > (typeof AUTO_STOP_FLOOR_MAX !== 'undefined' ? AUTO_STOP_FLOOR_MAX : 100)) {
+                autoStopFloor = (typeof AUTO_STOP_FLOOR_MAX !== 'undefined' ? AUTO_STOP_FLOOR_MAX : 100);
+            }
+            if (typeof autoStopFloorReached !== 'undefined') {
+                autoStopFloorReached = false;
+            }
             if ( autoModeUnlocked ) {
                 localStorage.setItem("autoMode", autoMode);
             }
@@ -1024,6 +1038,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             localStorage.setItem("autoSellRarity", autoSellRarity);
             localStorage.setItem("autoSellBelowLevel", autoSellBelowLevel);
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
+            localStorage.setItem("autoStopFloor", autoStopFloor);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
             closeAutoModeSettingsModal(returnToMenu);

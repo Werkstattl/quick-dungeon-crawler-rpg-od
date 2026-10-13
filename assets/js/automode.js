@@ -87,6 +87,11 @@ if (localStorage.getItem("autoBossDoors") === "false") {
 let autoMonarch = localStorage.getItem("autoMonarch") !== "false";
 let autoIgnoreDoors = parseInt(localStorage.getItem("autoIgnoreDoors"), 10);
 if (Number.isNaN(autoIgnoreDoors)) autoIgnoreDoors = 0;
+const AUTO_STOP_FLOOR_MAX = 100;
+let autoStopFloor = parseInt(localStorage.getItem("autoStopFloor"), 10);
+if (Number.isNaN(autoStopFloor) || autoStopFloor < 0) autoStopFloor = 0;
+if (autoStopFloor > AUTO_STOP_FLOOR_MAX) autoStopFloor = AUTO_STOP_FLOOR_MAX;
+let autoStopFloorReached = false;
 let autoSellRarity = localStorage.getItem("autoSellRarity") || "none";
 let autoSellBelowLevel = parseInt(localStorage.getItem("autoSellBelowLevel"), 10);
 if (Number.isNaN(autoSellBelowLevel)) autoSellBelowLevel = 0;
@@ -280,6 +285,34 @@ const autoClaim = () => {
             if (btn) btn.click();
         }, 100);
     }
+};
+
+// Turns Auto Mode off once when the configured floor is reached.
+// The trigger stays spent until the run drops below that floor again
+// (new run) or the setting is re-applied.
+const maybeAutoStopAtFloor = () => {
+    if (!autoStopFloor || !autoMode) {
+        return false;
+    }
+    const floor = (typeof dungeon !== 'undefined' && dungeon && dungeon.progress)
+        ? Number(dungeon.progress.floor)
+        : Number.NaN;
+    if (!Number.isFinite(floor)) {
+        return false;
+    }
+    if (floor < autoStopFloor) {
+        autoStopFloorReached = false;
+        return false;
+    }
+    if (autoStopFloorReached) {
+        return false;
+    }
+    autoStopFloorReached = true;
+    setAutoModeEnabled(false);
+    if (typeof addDungeonLog === 'function' && typeof t === 'function') {
+        addDungeonLog(t('auto-stopped-at-floor', { floor }));
+    }
+    return true;
 };
 
 const autoModeBtn = document.querySelector("#auto-mode-btn");

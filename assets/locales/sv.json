@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Sälj automatiskt under sällsynthet",
   "auto-sell-level": "Sälj automatiskt under nivå",
   "auto-sell-off": "Av",
+  "auto-stop-floor": "Stanna på våning",
+  "auto-stopped-at-floor": "Automatiskt läge stannade på våning {floor}.",
   "ignore-doors": "Dörrar att ignorera per rum",
   "auto-sold-item": "Sålde automatiskt {item} för {gold} guld.",
   "log-flow": "Loggens riktning",

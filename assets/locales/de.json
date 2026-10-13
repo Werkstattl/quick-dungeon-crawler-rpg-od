@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Auto-Verkauf unter",
   "auto-sell-level": "Auto-Verkauf unter Stufe",
   "auto-sell-off": "Aus",
+  "auto-stop-floor": "Stop auf Etage",
+  "auto-stopped-at-floor": "Auto-Modus hat auf Etage {floor} gestoppt.",
   "ignore-doors": "Türen pro Raum ignorieren",
   "auto-sold-item": "Automatisch verkauft: {item} für {gold} Gold.",
   "log-flow": "Log-Reihenfolge",

@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Automaticky prodat pod touto vzácností",
   "auto-sell-level": "Automaticky prodat pod touto úrovní",
   "auto-sell-off": "Vypnuto",
+  "auto-stop-floor": "Zastavit na patře",
+  "auto-stopped-at-floor": "Automatický režim se zastavil na patře {floor}.",
   "ignore-doors": "Počet dveří k ignorování v každé místnosti",
   "auto-sold-item": "Předmět {item} byl automaticky prodán za {gold} zlata.",
   "log-flow": "Směr záznamu",

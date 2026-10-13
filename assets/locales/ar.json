@@ -233,6 +233,8 @@
   "auto-sell-rarity": "بيع تلقائي لأقل من الندرة",
   "auto-sell-level": "بيع تلقائي لأقل من المستوى",
   "auto-sell-off": "متوقف",
+  "auto-stop-floor": "إيقاف عند الطابق",
+  "auto-stopped-at-floor": "أوقف الوضع التلقائي في الطابق {floor}.",
   "ignore-doors": "الأبواب التي يتم تجاهلها في كل غرفة",
   "auto-sold-item": "تم بيع {item} تلقائيا مقابل {gold} ذهب.",
   "log-flow": "اتجاه السجل",

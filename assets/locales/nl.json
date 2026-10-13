@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Automatisch verkopen onder zeldzaamheid",
   "auto-sell-level": "Automatisch verkopen onder niveau",
   "auto-sell-off": "Uit",
+  "auto-stop-floor": "Stoppen op verdieping",
+  "auto-stopped-at-floor": "Automatische modus gestopt op verdieping {floor}.",
   "ignore-doors": "Te negeren deuren per kamer",
   "auto-sold-item": "{item} automatisch verkocht voor {gold} goud.",
   "log-flow": "Richting van logboek",

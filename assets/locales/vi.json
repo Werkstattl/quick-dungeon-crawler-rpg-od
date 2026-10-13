@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Tự bán dưới độ hiếm",
   "auto-sell-level": "Tự bán dưới cấp",
   "auto-sell-off": "Tắt",
+  "auto-stop-floor": "Dừng ở tầng",
+  "auto-stopped-at-floor": "Chế độ tự động đã dừng ở tầng {floor}.",
   "ignore-doors": "Số cửa bỏ qua mỗi phòng",
   "auto-sold-item": "Đã tự bán {item} với giá {gold} vàng.",
   "log-flow": "Hướng nhật ký",

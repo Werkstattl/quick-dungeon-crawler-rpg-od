@@ -233,6 +233,8 @@
   "auto-sell-rarity": "Vendre auto sous la rareté",
   "auto-sell-level": "Vendre auto sous le niveau",
   "auto-sell-off": "Désactivé",
+  "auto-stop-floor": "Arrêter à l'étage",
+  "auto-stopped-at-floor": "Mode auto arrêté à l'étage {floor}.",
   "ignore-doors": "Portes à ignorer par salle",
   "auto-sold-item": "{item} vendu automatiquement pour {gold} or.",
   "log-flow": "Sens du journal",
