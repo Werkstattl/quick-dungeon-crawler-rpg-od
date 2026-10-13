@@ -1620,6 +1620,21 @@ header {
     color: #ffd76a;
 }
 
+.title-membership {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.15em 0.5em;
+    border: 1px solid currentColor;
+    border-radius: 0.35em;
+    color: #ffd76a;
+    background: rgba(255, 215, 106, 0.08);
+    text-shadow: none;
+}
+
+.player-title.title-membership {
+    display: block;
+}
+
 .player-title[hidden] {
     display: none;
 }

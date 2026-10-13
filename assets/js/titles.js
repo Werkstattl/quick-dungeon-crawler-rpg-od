@@ -1,23 +1,32 @@
 // Cosmetic accomplishments live in the player save and survive normal run resets.
+const PLAYER_TITLE_VERSION = 2;
 const PLAYER_TITLES = [
     { id: 'dungeon-delver', name: 'Dungeon Delver', rarity: 'Common', group: 'depth', metric: 'highestFloor', target: 5 },
     { id: 'depthwalker', name: 'Depthwalker', rarity: 'Uncommon', group: 'depth', metric: 'highestFloor', target: 20 },
     { id: 'abyss-strider', name: 'Abyss Strider', rarity: 'Rare', group: 'depth', metric: 'highestFloor', target: 40 },
-    { id: 'cursebound', name: 'Cursebound', rarity: 'Rare', group: 'curse', metric: 'curse', target: 5 },
-    { id: 'hexbreaker', name: 'Hexbreaker', rarity: 'Epic', group: 'curse', metric: 'curse', target: 10 },
-    { id: 'sovereign-of-ruin', name: 'Sovereign of Ruin', rarity: 'Legendary', group: 'curse', metric: 'curse', target: 15 },
-    { id: 'kingsbane', name: 'Kingsbane', rarity: 'Rare', group: 'monarch', metric: 'highestMonarchCurse', target: 1 },
-    { id: 'crowncrusher', name: 'Crowncrusher', rarity: 'Epic', group: 'monarch', metric: 'highestMonarchCurse', target: 10 },
-    { id: 'crownbreaker', name: 'Crownbreaker', rarity: 'Heirloom', group: 'monarch', metric: 'highestMonarchCurse', target: 15 },
     { id: 'field-scholar', name: 'Field Scholar', rarity: 'Uncommon', group: 'bestiary', metric: 'bestiaryTypes', target: 10 },
     { id: 'beast-chronicler', name: 'Beast Chronicler', rarity: 'Rare', group: 'bestiary', metric: 'bestiaryTypes', target: 25 },
     { id: 'living-bestiary', name: 'Living Bestiary', rarity: 'Epic', group: 'bestiary', metric: 'bestiaryTypes', target: 40 },
-    { id: 'deep-crowned', name: 'Deep-Crowned', rarity: 'Legendary', group: 'challenges', metric: 'deepMonarchFloor', target: 40 },
+    { id: 'cursebound', name: 'Cursebound', rarity: 'Rare', group: 'curse', metric: 'curse', target: 5 },
+    { id: 'hexbreaker', name: 'Hexbreaker', rarity: 'Epic', group: 'curse', metric: 'curse', target: 10 },
+    { id: 'curseforged', name: 'Curseforged', rarity: 'Legendary', group: 'curse', metric: 'curse', target: 15 },
+    { id: 'crownbreaker', name: 'Crownbreaker', rarity: 'Rare', group: 'monarch', metric: 'highestMonarchCurse', target: 1 },
+    { id: 'kingsbane', name: 'Kingsbane', rarity: 'Epic', group: 'monarch', metric: 'highestMonarchCurse', target: 10 },
+    { id: 'sovereign-of-ruin', name: 'Sovereign of Ruin', rarity: 'Heirloom', group: 'monarch', metric: 'highestMonarchCurse', target: 15 },
+    { id: 'deep-crowned', name: 'Deep-Crowned', rarity: 'Legendary', group: 'challenges', metric: 'deepMonarchFloor', target: 45 },
     { id: 'the-unbroken', name: 'The Unbroken', rarity: 'Legendary', group: 'challenges', metric: 'hardcoreMonarch', target: 1 },
-    { id: 'forge-member', name: 'Forge Member', rarity: 'Legendary', group: 'membership', metric: 'membership', target: 1 },
+    { id: 'forge-member', name: 'Forge Member', rarity: null, group: 'membership', metric: 'membership', target: 1 },
 ];
 
-const PLAYER_TITLE_GROUPS = ['depth', 'curse', 'monarch', 'bestiary', 'challenges', 'membership'];
+const PLAYER_TITLE_GROUPS = ['depth', 'bestiary', 'curse', 'monarch', 'challenges', 'membership'];
+
+// Match renamed titles to their original achievement, not the reused display name.
+const LEGACY_PLAYER_TITLE_IDS = {
+    'sovereign-of-ruin': 'curseforged',
+    kingsbane: 'crownbreaker',
+    crowncrusher: 'kingsbane',
+    crownbreaker: 'sovereign-of-ruin',
+};
 
 function titleText(key, fallback, params) {
     const translated = typeof t === 'function' ? t(key, params) : key;
@@ -41,13 +50,21 @@ function getPlayerTitleName(title) {
     return titleText(key, title.name);
 }
 
+function getPlayerTitleClass(title) {
+    return title.metric === 'membership' ? 'title-membership' : title.rarity;
+}
+
 function normalizePlayerTitles(playerData) {
     if (!playerData || typeof playerData !== 'object') return null;
     const old = playerData.titles && typeof playerData.titles === 'object' ? playerData.titles : {};
     const progress = old.progress && typeof old.progress === 'object' ? old.progress : {};
+    const migrateId = id => typeof id !== 'string' || Number(old.version) >= PLAYER_TITLE_VERSION
+        || !Object.prototype.hasOwnProperty.call(LEGACY_PLAYER_TITLE_IDS, id)
+        ? id : LEGACY_PLAYER_TITLE_IDS[id];
     const normalized = {
+        version: PLAYER_TITLE_VERSION,
         // Membership is checked against purchase entitlements, never imported unlocks.
-        unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.filter(id =>
+        unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.map(migrateId).filter(id =>
             id !== 'forge-member' && getPlayerTitleDefinition(id)))] : [],
         progress: {},
     };
@@ -60,7 +77,8 @@ function normalizePlayerTitles(playerData) {
     // An absent choice preserves the existing automatic Forge Member display.
     // Explicitly choosing None or an earned title always takes precedence.
     if (Object.prototype.hasOwnProperty.call(old, 'selected')) {
-        normalized.selected = getPlayerTitleDefinition(old.selected) ? old.selected : null;
+        const selected = migrateId(old.selected);
+        normalized.selected = getPlayerTitleDefinition(selected) ? selected : null;
     }
     playerData.titles = normalized;
     return normalized;
@@ -78,12 +96,14 @@ function isPlayerTitleUnlocked(id, playerData = player) {
     const title = getPlayerTitleDefinition(id);
     if (!title || !playerData) return false;
     if (id === 'forge-member') return isForgeMembershipActive();
+    if (playerData.titles && playerData.titles.version !== PLAYER_TITLE_VERSION) normalizePlayerTitles(playerData);
     return Boolean(playerData.titles && Array.isArray(playerData.titles.unlocked)
         && playerData.titles.unlocked.includes(id));
 }
 
 function getSelectedPlayerTitle(playerData = player) {
     if (!playerData) return null;
+    if (playerData.titles && playerData.titles.version !== PLAYER_TITLE_VERSION) normalizePlayerTitles(playerData);
     const state = playerData.titles;
     const id = state && Object.prototype.hasOwnProperty.call(state, 'selected')
         ? state.selected : 'forge-member';
@@ -170,18 +190,18 @@ function getPlayerTitleRequirement(title) {
 function renderPlayerTitleChoice(title, selectedId) {
     const unlocked = isPlayerTitleUnlocked(title.id);
     const selected = selectedId === title.id;
-    const rarity = titleText(title.rarity.toLowerCase(), title.rarity);
+    const metadata = title.metric === 'membership'
+        ? titleText('title-membership-badge', 'Membership badge')
+        : `${titleText(title.rarity.toLowerCase(), title.rarity)} · ${titleText('title-source-achievement', 'Achievement')}`;
     const progress = Math.min(title.target, getPlayerTitleProgress(title));
     const status = selected ? titleText('title-equipped', 'Equipped')
         : unlocked ? titleText('title-unlocked-label', 'Unlocked')
         : title.metric === 'membership' || title.metric === 'hardcoreMonarch'
             ? titleText('title-locked', 'Locked')
             : titleText('title-progress', '{current}/{target}', { current: progress, target: title.target });
-    const source = title.metric === 'membership' ? titleText('title-source-membership', 'Membership')
-        : titleText('title-source-achievement', 'Achievement');
     return `<button type="button" class="title-choice${selected ? ' title-choice-selected' : ''}" data-title-id="${title.id}" aria-pressed="${selected}" ${unlocked ? '' : 'disabled'}>
-        <span class="title-choice-heading"><span class="${title.rarity}" data-i18n="${title.id === 'forge-member' ? 'forge-member-title' : `title-${title.id}`}">${escapeTitleHTML(getPlayerTitleName(title))}</span><span class="title-choice-status">${escapeTitleHTML(status)}</span></span>
-        <span class="title-choice-meta">${escapeTitleHTML(rarity)} · ${escapeTitleHTML(source)}</span>
+        <span class="title-choice-heading"><span class="${getPlayerTitleClass(title)}" data-i18n="${title.id === 'forge-member' ? 'forge-member-title' : `title-${title.id}`}">${escapeTitleHTML(getPlayerTitleName(title))}</span><span class="title-choice-status">${escapeTitleHTML(status)}</span></span>
+        <span class="title-choice-meta">${escapeTitleHTML(metadata)}</span>
         <span class="title-choice-requirement">${escapeTitleHTML(getPlayerTitleRequirement(title))}</span>
     </button>`;
 }

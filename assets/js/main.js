@@ -1589,7 +1589,7 @@ const showEndgameScreen = (summary) => {
     if (titleElement) {
         const title = typeof getPlayerTitleDefinition === 'function' ? getPlayerTitleDefinition(safeSummary.titleId) : null;
         titleElement.textContent = title ? getPlayerTitleName(title) : '';
-        titleElement.className = title ? `player-title ${title.rarity}` : 'player-title';
+        titleElement.className = title ? `player-title ${getPlayerTitleClass(title)}` : 'player-title';
         titleElement.hidden = !title;
     }
 

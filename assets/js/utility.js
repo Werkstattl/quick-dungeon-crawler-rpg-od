@@ -70,7 +70,7 @@ function getPlayerTitleHTML() {
         const title = getSelectedPlayerTitle();
         if (!title) return '';
         const key = title.id === 'forge-member' ? 'forge-member-title' : `title-${title.id}`;
-        return `<span class="player-title ${title.rarity}" data-i18n="${key}">${escapeTitleHTML(getPlayerTitleName(title))}</span>`;
+        return `<span class="player-title ${getPlayerTitleClass(title)}" data-i18n="${key}">${escapeTitleHTML(getPlayerTitleName(title))}</span>`;
     }
     if (!isForgeMembershipActive()) {
         return '';
