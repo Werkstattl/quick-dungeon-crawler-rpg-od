@@ -25,6 +25,15 @@ if (localStorage.getItem("autoSpecialAbility") === "false") {
 }
 let autoEquipBest = localStorage.getItem("autoEquipBest") === "true";
 let autoStopLevelUp = localStorage.getItem("autoStopLevelUp") === "true";
+const normalizeAutoStopFloor = (value) => {
+    const floor = Number(value);
+    return Number.isSafeInteger(floor) && floor > 0 ? floor : 0;
+};
+let autoStopFloor = normalizeAutoStopFloor(localStorage.getItem("autoStopFloor"));
+const setAutoStopFloor = (value) => {
+    autoStopFloor = normalizeAutoStopFloor(value);
+    localStorage.setItem("autoStopFloor", autoStopFloor);
+};
 const AUTO_LEVEL_UP_STATS = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge", "luck"];
 const AUTO_LEVEL_UP_PRIORITY_LIMIT = 3;
 const AUTO_LEVEL_UP_STAT_LABEL_KEYS = {
@@ -337,9 +346,22 @@ const updateAutoModeBtnVisibility = () => {
     }
 };
 
+const stopAutoModeAtFloor = () => {
+    if (!autoMode || autoStopFloor === 0 || dungeon.progress.floor < autoStopFloor) {
+        return false;
+    }
+
+    setAutoModeEnabled(false);
+    if (!dungeon.status.paused) {
+        dungeonStartPause();
+    }
+    return true;
+};
+
 const setAutoModeEnabled = (enabled) => {
     const nextAutoMode = !!enabled;
     if (nextAutoMode === autoMode) {
+        if (autoMode) stopAutoModeAtFloor();
         updateAutoModeBtn();
         return;
     }
@@ -353,6 +375,7 @@ const setAutoModeEnabled = (enabled) => {
     autoMode = nextAutoMode;
     updateAutoModeBtn();
     localStorage.setItem("autoMode", autoMode);
+    if (autoMode && stopAutoModeAtFloor()) return;
     if (autoMode && typeof window !== 'undefined' && typeof window.maybeAutoAttack === 'function') {
         window.maybeAutoAttack();
     }

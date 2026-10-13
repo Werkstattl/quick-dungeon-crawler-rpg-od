@@ -220,6 +220,8 @@
   "auto-mode-description": "Lawan musuh, tuntut rampasan dan buka pintu secara automatik.",
   "auto-mode-show-button": "Tunjukkan butang Auto",
   "auto-mode-level-up": "Berhenti apabila naik tahap",
+  "auto-mode-stop-floor": "Berhenti di tingkat",
+  "auto-mode-stop-floor-help": "Jeda apabila mencapai tingkat ini. 0 = dimatikan.",
   "auto-level-up-stats": "Statistik kenaikan tahap",
   "luck-as-level-up-option": "Nasib sebagai pilihan kenaikan tahap",
   "active": "Aktif",

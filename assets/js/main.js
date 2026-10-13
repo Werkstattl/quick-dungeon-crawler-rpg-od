@@ -917,6 +917,8 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span class="Epic" data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
+                <label for="auto-stop-floor-input"><span data-i18n="auto-mode-stop-floor">Stop at floor</span> <input id="auto-stop-floor-input" type="number" min="0" max="${Number.MAX_SAFE_INTEGER}" step="1" inputmode="numeric" value="${autoStopFloor}" aria-describedby="auto-stop-floor-help"></label>
+                <p id="auto-stop-floor-help" data-i18n="auto-mode-stop-floor-help">Pause when this floor is reached. 0 = off.</p>
                 <div id="auto-levelup-priority" class="auto-levelup-priority-block">
                     <p data-i18n="auto-level-up-stats">Level-up stats</p>
                     ${autoLevelUpPrioritySelectsMarkup}
@@ -955,6 +957,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoLevelUpToggle = document.querySelector('#auto-levelup-toggle');
+        let autoStopFloorInput = document.querySelector('#auto-stop-floor-input');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoMonarchToggle = document.querySelector('#auto-monarch-toggle');
         let autoEquipBestToggle = document.querySelector('#auto-equip-best-toggle');
@@ -986,6 +989,10 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         }
 
         applyAuto.onclick = function () {
+            if (!autoStopFloorInput.checkValidity()) {
+                autoStopFloorInput.reportValidity();
+                return;
+            }
             sfxConfirm.play();
             autoModeBtnVisible = autoModeUnlocked && autoToggle.checked;
             if (!autoModeBtnVisible) {
@@ -997,6 +1004,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             autoHeal = autoHealToggle.checked;
             autoSpecialAbility = autoSpecialToggle.checked;
             autoStopLevelUp = autoLevelUpToggle.checked;
+            setAutoStopFloor(autoStopFloorInput.value);
             autoBossDoors = autoBossDoorToggle.checked;
             autoMonarch = autoMonarchToggle.checked;
             autoEquipBest = autoEquipBestToggle.checked;
@@ -1026,6 +1034,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             localStorage.setItem("autoIgnoreDoors", autoIgnoreDoors);
             updateAutoModeBtnVisibility();
             updateAutoModeBtn();
+            stopAutoModeAtFloor();
             closeAutoModeSettingsModal(returnToMenu);
         };
     };

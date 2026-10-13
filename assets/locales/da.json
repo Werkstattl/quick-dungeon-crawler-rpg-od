@@ -220,6 +220,8 @@
   "auto-mode-description": "Gå automatisk i kamp mod fjender, saml bytte og åbn døre.",
   "auto-mode-show-button": "Vis Auto-knappen",
   "auto-mode-level-up": "Stop ved niveaustigning",
+  "auto-mode-stop-floor": "Stop på etage",
+  "auto-mode-stop-floor-help": "Sæt på pause, når denne etage nås. 0 = fra.",
   "auto-level-up-stats": "Egenskaber ved niveaustigning",
   "luck-as-level-up-option": "Held som valg ved niveaustigning",
   "active": "Aktiv",

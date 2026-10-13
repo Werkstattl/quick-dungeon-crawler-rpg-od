@@ -211,6 +211,8 @@
   "auto-mode-description": "自动与敌人战斗、拾取战利品并打开门。",
   "auto-mode-show-button": "显示自动按钮",
   "auto-mode-level-up": "升级时停止",
+  "auto-mode-stop-floor": "停止楼层",
+  "auto-mode-stop-floor-help": "到达此楼层时暂停。0 = 关闭。",
   "auto-level-up-stats": "升级属性",
   "luck-as-level-up-option": "将幸运作为升级选项",
   "active": "激活",

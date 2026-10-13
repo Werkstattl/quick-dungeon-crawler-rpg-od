@@ -220,6 +220,8 @@
   "auto-mode-description": "Automaticky bojuje s nepřáteli, sbírá kořist a otevírá dveře.",
   "auto-mode-show-button": "Zobrazit tlačítko Auto",
   "auto-mode-level-up": "Zastavit při zvýšení úrovně",
+  "auto-mode-stop-floor": "Zastavit na patře",
+  "auto-mode-stop-floor-help": "Pozastavit při dosažení tohoto patra. 0 = vypnuto.",
   "auto-level-up-stats": "Atributy při zvýšení úrovně",
   "luck-as-level-up-option": "Štěstí jako volba při zvýšení úrovně",
   "active": "Aktivní",

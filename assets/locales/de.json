@@ -220,6 +220,8 @@
   "auto-mode-description": "Automatisch Feinde angreifen, Beute einsammeln und Türen öffnen.",
   "auto-mode-show-button": "Auto-Button zeigen",
   "auto-mode-level-up": "Beim Level-Up stoppen",
+  "auto-mode-stop-floor": "Bei Etage stoppen",
+  "auto-mode-stop-floor-help": "Beim Erreichen dieser Etage pausieren. 0 = aus.",
   "auto-level-up-stats": "Level-Up-Werte",
   "luck-as-level-up-option": "Glück als Level-Up-Option",
   "active": "Aktiv",

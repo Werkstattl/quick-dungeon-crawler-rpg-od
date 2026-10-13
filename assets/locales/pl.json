@@ -220,6 +220,8 @@
   "auto-mode-description": "Automatycznie walczy z wrogami, zbiera łup i otwiera drzwi.",
   "auto-mode-show-button": "Pokaż przycisk auto",
   "auto-mode-level-up": "Zatrzymaj przy awansie",
+  "auto-mode-stop-floor": "Zatrzymaj na piętrze",
+  "auto-mode-stop-floor-help": "Wstrzymaj po dotarciu na to piętro. 0 = wyłączone.",
   "auto-level-up-stats": "Statystyki awansu",
   "luck-as-level-up-option": "Szczęście jako opcja awansu",
   "active": "Aktywne",

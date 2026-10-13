@@ -220,6 +220,8 @@
   "auto-mode-description": "Gå automatisk i kamp mot fiender, hent bytte og åpne dører.",
   "auto-mode-show-button": "Vis Auto-knappen",
   "auto-mode-level-up": "Stopp ved nivåøkning",
+  "auto-mode-stop-floor": "Stopp på etasje",
+  "auto-mode-stop-floor-help": "Sett på pause når denne etasjen nås. 0 = av.",
   "auto-level-up-stats": "Egenskaper ved nivåøkning",
   "luck-as-level-up-option": "Flaks som valg ved nivåøkning",
   "active": "Aktiv",

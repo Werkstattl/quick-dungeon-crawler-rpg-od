@@ -220,6 +220,8 @@
   "auto-mode-description": "Tự động giao chiến, nhận chiến lợi phẩm và mở cửa.",
   "auto-mode-show-button": "Hiện nút Tự động",
   "auto-mode-level-up": "Dừng khi lên cấp",
+  "auto-mode-stop-floor": "Dừng ở tầng",
+  "auto-mode-stop-floor-help": "Tạm dừng khi đến tầng này. 0 = tắt.",
   "auto-level-up-stats": "Chỉ số khi lên cấp",
   "luck-as-level-up-option": "May mắn là tùy chọn lên cấp",
   "active": "Hoạt động",

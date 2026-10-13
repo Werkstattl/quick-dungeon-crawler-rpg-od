@@ -220,6 +220,8 @@
   "auto-mode-description": "يواجه الأعداء تلقائيا، ويجمع الغنائم، ويفتح الأبواب.",
   "auto-mode-show-button": "إظهار زر التلقائي",
   "auto-mode-level-up": "التوقف عند رفع المستوى",
+  "auto-mode-stop-floor": "التوقف عند الطابق",
+  "auto-mode-stop-floor-help": "إيقاف مؤقت عند الوصول إلى هذا الطابق. 0 = إيقاف الميزة.",
   "auto-level-up-stats": "إحصاءات رفع المستوى",
   "luck-as-level-up-option": "الحظ كخيار عند رفع المستوى",
   "active": "نشط",

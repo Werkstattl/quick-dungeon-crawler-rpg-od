@@ -233,9 +233,23 @@ main {
     gap: 0.5rem;
 }
 
-#auto-tab > label select {
+#auto-tab > label select,
+#auto-tab > label input[type="number"] {
     flex: 0 0 45%;
     margin-left: auto;
+}
+
+#auto-tab input[type="number"] {
+    width: 0;
+    min-width: 0;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#auto-stop-floor-help {
+    font-size: 0.85em;
+    opacity: 0.8;
 }
 
 #auto-tab input[type="checkbox"] {

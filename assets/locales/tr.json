@@ -220,6 +220,8 @@
   "auto-mode-description": "Düşmanlarla otomatik savaşır, ganimeti alır ve kapıları açar.",
   "auto-mode-show-button": "Otomatik Düğmesini Göster",
   "auto-mode-level-up": "Seviye atlamada dur",
+  "auto-mode-stop-floor": "Durulacak kat",
+  "auto-mode-stop-floor-help": "Bu kata ulaşıldığında duraklat. 0 = kapalı.",
   "auto-level-up-stats": "Seviye atlama özellikleri",
   "luck-as-level-up-option": "Seviye atlama seçeneği olarak şans",
   "active": "Aktif",

@@ -220,6 +220,8 @@
   "auto-mode-description": "적과 자동으로 교전하고, 전리품을 획득하며, 문을 엽니다.",
   "auto-mode-show-button": "자동 버튼 표시",
   "auto-mode-level-up": "레벨 업 시 중지",
+  "auto-mode-stop-floor": "멈출 층",
+  "auto-mode-stop-floor-help": "이 층에 도달하면 일시 정지합니다. 0 = 끄기.",
   "auto-level-up-stats": "레벨 업 능력치",
   "luck-as-level-up-option": "행운을 레벨 업 선택지로 사용",
   "active": "활성",
