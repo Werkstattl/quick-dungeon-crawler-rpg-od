@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Knop Automatisch tonen",
   "auto-mode-level-up": "Stoppen bij niveau omhoog",
   "auto-mode-stop-floor": "Stop op verdieping",
-  "auto-mode-stop-floor-help": "Pauzeer bij het bereiken van deze verdieping. 0 = uit.",
   "auto-level-up-stats": "Eigenschappen bij niveau omhoog",
   "luck-as-level-up-option": "Geluk als optie bij niveau omhoog",
   "active": "Actief",

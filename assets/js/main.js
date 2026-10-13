@@ -917,8 +917,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span class="Epic" data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
-                <label for="auto-stop-floor-input"><span data-i18n="auto-mode-stop-floor">Stop at floor</span> <input id="auto-stop-floor-input" type="number" min="0" max="${Number.MAX_SAFE_INTEGER}" step="1" inputmode="numeric" value="${autoStopFloor}" aria-describedby="auto-stop-floor-help"></label>
-                <p id="auto-stop-floor-help" data-i18n="auto-mode-stop-floor-help">Pause when this floor is reached. 0 = off.</p>
+                <label for="auto-stop-floor-input"><span data-i18n="auto-mode-stop-floor">Stop at floor</span> <input id="auto-stop-floor-input" type="number" min="0" max="${Number.MAX_SAFE_INTEGER}" step="1" inputmode="numeric" value="${autoStopFloor}"></label>
                 <div id="auto-levelup-priority" class="auto-levelup-priority-block">
                     <p data-i18n="auto-level-up-stats">Level-up stats</p>
                     ${autoLevelUpPrioritySelectsMarkup}

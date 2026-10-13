@@ -221,7 +221,6 @@
   "auto-mode-show-button": "نمایش دکمه خودکار",
   "auto-mode-level-up": "توقف هنگام ارتقای سطح",
   "auto-mode-stop-floor": "توقف در طبقه",
-  "auto-mode-stop-floor-help": "پس از رسیدن به این طبقه مکث کنید. 0 = غیرفعال.",
   "auto-level-up-stats": "ویژگی‌های ارتقای سطح",
   "luck-as-level-up-option": "شانس به‌عنوان گزینه ارتقای سطح",
   "active": "فعال",

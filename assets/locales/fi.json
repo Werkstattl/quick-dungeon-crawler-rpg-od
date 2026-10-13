@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Näytä Automaatti-painike",
   "auto-mode-level-up": "Pysähdy tason noustessa",
   "auto-mode-stop-floor": "Pysähdy kerroksessa",
-  "auto-mode-stop-floor-help": "Keskeytä, kun tämä kerros saavutetaan. 0 = pois käytöstä.",
   "auto-level-up-stats": "Tasonnousun ominaisuudet",
   "luck-as-level-up-option": "Onni tasonnousuvaihtoehtona",
   "active": "Aktiivinen",

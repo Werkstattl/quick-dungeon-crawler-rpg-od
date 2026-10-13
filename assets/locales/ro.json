@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Afișează butonul Auto",
   "auto-mode-level-up": "Oprește la creșterea nivelului",
   "auto-mode-stop-floor": "Oprește la etajul",
-  "auto-mode-stop-floor-help": "Pauză la atingerea acestui etaj. 0 = dezactivat.",
   "auto-level-up-stats": "Statistici la creștere de nivel",
   "luck-as-level-up-option": "Noroc ca opțiune la creșterea nivelului",
   "active": "Activ",

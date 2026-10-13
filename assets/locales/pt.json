@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Mostrar botão Auto",
   "auto-mode-level-up": "Parar ao subir de nível",
   "auto-mode-stop-floor": "Parar no andar",
-  "auto-mode-stop-floor-help": "Pausar ao chegar a este andar. 0 = desativado.",
   "auto-level-up-stats": "Atributos de subida de nível",
   "luck-as-level-up-option": "Sorte como opção ao subir de nível",
   "active": "Ativo",

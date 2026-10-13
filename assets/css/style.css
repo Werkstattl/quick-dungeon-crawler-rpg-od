@@ -247,11 +247,6 @@ main {
     margin-bottom: 0;
 }
 
-#auto-stop-floor-help {
-    font-size: 0.85em;
-    opacity: 0.8;
-}
-
 #auto-tab input[type="checkbox"] {
     margin: 0;
 }

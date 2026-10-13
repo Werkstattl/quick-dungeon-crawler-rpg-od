@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Mostra pulsante auto",
   "auto-mode-level-up": "Fermati al level up",
   "auto-mode-stop-floor": "Ferma al piano",
-  "auto-mode-stop-floor-help": "Metti in pausa quando raggiungi questo piano. 0 = disattivato.",
   "auto-level-up-stats": "Statistiche del level up",
   "luck-as-level-up-option": "Fortuna come opzione al level up",
   "active": "Attivo",

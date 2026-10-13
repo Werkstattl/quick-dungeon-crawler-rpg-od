@@ -221,7 +221,6 @@
   "auto-mode-show-button": "แสดงปุ่มอัตโนมัติ",
   "auto-mode-level-up": "หยุดเมื่อเลเวลอัป",
   "auto-mode-stop-floor": "หยุดที่ชั้น",
-  "auto-mode-stop-floor-help": "หยุดชั่วคราวเมื่อถึงชั้นนี้ 0 = ปิด",
   "auto-level-up-stats": "ค่าสถานะเมื่อเลเวลอัป",
   "luck-as-level-up-option": "แสดงโชคเป็นตัวเลือกเมื่อเลเวลอัป",
   "active": "ใช้งานอยู่",

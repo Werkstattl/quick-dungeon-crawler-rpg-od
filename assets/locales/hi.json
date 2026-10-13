@@ -221,7 +221,6 @@
   "auto-mode-show-button": "ऑटो बटन दिखाएँ",
   "auto-mode-level-up": "स्तर बढ़ने पर रोकें",
   "auto-mode-stop-floor": "इस मंज़िल पर रुकें",
-  "auto-mode-stop-floor-help": "इस मंज़िल पर पहुँचने पर विराम दें। 0 = बंद।",
   "auto-level-up-stats": "लेवल-अप आँकड़े",
   "luck-as-level-up-option": "लेवल अप विकल्प के रूप में किस्मत",
   "active": "सक्रिय",

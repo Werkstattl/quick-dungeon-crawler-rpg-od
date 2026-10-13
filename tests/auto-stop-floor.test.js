@@ -236,12 +236,11 @@ test('Auto Mode settings restore and apply the floor preference', () => {
     assert.equal(game.storage.get('autoStopFloor'), '4');
 });
 
-test('every supported locale includes the stop-floor setting and help', () => {
+test('every supported locale includes the stop-floor setting', () => {
     for (const file of fs.readdirSync(path.join(root, 'assets/locales'))) {
         const locale = JSON.parse(fs.readFileSync(path.join(root, 'assets/locales', file), 'utf8'));
-        for (const key of ['auto-mode-stop-floor', 'auto-mode-stop-floor-help']) {
-            assert.equal(typeof locale[key], 'string', `${file}: ${key}`);
-            assert.ok(locale[key].trim());
-        }
+        const key = 'auto-mode-stop-floor';
+        assert.equal(typeof locale[key], 'string', `${file}: ${key}`);
+        assert.ok(locale[key].trim());
     }
 });

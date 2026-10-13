@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Ipakita ang Auto Button",
   "auto-mode-level-up": "Huminto sa pag-level up",
   "auto-mode-stop-floor": "Huminto sa palapag",
-  "auto-mode-stop-floor-help": "I-pause kapag naabot ang palapag na ito. 0 = naka-off.",
   "auto-level-up-stats": "Mga stat sa pag-level up",
   "luck-as-level-up-option": "Suwerte bilang opsyon sa pag-level up",
   "active": "Aktibo",

@@ -221,7 +221,6 @@
   "auto-mode-show-button": "অটো বোতাম দেখান",
   "auto-mode-level-up": "লেভেল বাড়লে থামুন",
   "auto-mode-stop-floor": "এই তলায় থামুন",
-  "auto-mode-stop-floor-help": "এই তলায় পৌঁছালে বিরতি দিন। 0 = বন্ধ।",
   "auto-level-up-stats": "লেভেল-আপ স্ট্যাট",
   "luck-as-level-up-option": "লেভেল-আপ বিকল্প হিসেবে ভাগ্য",
   "active": "সক্রিয়",

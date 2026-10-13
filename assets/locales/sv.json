@@ -221,7 +221,6 @@
   "auto-mode-show-button": "Visa Auto-knappen",
   "auto-mode-level-up": "Stanna vid nivåökning",
   "auto-mode-stop-floor": "Stanna på våning",
-  "auto-mode-stop-floor-help": "Pausa när denna våning nås. 0 = av.",
   "auto-level-up-stats": "Egenskaper vid nivåökning",
   "luck-as-level-up-option": "Tur som val vid nivåökning",
   "active": "Aktiv",
