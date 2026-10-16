@@ -10,6 +10,8 @@
   "title-unlocked-label": "Відкрито",
   "title-locked": "Закрито",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Найкраща перемога: Прокляття {current}",
+  "title-no-monarch-victory": "Перемог ще немає",
   "title-unlocked": "Відкрито титул: {title}",
   "title-membership-badge": "Відзнака учасника",
   "title-source-achievement": "Досягнення",

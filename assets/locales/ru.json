@@ -10,6 +10,8 @@
   "title-unlocked-label": "Открыт",
   "title-locked": "Закрыт",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Лучшая победа: Проклятие {current}",
+  "title-no-monarch-victory": "Побед пока нет",
   "title-unlocked": "Открыт титул: {title}",
   "title-membership-badge": "Знак участника",
   "title-source-achievement": "Достижение",

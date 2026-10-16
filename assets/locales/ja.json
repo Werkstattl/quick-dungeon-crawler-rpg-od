@@ -10,6 +10,8 @@
   "title-unlocked-label": "獲得済み",
   "title-locked": "未獲得",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "最高勝利：呪いレベル{current}",
+  "title-no-monarch-victory": "まだ勝利なし",
   "title-unlocked": "称号を獲得：{title}",
   "title-membership-badge": "メンバーシップバッジ",
   "title-source-achievement": "実績",

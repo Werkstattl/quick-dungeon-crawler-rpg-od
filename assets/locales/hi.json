@@ -10,6 +10,8 @@
   "title-unlocked-label": "अनलॉक",
   "title-locked": "लॉक",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "सर्वश्रेष्ठ जीत: श्राप स्तर {current}",
+  "title-no-monarch-victory": "अभी कोई जीत नहीं",
   "title-unlocked": "उपाधि अनलॉक हुई: {title}",
   "title-membership-badge": "सदस्यता बैज",
   "title-source-achievement": "उपलब्धि",

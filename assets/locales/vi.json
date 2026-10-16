@@ -10,6 +10,8 @@
   "title-unlocked-label": "Đã mở khóa",
   "title-locked": "Chưa mở khóa",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Chiến thắng tốt nhất: Cấp lời nguyền {current}",
+  "title-no-monarch-victory": "Chưa có chiến thắng",
   "title-unlocked": "Đã mở khóa danh hiệu: {title}",
   "title-membership-badge": "Huy hiệu thành viên",
   "title-source-achievement": "Thành tựu",

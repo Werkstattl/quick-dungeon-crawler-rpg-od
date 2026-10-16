@@ -10,6 +10,8 @@
   "title-unlocked-label": "بازشده",
   "title-locked": "قفل‌شده",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "بهترین پیروزی: سطح نفرین {current}",
+  "title-no-monarch-victory": "هنوز پیروزی‌ای ثبت نشده",
   "title-unlocked": "لقب باز شد: {title}",
   "title-membership-badge": "نشان عضویت",
   "title-source-achievement": "دستاورد",

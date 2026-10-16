@@ -10,6 +10,8 @@
   "title-unlocked-label": "Upplåst",
   "title-locked": "Låst",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Bästa seger: Förbannelsenivå {current}",
+  "title-no-monarch-victory": "Inga segrar ännu",
   "title-unlocked": "Titel upplåst: {title}",
   "title-membership-badge": "Medlemsmärke",
   "title-source-achievement": "Prestation",

@@ -10,6 +10,8 @@
   "title-unlocked-label": "Deblocat",
   "title-locked": "Blocat",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Cea mai bună victorie: Blestem {current}",
+  "title-no-monarch-victory": "Nicio victorie încă",
   "title-unlocked": "Titlu deblocat: {title}",
   "title-membership-badge": "Insignă de membru",
   "title-source-achievement": "Realizare",

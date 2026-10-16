@@ -10,6 +10,8 @@
   "title-unlocked-label": "Låst opp",
   "title-locked": "Låst",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Beste seier: Forbannelsesnivå {current}",
+  "title-no-monarch-victory": "Ingen seire ennå",
   "title-unlocked": "Tittel låst opp: {title}",
   "title-membership-badge": "Medlemsmerke",
   "title-source-achievement": "Bragd",

@@ -10,6 +10,8 @@
   "title-unlocked-label": "Avattu",
   "title-locked": "Lukittu",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Paras voitto: Kiroustaso {current}",
+  "title-no-monarch-victory": "Ei vielä voittoja",
   "title-unlocked": "Arvonimi avattu: {title}",
   "title-membership-badge": "Jäsenmerkki",
   "title-source-achievement": "Saavutus",

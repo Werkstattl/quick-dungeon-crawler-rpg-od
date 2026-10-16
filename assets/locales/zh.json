@@ -10,6 +10,8 @@
   "title-unlocked-label": "已解锁",
   "title-locked": "未解锁",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "最佳胜利：诅咒等级{current}",
+  "title-no-monarch-victory": "尚无胜利",
   "title-unlocked": "解锁称号：{title}",
   "title-membership-badge": "会员徽章",
   "title-source-achievement": "成就",

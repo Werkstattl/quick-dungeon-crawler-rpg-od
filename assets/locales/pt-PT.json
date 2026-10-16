@@ -10,6 +10,8 @@
   "title-unlocked-label": "Desbloqueado",
   "title-locked": "Bloqueado",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Melhor vitória: Maldição {current}",
+  "title-no-monarch-victory": "Nenhuma vitória ainda",
   "title-unlocked": "Título desbloqueado: {title}",
   "title-membership-badge": "Distintivo de membro",
   "title-source-achievement": "Conquista",

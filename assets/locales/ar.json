@@ -10,6 +10,8 @@
   "title-unlocked-label": "مفتوح",
   "title-locked": "مقفل",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "أفضل انتصار: مستوى اللعنة {current}",
+  "title-no-monarch-victory": "لا انتصارات بعد",
   "title-unlocked": "تم فتح لقب: {title}",
   "title-membership-badge": "شارة العضوية",
   "title-source-achievement": "إنجاز",

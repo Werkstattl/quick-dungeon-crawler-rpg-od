@@ -10,6 +10,8 @@
   "title-unlocked-label": "ปลดล็อกแล้ว",
   "title-locked": "ยังไม่ปลดล็อก",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "ชัยชนะที่ดีที่สุด: คำสาประดับ {current}",
+  "title-no-monarch-victory": "ยังไม่มีชัยชนะ",
   "title-unlocked": "ปลดล็อกฉายา: {title}",
   "title-membership-badge": "ตราสมาชิก",
   "title-source-achievement": "ความสำเร็จ",

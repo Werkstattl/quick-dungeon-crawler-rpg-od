@@ -10,6 +10,8 @@
   "title-unlocked-label": "আনলক করা",
   "title-locked": "লক করা",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "সেরা জয়: অভিশাপ লেভেল {current}",
+  "title-no-monarch-victory": "এখনও কোনো জয় নেই",
   "title-unlocked": "উপাধি আনলক হয়েছে: {title}",
   "title-membership-badge": "সদস্যপদের ব্যাজ",
   "title-source-achievement": "অর্জন",

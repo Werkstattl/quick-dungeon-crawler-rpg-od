@@ -10,6 +10,8 @@
   "title-unlocked-label": "Unlocked",
   "title-locked": "Locked",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Best victory: Curse {current}",
+  "title-no-monarch-victory": "No victories yet",
   "title-unlocked": "Title unlocked: {title}",
   "title-membership-badge": "Membership badge",
   "title-source-achievement": "Achievement",

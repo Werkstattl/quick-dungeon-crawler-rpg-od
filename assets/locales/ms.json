@@ -10,6 +10,8 @@
   "title-unlocked-label": "Dibuka",
   "title-locked": "Terkunci",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Kemenangan terbaik: Sumpahan {current}",
+  "title-no-monarch-victory": "Belum ada kemenangan",
   "title-unlocked": "Gelaran dibuka: {title}",
   "title-membership-badge": "Lencana keahlian",
   "title-source-achievement": "Pencapaian",

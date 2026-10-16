@@ -10,6 +10,8 @@
   "title-unlocked-label": "해금됨",
   "title-locked": "잠김",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "최고 승리: 저주 레벨 {current}",
+  "title-no-monarch-victory": "아직 승리 없음",
   "title-unlocked": "칭호 해금: {title}",
   "title-membership-badge": "멤버십 배지",
   "title-source-achievement": "업적",

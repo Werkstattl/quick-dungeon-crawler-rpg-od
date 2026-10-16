@@ -10,6 +10,8 @@
   "title-unlocked-label": "Odblokowany",
   "title-locked": "Zablokowany",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Najlepsze zwycięstwo: Klątwa {current}",
+  "title-no-monarch-victory": "Brak zwycięstw",
   "title-unlocked": "Odblokowano tytuł: {title}",
   "title-membership-badge": "Odznaka członkowska",
   "title-source-achievement": "Osiągnięcie",

@@ -10,6 +10,8 @@
   "title-unlocked-label": "Låst op",
   "title-locked": "Låst",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Bedste sejr: Forbandelsesniveau {current}",
+  "title-no-monarch-victory": "Ingen sejre endnu",
   "title-unlocked": "Titel låst op: {title}",
   "title-membership-badge": "Medlemsmærke",
   "title-source-achievement": "Bedrift",

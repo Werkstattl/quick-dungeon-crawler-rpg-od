@@ -10,6 +10,8 @@
   "title-unlocked-label": "Débloqué",
   "title-locked": "Verrouillé",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Meilleure victoire : Malédiction {current}",
+  "title-no-monarch-victory": "Aucune victoire pour le moment",
   "title-unlocked": "Titre débloqué : {title}",
   "title-membership-badge": "Insigne de membre",
   "title-source-achievement": "Succès",

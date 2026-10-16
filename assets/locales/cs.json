@@ -10,6 +10,8 @@
   "title-unlocked-label": "Odemčený",
   "title-locked": "Zamčený",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Nejlepší vítězství: Kletba {current}",
+  "title-no-monarch-victory": "Zatím žádná vítězství",
   "title-unlocked": "Odemčen titul: {title}",
   "title-membership-badge": "Členský odznak",
   "title-source-achievement": "Úspěch",

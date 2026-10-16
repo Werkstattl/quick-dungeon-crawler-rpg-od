@@ -10,6 +10,8 @@
   "title-unlocked-label": "Açıldı",
   "title-locked": "Kilitli",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "En iyi zafer: Lanet {current}",
+  "title-no-monarch-victory": "Henüz zafer yok",
   "title-unlocked": "Unvan açıldı: {title}",
   "title-membership-badge": "Üyelik rozeti",
   "title-source-achievement": "Başarım",

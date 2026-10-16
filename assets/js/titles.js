@@ -196,6 +196,10 @@ function renderPlayerTitleChoice(title, selectedId) {
     const progress = Math.min(title.target, getPlayerTitleProgress(title));
     const status = selected ? titleText('title-equipped', 'Equipped')
         : unlocked ? titleText('title-unlocked-label', 'Unlocked')
+        : title.metric === 'highestMonarchCurse'
+            ? progress > 0
+                ? titleText('title-progress-monarch', 'Best victory: Curse {current}', { current: progress })
+                : titleText('title-no-monarch-victory', 'No victories yet')
         : title.metric === 'membership'
             ? titleText('title-locked', 'Locked')
             : titleText('title-progress', '{current}/{target}', { current: progress, target: title.target });

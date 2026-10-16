@@ -10,6 +10,8 @@
   "title-unlocked-label": "Ontgrendeld",
   "title-locked": "Vergrendeld",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Beste overwinning: Vloekniveau {current}",
+  "title-no-monarch-victory": "Nog geen overwinningen",
   "title-unlocked": "Titel ontgrendeld: {title}",
   "title-membership-badge": "Lidmaatschapsbadge",
   "title-source-achievement": "Prestatie",

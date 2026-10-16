@@ -10,6 +10,8 @@
   "title-unlocked-label": "Freigeschaltet",
   "title-locked": "Gesperrt",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Bester Sieg: Fluchstufe {current}",
+  "title-no-monarch-victory": "Noch keine Siege",
   "title-unlocked": "Titel freigeschaltet: {title}",
   "title-membership-badge": "Mitgliedschaftsabzeichen",
   "title-source-achievement": "Errungenschaft",

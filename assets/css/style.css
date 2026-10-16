@@ -1717,6 +1717,7 @@ header {
 
 .title-choice-heading {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
     gap: 0.6rem;
@@ -1725,6 +1726,7 @@ header {
 
 .title-choice-status {
     flex-shrink: 0;
+    max-width: 100%;
     font-size: calc(0.75rem * var(--font-scale));
     color: var(--accent);
 }

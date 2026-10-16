@@ -10,6 +10,8 @@
   "title-unlocked-label": "Nabuksan",
   "title-locked": "Naka-lock",
   "title-progress": "{current}/{target}",
+  "title-progress-monarch": "Pinakamahusay na tagumpay: Sumpa {current}",
+  "title-no-monarch-victory": "Wala pang tagumpay",
   "title-unlocked": "Nabuksang titulo: {title}",
   "title-membership-badge": "Tsapa ng Miyembro",
   "title-source-achievement": "Tagumpay",
