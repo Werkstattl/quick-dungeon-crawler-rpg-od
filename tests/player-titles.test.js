@@ -181,22 +181,25 @@ test('depth milestones award at their thresholds and preserve earlier titles', (
     assert.equal(state.run('getSelectedPlayerTitle()'), null);
 });
 
-test('bestiary milestones count defeated known enemy types and persist across bestiary reloads', () => {
-    const state = createState();
-    for (let id = 1; id <= 9; id++) state.context.bestiary[id] = { e: 1, k: 1 };
-    state.context.bestiary[10] = { e: 100, k: 0 };
-    state.context.bestiary[999] = { k: 100 };
-    state.run('syncPlayerTitleUnlocks()');
-    assert.equal(state.run('isPlayerTitleUnlocked("field-scholar")'), false);
-    for (let id = 10; id <= 40; id++) state.context.bestiary[id] = { e: 1, k: 1 };
-    state.run('syncPlayerTitleUnlocks({ announce: true })');
-    for (const id of ['field-scholar', 'beast-chronicler', 'living-bestiary']) {
-        assert.equal(state.run(`isPlayerTitleUnlocked('${id}')`), true);
+test('unreleased bestiary titles are removed from saves while other titles and bestiary records survive', () => {
+    const removedTitles = ['field-scholar', 'beast-chronicler', 'living-bestiary'];
+    for (const selected of [...removedTitles, 'dungeon-delver']) {
+        const state = createState({ titles: {
+            version: 2, unlocked: [...removedTitles, 'dungeon-delver'], selected,
+            progress: { bestiaryTypes: 40, highestFloor: 5 },
+        } });
+        for (let id = 1; id <= 42; id++) state.context.bestiary[id] = { e: 1, k: 1 };
+        const bestiaryBefore = JSON.stringify(state.context.bestiary);
+        state.run('syncPlayerTitleUnlocks({ announce: true })');
+        assert.deepEqual(state.unlocked(), ['dungeon-delver']);
+        assert.equal(state.context.player.titles.selected, selected === 'dungeon-delver' ? selected : null);
+        assert.equal(Object.hasOwn(state.context.player.titles.progress, 'bestiaryTypes'), false);
+        assert.equal(JSON.stringify(state.context.bestiary), bestiaryBefore);
+        assert.equal(state.logs.length, 0);
+        const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
+        reloaded.run('syncPlayerTitleUnlocks()');
+        assert.deepEqual(reloaded.unlocked(), ['dungeon-delver']);
     }
-    state.context.bestiary = {};
-    state.run('syncPlayerTitleUnlocks()');
-    assert.equal(state.context.player.titles.progress.bestiaryTypes, 40);
-    assert.equal(state.logs.length, 3);
 });
 
 test('Curse unlocks award their titles through the real progression handler', () => {
@@ -427,14 +430,14 @@ test('the endgame screen applies the chosen rarity and hides an empty title', ()
 test('malformed title saves are normalized without retaining unknown or paid unlocks', () => {
     const state = createState({ titles: {
         selected: 'nonexistent', unlocked: ['cursebound', 'cursebound', 'forge-member', 'invalid'],
-        progress: { highestFloor: 'invalid', highestMonarchCurse: 100, bestiaryTypes: -4, hardcoreMonarch: 'true' },
+        progress: { highestFloor: 'invalid', highestMonarchCurse: 100, deepMonarchFloor: -4, hardcoreMonarch: 'true' },
     } });
     state.run('normalizePlayerTitles(player)');
     assert.deepEqual(state.unlocked(), ['cursebound']);
     assert.equal(state.context.player.titles.selected, null);
     assert.equal(state.context.player.titles.progress.highestFloor, 0);
     assert.equal(state.context.player.titles.progress.highestMonarchCurse, 15);
-    assert.equal(state.context.player.titles.progress.bestiaryTypes, 0);
+    assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
     assert.equal(state.context.player.titles.progress.hardcoreMonarch, false);
 });
 
@@ -535,7 +538,8 @@ test('changing language refreshes the open title picker and equipped title in ev
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-back'])), `${lang} must translate the back button label`);
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-current'].replace('{title}', locale['title-cursebound']))));
         const groupIds = Array.from(html.matchAll(/<section class="title-group" aria-labelledby="title-group-([^"\s]+)"/g), match => match[1]);
-        assert.deepEqual(groupIds, ['depth', 'bestiary', 'curse', 'monarch', 'challenges', 'membership']);
+        assert.deepEqual(groupIds, ['depth', 'curse', 'monarch', 'challenges', 'membership']);
+        assert.ok(html.includes(state.context.escapeTitleHTML(locale['titles-count'].replace('{current}', '3').replace('{total}', '11'))));
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-requirement-deep-monarch'].replace('{target}', '45'))));
         assert.ok(Object.hasOwn(locale, 'title-curseforged'));
         assert.equal(Object.hasOwn(locale, 'title-crowncrusher'), false);

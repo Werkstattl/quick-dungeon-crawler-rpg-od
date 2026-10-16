@@ -4,9 +4,6 @@ const PLAYER_TITLES = [
     { id: 'dungeon-delver', name: 'Dungeon Delver', rarity: 'Common', group: 'depth', metric: 'highestFloor', target: 5 },
     { id: 'depthwalker', name: 'Depthwalker', rarity: 'Uncommon', group: 'depth', metric: 'highestFloor', target: 20 },
     { id: 'abyss-strider', name: 'Abyss Strider', rarity: 'Rare', group: 'depth', metric: 'highestFloor', target: 40 },
-    { id: 'field-scholar', name: 'Field Scholar', rarity: 'Uncommon', group: 'bestiary', metric: 'bestiaryTypes', target: 10 },
-    { id: 'beast-chronicler', name: 'Beast Chronicler', rarity: 'Rare', group: 'bestiary', metric: 'bestiaryTypes', target: 25 },
-    { id: 'living-bestiary', name: 'Living Bestiary', rarity: 'Epic', group: 'bestiary', metric: 'bestiaryTypes', target: 40 },
     { id: 'cursebound', name: 'Cursebound', rarity: 'Rare', group: 'curse', metric: 'curse', target: 5 },
     { id: 'hexbreaker', name: 'Hexbreaker', rarity: 'Epic', group: 'curse', metric: 'curse', target: 10 },
     { id: 'curseforged', name: 'Curseforged', rarity: 'Legendary', group: 'curse', metric: 'curse', target: 15 },
@@ -18,7 +15,7 @@ const PLAYER_TITLES = [
     { id: 'forge-member', name: 'Forge Member', rarity: null, group: 'membership', metric: 'membership', target: 1 },
 ];
 
-const PLAYER_TITLE_GROUPS = ['depth', 'bestiary', 'curse', 'monarch', 'challenges', 'membership'];
+const PLAYER_TITLE_GROUPS = ['depth', 'curse', 'monarch', 'challenges', 'membership'];
 
 // Match renamed titles to their original achievement, not the reused display name.
 const LEGACY_PLAYER_TITLE_IDS = {
@@ -68,7 +65,7 @@ function normalizePlayerTitles(playerData) {
             id !== 'forge-member' && getPlayerTitleDefinition(id)))] : [],
         progress: {},
     };
-    for (const field of ['highestFloor', 'highestMonarchCurse', 'bestiaryTypes', 'deepMonarchFloor']) {
+    for (const field of ['highestFloor', 'highestMonarchCurse', 'deepMonarchFloor']) {
         const number = Number(progress[field]);
         normalized.progress[field] = Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
     }
@@ -129,8 +126,8 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
     if (curse > MAX_STANDARD_CURSE_LEVEL) {
         progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, curse - 1);
     }
-    if (typeof bestiary !== 'undefined' && typeof enemyData !== 'undefined') {
-        const hasMonarchKill = typeof enemyPools !== 'undefined' && Object.values(enemyPools).some(pool =>
+    if (typeof bestiary !== 'undefined' && typeof enemyPools !== 'undefined') {
+        const hasMonarchKill = Object.values(enemyPools).some(pool =>
             pool.sboss.some(id => {
                 const kills = Number(bestiary[id] && bestiary[id].k);
                 return Number.isFinite(kills) && kills >= 1;
@@ -140,8 +137,6 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
             progress.highestFloor = Math.max(progress.highestFloor, 20);
             progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, 1);
         }
-        const defeatedTypes = Object.keys(enemyData).filter(id => bestiary[id] && Number(bestiary[id].k) > 0).length;
-        progress.bestiaryTypes = Math.max(progress.bestiaryTypes, defeatedTypes);
     }
     const unlocked = PLAYER_TITLES.filter(title => title.id !== 'forge-member'
         && !state.unlocked.includes(title.id) && getPlayerTitleProgress(title) >= title.target);
@@ -188,7 +183,6 @@ function getPlayerTitleRequirement(title) {
         highestFloor: ['title-requirement-floor', 'Reach Floor {target}.'],
         curse: ['title-requirement-curse', 'Unlock Curse Level {target}.'],
         highestMonarchCurse: ['title-requirement-monarch', 'Defeat the Dungeon Monarch on Curse Level {target} or higher.'],
-        bestiaryTypes: ['title-requirement-bestiary', 'Defeat {target} different enemy types.'],
         deepMonarchFloor: ['title-requirement-deep-monarch', 'Defeat the Dungeon Monarch on Floor {target} or deeper at Curse Level 10 or higher.'],
         hardcoreMonarch: ['title-requirement-hardcore', 'Defeat the Dungeon Monarch in Hardcore at Curse Level 10 or higher.'],
         membership: ['title-requirement-membership', 'Available with an active Forge Membership or Lifetime Membership.'],
@@ -224,7 +218,7 @@ function renderTitlesModal() {
     const selectedId = selected ? selected.id : null;
     const achievementTitles = PLAYER_TITLES.filter(title => title.metric !== 'membership');
     const count = achievementTitles.filter(title => isPlayerTitleUnlocked(title.id)).length;
-    const groupNames = { depth: 'Dungeon Depth', curse: 'Curse Mastery', monarch: 'Monarch Slayer', bestiary: 'Bestiary', challenges: 'Challenges', membership: 'Forge Membership' };
+    const groupNames = { depth: 'Dungeon Depth', curse: 'Curse Mastery', monarch: 'Monarch Slayer', challenges: 'Challenges', membership: 'Forge Membership' };
     modal.innerHTML = `<div class="content titles-modal">
         <div class="content-head"><h3 data-i18n="titles">${escapeTitleHTML(titleText('titles', 'Titles'))}</h3><button type="button" id="titles-close" class="title-close" aria-label="${escapeTitleHTML(titleText('title-back', 'Back to profile'))}"><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
         <p class="titles-description" data-i18n="titles-description">${escapeTitleHTML(titleText('titles-description', 'Choose a title to display beneath your name. Earned titles stay with you across runs.'))}</p>
