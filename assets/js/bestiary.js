@@ -702,7 +702,10 @@ function openBestiaryModal() {
     }
   }
 
-  loadMoreBtn.onclick = renderBatch;
+  loadMoreBtn.onclick = () => {
+    sfxConfirm.play();
+    renderBatch();
+  };
   sortByEl.onchange = resetAndRender;
   sortDirEl.onchange = resetAndRender;
   resetAndRender(); // first chunk
