@@ -22,7 +22,6 @@ function createState(overrides = {}, storage = new Map()) {
             statistics: {}, backlog: [],
         },
         bestiary: {},
-        enemyData: Object.fromEntries(Array.from({ length: 51 }, (_, i) => [i + 1, {}])),
         defaultModalElement: { style: { display: 'none' }, querySelector: () => null },
         localStorage: {
             getItem: key => storage.get(key) || null,
@@ -36,6 +35,7 @@ function createState(overrides = {}, storage = new Map()) {
         playerLoadStats() {},
     });
     vm.runInContext(source('progression.js'), context);
+    vm.runInContext(source('enemy.js').split('const isSavedEnemyValidForDungeon =')[0], context);
     vm.runInContext(source('utility.js').split('const nFormatter =')[0], context);
     vm.runInContext(source('titles.js'), context);
     context.saveData = () => vm.runInContext('persistPlayerTitles()', context);
@@ -48,6 +48,7 @@ function createState(overrides = {}, storage = new Map()) {
 
 test('old Curse 15 saves receive proven milestones without claiming a Curse 15 victory', () => {
     const state = createState({ maxUnlockedCurseLevel: 15, selectedCurseLevel: 15 });
+    state.context.bestiary[43] = { e: 1, k: 1 };
     state.run('syncPlayerTitleUnlocks()');
     assert.deepEqual(state.unlocked(), [
         'dungeon-delver', 'depthwalker', 'cursebound', 'hexbreaker',
@@ -57,6 +58,44 @@ test('old Curse 15 saves receive proven milestones without claiming a Curse 15 v
     assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), false);
     assert.equal(state.logs.length, 0);
     assert.equal(JSON.parse(state.storage.get('playerData')).titles.progress.highestMonarchCurse, 14);
+});
+
+test('every recorded Monarch variant credits old winners and persists only the proven milestones', () => {
+    for (const id of [43, 44, 45, 46, 47, 48, 49, 50, 51]) {
+        const state = createState({ hardcore: true });
+        state.context.bestiary[id] = { e: 1, k: '1' };
+        state.run('syncPlayerTitleUnlocks({ dungeonData: null })');
+        assert.deepEqual(state.unlocked(), ['dungeon-delver', 'depthwalker', 'crownbreaker']);
+        assert.equal(state.context.player.titles.progress.highestFloor, 20);
+        assert.equal(state.context.player.titles.progress.highestMonarchCurse, 1);
+        assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
+        assert.equal(state.context.player.titles.progress.hardcoreMonarch, false);
+        assert.equal(state.context.player.maxUnlockedCurseLevel, 1);
+        assert.equal(state.logs.length, 0);
+
+        state.run('setPlayerTitle("crownbreaker")');
+        const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
+        assert.equal(reloaded.run('syncPlayerTitleUnlocks({ announce: true }).length'), 0);
+        assert.deepEqual(reloaded.unlocked(), ['dungeon-delver', 'depthwalker', 'crownbreaker']);
+        assert.equal(reloaded.run('getSelectedPlayerTitle().id'), 'crownbreaker');
+        assert.equal(reloaded.context.player.titles.progress.highestFloor, 20);
+        assert.equal(reloaded.logs.length, 0);
+    }
+});
+
+test('encounters, other enemy kills and invalid kill counts do not prove a Monarch victory', () => {
+    for (const bestiary of [
+        {}, { 43: { e: 10 } }, { 43: { e: 10, k: 0 } },
+        { 1: { k: 100 }, 28: { k: 10 }, 42: { k: 10 }, 999: { k: 100 } },
+        ...[-1, 0.5, 'invalid', Infinity].map(k => ({ 43: { k } })),
+    ]) {
+        const state = createState();
+        state.context.bestiary = bestiary;
+        state.run('syncPlayerTitleUnlocks()');
+        assert.deepEqual(state.unlocked(), []);
+        assert.equal(state.context.player.titles.progress.highestMonarchCurse, 0);
+        assert.equal(state.context.player.titles.progress.highestFloor, 1);
+    }
 });
 
 test('legacy title unlocks and selections follow their achievement and migrate only once', () => {

@@ -130,6 +130,16 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
         progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, curse - 1);
     }
     if (typeof bestiary !== 'undefined' && typeof enemyData !== 'undefined') {
+        const hasMonarchKill = typeof enemyPools !== 'undefined' && Object.values(enemyPools).some(pool =>
+            pool.sboss.some(id => {
+                const kills = Number(bestiary[id] && bestiary[id].k);
+                return Number.isFinite(kills) && kills >= 1;
+            }));
+        if (hasMonarchKill) {
+            // Monarch kills prove Floor 20 and a victory, but not its difficulty or mode.
+            progress.highestFloor = Math.max(progress.highestFloor, 20);
+            progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, 1);
+        }
         const defeatedTypes = Object.keys(enemyData).filter(id => bestiary[id] && Number(bestiary[id].k) > 0).length;
         progress.bestiaryTypes = Math.max(progress.bestiaryTypes, defeatedTypes);
     }
