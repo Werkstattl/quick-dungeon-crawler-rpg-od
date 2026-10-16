@@ -11,7 +11,6 @@ const PLAYER_TITLES = [
     { id: 'kingsbane', name: 'Kingsbane', rarity: 'Epic', group: 'monarch', metric: 'highestMonarchCurse', target: 10 },
     { id: 'sovereign-of-ruin', name: 'Sovereign of Ruin', rarity: 'Heirloom', group: 'monarch', metric: 'highestMonarchCurse', target: 15 },
     { id: 'deep-crowned', name: 'Deep-Crowned', rarity: 'Legendary', group: 'challenges', metric: 'deepMonarchFloor', target: 45 },
-    { id: 'the-unbroken', name: 'The Unbroken', rarity: 'Legendary', group: 'challenges', metric: 'hardcoreMonarch', target: 1 },
     { id: 'forge-member', name: 'Forge Member', rarity: null, group: 'membership', metric: 'membership', target: 1 },
 ];
 
@@ -70,7 +69,6 @@ function normalizePlayerTitles(playerData) {
         normalized.progress[field] = Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
     }
     normalized.progress.highestMonarchCurse = Math.min(MAX_CURSE_LEVEL, normalized.progress.highestMonarchCurse);
-    normalized.progress.hardcoreMonarch = progress.hardcoreMonarch === true;
     // An absent choice preserves the existing automatic Forge Member display.
     // Explicitly choosing None or an earned title always takes precedence.
     if (Object.prototype.hasOwnProperty.call(old, 'selected')) {
@@ -161,7 +159,6 @@ function recordPlayerMonarchVictory() {
     state.progress.highestMonarchCurse = Math.max(state.progress.highestMonarchCurse, curse);
     if (curse >= 10) {
         state.progress.deepMonarchFloor = Math.max(state.progress.deepMonarchFloor, floor);
-        if (player.hardcore) state.progress.hardcoreMonarch = true;
     }
     syncPlayerTitleUnlocks({ announce: true, log: typeof addCombatLog === 'function' ? addCombatLog : null });
     // The recorded victory must persist even if it awarded no new title.
@@ -184,7 +181,6 @@ function getPlayerTitleRequirement(title) {
         curse: ['title-requirement-curse', 'Unlock Curse Level {target}.'],
         highestMonarchCurse: ['title-requirement-monarch', 'Defeat the Dungeon Monarch on Curse Level {target} or higher.'],
         deepMonarchFloor: ['title-requirement-deep-monarch', 'Defeat the Dungeon Monarch on Floor {target} or deeper at Curse Level 10 or higher.'],
-        hardcoreMonarch: ['title-requirement-hardcore', 'Defeat the Dungeon Monarch in Hardcore at Curse Level 10 or higher.'],
         membership: ['title-requirement-membership', 'Available with an active Forge Membership or Lifetime Membership.'],
     };
     const [key, fallback] = requirements[title.metric];
@@ -200,7 +196,7 @@ function renderPlayerTitleChoice(title, selectedId) {
     const progress = Math.min(title.target, getPlayerTitleProgress(title));
     const status = selected ? titleText('title-equipped', 'Equipped')
         : unlocked ? titleText('title-unlocked-label', 'Unlocked')
-        : title.metric === 'membership' || title.metric === 'hardcoreMonarch'
+        : title.metric === 'membership'
             ? titleText('title-locked', 'Locked')
             : titleText('title-progress', '{current}/{target}', { current: progress, target: title.target });
     return `<button type="button" class="title-choice${selected ? ' title-choice-selected' : ''}" data-title-id="${title.id}" aria-pressed="${selected}" ${unlocked ? '' : 'disabled'}>

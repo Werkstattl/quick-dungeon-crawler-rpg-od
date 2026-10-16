@@ -55,7 +55,6 @@ test('old Curse 15 saves receive proven milestones without claiming a Curse 15 v
         'curseforged', 'crownbreaker', 'kingsbane',
     ]);
     assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), false);
-    assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), false);
     assert.equal(state.logs.length, 0);
     assert.equal(JSON.parse(state.storage.get('playerData')).titles.progress.highestMonarchCurse, 14);
 });
@@ -69,7 +68,6 @@ test('every recorded Monarch variant credits old winners and persists only the p
         assert.equal(state.context.player.titles.progress.highestFloor, 20);
         assert.equal(state.context.player.titles.progress.highestMonarchCurse, 1);
         assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
-        assert.equal(state.context.player.titles.progress.hardcoreMonarch, false);
         assert.equal(state.context.player.maxUnlockedCurseLevel, 1);
         assert.equal(state.logs.length, 0);
 
@@ -181,12 +179,12 @@ test('depth milestones award at their thresholds and preserve earlier titles', (
     assert.equal(state.run('getSelectedPlayerTitle()'), null);
 });
 
-test('unreleased bestiary titles are removed from saves while other titles and bestiary records survive', () => {
-    const removedTitles = ['field-scholar', 'beast-chronicler', 'living-bestiary'];
+test('removed unreleased titles are cleared from saves while other titles and bestiary records survive', () => {
+    const removedTitles = ['field-scholar', 'beast-chronicler', 'living-bestiary', 'the-unbroken'];
     for (const selected of [...removedTitles, 'dungeon-delver']) {
         const state = createState({ titles: {
             version: 2, unlocked: [...removedTitles, 'dungeon-delver'], selected,
-            progress: { bestiaryTypes: 40, highestFloor: 5 },
+            progress: { bestiaryTypes: 40, hardcoreMonarch: true, highestFloor: 5 },
         } });
         for (let id = 1; id <= 42; id++) state.context.bestiary[id] = { e: 1, k: 1 };
         const bestiaryBefore = JSON.stringify(state.context.bestiary);
@@ -194,6 +192,7 @@ test('unreleased bestiary titles are removed from saves while other titles and b
         assert.deepEqual(state.unlocked(), ['dungeon-delver']);
         assert.equal(state.context.player.titles.selected, selected === 'dungeon-delver' ? selected : null);
         assert.equal(Object.hasOwn(state.context.player.titles.progress, 'bestiaryTypes'), false);
+        assert.equal(Object.hasOwn(state.context.player.titles.progress, 'hardcoreMonarch'), false);
         assert.equal(JSON.stringify(state.context.bestiary), bestiaryBefore);
         assert.equal(state.logs.length, 0);
         const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
@@ -231,37 +230,30 @@ test('a real floor transition awards the first title immediately', () => {
     assert.match(state.logs[0], /Dungeon Delver/);
 });
 
-test('Monarch and challenge rewards use the defeated run difficulty', () => {
+test('Monarch and depth challenge rewards use the defeated run difficulty', () => {
     const state = createState({ maxUnlockedCurseLevel: 15, selectedCurseLevel: 15, hardcore: true });
     state.context.dungeon.settings.enemyScaling = 1.9;
     state.context.dungeon.progress.floor = 45;
     state.run('recordPlayerMonarchVictory()');
     assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), false);
     assert.equal(state.run('isPlayerTitleUnlocked("deep-crowned")'), false);
-    assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), false);
     state.context.dungeon.settings.enemyScaling = 2.5;
     state.run('recordPlayerMonarchVictory()');
-    for (const id of ['sovereign-of-ruin', 'deep-crowned', 'the-unbroken']) {
+    for (const id of ['sovereign-of-ruin', 'deep-crowned']) {
         assert.equal(state.run(`isPlayerTitleUnlocked('${id}')`), true);
     }
     assert.equal(JSON.parse(state.storage.get('playerData')).titles.progress.highestMonarchCurse, 15);
 });
 
-test('deep and Hardcore titles require their separate conditions at Curse 10+', () => {
-    const state = createState({ maxUnlockedCurseLevel: 10, selectedCurseLevel: 10 });
-    state.context.dungeon.settings.enemyScaling = 2;
-    state.context.dungeon.progress.floor = 44;
-    state.run('recordPlayerMonarchVictory()');
-    assert.equal(state.run('isPlayerTitleUnlocked("deep-crowned")'), false);
-    assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), false);
+test('all ten achievement titles can be earned in normal mode without membership', () => {
+    const state = createState({ maxUnlockedCurseLevel: 15, selectedCurseLevel: 15, hardcore: false });
+    state.context.dungeon.settings.enemyScaling = 2.5;
     state.context.dungeon.progress.floor = 45;
     state.run('recordPlayerMonarchVictory()');
-    assert.equal(state.run('isPlayerTitleUnlocked("deep-crowned")'), true);
-    assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), false);
-    state.context.player.hardcore = true;
-    state.context.dungeon.progress.floor = 20;
-    state.run('recordPlayerMonarchVictory()');
-    assert.equal(state.run('isPlayerTitleUnlocked("the-unbroken")'), true);
+    assert.equal(state.unlocked().length, 10);
+    assert.equal(state.run('PLAYER_TITLES.filter(title => title.metric !== "membership").every(title => isPlayerTitleUnlocked(title.id))'), true);
+    assert.equal(state.run('isPlayerTitleUnlocked("forge-member")'), false);
+    assert.equal(state.context.player.hardcore, false);
 });
 
 test('the depth challenge requires a Monarch victory at Floor 45 and Curse 10+', () => {
@@ -430,7 +422,7 @@ test('the endgame screen applies the chosen rarity and hides an empty title', ()
 test('malformed title saves are normalized without retaining unknown or paid unlocks', () => {
     const state = createState({ titles: {
         selected: 'nonexistent', unlocked: ['cursebound', 'cursebound', 'forge-member', 'invalid'],
-        progress: { highestFloor: 'invalid', highestMonarchCurse: 100, deepMonarchFloor: -4, hardcoreMonarch: 'true' },
+        progress: { highestFloor: 'invalid', highestMonarchCurse: 100, deepMonarchFloor: -4 },
     } });
     state.run('normalizePlayerTitles(player)');
     assert.deepEqual(state.unlocked(), ['cursebound']);
@@ -438,7 +430,6 @@ test('malformed title saves are normalized without retaining unknown or paid unl
     assert.equal(state.context.player.titles.progress.highestFloor, 0);
     assert.equal(state.context.player.titles.progress.highestMonarchCurse, 15);
     assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
-    assert.equal(state.context.player.titles.progress.hardcoreMonarch, false);
 });
 
 test('title cards expose requirements, progress and rarity and disable locked titles', () => {
@@ -539,7 +530,7 @@ test('changing language refreshes the open title picker and equipped title in ev
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-current'].replace('{title}', locale['title-cursebound']))));
         const groupIds = Array.from(html.matchAll(/<section class="title-group" aria-labelledby="title-group-([^"\s]+)"/g), match => match[1]);
         assert.deepEqual(groupIds, ['depth', 'curse', 'monarch', 'challenges', 'membership']);
-        assert.ok(html.includes(state.context.escapeTitleHTML(locale['titles-count'].replace('{current}', '3').replace('{total}', '11'))));
+        assert.ok(html.includes(state.context.escapeTitleHTML(locale['titles-count'].replace('{current}', '3').replace('{total}', '10'))));
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-requirement-deep-monarch'].replace('{target}', '45'))));
         assert.ok(Object.hasOwn(locale, 'title-curseforged'));
         assert.equal(Object.hasOwn(locale, 'title-crowncrusher'), false);
