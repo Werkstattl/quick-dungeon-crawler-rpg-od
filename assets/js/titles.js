@@ -212,12 +212,13 @@ function renderTitlesModal() {
     const scrollTop = previousList ? previousList.scrollTop : 0;
     const selected = getSelectedPlayerTitle();
     const selectedId = selected ? selected.id : null;
-    const count = PLAYER_TITLES.filter(title => isPlayerTitleUnlocked(title.id)).length;
+    const achievementTitles = PLAYER_TITLES.filter(title => title.metric !== 'membership');
+    const count = achievementTitles.filter(title => isPlayerTitleUnlocked(title.id)).length;
     const groupNames = { depth: 'Dungeon Depth', curse: 'Curse Mastery', monarch: 'Monarch Slayer', bestiary: 'Bestiary', challenges: 'Challenges', membership: 'Forge Membership' };
     modal.innerHTML = `<div class="content titles-modal">
         <div class="content-head"><h3 data-i18n="titles">${escapeTitleHTML(titleText('titles', 'Titles'))}</h3><button type="button" id="titles-close" class="title-close" aria-label="${escapeTitleHTML(titleText('title-back', 'Back to profile'))}"><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
         <p class="titles-description" data-i18n="titles-description">${escapeTitleHTML(titleText('titles-description', 'Choose a title to display beneath your name. Earned titles stay with you across runs.'))}</p>
-        <p class="titles-count">${escapeTitleHTML(titleText('titles-count', '{current}/{total} titles unlocked', { current: count, total: PLAYER_TITLES.length }))}</p>
+        <p class="titles-count">${escapeTitleHTML(titleText('titles-count', '{current}/{total} titles unlocked', { current: count, total: achievementTitles.length }))}</p>
         <p id="title-selection-status" class="titles-current" aria-live="polite">${escapeTitleHTML(titleText('title-current', 'Current title: {title}', { title: selected ? getPlayerTitleName(selected) : titleText('title-none', 'None') }))}</p>
         <div id="titles-list" class="titles-list">
             <button type="button" class="title-choice${selectedId === null ? ' title-choice-selected' : ''}" data-title-id="" aria-pressed="${selectedId === null}"><span class="title-choice-heading"><span data-i18n="title-none">${escapeTitleHTML(titleText('title-none', 'None'))}</span><span class="title-choice-status">${escapeTitleHTML(selectedId === null ? titleText('title-equipped', 'Equipped') : '')}</span></span><span class="title-choice-requirement" data-i18n="title-none-description">${escapeTitleHTML(titleText('title-none-description', 'Display your name without a title.'))}</span></button>
