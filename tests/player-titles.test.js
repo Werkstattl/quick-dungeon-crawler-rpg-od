@@ -96,44 +96,6 @@ test('encounters, other enemy kills and invalid kill counts do not prove a Monar
     }
 });
 
-test('legacy title unlocks and selections follow their achievement and migrate only once', () => {
-    for (const [oldId, newId, name] of [
-        ['sovereign-of-ruin', 'curseforged', 'Curseforged'],
-        ['kingsbane', 'crownbreaker', 'Crownbreaker'],
-        ['crowncrusher', 'kingsbane', 'Kingsbane'],
-        ['crownbreaker', 'sovereign-of-ruin', 'Sovereign of Ruin'],
-    ]) {
-        const state = createState({ titles: { unlocked: [oldId], selected: oldId } });
-        // Reading an equipped title must also work before the next unlock sync.
-        assert.equal(state.run('getSelectedPlayerTitle().id'), newId);
-        assert.equal(state.run('getPlayerDisplayName("Hero")'), `Hero [${name}]`);
-        state.run('syncPlayerTitleUnlocks()');
-        assert.deepEqual(state.unlocked(), [newId]);
-        assert.equal(state.context.player.titles.version, 2);
-        const before = JSON.stringify(state.context.player.titles);
-        state.run('normalizePlayerTitles(player); persistPlayerTitles()');
-        assert.equal(JSON.stringify(state.context.player.titles), before);
-        const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
-        reloaded.run('syncPlayerTitleUnlocks()');
-        assert.equal(reloaded.run('getSelectedPlayerTitle().id'), newId);
-        assert.deepEqual(reloaded.unlocked(), [newId]);
-    }
-});
-
-test('an old Curse 15 title does not grant the new Curse 15 Monarch achievement', () => {
-    const state = createState({ maxUnlockedCurseLevel: 15, titles: {
-        unlocked: ['sovereign-of-ruin'], selected: 'sovereign-of-ruin',
-    } });
-    state.run('syncPlayerTitleUnlocks()');
-    assert.equal(state.run('getSelectedPlayerTitle().id'), 'curseforged');
-    assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), false);
-    state.context.dungeon.settings.enemyScaling = 2.5;
-    state.context.dungeon.progress.floor = 20;
-    state.run('recordPlayerMonarchVictory()');
-    assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), true);
-    assert.equal(state.run('getSelectedPlayerTitle().id'), 'curseforged');
-});
-
 test('Monarch titles progress from the first victory through Curse 10 to Curse 15', () => {
     const state = createState();
     state.context.dungeon.progress.floor = 20;
@@ -151,7 +113,7 @@ test('Monarch titles progress from the first victory through Curse 10 to Curse 1
     }
 });
 
-test('earned depth challenge titles survive the raised requirement and explicit None survives migration', () => {
+test('normalization preserves earned titles and an explicit None selection', () => {
     const state = createState({ titles: { unlocked: ['deep-crowned'], selected: 'deep-crowned',
         progress: { deepMonarchFloor: 40 },
     } });
@@ -533,7 +495,6 @@ test('changing language refreshes the open title picker and equipped title in ev
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['titles-count'].replace('{current}', '3').replace('{total}', '10'))));
         assert.ok(html.includes(state.context.escapeTitleHTML(locale['title-requirement-deep-monarch'].replace('{target}', '45'))));
         assert.ok(Object.hasOwn(locale, 'title-curseforged'));
-        assert.equal(Object.hasOwn(locale, 'title-crowncrusher'), false);
         assert.doesNotMatch(html, /\{(?:current|target|total|title)\}/, `${lang} must interpolate progress and requirement values`);
     }
 });

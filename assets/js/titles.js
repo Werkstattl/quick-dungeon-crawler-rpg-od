@@ -16,14 +16,6 @@ const PLAYER_TITLES = [
 
 const PLAYER_TITLE_GROUPS = ['depth', 'curse', 'monarch', 'challenges', 'membership'];
 
-// Match renamed titles to their original achievement, not the reused display name.
-const LEGACY_PLAYER_TITLE_IDS = {
-    'sovereign-of-ruin': 'curseforged',
-    kingsbane: 'crownbreaker',
-    crowncrusher: 'kingsbane',
-    crownbreaker: 'sovereign-of-ruin',
-};
-
 function titleText(key, fallback, params) {
     const translated = typeof t === 'function' ? t(key, params) : key;
     if (typeof translated === 'string' && translated !== key) return translated;
@@ -54,13 +46,10 @@ function normalizePlayerTitles(playerData) {
     if (!playerData || typeof playerData !== 'object') return null;
     const old = playerData.titles && typeof playerData.titles === 'object' ? playerData.titles : {};
     const progress = old.progress && typeof old.progress === 'object' ? old.progress : {};
-    const migrateId = id => typeof id !== 'string' || Number(old.version) >= PLAYER_TITLE_VERSION
-        || !Object.prototype.hasOwnProperty.call(LEGACY_PLAYER_TITLE_IDS, id)
-        ? id : LEGACY_PLAYER_TITLE_IDS[id];
     const normalized = {
         version: PLAYER_TITLE_VERSION,
         // Membership is checked against purchase entitlements, never imported unlocks.
-        unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.map(migrateId).filter(id =>
+        unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.filter(id =>
             id !== 'forge-member' && getPlayerTitleDefinition(id)))] : [],
         progress: {},
     };
@@ -72,8 +61,7 @@ function normalizePlayerTitles(playerData) {
     // An absent choice preserves the existing automatic Forge Member display.
     // Explicitly choosing None or an earned title always takes precedence.
     if (Object.prototype.hasOwnProperty.call(old, 'selected')) {
-        const selected = migrateId(old.selected);
-        normalized.selected = getPlayerTitleDefinition(selected) ? selected : null;
+        normalized.selected = getPlayerTitleDefinition(old.selected) ? old.selected : null;
     }
     playerData.titles = normalized;
     return normalized;
