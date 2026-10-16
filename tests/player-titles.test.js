@@ -145,7 +145,7 @@ test('removed unreleased titles are cleared from saves while other titles and be
     const removedTitles = ['field-scholar', 'beast-chronicler', 'living-bestiary', 'the-unbroken'];
     for (const selected of [...removedTitles, 'dungeon-delver']) {
         const state = createState({ titles: {
-            version: 2, unlocked: [...removedTitles, 'dungeon-delver'], selected,
+            unlocked: [...removedTitles, 'dungeon-delver'], selected,
             progress: { bestiaryTypes: 40, hardcoreMonarch: true, highestFloor: 5 },
         } });
         for (let id = 1; id <= 42; id++) state.context.bestiary[id] = { e: 1, k: 1 };

@@ -1,5 +1,4 @@
 // Cosmetic accomplishments live in the player save and survive normal run resets.
-const PLAYER_TITLE_VERSION = 2;
 const PLAYER_TITLES = [
     { id: 'dungeon-delver', name: 'Dungeon Delver', rarity: 'Common', group: 'depth', metric: 'highestFloor', target: 5 },
     { id: 'depthwalker', name: 'Depthwalker', rarity: 'Uncommon', group: 'depth', metric: 'highestFloor', target: 20 },
@@ -47,7 +46,6 @@ function normalizePlayerTitles(playerData) {
     const old = playerData.titles && typeof playerData.titles === 'object' ? playerData.titles : {};
     const progress = old.progress && typeof old.progress === 'object' ? old.progress : {};
     const normalized = {
-        version: PLAYER_TITLE_VERSION,
         // Membership is checked against purchase entitlements, never imported unlocks.
         unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.filter(id =>
             id !== 'forge-member' && getPlayerTitleDefinition(id)))] : [],
@@ -79,14 +77,12 @@ function isPlayerTitleUnlocked(id, playerData = player) {
     const title = getPlayerTitleDefinition(id);
     if (!title || !playerData) return false;
     if (id === 'forge-member') return isForgeMembershipActive();
-    if (playerData.titles && playerData.titles.version !== PLAYER_TITLE_VERSION) normalizePlayerTitles(playerData);
     return Boolean(playerData.titles && Array.isArray(playerData.titles.unlocked)
         && playerData.titles.unlocked.includes(id));
 }
 
 function getSelectedPlayerTitle(playerData = player) {
     if (!playerData) return null;
-    if (playerData.titles && playerData.titles.version !== PLAYER_TITLE_VERSION) normalizePlayerTitles(playerData);
     const state = playerData.titles;
     const id = state && Object.prototype.hasOwnProperty.call(state, 'selected')
         ? state.selected : 'forge-member';
