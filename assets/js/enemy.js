@@ -239,7 +239,7 @@ const generateRandomEnemy = (condition) => {
 };
 
 // Set a randomly generated stat for the enemy
-const ENEMY_CRIT_DAMAGE_CAP = 800;
+const ENEMY_CRIT_DAMAGE_CAP = 700;
 
 const setEnemyStats = (type, condition) => {
     if (type == 'Offensive') {

@@ -18,11 +18,11 @@ const createContext = (affixMultiplier = 1) => {
     return context;
 };
 
-test('all enemy conditions cap high-level crit damage at 800 percent', () => {
+test('all enemy conditions cap high-level crit damage at 700 percent', () => {
     const context = createContext();
     for (const condition of ['base', 'guardian', 'sboss']) {
         vm.runInContext(`enemy.lvl = 500; setEnemyStats('Lethal', '${condition}')`, context);
-        assert.equal(vm.runInContext('enemy.stats.critDmg', context), 800);
+        assert.equal(vm.runInContext('enemy.stats.critDmg', context), 700);
     }
 });
 
@@ -37,13 +37,13 @@ test('the cap applies after dungeon and affix multipliers', () => {
     vm.runInContext("enemy.lvl = 1; setEnemyStats('Lethal', 'base')", context);
     context.dungeon.enemyMultipliers.critDmg = 10;
     vm.runInContext("setEnemyStats('Lethal', 'base')", context);
-    assert.equal(vm.runInContext('enemy.stats.critDmg', context), 800);
+    assert.equal(vm.runInContext('enemy.stats.critDmg', context), 700);
 });
 
 test('restoring an encounter caps saved crit damage without increasing lower values', () => {
     const context = createContext();
-    for (const value of [1200, 800, 50, 0]) {
+    for (const value of [1200, 800, 700, 50, 0]) {
         vm.runInContext(`enemy.stats.critDmg = ${value}; ensureEnemyAffixState()`, context);
-        assert.equal(vm.runInContext('enemy.stats.critDmg', context), Math.min(value, 800));
+        assert.equal(vm.runInContext('enemy.stats.critDmg', context), Math.min(value, 700));
     }
 });
