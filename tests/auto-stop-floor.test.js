@@ -183,10 +183,11 @@ test('Auto Mode cannot resume at the target until the limit is changed', () => {
 
 test('floor preferences survive reloads and malformed values default to off', () => {
     const game = setup();
+    assert.equal(setup({ stopFloor: null }).run('autoStopFloor'), 20);
     game.run('setAutoStopFloor("123")');
     assert.equal(game.storage.get('autoStopFloor'), '123');
     assert.equal(setup({ stopFloor: game.storage.get('autoStopFloor') }).run('autoStopFloor'), 123);
-    for (const value of [null, '', '0', '-1', '3.5', '3abc', 'Infinity', 'NaN', '9007199254740992']) {
+    for (const value of ['', '0', '-1', '3.5', '3abc', 'Infinity', 'NaN', '9007199254740992']) {
         assert.equal(setup({ stopFloor: value }).run('autoStopFloor'), 0);
     }
 });
