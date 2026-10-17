@@ -1,7 +1,7 @@
 {
   "titles": "Títulos",
   "title-back": "Voltar ao perfil",
-  "titles-description": "Escolhe um título para mostrar por baixo do teu nome. Os títulos conquistados mantêm-se entre partidas.",
+  "titles-description": "Escolhe um título para mostrar por baixo do teu nome.",
   "titles-count": "{current}/{total} títulos desbloqueados",
   "title-current": "Título atual: {title}",
   "title-none": "Nenhum",

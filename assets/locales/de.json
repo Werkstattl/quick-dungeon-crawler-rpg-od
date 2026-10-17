@@ -1,7 +1,7 @@
 {
   "titles": "Titel",
   "title-back": "Zurück zum Profil",
-  "titles-description": "Wähle einen Titel unter deinem Namen. Verdiente Titel bleiben über alle Läufe hinweg erhalten.",
+  "titles-description": "Wähle einen Titel unter deinem Namen.",
   "titles-count": "{current}/{total} Titel freigeschaltet",
   "title-current": "Aktueller Titel: {title}",
   "title-none": "Keiner",

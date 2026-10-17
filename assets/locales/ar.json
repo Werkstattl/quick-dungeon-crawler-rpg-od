@@ -1,7 +1,7 @@
 {
   "titles": "الألقاب",
   "title-back": "العودة إلى الملف الشخصي",
-  "titles-description": "اختر لقبًا لعرضه أسفل اسمك. تبقى الألقاب التي تكسبها معك بين المغامرات.",
+  "titles-description": "اختر لقبًا لعرضه أسفل اسمك.",
   "titles-count": "الألقاب المفتوحة: {current}/{total}",
   "title-current": "اللقب الحالي: {title}",
   "title-none": "بلا لقب",

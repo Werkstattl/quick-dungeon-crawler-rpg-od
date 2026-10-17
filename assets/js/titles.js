@@ -209,7 +209,7 @@ function renderTitlesModal() {
     const groupNames = { depth: 'Dungeon Depth', curse: 'Curse Mastery', monarch: 'Monarch Slayer', challenges: 'Challenges', membership: 'Forge Membership' };
     modal.innerHTML = `<div class="content titles-modal">
         <div class="content-head"><h3 data-i18n="titles">${escapeTitleHTML(titleText('titles', 'Titles'))}</h3><button type="button" id="titles-close" class="title-close" aria-label="${escapeTitleHTML(titleText('title-back', 'Back to profile'))}"><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
-        <p class="titles-description" data-i18n="titles-description">${escapeTitleHTML(titleText('titles-description', 'Choose a title to display beneath your name. Earned titles stay with you across runs.'))}</p>
+        <p class="titles-description" data-i18n="titles-description">${escapeTitleHTML(titleText('titles-description', 'Choose a title to display beneath your name.'))}</p>
         <p class="titles-count">${escapeTitleHTML(titleText('titles-count', '{current}/{total} titles unlocked', { current: count, total: achievementTitles.length }))}</p>
         <p id="title-selection-status" class="titles-current" aria-live="polite">${escapeTitleHTML(titleText('title-current', 'Current title: {title}', { title: selected ? getPlayerTitleName(selected) : titleText('title-none', 'None') }))}</p>
         <div id="titles-list" class="titles-list">

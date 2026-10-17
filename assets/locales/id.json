@@ -1,7 +1,7 @@
 {
   "titles": "Gelar",
   "title-back": "Kembali ke profil",
-  "titles-description": "Pilih gelar untuk ditampilkan di bawah namamu. Gelar yang diperoleh tetap tersimpan di setiap petualangan.",
+  "titles-description": "Pilih gelar untuk ditampilkan di bawah namamu.",
   "titles-count": "{current}/{total} gelar terbuka",
   "title-current": "Gelar saat ini: {title}",
   "title-none": "Tanpa gelar",

@@ -1,7 +1,7 @@
 {
   "titles": "称号",
   "title-back": "プロフィールに戻る",
-  "titles-description": "名前の下に表示する称号を選びましょう。獲得した称号は次の冒険にも引き継がれます。",
+  "titles-description": "名前の下に表示する称号を選びましょう。",
   "titles-count": "称号の獲得数：{current}/{total}",
   "title-current": "現在の称号：{title}",
   "title-none": "なし",

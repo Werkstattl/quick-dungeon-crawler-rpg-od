@@ -1,7 +1,7 @@
 {
   "titles": "Titels",
   "title-back": "Terug naar profiel",
-  "titles-description": "Kies een titel om onder je naam te tonen. Verdiende titels blijven behouden tussen avonturen.",
+  "titles-description": "Kies een titel om onder je naam te tonen.",
   "titles-count": "{current}/{total} titels ontgrendeld",
   "title-current": "Huidige titel: {title}",
   "title-none": "Geen",

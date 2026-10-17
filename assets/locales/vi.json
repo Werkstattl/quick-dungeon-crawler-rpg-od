@@ -1,7 +1,7 @@
 {
   "titles": "Danh hiệu",
   "title-back": "Quay lại hồ sơ",
-  "titles-description": "Chọn danh hiệu để hiển thị dưới tên của bạn. Danh hiệu đã đạt được sẽ được giữ lại qua các lượt chơi.",
+  "titles-description": "Chọn danh hiệu để hiển thị dưới tên của bạn.",
   "titles-count": "Đã mở khóa {current}/{total} danh hiệu",
   "title-current": "Danh hiệu hiện tại: {title}",
   "title-none": "Không có",

@@ -1,7 +1,7 @@
 {
   "titles": "Titoli",
   "title-back": "Torna al profilo",
-  "titles-description": "Scegli un titolo da mostrare sotto il tuo nome. I titoli ottenuti si conservano tra le partite.",
+  "titles-description": "Scegli un titolo da mostrare sotto il tuo nome.",
   "titles-count": "{current}/{total} titoli sbloccati",
   "title-current": "Titolo attuale: {title}",
   "title-none": "Nessuno",

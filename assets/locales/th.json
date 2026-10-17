@@ -1,7 +1,7 @@
 {
   "titles": "ฉายา",
   "title-back": "กลับไปยังโปรไฟล์",
-  "titles-description": "เลือกฉายาที่จะแสดงใต้ชื่อของคุณ ฉายาที่ได้รับจะคงอยู่ในการผจญภัยครั้งต่อไป",
+  "titles-description": "เลือกฉายาที่จะแสดงใต้ชื่อของคุณ",
   "titles-count": "ปลดล็อกฉายาแล้ว {current}/{total}",
   "title-current": "ฉายาปัจจุบัน: {title}",
   "title-none": "ไม่มี",

@@ -1,7 +1,7 @@
 {
   "titles": "Mga titulo",
   "title-back": "Bumalik sa profile",
-  "titles-description": "Pumili ng titulong ipapakita sa ilalim ng iyong pangalan. Mananatili ang mga nakamit na titulo sa bawat pakikipagsapalaran.",
+  "titles-description": "Pumili ng titulong ipapakita sa ilalim ng iyong pangalan.",
   "titles-count": "{current}/{total} titulong nabuksan",
   "title-current": "Kasalukuyang titulo: {title}",
   "title-none": "Wala",

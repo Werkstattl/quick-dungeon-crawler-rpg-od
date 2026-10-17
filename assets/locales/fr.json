@@ -1,7 +1,7 @@
 {
   "titles": "Titres",
   "title-back": "Retour au profil",
-  "titles-description": "Choisissez un titre à afficher sous votre nom. Les titres obtenus sont conservés d’une partie à l’autre.",
+  "titles-description": "Choisissez un titre à afficher sous votre nom.",
   "titles-count": "{current}/{total} titres débloqués",
   "title-current": "Titre actuel : {title}",
   "title-none": "Aucun",

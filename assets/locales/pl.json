@@ -1,7 +1,7 @@
 {
   "titles": "Tytuły",
   "title-back": "Powrót do profilu",
-  "titles-description": "Wybierz tytuł wyświetlany pod imieniem. Zdobyte tytuły pozostają z tobą między rozgrywkami.",
+  "titles-description": "Wybierz tytuł wyświetlany pod imieniem.",
   "titles-count": "Odblokowane tytuły: {current}/{total}",
   "title-current": "Obecny tytuł: {title}",
   "title-none": "Brak",

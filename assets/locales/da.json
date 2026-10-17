@@ -1,7 +1,7 @@
 {
   "titles": "Titler",
   "title-back": "Tilbage til profilen",
-  "titles-description": "Vælg en titel, der vises under dit navn. Optjente titler bevares mellem eventyr.",
+  "titles-description": "Vælg en titel, der vises under dit navn.",
   "titles-count": "{current}/{total} titler låst op",
   "title-current": "Nuværende titel: {title}",
   "title-none": "Ingen",

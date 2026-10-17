@@ -1,7 +1,7 @@
 {
   "titles": "Tituly",
   "title-back": "Zpět na profil",
-  "titles-description": "Vyber si titul, který se zobrazí pod tvým jménem. Získané tituly ti zůstanou i v dalších výpravách.",
+  "titles-description": "Vyber si titul, který se zobrazí pod tvým jménem.",
   "titles-count": "Odemčené tituly: {current}/{total}",
   "title-current": "Současný titul: {title}",
   "title-none": "Žádný",

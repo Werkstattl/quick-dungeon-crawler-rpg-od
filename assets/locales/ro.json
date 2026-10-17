@@ -1,7 +1,7 @@
 {
   "titles": "Titluri",
   "title-back": "Înapoi la profil",
-  "titles-description": "Alege un titlu de afișat sub numele tău. Titlurile câștigate se păstrează de la o aventură la alta.",
+  "titles-description": "Alege un titlu de afișat sub numele tău.",
   "titles-count": "{current}/{total} titluri deblocate",
   "title-current": "Titlu actual: {title}",
   "title-none": "Niciunul",

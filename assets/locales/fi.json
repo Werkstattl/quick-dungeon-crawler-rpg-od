@@ -1,7 +1,7 @@
 {
   "titles": "Arvonimet",
   "title-back": "Takaisin profiiliin",
-  "titles-description": "Valitse nimesi alla näytettävä arvonimi. Ansaitut arvonimet säilyvät seikkailusta toiseen.",
+  "titles-description": "Valitse nimesi alla näytettävä arvonimi.",
   "titles-count": "Avatut arvonimet: {current}/{total}",
   "title-current": "Nykyinen arvonimi: {title}",
   "title-none": "Ei arvonimeä",

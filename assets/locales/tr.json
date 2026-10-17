@@ -1,7 +1,7 @@
 {
   "titles": "Unvanlar",
   "title-back": "Profile dön",
-  "titles-description": "Adının altında gösterilecek bir unvan seç. Kazanılan unvanlar maceralar arasında korunur.",
+  "titles-description": "Adının altında gösterilecek bir unvan seç.",
   "titles-count": "{current}/{total} unvan açıldı",
   "title-current": "Mevcut unvan: {title}",
   "title-none": "Yok",

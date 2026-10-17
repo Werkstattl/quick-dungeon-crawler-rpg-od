@@ -1,7 +1,7 @@
 {
   "titles": "稱號",
   "title-back": "返回個人資料",
-  "titles-description": "選擇顯示在名字下方的稱號。已獲得的稱號會保留到以後的冒險中。",
+  "titles-description": "選擇顯示在名字下方的稱號。",
   "titles-count": "已解鎖稱號：{current}/{total}",
   "title-current": "目前稱號：{title}",
   "title-none": "無",

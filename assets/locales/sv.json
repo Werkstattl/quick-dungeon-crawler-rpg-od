@@ -1,7 +1,7 @@
 {
   "titles": "Titlar",
   "title-back": "Tillbaka till profilen",
-  "titles-description": "Välj en titel som visas under ditt namn. Intjänade titlar behålls mellan äventyr.",
+  "titles-description": "Välj en titel som visas under ditt namn.",
   "titles-count": "{current}/{total} titlar upplåsta",
   "title-current": "Nuvarande titel: {title}",
   "title-none": "Ingen",

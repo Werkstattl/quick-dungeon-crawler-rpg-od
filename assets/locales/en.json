@@ -1,7 +1,7 @@
 {
   "titles": "Titles",
   "title-back": "Back to profile",
-  "titles-description": "Choose a title to display beneath your name. Earned titles stay with you across runs.",
+  "titles-description": "Choose a title to display beneath your name.",
   "titles-count": "{current}/{total} titles unlocked",
   "title-current": "Current title: {title}",
   "title-none": "None",
