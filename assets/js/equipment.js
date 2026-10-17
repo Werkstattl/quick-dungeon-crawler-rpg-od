@@ -2242,6 +2242,7 @@ const getEquipmentStatAbbreviation = (statKey) => {
 };
 
 const AUTO_SELL_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
+const AUTO_SELL_ALL_RARITIES = "all";
 
 const shouldAutoSellEquipment = (equipment) => {
     if (typeof autoMode === 'undefined' || typeof autoSellRarity === 'undefined') {
@@ -2253,11 +2254,19 @@ const shouldAutoSellEquipment = (equipment) => {
     if (!autoMode) {
         return false;
     }
+    // "All" is meant for material/gold farming runs. A Companion Charm drop is the only
+    // way to obtain a new charm, so it must never be swept up by that setting.
+    if (autoSellRarity === AUTO_SELL_ALL_RARITIES
+        && typeof isCompanionCharm === 'function' && isCompanionCharm(equipment)) {
+        return false;
+    }
     const thresholdIndex = AUTO_SELL_RARITY_ORDER.indexOf(autoSellRarity);
     const itemIndex = AUTO_SELL_RARITY_ORDER.indexOf(equipment.rarity);
-    const meetsRarityRule = autoSellRarity && autoSellRarity !== 'none'
-        ? thresholdIndex > 0 && itemIndex >= 0 && itemIndex < thresholdIndex
-        : false;
+    const meetsRarityRule = autoSellRarity === AUTO_SELL_ALL_RARITIES
+        ? itemIndex >= 0
+        : (autoSellRarity && autoSellRarity !== 'none'
+            ? thresholdIndex > 0 && itemIndex >= 0 && itemIndex < thresholdIndex
+            : false);
     const levelThreshold = typeof autoSellBelowLevel === 'number' ? autoSellBelowLevel : 0;
     const itemLevel = Number.isFinite(equipment.lvl) ? equipment.lvl : 0;
     const meetsLevelRule = levelThreshold > 0 && itemLevel > 0 && itemLevel < levelThreshold;
