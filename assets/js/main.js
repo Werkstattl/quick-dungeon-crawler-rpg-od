@@ -518,7 +518,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         <div class="content">
             <div class="content-head">
                 <h3 data-i18n="menu">Menu</h3>
-                <p id="close-menu"><i class="fa fa-xmark"></i></p>
+                <button type="button" class="title-close" id="close-menu" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
             </div>
             <button id="player-menu"><i class="fas fa-user"></i>${player.name}</button>
             ${isTitle ? '' : '<button id="stats"><i class="fas fa-chart-line"></i> <span data-i18n="current-run">Current Run</span></button>'}
@@ -577,7 +577,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             <div class="content" id="forge-membership-tab">
                 <div class="content-head">
                     <h3 data-i18n="forge-membership">The Forge Membership</h3>
-                    <p id="forge-membership-close"><i class="fa fa-xmark"></i></p>
+                    <button type="button" class="title-close" id="forge-membership-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                 </div>
                 <p data-i18n="forge-membership-description">Support ongoing development of Quick Dungeon Crawler and receive Forge Member benefits.</p>
                 <div class="forge-unlock-options">
@@ -633,7 +633,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <div class="content" id="run-tab">
                     <div class="content-head">
                         <h3 data-i18n="current-run">Current Run</h3>
-                        <p id="run-close"><i class="fa fa-xmark"></i></p>
+                        <button type="button" class="title-close" id="run-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                     </div>
                     <p>${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
                     <p>${t('blessings')}: Lvl.${player.blessing}</p>
@@ -736,7 +736,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             <div class="content" id="volume-tab">
                 <div class="content-head">
                     <h3 data-i18n="settings">Settings</h3>
-                    <p id="volume-close"><i class="fa fa-xmark"></i></p>
+                    <button type="button" class="title-close" id="volume-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                 </div>
                 <label id="master-label" for="master-volume">Master (${master}%)</label>
                 <input type="range" id="master-volume" min="0" max="100" value="${master}">
@@ -904,7 +904,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             <div class="content" id="auto-tab">
                 <div class="content-head">
                     <h3 data-i18n="auto-mode">Auto Mode</h3>
-                    <p id="auto-close"><i class="fa fa-xmark"></i></p>
+                    <button type="button" class="title-close" id="auto-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                 </div>
                 <p data-i18n="auto-mode-description">Automatically engage enemies, claim loot and open doors.</p>
                 ${!autoModeUnlocked ? '<button id="unlock-auto" data-i18n="auto-mode-unlock">Unlock Auto Mode (Premium)</button>' : ''}
@@ -1052,7 +1052,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             <div class="content content-ei" id="ei-tab">
                 <div class="content-head">
                     <h3 data-i18n="export-import-data">Export/Import Data</h3>
-                    <p id="ei-close"><i class="fa fa-xmark"></i></p>
+                    <button type="button" class="title-close" id="ei-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                 </div>
                 <h4 data-i18n="export-data">Export Data</h4>
                 <input type="text" id="export-input" autocomplete="off" value="${exportedData}" readonly>

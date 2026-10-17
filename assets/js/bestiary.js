@@ -275,7 +275,7 @@ function openBestiaryModal() {
     <div class="content" id="bestiary-modal">
       <div class="content-head">
         <h3 data-i18n="bestiary">Bestiary</h3>
-        <p id="bestiary-close"><i class="fa fa-xmark"></i></p>
+        <button type="button" class="title-close" id="bestiary-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
       </div>
       <div class="bestiary-controls" id="bestiary-controls">
         <span class="label" data-i18n="sort">Sort</span>

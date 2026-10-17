@@ -175,7 +175,7 @@ const openAutoModeUnlockModal = () => {
         <div class="content forge-unlock-modal auto-mode-unlock-modal">
             <div class="content-head">
                 <h3><i class="fas fa-play"></i> <span data-i18n="auto-mode-unlock">Purchase: Auto Mode</span></h3>
-                <p id="auto-mode-unlock-close"><i class="fa fa-xmark"></i></p>
+                <button type="button" class="title-close" id="auto-mode-unlock-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
             </div>
             <p data-i18n="auto-mode-description">Automatically engage enemies, claim loot and open doors.</p>
             <div class="forge-unlock-options">
