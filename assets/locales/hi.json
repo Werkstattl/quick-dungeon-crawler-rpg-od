@@ -187,10 +187,10 @@
   "runtime": "रन समय",
   "curse": "श्राप",
   "curse-level-unlocked": "नया श्राप स्तर अनलॉक हुआ! (स्तर {level})",
-  "curse-levels-unlocked": "अनलॉक किए गए अभिशाप स्तर: {current}/{max}",
-  "curse-next-unlock-floor": "अभिशाप स्तर {current} पर मंजिल {floor} तक पहुंचें और अभिशाप स्तर {next} अनलॉक करें।",
-  "curse-next-unlock-monarch": "अभिशाप स्तर {current} पर डंज़न मोनार्क को हराएं और अभिशाप स्तर {next} अनलॉक करें।",
-  "curse-all-unlocked": "सभी अभिशाप स्तर अनलॉक हो गए।",
+  "curse-levels-unlocked": "अनलॉक किए गए श्राप स्तर: {current}/{max}",
+  "curse-next-unlock-floor": "श्राप स्तर {current} पर मंजिल {floor} तक पहुंचें और श्राप स्तर {next} अनलॉक करें।",
+  "curse-next-unlock-monarch": "श्राप स्तर {current} पर डंज़न मोनार्क को हराएं और श्राप स्तर {next} अनलॉक करें।",
+  "curse-all-unlocked": "सभी श्राप स्तर अनलॉक हो गए।",
   "bestiary": "बेस्टियरी",
   "enemy-damage-unlock": "{enemy} महारत अनलॉक: इस दुश्मन के खिलाफ +{value}% नुकसान।",
   "rename": "नाम बदलें",
@@ -675,7 +675,7 @@
   "forge-tokens": "फोर्ज टोकन",
   "forge-token-merchant-offer": "एक घूमता हुआ लोहार दिखाई देता है: {cost} सोने में एक फोर्ज टोकन खरीदें?",
   "forge-token-merchant-purchase": "आपने {cost} सोने में एक फोर्ज टोकन खरीदा।",
-  "forge-free-access-hint": "सुझाव: फ्लोर 13 पर एक घूमता हुआ लोहार गोल्ड के बदले फोर्ज टोकन बेचता है।",
+  "forge-free-access-hint": "सुझाव: मंजिल 13 पर एक घूमता हुआ लोहार गोल्ड के बदले फोर्ज टोकन बेचता है।",
   "stat-lock": "आँकड़े लॉक करें",
   "stat-lock-help": "लॉक किए गए आँकड़ों का प्रकार और मान बरकरार रहता है। कम से कम एक आँकड़ा अनलॉक रहना चाहिए।"
 }
