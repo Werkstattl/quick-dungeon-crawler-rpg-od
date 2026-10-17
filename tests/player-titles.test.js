@@ -152,7 +152,24 @@ test('depth milestones award at their thresholds and preserve earlier titles', (
     state.context.dungeon.progress.floor = 1;
     state.run('syncPlayerTitleUnlocks()');
     assert.equal(state.context.player.titles.highestFloor, 40);
-    assert.equal(state.run('getSelectedPlayerTitle()'), null);
+    assert.equal(state.run('getSelectedPlayerTitle().id'), 'dungeon-delver');
+});
+
+test('the first unlock preserves an explicit choice, an active membership title and prior earned titles', () => {
+    for (const overrides of [
+        { titles: { unlocked: 0, selected: null } },
+        { titles: { unlocked: 8, selected: 'cursebound' } },
+        { titles: { unlocked: 8 } },
+        {},
+    ]) {
+        const state = createState(overrides);
+        if (!overrides.titles) state.storage.set('forgeMembershipActive', 'true');
+        const selectedBefore = state.run('getSelectedPlayerTitle()?.id ?? null');
+        state.context.dungeon.progress.floor = 5;
+        state.run('syncPlayerTitleUnlocks()');
+        assert.equal(state.run('isPlayerTitleUnlocked("dungeon-delver")'), true);
+        assert.equal(state.run('getSelectedPlayerTitle()?.id ?? null'), selectedBefore);
+    }
 });
 
 test('removed unreleased titles are cleared from saves while other titles and bestiary records survive', () => {
@@ -195,6 +212,8 @@ test('Curse unlocks award their titles through the real progression handler', ()
 
 test('a real floor transition awards the first title immediately', () => {
     const state = createState();
+    const displayedTitles = [];
+    state.context.playerLoadStats = () => displayedTitles.push(state.run('getPlayerTitleHTML()'));
     const dungeon = source('dungeon.js');
     const element = { setAttribute() {}, textContent: '' };
     Object.assign(state.context, {
@@ -207,8 +226,16 @@ test('a real floor transition awards the first title immediately', () => {
         dungeon.indexOf('// ========== Events in the Dungeon')), state.context);
     state.run('loadDungeonProgress()');
     assert.equal(state.run('isPlayerTitleUnlocked("dungeon-delver")'), true);
+    assert.equal(state.run('getSelectedPlayerTitle().id'), 'dungeon-delver');
+    assert.equal(displayedTitles.length, 1);
+    assert.match(displayedTitles[0], /Dungeon Delver/);
     assert.match(state.logs[0], /Dungeon Delver/);
     assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
+    const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
+    reloaded.run('syncPlayerTitleUnlocks()');
+    assert.equal(reloaded.run('getSelectedPlayerTitle().id'), 'dungeon-delver');
+    reloaded.run('setPlayerTitle(null); syncPlayerTitleUnlocks()');
+    assert.equal(reloaded.run('getSelectedPlayerTitle()'), null);
 });
 
 test('Monarch and depth challenge rewards use the defeated run difficulty', () => {
@@ -298,7 +325,7 @@ test('a selected membership title is hidden on expiry and restored by lifetime o
 });
 
 test('purchase entitlement updates respect title selection and lifetime ownership', () => {
-    const state = createState({ maxUnlockedCurseLevel: 10 });
+    const state = createState({ maxUnlockedCurseLevel: 10, titles: { unlocked: 1 } });
     state.context.document = { querySelector: () => null };
     const main = source('main.js');
     vm.runInContext(main.slice(main.indexOf('function setForgeMembershipActive('),

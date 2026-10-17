@@ -119,8 +119,14 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
     }
     const unlocked = PLAYER_TITLES.filter(title => title.bit
         && !(state.unlocked & title.bit) && getPlayerTitleProgress(title) >= title.target);
+    const autoSelectFirstTitle = state.unlocked === 0
+        && !Object.prototype.hasOwnProperty.call(state, 'selected')
+        && !getSelectedPlayerTitle()
+        && unlocked.some(title => title.id === 'dungeon-delver');
     unlocked.forEach(title => { state.unlocked |= title.bit; });
+    if (autoSelectFirstTitle) state.selected = 'dungeon-delver';
     if (persist && JSON.stringify(state) !== before) persistPlayerTitles();
+    if (autoSelectFirstTitle && typeof playerLoadStats === 'function') playerLoadStats();
     if (announce) {
         const addLog = log || (typeof addDungeonLog === 'function' ? addDungeonLog : null);
         if (addLog) unlocked.forEach(title => {
