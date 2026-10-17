@@ -29,7 +29,8 @@ const normalizeAutoStopFloor = (value) => {
     const floor = Number(value);
     return Number.isSafeInteger(floor) && floor > 0 ? floor : 0;
 };
-let autoStopFloor = normalizeAutoStopFloor(localStorage.getItem("autoStopFloor") ?? 20);
+const savedAutoStopFloor = localStorage.getItem("autoStopFloor");
+let autoStopFloor = normalizeAutoStopFloor(savedAutoStopFloor === null ? 20 : savedAutoStopFloor);
 const setAutoStopFloor = (value) => {
     autoStopFloor = normalizeAutoStopFloor(value);
     localStorage.setItem("autoStopFloor", autoStopFloor);
