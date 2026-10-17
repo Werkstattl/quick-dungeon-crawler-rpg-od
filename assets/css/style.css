@@ -1577,7 +1577,7 @@ button:focus-visible {
 
 /* Stat Allocation */
 #allocate-stats {
-    width: 18rem;
+    min-width: 18rem;
     max-height: 90vh;
     overflow-y: auto;
 }
