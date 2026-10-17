@@ -2255,9 +2255,8 @@ const shouldAutoSellEquipment = (equipment) => {
     }
     const thresholdIndex = AUTO_SELL_RARITY_ORDER.indexOf(autoSellRarity);
     const itemIndex = AUTO_SELL_RARITY_ORDER.indexOf(equipment.rarity);
-    const meetsRarityRule = autoSellRarity && autoSellRarity !== 'none'
-        ? thresholdIndex > 0 && itemIndex >= 0 && itemIndex < thresholdIndex
-        : false;
+    const meetsRarityRule = autoSellRarity === 'all'
+        || (thresholdIndex > 0 && itemIndex >= 0 && itemIndex < thresholdIndex);
     const levelThreshold = typeof autoSellBelowLevel === 'number' ? autoSellBelowLevel : 0;
     const itemLevel = Number.isFinite(equipment.lvl) ? equipment.lvl : 0;
     const meetsLevelRule = levelThreshold > 0 && itemLevel > 0 && itemLevel < levelThreshold;

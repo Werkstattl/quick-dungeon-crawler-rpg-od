@@ -6,7 +6,7 @@ const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '../assets/js/equipment.js'), 'utf8');
 
-function drop({ autoMode = true, autoEquipBest = true, locked = false, autoSellRarity = 'none', condition = 'combat' } = {}) {
+function drop({ autoMode = true, autoEquipBest = true, locked = false, autoSellRarity = 'none', condition = 'combat', rarity = 'Rare', dropLocked = false } = {}) {
     const weapon = value => ({
         category: 'Sword', type: 'Weapon', attribute: 'Damage', slot: 'weapon',
         rarity: 'Rare', lvl: 10, tier: 1, stats: [], value, icon: '', locked: false,
@@ -20,7 +20,7 @@ function drop({ autoMode = true, autoEquipBest = true, locked = false, autoSellR
         getDisplayEnemyName: () => 'Test',
         saveData() {}, playerLoadStats() {}, checkInventoryLimit() {},
         addCombatLog() {}, addDungeonLog() {}, nFormatter: String,
-        dropped: weapon(100),
+        dropped: { ...weapon(100), rarity, locked: dropLocked },
     });
     vm.runInContext(source.replace('const createEquipment =', 'let createEquipment ='), context);
     vm.runInContext('createEquipment = () => dropped;', context);
@@ -55,4 +55,30 @@ test('auto-sell processes excluded equipment before auto-equip', () => {
     assert.equal(player.equipped[0].value, 10);
     assert.equal(player.inventory.equipment.length, 0);
     assert.ok(player.gold > 0);
+});
+
+for (const condition of ['combat', 'dungeon']) {
+    for (const rarity of ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Heirloom']) {
+        test(`auto-sell All sells ${rarity} ${condition} drops`, () => {
+            const { player, result } = drop({ autoSellRarity: 'all', rarity, condition });
+            assert.equal(result.autoSold, true);
+            assert.equal(player.equipped[0].value, 10);
+            assert.equal(player.inventory.equipment.length, 0);
+            assert.ok(player.gold > 0);
+        });
+    }
+}
+
+for (const options of [{ autoMode: false }, { dropLocked: true }]) {
+    test('auto-sell All respects ' + JSON.stringify(options), () => {
+        const { player, result } = drop({ autoSellRarity: 'all', rarity: 'Heirloom', ...options });
+        assert.notEqual(result.autoSold, true);
+        assert.equal(player.gold, 0);
+    });
+}
+
+test('auto-sell Heirloom threshold still keeps Heirloom drops', () => {
+    const { player, result } = drop({ autoSellRarity: 'Heirloom', rarity: 'Heirloom' });
+    assert.notEqual(result.autoSold, true);
+    assert.equal(player.gold, 0);
 });

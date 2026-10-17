@@ -932,6 +932,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <option value="Epic" ${autoSellRarity === 'Epic' ? 'selected' : ''} data-i18n="epic">Epic</option>
                     <option value="Legendary" ${autoSellRarity === 'Legendary' ? 'selected' : ''} data-i18n="legendary">Legendary</option>
                     <option value="Heirloom" ${autoSellRarity === 'Heirloom' ? 'selected' : ''} data-i18n="heirloom">Heirloom</option>
+                    <option value="all" ${autoSellRarity === 'all' ? 'selected' : ''} data-i18n="all">All</option>
                 </select></label>
                 <label id="auto-sell-level-label"><span data-i18n="auto-sell-level">Auto-sell below level</span> <select id="auto-sell-level-input">${autoSellLevelOptionsMarkup}</select></label>
                 <label id="auto-doorignore-label"><span data-i18n="ignore-doors">Doors to Ignore per Room</span> <select id="auto-doorignore-select">
