@@ -83,7 +83,7 @@ test('the active Curse cap allows Monarch progression from 10 to 11', () => {
 test('the Monarch unlock runs before the victory summary is created', () => {
     const combatSource = fs.readFileSync(path.join(root, 'assets/js/combat.js'), 'utf8');
     const handlerStart = combatSource.indexOf('const handleSpecialBossVictory');
-    const unlockCall = combatSource.indexOf('maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH)', handlerStart);
+    const unlockCall = combatSource.indexOf('maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH,', handlerStart);
     const summaryCall = combatSource.indexOf("createRunSummary('victory')", handlerStart);
 
     assert.ok(handlerStart >= 0);

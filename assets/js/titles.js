@@ -1,18 +1,21 @@
 // Cosmetic accomplishments live in the player save and survive normal run resets.
+// Unlock bits are permanent save identifiers: never renumber or reuse them.
 const PLAYER_TITLES = [
-    { id: 'dungeon-delver', name: 'Dungeon Delver', rarity: 'Common', group: 'depth', metric: 'highestFloor', target: 5 },
-    { id: 'depthwalker', name: 'Depthwalker', rarity: 'Uncommon', group: 'depth', metric: 'highestFloor', target: 20 },
-    { id: 'abyss-strider', name: 'Abyss Strider', rarity: 'Rare', group: 'depth', metric: 'highestFloor', target: 40 },
-    { id: 'cursebound', name: 'Cursebound', rarity: 'Rare', group: 'curse', metric: 'curse', target: 5 },
-    { id: 'hexbreaker', name: 'Hexbreaker', rarity: 'Epic', group: 'curse', metric: 'curse', target: 10 },
-    { id: 'curseforged', name: 'Curseforged', rarity: 'Legendary', group: 'curse', metric: 'curse', target: 15 },
-    { id: 'crownbreaker', name: 'Crownbreaker', rarity: 'Rare', group: 'monarch', metric: 'highestMonarchCurse', target: 1 },
-    { id: 'kingsbane', name: 'Kingsbane', rarity: 'Epic', group: 'monarch', metric: 'highestMonarchCurse', target: 10 },
-    { id: 'sovereign-of-ruin', name: 'Sovereign of Ruin', rarity: 'Heirloom', group: 'monarch', metric: 'highestMonarchCurse', target: 15 },
-    { id: 'deep-crowned', name: 'Deep-Crowned', rarity: 'Legendary', group: 'challenges', metric: 'deepMonarchFloor', target: 45 },
+    { id: 'dungeon-delver', bit: 1, name: 'Dungeon Delver', rarity: 'Common', group: 'depth', metric: 'highestFloor', target: 5 },
+    { id: 'depthwalker', bit: 2, name: 'Depthwalker', rarity: 'Uncommon', group: 'depth', metric: 'highestFloor', target: 20 },
+    { id: 'abyss-strider', bit: 4, name: 'Abyss Strider', rarity: 'Rare', group: 'depth', metric: 'highestFloor', target: 40 },
+    { id: 'cursebound', bit: 8, name: 'Cursebound', rarity: 'Rare', group: 'curse', metric: 'curse', target: 5 },
+    { id: 'hexbreaker', bit: 16, name: 'Hexbreaker', rarity: 'Epic', group: 'curse', metric: 'curse', target: 10 },
+    { id: 'curseforged', bit: 32, name: 'Curseforged', rarity: 'Legendary', group: 'curse', metric: 'curse', target: 15 },
+    { id: 'crownbreaker', bit: 64, name: 'Crownbreaker', rarity: 'Rare', group: 'monarch', metric: 'highestMonarchCurse', target: 1 },
+    { id: 'kingsbane', bit: 128, name: 'Kingsbane', rarity: 'Epic', group: 'monarch', metric: 'highestMonarchCurse', target: 10 },
+    { id: 'sovereign-of-ruin', bit: 256, name: 'Sovereign of Ruin', rarity: 'Heirloom', group: 'monarch', metric: 'highestMonarchCurse', target: 15 },
+    { id: 'deep-crowned', bit: 512, name: 'Deep-Crowned', rarity: 'Legendary', group: 'challenges', metric: 'deepMonarchFloor', target: 45 },
     { id: 'forge-member', name: 'Forge Member', rarity: null, group: 'membership', metric: 'membership', target: 1 },
 ];
 
+// Membership is checked against purchase entitlements and has no unlock bit.
+const PLAYER_TITLE_UNLOCK_MASK = PLAYER_TITLES.reduce((mask, title) => mask | (title.bit || 0), 0);
 const PLAYER_TITLE_GROUPS = ['depth', 'curse', 'monarch', 'challenges', 'membership'];
 
 function titleText(key, fallback, params) {
@@ -44,18 +47,15 @@ function getPlayerTitleClass(title) {
 function normalizePlayerTitles(playerData) {
     if (!playerData || typeof playerData !== 'object') return null;
     const old = playerData.titles && typeof playerData.titles === 'object' ? playerData.titles : {};
-    const progress = old.progress && typeof old.progress === 'object' ? old.progress : {};
     const normalized = {
-        // Membership is checked against purchase entitlements, never imported unlocks.
-        unlocked: Array.isArray(old.unlocked) ? [...new Set(old.unlocked.filter(id =>
-            id !== 'forge-member' && getPlayerTitleDefinition(id)))] : [],
-        progress: {},
+        unlocked: Number.isSafeInteger(old.unlocked) && old.unlocked >= 0
+            ? old.unlocked & PLAYER_TITLE_UNLOCK_MASK : 0,
     };
     for (const field of ['highestFloor', 'highestMonarchCurse', 'deepMonarchFloor']) {
-        const number = Number(progress[field]);
-        normalized.progress[field] = Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
+        const number = Number(old[field]);
+        normalized[field] = Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
     }
-    normalized.progress.highestMonarchCurse = Math.min(MAX_CURSE_LEVEL, normalized.progress.highestMonarchCurse);
+    normalized.highestMonarchCurse = Math.min(MAX_CURSE_LEVEL, normalized.highestMonarchCurse);
     // An absent choice preserves the existing automatic Forge Member display.
     // Explicitly choosing None or an earned title always takes precedence.
     if (Object.prototype.hasOwnProperty.call(old, 'selected')) {
@@ -69,16 +69,14 @@ function getPlayerTitleProgress(title, playerData = player) {
     if (!playerData) return 0;
     if (title.metric === 'membership') return isForgeMembershipActive() ? 1 : 0;
     if (title.metric === 'curse') return clampCurseLevel(playerData.maxUnlockedCurseLevel);
-    const progress = playerData.titles && playerData.titles.progress;
-    return progress ? Number(progress[title.metric]) || 0 : 0;
+    return playerData.titles ? Number(playerData.titles[title.metric]) || 0 : 0;
 }
 
 function isPlayerTitleUnlocked(id, playerData = player) {
     const title = getPlayerTitleDefinition(id);
     if (!title || !playerData) return false;
     if (id === 'forge-member') return isForgeMembershipActive();
-    return Boolean(playerData.titles && Array.isArray(playerData.titles.unlocked)
-        && playerData.titles.unlocked.includes(id));
+    return Boolean(playerData.titles && (playerData.titles.unlocked & title.bit));
 }
 
 function getSelectedPlayerTitle(playerData = player) {
@@ -93,20 +91,19 @@ function persistPlayerTitles() {
     if (player) safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
 }
 
-function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log = null } = {}) {
+function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log = null, persist = true } = {}) {
     if (!player) return [];
-    const before = JSON.stringify(player.titles);
+    const before = persist ? JSON.stringify(player.titles) : null;
     const state = normalizePlayerTitles(player);
-    const progress = state.progress;
     const curse = clampCurseLevel(player.maxUnlockedCurseLevel);
     // Old saves prove Floor 10 via Curse 2+, and Monarch victories via Curse 11+.
     // Unlocking Curse 15 proves a Curse 14 victory, not a Curse 15 victory.
     const savedFloor = dungeonData && dungeonData.progress ? Number(dungeonData.progress.floor) : 0;
-    progress.highestFloor = Math.max(progress.highestFloor, curse > 1 ? 10 : 0,
+    state.highestFloor = Math.max(state.highestFloor, curse > 1 ? 10 : 0,
         curse > MAX_STANDARD_CURSE_LEVEL ? 20 : 0,
         Number.isFinite(savedFloor) ? Math.max(0, Math.floor(savedFloor)) : 0);
     if (curse > MAX_STANDARD_CURSE_LEVEL) {
-        progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, curse - 1);
+        state.highestMonarchCurse = Math.max(state.highestMonarchCurse, curse - 1);
     }
     if (typeof bestiary !== 'undefined' && typeof enemyPools !== 'undefined') {
         const hasMonarchKill = Object.values(enemyPools).some(pool =>
@@ -116,14 +113,14 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
             }));
         if (hasMonarchKill) {
             // Monarch kills prove Floor 20 and a victory, but not its difficulty or mode.
-            progress.highestFloor = Math.max(progress.highestFloor, 20);
-            progress.highestMonarchCurse = Math.max(progress.highestMonarchCurse, 1);
+            state.highestFloor = Math.max(state.highestFloor, 20);
+            state.highestMonarchCurse = Math.max(state.highestMonarchCurse, 1);
         }
     }
-    const unlocked = PLAYER_TITLES.filter(title => title.id !== 'forge-member'
-        && !state.unlocked.includes(title.id) && getPlayerTitleProgress(title) >= title.target);
-    state.unlocked.push(...unlocked.map(title => title.id));
-    if (JSON.stringify(state) !== before) persistPlayerTitles();
+    const unlocked = PLAYER_TITLES.filter(title => title.bit
+        && !(state.unlocked & title.bit) && getPlayerTitleProgress(title) >= title.target);
+    unlocked.forEach(title => { state.unlocked |= title.bit; });
+    if (persist && JSON.stringify(state) !== before) persistPlayerTitles();
     if (announce) {
         const addLog = log || (typeof addDungeonLog === 'function' ? addDungeonLog : null);
         if (addLog) unlocked.forEach(title => {
@@ -135,18 +132,19 @@ function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log =
     return unlocked;
 }
 
-function recordPlayerMonarchVictory() {
+function recordPlayerMonarchVictory({ persist = true } = {}) {
     if (!player || !dungeon) return;
+    const before = persist ? JSON.stringify(player.titles) : null;
     const state = normalizePlayerTitles(player);
     const curse = getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling);
     const floor = Number(dungeon.progress.floor) || 1;
-    state.progress.highestMonarchCurse = Math.max(state.progress.highestMonarchCurse, curse);
+    state.highestMonarchCurse = Math.max(state.highestMonarchCurse, curse);
     if (curse >= 10) {
-        state.progress.deepMonarchFloor = Math.max(state.progress.deepMonarchFloor, floor);
+        state.deepMonarchFloor = Math.max(state.deepMonarchFloor, floor);
     }
-    syncPlayerTitleUnlocks({ announce: true, log: typeof addCombatLog === 'function' ? addCombatLog : null });
-    // The recorded victory must persist even if it awarded no new title.
-    persistPlayerTitles();
+    syncPlayerTitleUnlocks({ announce: true, log: typeof addCombatLog === 'function' ? addCombatLog : null, persist: false });
+    // Save improved progress even without a new title, unless the caller saves the whole victory.
+    if (persist && JSON.stringify(player.titles) !== before) persistPlayerTitles();
 }
 
 function setPlayerTitle(id) {

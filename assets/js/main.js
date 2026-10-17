@@ -1282,7 +1282,7 @@ const saveData = ({ forceDungeon = false } = {}) => {
     }
 }
 
-const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR) => {
+const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR, { persist = true } = {}) => {
     if (!player || !dungeon || !dungeon.progress || !dungeon.settings) {
         return false;
     }
@@ -1301,7 +1301,7 @@ const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR) => {
     }
 
     player.maxUnlockedCurseLevel = newMax;
-    if (typeof syncPlayerTitleUnlocks === 'function') syncPlayerTitleUnlocks({ announce: true });
+    if (typeof syncPlayerTitleUnlocks === 'function') syncPlayerTitleUnlocks({ announce: true, persist: false });
     if (typeof ensureRunStatisticsShape === 'function') {
         ensureRunStatisticsShape();
     }
@@ -1312,7 +1312,7 @@ const maybeUnlockNextCurseLevel = (trigger = CURSE_UNLOCK_TRIGGER_FLOOR) => {
         const unlockMessage = t('curse-level-unlocked', { level: newMax });
         addDungeonLog(`<span class="CurseUnlock">${unlockMessage}</span>`);
     }
-    saveData();
+    if (persist) saveData();
     return true;
 };
 

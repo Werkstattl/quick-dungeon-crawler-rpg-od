@@ -1293,9 +1293,10 @@ const grantMonarchDepthRewards = () => {
 };
 
 const handleSpecialBossVictory = () => {
-    if (typeof recordPlayerMonarchVictory === 'function') recordPlayerMonarchVictory();
+    // Persist titles, Curse unlocks and the stopped run together at the end of this handler.
+    if (typeof recordPlayerMonarchVictory === 'function') recordPlayerMonarchVictory({ persist: false });
     if (typeof maybeUnlockNextCurseLevel === 'function') {
-        maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH);
+        maybeUnlockNextCurseLevel(CURSE_UNLOCK_TRIGGER_MONARCH, { persist: false });
     }
     pendingRunSummary = createRunSummary('victory');
     runSummaryReadyInCombat = true;

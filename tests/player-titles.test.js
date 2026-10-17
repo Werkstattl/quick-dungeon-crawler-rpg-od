@@ -14,6 +14,7 @@ const titleTranslationKeys = Object.keys(english).filter(key =>
 
 function createState(overrides = {}, storage = new Map()) {
     const logs = [];
+    const writes = [];
     const context = vm.createContext({
         console,
         player: { name: 'Hero', maxUnlockedCurseLevel: 1, selectedCurseLevel: 1, ...overrides },
@@ -25,7 +26,10 @@ function createState(overrides = {}, storage = new Map()) {
         defaultModalElement: { style: { display: 'none' }, querySelector: () => null },
         localStorage: {
             getItem: key => storage.get(key) || null,
-            setItem: (key, value) => storage.set(key, String(value)),
+            setItem: (key, value) => {
+                writes.push({ key, value: String(value) });
+                storage.set(key, String(value));
+            },
             removeItem: key => storage.delete(key),
         },
         t: (key, params) => (english[key] || key).replace(/\{(\w+)\}/g,
@@ -40,9 +44,10 @@ function createState(overrides = {}, storage = new Map()) {
     vm.runInContext(source('titles.js'), context);
     context.saveData = () => vm.runInContext('persistPlayerTitles()', context);
     return {
-        context, storage, logs,
+        context, storage, logs, writes,
         run: expression => vm.runInContext(expression, context),
-        unlocked: () => Array.from(context.player.titles.unlocked),
+        unlocked: () => Array.from(vm.runInContext(
+            'PLAYER_TITLES.filter(title => title.bit && isPlayerTitleUnlocked(title.id)).map(title => title.id)', context)),
     };
 }
 
@@ -56,7 +61,7 @@ test('old Curse 15 saves receive proven milestones without claiming a Curse 15 v
     ]);
     assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), false);
     assert.equal(state.logs.length, 0);
-    assert.equal(JSON.parse(state.storage.get('playerData')).titles.progress.highestMonarchCurse, 14);
+    assert.equal(JSON.parse(state.storage.get('playerData')).titles.highestMonarchCurse, 14);
 });
 
 test('every recorded Monarch variant credits old winners and persists only the proven milestones', () => {
@@ -65,9 +70,9 @@ test('every recorded Monarch variant credits old winners and persists only the p
         state.context.bestiary[id] = { e: 1, k: '1' };
         state.run('syncPlayerTitleUnlocks({ dungeonData: null })');
         assert.deepEqual(state.unlocked(), ['dungeon-delver', 'depthwalker', 'crownbreaker']);
-        assert.equal(state.context.player.titles.progress.highestFloor, 20);
-        assert.equal(state.context.player.titles.progress.highestMonarchCurse, 1);
-        assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
+        assert.equal(state.context.player.titles.highestFloor, 20);
+        assert.equal(state.context.player.titles.highestMonarchCurse, 1);
+        assert.equal(state.context.player.titles.deepMonarchFloor, 0);
         assert.equal(state.context.player.maxUnlockedCurseLevel, 1);
         assert.equal(state.logs.length, 0);
 
@@ -76,7 +81,7 @@ test('every recorded Monarch variant credits old winners and persists only the p
         assert.equal(reloaded.run('syncPlayerTitleUnlocks({ announce: true }).length'), 0);
         assert.deepEqual(reloaded.unlocked(), ['dungeon-delver', 'depthwalker', 'crownbreaker']);
         assert.equal(reloaded.run('getSelectedPlayerTitle().id'), 'crownbreaker');
-        assert.equal(reloaded.context.player.titles.progress.highestFloor, 20);
+        assert.equal(reloaded.context.player.titles.highestFloor, 20);
         assert.equal(reloaded.logs.length, 0);
     }
 });
@@ -91,8 +96,8 @@ test('encounters, other enemy kills and invalid kill counts do not prove a Monar
         state.context.bestiary = bestiary;
         state.run('syncPlayerTitleUnlocks()');
         assert.deepEqual(state.unlocked(), []);
-        assert.equal(state.context.player.titles.progress.highestMonarchCurse, 0);
-        assert.equal(state.context.player.titles.progress.highestFloor, 1);
+        assert.equal(state.context.player.titles.highestMonarchCurse, 0);
+        assert.equal(state.context.player.titles.highestFloor, 1);
     }
 });
 
@@ -114,17 +119,26 @@ test('Monarch titles progress from the first victory through Curse 10 to Curse 1
 });
 
 test('normalization preserves earned titles and an explicit None selection', () => {
-    const state = createState({ titles: { unlocked: ['deep-crowned'], selected: 'deep-crowned',
-        progress: { deepMonarchFloor: 40 },
+    const state = createState({ titles: { unlocked: 512, selected: 'deep-crowned',
+        deepMonarchFloor: 40,
     } });
     state.run('syncPlayerTitleUnlocks()');
     assert.equal(state.run('getSelectedPlayerTitle().id'), 'deep-crowned');
     assert.equal(state.run('getPlayerTitleRequirement(getSelectedPlayerTitle())'),
         'Defeat the Dungeon Monarch on Floor 45 or deeper at Curse Level 10 or higher.');
-    const none = createState({ titles: { unlocked: ['kingsbane'], selected: null } });
+    const none = createState({ titles: { unlocked: 128, selected: null } });
     none.storage.set('forgeMembershipActive', 'true');
     none.run('syncPlayerTitleUnlocks()');
     assert.equal(none.run('getSelectedPlayerTitle()'), null);
+});
+
+test('saved unlock bits remain attached to the same titles when the catalog is reordered', () => {
+    const state = createState({ titles: { unlocked: 273, selected: 'hexbreaker' } });
+    state.run('PLAYER_TITLES.reverse(); normalizePlayerTitles(player); persistPlayerTitles()');
+    assert.deepEqual(state.unlocked().sort(), ['dungeon-delver', 'hexbreaker', 'sovereign-of-ruin']);
+    const reloaded = createState(JSON.parse(state.storage.get('playerData')));
+    assert.deepEqual(reloaded.unlocked().sort(), state.unlocked().sort());
+    assert.equal(reloaded.run('getSelectedPlayerTitle().id'), 'hexbreaker');
 });
 
 test('depth milestones award at their thresholds and preserve earlier titles', () => {
@@ -137,7 +151,7 @@ test('depth milestones award at their thresholds and preserve earlier titles', (
     }
     state.context.dungeon.progress.floor = 1;
     state.run('syncPlayerTitleUnlocks()');
-    assert.equal(state.context.player.titles.progress.highestFloor, 40);
+    assert.equal(state.context.player.titles.highestFloor, 40);
     assert.equal(state.run('getSelectedPlayerTitle()'), null);
 });
 
@@ -145,16 +159,16 @@ test('removed unreleased titles are cleared from saves while other titles and be
     const removedTitles = ['field-scholar', 'beast-chronicler', 'living-bestiary', 'the-unbroken'];
     for (const selected of [...removedTitles, 'dungeon-delver']) {
         const state = createState({ titles: {
-            unlocked: [...removedTitles, 'dungeon-delver'], selected,
-            progress: { bestiaryTypes: 40, hardcoreMonarch: true, highestFloor: 5 },
+            unlocked: 1 | 1024, selected,
+            bestiaryTypes: 40, hardcoreMonarch: true, highestFloor: 5,
         } });
         for (let id = 1; id <= 42; id++) state.context.bestiary[id] = { e: 1, k: 1 };
         const bestiaryBefore = JSON.stringify(state.context.bestiary);
         state.run('syncPlayerTitleUnlocks({ announce: true })');
         assert.deepEqual(state.unlocked(), ['dungeon-delver']);
         assert.equal(state.context.player.titles.selected, selected === 'dungeon-delver' ? selected : null);
-        assert.equal(Object.hasOwn(state.context.player.titles.progress, 'bestiaryTypes'), false);
-        assert.equal(Object.hasOwn(state.context.player.titles.progress, 'hardcoreMonarch'), false);
+        assert.equal(Object.hasOwn(state.context.player.titles, 'bestiaryTypes'), false);
+        assert.equal(Object.hasOwn(state.context.player.titles, 'hardcoreMonarch'), false);
         assert.equal(JSON.stringify(state.context.bestiary), bestiaryBefore);
         assert.equal(state.logs.length, 0);
         const reloaded = createState(JSON.parse(state.storage.get('playerData')), state.storage);
@@ -173,6 +187,10 @@ test('Curse unlocks award their titles through the real progression handler', ()
     assert.equal(state.run('isPlayerTitleUnlocked("cursebound")'), true);
     assert.equal(state.run('isPlayerTitleUnlocked("hexbreaker")'), false);
     assert.match(state.logs.join('\n'), /Title unlocked:.*Cursebound/);
+    assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
+    const reloaded = createState(JSON.parse(state.storage.get('playerData')));
+    assert.equal(reloaded.run('isPlayerTitleUnlocked("cursebound")'), true);
+    assert.equal(reloaded.context.player.maxUnlockedCurseLevel, 5);
 });
 
 test('a real floor transition awards the first title immediately', () => {
@@ -190,6 +208,7 @@ test('a real floor transition awards the first title immediately', () => {
     state.run('loadDungeonProgress()');
     assert.equal(state.run('isPlayerTitleUnlocked("dungeon-delver")'), true);
     assert.match(state.logs[0], /Dungeon Delver/);
+    assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
 });
 
 test('Monarch and depth challenge rewards use the defeated run difficulty', () => {
@@ -204,7 +223,7 @@ test('Monarch and depth challenge rewards use the defeated run difficulty', () =
     for (const id of ['sovereign-of-ruin', 'deep-crowned']) {
         assert.equal(state.run(`isPlayerTitleUnlocked('${id}')`), true);
     }
-    assert.equal(JSON.parse(state.storage.get('playerData')).titles.progress.highestMonarchCurse, 15);
+    assert.equal(JSON.parse(state.storage.get('playerData')).titles.highestMonarchCurse, 15);
 });
 
 test('all ten achievement titles can be earned in normal mode without membership', () => {
@@ -216,6 +235,12 @@ test('all ten achievement titles can be earned in normal mode without membership
     assert.equal(state.run('PLAYER_TITLES.filter(title => title.metric !== "membership").every(title => isPlayerTitleUnlocked(title.id))'), true);
     assert.equal(state.run('isPlayerTitleUnlocked("forge-member")'), false);
     assert.equal(state.context.player.hardcore, false);
+    state.run('setPlayerTitle("deep-crowned")');
+    const saved = JSON.parse(state.storage.get('playerData')).titles;
+    assert.deepEqual(saved, {
+        unlocked: 1023, highestFloor: 45, highestMonarchCurse: 15,
+        deepMonarchFloor: 45, selected: 'deep-crowned',
+    });
 });
 
 test('the depth challenge requires a Monarch victory at Floor 45 and Curse 10+', () => {
@@ -236,7 +261,7 @@ test('the depth challenge requires a Monarch victory at Floor 45 and Curse 10+',
 });
 
 test('an imported Forge title cannot grant a membership entitlement', () => {
-    const state = createState({ titles: { unlocked: ['forge-member'], selected: 'forge-member' } });
+    const state = createState({ titles: { unlocked: 2047, selected: 'forge-member' } });
     state.run('syncPlayerTitleUnlocks()');
     assert.equal(state.run('isPlayerTitleUnlocked("forge-member")'), false);
     assert.equal(state.run('setPlayerTitle("forge-member")'), false);
@@ -344,21 +369,64 @@ test('run summaries capture the selected earned title and the None option', () =
     assert.equal(state.run('createRunSummary("victory").titleId'), null);
 });
 
-test('the real Monarch victory handler persists the final Curse 15 title after timers stop', () => {
-    const state = createState({ maxUnlockedCurseLevel: 15, selectedCurseLevel: 15 });
-    state.context.dungeon.settings.enemyScaling = 2.5;
-    state.context.dungeon.progress.floor = 20;
-    state.context.dungeon.status = {};
-    state.context.updateCombatLog = () => {};
+test('the real Monarch victory handler saves titles, Curse unlocks and the stopped run once', () => {
+    const main = source('main.js');
     const combat = source('combat.js');
-    const start = combat.indexOf('const createRunSummary =');
-    vm.runInContext(combat.slice(start, combat.indexOf('\n});', start) + 4), state.context);
-    vm.runInContext(combat.slice(combat.indexOf('const handleSpecialBossVictory ='),
-        combat.indexOf('const hasSellableCombatLoot =')), state.context);
-    state.run('handleSpecialBossVictory()');
-    assert.equal(state.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), true);
-    assert.equal(state.context.dungeon.status.paused, true);
-    assert.equal(JSON.parse(state.storage.get('playerData')).titles.unlocked.includes('sovereign-of-ruin'), true);
+    for (const curse of [10, 14, 15]) {
+        const state = createState({ maxUnlockedCurseLevel: curse, selectedCurseLevel: curse });
+        const clearedTimers = [];
+        Object.assign(state.context, {
+            enemy: {}, dungeonTimer: 1, playTimer: 2,
+            clearInterval: timer => clearedTimers.push(timer), updateCombatLog() {},
+        });
+        state.context.dungeon.settings.enemyScaling = 1 + curse / 10;
+        state.context.dungeon.progress.floor = 45;
+        state.context.dungeon.status = {};
+        state.context.dungeon.initialized = true;
+        vm.runInContext(main.slice(main.indexOf('// Save all the data into local storage'),
+            main.indexOf('// Calculate every player stat')), state.context);
+        const start = combat.indexOf('const createRunSummary =');
+        vm.runInContext(combat.slice(start, combat.indexOf('\n});', start) + 4), state.context);
+        vm.runInContext(combat.slice(combat.indexOf('const handleSpecialBossVictory ='),
+            combat.indexOf('const hasSellableCombatLoot =')), state.context);
+
+        state.run('handleSpecialBossVictory()');
+        assert.deepEqual(clearedTimers, [1, 2]);
+        assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
+        assert.equal(state.writes.filter(write => write.key === 'dungeonData').length, 1);
+        const savedDungeon = JSON.parse(state.storage.get('dungeonData'));
+        assert.equal(savedDungeon.status.paused, true);
+        assert.equal(savedDungeon.status.exploring, false);
+        const reloaded = createState(JSON.parse(state.storage.get('playerData')));
+        assert.equal(reloaded.context.player.maxUnlockedCurseLevel, Math.min(15, curse + 1));
+        assert.equal(reloaded.context.player.titles.highestMonarchCurse, curse);
+        assert.equal(reloaded.run('isPlayerTitleUnlocked("sovereign-of-ruin")'), curse === 15);
+        assert.equal(reloaded.run('isPlayerTitleUnlocked("deep-crowned")'), true);
+        assert.equal(reloaded.run('isPlayerTitleUnlocked("curseforged")'), curse >= 14);
+        assert.equal(reloaded.run('syncPlayerTitleUnlocks({ announce: true }).length'), 0);
+        assert.equal(reloaded.logs.length, 0);
+        assert.equal(reloaded.writes.length, 0);
+    }
+});
+
+test('standalone Monarch updates save improved progress once even without a new title', () => {
+    const state = createState();
+    state.context.dungeon.progress.floor = 20;
+    state.run('recordPlayerMonarchVictory()');
+    assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
+    const unlocked = state.context.player.titles.unlocked;
+    state.writes.length = 0;
+    state.logs.length = 0;
+    state.context.dungeon.settings.enemyScaling = 1.9;
+    state.run('recordPlayerMonarchVictory()');
+    assert.equal(state.writes.filter(write => write.key === 'playerData').length, 1);
+    const saved = JSON.parse(state.storage.get('playerData')).titles;
+    assert.equal(saved.highestMonarchCurse, 9);
+    assert.equal(saved.unlocked, unlocked);
+    assert.equal(state.logs.length, 0);
+    state.writes.length = 0;
+    state.run('recordPlayerMonarchVictory()');
+    assert.equal(state.writes.length, 0);
 });
 
 test('the endgame screen applies the chosen rarity and hides an empty title', () => {
@@ -383,15 +451,25 @@ test('the endgame screen applies the chosen rarity and hides an empty title', ()
 
 test('malformed title saves are normalized without retaining unknown or paid unlocks', () => {
     const state = createState({ titles: {
-        selected: 'nonexistent', unlocked: ['cursebound', 'cursebound', 'forge-member', 'invalid'],
-        progress: { highestFloor: 'invalid', highestMonarchCurse: 100, deepMonarchFloor: -4 },
+        selected: 'nonexistent', unlocked: 8 | 1024,
+        highestFloor: 'invalid', highestMonarchCurse: 100, deepMonarchFloor: -4,
     } });
     state.run('normalizePlayerTitles(player)');
     assert.deepEqual(state.unlocked(), ['cursebound']);
     assert.equal(state.context.player.titles.selected, null);
-    assert.equal(state.context.player.titles.progress.highestFloor, 0);
-    assert.equal(state.context.player.titles.progress.highestMonarchCurse, 15);
-    assert.equal(state.context.player.titles.progress.deepMonarchFloor, 0);
+    assert.equal(state.context.player.titles.highestFloor, 0);
+    assert.equal(state.context.player.titles.highestMonarchCurse, 15);
+    assert.equal(state.context.player.titles.deepMonarchFloor, 0);
+});
+
+test('invalid unlock masks cannot turn into earned titles', () => {
+    for (const unlocked of [undefined, null, '8', [], ['cursebound'], {}, -1, 1.5, Infinity, NaN, Number.MAX_VALUE]) {
+        const state = createState({ titles: { unlocked, selected: 'cursebound' } });
+        state.run('normalizePlayerTitles(player)');
+        assert.equal(state.context.player.titles.unlocked, 0);
+        assert.deepEqual(state.unlocked(), []);
+        assert.equal(state.run('getSelectedPlayerTitle()'), null);
+    }
 });
 
 test('title cards expose requirements, progress and rarity and disable locked titles', () => {
@@ -406,6 +484,10 @@ test('title cards expose requirements, progress and rarity and disable locked ti
     assert.doesNotMatch(selected, /disabled/);
     assert.match(selected, /aria-pressed="true"/);
     assert.match(selected, /Equipped/);
+    state.context.player.titles.highestMonarchCurse = 9;
+    const monarch = state.run('renderPlayerTitleChoice(getPlayerTitleDefinition("sovereign-of-ruin"), null)');
+    assert.match(monarch, /Best victory: Curse 9/);
+    assert.doesNotMatch(monarch, /9\/15/);
 });
 
 test('membership uses its own badge in the picker, profile and run summary', () => {
