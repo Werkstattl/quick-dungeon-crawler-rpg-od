@@ -1577,9 +1577,13 @@ button:focus-visible {
 
 /* Stat Allocation */
 #allocate-stats {
-    min-width: 18rem;
+    max-width: 22rem;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+#allocate-reset {
+    margin-left: auto;
 }
 
 .curse-progression-info {
