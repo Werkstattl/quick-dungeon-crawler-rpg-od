@@ -215,6 +215,7 @@
   "auto-mode-description": "Automatisch Feinde angreifen, Beute einsammeln und Türen öffnen.",
   "auto-mode-show-button": "Auto-Button zeigen",
   "auto-mode-level-up": "Beim Level-Up stoppen",
+  "auto-mode-new-pet": "Stoppen, wenn ein neuer Begleiter gefunden wird",
   "auto-mode-stop-floor": "Bei Etage stoppen",
   "auto-level-up-stats": "Level-Up-Werte",
   "luck-as-level-up-option": "Glück als Level-Up-Option",

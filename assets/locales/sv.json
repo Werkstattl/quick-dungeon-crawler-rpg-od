@@ -215,6 +215,7 @@
   "auto-mode-description": "Ta automatiskt strid mot fiender, hämta byte och öppna dörrar.",
   "auto-mode-show-button": "Visa Auto-knappen",
   "auto-mode-level-up": "Stanna vid nivåökning",
+  "auto-mode-new-pet": "Stanna när en ny följeslagare hittas",
   "auto-mode-stop-floor": "Stanna på våning",
   "auto-level-up-stats": "Egenskaper vid nivåökning",
   "luck-as-level-up-option": "Tur som val vid nivåökning",

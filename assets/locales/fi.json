@@ -215,6 +215,7 @@
   "auto-mode-description": "Kohtaa viholliset, lunasta saalis ja avaa ovet automaattisesti.",
   "auto-mode-show-button": "Näytä Automaatti-painike",
   "auto-mode-level-up": "Pysähdy tason noustessa",
+  "auto-mode-new-pet": "Pysähdy, kun uusi kumppani löytyy",
   "auto-mode-stop-floor": "Pysähdy kerroksessa",
   "auto-level-up-stats": "Tasonnousun ominaisuudet",
   "luck-as-level-up-option": "Onni tasonnousuvaihtoehtona",

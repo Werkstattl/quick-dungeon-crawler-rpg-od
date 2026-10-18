@@ -215,6 +215,7 @@
   "auto-mode-description": "Automaticky bojuje s nepřáteli, sbírá kořist a otevírá dveře.",
   "auto-mode-show-button": "Zobrazit tlačítko Auto",
   "auto-mode-level-up": "Zastavit při zvýšení úrovně",
+  "auto-mode-new-pet": "Zastavit při nalezení nového společníka",
   "auto-mode-stop-floor": "Zastavit na patře",
   "auto-level-up-stats": "Atributy při zvýšení úrovně",
   "luck-as-level-up-option": "Štěstí jako volba při zvýšení úrovně",

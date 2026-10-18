@@ -926,6 +926,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span class="Epic" data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
+                <label id="auto-new-pet-label"><input type="checkbox" id="auto-new-pet-toggle" ${autoStopNewPet ? 'checked' : ''}> <span data-i18n="auto-mode-new-pet">Stop when a new pet is found</span></label>
                 <label for="auto-stop-floor-input"><span data-i18n="auto-mode-stop-floor">Stop at floor</span> <input id="auto-stop-floor-input" type="number" min="0" max="${Number.MAX_SAFE_INTEGER}" step="1" inputmode="numeric" value="${autoStopFloor}"></label>
                 <div id="auto-levelup-priority" class="auto-levelup-priority-block">
                     <p data-i18n="auto-level-up-stats">Level-up stats</p>
@@ -966,6 +967,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let autoHealToggle = document.querySelector('#auto-heal-toggle');
         let autoSpecialToggle = document.querySelector('#auto-special-toggle');
         let autoLevelUpToggle = document.querySelector('#auto-levelup-toggle');
+        let autoNewPetToggle = document.querySelector('#auto-new-pet-toggle');
         let autoStopFloorInput = document.querySelector('#auto-stop-floor-input');
         let autoBossDoorToggle = document.querySelector('#auto-bossdoor-toggle');
         let autoMonarchToggle = document.querySelector('#auto-monarch-toggle');
@@ -1013,6 +1015,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             autoHeal = autoHealToggle.checked;
             autoSpecialAbility = autoSpecialToggle.checked;
             autoStopLevelUp = autoLevelUpToggle.checked;
+            autoStopNewPet = autoNewPetToggle.checked;
             setAutoStopFloor(autoStopFloorInput.value);
             autoBossDoors = autoBossDoorToggle.checked;
             autoMonarch = autoMonarchToggle.checked;
@@ -1035,6 +1038,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             localStorage.setItem("autoHeal", autoHeal);
             localStorage.setItem("autoSpecialAbility", autoSpecialAbility);
             localStorage.setItem("autoStopLevelUp", autoStopLevelUp);
+            localStorage.setItem("autoStopNewPet", autoStopNewPet);
             localStorage.setItem("autoBossDoors", autoBossDoors);
             localStorage.setItem("autoMonarch", autoMonarch);
             localStorage.setItem("autoEquipBest", autoEquipBest);

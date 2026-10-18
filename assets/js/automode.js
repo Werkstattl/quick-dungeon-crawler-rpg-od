@@ -25,6 +25,7 @@ if (localStorage.getItem("autoSpecialAbility") === "false") {
 }
 let autoEquipBest = localStorage.getItem("autoEquipBest") === "true";
 let autoStopLevelUp = localStorage.getItem("autoStopLevelUp") === "true";
+let autoStopNewPet = localStorage.getItem("autoStopNewPet") === "true";
 const normalizeAutoStopFloor = (value) => {
     const floor = Number(value);
     return Number.isSafeInteger(floor) && floor > 0 ? floor : 0;

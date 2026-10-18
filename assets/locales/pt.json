@@ -215,6 +215,7 @@
   "auto-mode-description": "Enfrente inimigos, colete saque e abra portas automaticamente.",
   "auto-mode-show-button": "Mostrar botão Auto",
   "auto-mode-level-up": "Parar ao subir de nível",
+  "auto-mode-new-pet": "Parar ao encontrar um novo companheiro",
   "auto-mode-stop-floor": "Parar no andar",
   "auto-level-up-stats": "Atributos de subida de nível",
   "luck-as-level-up-option": "Sorte como opção ao subir de nível",

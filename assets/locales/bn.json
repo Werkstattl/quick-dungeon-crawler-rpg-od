@@ -215,6 +215,7 @@
   "auto-mode-description": "স্বয়ংক্রিয়ভাবে শত্রুর সঙ্গে লড়ুন, লুট নিন ও দরজা খুলুন।",
   "auto-mode-show-button": "অটো বোতাম দেখান",
   "auto-mode-level-up": "লেভেল বাড়লে থামুন",
+  "auto-mode-new-pet": "নতুন সঙ্গী পাওয়া গেলে থামুন",
   "auto-mode-stop-floor": "এই তলায় থামুন",
   "auto-level-up-stats": "লেভেল-আপ স্ট্যাট",
   "luck-as-level-up-option": "লেভেল-আপ বিকল্প হিসেবে ভাগ্য",

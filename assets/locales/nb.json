@@ -215,6 +215,7 @@
   "auto-mode-description": "Gå automatisk i kamp mot fiender, hent bytte og åpne dører.",
   "auto-mode-show-button": "Vis Auto-knappen",
   "auto-mode-level-up": "Stopp ved nivåøkning",
+  "auto-mode-new-pet": "Stopp når en ny følgesvenn blir funnet",
   "auto-mode-stop-floor": "Stopp på etasje",
   "auto-level-up-stats": "Egenskaper ved nivåøkning",
   "luck-as-level-up-option": "Flaks som valg ved nivåøkning",

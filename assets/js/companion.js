@@ -1058,6 +1058,14 @@ function findCompanionAfterCombat(enemyLevel) {
             const companion = giveCompanion(selectedType.id);
             if (companion) {
                 recordPermanentCompanionFind(selectedType.id);
+                if (typeof autoMode !== 'undefined' && autoMode
+                    && typeof autoStopNewPet !== 'undefined' && autoStopNewPet) {
+                    setAutoModeEnabled(false);
+                    if (!dungeon.status.paused) {
+                        dungeonStartPause();
+                    }
+                    updateCompanionUI();
+                }
             }
         }
     }
