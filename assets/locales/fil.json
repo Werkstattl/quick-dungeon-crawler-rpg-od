@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Permanente kang nakatatanggap ng 25% mas kaunting pinsala.",
   "aegis-thorns-desc": "Tumatanggap ang mga kaaway ng 30% ng pinsalang ibinigay nila.",
   "companions-insight-desc": "Dobleng karanasan ang nakukuha ng mga kasama mula sa mga labanan.",
-  "open-wounds-desc": "Nagdudulot ng Pagdurugo ang mga tama sa loob ng 5s. Naiipon ang Pagdurugo (hanggang 25). Bawat segundo, nagbibigay ito ng 0.2% ng Maximum Health ng target na pinsala sa bawat stack.",
+  "open-wounds-desc": "Nagdudulot ng Pagdurugo ang mga tama sa loob ng 5s. Naiipon ang Pagdurugo (hanggang 13). Bawat segundo, nagbibigay ito ng 0.4% ng Maximum Health ng target na pinsala sa bawat stack.",
   "enter": "Pumasok",
   "ignore": "Huwag pansinin",
   "open-the-chest": "Buksan ang baul",

@@ -444,7 +444,7 @@
   "paladins-heart-desc": "永久減少 25% 所受傷害。",
   "aegis-thorns-desc": "敵人會承受其造成傷害的 30%。",
   "companions-insight-desc": "同伴在戰鬥中獲得的經驗翻倍。",
-  "open-wounds-desc": "攻擊命中會施加持續 5 秒的流血。流血可疊加（最多 25 層）。流血每秒按層數造成傷害：每層造成目標最大生命值的 0.2%。",
+  "open-wounds-desc": "攻擊命中會施加持續 5 秒的流血。流血可疊加（最多 13 層）。流血每秒按層數造成傷害：每層造成目標最大生命值的 0.4%。",
   "enter": "進入",
   "ignore": "忽略",
   "open-the-chest": "打開寶箱",

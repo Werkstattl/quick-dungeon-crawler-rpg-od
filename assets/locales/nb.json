@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Du mottar permanent 25% mindre skade.",
   "aegis-thorns-desc": "Fiender mottar 30% av skaden de påførte.",
   "companions-insight-desc": "Følgesvenner får dobbel erfaring fra kamper.",
-  "open-wounds-desc": "Treff påfører Blødning i 5 sek. Blødning stables opptil 25 ganger. Hver stabel påfører 0,2% av målets maksimale HP per sekund.",
+  "open-wounds-desc": "Treff påfører Blødning i 5 sek. Blødning stables opptil 13 ganger. Hver stabel påfører 0,4% av målets maksimale HP per sekund.",
   "enter": "Gå inn",
   "ignore": "Ignorer",
   "open-the-chest": "Åpne kisten",

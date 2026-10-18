@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Je loopt permanent 25% minder schade op.",
   "aegis-thorns-desc": "Vijanden lopen 30% van hun toegebrachte schade zelf op.",
   "companions-insight-desc": "Metgezellen ontvangen dubbele ervaring uit gevechten.",
-  "open-wounds-desc": "Treffers veroorzaken 5 sec. Bloeding. Bloeding stapelt tot 25 keer. Elke stapel brengt per seconde 0,2% van de maximale levenspunten van het doelwit toe.",
+  "open-wounds-desc": "Treffers veroorzaken 5 sec. Bloeding. Bloeding stapelt tot 13 keer. Elke stapel brengt per seconde 0,4% van de maximale levenspunten van het doelwit toe.",
   "enter": "Binnengaan",
   "ignore": "Negeren",
   "open-the-chest": "De kist openen",

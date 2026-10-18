@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Du tar permanent 25% mindre skada.",
   "aegis-thorns-desc": "Fiender tar 30% av skadan de tillfogade.",
   "companions-insight-desc": "Följeslagare får dubbel erfarenhet från strider.",
-  "open-wounds-desc": "Träffar orsakar Blödning i 5 s. Blödning staplas upp till 25 gånger. Varje stapel tillfogar 0,2% av målets maximala HP per sekund.",
+  "open-wounds-desc": "Träffar orsakar Blödning i 5 s. Blödning staplas upp till 13 gånger. Varje stapel tillfogar 0,4% av målets maximala HP per sekund.",
   "enter": "Gå in",
   "ignore": "Ignorera",
   "open-the-chest": "Öppna kistan",

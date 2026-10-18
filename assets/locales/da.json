@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Du modtager permanent 25% mindre skade.",
   "aegis-thorns-desc": "Fjender modtager 30% af den skade, de påførte.",
   "companions-insight-desc": "Ledsagere får dobbelt erfaring fra kampe.",
-  "open-wounds-desc": "Træffere påfører Blødning i 5 sek. Blødning stakkes op til 25 gange. Hver stak påfører 0,2% af målets maksimale HP pr. sekund.",
+  "open-wounds-desc": "Træffere påfører Blødning i 5 sek. Blødning stakkes op til 13 gange. Hver stak påfører 0,4% af målets maksimale HP pr. sekund.",
   "enter": "Gå ind",
   "ignore": "Ignorér",
   "open-the-chest": "Åbn kisten",

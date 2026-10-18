@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Trvale utrpíte o 25 % méně poškození.",
   "aegis-thorns-desc": "Nepřátelé utrpí 30 % poškození, které způsobili.",
   "companions-insight-desc": "Společníci získávají z bojů dvojnásobek zkušeností.",
-  "open-wounds-desc": "Zásahy způsobí krvácení na 5 s. Krvácení se sčítá (až 25krát). Každá vrstva krvácení způsobí každou sekundu poškození ve výši 0,2 % maximálního zdraví cíle.",
+  "open-wounds-desc": "Zásahy způsobí krvácení na 5 s. Krvácení se sčítá (až 13krát). Každá vrstva krvácení způsobí každou sekundu poškození ve výši 0,4 % maximálního zdraví cíle.",
   "enter": "Vstoupit",
   "ignore": "Ignorovat",
   "open-the-chest": "Otevřít truhlu",

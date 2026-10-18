@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Saat pysyvästi 25 % vähemmän vahinkoa.",
   "aegis-thorns-desc": "Viholliset saavat 30 % aiheuttamastaan vahingosta.",
   "companions-insight-desc": "Kumppanit saavat kaksinkertaisen kokemuksen taisteluista.",
-  "open-wounds-desc": "Osumat aiheuttavat verenvuotoa 5 sekunniksi. Vuoto pinoutuu (enintään 25). Vuoto aiheuttaa sekunnissa 0,2 % kohteen enimmäiselämästä pinoa kohti.",
+  "open-wounds-desc": "Osumat aiheuttavat verenvuotoa 5 sekunniksi. Vuoto pinoutuu (enintään 13). Vuoto aiheuttaa sekunnissa 0,4 % kohteen enimmäiselämästä pinoa kohti.",
   "enter": "Mene sisään",
   "ignore": "Ohita",
   "open-the-chest": "Avaa arkku",

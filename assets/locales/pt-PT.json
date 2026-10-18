@@ -444,7 +444,7 @@
   "paladins-heart-desc": "Recebes permanentemente menos 25% de dano.",
   "aegis-thorns-desc": "Os inimigos recebem 30% do dano que causarem.",
   "companions-insight-desc": "Companheiros recebem o dobro de experiência em batalhas.",
-  "open-wounds-desc": "Golpes aplicam Sangramento por 5s. Sangramento acumula (até 25). Sangramento causa 0,2% da Vida Máxima do alvo por acúmulo a cada segundo.",
+  "open-wounds-desc": "Golpes aplicam Sangramento por 5s. Sangramento acumula (até 13). Sangramento causa 0,4% da Vida Máxima do alvo por acúmulo a cada segundo.",
   "enter": "Entrar",
   "ignore": "Ignorar",
   "open-the-chest": "Abrir o baú",
