@@ -1414,6 +1414,10 @@ button:focus-visible {
     font-size: calc(0.8rem * var(--font-scale));
 }
 
+.auto-attack-toggle[hidden] {
+    display: none;
+}
+
 .auto-attack-toggle input {
     margin: 0;
 }

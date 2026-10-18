@@ -89,6 +89,7 @@ const getAutoLevelUpStatLabel = (stat) => {
     return stat;
 };
 const autoAttackSetting = localStorage.getItem("autoAttack");
+let hideAutoAttackToggle = localStorage.getItem("hideAutoAttackToggle") === "true";
 let autoAttack = autoAttackSetting === "true";
 let autoBossDoors = true
 if (localStorage.getItem("autoBossDoors") === "false") {

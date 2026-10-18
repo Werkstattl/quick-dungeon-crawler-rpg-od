@@ -725,6 +725,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         // Log flow setting
         let logFlow = (localStorage.getItem('logFlow') || 'bottom');
         let luckLevelUpEnabled = Boolean(luckAsLevelUpOption);
+        const hideAutoAttackEnabled = typeof hideAutoAttackToggle !== 'undefined' && hideAutoAttackToggle;
         // Only allow changing logFlow while resting with no open choices
         const hasOpenChoices = !!document.querySelector('#choice1, #choice2, #choice3, #choice4');
         const dimTitle = document.querySelector('#title-screen');
@@ -761,6 +762,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     ${languageOptionsMarkup}
                 </select>
                 <br><label id="luck-levelup-label"><input type="checkbox" id="luck-levelup-toggle" ${luckLevelUpEnabled ? 'checked' : ''}> <span data-i18n="luck-as-level-up-option">Luck as level up option</span></label>
+                <br><label id="hide-auto-attack-label"><input type="checkbox" id="hide-auto-attack-toggle" ${hideAutoAttackEnabled ? 'checked' : ''}> <span data-i18n="hide-auto-attack-toggle">Hide Auto Attack</span></label>
                 <br><button id="apply-volume" data-i18n="apply">Apply</button>
             </div>`;
         applyTranslations();
@@ -772,6 +774,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let fontFamilySelect = document.querySelector('#font-family-select');
         let logFlowSelect = document.querySelector('#logflow-select');
         let luckLevelUpToggle = document.querySelector('#luck-levelup-toggle');
+        let hideAutoAttackCheckbox = document.querySelector('#hide-auto-attack-toggle');
         let selectedLang = localStorage.getItem('lang') || 'en';
         languageSelect.value = selectedLang;
         languageSelect.onchange = function () {
@@ -835,6 +838,12 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
             }
             luckAsLevelUpOption = luckLevelUpToggle.checked;
             localStorage.setItem("luckAsLevelUpOption", luckAsLevelUpOption);
+            hideAutoAttackToggle = hideAutoAttackCheckbox.checked;
+            localStorage.setItem("hideAutoAttackToggle", hideAutoAttackToggle);
+            const combatAutoAttackLabel = document.querySelector('.auto-attack-toggle');
+            if (combatAutoAttackLabel) {
+                combatAutoAttackLabel.hidden = hideAutoAttackToggle;
+            }
             let wasPlaying = bgmDungeon && bgmDungeon.playing();
             if (wasPlaying) {
                 bgmDungeon.stop();

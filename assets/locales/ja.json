@@ -218,6 +218,7 @@
   "auto-mode-stop-floor": "停止する階",
   "auto-level-up-stats": "レベルアップ能力値",
   "luck-as-level-up-option": "運をレベルアップ候補にする",
+  "hide-auto-attack-toggle": "オートアタックを非表示",
   "active": "アクティブ",
   "blessings": "祝福",
   "heal": "ヒール",

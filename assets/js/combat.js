@@ -1814,6 +1814,7 @@ const showCombatInfo = () => {
     }
     // Re-evaluate enemy name in case language changed after spawn
     enemy.name = getBaseEnemyName(enemy.id);
+    const autoAttackToggleHidden = typeof hideAutoAttackToggle !== 'undefined' && hideAutoAttackToggle;
     const autoAttackEnabled = typeof autoAttack === 'undefined' ? false : autoAttack;
     const autoAttackCheckedAttr = autoAttackEnabled ? 'checked' : '';
     const autoModeEnabled = typeof autoMode === 'undefined' ? false : autoMode;
@@ -1889,7 +1890,7 @@ const showCombatInfo = () => {
             <div class="attack-controls">
                 <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>
                 <div class="attack-controls-secondary">
-                    <label class="auto-attack-toggle">
+                    <label class="auto-attack-toggle" ${autoAttackToggleHidden ? 'hidden' : ''}>
                         <input type="checkbox" id="auto-attack-combat-toggle" ${autoAttackCheckedAttr}>
                         <span data-i18n="auto-attack">${t('auto-attack')}</span>
                     </label>
