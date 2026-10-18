@@ -187,6 +187,7 @@
   "runtime": "Tiempo transcurrido",
   "curse": "Maldición",
   "curse-level-unlocked": "¡Nuevo nivel de maldición desbloqueado! (Nv.{level})",
+  "curse-help-description": "Los niveles de maldición son una escala de dificultad: cuanto mayor sea el nivel, más fuertes serán las criaturas y mejor será el botín.",
   "curse-levels-unlocked": "Niveles de maldición desbloqueados: {current}/{max}",
   "curse-next-unlock-floor": "Alcanza el piso {floor} en el nivel de maldición {current} para desbloquear el nivel de maldición {next}.",
   "curse-next-unlock-monarch": "Derrota al Monarca de la Mazmorra en el nivel de maldición {current} para desbloquear el nivel de maldición {next}.",

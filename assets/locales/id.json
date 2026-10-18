@@ -187,6 +187,7 @@
   "runtime": "Durasi run",
   "curse": "Kutukan",
   "curse-level-unlocked": "Level kutukan baru terbuka! (Lv.{level})",
+  "curse-help-description": "Level kutukan adalah skala kesulitan: semakin tinggi levelnya, semakin kuat makhluk yang dihadapi dan semakin bagus jarahan yang kamu dapatkan.",
   "curse-levels-unlocked": "Level Kutukan terbuka: {current}/{max}",
   "curse-next-unlock-floor": "Capai Lantai {floor} di Level Kutukan {current} untuk membuka Level Kutukan {next}.",
   "curse-next-unlock-monarch": "Kalahkan Penguasa Dungeon di Level Kutukan {current} untuk membuka Level Kutukan {next}.",

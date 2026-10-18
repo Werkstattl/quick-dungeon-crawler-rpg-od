@@ -187,6 +187,7 @@
   "runtime": "Speltid",
   "curse": "Förbannelse",
   "curse-level-unlocked": "Ny förbannelsenivå upplåst! (Niv.{level})",
+  "curse-help-description": "Förbannelsenivåer anger svårighetsgraden: högre nivåer gör varelserna starkare och belönar dig med bättre byte.",
   "curse-levels-unlocked": "Upplåsta förbannelsenivåer: {current}/{max}",
   "curse-next-unlock-floor": "Nå Våning {floor} på förbannelsenivå {current} för att låsa upp förbannelsenivå {next}.",
   "curse-next-unlock-monarch": "Besegra Fängelsehålans monark på förbannelsenivå {current} för att låsa upp förbannelsenivå {next}.",

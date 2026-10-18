@@ -178,6 +178,7 @@
   "runtime": "已用时间",
   "curse": "诅咒",
   "curse-level-unlocked": "新诅咒等级已解锁！（等级 {level}）",
+  "curse-help-description": "诅咒等级代表难度：等级越高，生物越强大，你获得的战利品也越好。",
   "curse-levels-unlocked": "已解锁的诅咒等级：{current}/{max}",
   "curse-next-unlock-floor": "在诅咒等级 {current} 到达第 {floor} 层，可解锁诅咒等级 {next}。",
   "curse-next-unlock-monarch": "在诅咒等级 {current} 击败地下城君主，可解锁诅咒等级 {next}。",

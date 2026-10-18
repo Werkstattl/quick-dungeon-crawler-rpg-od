@@ -187,6 +187,7 @@
   "runtime": "Tempoh pusingan",
   "curse": "Sumpahan",
   "curse-level-unlocked": "Tahap sumpahan baharu dibuka! (Tahap {level})",
+  "curse-help-description": "Tahap sumpahan ialah ukuran kesukaran: semakin tinggi tahapnya, semakin kuat makhluk dan semakin baik rampasan yang anda peroleh.",
   "curse-levels-unlocked": "Tahap Sumpahan dibuka: {current}/{max}",
   "curse-next-unlock-floor": "Capai Tingkat {floor} pada Tahap Sumpahan {current} untuk membuka Tahap Sumpahan {next}.",
   "curse-next-unlock-monarch": "Tewaskan Maharaja Penjara Bawah Tanah pada Tahap Sumpahan {current} untuk membuka Tahap Sumpahan {next}.",

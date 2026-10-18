@@ -187,6 +187,7 @@
   "runtime": "Durata run",
   "curse": "Maledizione",
   "curse-level-unlocked": "Nuovo livello di maledizione sbloccato! (Liv.{level})",
+  "curse-help-description": "I livelli di maledizione indicano la difficoltà: più alto è il livello, più forti sono le creature e migliore è il bottino.",
   "curse-levels-unlocked": "Livelli maledizione sbloccati: {current}/{max}",
   "curse-next-unlock-floor": "Raggiungi il piano {floor} al livello maledizione {current} per sbloccare il livello maledizione {next}.",
   "curse-next-unlock-monarch": "Sconfiggi il Monarca del dungeon al livello maledizione {current} per sbloccare il livello maledizione {next}.",

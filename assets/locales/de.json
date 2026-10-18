@@ -187,6 +187,7 @@
   "runtime": "Laufzeit",
   "curse": "Fluch",
   "curse-level-unlocked": "Neue Fluchstufe freigeschaltet! (Stufe {level})",
+  "curse-help-description": "Fluchstufen bestimmen den Schwierigkeitsgrad: Je höher die Stufe, desto stärker die Kreaturen und desto besser die Beute.",
   "curse-levels-unlocked": "Freigeschaltete Fluchstufen: {current}/{max}",
   "curse-next-unlock-floor": "Erreiche Etage {floor} auf Fluchstufe {current}, um Fluchstufe {next} freizuschalten.",
   "curse-next-unlock-monarch": "Besiege den Dungeon-Monarchen auf Fluchstufe {current}, um Fluchstufe {next} freizuschalten.",

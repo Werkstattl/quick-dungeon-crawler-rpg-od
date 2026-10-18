@@ -187,6 +187,7 @@
   "runtime": "ランタイム",
   "curse": "呪い",
   "curse-level-unlocked": "新しい呪いレベルを解放した！(Lv.{level})",
+  "curse-help-description": "呪いレベルは難易度の目安です。レベルが高いほどクリーチャーが強くなり、より良い戦利品を獲得できます。",
   "curse-levels-unlocked": "解放済みの呪いレベル：{current}/{max}",
   "curse-next-unlock-floor": "呪いレベル{current}で{floor}階に到達すると、呪いレベル{next}が解放されます。",
   "curse-next-unlock-monarch": "呪いレベル{current}でダンジョンモナークを倒すと、呪いレベル{next}が解放されます。",

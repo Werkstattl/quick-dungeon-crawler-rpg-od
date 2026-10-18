@@ -187,6 +187,7 @@
   "runtime": "Czas wyprawy",
   "curse": "Klątwa",
   "curse-level-unlocked": "Odblokowano nowy poziom klątwy! (Poz.{level})",
+  "curse-help-description": "Poziomy klątwy określają trudność: im wyższy poziom, tym silniejsze stworzenia i lepsze łupy.",
   "curse-levels-unlocked": "Odblokowane poziomy klątwy: {current}/{max}",
   "curse-next-unlock-floor": "Dotrzyj na piętro {floor} na poziomie klątwy {current}, aby odblokować poziom klątwy {next}.",
   "curse-next-unlock-monarch": "Pokonaj Monarchę lochu na poziomie klątwy {current}, aby odblokować poziom klątwy {next}.",

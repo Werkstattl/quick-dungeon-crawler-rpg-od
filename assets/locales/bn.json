@@ -187,6 +187,7 @@
   "runtime": "সময়কাল",
   "curse": "অভিশাপ",
   "curse-level-unlocked": "নতুন অভিশাপ লেভেল খুলেছে! (Lv.{level})",
+  "curse-help-description": "অভিশাপের স্তর হলো কঠিনতার মাপকাঠি: স্তর যত বেশি, প্রাণীরা তত শক্তিশালী হয় এবং আপনি তত ভালো লুট পান।",
   "curse-levels-unlocked": "খোলা অভিশাপ লেভেল: {current}/{max}",
   "curse-next-unlock-floor": "অভিশাপ লেভেল {current}-এ তলা {floor}-এ পৌঁছালে অভিশাপ লেভেল {next} খুলবে।",
   "curse-next-unlock-monarch": "অভিশাপ লেভেল {current}-এ অন্ধকূপের সম্রাটকে হারালে অভিশাপ লেভেল {next} খুলবে।",

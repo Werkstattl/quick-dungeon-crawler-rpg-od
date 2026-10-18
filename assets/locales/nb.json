@@ -187,6 +187,7 @@
   "runtime": "Varighet",
   "curse": "Forbannelse",
   "curse-level-unlocked": "Nytt forbannelsesnivå låst opp! (Niv.{level})",
+  "curse-help-description": "Forbannelsesnivåer er en vanskelighetsskala: høyere nivåer gjør skapningene sterkere og belønner deg med bedre bytte.",
   "curse-levels-unlocked": "Opplåste forbannelsesnivåer: {current}/{max}",
   "curse-next-unlock-floor": "Nå Etasje {floor} på forbannelsesnivå {current} for å låse opp forbannelsesnivå {next}.",
   "curse-next-unlock-monarch": "Beseir Fangehullets monark på forbannelsesnivå {current} for å låse opp forbannelsesnivå {next}.",

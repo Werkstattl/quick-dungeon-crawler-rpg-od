@@ -178,6 +178,7 @@
   "runtime": "已用時間",
   "curse": "詛咒",
   "curse-level-unlocked": "新詛咒等級已解鎖！（等級 {level}）",
+  "curse-help-description": "詛咒等級代表難度：等級越高，生物越強大，你獲得的戰利品也越好。",
   "curse-levels-unlocked": "已解鎖的詛咒等級：{current}/{max}",
   "curse-next-unlock-floor": "在詛咒等級 {current} 到達第 {floor} 層，可解鎖詛咒等級 {next}。",
   "curse-next-unlock-monarch": "在詛咒等級 {current} 擊敗地下城君主，可解鎖詛咒等級 {next}。",

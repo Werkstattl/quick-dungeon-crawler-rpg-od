@@ -187,6 +187,7 @@
   "runtime": "Doba výpravy",
   "curse": "Kletba",
   "curse-level-unlocked": "Odemčena nová úroveň kletby! (Lv.{level})",
+  "curse-help-description": "Úrovně kletby určují obtížnost: vyšší úrovně posilují nestvůry a odměňují tě lepší kořistí.",
   "curse-levels-unlocked": "Odemčené úrovně kletby: {current}/{max}",
   "curse-next-unlock-floor": "Dosáhněte {floor}. patra na úrovni kletby {current} a odemknete úroveň kletby {next}.",
   "curse-next-unlock-monarch": "Porazte Vládce podzemí na úrovni kletby {current} a odemknete úroveň kletby {next}.",

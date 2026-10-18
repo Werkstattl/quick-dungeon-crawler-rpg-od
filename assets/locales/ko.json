@@ -187,6 +187,7 @@
   "runtime": "런 시간",
   "curse": "저주",
   "curse-level-unlocked": "새 저주 레벨이 해금되었습니다! (Lv.{level})",
+  "curse-help-description": "저주 레벨은 난이도의 척도입니다. 레벨이 높을수록 크리처가 강해지고 더 좋은 전리품을 얻습니다.",
   "curse-levels-unlocked": "해금된 저주 레벨: {current}/{max}",
   "curse-next-unlock-floor": "저주 레벨 {current}에서 {floor}층에 도달하면 저주 레벨 {next}이(가) 해금됩니다.",
   "curse-next-unlock-monarch": "저주 레벨 {current}에서 던전 군주를 처치하면 저주 레벨 {next}이(가) 해금됩니다.",

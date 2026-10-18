@@ -187,6 +187,7 @@
   "runtime": "Duur",
   "curse": "Vloek",
   "curse-level-unlocked": "Nieuw vloekniveau ontgrendeld! (Niv.{level})",
+  "curse-help-description": "Vloekniveaus bepalen de moeilijkheid: hogere niveaus maken wezens sterker en belonen je met betere buit.",
   "curse-levels-unlocked": "Ontgrendelde vloekniveaus: {current}/{max}",
   "curse-next-unlock-floor": "Bereik Verdieping {floor} op vloekniveau {current} om vloekniveau {next} te ontgrendelen.",
   "curse-next-unlock-monarch": "Versla de Kerkervorst op vloekniveau {current} om vloekniveau {next} te ontgrendelen.",

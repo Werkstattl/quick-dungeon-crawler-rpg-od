@@ -187,6 +187,7 @@
   "runtime": "Durée",
   "curse": "Malédiction",
   "curse-level-unlocked": "Nouveau niveau de malédiction débloqué ! (Niv.{level})",
+  "curse-help-description": "Les niveaux de malédiction définissent la difficulté : plus le niveau est élevé, plus les créatures sont fortes et meilleur est le butin.",
   "curse-levels-unlocked": "Niveaux de malédiction débloqués : {current}/{max}",
   "curse-next-unlock-floor": "Atteignez l'étage {floor} au niveau de malédiction {current} pour débloquer le niveau de malédiction {next}.",
   "curse-next-unlock-monarch": "Battez le Monarque du donjon au niveau de malédiction {current} pour débloquer le niveau de malédiction {next}.",

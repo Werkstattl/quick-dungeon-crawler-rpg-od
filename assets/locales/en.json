@@ -187,6 +187,7 @@
   "runtime": "Runtime",
   "curse": "Curse",
   "curse-level-unlocked": "New curse level unlocked! (Lv.{level})",
+  "curse-help-description": "Curse levels are a difficulty scale: higher levels make creatures stronger and reward you with better loot.",
   "curse-levels-unlocked": "Curse Levels unlocked: {current}/{max}",
   "curse-next-unlock-floor": "Reach Floor {floor} on Curse Level {current} to unlock Curse Level {next}.",
   "curse-next-unlock-monarch": "Defeat the Dungeon Monarch on Curse Level {current} to unlock Curse Level {next}.",

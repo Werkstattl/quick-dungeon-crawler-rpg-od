@@ -187,6 +187,7 @@
   "runtime": "Varighed",
   "curse": "Forbandelse",
   "curse-level-unlocked": "Nyt forbandelsesniveau låst op! (Niv.{level})",
+  "curse-help-description": "Forbandelsesniveauer er en sværhedsgrad: højere niveauer gør væsner stærkere og belønner dig med bedre bytte.",
   "curse-levels-unlocked": "Oplåste forbandelsesniveauer: {current}/{max}",
   "curse-next-unlock-floor": "Nå Etage {floor} på forbandelsesniveau {current} for at låse forbandelsesniveau {next} op.",
   "curse-next-unlock-monarch": "Besejr Fangekælderens monark på forbandelsesniveau {current} for at låse forbandelsesniveau {next} op.",

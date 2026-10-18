@@ -187,6 +187,7 @@
   "runtime": "Kesto",
   "curse": "Kirous",
   "curse-level-unlocked": "Uusi kiroustaso avattu! (Taso {level})",
+  "curse-help-description": "Kiroustasot määrittävät vaikeustason: korkeammat tasot tekevät olennoista vahvempia ja palkitsevat sinut paremmalla saaliilla.",
   "curse-levels-unlocked": "Avatut kiroustasot: {current}/{max}",
   "curse-next-unlock-floor": "Saavuta kerros {floor} kiroustasolla {current} avataksesi kiroustason {next}.",
   "curse-next-unlock-monarch": "Kukista Luolaston hallitsija kiroustasolla {current} avataksesi kiroustason {next}.",

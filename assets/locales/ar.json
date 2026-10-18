@@ -187,6 +187,7 @@
   "runtime": "مدة التشغيل",
   "curse": "اللعنة",
   "curse-level-unlocked": "تم فتح مستوى لعنة جديد! (المستوى {level})",
+  "curse-help-description": "مستويات اللعنة هي مقياس للصعوبة: كلما ارتفع المستوى، أصبحت المخلوقات أقوى وحصلت على غنائم أفضل.",
   "curse-levels-unlocked": "مستويات اللعنة المفتوحة: {current}/{max}",
   "curse-next-unlock-floor": "اوصل إلى الطابق {floor} على مستوى اللعنة {current} لفتح مستوى اللعنة {next}.",
   "curse-next-unlock-monarch": "اهزم حاكم الزنزانة على مستوى اللعنة {current} لفتح مستوى اللعنة {next}.",

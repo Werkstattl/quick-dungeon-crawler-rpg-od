@@ -187,6 +187,7 @@
   "runtime": "रन समय",
   "curse": "श्राप",
   "curse-level-unlocked": "नया श्राप स्तर अनलॉक हुआ! (स्तर {level})",
+  "curse-help-description": "श्राप का स्तर कठिनाई का पैमाना है: स्तर जितना ऊँचा होगा, जीव उतने ही ताकतवर होंगे और आपको उतनी ही बेहतर लूट मिलेगी।",
   "curse-levels-unlocked": "अनलॉक किए गए श्राप स्तर: {current}/{max}",
   "curse-next-unlock-floor": "श्राप स्तर {current} पर मंजिल {floor} तक पहुंचें और श्राप स्तर {next} अनलॉक करें।",
   "curse-next-unlock-monarch": "श्राप स्तर {current} पर डंज़न मोनार्क को हराएं और श्राप स्तर {next} अनलॉक करें।",

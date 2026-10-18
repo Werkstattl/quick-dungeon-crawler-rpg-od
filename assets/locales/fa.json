@@ -187,6 +187,7 @@
   "runtime": "زمان دور",
   "curse": "نفرین",
   "curse-level-unlocked": "سطح تازه نفرین باز شد! (سطح {level})",
+  "curse-help-description": "سطح نفرین معیاری برای سختی بازی است: سطح بالاتر موجودات را قوی‌تر می‌کند و غنیمت بهتری به شما می‌دهد.",
   "curse-levels-unlocked": "سطوح نفرین بازشده: {current}/{max}",
   "curse-next-unlock-floor": "در سطح نفرین {current} به طبقه {floor} برسید تا سطح نفرین {next} باز شود.",
   "curse-next-unlock-monarch": "در سطح نفرین {current} فرمانروای سیاه‌چال را شکست دهید تا سطح نفرین {next} باز شود.",

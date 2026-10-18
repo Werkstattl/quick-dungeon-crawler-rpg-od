@@ -187,6 +187,7 @@
   "runtime": "Çalışma süresi",
   "curse": "Lanet",
   "curse-level-unlocked": "Yeni lanet seviyesi açıldı! (Sv.{level})",
+  "curse-help-description": "Lanet seviyeleri bir zorluk ölçeğidir: seviye yükseldikçe yaratıklar güçlenir ve daha iyi ganimet kazanırsın.",
   "curse-levels-unlocked": "Açılan lanet seviyeleri: {current}/{max}",
   "curse-next-unlock-floor": "Lanet seviyesi {current} ile {floor}. kata ulaşarak lanet seviyesi {next} kilidini aç.",
   "curse-next-unlock-monarch": "Lanet seviyesi {current} ile Zindan Hükümdarı'nı yenerek lanet seviyesi {next} kilidini aç.",

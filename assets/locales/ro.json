@@ -187,6 +187,7 @@
   "runtime": "Durată",
   "curse": "Blestem",
   "curse-level-unlocked": "Noul nivel de blestem deblocat! (Niv.{level})",
+  "curse-help-description": "Nivelurile de blestem indică dificultatea: nivelurile mai mari fac creaturile mai puternice și te răsplătesc cu pradă mai bună.",
   "curse-levels-unlocked": "Niveluri de blestem deblocate: {current}/{max}",
   "curse-next-unlock-floor": "Ajunge la etajul {floor} pe nivelul de blestem {current} pentru a debloca nivelul de blestem {next}.",
   "curse-next-unlock-monarch": "Învinge Monarhul Temniței pe nivelul de blestem {current} pentru a debloca nivelul de blestem {next}.",

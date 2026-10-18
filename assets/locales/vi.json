@@ -187,6 +187,7 @@
   "runtime": "Thời lượng",
   "curse": "Lời nguyền",
   "curse-level-unlocked": "Đã mở cấp lời nguyền mới! (Cấp {level})",
+  "curse-help-description": "Cấp độ nguyền rủa là thước đo độ khó: cấp độ càng cao, sinh vật càng mạnh và bạn nhận được chiến lợi phẩm càng tốt.",
   "curse-levels-unlocked": "Cấp lời nguyền đã mở: {current}/{max}",
   "curse-next-unlock-floor": "Đạt Tầng {floor} ở cấp lời nguyền {current} để mở cấp lời nguyền {next}.",
   "curse-next-unlock-monarch": "Đánh bại Bạo chúa Hầm ngục ở cấp lời nguyền {current} để mở cấp lời nguyền {next}.",

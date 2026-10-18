@@ -1987,12 +1987,16 @@ const allocationPopup = () => {
                 <p id="skill-desc" data-i18n="remnant-razor-desc">Attacks deal extra 9% of enemies' current health on hit.</p>
             </div>
             <div class="row">
-                <p data-i18n="curse">Curse</p>
+                <button type="button" id="curse-help-toggle" aria-expanded="false" aria-controls="curse-help-description">
+                    <span data-i18n="curse">Curse</span>
+                    <i class="fa fa-circle-question stats-help-icon" aria-hidden="true"></i>
+                </button>
                 ${maxUnlockedCurse <= MIN_CURSE_LEVEL ? `<p>${MIN_CURSE_LEVEL}</p>` : ''}
                 <select id="select-curse" ${maxUnlockedCurse <= MIN_CURSE_LEVEL ? 'hidden' : ''}>
                     ${getCurseLevelRange().filter((level) => level <= maxUnlockedCurse).map((level) => `<option value="${level}">${level}</option>`).join('')}
                 </select>
             </div>
+            <p id="curse-help-description" class="curse-progression-info" data-i18n="curse-help-description" hidden>Curse levels are a difficulty scale: higher levels make creatures stronger and reward you with better loot.</p>
             <div class="curse-progression-info">
                 <p class="curse-progress" data-i18n="curse-levels-unlocked" data-i18n-params='{"current":${maxUnlockedCurse},"max":${MAX_CURSE_LEVEL}}'>${t('curse-levels-unlocked', { current: maxUnlockedCurse, max: MAX_CURSE_LEVEL })}</p>
                 <p data-i18n="${curseUnlockHint.key}" data-i18n-params='${JSON.stringify(curseUnlockHint.params)}'>${t(curseUnlockHint.key, curseUnlockHint.params)}</p>
@@ -2007,6 +2011,15 @@ const allocationPopup = () => {
     document.querySelector("#title-screen").style.filter = "brightness(50%)";
     loadContent();
     applyTranslations(defaultModalElement);
+
+    const curseHelpToggle = document.getElementById('curse-help-toggle');
+    const curseHelpDescription = document.getElementById('curse-help-description');
+    curseHelpToggle.addEventListener('click', () => {
+        const expanded = curseHelpToggle.getAttribute('aria-expanded') === 'true';
+        (expanded ? sfxDecline : sfxOpen).play();
+        curseHelpToggle.setAttribute('aria-expanded', String(!expanded));
+        curseHelpDescription.hidden = expanded;
+    });
 
     // Stat Allocation
     const handleStatButtons = (e) => {

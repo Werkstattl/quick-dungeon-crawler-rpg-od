@@ -1782,6 +1782,28 @@ button:focus-visible {
     margin-left: auto;
 }
 
+#curse-help-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+#curse-help-toggle:hover {
+    text-decoration: underline;
+}
+
+#curse-help-toggle span {
+    width: auto;
+}
+
 .curse-progression-info {
     margin: 0.5rem 0;
     padding: 0.6rem;
@@ -2106,7 +2128,8 @@ header button i {
     text-decoration: underline;
 }
 
-.stat-panel .stats-help-icon {
+.stat-panel .stats-help-icon,
+#curse-help-toggle .stats-help-icon {
     color: #ffd166;
     font-size: 0.95em;
 }
