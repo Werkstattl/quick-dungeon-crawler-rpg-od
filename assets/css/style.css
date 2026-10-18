@@ -1008,6 +1008,188 @@ button:focus-visible {
     font-size: 0.85rem;
 }
 
+#equipmentInfo .content .equipment-info-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.75rem;
+}
+
+#equipmentInfo .content .equipment-compare-slot > .equipment-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#equipmentInfo .content .equipment-card--roll-quality {
+    overflow-x: auto;
+}
+
+#equipmentInfo .content .equipment-roll-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+#equipmentInfo .content .equipment-roll-table th,
+#equipmentInfo .content .equipment-roll-table td {
+    padding: 0.55rem 0.35rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+#equipmentInfo .content .equipment-roll-table thead th {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #999;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#equipmentInfo .content .equipment-roll-table thead th:nth-child(2),
+#equipmentInfo .content .equipment-roll-table .roll-stat-value {
+    text-align: right;
+}
+
+#equipmentInfo .content .equipment-roll-table thead th:nth-child(3),
+#equipmentInfo .content .equipment-roll-table .roll-stat-rolls {
+    text-align: center;
+}
+
+#equipmentInfo .content .equipment-roll-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#equipmentInfo .content .equipment-roll-row.is-interactive {
+    cursor: pointer;
+}
+
+#equipmentInfo .content .equipment-roll-row.is-interactive:hover,
+#equipmentInfo .content .equipment-roll-row.is-active {
+    background: rgba(227, 185, 100, 0.1);
+}
+
+#equipmentInfo .content .equipment-roll-row:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+#equipmentInfo .content .equipment-roll-row .roll-stat-name {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #ccc;
+}
+
+#equipmentInfo .content .equipment-roll-row .roll-stat-value {
+    font-weight: 600;
+}
+
+#equipmentInfo .content .equipment-roll-row .roll-stat-value .stat-diff {
+    display: block;
+    font-size: 0.75rem;
+}
+
+#equipmentInfo .content .equipment-roll-row .stat-diff.positive {
+    color: #6ad16a;
+}
+
+#equipmentInfo .content .equipment-roll-row .stat-diff.negative {
+    color: #f08080;
+}
+
+#equipmentInfo .content .equipment-roll-row .roll-stat-rolls {
+    color: #999;
+}
+
+#equipmentInfo .content .equipment-roll-row .roll-stat-quality {
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    padding-left: 0.6rem;
+}
+
+#equipmentInfo .content .roll-quality-bar {
+    display: inline-block;
+    vertical-align: middle;
+    width: 3.5rem;
+    height: 0.35rem;
+    margin-right: 0.5rem;
+    border-radius: 0.2rem;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+#equipmentInfo .content .roll-quality-fill {
+    display: block;
+    height: 100%;
+    border-radius: 0.2rem;
+}
+
+#equipmentInfo .content .roll-quality-high {
+    background: #6ad16a;
+}
+
+#equipmentInfo .content .roll-quality-mid {
+    background: #e3b964;
+}
+
+#equipmentInfo .content .roll-quality-low {
+    background: #f08080;
+}
+
+#equipmentInfo .content .roll-quality-percent {
+    display: inline-block;
+    min-width: 2.5rem;
+    text-align: right;
+    font-weight: 600;
+}
+
+#equipmentInfo .content .roll-quality-empty {
+    color: #777;
+}
+
+#equipmentInfo .content .equipment-roll-info {
+    display: flex;
+    gap: 0.9rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 0.4rem;
+    background: rgba(227, 185, 100, 0.05);
+    text-align: left;
+}
+
+#equipmentInfo .content .equipment-roll-info > i {
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-top: 0.1rem;
+}
+
+#equipmentInfo .content .equipment-roll-info h4 {
+    margin: 0 0 0.4rem;
+    color: var(--accent);
+}
+
+#equipmentInfo .content .equipment-roll-info p {
+    margin: 0.2rem 0;
+    font-size: 0.85rem;
+}
+
+#equipmentInfo .content .equipment-roll-info .equipment-roll-legend {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+#equipmentInfo .content .equipment-info-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #999;
+    text-align: center;
+}
+
+#equipmentInfo .content .equipment-info-note:empty,
+#equipmentInfo .content #equipment-roll-quality-info:empty {
+    display: none;
+}
+
 @media (max-width: 600px) {
     #equipmentInfo .content.equipment-info-content,
     #equipmentInfo .content.equipment-info-content--with-compare {

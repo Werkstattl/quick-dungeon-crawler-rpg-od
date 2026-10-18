@@ -817,6 +817,134 @@ const rerollEquipmentStats = (equipment, forcedStat = null, options = {}) => {
     equipment.value = Math.round(equipmentValue * 2.55);
     equipment.icon = equipmentIcon(equipment.category);
 };
+
+const EQUIPMENT_INTEGER_ROLL_STATS = new Set(['hp', 'atk', 'def']);
+const EQUIPMENT_SHOW_ROLL_QUALITY_STORAGE_KEY = 'equipmentShowRollQuality';
+const EQUIPMENT_INCLUDE_REFINEMENT_STORAGE_KEY = 'equipmentIncludeRefinement';
+
+const readEquipmentInfoPreference = (storageKey, fallback) => {
+    try {
+        const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(storageKey) : null;
+        return stored === null ? fallback : stored === 'true';
+    } catch (error) {
+        return fallback;
+    }
+};
+
+const writeEquipmentInfoPreference = (storageKey, value) => {
+    try {
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(storageKey, String(Boolean(value)));
+        }
+    } catch (error) {
+        console.warn('Unable to save the equipment display preference:', error);
+    }
+};
+
+// Mirrors the per-roll bounds of rerollEquipmentStats / rollCompanionCharmStatValue.
+const getEquipmentStatRollRange = (equipment, statType) => {
+    if (!equipment) {
+        return null;
+    }
+    const tier = clampEquipmentTier(equipment.tier === undefined ? 1 : equipment.tier);
+    const lvl = Number(equipment.lvl) || 1;
+    const enemyScaling = getEnemyScalingFromEquipmentTier(tier);
+    const rollFloor = getEquipmentRollFloor(tier);
+    let min;
+    let max;
+
+    if (isCompanionCharm(equipment)) {
+        const rarityScale = {
+            Common: 0.9,
+            Uncommon: 1,
+            Rare: 1.15,
+            Epic: 1.3,
+            Legendary: 1.5,
+            Heirloom: 1.8,
+        }[equipment.rarity] || 1;
+        const levelScale = 1 + Math.min(1.2, lvl / 90) + (Math.max(0, tier) * 0.08);
+        const minimumRollMultiplier = rollFloor / BASE_EQUIPMENT_ROLL_FLOOR;
+        const charmRanges = {
+            atk: [12, 20, Infinity],
+            atkSpd: [1.7, 4.5, 19],
+            critRate: [1.4, 4.25, 18],
+            critDmg: [4, 9 * enemyScaling, 35],
+            vamp: [0.4, 1.6, 5],
+            luck: [0.6, 2.4, 8],
+            fasterRun: [0.5, 1.8, 6],
+        }[statType];
+        if (!charmRanges) {
+            return null;
+        }
+        const [low, high, cap] = charmRanges;
+        min = Math.min(cap, low * rarityScale * minimumRollMultiplier);
+        max = Math.min(cap, high * rarityScale * levelScale);
+        if (statType === 'atk') {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+        }
+        return max >= min ? { min, max } : null;
+    }
+
+    const statMultiplier = (enemyScaling - 1) * lvl;
+    const baseScale = {
+        hp: 40,
+        atk: 16,
+        def: 16,
+        atkSpd: 3,
+        vamp: 2,
+        critRate: 2,
+        critDmg: 0.6,
+        dodge: 0.8,
+        luck: 0.8,
+    }[statType];
+    if (statType === 'fasterRun') {
+        min = rollFloor * rollFloor * (1 + (2.5 * statMultiplier));
+        max = 1.5 * (1 + (2.5 * statMultiplier));
+    } else if (baseScale) {
+        min = baseScale * rollFloor * rollFloor * (1 + statMultiplier);
+        max = baseScale * 1.5 * (1 + statMultiplier);
+    } else {
+        return null;
+    }
+
+    if (EQUIPMENT_INTEGER_ROLL_STATS.has(statType)) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+    }
+    const cap = getEquipmentStatRollCap(statType, tier);
+    if (cap && max > cap) {
+        min = Math.min(min, cap * rollFloor);
+        max = cap;
+    }
+    return max >= min ? { min, max } : null;
+};
+
+// Quality is where the average roll lands between the minimum and maximum possible roll.
+const getEquipmentStatRollQuality = (equipment, statType) => {
+    const range = getEquipmentStatRollRange(equipment, statType);
+    const rolls = getEquipmentStatRollCounts(equipment)[statType];
+    if (!range || !rolls) {
+        return null;
+    }
+    const total = equipment.stats
+        .filter((entry) => entry && Object.keys(entry)[0] === statType)
+        .reduce((sum, entry) => sum + (Number(entry[statType]) || 0), 0);
+    const average = total / rolls;
+    const spread = range.max - range.min;
+    const quality = spread > 0
+        ? Math.max(0, Math.min(1, (average - range.min) / spread))
+        : 1;
+    return {
+        min: range.min,
+        max: range.max,
+        rolls,
+        total,
+        average,
+        quality,
+    };
+};
+
 const equipmentName = (category) => {
     const key = category.toLowerCase().replace(/\s+/g, '-');
     if (typeof t === 'function') {
@@ -969,8 +1097,6 @@ const showItemInfo = (item, icon, action, i) => {
     const comparisonItem = action === 'equip'
         ? findComparableEquippedItem(item)
         : (action === 'equip-companion' ? getEquippedCompanionCharm() : null);
-    const comparisonTotals = comparisonItem ? getEquipmentStatTotals(comparisonItem) : null;
-    const selectedTotals = getEquipmentStatTotals(item);
     const selectedLabelFallback = action === 'equip'
         ? 'Inventory Item'
         : action === 'equip-companion'
@@ -978,32 +1104,37 @@ const showItemInfo = (item, icon, action, i) => {
             : action === 'unequip-companion'
                 ? 'Equipped Charm'
                 : 'Equipped Item';
-    const renderSelectedCard = () => renderEquipmentCard({
-        item,
-        icon,
-        totals: selectedTotals,
-        comparisonTotals,
-        labelFallback: selectedLabelFallback,
-        highlightDiff: Boolean(comparisonTotals)
-    });
     const hasComparisonItem = isEquipAction && Boolean(comparisonItem);
-    let comparisonSection = renderSelectedCard();
-    if (isEquipAction) {
-        comparisonSection = `
-            <div class="equipment-compare-grid">
+    let compareHintMarkup = '';
+    if (isEquipAction && !hasComparisonItem) {
+        const hintKey = isCompanionAction
+            ? 'no-companion-charm'
+            : (player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items');
+        const hintFallback = isCompanionAction
+            ? 'No charm equipped yet.'
+            : (player.equipped.length > 0 ? 'No comparable equipment currently equipped.' : 'You have no equipment equipped yet.');
+        compareHintMarkup = `<p class="equipment-compare-hint">${translateEquipText(hintKey, hintFallback)}</p>`;
+    }
+    const showRollQualityChecked = readEquipmentInfoPreference(EQUIPMENT_SHOW_ROLL_QUALITY_STORAGE_KEY, false) ? ' checked' : '';
+    const includeRefinementChecked = readEquipmentInfoPreference(EQUIPMENT_INCLUDE_REFINEMENT_STORAGE_KEY, true) ? ' checked' : '';
+    const comparisonSection = `
+            <div class="equipment-info-options">
+                <label class="forge-refinement-toggle">
+                    <input id="equipment-show-roll-quality" type="checkbox"${showRollQualityChecked}>
+                    <span>${translateEquipText('show-roll-quality', 'Show roll quality')}</span>
+                </label>
+                <label class="forge-refinement-toggle">
+                    <input id="equipment-include-refinement" type="checkbox"${includeRefinementChecked}>
+                    <span>${translateEquipText('forge-include-refinement', 'Include refinement')}</span>
+                </label>
+            </div>
+            <div class="equipment-compare-grid" id="equipment-info-cards">
                 <div id="equipment-selected-card" class="equipment-compare-slot"></div>
                 ${hasComparisonItem ? '<div id="equipment-comparison-card" class="equipment-compare-slot"></div>' : ''}
-            </div>`;
-        if (!hasComparisonItem) {
-            const hintKey = isCompanionAction
-                ? 'no-companion-charm'
-                : (player.equipped.length > 0 ? 'no-comparable-item' : 'no-equipped-items');
-            const hintFallback = isCompanionAction
-                ? 'No charm equipped yet.'
-                : (player.equipped.length > 0 ? 'No comparable equipment currently equipped.' : 'You have no equipment equipped yet.');
-            comparisonSection += `<p class="equipment-compare-hint">${translateEquipText(hintKey, hintFallback)}</p>`;
-        }
-    }
+            </div>
+            ${compareHintMarkup}
+            <div id="equipment-roll-quality-info"></div>
+            <p class="equipment-info-note" id="equipment-info-note"></p>`;
     const actionKey = isCompanionAction
         ? (action === 'equip-companion' ? 'equip' : 'unequip')
         : action;
@@ -1024,13 +1155,33 @@ const showItemInfo = (item, icon, action, i) => {
                 </div>
             </div>`;
 
-    if (isEquipAction) {
+    const rollFocus = { card: 'selected', stat: null };
+    const renderItemInfoCards = () => {
+        const showRollQuality = readEquipmentInfoPreference(EQUIPMENT_SHOW_ROLL_QUALITY_STORAGE_KEY, false);
+        const includeRefinement = readEquipmentInfoPreference(EQUIPMENT_INCLUDE_REFINEMENT_STORAGE_KEY, true);
+        const totalsFor = (equipment) => getEquipmentStatTotals(includeRefinement ? equipment : { ...equipment, refineLevel: 0 });
+        const selectedTotals = totalsFor(item);
+        const comparisonTotals = hasComparisonItem ? totalsFor(comparisonItem) : null;
+        if (showRollQuality && !rollFocus.stat) {
+            rollFocus.stat = getOrderedEquipmentStats(selectedTotals)
+                .find((stat) => getEquipmentStatRollQuality(item, stat)) || null;
+        }
         const selectedCardContainer = itemInfo.querySelector('#equipment-selected-card');
         const comparisonCardContainer = itemInfo.querySelector('#equipment-comparison-card');
         if (selectedCardContainer) {
-            selectedCardContainer.innerHTML = renderSelectedCard();
+            selectedCardContainer.innerHTML = renderEquipmentCard({
+                item,
+                icon,
+                totals: selectedTotals,
+                comparisonTotals,
+                labelFallback: selectedLabelFallback,
+                highlightDiff: Boolean(comparisonTotals),
+                showRollQuality,
+                activeRollStat: rollFocus.card === 'selected' ? rollFocus.stat : null,
+                cardKey: 'selected',
+            });
         }
-        if (comparisonCardContainer && comparisonItem && comparisonTotals) {
+        if (comparisonCardContainer && comparisonTotals) {
             const comparisonIcon = equipmentIcon(comparisonItem.baseCategory || comparisonItem.category);
             const label = isCompanionAction
                 ? 'Currently Equipped Charm'
@@ -1041,9 +1192,60 @@ const showItemInfo = (item, icon, action, i) => {
                 totals: comparisonTotals,
                 comparisonTotals: selectedTotals,
                 labelFallback: label,
-                highlightDiff: false
+                highlightDiff: false,
+                showRollQuality,
+                activeRollStat: rollFocus.card === 'comparison' ? rollFocus.stat : null,
+                cardKey: 'comparison',
             });
         }
+        const rollInfo = itemInfo.querySelector('#equipment-roll-quality-info');
+        if (rollInfo) {
+            const focusItem = rollFocus.card === 'comparison' ? comparisonItem : item;
+            rollInfo.innerHTML = showRollQuality ? renderEquipmentRollQualityInfo(focusItem, rollFocus.stat) : '';
+        }
+        const note = itemInfo.querySelector('#equipment-info-note');
+        if (note) {
+            note.textContent = includeRefinement
+                ? (showRollQuality ? translateEquipText('roll-quality-refined-note', 'Refinement bonuses included · Roll quality uses base stats') : '')
+                : translateEquipText('roll-quality-base-note', 'Base stats shown · Refinement bonuses excluded');
+        }
+    };
+    renderItemInfoCards();
+
+    const bindInfoPreference = (selector, storageKey) => {
+        const toggle = itemInfo.querySelector(selector);
+        if (toggle) {
+            toggle.onchange = () => {
+                writeEquipmentInfoPreference(storageKey, toggle.checked);
+                renderItemInfoCards();
+            };
+        }
+    };
+    bindInfoPreference('#equipment-show-roll-quality', EQUIPMENT_SHOW_ROLL_QUALITY_STORAGE_KEY);
+    bindInfoPreference('#equipment-include-refinement', EQUIPMENT_INCLUDE_REFINEMENT_STORAGE_KEY);
+
+    const cardsContainer = itemInfo.querySelector('#equipment-info-cards');
+    if (cardsContainer) {
+        const focusRollRow = (event) => {
+            const row = event.target.closest('[data-roll-stat]');
+            if (!row) {
+                return;
+            }
+            rollFocus.card = row.getAttribute('data-roll-card');
+            rollFocus.stat = row.getAttribute('data-roll-stat');
+            renderItemInfoCards();
+            const refocused = cardsContainer.querySelector(`[data-roll-card="${rollFocus.card}"][data-roll-stat="${rollFocus.stat}"]`);
+            if (refocused && event.type === 'keydown') {
+                refocused.focus();
+            }
+        };
+        cardsContainer.onclick = focusRollRow;
+        cardsContainer.onkeydown = (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                focusRollRow(event);
+            }
+        };
     }
 
     // Equip/Unequip button for the item
@@ -1699,16 +1901,70 @@ const renderEquipmentCard = ({
     labelFallback = '',
     highlightDiff = false,
     showRollCounts = false,
+    showRollQuality = false,
+    activeRollStat = null,
+    cardKey = '',
 }) => {
     const label = labelKey ? translateEquipText(labelKey, labelFallback || labelKey) : (labelFallback || '');
     const tier = item.tier === undefined ? 1 : item.tier;
     const statKeys = getOrderedEquipmentStats(totals, comparisonTotals);
-    const statRollCounts = showRollCounts ? getEquipmentStatRollCounts(item) : {};
-    const statsMarkup = statKeys.map(stat => {
-        const value = totals[stat] || 0;
+    const statRollCounts = showRollCounts || showRollQuality ? getEquipmentStatRollCounts(item) : {};
+    const getDiffMarkup = (stat, value) => {
         const comparisonValue = comparisonTotals && comparisonTotals[stat] ? comparisonTotals[stat] : 0;
         const diffValue = highlightDiff && comparisonTotals ? normalizeEquipmentDiff(value - comparisonValue) : 0;
-        const diffMarkup = diffValue !== 0 ? `<span class="stat-diff ${diffValue > 0 ? 'positive' : 'negative'}">(${formatEquipmentValue(stat, diffValue, { includeSign: true })})</span>` : '';
+        return diffValue !== 0 ? `<span class="stat-diff ${diffValue > 0 ? 'positive' : 'negative'}">(${formatEquipmentValue(stat, diffValue, { includeSign: true })})</span>` : '';
+    };
+    const headerMarkup = label ? `<p class="equipment-card-label">${label}</p>` : '';
+    const titleMarkup = `
+            <h3 class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</h3>
+            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>`;
+
+    if (showRollQuality) {
+        const rowsMarkup = statKeys.map(stat => {
+            const value = totals[stat] || 0;
+            const qualityInfo = getEquipmentStatRollQuality(item, stat);
+            const rolls = statRollCounts[stat];
+            const isActive = stat === activeRollStat;
+            let qualityMarkup = '<span class="roll-quality-empty">—</span>';
+            if (qualityInfo) {
+                const percent = Math.round(qualityInfo.quality * 100);
+                const grade = percent >= 70 ? 'high' : (percent >= 35 ? 'mid' : 'low');
+                qualityMarkup = `<span class="roll-quality-bar" aria-hidden="true"><span class="roll-quality-fill roll-quality-${grade}" style="width: ${percent}%"></span></span><span class="roll-quality-percent">${percent}%</span>`;
+            }
+            const interactiveAttrs = qualityInfo
+                ? ` tabindex="0" role="button" aria-pressed="${isActive ? 'true' : 'false'}" data-roll-card="${cardKey}" data-roll-stat="${stat}"`
+                : '';
+            return `<tr class="equipment-roll-row${isActive ? ' is-active' : ''}${qualityInfo ? ' is-interactive' : ''}"${interactiveAttrs}>
+                        <th scope="row" class="roll-stat-name">${formatEquipmentStatLabel(stat)}</th>
+                        <td class="roll-stat-value">${formatEquipmentValue(stat, value, { includeSign: true })}${getDiffMarkup(stat, value)}</td>
+                        <td class="roll-stat-rolls">${rolls ? `×${rolls}` : '—'}</td>
+                        <td class="roll-stat-quality">${qualityMarkup}</td>
+                    </tr>`;
+        }).join('');
+        const emptyRow = `<tr><td colspan="4">${translateEquipText('no-stats-available', 'No stats available')}</td></tr>`;
+        return `
+        <div class="equipment-card equipment-card--roll-quality">
+            ${headerMarkup}
+            ${titleMarkup}
+            <table class="equipment-roll-table">
+                <thead>
+                    <tr>
+                        <th scope="col">${translateEquipText('roll-quality-stat', 'Stat')}</th>
+                        <th scope="col">${translateEquipText('roll-quality-value', 'Value')}</th>
+                        <th scope="col">${translateEquipText('roll-quality-rolls', 'Rolls')}</th>
+                        <th scope="col">${translateEquipText('roll-quality', 'Roll quality')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsMarkup || emptyRow}
+                </tbody>
+            </table>
+        </div>`;
+    }
+
+    const statsMarkup = statKeys.map(stat => {
+        const value = totals[stat] || 0;
+        const diffMarkup = getDiffMarkup(stat, value);
         const rollCountMarkup = showRollCounts && statRollCounts[stat]
             ? `<span class="stat-roll-count" aria-label="${statRollCounts[stat]}">🎲 ×${statRollCounts[stat]}</span>`
             : '';
@@ -1721,15 +1977,38 @@ const renderEquipmentCard = ({
                 </li>`;
     }).join('');
     const statsList = statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`;
-    const headerMarkup = label ? `<p class="equipment-card-label">${label}</p>` : '';
     return `
         <div class="equipment-card">
             ${headerMarkup}
-            <h3 class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</h3>
-            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
+            ${titleMarkup}
             <ul class="equipment-stat-list">
                 ${statsList}
             </ul>
+        </div>`;
+};
+
+const renderEquipmentRollQualityInfo = (item, stat) => {
+    const info = item && stat ? getEquipmentStatRollQuality(item, stat) : null;
+    if (!info) {
+        return '';
+    }
+    const statLabel = formatEquipmentStatLabel(stat);
+    const format = (value) => formatEquipmentValue(stat, value);
+    const percent = `${Math.round(info.quality * 100)}%`;
+    const fill = (key, fallback, params) => {
+        const template = translateEquipText(key, fallback);
+        return Object.keys(params).reduce((text, name) => text.split(`{${name}}`).join(params[name]), template);
+    };
+    return `
+        <div class="equipment-roll-info">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            <div>
+                <h4>${translateEquipText('roll-quality-how', 'How roll quality works')}</h4>
+                <p>${fill('roll-quality-per-roll', '{stat} per roll: {min}–{max}', { stat: statLabel, min: format(info.min), max: format(info.max) })}</p>
+                <p>${fill('roll-quality-this-item', 'This item: {average} × {rolls} = {total} {stat}', { stat: statLabel, average: format(info.average), rolls: info.rolls, total: format(info.total) })}</p>
+                <p>${fill('roll-quality-position', '{average} lands at {percent} of that range → {percent} roll quality', { average: format(info.average), percent })}</p>
+                <p class="equipment-roll-legend">${translateEquipText('roll-quality-legend', '0% = minimum roll · 100% = maximum roll')}</p>
+            </div>
         </div>`;
 };
 
