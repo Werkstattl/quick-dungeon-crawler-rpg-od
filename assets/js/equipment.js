@@ -1892,6 +1892,17 @@ const getOrderedEquipmentStats = (primaryTotals, comparisonTotals) => {
     return ordered.concat(remaining);
 };
 
+const renderEquipmentRollQualityMeter = (item, stat) => {
+    const qualityInfo = getEquipmentStatRollQuality(item, stat);
+    if (!qualityInfo) {
+        return '';
+    }
+    const percent = Math.round(qualityInfo.quality * 100);
+    const grade = percent >= 70 ? 'high' : (percent >= 35 ? 'mid' : 'low');
+    const title = translateEquipText('roll-quality', 'Roll quality');
+    return `<span class="roll-quality-meter" title="${title}"><span class="roll-quality-bar" aria-hidden="true"><span class="roll-quality-fill roll-quality-${grade}" style="width: ${percent}%"></span></span><span class="roll-quality-percent roll-quality-text-${grade}">${percent}%</span></span>`;
+};
+
 const renderEquipmentCard = ({
     item,
     icon,
@@ -1901,6 +1912,7 @@ const renderEquipmentCard = ({
     labelFallback = '',
     highlightDiff = false,
     showRollCounts = false,
+    showRollQualityMeter = false,
     showRollQuality = false,
     activeRollStat = null,
     cardKey = '',
@@ -1922,15 +1934,11 @@ const renderEquipmentCard = ({
     if (showRollQuality) {
         const rowsMarkup = statKeys.map(stat => {
             const value = totals[stat] || 0;
-            const qualityInfo = getEquipmentStatRollQuality(item, stat);
+            const meterMarkup = renderEquipmentRollQualityMeter(item, stat);
+            const qualityInfo = Boolean(meterMarkup);
             const rolls = statRollCounts[stat];
             const isActive = stat === activeRollStat;
-            let qualityMarkup = '<span class="roll-quality-empty">—</span>';
-            if (qualityInfo) {
-                const percent = Math.round(qualityInfo.quality * 100);
-                const grade = percent >= 70 ? 'high' : (percent >= 35 ? 'mid' : 'low');
-                qualityMarkup = `<span class="roll-quality-bar" aria-hidden="true"><span class="roll-quality-fill roll-quality-${grade}" style="width: ${percent}%"></span></span><span class="roll-quality-percent">${percent}%</span>`;
-            }
+            const qualityMarkup = meterMarkup || '<span class="roll-quality-empty">—</span>';
             const interactiveAttrs = qualityInfo
                 ? ` tabindex="0" role="button" aria-pressed="${isActive ? 'true' : 'false'}" data-roll-card="${cardKey}" data-roll-stat="${stat}"`
                 : '';
@@ -1968,12 +1976,14 @@ const renderEquipmentCard = ({
         const rollCountMarkup = showRollCounts && statRollCounts[stat]
             ? `<span class="stat-roll-count" aria-label="${statRollCounts[stat]}">🎲 ×${statRollCounts[stat]}</span>`
             : '';
-        return `<li class="equipment-stat-row">
+        const meterMarkup = showRollQualityMeter ? renderEquipmentRollQualityMeter(item, stat) : '';
+        return `<li class="equipment-stat-row${meterMarkup ? ' has-roll-quality' : ''}">
                     <span class="stat-name">${formatEquipmentStatLabel(stat)} ${rollCountMarkup}</span>
                     <span class="stat-numbers">
                         <span class="stat-value">${formatEquipmentValue(stat, value, { includeSign: true })}</span>
                         ${diffMarkup}
                     </span>
+                    ${meterMarkup}
                 </li>`;
     }).join('');
     const statsList = statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`;

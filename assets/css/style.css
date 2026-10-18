@@ -1106,7 +1106,13 @@ button:focus-visible {
     padding-left: 0.6rem;
 }
 
-#equipmentInfo .content .roll-quality-bar {
+.roll-quality-meter {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.roll-quality-bar {
     display: inline-block;
     vertical-align: middle;
     width: 3.5rem;
@@ -1117,29 +1123,33 @@ button:focus-visible {
     overflow: hidden;
 }
 
-#equipmentInfo .content .roll-quality-fill {
+.roll-quality-fill {
     display: block;
     height: 100%;
     border-radius: 0.2rem;
 }
 
-#equipmentInfo .content .roll-quality-high {
+.roll-quality-high {
     background: #6ad16a;
 }
 
-#equipmentInfo .content .roll-quality-mid {
+.roll-quality-mid {
     background: #e3b964;
 }
 
-#equipmentInfo .content .roll-quality-low {
+.roll-quality-low {
     background: #f08080;
 }
 
-#equipmentInfo .content .roll-quality-percent {
+.roll-quality-percent {
     display: inline-block;
     min-width: 2.5rem;
     text-align: right;
     font-weight: 600;
+}
+
+#equipmentInfo .content .roll-quality-percent {
+    color: inherit;
 }
 
 #equipmentInfo .content .roll-quality-empty {
@@ -2901,8 +2911,45 @@ header button i {
     margin-left: auto;
 }
 
-.reroll-stat-lock-rolls + .reroll-stat-lock-value {
+.reroll-stat-lock-rolls + .reroll-stat-lock-value,
+.reroll-stat-lock-option .roll-quality-meter + .reroll-stat-lock-value {
     margin-left: 0;
+}
+
+.reroll-stat-lock-option .roll-quality-bar {
+    display: none;
+}
+
+.reroll-stat-lock-option .roll-quality-percent,
+.reroll-preview .roll-quality-percent {
+    min-width: 0;
+    font-size: calc(0.72rem * var(--font-scale));
+}
+
+.roll-quality-text-high {
+    color: #6ad16a;
+}
+
+.roll-quality-text-mid {
+    color: #e3b964;
+}
+
+.roll-quality-text-low {
+    color: #f08080;
+}
+
+.reroll-preview .equipment-stat-row.has-roll-quality {
+    flex-wrap: wrap;
+}
+
+.reroll-preview .equipment-stat-row .roll-quality-meter {
+    flex-basis: 100%;
+    margin-bottom: 0.25rem;
+}
+
+.reroll-preview .equipment-stat-row .roll-quality-bar {
+    flex: 1;
+    width: auto;
 }
 
 .reroll-preview {

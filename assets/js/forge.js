@@ -892,6 +892,7 @@ const renderRerollStatLocks = () => {
             <input type="checkbox" data-reroll-stat-lock="${statType}" ${selectedRerollStatLocks.includes(statType) ? 'checked' : ''}>
             <span>${formatEquipmentStatLabel(statType)}</span>
             <span class="reroll-stat-lock-rolls">🎲 ×${statRollCounts[statType] || 1}</span>
+            ${typeof renderEquipmentRollQualityMeter === 'function' ? renderEquipmentRollQualityMeter(equipment, statType) : ''}
             <span class="reroll-stat-lock-value">${formatEquipmentValue(statType, totals[statType] || 0, { includeSign: true })}</span>
         </label>
     `).join('');
@@ -939,6 +940,7 @@ const displayRerollPreview = () => {
         totals: currentTotals,
         labelFallback: '',
         showRollCounts: true,
+        showRollQualityMeter: true,
     });
     previewItem.innerHTML = renderPossibleRerollStats(currentEquipment, selectedRerollStatLocks);
 
