@@ -910,16 +910,16 @@ button:focus-visible {
 
 #equipmentInfo .content.equipment-info-content {
     max-width: 28rem;
-    max-height: calc(99vh - 2rem);
-    max-height: calc(99dvh - 2rem);
+    max-height: calc(99vh - 1rem);
+    max-height: calc(99dvh - 1rem);
     overflow-y: auto;
 }
 
 #equipmentInfo .content.equipment-info-content--with-compare {
     max-width: 48rem;
     overflow-y: auto;
-    max-height: calc(99vh - 2rem);
-    max-height: calc(99dvh - 2rem);
+    max-height: calc(99vh - 1rem);
+    max-height: calc(99dvh - 1rem);
 }
 
 #equipmentInfo .content .equipment-compare-grid {
@@ -1220,23 +1220,22 @@ button:focus-visible {
     padding: 0;
     gap: 0;
     height: 43rem;
-    max-height: calc(100vh - 2rem);
-    max-height: calc(100dvh - 2rem);
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
     width: 16rem;
     overflow-y: auto;
 }
 
 #inventory .content .inventorySlots {
     padding: 0 0.7em 0.4em;
-    min-height: 3.4rem;
 }
 
 /* Menu Modal */
 #menuModal .content {
     min-width: 15rem;
     overflow-y: auto;
-    max-height: calc(100vh - 2rem);
-    max-height: calc(100dvh - 2rem);
+    max-height: 100vh;
+    max-height: calc(100dvh - 1rem);
 }
 
 #menuModal .content-head {
@@ -1255,7 +1254,7 @@ button:focus-visible {
 
 #defaultModal .content {
     max-height: calc(100vh - 3rem);
-    max-height: calc(100dvh - 3rem);
+    max-height: calc(100dvh - 1rem);
     overflow-y: auto;
 }
 
@@ -1263,7 +1262,7 @@ button:focus-visible {
 #defaultModal #bestiary-modal {
     overflow: hidden;
     max-height: min(34rem, calc(100vh - 3rem));
-    max-height: min(34rem, calc(100dvh - 3rem));
+    max-height: min(34rem, calc(100dvh - 1rem));
 }
 
 .forge-membership-benefits {
