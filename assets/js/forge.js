@@ -505,10 +505,10 @@ const getStatLockRerollCosts = (equipment, lockedStatCount) => {
 
     const rarityRank = STAT_LOCK_RARITY_RANK[equipment && equipment.rarity] || 1;
     const tier = Math.max(1, Math.min(15, Math.floor(Number(equipment && equipment.tier) || 1)));
-    const perLockGoldScale = 0.5 + ((rarityRank - 1) * 0.25) + ((tier - 1) * 0.1);
+    const perLockGoldScale = 0.55 + ((rarityRank - 1) * 0.275) + ((tier - 1) * 0.11);
     const lockWeight = getStatLockWeight(locks);
     const gold = Math.round(baseGold * (1 + (lockWeight * perLockGoldScale)));
-    const stones = Math.ceil(lockWeight * rarityRank * (1 + ((tier - 1) * 0.16)));
+    const stones = Math.ceil(lockWeight * rarityRank * (1 + ((tier - 1) * 0.15)));
     return { gold, stones };
 };
 const getRefineCost = (equipment) => {
