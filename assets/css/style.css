@@ -1220,8 +1220,8 @@ button:focus-visible {
     padding: 0;
     gap: 0;
     height: 43rem;
-    max-height: calc(100vh - 1rem);
-    max-height: calc(100dvh - 1rem);
+    max-height: calc(99vh - 2rem);
+    max-height: calc(99dvh - 2rem);
     width: 16rem;
     overflow-y: auto;
 }
@@ -1235,8 +1235,8 @@ button:focus-visible {
 #menuModal .content {
     min-width: 15rem;
     overflow-y: auto;
-    max-height: 100vh;
-    max-height: calc(100dvh - 1rem);
+    max-height: calc(99vh - 2rem);
+    max-height: calc(99dvh - 2rem);
 }
 
 #menuModal .content-head {
@@ -1254,16 +1254,16 @@ button:focus-visible {
 }
 
 #defaultModal .content {
-    max-height: calc(100vh - 3rem);
-    max-height: calc(100dvh - 1rem);
+    max-height: calc(99vh - 2rem);
+    max-height: calc(99dvh - 2rem);
     overflow-y: auto;
 }
 
 /* Only the list scrolls so header, controls and load-more stay reachable */
 #defaultModal #bestiary-modal {
     overflow: hidden;
-    max-height: min(34rem, calc(100vh - 3rem));
-    max-height: min(34rem, calc(100dvh - 1rem));
+    max-height: min(34rem, calc(99vh - 2rem));
+    max-height: min(34rem, calc(99dvh - 2rem));
 }
 
 .forge-membership-benefits {
