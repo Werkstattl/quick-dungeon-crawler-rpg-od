@@ -910,16 +910,16 @@ button:focus-visible {
 
 #equipmentInfo .content.equipment-info-content {
     max-width: 28rem;
-    max-height: calc(99vh - 1rem);
-    max-height: calc(99dvh - 1rem);
+    max-height: calc(99vh - 2rem);
+    max-height: calc(99dvh - 2rem);
     overflow-y: auto;
 }
 
 #equipmentInfo .content.equipment-info-content--with-compare {
     max-width: 48rem;
     overflow-y: auto;
-    max-height: calc(99vh - 1rem);
-    max-height: calc(99dvh - 1rem);
+    max-height: calc(99vh - 2rem);
+    max-height: calc(99dvh - 2rem);
 }
 
 #equipmentInfo .content .equipment-compare-grid {
