@@ -1228,6 +1228,7 @@ button:focus-visible {
 
 #inventory .content .inventorySlots {
     padding: 0 0.7em 0.4em;
+    min-height: 3.4rem;
 }
 
 /* Menu Modal */
