@@ -300,12 +300,18 @@ const ratingSystem = {
         }
     },
     
+    openAppStoreForRating() {
+        openExternal('https://apps.apple.com/app/id6812062363?action=write-review');
+    },
+
     openItchioForRating() {
         openExternal('https://werkstattl.itch.io/quick-dungeon-crawler-on-demand/rate?source=game');
     },
 
     openRating() {
-        if ( isPremium() ) {
+        if (isApplePurchasePlatform()) {
+            this.openAppStoreForRating();
+        } else if ( isPremium() ) {
             this.openItchioForRating();
         } else if (isCordova()) {
             this.openGooglePlayForRating();

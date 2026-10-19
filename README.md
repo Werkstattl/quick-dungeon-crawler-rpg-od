@@ -10,11 +10,13 @@ Quick Dungeon Crawler on Demand is an open-source endless dungeon crawler with r
   <img alt="In game screenshot" src="./assets/screenshots/combat.webp" width="350" />
 </div>
 
-The game is available for Android and Desktop platforms. You can find official releases of the game on:
+The game is available for Android, iOS/iPadOS, macOS and Desktop platforms. You can find official releases of the game on:
 
 <a href="https://play.google.com/store/apps/details?id=com.thomaspeissl.quick_dungeon_crawler_od.twa">
   <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200"/>
 </a>
+
+[![Download on the App Store](https://img.shields.io/badge/Download%20on%20the-App%20Store-black?logo=apple)](https://apps.apple.com/app/id6812062363)
 
 [![Play on itch.io](https://img.shields.io/badge/Play%20on-itch.io-red?logo=itch-io)](https://werkstattl.itch.io/quick-dungeon-crawler-on-demand)
 
