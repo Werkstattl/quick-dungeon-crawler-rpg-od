@@ -221,6 +221,7 @@
   "auto-level-up-stats": "ค่าสถานะเมื่อเลเวลอัป",
   "luck-as-level-up-option": "แสดงโชคเป็นตัวเลือกเมื่อเลเวลอัป",
   "hide-auto-attack-toggle": "ซ่อนโจมตีอัตโนมัติ",
+  "combat-corner-toggle": "แผงการต่อสู้ที่มุมจอ",
   "active": "ใช้งานอยู่",
   "blessings": "พร",
   "heal": "รักษา",
