@@ -1493,11 +1493,6 @@ button:focus-visible {
     color: white;
 }
 
-#menuModal #quit-run:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 .battle-info-panel {
     display: flex;
     flex-direction: column;

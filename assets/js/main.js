@@ -499,19 +499,6 @@ function openPlayerProfile() {
     };
 }
 
-const isRunAbandonBlockedByCombat = () => Boolean(
-    (player && player.inCombat)
-    || (typeof combatPanel !== 'undefined' && combatPanel && combatPanel.style.display === 'flex')
-);
-
-const updateRunAbandonButtonState = () => {
-    const quitRun = document.querySelector('#menuModal #quit-run');
-    if (quitRun) {
-        // Keep the result panel protected too, especially before Hardcore death is processed.
-        quitRun.disabled = isRunAbandonBlockedByCombat();
-    }
-};
-
 function openMenu(isTitle = false, silentInventoryClose = false) {
     closeInventory(silentInventoryClose);
 
@@ -551,7 +538,6 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
     let playerMenu = document.querySelector('#player-menu');
     let runMenu = document.querySelector('#stats');
     let quitRun = document.querySelector('#quit-run');
-    updateRunAbandonButtonState();
     let heroReturn = document.querySelector('#hero-return');
     let exportImport = document.querySelector('#export-import');
     let bestiaryMenu = document.querySelector('#bestiary-menu');
@@ -671,10 +657,6 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
     // Quit the current run
     if (quitRun) {
         quitRun.onclick = function () {
-            if (isRunAbandonBlockedByCombat()) {
-                updateRunAbandonButtonState();
-                return;
-            }
             sfxOpen.play();
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
@@ -682,17 +664,14 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <div class="content">
                     <p data-i18n="abandon-run-question">${t('abandon-run-question')}</p>
                     <div class="button-container">
-                        <button id="confirm-quit-run" data-i18n="abandon">${t('abandon')}</button>
+                        <button id="quit-run" data-i18n="abandon">${t('abandon')}</button>
                         <button id="cancel-quit" data-i18n="cancel">${t('cancel')}</button>
                     </div>
                 </div>`;
             applyTranslations(defaultModalElement);
-            let quit = defaultModalElement.querySelector('#confirm-quit-run');
+            let quit = document.querySelector('#quit-run');
             let cancel = document.querySelector('#cancel-quit');
             quit.onclick = function () {
-                if (isRunAbandonBlockedByCombat()) {
-                    return;
-                }
                 sfxConfirm.play();
                 // Clear out everything, send the player back to menu and clear progress.
                 bgmDungeon.stop();
@@ -959,7 +938,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <label id="auto-heal-label"><input type="checkbox" id="auto-heal-toggle" ${autoHeal ? 'checked' : ''}> <span class="Epic" data-i18n="heal">Heal</span></label>
                 <label id="auto-special-label"><input type="checkbox" id="auto-special-toggle" ${autoSpecialAbility ? 'checked' : ''}> <span data-i18n="auto-special-ability">Special Ability</span></label>
                 <label id="auto-levelup-label"><input type="checkbox" id="auto-levelup-toggle" ${autoStopLevelUp ? 'checked' : ''}> <span data-i18n="auto-mode-level-up">Stop at level-up</span></label>
-                <label id="auto-new-pet-label"><input type="checkbox" id="auto-new-pet-toggle" ${autoStopNewPet ? 'checked' : ''}> <span data-i18n="auto-mode-new-pet">Stop when a new companion is found</span></label>
+                <label id="auto-new-pet-label"><input type="checkbox" id="auto-new-pet-toggle" ${autoStopNewPet ? 'checked' : ''}> <span data-i18n="auto-mode-new-pet">Stop when a new pet is found</span></label>
                 <label for="auto-stop-floor-input"><span data-i18n="auto-mode-stop-floor">Stop at floor</span> <input id="auto-stop-floor-input" type="number" min="0" max="${Number.MAX_SAFE_INTEGER}" step="1" inputmode="numeric" value="${autoStopFloor}"></label>
                 <div id="auto-levelup-priority" class="auto-levelup-priority-block">
                     <p data-i18n="auto-level-up-stats">Level-up stats</p>
@@ -1501,9 +1480,6 @@ const progressReset = (fromDeath = false) => {
         fasterRun: 0
     };
     player.inCombat = false;
-    if (typeof updateRunAbandonButtonState === 'function') {
-        updateRunAbandonButtonState();
-    }
     if (typeof resetActiveCompanionBonuses === 'function') {
         resetActiveCompanionBonuses();
     }

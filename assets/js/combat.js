@@ -1256,9 +1256,6 @@ const handleClaimButtonClick = () => {
 
     dungeon.status.event = false;
     combatPanel.style.display = "none";
-    if (typeof updateRunAbandonButtonState === 'function') {
-        updateRunAbandonButtonState();
-    }
     enemyDead = false;
     latestCombatLoot = null;
     combatBacklog.length = 0;
@@ -1580,9 +1577,6 @@ const startCombat = (battleMusic) => {
 
     dungeon.status.event = true;
     combatPanel.style.display = "flex";
-    if (typeof updateRunAbandonButtonState === 'function') {
-        updateRunAbandonButtonState();
-    }
 
     window.setTimeout(() => setPlayerAttackReady(true), 200);
     combatTimer = setInterval(combatCounter, 1000);
