@@ -290,7 +290,6 @@
   "rate-game": "Noter le jeu",
   "rating-prompt": {
     "title": "Vous aimez le jeu ?",
-    "reward": "Notez le jeu et vous gagnerez un niveau !",
     "rate-now": "Noter maintenant",
     "later": "Plus tard",
     "no-thanks": "Non merci"

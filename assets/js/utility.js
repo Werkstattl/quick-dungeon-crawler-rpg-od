@@ -255,7 +255,6 @@ const ratingSystem = {
                     <p onclick="closeDefaultModal()" data-i18n-attr="aria-label:close" aria-label="${t('close')}"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="modal-body">
-                    <p data-i18n="rating-prompt.reward">${t('rating-prompt.reward')}</p>
                     <div class="decision-panel">
                         <button id="rate-btn" type="button" data-i18n="rating-prompt.rate-now">${t('rating-prompt.rate-now')}</button>
                         <button id="rate-later-btn" type="button" data-i18n="rating-prompt.later">${t('rating-prompt.later')}</button>
@@ -274,7 +273,6 @@ const ratingSystem = {
             this.config.hasRated = true;
             this.saveConfig();
             this.openRating();
-            grantLevelUpReward();
             closeDefaultModal();
         });
         
@@ -381,19 +379,4 @@ function closeStatsModal() {
     if (dimDungeon && window.getComputedStyle(dimDungeon).display !== 'none') {
         dimDungeon.style.filter = "brightness(100%)";
     }
-}
-
-// give the player exp equal to one level up
-function grantLevelUpReward() {
-    const reward = player.exp.expMaxLvl;
-
-    player.exp.expCurr += reward;
-    player.exp.expCurrLvl += reward;
-    activeCompanion.gainExperience(reward);
-
-    while (player.exp.expCurr >= player.exp.expMax) {
-        playerLvlUp();
-    }
-    playerLoadStats();
-    showLevelUpModalIfPending();
 }

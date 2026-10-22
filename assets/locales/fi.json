@@ -290,7 +290,6 @@
   "rate-game": "Arvostele peli",
   "rating-prompt": {
     "title": "Pidätkö pelistä?",
-    "reward": "Arvostele peli, niin saat tasonnousun!",
     "rate-now": "Arvostele nyt",
     "later": "Myöhemmin",
     "no-thanks": "Ei kiitos"

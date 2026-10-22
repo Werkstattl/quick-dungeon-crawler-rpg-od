@@ -290,7 +290,6 @@
   "rate-game": "게임 평가",
   "rating-prompt": {
     "title": "게임을 즐기고 있나요?",
-    "reward": "게임을 평가하면 레벨 업을 받을 수 있습니다!",
     "rate-now": "지금 평가",
     "later": "나중에",
     "no-thanks": "괜찮습니다"
