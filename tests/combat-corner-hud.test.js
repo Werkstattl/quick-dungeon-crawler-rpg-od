@@ -106,5 +106,9 @@ test('corner HUD CSS ships the floating card rules', () => {
     assert.match(styleSource, /#combatPanel\.combat-corner\s*\{[^}]*pointer-events:\s*none/);
     assert.match(styleSource, /#combatPanel\.combat-corner \.content\s*\{[^}]*pointer-events:\s*auto/);
     assert.match(styleSource, /#combatPanel\.combat-corner \.content\s*\{[^}]*background-color:\s*#161211/);
-    assert.match(styleSource, /#combatPanel\.combat-corner \.bb-xb\s*\{[^}]*display:\s*none/);
+    assert.doesNotMatch(
+        styleSource,
+        /#combatPanel\.combat-corner \.bb-xb\s*\{[^}]*display:\s*none/,
+        'the XP bar must remain visible in the corner HUD',
+    );
 });
