@@ -1478,14 +1478,10 @@ button:focus-visible {
 }
 
 #combatPanel.combat-corner .logBox {
-    min-height: 3.5rem;
+    min-height: 7.5rem;
     max-height: 7.5rem;
+    flex-shrink: 0;
     margin: 0;
-}
-
-/* The 0.4rem XP sliver reads as a broken bar when near empty; the XP percent is already in the player name line */
-#combatPanel.combat-corner .bb-xb {
-    display: none;
 }
 
 #combatPanel.combat-corner .player-title {
