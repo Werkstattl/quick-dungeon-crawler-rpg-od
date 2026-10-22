@@ -596,10 +596,10 @@ const showRouteChoiceEvent = () => {
     currentEvent = "routeChoice";
     const choices = `
         <div class="decision-panel route-choice-panel">
-            <button id="choice1" data-route="balanced" data-i18n="route-balanced">${t('route-balanced')}</button>
-            <button id="choice2" data-route="spoils" data-i18n="route-spoils">${t('route-spoils')}</button>
-            <button id="choice3" data-route="sanctuary" data-i18n="route-sanctuary">${t('route-sanctuary')}</button>
-            <button id="choice4" data-route="descent" data-i18n="route-descent">${t('route-descent')}</button>
+            <button id="choice1" data-route="balanced" class="route-choice route-choice--balanced"><i class="fas fa-scale-balanced" aria-hidden="true"></i><span data-i18n="route-balanced">${t('route-balanced')}</span></button>
+            <button id="choice2" data-route="spoils" class="route-choice route-choice--spoils"><i class="fas fa-sack-dollar" aria-hidden="true"></i><span data-i18n="route-spoils">${t('route-spoils')}</span></button>
+            <button id="choice3" data-route="sanctuary" class="route-choice route-choice--sanctuary"><i class="fas fa-place-of-worship" aria-hidden="true"></i><span data-i18n="route-sanctuary">${t('route-sanctuary')}</span></button>
+            <button id="choice4" data-route="descent" class="route-choice route-choice--descent"><i class="fas fa-stairs" aria-hidden="true"></i><span data-i18n="route-descent">${t('route-descent')}</span></button>
         </div>`;
     addDungeonLog(t('route-choice-found'), choices);
 
