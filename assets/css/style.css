@@ -2432,7 +2432,7 @@ header button i {
 }
 
 .route-choice i {
-    font-size: 1.4em;
+    font-size: 1.1em;
     margin: 0;
     color: var(--route-color);
     text-shadow: 0 0 6px rgba(var(--route-rgb), 0.55);
