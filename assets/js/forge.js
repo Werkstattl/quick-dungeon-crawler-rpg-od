@@ -513,7 +513,7 @@ const getStatLockRerollCosts = (equipment, lockedStatCount) => {
 };
 const getRefineCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
-    return Math.max(500, Math.round((equipment.value || 0) * (currentLevel + 1) * 0.75));
+    return Math.max(2500, Math.round((equipment.value || 0) * (currentLevel + 1) * 3.75));
 };
 const getRefineStoneCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
