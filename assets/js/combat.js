@@ -1,4 +1,22 @@
 const combatPanel = document.querySelector("#combatPanel")
+
+// Corner combat HUD: floats the battle card over the dungeon so stats,
+// companion and the exploration log stay visible while fighting.
+const isCombatCornerHudEnabled = () =>
+    typeof combatCornerHudToggle !== 'undefined' && combatCornerHudToggle === true;
+
+const applyCombatHudLayout = () => {
+    const cornerHud = isCombatCornerHudEnabled();
+    if (combatPanel && combatPanel.classList) {
+        combatPanel.classList.toggle('combat-corner', cornerHud);
+    }
+    const dimDungeon = document.querySelector('#dungeon-main');
+    if (dimDungeon) {
+        // The corner card sits on the live dungeon; dimming it would gray out the view the card exists to keep readable.
+        dimDungeon.style.filter = cornerHud ? "brightness(100%)" : "brightness(50%)";
+    }
+    return cornerHud;
+};
 let enemyDead = false;
 let playerDead = false;
 let currentBattleMusic = false;
@@ -1552,8 +1570,7 @@ const startCombat = (battleMusic) => {
 
     // Starts the timer for player and enemy attacks along with combat timer
     scheduleEnemyAttack(getEnemyAttackDelay() + ENEMY_FIRST_ATTACK_DELAY);
-    let dimDungeon = document.querySelector('#dungeon-main');
-    dimDungeon.style.filter = "brightness(50%)";
+    applyCombatHudLayout();
 
     playerLoadStats();
     enemyLoadStats();
