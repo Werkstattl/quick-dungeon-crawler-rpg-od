@@ -517,7 +517,7 @@ const getRefineCost = (equipment) => {
 };
 const getRefineStoneCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
-    return Math.max(1, currentLevel + 1);
+    return Math.max(1, Math.ceil((currentLevel + 1) * 0.75));
 };
 
 const cloneEquipment = (equipment) => JSON.parse(JSON.stringify(equipment));
