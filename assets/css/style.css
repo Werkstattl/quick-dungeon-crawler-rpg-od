@@ -1488,6 +1488,10 @@ button:focus-visible {
     display: none;
 }
 
+#combatPanel.combat-corner .player-title {
+    display: none;
+}
+
 #combat-auto-mode-btn.active {
     background-color: #4CAF50;
     color: white;
