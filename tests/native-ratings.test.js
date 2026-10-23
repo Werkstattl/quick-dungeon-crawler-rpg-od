@@ -14,7 +14,7 @@ const daysAgo = days => new Date(Date.now() - days * 86400000).toISOString();
 
 function setup({ platform = 'ios', premium = false, config = null, requestReview = async () => {} } = {}) {
     const storage = new Map(config ? [['ratingConfig', JSON.stringify(config)]] : []);
-    const calls = { native: 0, custom: 0, load: 0, warnings: 0, links: [], diagnostics: [] };
+    const calls = { native: 0, custom: 0, load: 0, warnings: 0, links: [], gameLog: [] };
     const modals = [];
     const context = vm.createContext({
         window: {
@@ -22,7 +22,6 @@ function setup({ platform = 'ios', premium = false, config = null, requestReview
             Capacitor: {
                 isNativePlatform: () => ['android', 'ios'].includes(platform),
                 getPlatform: () => platform,
-                isPluginAvailable: name => name === 'InAppReview',
             },
             getComputedStyle: element => element.style,
         },
@@ -32,8 +31,8 @@ function setup({ platform = 'ios', premium = false, config = null, requestReview
             getItem: key => storage.get(key) ?? null,
             setItem: (key, value) => storage.set(key, value),
         },
-        console: { warn: () => calls.warnings++, info() {} },
-        addDungeonLog: message => calls.diagnostics.push(message),
+        console: { warn: () => calls.warnings++ },
+        addDungeonLog: message => calls.gameLog.push(message),
         player: { playtime: 1800 },
         dungeon: { progress: { floor: 10 }, status: { event: false } },
         isForgeMembershipActive: () => premium,
@@ -149,7 +148,7 @@ test('a new combat during plugin loading cancels the attempt without consuming c
 test('native review requests do not add messages to the game log', async () => {
     const game = setup();
     await game.run('ratingSystem.checkAndPrompt()');
-    assert.deepEqual(game.calls.diagnostics, []);
+    assert.deepEqual(game.calls.gameLog, []);
 });
 
 test('web and desktop retain the custom prompt, itch.io link and seven-day cooldown', async () => {
