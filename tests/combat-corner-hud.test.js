@@ -112,3 +112,23 @@ test('corner HUD CSS ships the floating card rules', () => {
         'the XP bar must remain visible in the corner HUD',
     );
 });
+
+test('corner HUD card keeps edge distance and leaves the log column readable beside it', () => {
+    const card = styleSource.match(/#combatPanel\.combat-corner \.content\s*\{[^}]*\}/);
+    assert.ok(card, 'corner HUD card rules not found');
+    assert.match(
+        card[0],
+        /margin:\s*1rem/,
+        'the card must line up with the dungeon content column instead of hugging the screen edge',
+    );
+    assert.doesNotMatch(
+        card[0],
+        /margin:\s*0\.4rem\s*[;}]/,
+        'a 0.4rem margin leaves the card flush with the screen edge and past the log column edge',
+    );
+    assert.match(
+        card[0],
+        /width:\s*min\(64vw,\s*260px\)/,
+        'the card stays narrow enough that exploration log lines keep a readable column on the left',
+    );
+});

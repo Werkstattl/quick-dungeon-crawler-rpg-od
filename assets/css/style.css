@@ -1452,12 +1452,16 @@ button:focus-visible {
 
 #combatPanel.combat-corner .content {
     pointer-events: auto;
-    width: min(68vw, 280px);
-    max-width: min(68vw, 280px);
+    /* Narrower than the classic card so more of the exploration log stays readable beside it */
+    width: min(64vw, 260px);
+    max-width: min(64vw, 260px);
     height: auto;
     max-height: 62vh;
     max-height: 62dvh;
-    margin: 0.4rem;
+    /* 1rem lines the card up with the dungeon content column; 0.4rem made it hug the
+       screen edge and hang past the log's right edge, which read as clipped.
+       No extra env(safe-area-inset-bottom) here: body padding already reserves it. */
+    margin: 1rem;
     padding: 0.4em;
     gap: 0.25em;
     /* Fully opaque: the dungeon behind must not read through the card */
