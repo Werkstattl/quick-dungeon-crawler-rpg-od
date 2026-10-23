@@ -1448,6 +1448,7 @@ button:focus-visible {
     align-items: flex-end;
     justify-content: flex-end;
     pointer-events: none;
+    margin-bottom: 4rem;
 }
 
 #combatPanel.combat-corner .content {
