@@ -4,6 +4,21 @@ let purchasePlatform = null;
 let pendingPurchaseProductId = null;
 let purchasesReady = false;
 let purchasesInitializing = false;
+let reviewApiLoading = null;
+
+async function loadNativeReviewApi() {
+  if (!reviewApiLoading) {
+    reviewApiLoading = import('./review-plugin.js').then(({ InAppReview }) => ({
+      // Capacitor proxies expose a callable `then`. Returning the proxy itself
+      // makes Promise resolution call InAppReview.then() and hang forever.
+      requestReview: () => InAppReview.requestReview(),
+    })).catch(error => {
+      reviewApiLoading = null;
+      throw error;
+    });
+  }
+  return reviewApiLoading;
+}
 
 function isPremium() {
   let premium = Boolean(window.__TAURI__ || window.electronAPI);

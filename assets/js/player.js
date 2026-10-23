@@ -601,7 +601,6 @@ const lvlupPopup = () => {
         "dodge": 0.3,
         "luck": 1
     };
-    ratingSystem.checkAndPrompt();
     generateLvlStats(2, percentages);
 }
 
@@ -740,6 +739,9 @@ const generateLvlStats = (rerolls, percentages) => {
                 }
 
                 playerLoadStats();
+                if (player.exp.lvlGained === 0) {
+                    ratingSystem.checkAndPrompt();
+                }
             });
 
             lvlupSelect.appendChild(button);

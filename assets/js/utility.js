@@ -205,6 +205,7 @@ const getDisplayEnemyName = (enemyId, fallbackName) => {
 
 // Rating system - prompts user to rate the app after certain conditions
 const ratingSystem = {
+    requestInFlight: false,
     // Configuration for when to show rating dialog
     config: {
         lastPromptDate: null,
@@ -231,7 +232,8 @@ const ratingSystem = {
             const lastPrompt = new Date(this.config.lastPromptDate);
             const now = new Date();
             const daysSinceLastPrompt = (now - lastPrompt) / (1000 * 60 * 60 * 24);
-            if (daysSinceLastPrompt < 7) {
+            const cooldownDays = isNativePurchasePlatform() ? 120 : 7;
+            if (daysSinceLastPrompt < cooldownDays) {
                 return false;
             }
         }
@@ -309,6 +311,9 @@ const ratingSystem = {
     openRating() {
         if (isApplePurchasePlatform()) {
             this.openAppStoreForRating();
+        } else if (isNativePurchasePlatform()) {
+            // Store destination depends on the platform, including for members.
+            this.openGooglePlayForRating();
         } else if ( isPremium() ) {
             this.openItchioForRating();
         } else if (isCordova()) {
@@ -322,9 +327,39 @@ const ratingSystem = {
         localStorage.setItem('ratingConfig', JSON.stringify(this.config));
     },
     
-    checkAndPrompt() {
-        if (this.shouldPrompt()) {
+    canPromptNow() {
+        if (document.hidden || dungeon.status.event) return false;
+        if (typeof autoMode !== 'undefined' && autoMode
+            && typeof autoStopLevelUp !== 'undefined' && !autoStopLevelUp) return false;
+        // Never cover combat, another choice, or an open menu with a review.
+        return !Array.from(document.querySelectorAll('.modal-container')).some(
+            modal => window.getComputedStyle(modal).display !== 'none'
+        );
+    },
+
+    async checkAndPrompt() {
+        if (this.requestInFlight || !this.shouldPrompt() || !this.canPromptNow()) return;
+        if (!isNativePurchasePlatform()) {
             this.showPrompt();
+            return;
+        }
+
+        this.requestInFlight = true;
+        try {
+            const reviewApi = await loadNativeReviewApi();
+            // Loading the bridge can take time; the player may have moved on.
+            if (!this.shouldPrompt() || !this.canPromptNow()) return;
+            this.config.lastPromptDate = new Date().toISOString();
+            this.saveConfig();
+            // This records an attempt only. Neither store reports whether the
+            // dialog appeared or a rating was submitted. Preserve prior opt-outs.
+            await reviewApi.requestReview();
+        } catch (error) {
+            // Suppressed/unavailable native prompts must not open a custom
+            // dialog or redirect the player to a store automatically.
+            console.warn('Native review request unavailable:', error);
+        } finally {
+            this.requestInFlight = false;
         }
     }
 };
