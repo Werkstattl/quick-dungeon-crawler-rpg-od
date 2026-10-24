@@ -16,7 +16,9 @@ The game is available for Android, iOS/iPadOS, macOS and Desktop platforms. You 
   <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200"/>
 </a>
 
-[![Download on the App Store](https://img.shields.io/badge/Download%20on%20the-App%20Store-black?logo=apple)](https://apps.apple.com/app/id6812062363)
+<a href="https://apps.apple.com/app/id6812062363">
+  <img alt="Download on the App Store" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="170"/>
+</a>
 
 [![Play on itch.io](https://img.shields.io/badge/Play%20on-itch.io-red?logo=itch-io)](https://werkstattl.itch.io/quick-dungeon-crawler-on-demand)
 
