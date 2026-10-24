@@ -1086,6 +1086,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                 <h4 data-i18n="import-data">Import Data</h4>
                 <input type="text" id="import-input" autocomplete="off">
                 <button id="data-import" data-i18n="import">Import</button>
+                <p id="save-transfer-status" role="status" hidden></p>
             </div>`;
         applyTranslations(defaultModalElement);
         let eiTab = document.querySelector('#ei-tab');
@@ -1094,16 +1095,9 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         let copyExport = document.querySelector('#copy-export');
         let dataImport = document.querySelector('#data-import');
         let importInput = document.querySelector('#import-input');
-        const copyToClipboard = (selector, btn) => {
-            let copyText = document.querySelector(selector);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
-            btn.innerHTML = t('copied');
-        }
         copyExport.onclick = function () {
             sfxConfirm.play();
-            copyToClipboard('#export-input', copyExport);
+            copySaveExport();
         }
         dataImport.onclick = function () {
             importData(importInput.value);
@@ -1815,18 +1809,66 @@ if (typeof window !== "undefined") {
 }
 
 // Export and Import Save Data
+const setSaveTransferStatus = (selector, key) => {
+    const status = document.querySelector(selector);
+    if (status) {
+        status.textContent = key ? t(key) : '';
+        status.hidden = !key;
+    }
+};
+
+const copySaveExport = async () => {
+    const input = document.querySelector('#export-input');
+    const button = document.querySelector('#copy-export');
+    setSaveTransferStatus('#save-transfer-status', null);
+    // Select the entire save so manual copying also works on older Android WebViews.
+    input.select();
+    input.setSelectionRange(0, input.value.length);
+    let copied = false;
+    try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            await navigator.clipboard.writeText(input.value);
+            copied = true;
+        }
+    } catch (err) {
+        // Clipboard permission can be unavailable in native WebViews.
+    }
+    if (!copied) {
+        try {
+            copied = document.execCommand('copy');
+        } catch (err) {
+            copied = false;
+        }
+    }
+    button.textContent = t(copied ? 'copied' : 'copy');
+    if (!copied) setSaveTransferStatus('#save-transfer-status', 'save-copy-error');
+    return Boolean(copied);
+};
+
 const exportData = () => {
     if (typeof loadPermanentCompanionUnlockProgress === 'function') {
         loadPermanentCompanionUnlockProgress();
     }
-    const exportedData = btoa(JSON.stringify(player));
-    return exportedData;
+    // JSON escapes preserve Unicode while keeping the existing Base64 format
+    // readable by older game versions, whose importers use JSON.parse(atob(...)).
+    const json = JSON.stringify(player).replace(/[\u007f-\uffff]/g, character =>
+        '\\u' + character.charCodeAt(0).toString(16).padStart(4, '0'));
+    return btoa(json);
 }
 
 const importData = (importedData) => {
+    setSaveTransferStatus('#save-transfer-status', null);
     try {
         let playerImport = JSON.parse(atob(importedData));
-        if (playerImport.inventory !== undefined) {
+        const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+        if (isObject(playerImport) && isObject(playerImport.inventory)
+            && Array.isArray(playerImport.inventory.equipment)
+            && Array.isArray(playerImport.inventory.consumables)
+            && Array.isArray(playerImport.equipped)
+            && isObject(playerImport.stats) && isObject(playerImport.baseStats)
+            && isObject(playerImport.equippedStats)
+            && playerImport.inventory.equipment.every(entry => isObject(typeof entry === 'string' ? JSON.parse(entry) : entry))
+            && playerImport.equipped.every(isObject)) {
             normalizePlayerCurseProgress(playerImport);
             if (typeof normalizePlayerTitles === 'function') normalizePlayerTitles(playerImport);
             if (typeof normalizePermanentCompanionUnlockProgress === 'function') {
@@ -1837,10 +1879,11 @@ const importData = (importedData) => {
             confirmationModalElement.style.display = "flex";
             confirmationModalElement.innerHTML = `
             <div class="content">
-                <p>Are you sure you want to import this data? This will erase the current data and reset your dungeon progress.</p>
+                <p>${t('save-import-confirm')}</p>
+                <p id="import-status" role="status" hidden></p>
                 <div class="button-container">
-                    <button id="import-btn">Import</button>
-                    <button id="cancel-btn">Cancel</button>
+                    <button id="import-btn">${t('import')}</button>
+                    <button id="cancel-btn">${t('cancel')}</button>
                 </div>
             </div>`;
             let confirm = document.querySelector("#import-btn");
@@ -1850,9 +1893,19 @@ const importData = (importedData) => {
                 if (typeof playerImport.playtime !== 'number' || !Number.isFinite(playerImport.playtime)) {
                     playerImport.playtime = 0;
                 }
+                // Persist the transferred items before replacing the active player.
+                // A failed write must leave the existing game usable and allow retry.
+                // Clear combat/death state in this checkpoint because the imported run resets.
+                playerImport.inCombat = false;
+                playerImport.stats.hp = playerImport.stats.hpMax;
+                delete playerImport.allocated;
+                if (!safeSave(STORAGE_KEYS.player, playerImport, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp)) {
+                    sfxDeny.play();
+                    setSaveTransferStatus('#import-status', 'save-import-storage-error');
+                    return;
+                }
                 player = playerImport;
                 migratePlayerEquipmentSlots();
-                saveData();
                 bgmDungeon.stop();
                 let dimDungeon = document.querySelector('#dungeon-main');
                 dimDungeon.style.filter = "brightness(100%)";
@@ -1880,9 +1933,11 @@ const importData = (importedData) => {
             }
         } else {
             sfxDeny.play();
+            setSaveTransferStatus('#save-transfer-status', 'save-import-invalid');
         }
     } catch (err) {
         sfxDeny.play();
+        setSaveTransferStatus('#save-transfer-status', 'save-import-invalid');
     }
 }
 
