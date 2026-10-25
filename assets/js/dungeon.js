@@ -447,6 +447,7 @@ const updateExploreButtonAttention = () => {
 
 // Sets up the initial dungeon
 const initialDungeonLoad = () => {
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(false);
     const savedDungeon = safeLoad(STORAGE_KEYS.dungeon, STORAGE_KEYS.dungeonBackup);
     if (savedDungeon !== null) {
         dungeon = savedDungeon;
@@ -536,6 +537,7 @@ const dungeonStartPause = () => {
         // Reset resting duration when starting exploration
         dungeon.resting.duration = 0;
     }
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(!dungeon.status.paused);
     updateExploreButtonAttention();
 }
 

@@ -1311,6 +1311,7 @@ const grantMonarchDepthRewards = () => {
 };
 
 const handleSpecialBossVictory = () => {
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(false);
     // Persist titles, Curse unlocks and the stopped run together at the end of this handler.
     if (typeof recordPlayerMonarchVictory === 'function') recordPlayerMonarchVictory({ persist: false });
     if (typeof maybeUnlockNextCurseLevel === 'function') {
@@ -1523,6 +1524,7 @@ const startCombat = (battleMusic) => {
     sfxEncounter.play();
         currentBattleMusic.play();
     player.inCombat = true;
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(true);
     combatPaused = false;
     scoutDodgeReady = false;
     volatileDetonated = false;
@@ -1586,6 +1588,7 @@ const endCombat = () => {
     currentBattleMusic.stop();
     sfxCombatEnd.play();
     player.inCombat = false;
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(!playerDead && !dungeon.status.paused);
     combatPaused = false;
     clearCompanionSpecialBuff();
     if (playerAttackTimeout) {

@@ -1147,6 +1147,7 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
 
 // Loading Screen
 const runLoad = (id, display) => {
+    if (id !== 'dungeon-main' && typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(false);
     let loader = document.querySelector("#loading");
     loader.style.display = "flex";
     setTimeout(async () => {
@@ -1423,6 +1424,7 @@ const calculateStats = () => {
 // Resets the progress back to start. If `fromDeath` is true and hardcore mode
 // is enabled, inventory, equipped items and gold are wiped.
 const progressReset = (fromDeath = false) => {
+    if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(false);
     if (fromDeath && player.hardcore) {
         player.inventory = {
             consumables: [],
