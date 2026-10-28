@@ -12,6 +12,14 @@ const REFINE_STONE_CHEST_DROP_CHANCE = 0.35;
 // Refine levels past REFINE_MAX_LEVEL are only available on max-level items and also cost Guardian Cores.
 const ASCENDED_REFINE_STAT_BONUS_PER_LEVEL = 0.03;
 const GUARDIAN_CORE_MIN_FLOOR = 20;
+const GUARDIAN_CORE_FULL_FLOOR = 45;
+const GUARDIAN_CORE_LOW_CURSE_PEAK_CHANCE = 0.05;
+const GUARDIAN_CORE_CURSE_10_PEAK_CHANCE = 0.1;
+const GUARDIAN_CORE_MAX_PEAK_CHANCE = 0.5;
+const GUARDIAN_CORE_MIN_FLOOR_SHARE = 0.4;
+// Luck 140 (the stat cap) adds at most +10% relative chance.
+const GUARDIAN_CORE_LUCK_DIVISOR = 1400;
+const GUARDIAN_CORE_MAX_LUCK = 140;
 const BASE_EQUIPMENT_ROLL_FLOOR = 0.5;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER = 10;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_STEP = 0.05;
@@ -149,19 +157,39 @@ const getGuardianCoreCount = () => {
     return player ? player.inventory.guardianCores : 0;
 };
 
-const getGuardianCoreDropCount = (floor) => {
+const getGuardianCoreDropChance = (floor, curseLevel, luck = 0) => {
     const normalizedFloor = Math.floor(Number(floor));
     if (!Number.isFinite(normalizedFloor) || normalizedFloor < GUARDIAN_CORE_MIN_FLOOR) {
         return 0;
     }
-    return 1;
+    const curse = clampCurseLevel(curseLevel);
+    const peakChance = curse < MAX_STANDARD_CURSE_LEVEL
+        ? GUARDIAN_CORE_LOW_CURSE_PEAK_CHANCE
+        : GUARDIAN_CORE_CURSE_10_PEAK_CHANCE + ((GUARDIAN_CORE_MAX_PEAK_CHANCE - GUARDIAN_CORE_CURSE_10_PEAK_CHANCE)
+            * (curse - MAX_STANDARD_CURSE_LEVEL) / (MAX_CURSE_LEVEL - MAX_STANDARD_CURSE_LEVEL));
+    const floorProgress = Math.min(1, (normalizedFloor - GUARDIAN_CORE_MIN_FLOOR)
+        / (GUARDIAN_CORE_FULL_FLOOR - GUARDIAN_CORE_MIN_FLOOR));
+    const floorShare = GUARDIAN_CORE_MIN_FLOOR_SHARE + ((1 - GUARDIAN_CORE_MIN_FLOOR_SHARE) * floorProgress);
+    const normalizedLuck = Math.min(GUARDIAN_CORE_MAX_LUCK, Math.max(0, Number(luck) || 0));
+    return peakChance * floorShare * (1 + (normalizedLuck / GUARDIAN_CORE_LUCK_DIVISOR));
 };
 
-const grantGuardianCoreDrop = (floor) => {
-    const count = getGuardianCoreDropCount(floor);
-    if (count <= 0 || !player) {
+const grantGuardianCoreDrop = (floor, curseLevel = null, luck = null) => {
+    if (!player) {
         return 0;
     }
+    const resolvedCurse = curseLevel !== null
+        ? curseLevel
+        : (typeof dungeon !== 'undefined' && dungeon && dungeon.settings
+            ? getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling)
+            : MIN_CURSE_LEVEL);
+    const resolvedLuck = luck !== null
+        ? luck
+        : (player.stats && Number.isFinite(player.stats.luck) ? player.stats.luck : 0);
+    if (Math.random() >= getGuardianCoreDropChance(floor, resolvedCurse, resolvedLuck)) {
+        return 0;
+    }
+    const count = 1;
     ensureRefineInventory();
     player.inventory.guardianCores += count;
     const coreName = typeof t === 'function' ? t('guardian-core') : 'Guardian Core';

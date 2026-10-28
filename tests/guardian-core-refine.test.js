@@ -65,17 +65,32 @@ test('Guardian Cores are only needed past +10 and their cost grows exponentially
     assert.ok(goldCost(30) / goldCost(29) > 1.3);
 });
 
+test('Guardian Core drop chance scales with curse, floor and slightly with luck', () => {
+    const context = createContext();
+    const chance = (floor, curse, luck = 0) => evaluate(context, `getGuardianCoreDropChance(${floor}, ${curse}, ${luck})`);
+    const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} !== ${expected}`);
+
+    assert.equal(chance(19, 15), 0);
+    assert.ok(chance(45, 9) <= 0.05);
+    assert.ok(chance(20, 1) < chance(45, 1));
+    assert.ok(chance(45, 9) < chance(45, 10));
+    assert.ok(chance(45, 14) < chance(45, 15));
+    near(chance(45, 15), 0.5);
+    near(chance(100, 15), 0.5);
+    near(chance(45, 15, 140), 0.55);
+    near(chance(45, 15, 9999), 0.55);
+});
+
 test('Guardian Cores drop only from floor bosses on Floor 20 or deeper', () => {
     const context = createContext();
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(1)'), 0);
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(19)'), 0);
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(20)'), 1);
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(30)'), 1);
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(100)'), 1);
-
-    assert.equal(evaluate(context, 'grantGuardianCoreDrop(5)'), 0);
+    assert.equal(evaluate(context, 'grantGuardianCoreDrop(5, 15, 140)'), 0);
     assert.equal(context.player.inventory.guardianCores, 0);
-    assert.equal(evaluate(context, 'grantGuardianCoreDrop(25)'), 1);
+
+    vm.runInContext('Math.random = () => 0.49;', context);
+    assert.equal(evaluate(context, 'grantGuardianCoreDrop(45, 15, 0)'), 1);
+    assert.equal(context.player.inventory.guardianCores, 1);
+    vm.runInContext('Math.random = () => 0.5;', context);
+    assert.equal(evaluate(context, 'grantGuardianCoreDrop(45, 15, 0)'), 0);
     assert.equal(context.player.inventory.guardianCores, 1);
     assert.match(context.combatLogs.at(-1), /guardian-core/);
 
