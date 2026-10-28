@@ -12,7 +12,6 @@ const REFINE_STONE_CHEST_DROP_CHANCE = 0.35;
 // Refine levels past REFINE_MAX_LEVEL are only available on max-level items and also cost Guardian Cores.
 const ASCENDED_REFINE_STAT_BONUS_PER_LEVEL = 0.03;
 const GUARDIAN_CORE_MIN_FLOOR = 20;
-const GUARDIAN_CORE_BONUS_FLOOR_STEP = 10;
 const BASE_EQUIPMENT_ROLL_FLOOR = 0.5;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER = 10;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_STEP = 0.05;
@@ -155,7 +154,7 @@ const getGuardianCoreDropCount = (floor) => {
     if (!Number.isFinite(normalizedFloor) || normalizedFloor < GUARDIAN_CORE_MIN_FLOOR) {
         return 0;
     }
-    return 1 + Math.floor((normalizedFloor - GUARDIAN_CORE_MIN_FLOOR) / GUARDIAN_CORE_BONUS_FLOOR_STEP);
+    return 1;
 };
 
 const grantGuardianCoreDrop = (floor) => {
@@ -166,8 +165,7 @@ const grantGuardianCoreDrop = (floor) => {
     ensureRefineInventory();
     player.inventory.guardianCores += count;
     const coreName = typeof t === 'function' ? t('guardian-core') : 'Guardian Core';
-    const formattedCount = count > 1 ? `${count}x ` : '';
-    const coreMarkup = `<span class="Legendary"><i class="ra ra-crystal-cluster"></i>${formattedCount}${coreName}</span>`;
+    const coreMarkup = `<span class="Legendary"><i class="ra ra-crystal-cluster"></i>${coreName}</span>`;
     if (typeof addCombatLog === 'function') {
         const enemyLabel = typeof enemy !== 'undefined' && enemy ? getDisplayEnemyName(enemy.id, enemy.name) : '';
         addCombatLog(typeof t === 'function'

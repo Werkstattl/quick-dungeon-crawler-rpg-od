@@ -70,7 +70,8 @@ test('Guardian Cores drop only from floor bosses on Floor 20 or deeper', () => {
     assert.equal(evaluate(context, 'getGuardianCoreDropCount(1)'), 0);
     assert.equal(evaluate(context, 'getGuardianCoreDropCount(19)'), 0);
     assert.equal(evaluate(context, 'getGuardianCoreDropCount(20)'), 1);
-    assert.equal(evaluate(context, 'getGuardianCoreDropCount(30)'), 2);
+    assert.equal(evaluate(context, 'getGuardianCoreDropCount(30)'), 1);
+    assert.equal(evaluate(context, 'getGuardianCoreDropCount(100)'), 1);
 
     assert.equal(evaluate(context, 'grantGuardianCoreDrop(5)'), 0);
     assert.equal(context.player.inventory.guardianCores, 0);
