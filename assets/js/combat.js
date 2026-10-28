@@ -72,6 +72,7 @@ const createRunSummary = (result = 'defeat') => ({
     damageDealt: dungeon && dungeon.statistics ? dungeon.statistics.damageDealt : 0,
     damageTaken: dungeon && dungeon.statistics ? dungeon.statistics.damageTaken : 0,
     goldEarned: dungeon && dungeon.statistics ? dungeon.statistics.goldEarned : 0,
+    refineStonesCollected: dungeon && dungeon.statistics ? dungeon.statistics.refineStonesCollected : 0,
     lootDrops: (dungeon && dungeon.statistics && dungeon.statistics.lootDrops)
         ? JSON.parse(JSON.stringify(dungeon.statistics.lootDrops))
         : null,

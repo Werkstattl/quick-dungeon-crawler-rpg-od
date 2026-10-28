@@ -184,6 +184,9 @@ const addRefineStones = (amount, source = 'dungeon') => {
     const count = Math.max(1, Math.floor(Number(amount) || 1));
     ensureRefineInventory();
     player.inventory.refineStones += count;
+    if (typeof recordRunRefineStonesCollected === 'function') {
+        recordRunRefineStonesCollected(count);
+    }
     const stoneName = typeof t === 'function' ? t('refine-stone') : 'Refine Stone';
     const formattedCount = count > 1 ? `${count}x ` : '';
     const stoneMarkup = `<span class="Rare"><i class="ra ra-crystal-ball"></i>${formattedCount}${stoneName}</span>`;
