@@ -191,6 +191,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                         consumables: [],
                         equipment: [],
                         refineStones: 0,
+                        guardianCores: 0,
                         forgeTokens: 0
                     },
                     equipped: [],
@@ -229,6 +230,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                             consumables: [],
                             equipment: [],
                             refineStones: 0,
+                            guardianCores: 0,
                             forgeTokens: 0
                         };
                         player.equipped = [];
@@ -1430,6 +1432,7 @@ const progressReset = (fromDeath = false) => {
             consumables: [],
             equipment: [],
             refineStones: 0,
+            guardianCores: 0,
             forgeTokens: 0
         };
         player.equipped = [];

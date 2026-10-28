@@ -9,6 +9,10 @@ const REFINE_MAX_LEVEL = 10;
 const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
 const REFINE_STONE_COMBAT_DROP_CHANCE = 0.16;
 const REFINE_STONE_CHEST_DROP_CHANCE = 0.35;
+// Refine levels past REFINE_MAX_LEVEL are only available on max-level items and also cost Guardian Cores.
+const ASCENDED_REFINE_STAT_BONUS_PER_LEVEL = 0.03;
+const GUARDIAN_CORE_MIN_FLOOR = 20;
+const GUARDIAN_CORE_BONUS_FLOOR_STEP = 10;
 const BASE_EQUIPMENT_ROLL_FLOOR = 0.5;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_START_TIER = 10;
 const ENDGAME_EQUIPMENT_ROLL_FLOOR_STEP = 0.05;
@@ -132,10 +136,49 @@ const ensureRefineInventory = () => {
         player.inventory.refineStones = 0;
     }
     player.inventory.refineStones = Math.max(0, Math.floor(Number(player.inventory.refineStones)));
+    if (!Number.isFinite(Number(player.inventory.guardianCores))) {
+        player.inventory.guardianCores = 0;
+    }
+    player.inventory.guardianCores = Math.max(0, Math.floor(Number(player.inventory.guardianCores)));
     return player.inventory.refineStones;
 };
 
 const getRefineStoneCount = () => ensureRefineInventory();
+
+const getGuardianCoreCount = () => {
+    ensureRefineInventory();
+    return player ? player.inventory.guardianCores : 0;
+};
+
+const getGuardianCoreDropCount = (floor) => {
+    const normalizedFloor = Math.floor(Number(floor));
+    if (!Number.isFinite(normalizedFloor) || normalizedFloor < GUARDIAN_CORE_MIN_FLOOR) {
+        return 0;
+    }
+    return 1 + Math.floor((normalizedFloor - GUARDIAN_CORE_MIN_FLOOR) / GUARDIAN_CORE_BONUS_FLOOR_STEP);
+};
+
+const grantGuardianCoreDrop = (floor) => {
+    const count = getGuardianCoreDropCount(floor);
+    if (count <= 0 || !player) {
+        return 0;
+    }
+    ensureRefineInventory();
+    player.inventory.guardianCores += count;
+    const coreName = typeof t === 'function' ? t('guardian-core') : 'Guardian Core';
+    const formattedCount = count > 1 ? `${count}x ` : '';
+    const coreMarkup = `<span class="Legendary"><i class="ra ra-crystal-cluster"></i>${formattedCount}${coreName}</span>`;
+    if (typeof addCombatLog === 'function') {
+        const enemyLabel = typeof enemy !== 'undefined' && enemy ? getDisplayEnemyName(enemy.id, enemy.name) : '';
+        addCombatLog(typeof t === 'function'
+            ? t('enemy-dropped-refine-stone', { enemy: enemyLabel, item: coreMarkup })
+            : `${enemyLabel} dropped ${coreMarkup}.`);
+    }
+    if (typeof saveData === 'function') {
+        saveData();
+    }
+    return count;
+};
 
 const addRefineStones = (amount, source = 'dungeon') => {
     const count = Math.max(1, Math.floor(Number(amount) || 1));
@@ -175,15 +218,30 @@ const rollRefineStoneDrop = (source = 'combat') => {
     return addRefineStones(1, source);
 };
 
+const getEquipmentRefineMaxLevel = (equipment) => (
+    Number(equipment && equipment.lvl) >= MAX_EQUIPMENT_LEVEL ? Infinity : REFINE_MAX_LEVEL
+);
+
 const getEquipmentRefineLevel = (equipment) => {
     const level = Number(equipment && equipment.refineLevel);
-    if (!Number.isFinite(level)) {
+    if (!Number.isFinite(level) || level <= 0) {
         return 0;
     }
-    return Math.max(0, Math.min(REFINE_MAX_LEVEL, Math.floor(level)));
+    const flooredLevel = Math.floor(level);
+    return flooredLevel <= REFINE_MAX_LEVEL
+        ? flooredLevel
+        : Math.min(getEquipmentRefineMaxLevel(equipment), flooredLevel);
 };
 
-const getEquipmentRefineStatMultiplier = (equipment) => 1 + (getEquipmentRefineLevel(equipment) * REFINE_STAT_BONUS_PER_LEVEL);
+const canRefineEquipment = (equipment) => getEquipmentRefineLevel(equipment) < getEquipmentRefineMaxLevel(equipment);
+
+const getEquipmentRefineStatMultiplier = (equipment) => {
+    const level = getEquipmentRefineLevel(equipment);
+    const standardLevels = Math.min(REFINE_MAX_LEVEL, level);
+    return 1
+        + (standardLevels * REFINE_STAT_BONUS_PER_LEVEL)
+        + ((level - standardLevels) * ASCENDED_REFINE_STAT_BONUS_PER_LEVEL);
+};
 
 const equipmentRefinePrefix = (equipment) => {
     const level = getEquipmentRefineLevel(equipment);

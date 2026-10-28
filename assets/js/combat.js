@@ -897,6 +897,9 @@ const hpValidation = () => {
         if (typeof rollRefineStoneDrop === 'function') {
             rollRefineStoneDrop('combat');
         }
+        if (enemy.condition === 'guardian' && typeof grantGuardianCoreDrop === 'function') {
+            grantGuardianCoreDrop(dungeon.progress.floor);
+        }
         if (enemy.condition === 'sboss') {
             grantMonarchDepthRewards();
         }

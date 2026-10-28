@@ -24,6 +24,10 @@ if (player) {
         player.inventory.refineStones = 0;
     }
     player.inventory.refineStones = Math.max(0, Math.floor(Number(player.inventory.refineStones)));
+    if (!Number.isFinite(Number(player.inventory.guardianCores))) {
+        player.inventory.guardianCores = 0;
+    }
+    player.inventory.guardianCores = Math.max(0, Math.floor(Number(player.inventory.guardianCores)));
     if (!Number.isFinite(Number(player.inventory.forgeTokens))) {
         player.inventory.forgeTokens = 0;
     }

@@ -3213,6 +3213,13 @@ header button i {
     margin: 0;
 }
 
+.refine-ascension-hint {
+    margin-top: 0.4rem;
+    font-weight: normal;
+    font-size: calc(0.85rem * var(--font-scale));
+    opacity: 0.8;
+}
+
 .forge-equipment-list {
     margin: 1rem 0;
 }

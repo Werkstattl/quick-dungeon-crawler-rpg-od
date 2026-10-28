@@ -16,6 +16,9 @@ let rerollStoneCost = 0;
 let selectedRefineItem = null;
 let refineCost = 0;
 let refineStoneCost = 0;
+let refineCoreCost = 0;
+const ASCENDED_REFINE_GOLD_GROWTH = 1.35;
+const ASCENDED_REFINE_CORE_GROWTH = 1.25;
 const FORGE_INCLUDE_REFINEMENT_STORAGE_KEY = 'forgeIncludeRefinement';
 let forgeIncludeRefinement = false;
 try {
@@ -302,10 +305,14 @@ function unlockForge(source = 'purchase') {
 const updateForgeGold = () => {
     if (forgeGoldElement) {
         const refineStoneCount = typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0;
+        const guardianCoreCount = typeof getGuardianCoreCount === 'function' ? getGuardianCoreCount() : 0;
+        const guardianCoreMarkup = guardianCoreCount > 0
+            ? ` <span class="forge-material-count" title="${t('guardian-cores')}"><i class="ra ra-crystal-cluster"></i>${nFormatter(guardianCoreCount)}</span>`
+            : '';
         const forgeTokenCount = forgeUnlocked
             ? ''
             : ` <span class="forge-material-count" title="${t('forge-tokens')}"><i class="ra ra-anvil"></i>${nFormatter(getForgeTokenCount())}</span>`;
-        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span>${forgeTokenCount}`;
+        forgeGoldElement.innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)} <span class="forge-material-count"><i class="ra ra-crystal-ball"></i>${nFormatter(refineStoneCount)}</span>${guardianCoreMarkup}${forgeTokenCount}`;
     }
 };
 
@@ -358,6 +365,7 @@ const resetRefineState = () => {
     selectedRefineItem = null;
     refineCost = 0;
     refineStoneCost = 0;
+    refineCoreCost = 0;
     const refinePreviewContainer = document.querySelector('#refine-preview');
     if (refinePreviewContainer) {
         refinePreviewContainer.style.display = 'none';
@@ -511,14 +519,27 @@ const getStatLockRerollCosts = (equipment, lockedStatCount) => {
     const stones = Math.ceil(lockWeight * rarityRank * (1 + ((tier - 1) * 0.15)));
     return { gold, stones };
 };
+const getAscendedRefineStep = (equipment) => {
+    const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
+    return Math.max(0, currentLevel + 1 - REFINE_MAX_LEVEL);
+};
 const getRefineCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
-    return Math.max(2500, Math.round((equipment.value || 0) * (currentLevel + 1) * 3.75));
+    const baseCost = Math.max(2500, Math.round((equipment.value || 0) * (currentLevel + 1) * 3.75));
+    return Math.round(baseCost * Math.pow(ASCENDED_REFINE_GOLD_GROWTH, getAscendedRefineStep(equipment)));
 };
 const getRefineStoneCost = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
     return Math.max(1, Math.ceil((currentLevel + 1) * 0.75));
 };
+const getRefineGuardianCoreCost = (equipment) => {
+    const step = getAscendedRefineStep(equipment);
+    return step > 0 ? Math.ceil(Math.pow(ASCENDED_REFINE_CORE_GROWTH, step - 1)) : 0;
+};
+const hasRefineMaterials = () => (
+    (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost
+    && (typeof getGuardianCoreCount === 'function' ? getGuardianCoreCount() : 0) >= refineCoreCost
+);
 
 const cloneEquipment = (equipment) => JSON.parse(JSON.stringify(equipment));
 
@@ -631,8 +652,8 @@ const loadForgeEquipment = () => {
         if (selectedStrs.includes(item.equipStr)) {
             return false;
         }
-        if (forgeMode === 'refine' && typeof getEquipmentRefineLevel === 'function') {
-            return getEquipmentRefineLevel(item.equip) < REFINE_MAX_LEVEL;
+        if (forgeMode === 'refine' && typeof canRefineEquipment === 'function') {
+            return canRefineEquipment(item.equip);
         }
         return true;
     });
@@ -745,7 +766,7 @@ const selectRerollEquipment = (equipmentStr, source = 'inventory', sourceIndex =
 
 const selectRefineEquipment = (equipmentStr, source = 'inventory', sourceIndex = -1, equipmentOverride = null) => {
     const equipment = equipmentOverride || JSON.parse(equipmentStr);
-    if (typeof getEquipmentRefineLevel === 'function' && getEquipmentRefineLevel(equipment) >= REFINE_MAX_LEVEL) {
+    if (typeof canRefineEquipment === 'function' && !canRefineEquipment(equipment)) {
         sfxDeny.play();
         return;
     }
@@ -776,10 +797,12 @@ const calculateRefinePreview = () => {
     if (!selectedRefineItem) {
         refineCost = 0;
         refineStoneCost = 0;
+        refineCoreCost = 0;
         return;
     }
     refineCost = getRefineCost(selectedRefineItem.equipment);
     refineStoneCost = getRefineStoneCost(selectedRefineItem.equipment);
+    refineCoreCost = getRefineGuardianCoreCost(selectedRefineItem.equipment);
     displayRefinePreview();
 };
 
@@ -826,7 +849,7 @@ const displayRefinePreview = () => {
     const currentEquipment = selectedRefineItem.equipment;
     const currentTotals = getEquipmentStatTotals(currentEquipment);
     const previewEquipment = cloneEquipment(currentEquipment);
-    previewEquipment.refineLevel = Math.min(REFINE_MAX_LEVEL, (typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(currentEquipment) : 0) + 1);
+    previewEquipment.refineLevel = (typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(currentEquipment) : 0) + 1;
     const previewTotals = getEquipmentStatTotals(previewEquipment);
     const currentIcon = equipmentIcon(currentEquipment.baseCategory || currentEquipment.category);
 
@@ -847,11 +870,21 @@ const displayRefinePreview = () => {
 
     costAmount.textContent = nFormatter(getForgeActionGoldCost(refineCost));
     stoneAmount.textContent = nFormatter(refineStoneCost);
+    const coreCost = document.querySelector('#refine-core-cost');
+    const coreAmount = document.querySelector('#refine-core-cost-amount');
+    if (coreCost && coreAmount) {
+        coreAmount.textContent = nFormatter(refineCoreCost);
+        coreCost.style.display = refineCoreCost > 0 ? '' : 'none';
+    }
+    const ascensionHint = document.querySelector('#refine-ascension-hint');
+    if (ascensionHint) {
+        ascensionHint.style.display = refineCoreCost > 0 ? 'block' : 'none';
+    }
     const hasGold = canPayForgeAction(refineCost);
-    const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
+    const hasMaterials = hasRefineMaterials();
     const costElement = costAmount.parentElement;
     if (costElement) {
-        costElement.style.color = hasGold && hasStones ? '#4CAF50' : '#F44336';
+        costElement.style.color = hasGold && hasMaterials ? '#4CAF50' : '#F44336';
     }
     previewContainer.style.display = 'grid';
     costContainer.style.display = 'block';
@@ -1100,7 +1133,8 @@ const updateRefineDisplay = () => {
     }
 
     const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
-    if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones) {
+    const hasCores = (typeof getGuardianCoreCount === 'function' ? getGuardianCoreCount() : 0) >= refineCoreCost;
+    if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones && hasCores) {
         confirmButton.disabled = false;
         confirmButton.setAttribute('data-i18n', 'refine-equipment');
         confirmButton.textContent = t('refine-equipment');
@@ -1108,6 +1142,10 @@ const updateRefineDisplay = () => {
         confirmButton.disabled = true;
         confirmButton.setAttribute('data-i18n', 'not-enough-refine-stones');
         confirmButton.textContent = t('not-enough-refine-stones');
+    } else if (selectedRefineItem && !hasCores) {
+        confirmButton.disabled = true;
+        confirmButton.setAttribute('data-i18n', 'not-enough-guardian-cores');
+        confirmButton.textContent = t('not-enough-guardian-cores');
     } else if (selectedRefineItem) {
         confirmButton.disabled = true;
         confirmButton.setAttribute('data-i18n', 'not-enough-gold');
@@ -1119,7 +1157,7 @@ const updateRefineDisplay = () => {
     }
 
     confirmButton.onclick = () => {
-        if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones) {
+        if (selectedRefineItem && canPayForgeAction(refineCost) && hasStones && hasCores) {
             executeRefine();
         } else {
             sfxDeny.play();
@@ -1561,12 +1599,12 @@ const executeReroll = () => {
 
 const applyRefinedEquipment = (equipment) => {
     const currentLevel = typeof getEquipmentRefineLevel === 'function' ? getEquipmentRefineLevel(equipment) : 0;
-    equipment.refineLevel = Math.min(REFINE_MAX_LEVEL, currentLevel + 1);
+    const maxLevel = typeof getEquipmentRefineMaxLevel === 'function' ? getEquipmentRefineMaxLevel(equipment) : REFINE_MAX_LEVEL;
+    equipment.refineLevel = Math.min(maxLevel, currentLevel + 1);
 };
 
 const executeRefine = () => {
-    const hasStones = (typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0) >= refineStoneCost;
-    if (!selectedRefineItem || !canPayForgeAction(refineCost) || !hasStones) {
+    if (!selectedRefineItem || !canPayForgeAction(refineCost) || !hasRefineMaterials()) {
         sfxDeny.play();
         return;
     }
@@ -1611,6 +1649,7 @@ const executeRefine = () => {
     ensureRefineInventory();
     payForForgeAction(refineCost);
     player.inventory.refineStones -= refineStoneCost;
+    player.inventory.guardianCores -= refineCoreCost;
     saveData();
     playerLoadStats();
     if (typeof updateCompanionUI === 'function') {
