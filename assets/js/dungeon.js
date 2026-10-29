@@ -23,6 +23,7 @@ const createDefaultRunStatistics = () => ({
     damageTaken: 0,
     goldEarned: 0,
     refineStonesCollected: 0,
+    guardianCoresCollected: 0,
     lootDrops: createDefaultLootStatistics(),
     latestCurseUnlock: null,
 });
@@ -313,7 +314,7 @@ const ensureRunStatisticsShape = () => {
         return;
     }
     const stats = dungeon.statistics;
-    const numericFields = ['kills', 'bossesDefeated', 'runtime', 'damageDealt', 'damageTaken', 'goldEarned', 'refineStonesCollected'];
+    const numericFields = ['kills', 'bossesDefeated', 'runtime', 'damageDealt', 'damageTaken', 'goldEarned', 'refineStonesCollected', 'guardianCoresCollected'];
     numericFields.forEach((field) => {
         if (!Number.isFinite(stats[field])) {
             stats[field] = 0;
@@ -390,6 +391,15 @@ const recordRunRefineStonesCollected = (amount) => {
     dungeon.statistics.refineStonesCollected += Math.round(value);
 };
 
+const recordRunGuardianCoresCollected = (amount) => {
+    ensureRunStatisticsShape();
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+        return;
+    }
+    dungeon.statistics.guardianCoresCollected += Math.round(value);
+};
+
 const getRarityRank = (rarity) => RUN_LOOT_RARITIES.indexOf(rarity);
 
 const recordRunLootDrop = (rarity) => {
@@ -409,6 +419,7 @@ if (typeof window !== 'undefined') {
     window.recordRunDamageTaken = recordRunDamageTaken;
     window.recordRunGoldEarned = recordRunGoldEarned;
     window.recordRunRefineStonesCollected = recordRunRefineStonesCollected;
+    window.recordRunGuardianCoresCollected = recordRunGuardianCoresCollected;
     window.recordRunLootDrop = recordRunLootDrop;
     window.recordRunBossDefeat = recordRunBossDefeat;
     window.resetRunStatistics = resetRunStatistics;

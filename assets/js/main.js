@@ -1495,6 +1495,7 @@ const progressReset = (fromDeath = false) => {
             damageTaken: 0,
             goldEarned: 0,
             refineStonesCollected: 0,
+            guardianCoresCollected: 0,
             lootDrops: { total: 0, highestRarity: null, rarityCounts: {} },
             latestCurseUnlock: null,
         };
@@ -1680,6 +1681,7 @@ const showEndgameScreen = (summary) => {
             { key: "damage-taken", value: formatNumberStat(safeSummary.damageTaken) },
             { key: "gold-earned", value: formatNumberStat(safeSummary.goldEarned) },
             { key: "refine-stones", value: formatNumberStat(safeSummary.refineStonesCollected) },
+            { key: "guardian-cores", value: formatNumberStat(safeSummary.guardianCoresCollected) },
             { key: "loot-drops", value: formatLootDrops() },
             { key: "best-loot", value: formatBestLoot() },
         ];
