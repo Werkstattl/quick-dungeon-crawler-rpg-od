@@ -610,7 +610,7 @@ const lvlupPopup = () => {
 
 const getLevelUpRerollGoldCost = (lvl = player.lvl) => {
     const level = Math.max(1, Math.floor(Number(lvl) || 1));
-    const normalizedCurseLevel = clampCurseLevel(curseLevel);
+    const normalizedCurseLevel = clampCurseLevel(player.selectedCurseLevel);
     const curseMultiplier = 1 + ((normalizedCurseLevel - MIN_CURSE_LEVEL) * BLESSING_CURSE_COST_STEP * 500);
     return Math.round(((800 * level) + (6 * level * level)) * curseMultiplier);
 };
