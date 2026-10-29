@@ -398,10 +398,10 @@ const setEnemyStats = (type, condition) => {
 
     let expCalculation = (expYield.reduce((acc, cur) => acc + cur, 0)) / 20;
     enemy.rewards.exp = Math.round(expCalculation + expCalculation * (enemy.lvl * 0.1));
-    if (enemy.rewards.exp > 900000) {
-        enemy.rewards.exp = 900000 * randomizeDecimal(0.9, 1.1);
+    if (enemy.rewards.exp > 890000) {
+        enemy.rewards.exp = 890000 * randomizeDecimal(0.9, 1.1);
     }
-    enemy.rewards.gold = Math.round((enemy.rewards.exp * randomizeDecimal(0.9, 1.1)) * 1.1);
+    enemy.rewards.gold = Math.round(enemy.rewards.exp * randomizeDecimal(0.9, 1.1));
     if (typeof getAffixRewardMultiplier === 'function') {
         const affixRewardMultiplier = getAffixRewardMultiplier(enemy.affixes);
         enemy.rewards.exp = Math.round(enemy.rewards.exp * affixRewardMultiplier);
