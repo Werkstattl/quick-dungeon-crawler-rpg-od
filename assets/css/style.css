@@ -3213,6 +3213,13 @@ header button i {
     margin: 0;
 }
 
+/* Guardian Cores keep the Legendary gold they have in drop lines, inside the forge too. */
+.forge-material-count.guardian-core-count,
+.refine-material-cost.guardian-core-cost {
+    color: #ffd700;
+    text-shadow: 0 0 6px rgba(255, 190, 0, 0.45);
+}
+
 .refine-ascension-hint {
     margin-top: 0.4rem;
     font-weight: normal;
