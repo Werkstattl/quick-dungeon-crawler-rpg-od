@@ -46,8 +46,8 @@ test('refine levels past +10 add a smaller stat bonus each', () => {
     const context = createContext();
     const multiplier = (refineLevel) => evaluate(context, `getEquipmentRefineStatMultiplier(${item(100, refineLevel)})`);
     assert.ok(Math.abs(multiplier(10) - 1.8) < 1e-9);
-    assert.ok(Math.abs(multiplier(11) - 1.83) < 1e-9);
-    assert.ok(Math.abs(multiplier(20) - 2.1) < 1e-9);
+    assert.ok(Math.abs(multiplier(11) - 1.82) < 1e-9);
+    assert.ok(Math.abs(multiplier(20) - 2.0) < 1e-9);
 });
 
 test('Guardian Cores are only needed past +10 and their cost grows exponentially', () => {
