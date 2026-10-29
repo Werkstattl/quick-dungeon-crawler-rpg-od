@@ -5,10 +5,12 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
+const progressionSource = fs.readFileSync(path.join(root, 'assets/js/progression.js'), 'utf8');
+const dungeonSource = fs.readFileSync(path.join(root, 'assets/js/dungeon.js'), 'utf8');
 const playerSource = fs.readFileSync(path.join(root, 'assets/js/player.js'), 'utf8')
     .replace('const playerLoadStats =', 'let playerLoadStats =');
 
-const createContext = (gold, lvl) => {
+const createContext = (gold, lvl, selectedCurseLevel = 1) => {
     const element = () => ({
         dataset: {}, children: [], innerHTML: '',
         appendChild(child) { this.children.push(child); },
@@ -24,7 +26,7 @@ const createContext = (gold, lvl) => {
             querySelector: selector => {
                 if (selector === '#lvlupSelect') return panel;
                 if (selector === '#lvlReroll') return rerollButton;
-                return null;
+                return element();
             },
             createElement: element,
         },
@@ -34,11 +36,14 @@ const createContext = (gold, lvl) => {
         sfxDeny: { play: () => sounds.push('deny') },
         getCurrentCompanionBonuses: () => ({}),
     });
+    vm.runInContext(progressionSource, context);
     vm.runInContext(playerSource, context);
+    vm.runInContext(dungeonSource, context);
     vm.runInContext(`
         playerLoadStats = () => {};
         player = {
-            lvl: ${lvl}, gold: ${gold}, exp: { lvlGained: 1 },
+            lvl: ${lvl}, gold: ${gold}, selectedCurseLevel: ${JSON.stringify(selectedCurseLevel)},
+            exp: { lvlGained: 1 },
             baseStats: {}, bonusStats: {}, equippedStats: {}, stats: {},
         };
         dungeon = { floorBuffs: {} };
@@ -49,16 +54,30 @@ const createContext = (gold, lvl) => {
 test('level-up reroll gold cost scales with player level', () => {
     const { context } = createContext(0, 1);
     const costs = [1, 10, 50, 100].map(lvl => vm.runInContext(`getLevelUpRerollGoldCost(${lvl})`, context));
-    assert.deepEqual(costs, [55, 1000, 15000, 55000]);
+    assert.deepEqual(costs, [806, 8600, 55000, 140000]);
+});
+
+test('level-up reroll gold cost scales with the selected Curse and clamps invalid levels', () => {
+    for (const [curseLevel, expectedCost] of [
+        [1, 8600],
+        [5, 868600],
+        [15, 3018600],
+        [999, 3018600],
+        [0, 8600],
+        ['invalid', 8600],
+    ]) {
+        const { context } = createContext(0, 10, curseLevel);
+        assert.equal(vm.runInContext('getLevelUpRerollGoldCost()', context), expectedCost);
+    }
 });
 
 test('level-up reroll charges gold once free rerolls are exhausted', () => {
-    const { context, panel, rerollButton, sounds } = createContext(2000, 10);
+    const { context, panel, rerollButton, sounds } = createContext(17200, 10);
     vm.runInContext('generateLvlStats(0, { hp: 11, atk: 9, def: 9 })', context);
-    assert.match(panel.innerHTML, /reroll-gold-button:.*1000/);
+    assert.match(panel.innerHTML, /reroll-gold-button:.*8600/);
 
     rerollButton.listeners.at(-1)();
-    assert.equal(vm.runInContext('player.gold', context), 1000);
+    assert.equal(vm.runInContext('player.gold', context), 8600);
     rerollButton.listeners.at(-1)();
     assert.equal(vm.runInContext('player.gold', context), 0);
     rerollButton.listeners.at(-1)();
