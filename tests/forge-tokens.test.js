@@ -160,7 +160,7 @@ test('buying the Floor 13 offer exchanges exactly 10000 gold for one persistent 
     assert.equal(context.player.inventory.forgeTokens, 3);
 });
 
-test('the Floor 13 merchant grants one token up to Curse 5 and two from Curse 6', () => {
+test('the Floor 13 merchant sells one token up to Curse 5 and two at double price from Curse 6', () => {
     for (const [curseLevel, expectedTokens, expectedKey] of [
         [1, 1, 'forge-token-merchant-purchase:'],
         [5, 1, 'forge-token-merchant-purchase:'],
@@ -168,16 +168,28 @@ test('the Floor 13 merchant grants one token up to Curse 5 and two from Curse 6'
         [20, 2, 'forge-token-merchant-purchase-multiple:'],
     ]) {
         const context = createDungeonContext();
-        setDungeonState(context, { gold: 10000, curseLevel });
+        setDungeonState(context, { gold: 25000, curseLevel });
 
         evaluate(context, 'forgeTokenMerchantEvent()');
         context.buttons['#choice1'].onclick();
 
-        assert.equal(context.player.gold, 0);
+        assert.equal(context.player.gold, 25000 - (10000 * expectedTokens));
         assert.equal(context.player.inventory.forgeTokens, expectedTokens);
         const message = evaluate(context, 'dungeon.backlog[dungeon.backlog.length - 1]');
         assert.ok(message.startsWith(expectedKey), `unexpected message for curse ${curseLevel}: ${message}`);
     }
+});
+
+test('the Curse 6 offer requires gold for both tokens', () => {
+    const context = createDungeonContext();
+    setDungeonState(context, { gold: 19999, tokens: 1, curseLevel: 6 });
+
+    evaluate(context, 'forgeTokenMerchantEvent()');
+    assert.match(evaluate(context, 'dungeon.backlog[dungeon.backlog.length - 1]'), /<span class='Common'>20000<\/span>/);
+    context.buttons['#choice1'].onclick();
+
+    assert.equal(context.player.gold, 19999);
+    assert.equal(context.player.inventory.forgeTokens, 1);
 });
 
 test('the Floor 13 merchant never grants a token without enough gold', () => {

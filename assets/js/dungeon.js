@@ -1077,7 +1077,8 @@ const forgeTokenMerchantEvent = () => {
     dungeon.specialEvents.floor13ForgeTokenMerchantVisited = true;
     const tokenCount = getForgeTokenMerchantTokenCount();
     const keySuffix = tokenCount > 1 ? '-multiple' : '';
-    const costMarkup = `<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>${nFormatter(FORGE_TOKEN_MERCHANT_COST)}</span>`;
+    const cost = FORGE_TOKEN_MERCHANT_COST * tokenCount;
+    const costMarkup = `<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>${nFormatter(cost)}</span>`;
     const choices = `
         <div class="decision-panel">
             <button id="choice1" data-i18n="buy">${t('buy')}</button>
@@ -1088,7 +1089,7 @@ const forgeTokenMerchantEvent = () => {
         if (!dungeon.status.event) {
             return;
         }
-        if (player.gold < FORGE_TOKEN_MERCHANT_COST) {
+        if (player.gold < cost) {
             sfxDeny.play();
             addDungeonLog(t('not-enough-gold'));
             dungeon.status.event = false;
@@ -1100,7 +1101,7 @@ const forgeTokenMerchantEvent = () => {
         } else if (!Number.isFinite(Number(player.inventory.forgeTokens))) {
             player.inventory.forgeTokens = 0;
         }
-        player.gold -= FORGE_TOKEN_MERCHANT_COST;
+        player.gold -= cost;
         player.inventory.forgeTokens += tokenCount;
         sfxSell.play();
         addDungeonLog(t(`forge-token-merchant-purchase${keySuffix}`, { cost: costMarkup, count: tokenCount }));
