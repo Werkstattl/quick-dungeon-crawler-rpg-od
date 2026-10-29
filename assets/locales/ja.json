@@ -548,6 +548,7 @@
   "level-up": "レベルアップ!",
   "remaining": "残り: {count}",
   "reroll-button": "リロール {remaining}/{total}",
+  "reroll-gold-button": "リロール {cost}",
   "equipment-names": {
     "sword": "剣",
     "axe": "斧",

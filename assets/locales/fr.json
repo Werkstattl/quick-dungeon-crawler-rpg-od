@@ -548,6 +548,7 @@
   "level-up": "Niveau supérieur !",
   "remaining": "Restant : {count}",
   "reroll-button": "Relancer {remaining}/{total}",
+  "reroll-gold-button": "Relancer {cost}",
   "equipment-names": {
     "sword": "Épée",
     "axe": "Hache",

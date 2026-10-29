@@ -548,6 +548,7 @@
   "level-up": "Tasonnousu!",
   "remaining": "Jäljellä: {count}",
   "reroll-button": "Arvo uudelleen {remaining}/{total}",
+  "reroll-gold-button": "Arvo uudelleen {cost}",
   "equipment-names": {
     "sword": "Miekka",
     "axe": "Kirves",

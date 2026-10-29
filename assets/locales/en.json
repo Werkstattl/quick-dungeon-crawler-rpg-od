@@ -548,6 +548,7 @@
   "level-up": "Level Up!",
   "remaining": "Remaining: {count}",
   "reroll-button": "Reroll {remaining}/{total}",
+  "reroll-gold-button": "Reroll {cost}",
   "equipment-names": {
     "sword": "Sword",
     "axe": "Axe",

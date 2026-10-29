@@ -548,6 +548,7 @@
   "level-up": "Level Up!",
   "remaining": "Natitira: {count}",
   "reroll-button": "I-reroll {remaining}/{total}",
+  "reroll-gold-button": "I-reroll {cost}",
   "equipment-names": {
     "sword": "Espada",
     "axe": "Palakol",

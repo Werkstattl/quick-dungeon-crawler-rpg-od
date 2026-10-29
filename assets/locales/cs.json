@@ -548,6 +548,7 @@
   "level-up": "Nová úroveň!",
   "remaining": "Zbývá: {count}",
   "reroll-button": "Přehodit {remaining}/{total}",
+  "reroll-gold-button": "Přehodit {cost}",
   "equipment-names": {
     "sword": "Meč",
     "axe": "Sekera",

@@ -548,6 +548,7 @@
   "level-up": "ارتقای سطح!",
   "remaining": "باقی‌مانده: {count}",
   "reroll-button": "بازگردانی {remaining}/{total}",
+  "reroll-gold-button": "بازگردانی {cost}",
   "equipment-names": {
     "sword": "شمشیر",
     "axe": "تبر",

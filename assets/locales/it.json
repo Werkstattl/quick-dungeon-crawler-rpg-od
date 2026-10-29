@@ -548,6 +548,7 @@
   "level-up": "Level up!",
   "remaining": "Rimanenti: {count}",
   "reroll-button": "Ritira {remaining}/{total}",
+  "reroll-gold-button": "Ritira {cost}",
   "equipment-names": {
     "sword": "Spada",
     "axe": "Ascia",

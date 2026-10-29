@@ -548,6 +548,7 @@
   "level-up": "Рівень підвищено!",
   "remaining": "Залишилось: {count}",
   "reroll-button": "Перекинути {remaining}/{total}",
+  "reroll-gold-button": "Перекинути {cost}",
   "equipment-names": {
     "sword": "Меч",
     "axe": "Сокира",

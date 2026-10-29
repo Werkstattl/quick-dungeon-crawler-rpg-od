@@ -548,6 +548,7 @@
   "level-up": "Niveau op!",
   "remaining": "Tilbage: {count}",
   "reroll-button": "Slå om {remaining}/{total}",
+  "reroll-gold-button": "Slå om {cost}",
   "equipment-names": {
     "sword": "Sværd",
     "axe": "Økse",

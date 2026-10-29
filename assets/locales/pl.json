@@ -548,6 +548,7 @@
   "level-up": "Awans!",
   "remaining": "Pozostało: {count}",
   "reroll-button": "Przerzuć {remaining}/{total}",
+  "reroll-gold-button": "Przerzuć {cost}",
   "equipment-names": {
     "sword": "Miecz",
     "axe": "Topór",

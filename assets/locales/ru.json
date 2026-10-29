@@ -548,6 +548,7 @@
   "level-up": "Повышение уровня!",
   "remaining": "Осталось: {count}",
   "reroll-button": "Перебросить {remaining}/{total}",
+  "reroll-gold-button": "Перебросить {cost}",
   "equipment-names": {
     "sword": "Меч",
     "axe": "Топор",

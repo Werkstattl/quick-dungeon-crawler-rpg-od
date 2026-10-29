@@ -548,6 +548,7 @@
   "level-up": "Niveau omhoog!",
   "remaining": "Resterend: {count}",
   "reroll-button": "Opnieuw bepalen {remaining}/{total}",
+  "reroll-gold-button": "Opnieuw bepalen {cost}",
   "equipment-names": {
     "sword": "Zwaard",
     "axe": "Bijl",

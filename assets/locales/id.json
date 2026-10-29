@@ -548,6 +548,7 @@
   "level-up": "Level Naik!",
   "remaining": "Tersisa: {count}",
   "reroll-button": "Acak ulang {remaining}/{total}",
+  "reroll-gold-button": "Acak ulang {cost}",
   "equipment-names": {
     "sword": "Pedang",
     "axe": "Kapak",

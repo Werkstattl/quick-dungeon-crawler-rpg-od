@@ -548,6 +548,7 @@
   "level-up": "Subiu de nível!",
   "remaining": "Restantes: {count}",
   "reroll-button": "Rerrolar {remaining}/{total}",
+  "reroll-gold-button": "Rerrolar {cost}",
   "equipment-names": {
     "sword": "Espada",
     "axe": "Machado",

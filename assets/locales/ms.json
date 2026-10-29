@@ -548,6 +548,7 @@
   "level-up": "Naik tahap!",
   "remaining": "Baki: {count}",
   "reroll-button": "Rawak semula {remaining}/{total}",
+  "reroll-gold-button": "Rawak semula {cost}",
   "equipment-names": {
     "sword": "Pedang",
     "axe": "Kapak",

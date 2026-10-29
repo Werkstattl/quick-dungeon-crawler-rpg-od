@@ -548,6 +548,7 @@
   "level-up": "¡Nivel aumentado!",
   "remaining": "Restante: {count}",
   "reroll-button": "Volver a tirar {remaining}/{total}",
+  "reroll-gold-button": "Volver a tirar {cost}",
   "equipment-names": {
     "sword": "Espada",
     "axe": "Hacha",

@@ -548,6 +548,7 @@
   "level-up": "레벨 업!",
   "remaining": "남음: {count}",
   "reroll-button": "다시 굴리기 {remaining}/{total}",
+  "reroll-gold-button": "다시 굴리기 {cost}",
   "equipment-names": {
     "sword": "검",
     "axe": "도끼",

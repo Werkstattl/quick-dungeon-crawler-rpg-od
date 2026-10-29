@@ -548,6 +548,7 @@
   "level-up": "Seviye Atla!",
   "remaining": "Kalan: {count}",
   "reroll-button": "Yenile {remaining}/{total}",
+  "reroll-gold-button": "Yenile {cost}",
   "equipment-names": {
     "sword": "Kılıç",
     "axe": "Balta",

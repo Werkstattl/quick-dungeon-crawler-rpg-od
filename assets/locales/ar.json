@@ -548,6 +548,7 @@
   "level-up": "رفع المستوى!",
   "remaining": "المتبقي: {count}",
   "reroll-button": "إعادة الاختيار {remaining}/{total}",
+  "reroll-gold-button": "إعادة الاختيار {cost}",
   "equipment-names": {
     "sword": "سيف",
     "axe": "فأس",

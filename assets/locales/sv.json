@@ -548,6 +548,7 @@
   "level-up": "Nivå upp!",
   "remaining": "Kvar: {count}",
   "reroll-button": "Slå om {remaining}/{total}",
+  "reroll-gold-button": "Slå om {cost}",
   "equipment-names": {
     "sword": "Svärd",
     "axe": "Yxa",

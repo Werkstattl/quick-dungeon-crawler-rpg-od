@@ -548,6 +548,7 @@
   "level-up": "Stufenaufstieg!",
   "remaining": "Verbleibend: {count}",
   "reroll-button": "Neu würfeln {remaining}/{total}",
+  "reroll-gold-button": "Neu würfeln {cost}",
   "equipment-names": {
     "sword": "Schwert",
     "axe": "Axt",

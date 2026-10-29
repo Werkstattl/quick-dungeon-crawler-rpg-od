@@ -548,6 +548,7 @@
   "level-up": "เลเวลอัป!",
   "remaining": "เหลือ: {count}",
   "reroll-button": "สุ่มใหม่ {remaining}/{total}",
+  "reroll-gold-button": "สุ่มใหม่ {cost}",
   "equipment-names": {
     "sword": "ดาบ",
     "axe": "ขวาน",

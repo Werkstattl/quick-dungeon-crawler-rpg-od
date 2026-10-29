@@ -548,6 +548,7 @@
   "level-up": "स्तर बढ़ा!",
   "remaining": "शेष: {count}",
   "reroll-button": "फिर से रोल करें {remaining}/{total}",
+  "reroll-gold-button": "फिर से रोल करें {cost}",
   "equipment-names": {
     "sword": "तलवार",
     "axe": "कुल्हाड़ी",

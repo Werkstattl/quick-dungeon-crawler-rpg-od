@@ -546,6 +546,7 @@
   "level-up": "Nivel crescut!",
   "remaining": "Mai rămân: {count}",
   "reroll-button": "Rerolează {remaining}/{total}",
+  "reroll-gold-button": "Rerolează {cost}",
   "equipment-names": {
     "sword": "Sabie",
     "axe": "Topor",

@@ -548,6 +548,7 @@
   "level-up": "Subiu de nível!",
   "remaining": "Restantes: {count}",
   "reroll-button": "Novo sorteio {remaining}/{total}",
+  "reroll-gold-button": "Novo sorteio {cost}",
   "equipment-names": {
     "sword": "Espada",
     "axe": "Machado",

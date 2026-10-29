@@ -548,6 +548,7 @@
   "level-up": "升級！",
   "remaining": "剩餘：{count}",
   "reroll-button": "重擲 {remaining}/{total}",
+  "reroll-gold-button": "重擲 {cost}",
   "descend": "下樓",
   "descended-to-floor": "你下到了第 {floor} 層。",
   "found-stairs": "你發現了一段通往更深處的樓梯。",

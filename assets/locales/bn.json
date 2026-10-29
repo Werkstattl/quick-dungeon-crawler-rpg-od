@@ -548,6 +548,7 @@
   "level-up": "লেভেল আপ!",
   "remaining": "বাকি: {count}",
   "reroll-button": "পুনরোল {remaining}/{total}",
+  "reroll-gold-button": "পুনরোল {cost}",
   "equipment-names": {
     "sword": "তলোয়ার",
     "axe": "কুঠার",

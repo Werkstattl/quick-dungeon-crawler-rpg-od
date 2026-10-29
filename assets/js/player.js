@@ -608,6 +608,11 @@ const lvlupPopup = () => {
     generateLvlStats(2, percentages);
 }
 
+const getLevelUpRerollGoldCost = (lvl = player.lvl) => {
+    const level = Math.max(1, Math.floor(Number(lvl) || 1));
+    return Math.round((50 * level) + (5 * level * level));
+};
+
 const generateLvlStats = (rerolls, percentages) => {
     let selectedStats = [];
     let stats = ["hp", "atk", "def", "atkSpd", "vamp", "critRate", "critDmg", "dodge"];
@@ -621,12 +626,15 @@ const generateLvlStats = (rerolls, percentages) => {
         }
     }
 
+    const rerollLabel = rerolls > 0
+        ? t('reroll-button', { remaining: rerolls, total: 2 })
+        : t('reroll-gold-button', { cost: `<i class="fas fa-coins" style="color: #FFD700;"></i> ${nFormatter(getLevelUpRerollGoldCost())}` });
     const loadLvlHeader = () => {
         lvlupSelect.innerHTML = `
             <h1>${t('level-up')}</h1>
             <div class="content-head">
                 <h4>${t('remaining', { count: player.exp.lvlGained })}</h4>
-                <button data-level-up-control="reroll" id="lvlReroll">${t('reroll-button', { remaining: rerolls, total: 2 })}</button>
+                <button data-level-up-control="reroll" id="lvlReroll">${rerollLabel}</button>
             </div>
         `;
     }
@@ -640,6 +648,14 @@ const generateLvlStats = (rerolls, percentages) => {
                 sfxSell.play();
                 rerolls--;
                 generateLvlStats(rerolls, percentages);
+                return;
+            }
+            const goldCost = getLevelUpRerollGoldCost();
+            if (player.gold >= goldCost) {
+                sfxSell.play();
+                player.gold -= goldCost;
+                playerLoadStats();
+                generateLvlStats(0, percentages);
             } else if (typeof sfxDeny !== "undefined") {
                 sfxDeny.play();
             }
