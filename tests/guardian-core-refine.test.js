@@ -129,3 +129,14 @@ test('the Refine panel shows the Guardian Core cost and every locale translates 
         }
     }
 });
+
+test('guardian cores keep their legendary gold inside the forge UI', () => {
+    const cssSource = read('assets/css/style.css');
+    // header badge and refine cost carry a dedicated core modifier ...
+    assert.match(forgeSource, /class="forge-material-count guardian-core-count"[^>]*><i class="ra ra-crystal-cluster"/);
+    assert.match(indexSource, /class="refine-material-cost guardian-core-cost" id="refine-core-cost"/);
+    // ... painted with the same gold as the .Legendary drop line ...
+    assert.match(cssSource, /\.forge-material-count\.guardian-core-count,\s*\.refine-material-cost\.guardian-core-cost\s*{[^}]*color:\s*#ffd700/);
+    // ... while refine stones stay on the shared material blue
+    assert.doesNotMatch(indexSource, /refine-material-cost guardian-core-cost"[^"]*refine-stone-cost-amount/);
+});

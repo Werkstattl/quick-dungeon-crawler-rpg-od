@@ -307,7 +307,7 @@ const updateForgeGold = () => {
         const refineStoneCount = typeof getRefineStoneCount === 'function' ? getRefineStoneCount() : 0;
         const guardianCoreCount = typeof getGuardianCoreCount === 'function' ? getGuardianCoreCount() : 0;
         const guardianCoreMarkup = guardianCoreCount > 0
-            ? ` <span class="forge-material-count" title="${t('guardian-cores')}"><i class="ra ra-crystal-cluster"></i>${nFormatter(guardianCoreCount)}</span>`
+            ? ` <span class="forge-material-count guardian-core-count" title="${t('guardian-cores')}"><i class="ra ra-crystal-cluster"></i>${nFormatter(guardianCoreCount)}</span>`
             : '';
         const forgeTokenCount = forgeUnlocked
             ? ''
