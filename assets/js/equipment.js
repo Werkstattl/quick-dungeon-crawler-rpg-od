@@ -192,6 +192,9 @@ const grantGuardianCoreDrop = (floor, curseLevel = null, luck = null) => {
     const count = 1;
     ensureRefineInventory();
     player.inventory.guardianCores += count;
+    if (typeof recordRunGuardianCoresCollected === 'function') {
+        recordRunGuardianCoresCollected(count);
+    }
     const coreName = typeof t === 'function' ? t('guardian-core') : 'Guardian Core';
     const coreMarkup = `<span class="Legendary"><i class="ra ra-crystal-cluster"></i>${coreName}</span>`;
     if (typeof addCombatLog === 'function') {

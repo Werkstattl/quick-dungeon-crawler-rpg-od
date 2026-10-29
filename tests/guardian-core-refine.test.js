@@ -140,3 +140,55 @@ test('guardian cores keep their legendary gold inside the forge UI', () => {
     // ... while refine stones stay on the shared material blue
     assert.doesNotMatch(indexSource, /refine-material-cost guardian-core-cost"[^"]*refine-stone-cost-amount/);
 });
+
+test('a Guardian Core drop is counted in the run statistics and survives a save reload', () => {
+    const context = createContext();
+    vm.runInContext('document = { querySelector: () => ({ addEventListener() {} }) };', context);
+    vm.runInContext(read('assets/js/dungeon.js'), context);
+
+    assert.equal(evaluate(context, 'dungeon.statistics.guardianCoresCollected'), 0);
+
+    vm.runInContext('Math.random = () => 0.49;', context);
+    assert.equal(evaluate(context, 'grantGuardianCoreDrop(45, 15, 0)'), 1);
+    assert.equal(evaluate(context, 'grantGuardianCoreDrop(45, 15, 0)'), 1);
+    assert.equal(context.player.inventory.guardianCores, 2);
+    assert.equal(evaluate(context, 'dungeon.statistics.guardianCoresCollected'), 2);
+
+    // an older save without the field is normalized instead of summing into NaN
+    evaluate(context, 'delete dungeon.statistics.guardianCoresCollected');
+    evaluate(context, 'recordRunGuardianCoresCollected(3)');
+    assert.equal(evaluate(context, 'dungeon.statistics.guardianCoresCollected'), 3);
+
+    evaluate(context, 'resetRunStatistics()');
+    assert.equal(evaluate(context, 'dungeon.statistics.guardianCoresCollected'), 0);
+});
+
+test('the run summary lists collected Guardian Cores next to Refine Stones', () => {
+    const context = createContext();
+    const mainSource = read('assets/js/main.js');
+    vm.runInContext(mainSource.slice(mainSource.indexOf('const showEndgameScreen ='),
+        mainSource.indexOf('const startNewRunAfterEndgame =')), context);
+
+    vm.runInContext(`
+        statsEl = { innerHTML: '' };
+        modalEl = { dataset: {}, style: {}, querySelector: sel => (sel === '#endgame-stats' ? statsEl : null) };
+        document = { querySelector: sel => (sel === '#endgameModal' ? modalEl : null) };
+        t = (key) => key;
+        nFormatter = (v) => String(v);
+        formatRunDuration = () => '0:00';
+        getPlayerTitleDefinition = () => null;
+        applyTranslations = () => {};
+    `, context);
+    evaluate(context, 'showEndgameScreen({ guardianCoresCollected: 4, refineStonesCollected: 9000, result: "defeat" })');
+
+    const html = evaluate(context, 'statsEl.innerHTML');
+    const row = (key, value) => '<span class="label" data-i18n="' + key + '">' + key + '</span><span class="value">' + value + '</span>';
+    assert.ok(html.includes(row('refine-stones', '9000')), html);
+    assert.ok(html.includes(row('guardian-cores', '4')), html);
+    assert.ok(html.indexOf('data-i18n="refine-stones"') < html.indexOf('data-i18n="guardian-cores"'));
+    assert.ok(html.indexOf('data-i18n="guardian-cores"') < html.indexOf('data-i18n="loot-drops"'));
+
+    evaluate(context, 'showEndgameScreen({ result: "defeat" })');
+    const emptyHtml = evaluate(context, 'statsEl.innerHTML');
+    assert.ok(emptyHtml.includes(row('guardian-cores', '0')), emptyHtml);
+});
