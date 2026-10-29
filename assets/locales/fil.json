@@ -699,6 +699,8 @@
   "forge-tokens": "Mga Token ng Pandayan",
   "forge-token-merchant-offer": "Lumilitaw ang isang naglalakbay na panday: bumili ng Token ng Pandayan sa halagang {cost} ginto?",
   "forge-token-merchant-purchase": "Bumili ka ng Token ng Pandayan sa halagang {cost} ginto.",
+  "forge-token-merchant-offer-multiple": "Lumilitaw ang isang naglalakbay na panday: bumili ng {count} Token ng Pandayan sa halagang {cost} ginto?",
+  "forge-token-merchant-purchase-multiple": "Bumili ka ng {count} Token ng Pandayan sa halagang {cost} ginto.",
   "forge-free-access-hint": "Tip: Nagbebenta ang isang naglalakbay na panday ng Token ng Pandayan kapalit ng Ginto sa Palapag 13.",
   "stat-lock": "I-lock ang mga Stat",
   "stat-lock-help": "Pinananatili ng mga naka-lock na stat ang kanilang uri at halaga. Dapat manatiling naka-unlock ang kahit isang stat."

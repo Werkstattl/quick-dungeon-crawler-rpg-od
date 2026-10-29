@@ -699,6 +699,8 @@
   "forge-tokens": "Żetony kuźni",
   "forge-token-merchant-offer": "Pojawia się wędrowny kowal: kupić żeton kuźni za {cost} złota?",
   "forge-token-merchant-purchase": "Kupiono żeton kuźni za {cost} złota.",
+  "forge-token-merchant-offer-multiple": "Pojawia się wędrowny kowal: kupić {count} żetony kuźni za {cost} złota?",
+  "forge-token-merchant-purchase-multiple": "Kupiono {count} żetony kuźni za {cost} złota.",
   "forge-free-access-hint": "Wskazówka: na 13. piętrze wędrowny kowal sprzedaje Żeton Kuźni za złoto.",
   "stat-lock": "Zablokuj statystyki",
   "stat-lock-help": "Zablokowane statystyki zachowują typ i wartość. Co najmniej jedna statystyka musi pozostać odblokowana."

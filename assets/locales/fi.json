@@ -699,6 +699,8 @@
   "forge-tokens": "Pajapoletit",
   "forge-token-merchant-offer": "Kiertelevä seppä ilmestyy: ostatko pajapoletin {cost} kullalla?",
   "forge-token-merchant-purchase": "Ostit pajapoletin {cost} kullalla.",
+  "forge-token-merchant-offer-multiple": "Kiertelevä seppä ilmestyy: ostatko {count} pajapolettia {cost} kullalla?",
+  "forge-token-merchant-purchase-multiple": "Ostit {count} pajapolettia {cost} kullalla.",
   "forge-free-access-hint": "Vinkki: kiertelevä seppä myy pajapoletin kullalla kerroksessa 13.",
   "stat-lock": "Lukitse ominaisuudet",
   "stat-lock-help": "Lukitut ominaisuudet säilyttävät tyyppinsä ja arvonsa. Vähintään yhden ominaisuuden on jäätävä lukitsematta."

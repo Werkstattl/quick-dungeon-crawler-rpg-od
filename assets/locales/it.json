@@ -699,6 +699,8 @@
   "forge-tokens": "Gettoni della forgia",
   "forge-token-merchant-offer": "Appare un fabbro errante: comprare un gettone della forgia per {cost} oro?",
   "forge-token-merchant-purchase": "Hai comprato un gettone della forgia per {cost} oro.",
+  "forge-token-merchant-offer-multiple": "Appare un fabbro errante: comprare {count} gettoni della forgia per {cost} oro?",
+  "forge-token-merchant-purchase-multiple": "Hai comprato {count} gettoni della forgia per {cost} oro.",
   "forge-free-access-hint": "Suggerimento: al Piano 13, un fabbro itinerante vende un Gettone della Forgia in cambio di oro.",
   "stat-lock": "Blocca statistiche",
   "stat-lock-help": "Le statistiche bloccate mantengono tipo e valore. Almeno una statistica deve restare sbloccata."

@@ -699,6 +699,8 @@
   "forge-tokens": "ফোর্জ টোকেন",
   "forge-token-merchant-offer": "এক ভ্রাম্যমাণ কামার এসেছে: {cost} সোনায় একটি ফোর্জ টোকেন কিনবেন?",
   "forge-token-merchant-purchase": "আপনি {cost} সোনায় একটি ফোর্জ টোকেন কিনেছেন।",
+  "forge-token-merchant-offer-multiple": "এক ভ্রাম্যমাণ কামার এসেছে: {cost} সোনায় {count}টি ফোর্জ টোকেন কিনবেন?",
+  "forge-token-merchant-purchase-multiple": "আপনি {cost} সোনায় {count}টি ফোর্জ টোকেন কিনেছেন।",
   "forge-free-access-hint": "পরামর্শ: ১৩তম তলায় এক ভ্রাম্যমাণ কামার সোনার বিনিময়ে ফোর্জ টোকেন বিক্রি করে।",
   "stat-lock": "স্ট্যাট লক করুন",
   "stat-lock-help": "লক করা স্ট্যাটের ধরন ও মান অপরিবর্তিত থাকে। অন্তত একটি স্ট্যাট আনলক থাকতে হবে।"

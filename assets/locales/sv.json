@@ -672,6 +672,8 @@
   "forge-tokens": "Smedjepolletter",
   "forge-token-merchant-offer": "En vandrande smed dyker upp: köp en Smedjepollett för {cost} guld?",
   "forge-token-merchant-purchase": "Du köpte en Smedjepollett för {cost} guld.",
+  "forge-token-merchant-offer-multiple": "En vandrande smed dyker upp: köp {count} Smedjepolletter för {cost} guld?",
+  "forge-token-merchant-purchase-multiple": "Du köpte {count} Smedjepolletter för {cost} guld.",
   "forge-free-access-hint": "Tips: En vandrande smed säljer en Smedjepollett för guld på Våning 13.",
   "stat-lock": "Lås egenskaper",
   "stat-lock-help": "Låsta egenskaper behåller sin typ och sitt värde. Minst en egenskap måste förbli olåst."

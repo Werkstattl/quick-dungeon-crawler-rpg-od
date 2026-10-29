@@ -60,9 +60,10 @@ const createDungeonContext = () => {
     return context;
 };
 
-const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visited = false } = {}) => {
+const setDungeonState = (context, { floor = 13, gold = 10000, tokens = 0, visited = false, curseLevel = 1 } = {}) => {
     context.player = {
         gold,
+        selectedCurseLevel: curseLevel,
         inventory: { consumables: [], equipment: [], refineStones: 0, forgeTokens: tokens },
     };
     evaluate(context, `
@@ -157,6 +158,26 @@ test('buying the Floor 13 offer exchanges exactly 10000 gold for one persistent 
     buy();
     assert.equal(context.player.gold, 15000);
     assert.equal(context.player.inventory.forgeTokens, 3);
+});
+
+test('the Floor 13 merchant grants one token up to Curse 5 and two from Curse 6', () => {
+    for (const [curseLevel, expectedTokens, expectedKey] of [
+        [1, 1, 'forge-token-merchant-purchase:'],
+        [5, 1, 'forge-token-merchant-purchase:'],
+        [6, 2, 'forge-token-merchant-purchase-multiple:'],
+        [20, 2, 'forge-token-merchant-purchase-multiple:'],
+    ]) {
+        const context = createDungeonContext();
+        setDungeonState(context, { gold: 10000, curseLevel });
+
+        evaluate(context, 'forgeTokenMerchantEvent()');
+        context.buttons['#choice1'].onclick();
+
+        assert.equal(context.player.gold, 0);
+        assert.equal(context.player.inventory.forgeTokens, expectedTokens);
+        const message = evaluate(context, 'dungeon.backlog[dungeon.backlog.length - 1]');
+        assert.ok(message.startsWith(expectedKey), `unexpected message for curse ${curseLevel}: ${message}`);
+    }
 });
 
 test('the Floor 13 merchant never grants a token without enough gold', () => {
@@ -321,6 +342,8 @@ test('every locale includes the Forge Token event and Forge UI text', () => {
         'forge-tokens',
         'forge-token-merchant-offer',
         'forge-token-merchant-purchase',
+        'forge-token-merchant-offer-multiple',
+        'forge-token-merchant-purchase-multiple',
         'forge-free-access-hint',
     ];
     const localesDirectory = path.join(root, 'assets/locales');

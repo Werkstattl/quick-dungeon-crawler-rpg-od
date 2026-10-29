@@ -672,6 +672,8 @@
   "forge-tokens": "Smedjemønter",
   "forge-token-merchant-offer": "En omrejsende smed dukker op: køb en Smedjemønt for {cost} guld?",
   "forge-token-merchant-purchase": "Du købte en Smedjemønt for {cost} guld.",
+  "forge-token-merchant-offer-multiple": "En omrejsende smed dukker op: køb {count} Smedjemønter for {cost} guld?",
+  "forge-token-merchant-purchase-multiple": "Du købte {count} Smedjemønter for {cost} guld.",
   "forge-free-access-hint": "Tip: En omrejsende smed sælger en Smedjemønt for guld på Etage 13.",
   "stat-lock": "Lås egenskaber",
   "stat-lock-help": "Låste egenskaber beholder deres type og værdi. Mindst én egenskab skal forblive ulåst."

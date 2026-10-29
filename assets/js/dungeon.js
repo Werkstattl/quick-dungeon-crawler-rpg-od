@@ -67,6 +67,7 @@ const WANDERING_SHOP_COST_MULTIPLIER = 1.5;
 const WANDERING_SHOP_TIER_GAP_LEVEL_PENALTY = 10;
 const FORGE_TOKEN_MERCHANT_FLOOR = 13;
 const FORGE_TOKEN_MERCHANT_COST = 10000;
+const FORGE_TOKEN_MERCHANT_BONUS_CURSE_LEVEL = 6;
 const BLESSING_CURSE_COST_STEP = 0.05;
 let lastDungeonEventTimestamp = Date.now();
 
@@ -219,6 +220,11 @@ const shouldTriggerForgeTokenMerchant = () => {
     return !forgeUnlocked
         && dungeon.progress.floor === FORGE_TOKEN_MERCHANT_FLOOR
         && !dungeon.specialEvents.floor13ForgeTokenMerchantVisited;
+};
+
+const getForgeTokenMerchantTokenCount = () => {
+    const curseLevel = Number(player && player.selectedCurseLevel);
+    return curseLevel >= FORGE_TOKEN_MERCHANT_BONUS_CURSE_LEVEL ? 2 : 1;
 };
 
 // Median instead of max so a single leftover high level item cannot inflate the offer
@@ -1069,13 +1075,15 @@ const forgeTokenMerchantEvent = () => {
     dungeon.status.event = true;
     ensureSpecialEventsState();
     dungeon.specialEvents.floor13ForgeTokenMerchantVisited = true;
+    const tokenCount = getForgeTokenMerchantTokenCount();
+    const keySuffix = tokenCount > 1 ? '-multiple' : '';
     const costMarkup = `<i class='fas fa-coins' style='color: #FFD700;'></i><span class='Common'>${nFormatter(FORGE_TOKEN_MERCHANT_COST)}</span>`;
     const choices = `
         <div class="decision-panel">
             <button id="choice1" data-i18n="buy">${t('buy')}</button>
             <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
         </div>`;
-    addDungeonLog(`<span class='Legendary'>${t('forge-token-merchant-offer', { cost: costMarkup })}</span>`, choices);
+    addDungeonLog(`<span class='Legendary'>${t(`forge-token-merchant-offer${keySuffix}`, { cost: costMarkup, count: tokenCount })}</span>`, choices);
     document.querySelector("#choice1").onclick = function () {
         if (!dungeon.status.event) {
             return;
@@ -1093,9 +1101,9 @@ const forgeTokenMerchantEvent = () => {
             player.inventory.forgeTokens = 0;
         }
         player.gold -= FORGE_TOKEN_MERCHANT_COST;
-        player.inventory.forgeTokens += 1;
+        player.inventory.forgeTokens += tokenCount;
         sfxSell.play();
-        addDungeonLog(t('forge-token-merchant-purchase', { cost: costMarkup }));
+        addDungeonLog(t(`forge-token-merchant-purchase${keySuffix}`, { cost: costMarkup, count: tokenCount }));
         playerLoadStats();
         saveData();
         dungeon.status.event = false;

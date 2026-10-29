@@ -720,6 +720,8 @@
   "forge-tokens": "Schmiede-Tokens",
   "forge-token-merchant-offer": "Ein wandernder Schmied erscheint: Einen Schmiede-Token für {cost} Gold kaufen?",
   "forge-token-merchant-purchase": "Du hast einen Schmiede-Token für {cost} Gold gekauft.",
+  "forge-token-merchant-offer-multiple": "Ein wandernder Schmied erscheint: {count} Schmiede-Token für {cost} Gold kaufen?",
+  "forge-token-merchant-purchase-multiple": "Du hast {count} Schmiede-Token für {cost} Gold gekauft.",
   "forge-free-access-hint": "Tipp: Auf Etage 13 verkauft ein wandernder Schmied einen Schmiede-Token für Gold.",
   "stat-lock": "Werte sperren",
   "stat-lock-help": "Gesperrte Werte behalten Typ und Wert. Mindestens ein Wert muss entsperrt bleiben."

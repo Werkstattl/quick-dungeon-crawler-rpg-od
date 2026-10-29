@@ -699,6 +699,8 @@
   "forge-tokens": "Jetons de forge",
   "forge-token-merchant-offer": "Un forgeron itinérant apparaît : acheter un jeton de forge pour {cost} pièces d’or ?",
   "forge-token-merchant-purchase": "Vous avez acheté un jeton de forge pour {cost} pièces d’or.",
+  "forge-token-merchant-offer-multiple": "Un forgeron itinérant apparaît : acheter {count} jetons de forge pour {cost} pièces d’or ?",
+  "forge-token-merchant-purchase-multiple": "Vous avez acheté {count} jetons de forge pour {cost} pièces d’or.",
   "forge-free-access-hint": "Astuce : au 13e étage, un forgeron itinérant vend un jeton de forge contre de l'or.",
   "stat-lock": "Verrouiller les stats",
   "stat-lock-help": "Les stats verrouillées conservent leur type et leur valeur. Au moins une stat doit rester déverrouillée."

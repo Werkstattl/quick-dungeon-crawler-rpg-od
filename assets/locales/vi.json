@@ -672,6 +672,8 @@
   "forge-tokens": "Thẻ Rèn",
   "forge-token-merchant-offer": "Một thợ rèn lang thang xuất hiện: Mua một Thẻ Rèn với giá {cost} vàng?",
   "forge-token-merchant-purchase": "Bạn đã mua một Thẻ Rèn với giá {cost} vàng.",
+  "forge-token-merchant-offer-multiple": "Một thợ rèn lang thang xuất hiện: Mua {count} Thẻ Rèn với giá {cost} vàng?",
+  "forge-token-merchant-purchase-multiple": "Bạn đã mua {count} Thẻ Rèn với giá {cost} vàng.",
   "forge-free-access-hint": "Mẹo: Một thợ rèn lang thang bán Thẻ Rèn lấy Vàng ở Tầng 13.",
   "stat-lock": "Khóa chỉ số",
   "stat-lock-help": "Chỉ số đã khóa giữ nguyên loại và giá trị. Phải có ít nhất một chỉ số không bị khóa."

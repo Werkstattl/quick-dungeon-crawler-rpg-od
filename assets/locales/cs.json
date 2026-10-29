@@ -699,6 +699,8 @@
   "forge-tokens": "Žetony Kovárny",
   "forge-token-merchant-offer": "Objevil se potulný kovář: koupit žeton Kovárny za {cost} zlata?",
   "forge-token-merchant-purchase": "Koupili jste žeton Kovárny za {cost} zlata.",
+  "forge-token-merchant-offer-multiple": "Objevil se potulný kovář: koupit {count} žetony Kovárny za {cost} zlata?",
+  "forge-token-merchant-purchase-multiple": "Koupili jste {count} žetony Kovárny za {cost} zlata.",
   "forge-free-access-hint": "Tip: Potulný kovář prodává ve 13. patře žeton Kovárny za zlato.",
   "stat-lock": "Uzamknout atributy",
   "stat-lock-help": "Uzamčené atributy si zachovají svůj typ a hodnotu. Alespoň jeden atribut musí zůstat odemčený."

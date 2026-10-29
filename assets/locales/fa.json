@@ -699,6 +699,8 @@
   "forge-tokens": "ژتون‌های آهنگری",
   "forge-token-merchant-offer": "آهنگری دوره‌گرد پدیدار می‌شود: یک ژتون آهنگری به قیمت {cost} طلا می‌خرید؟",
   "forge-token-merchant-purchase": "یک ژتون آهنگری به قیمت {cost} طلا خریدید.",
+  "forge-token-merchant-offer-multiple": "آهنگری دوره‌گرد پدیدار می‌شود: {count} ژتون آهنگری به قیمت {cost} طلا می‌خرید؟",
+  "forge-token-merchant-purchase-multiple": "{count} ژتون آهنگری به قیمت {cost} طلا خریدید.",
   "forge-free-access-hint": "نکته: در طبقه ۱۳، آهنگری دوره‌گرد یک ژتون آهنگری در برابر طلا می‌فروشد.",
   "stat-lock": "قفل ویژگی‌ها",
   "stat-lock-help": "ویژگی‌های قفل‌شده نوع و مقدار خود را حفظ می‌کنند. دست‌کم یک ویژگی باید باز بماند."

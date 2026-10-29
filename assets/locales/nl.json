@@ -672,6 +672,8 @@
   "forge-tokens": "Smederijfiches",
   "forge-token-merchant-offer": "Een rondreizende smid verschijnt: een Smederijfiche kopen voor {cost} goud?",
   "forge-token-merchant-purchase": "Je hebt een Smederijfiche gekocht voor {cost} goud.",
+  "forge-token-merchant-offer-multiple": "Een rondreizende smid verschijnt: {count} Smederijfiches kopen voor {cost} goud?",
+  "forge-token-merchant-purchase-multiple": "Je hebt {count} Smederijfiches gekocht voor {cost} goud.",
   "forge-free-access-hint": "Tip: op Verdieping 13 verkoopt een rondreizende smid een Smederijfiche voor goud.",
   "stat-lock": "Eigenschappen vergrendelen",
   "stat-lock-help": "Vergrendelde eigenschappen behouden hun type en waarde. Minstens één eigenschap moet ontgrendeld blijven."

@@ -672,6 +672,8 @@
   "forge-tokens": "Token Tempaan",
   "forge-token-merchant-offer": "Seorang tukang besi pengembara muncul: beli Token Tempaan untuk {cost} emas?",
   "forge-token-merchant-purchase": "Anda membeli Token Tempaan untuk {cost} emas.",
+  "forge-token-merchant-offer-multiple": "Seorang tukang besi pengembara muncul: beli {count} Token Tempaan untuk {cost} emas?",
+  "forge-token-merchant-purchase-multiple": "Anda membeli {count} Token Tempaan untuk {cost} emas.",
   "forge-free-access-hint": "Petua: Tukang besi pengembara menjual Token Tempaan untuk Emas di Tingkat 13.",
   "stat-lock": "Kunci statistik",
   "stat-lock-help": "Statistik yang dikunci mengekalkan jenis dan nilainya. Sekurang-kurangnya satu statistik mesti kekal tidak dikunci."

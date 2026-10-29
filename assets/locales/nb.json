@@ -672,6 +672,8 @@
   "forge-tokens": "Smiepolletter",
   "forge-token-merchant-offer": "En omreisende smed dukker opp: kjøp en Smiepollett for {cost} gull?",
   "forge-token-merchant-purchase": "Du kjøpte en Smiepollett for {cost} gull.",
+  "forge-token-merchant-offer-multiple": "En omreisende smed dukker opp: kjøp {count} Smiepolletter for {cost} gull?",
+  "forge-token-merchant-purchase-multiple": "Du kjøpte {count} Smiepolletter for {cost} gull.",
   "forge-free-access-hint": "Tips: En omreisende smed selger en Smiepollett for gull i Etasje 13.",
   "stat-lock": "Lås egenskaper",
   "stat-lock-help": "Låste egenskaper beholder typen og verdien sin. Minst én egenskap må forbli ulåst."
