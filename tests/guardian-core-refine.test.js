@@ -118,6 +118,95 @@ test('refining past +10 spends Guardian Cores and blocks without them', () => {
     assert.equal(context.player.inventory.guardianCores, 2);
 });
 
+const createRefinePanelContext = ({ source = 'inventory', level = 100, refineLevel = 10, ...resources } = {}) => {
+    const context = createContext({ cores: 100, ...resources });
+    const elements = {};
+    for (const id of ['refine-preview', 'refine-cost', 'refine-current-item', 'refine-preview-item',
+        'refine-cost-amount', 'refine-stone-cost-amount', 'refine-core-cost', 'refine-core-cost-amount',
+        'refine-slot', 'forge-confirm']) {
+        elements[`#${id}`] = { style: {}, innerHTML: '', textContent: '', setAttribute() {} };
+    }
+    context.document = { querySelector: selector => elements[selector] || null, querySelectorAll: () => [] };
+    context.sfxDeny = context.sfxEquip = { play() {} };
+    context.playerLoadStats = () => {};
+    context.nFormatter = String;
+    const equipment = { ...JSON.parse(item(level, refineLevel)), category: 'Sword', rarity: 'Common', tier: 1 };
+    if (source === 'companionCharm') {
+        Object.assign(equipment, { category: 'Charm', attribute: 'Companion', slot: 'companionCharm' });
+        context.player.companionCharm = equipment;
+    }
+    const equipmentStr = JSON.stringify(equipment);
+    if (source === 'inventory') context.player.inventory.equipment = [equipmentStr];
+    if (source === 'equipped') context.player.equipped = [equipment];
+    context.refineTestEquipment = equipment;
+    evaluate(context, `forgeMode = 'refine'; selectRefineEquipment(${JSON.stringify(equipmentStr)}, ${JSON.stringify(source)}, ${source === 'companionCharm' ? -1 : 0}, refineTestEquipment);`);
+    return { context, elements };
+};
+
+for (const source of ['inventory', 'equipped', 'companionCharm']) {
+    test(`successive refinements keep ${source} selected and refresh the preview and costs`, () => {
+        const { context, elements } = createRefinePanelContext({ source, refineLevel: 9 });
+        for (const nextLevel of [10, 11, 12]) {
+            const before = {
+                gold: context.player.gold,
+                stones: context.player.inventory.refineStones,
+                cores: context.player.inventory.guardianCores,
+            };
+            const costs = evaluate(context, '[refineCost, refineStoneCost, refineCoreCost]');
+            elements['#forge-confirm'].onclick();
+            const selected = evaluate(context, 'selectedRefineItem');
+            assert.equal(selected.equipment.refineLevel, nextLevel);
+            assert.equal(selected.equipmentStr, JSON.stringify(selected.equipment));
+            assert.equal(selected.source, source);
+            assert.equal(source === 'inventory'
+                ? JSON.parse(context.player.inventory.equipment[0]).refineLevel
+                : context.refineTestEquipment.refineLevel, nextLevel);
+            assert.equal(context.player.gold, before.gold - costs[0]);
+            assert.equal(context.player.inventory.refineStones, before.stones - costs[1]);
+            assert.equal(context.player.inventory.guardianCores, before.cores - costs[2]);
+            assert.equal(elements['#refine-preview'].style.display, 'grid');
+            assert.equal(elements['#refine-cost'].style.display, 'block');
+            assert.match(elements['#refine-current-item'].innerHTML, new RegExp(`\\+${nextLevel} `));
+            assert.match(elements['#refine-preview-item'].innerHTML, new RegExp(`\\+${nextLevel + 1} `));
+            assert.equal(elements['#refine-cost-amount'].textContent,
+                String(evaluate(context, 'getRefineCost(selectedRefineItem.equipment)')));
+            assert.equal(elements['#refine-core-cost-amount'].textContent,
+                String(evaluate(context, 'getRefineGuardianCoreCost(selectedRefineItem.equipment)')));
+            assert.equal(elements['#forge-confirm'].disabled, false);
+        }
+    });
+}
+
+for (const [resources, reason] of [
+    [{ cores: 1 }, 'not-enough-guardian-cores'],
+    [{ stones: 9 }, 'not-enough-refine-stones'],
+    [{ gold: 61875 }, 'not-enough-gold'],
+]) {
+    test(`refinement stays visible but blocks the next upgrade with ${reason}`, () => {
+        const { context, elements } = createRefinePanelContext(resources);
+        elements['#forge-confirm'].onclick();
+        assert.equal(evaluate(context, 'selectedRefineItem.equipment.refineLevel'), 11);
+        assert.equal(elements['#refine-preview'].style.display, 'grid');
+        assert.equal(elements['#forge-confirm'].disabled, true);
+        assert.equal(elements['#forge-confirm'].textContent, reason);
+        const inventory = JSON.stringify(context.player.inventory);
+        const gold = context.player.gold;
+        elements['#forge-confirm'].onclick();
+        assert.equal(JSON.stringify(context.player.inventory), inventory);
+        assert.equal(context.player.gold, gold);
+    });
+}
+
+test('reaching the refinement cap clears the selection and hides the next-upgrade preview', () => {
+    const { context, elements } = createRefinePanelContext({ level: 99, refineLevel: 9 });
+    elements['#forge-confirm'].onclick();
+    assert.equal(JSON.parse(context.player.inventory.equipment[0]).refineLevel, 10);
+    assert.equal(evaluate(context, 'selectedRefineItem'), null);
+    assert.equal(elements['#refine-preview'].style.display, 'none');
+    assert.equal(elements['#refine-cost'].style.display, 'none');
+    assert.equal(elements['#forge-confirm'].disabled, true);
+});
+
 test('the Refine panel shows the Guardian Core cost and every locale translates it', () => {
     assert.match(indexSource, /id="refine-core-cost-amount"/);
     assert.match(indexSource, /data-i18n="guardian-core-refine-hint"/);

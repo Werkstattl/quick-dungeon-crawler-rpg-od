@@ -1609,7 +1609,8 @@ const executeRefine = () => {
         return;
     }
 
-    let updated = false;
+    let updatedEquipment = null;
+    let updatedSourceIndex = selectedRefineItem.sourceIndex;
     if (selectedRefineItem.source === 'inventory') {
         let itemIndex = Number.isInteger(selectedRefineItem.sourceIndex) ? selectedRefineItem.sourceIndex : -1;
         if (itemIndex < 0 || player.inventory.equipment[itemIndex] !== selectedRefineItem.equipmentStr) {
@@ -1619,7 +1620,8 @@ const executeRefine = () => {
             const equipment = JSON.parse(player.inventory.equipment[itemIndex]);
             applyRefinedEquipment(equipment);
             player.inventory.equipment[itemIndex] = JSON.stringify(equipment);
-            updated = true;
+            updatedEquipment = equipment;
+            updatedSourceIndex = itemIndex;
         }
     } else if (selectedRefineItem.source === 'equipped') {
         let itemIndex = Number.isInteger(selectedRefineItem.sourceIndex) ? selectedRefineItem.sourceIndex : -1;
@@ -1631,17 +1633,19 @@ const executeRefine = () => {
         }
         if (itemIndex !== -1) {
             applyRefinedEquipment(player.equipped[itemIndex]);
-            updated = true;
+            updatedEquipment = player.equipped[itemIndex];
+            updatedSourceIndex = itemIndex;
         }
     } else if (selectedRefineItem.source === 'companionCharm') {
         const charm = typeof getEquippedCompanionCharm === 'function' ? getEquippedCompanionCharm() : null;
         if (charm) {
             applyRefinedEquipment(charm);
-            updated = true;
+            updatedEquipment = charm;
+            updatedSourceIndex = -1;
         }
     }
 
-    if (!updated) {
+    if (!updatedEquipment) {
         sfxDeny.play();
         return;
     }
@@ -1656,7 +1660,17 @@ const executeRefine = () => {
         updateCompanionUI();
     }
     sfxEquip.play();
-    resetRefineState();
+    if (canRefineEquipment(updatedEquipment)) {
+        selectedRefineItem = {
+            equipment: updatedEquipment,
+            equipmentStr: JSON.stringify(updatedEquipment),
+            source: selectedRefineItem.source,
+            sourceIndex: updatedSourceIndex
+        };
+        calculateRefinePreview();
+    } else {
+        resetRefineState();
+    }
     loadForgeEquipment();
     updateForgeDisplay();
 };
