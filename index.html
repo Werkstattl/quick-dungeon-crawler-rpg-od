@@ -29,7 +29,10 @@
                 <img src="assets/icon/logo.webp" alt="Quick Dungeon Crawler logo">
                 <h1>Quick Dungeon Crawler on Demand!</h1>
             </div>
-            <p data-i18n="tap-to-explore">Tap to explore the dungeon</p>
+            <div>
+                <p id="title-play-prompt" data-i18n="tap-to-explore">Tap to explore the dungeon</p>
+                <div id="title-run-progress" hidden><span data-i18n="floor-count"></span> · <span data-i18n="room-count"></span></div>
+            </div>
             <button id="title-menu-btn" aria-label="Open menu"><i class="fas fa-cog"></i></button>
         </section>
         <section id="character-creation" class="game-container">

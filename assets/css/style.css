@@ -1756,6 +1756,11 @@ button:focus-visible {
     letter-spacing: 0.02em;
 }
 
+#title-run-progress {
+    color: var(--text-muted);
+    font-size: calc(0.8rem * var(--font-scale));
+}
+
 #title-screen i {
     margin: 0 0 1rem;
 }

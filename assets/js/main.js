@@ -34,6 +34,37 @@ const restoreSavedCombatState = () => {
     return true;
 };
 
+const canContinueRun = () => {
+    const savedPlayer = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup);
+    return !!(savedPlayer && savedPlayer.allocated);
+};
+
+const refreshTitleRunProgress = () => {
+    const prompt = document.querySelector('#title-play-prompt');
+    const progressElement = document.querySelector('#title-run-progress');
+    if (!prompt || !progressElement) return;
+
+    // Before entering the dungeon, the in-memory dungeon still contains defaults.
+    const currentDungeon = dungeon.initialized
+        ? dungeon
+        : safeLoad(STORAGE_KEYS.dungeon, STORAGE_KEYS.dungeonBackup);
+    const progress = (currentDungeon && currentDungeon.progress) || dungeon.progress;
+    const canContinue = canContinueRun();
+    const promptKey = canContinue ? 'continue-run' : 'tap-to-explore';
+    prompt.setAttribute('data-i18n', promptKey);
+    prompt.textContent = t(promptKey);
+    progressElement.hidden = !canContinue;
+
+    if (canContinue) {
+        ['floor', 'room'].forEach(key => {
+            const label = progressElement.querySelector(`[data-i18n="${key}-count"]`);
+            const params = { [key]: progress[key] };
+            label.setAttribute('data-i18n-params', JSON.stringify(params));
+            label.textContent = t(`${key}-count`, params);
+        });
+    }
+};
+
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
@@ -66,15 +97,14 @@ window.addEventListener("DOMContentLoaded", async function () {
     if (player === null) {
         showCharacterCreation();
     } else {
+        refreshTitleRunProgress();
         let target = document.querySelector("#title-screen");
         target.style.display = "flex";
     }
 
     // Title Screen Validation
     document.querySelector("#title-screen").addEventListener("click", function () {
-        const savedPlayer = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup);
-        const player = savedPlayer;
-        if (player && player.allocated) {
+        if (canContinueRun()) {
             enterDungeon();
         } else {
             allocationPopup();
@@ -1154,6 +1184,9 @@ const runLoad = (id, display) => {
     loader.style.display = "flex";
     setTimeout(async () => {
         loader.style.display = "none";
+        if (id === 'title-screen' && typeof refreshTitleRunProgress === 'function') {
+            refreshTitleRunProgress();
+        }
         document.querySelector(`#${id}`).style.display = `${display}`;
     }, 100);
 }
