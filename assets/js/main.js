@@ -1460,6 +1460,7 @@ const calculateStats = () => {
 // is enabled, inventory, equipped items and gold are wiped.
 const progressReset = (fromDeath = false) => {
     if (typeof setScreenWakeLockActive === 'function') setScreenWakeLockActive(false);
+    if (typeof setAutoModeEnabled === 'function') setAutoModeEnabled(false);
     if (fromDeath && player.hardcore) {
         player.inventory = {
             consumables: [],

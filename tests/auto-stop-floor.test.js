@@ -119,6 +119,43 @@ test('earlier floors and room changes continue normally', () => {
     assert.equal(game.run('dungeon.status.exploring'), true);
 });
 
+test('a new run clears active Auto Mode and allows it to be enabled again', () => {
+    for (const fromDeath of [false, true]) {
+        const game = setup({ stopFloor: '9', floor: 4 });
+        Object.assign(game.context, {
+            combatBacklog: [],
+            clampCurseLevel: value => value,
+            getEnemyScalingFromCurseLevel: () => 1,
+            saveCompanions() {},
+            saveData() {},
+        });
+        vm.runInContext(mainSource.slice(
+            mainSource.indexOf('const progressReset ='),
+            mainSource.indexOf('const hideEndgameScreen ='),
+        ), game.context);
+        game.run(`autoConfirm(); autoClaim(); progressReset(${fromDeath})`);
+
+        assert.equal(game.run('autoMode'), false);
+        assert.equal(game.storage.get('autoMode'), 'false');
+        assert.equal(game.run('dungeon.status.paused'), true);
+        assert.equal(game.run('dungeon.status.exploring'), false);
+        assert.equal(game.run('autoStopFloor'), 9);
+        assert.equal(game.storage.get('autoModeBtnVisible'), 'true');
+        for (const selector of ['#auto-mode-btn', '#combat-auto-mode-btn']) {
+            assert.equal(game.elements.get(selector).classList.contains('active'), false);
+            assert.equal(game.elements.get(selector).attributes['aria-pressed'], 'false');
+        }
+        game.flush();
+        assert.equal(game.clicks(), 0);
+
+        game.run('toggleAutoMode()');
+        assert.equal(game.run('autoMode'), true);
+        assert.equal(game.storage.get('autoMode'), 'true');
+        assert.equal(game.run('dungeon.status.exploring'), true);
+        assert.equal(game.elements.get('#auto-mode-btn').classList.contains('active'), true);
+    }
+});
+
 test('claiming guardian loot stops at the new floor and closes combat normally', () => {
     const game = setup();
     Object.assign(game.context, {
