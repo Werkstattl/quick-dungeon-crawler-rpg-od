@@ -122,23 +122,31 @@ const safeSave = (key, data, backupKey, tempKey) => {
 const safeLoad = (key, backupKey) => {
     try {
         const raw = localStorage.getItem(key);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        return parsed;
-    } catch (err) {
-        console.warn(`safeLoad: primary key ${key} corrupt, trying backup.`, err);
-        try {
-            const backupRaw = localStorage.getItem(backupKey);
-            if (backupRaw) {
-                const backupParsed = JSON.parse(backupRaw);
-                // Restore backup to primary key
-                localStorage.setItem(key, backupRaw);
-                console.log(`safeLoad: restored ${key} from backup.`);
-                return backupParsed;
-            }
-        } catch (backupErr) {
-            console.error(`safeLoad: backup also corrupt for ${key}`, backupErr);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed !== null) return parsed;
         }
+    } catch (err) {
+        console.warn(`safeLoad: primary key ${key} unreadable, trying backup.`, err);
+    }
+
+    // Missing, empty and JSON-null saves need the same fallback as corrupt saves.
+    try {
+        const backupRaw = localStorage.getItem(backupKey);
+        if (!backupRaw) return null;
+        const backupParsed = JSON.parse(backupRaw);
+        if (backupParsed === null) return null;
+
+        // A failed repair must not prevent loading a readable backup into memory.
+        try {
+            localStorage.setItem(key, backupRaw);
+            console.log(`safeLoad: restored ${key} from backup.`);
+        } catch (restoreErr) {
+            console.warn(`safeLoad: loaded backup for ${key}, but could not restore primary key.`, restoreErr);
+        }
+        return backupParsed;
+    } catch (backupErr) {
+        console.error(`safeLoad: backup unreadable for ${key}`, backupErr);
         return null;
     }
 };
