@@ -96,6 +96,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
                     } catch (error) {
                         readError = error;
                         storageUnavailable = true;
+                        console.warn('Native save backups disabled: could not read file:', paths[slot], error);
                         continue;
                     }
                     try {

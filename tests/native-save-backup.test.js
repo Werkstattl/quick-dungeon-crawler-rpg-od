@@ -633,6 +633,37 @@ test('unreadable backups block a fresh character instead of overwriting existing
     assert.equal(failed.operations.length, 0);
 });
 
+test('unreadable native files warn and disable backups while a valid local save remains playable', async () => {
+    const seeded = await seed();
+    const data = fixture(30);
+    data.player._saveRevision = 2;
+    for (const unreadable of [[slot(1)], [slot(0), slot(1)]]) {
+        const local = new Map(Object.entries({ playerData: data.player, dungeonData: data.dungeon,
+            enemyData: data.enemy, playerCompanions: data.companions }));
+        const localBefore = clone([...local]);
+        const state = setup({ disk: new Map(seeded.disk), local });
+        const warnings = [];
+        state.context.console = { ...quiet, warn: (...args) => warnings.push(args) };
+        const error = new Error('Native storage read denied');
+        const readFile = state.files.read;
+        state.files.read = async file => {
+            if (unreadable.includes(file)) throw error;
+            return readFile(file);
+        };
+
+        await state.backup.initialize();
+
+        assert.deepEqual(warnings, unreadable.map(file => [
+            'Native save backups disabled: could not read file:', file, error,
+        ]));
+        assert.deepEqual([...state.local], localBefore);
+        assert.equal(state.restored.length, 0);
+        assert.equal(await state.backup.save(fixture(31), { force: true }), false);
+        assert.equal(state.operations.length, 0);
+        assert.deepEqual([...state.disk], [...seeded.disk]);
+    }
+});
+
 test('initialization can be retried after temporary native storage failure', async () => {
     const state = setup();
     state.files.read = async () => { throw new Error('temporarily unavailable'); };
