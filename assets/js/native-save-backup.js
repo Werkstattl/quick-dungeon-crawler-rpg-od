@@ -10,9 +10,19 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
         && Number.isFinite(value.progress.floor) && value.progress.floor >= 1
         && Number.isFinite(value.progress.room) && value.progress.room >= 1
         && isObject(value.settings) && isObject(value.statistics) && Array.isArray(value.backlog);
+    const validCompanions = value => Array.isArray(value) && value.every(companion =>
+        isObject(companion) && Number.isInteger(companion.id) && companion.id > 0
+        && Number.isInteger(companion.level) && companion.level >= 1
+        && (companion.experience === undefined
+            || (Number.isFinite(companion.experience) && companion.experience >= 0)));
     const validData = value => isObject(value) && validPlayer(value.player)
         && validDungeon(value.dungeon) && isObject(value.enemy)
-        && Array.isArray(value.companions) && value.companions.every(isObject);
+        && validCompanions(value.companions);
+    // Shared by local player writes and native captures; never compare level or wall time.
+    const getRevision = player => player && Number.isSafeInteger(player._saveRevision)
+        && player._saveRevision > 0 ? player._saveRevision : 0;
+    let revision = 0;
+    const nextRevision = () => ++revision;
     const checksum = text => {
         let hash = 2166136261;
         for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 16777619);
@@ -45,15 +55,24 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
 
     const localSaveUsable = () => {
         const savedPlayer = readLocal('playerData', validPlayer);
-        return savedPlayer && (!savedPlayer.allocated || readLocal('dungeonData', validDungeon));
+        return savedPlayer && !savedPlayer._saveIncomplete && (!savedPlayer.allocated || (readLocal('dungeonData', validDungeon)
+            && readLocal('playerCompanions', validCompanions)));
     };
 
     const initialize = () => {
         if (initialization) return initialization;
         initialization = (async () => {
             try {
+                const localPlayer = readLocal('playerData', validPlayer);
+                revision = Math.max(revision, getRevision(localPlayer));
                 files = await loadFiles();
-                if (!files) return; // Browser and desktop keep their existing storage behavior.
+                if (!files) {
+                    if (localPlayer && localPlayer._saveIncomplete) throw new Error('Incomplete local save could not be recovered');
+                    if (localPlayer && localPlayer.allocated && !readLocal('playerCompanions', validCompanions)) {
+                        throw new Error('Saved companions could not be recovered');
+                    }
+                    return; // Browser and desktop do not write native snapshots.
+                }
                 let readError = null;
                 let storageUnavailable = false;
                 for (let slot = 0; slot < paths.length; slot++) {
@@ -68,6 +87,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
                     try {
                         if (raw === null) continue;
                         const snapshot = decode(raw);
+                        revision = Math.max(revision, getRevision(snapshot.data.player));
                         if (!latest || snapshot.sequence > latest.sequence) {
                             latest = snapshot;
                             latestSlot = slot;
@@ -78,7 +98,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
                         console.warn('Native save backup could not be read:', error);
                     }
                 }
-                if (!localSaveUsable()) {
+                if (!localSaveUsable() || (latest && getRevision(latest.data.player) > getRevision(localPlayer))) {
                     if (latest) {
                         restoreLocal({
                             playerData: latest.data.player,
@@ -88,6 +108,11 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
                         });
                     } else if (readError) {
                         throw readError; // Do not replace an inaccessible save with a new character.
+                    } else if (localPlayer && localPlayer._saveIncomplete) {
+                        throw new Error('Incomplete local save could not be recovered');
+                    } else if (localPlayer && localPlayer.allocated
+                        && !readLocal('playerCompanions', validCompanions)) {
+                        throw new Error('Saved companions could not be recovered');
                     }
                 }
                 // Preserve files we could not inspect; retry on the next app launch.
@@ -136,6 +161,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
         try {
             // Detach before the first await: subsequent gameplay must not change this snapshot.
             pending = JSON.parse(JSON.stringify(data));
+            pending.player._saveRevision = nextRevision();
         } catch (error) {
             console.error('Native save backup serialization failed:', error);
             return Promise.resolve(false);
@@ -174,7 +200,8 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
         latestSlot = -1;
     };
 
-    return { initialize, save, validPlayer, validDungeon, exportRaw, clear };
+    return { initialize, save, validPlayer, validDungeon, validCompanions, nextRevision, exportRaw, clear,
+        get hasNativeStorage() { return files !== null; } };
 };
 
 const nativeSaveBackup = createNativeSaveBackup({
@@ -188,10 +215,17 @@ const nativeSaveBackup = createNativeSaveBackup({
     restoreLocal: entries => {
         // Keep an in-memory copy too, so recovery works even when localStorage is full.
         for (const [key, value] of Object.entries(entries)) {
-            const raw = JSON.stringify(value);
-            recoveredSaveData.set(key, raw);
-            try { localStorage.setItem(key, raw); }
-            catch (error) { console.warn(`Could not restore ${key} to localStorage:`, error); }
+            recoveredSaveData.set(key, JSON.stringify(value));
+        }
+        try {
+            // A partial repair must never look like a complete, current local save.
+            localStorage.setItem('playerData', JSON.stringify({ ...entries.playerData, _saveIncomplete: true }));
+            for (const [key, value] of Object.entries(entries)) {
+                if (key !== 'playerData') localStorage.setItem(key, JSON.stringify(value));
+            }
+            localStorage.setItem('playerData', JSON.stringify(entries.playerData));
+        } catch (error) {
+            console.warn('Could not restore complete save to localStorage:', error);
         }
     },
 });

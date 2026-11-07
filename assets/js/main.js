@@ -1403,7 +1403,7 @@ const enterDungeon = () => {
 let isSaving = false;
 let lastSaveTime = Date.now();
 const saveData = ({ forceDungeon = false } = {}) => {
-    if (isSaving) return; // Prevent overlapping saves
+    if (isSaving || !player) return; // Never manufacture a save before character creation.
     isSaving = true;
     try {
         let playerData, dungeonData, enemyData;
@@ -1417,15 +1417,24 @@ const saveData = ({ forceDungeon = false } = {}) => {
             return;
         }
         // Only save if all data is valid JSON
-        const playerSaved = safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
         const existingDungeonData = typeof readSaveStorage === 'function'
             ? readSaveStorage("dungeonData") : localStorage.getItem("dungeonData");
         const canPersistDungeon = dungeon
             && (forceDungeon || dungeon.initialized || existingDungeonData === null);
-        if (canPersistDungeon) {
-            safeSave(STORAGE_KEYS.dungeon, dungeon, STORAGE_KEYS.dungeonBackup, STORAGE_KEYS.dungeonTemp);
-        }
-        safeSave(STORAGE_KEYS.enemy, enemy, STORAGE_KEYS.enemyBackup, STORAGE_KEYS.enemyTemp);
+        // Mark the local set before changing its parts. A crash or failed write
+        // leaves this marker in place, so startup uses the complete native backup.
+        if (typeof nativeSaveBackup !== 'undefined' && nativeSaveBackup.hasNativeStorage
+            && !safeSave(STORAGE_KEYS.player, { ...player, _saveIncomplete: true },
+                STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp, { advanceRevision: false })) return;
+        const dungeonSaved = !canPersistDungeon
+            || safeSave(STORAGE_KEYS.dungeon, dungeon, STORAGE_KEYS.dungeonBackup, STORAGE_KEYS.dungeonTemp);
+        const enemySaved = !canPersistDungeon
+            || safeSave(STORAGE_KEYS.enemy, enemy, STORAGE_KEYS.enemyBackup, STORAGE_KEYS.enemyTemp);
+        const companionsSaved = typeof companionsInitialized === 'undefined' || !companionsInitialized
+            || persistCompanions();
+        // Publish a newer local revision only after the other parts were persisted.
+        const playerSaved = dungeonSaved && enemySaved && companionsSaved
+            && safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
         if (playerSaved) {
             lastSaveTime = Date.now();
         }

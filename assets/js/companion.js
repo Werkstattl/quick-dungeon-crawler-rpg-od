@@ -806,7 +806,7 @@ function initCompanions() {
                 getCompanionOptionsFromTemplate(type)
             );
             comp.level = data.level;
-            comp.experience = data.experience;
+            comp.experience = data.experience === undefined ? 0 : data.experience;
             comp.refreshBaseStats();
             comp.isActive = data.isActive;
             if (Array.isArray(data.passives) && data.passives.length && !type.passives) {
@@ -1012,11 +1012,20 @@ function dismissCompanion() {
 // Save companions to localStorage
 function saveCompanions() {
     companionsInitialized = true;
+    // Companion-only actions must also advance the complete local save, so a
+    // previous native snapshot cannot undo a newer roster on the next launch.
+    if (typeof saveData === 'function') saveData();
+    else persistCompanions();
+}
+
+function persistCompanions() {
     try {
         localStorage.setItem('playerCompanions', JSON.stringify(playerCompanions));
         if (typeof recoveredSaveData !== 'undefined') recoveredSaveData.delete('playerCompanions');
+        return true;
     } catch (error) {
         console.warn('Could not save companions to localStorage:', error);
+        return false;
     }
 }
 

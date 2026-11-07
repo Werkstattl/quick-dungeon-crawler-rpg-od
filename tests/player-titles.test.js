@@ -42,7 +42,7 @@ function createState(overrides = {}, storage = new Map()) {
     vm.runInContext(source('enemy.js').split('const isSavedEnemyValidForDungeon =')[0], context);
     vm.runInContext(source('utility.js').split('const nFormatter =')[0], context);
     vm.runInContext(source('titles.js'), context);
-    context.saveData = () => vm.runInContext('persistPlayerTitles()', context);
+    context.saveData = () => vm.runInContext('safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp)', context);
     return {
         context, storage, logs, writes,
         run: expression => vm.runInContext(expression, context),

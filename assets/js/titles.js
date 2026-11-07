@@ -88,7 +88,9 @@ function getSelectedPlayerTitle(playerData = player) {
 }
 
 function persistPlayerTitles() {
-    if (player) safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
+    if (!player) return;
+    if (typeof saveData === 'function') saveData();
+    else safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
 }
 
 function syncPlayerTitleUnlocks({ announce = false, dungeonData = dungeon, log = null, persist = true } = {}) {

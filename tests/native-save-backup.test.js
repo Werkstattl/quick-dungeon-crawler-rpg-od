@@ -74,6 +74,251 @@ async function seed() {
     return state;
 }
 
+// Run the shipped loading, saving and restoration paths together. Only the
+// platform's disk/localStorage APIs are replaced to inject write failures.
+function gameSession({ disk = new Map(), storage, failKeys = [], clock = 100000 } = {}) {
+    const data = fixture();
+    storage ||= new Map(Object.entries({ playerData: data.player, dungeonData: data.dungeon,
+        enemyData: data.enemy, playerCompanions: data.companions }).map(([key, value]) => [key, JSON.stringify(value)]));
+    const context = vm.createContext({
+        console: quiet, failKeys: new Set(failKeys), failNativeWrites: false,
+        Date: class extends Date { static now() { return clock; } },
+        window: { Capacitor: { isNativePlatform: () => true, getPlatform: () => 'android' }, addEventListener() {} },
+        document: { addEventListener() {} },
+        localStorage: {
+            getItem: key => storage.get(key) ?? null,
+            setItem: (key, value) => {
+                if (context.failKeys.has('*') || context.failKeys.has(key)
+                    || (context.rejectWrite && context.rejectWrite(key, value))) throw new Error('Quota exceeded');
+                storage.set(key, String(value));
+            },
+        },
+        nativeFiles: {
+            read: async file => disk.get(file) ?? null,
+            write: async (file, raw) => {
+                if (context.failNativeWrites) throw new Error('Native write interrupted');
+                disk.set(file, raw);
+            },
+            rename: async (from, to) => { disk.set(to, disk.get(from)); disk.delete(from); },
+            remove: async file => { disk.delete(file); },
+        },
+        player: data.player, dungeon: { ...data.dungeon, initialized: true }, enemy: data.enemy,
+        playerCompanions: data.companions, companionsInitialized: true,
+    });
+    const run = code => vm.runInContext(code, context);
+    run(read('utility.js').split('const nFormatter')[0]);
+    run(source.replace("return import('./filesystem-plugin.js');", 'return nativeFiles;'));
+    const main = read('main.js');
+    run(main.slice(main.indexOf('let isSaving = false;'), main.indexOf('const maybeUnlockNextCurseLevel')));
+    const companion = read('companion.js');
+    run(companion.slice(companion.indexOf('function saveCompanions()'), companion.indexOf('// Find companion after combat')));
+    return { context, disk, storage, run,
+        initialize: () => run('nativeSaveBackup.initialize()'),
+        checkpoint: () => run('saveNativeBackup({ force: true })'),
+        load: key => clone(run(`safeLoad('${key}', '${key}_backup')`)),
+    };
+}
+
+for (const failedKey of ['*', 'playerData_temp', 'dungeonData_temp', 'enemyData_temp', 'playerCompanions']) {
+    test(`a newer native checkpoint survives restart after failed ${failedKey} writes`, async () => {
+        const game = gameSession();
+        await game.initialize();
+        game.run('saveData()');
+        await game.checkpoint();
+        game.context.failKeys.add(failedKey);
+        game.run('player.lvl = 30; dungeon.progress.floor = 8; playerCompanions[0].level = 9; saveData()');
+        await game.checkpoint();
+        const restarted = gameSession({ disk: game.disk, storage: game.storage,
+            failKeys: [failedKey], clock: 1 }); // Wall-clock rollback cannot change save ordering.
+        await restarted.initialize();
+        assert.equal(restarted.load('playerData').lvl, 30);
+        assert.equal(restarted.load('dungeonData').progress.floor, 8);
+        assert.equal(restarted.load('playerCompanions')[0].level, 9);
+        restarted.run(`player = safeLoad('playerData', 'playerData_backup');
+            dungeon = safeLoad('dungeonData', 'dungeonData_backup');
+            playerCompanions = JSON.parse(readSaveStorage('playerCompanions'));`);
+        await restarted.checkpoint();
+        await restarted.checkpoint();
+        assert.deepEqual([0, 1].map(i => JSON.parse(game.disk.get(slot(i))).data.player.lvl), [30, 30]);
+    });
+}
+
+test('a newer successful local save wins over the throttled native checkpoint', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.run('player.lvl = 31; saveData()');
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 31);
+});
+
+test('a partially repaired local save recovers again on a second cold start', async () => {
+    for (const failedKey of ['playerData', 'dungeonData', 'enemyData', 'playerCompanions', 'commit']) {
+        const game = gameSession();
+        await game.initialize();
+        game.run('saveData()');
+        await game.checkpoint();
+        game.run('player.lvl = 30; playerCompanions[0].level = 10');
+        await game.checkpoint();
+        for (let restart = 0; restart < 2; restart++) {
+            const restarted = gameSession({ disk: game.disk, storage: game.storage, failKeys: [failedKey] });
+            if (failedKey === 'commit') restarted.context.rejectWrite = (key, value) =>
+                key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+            await restarted.initialize();
+            assert.equal(restarted.load('playerData').lvl, 30, `${failedKey}, restart ${restart}`);
+            assert.equal(restarted.load('playerCompanions')[0].level, 10);
+        }
+    }
+});
+
+test('interrupted local commits preserve the previous complete local backup', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+    game.run('player.lvl = 30; saveData()');
+    assert.equal(JSON.parse(game.storage.get('playerData'))._saveIncomplete, true);
+    const previous = JSON.parse(game.storage.get('playerData_backup'));
+    assert.equal(previous.lvl, 20);
+    assert.equal(previous._saveIncomplete, undefined);
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 20, 'incomplete local revision cannot override a durable snapshot');
+});
+
+test('a legacy local save and legacy snapshot remain readable without revision metadata', async () => {
+    const data = fixture();
+    const json = JSON.stringify(data);
+    let hash = 2166136261;
+    for (let i = 0; i < json.length; i++) hash = Math.imul(hash ^ json.charCodeAt(i), 16777619);
+    const disk = new Map([[slot(0), JSON.stringify({ version: 1, sequence: 5, savedAt: 100,
+        data, checksum: (hash >>> 0).toString(16) })]]);
+    const game = gameSession({ disk });
+    game.storage.set('playerData', JSON.stringify({ ...fixture(40).player }));
+    await game.initialize();
+    assert.equal(game.load('playerData').lvl, 40, 'legacy complete local save keeps precedence');
+    game.storage.clear();
+    const restarted = gameSession({ disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 20, 'legacy native snapshot still recovers missing local storage');
+});
+
+test('a completed local reset is retained when the forced native write is interrupted', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.context.failNativeWrites = true;
+    game.run(`player.lvl = 1; player.allocated = false; dungeon.progress.floor = 1;
+        playerCompanions[0].level = 1; saveData({ forceDungeon: true });`);
+    await game.checkpoint();
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 1);
+    assert.equal(restarted.load('playerData').allocated, false);
+    assert.equal(restarted.load('dungeonData').progress.floor, 1);
+    assert.equal(restarted.load('playerCompanions')[0].level, 1);
+});
+
+test('companion-only changes advance the local save beyond the previous native snapshot', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.run('playerCompanions[0].level = 10; saveCompanions()');
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerCompanions')[0].level, 10);
+});
+
+test('title-only changes cannot mark a partially failed local save as newer', async () => {
+    const game = gameSession();
+    game.run(read('titles.js'));
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.context.failKeys.add('playerCompanions');
+    game.run('playerCompanions[0].level = 10; player.lvl = 30; saveData()');
+    await game.checkpoint();
+    game.run('player.titles = { unlocked: 1 }; persistPlayerTitles()');
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 30);
+    assert.equal(restarted.load('playerCompanions')[0].level, 10);
+});
+
+test('an import gets a local revision instead of trusting a revision from another device', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.run(`player.lvl = 1; player.allocated = false; player._saveRevision = 9000000;
+        safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);`);
+    assert.ok(game.load('playerData')._saveRevision < 9000000);
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.equal(restarted.load('playerData').lvl, 1);
+});
+
+for (const raw of [undefined, '{broken', 'null', '{}', '[null]', '[{}]', '[{"id":1,"level":-1}]']) {
+    test(`unusable companion data (${raw}) restores the complete native snapshot`, async () => {
+        const game = gameSession();
+        await game.initialize();
+        game.run('saveData()');
+        await game.checkpoint();
+        game.run('player.lvl = 30; saveData()'); // Local player is newer but the set is incomplete.
+        if (raw === undefined) game.storage.delete('playerCompanions');
+        else game.storage.set('playerCompanions', raw);
+        const restarted = gameSession({ disk: game.disk, storage: game.storage });
+        await restarted.initialize();
+        assert.equal(restarted.load('playerData').lvl, 20);
+        assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+    });
+}
+
+test('unrecoverable companions preserve the original data and block startup before dungeon entry', async () => {
+    for (const raw of [undefined, '{broken', '{}', '[null]']) {
+        const game = gameSession();
+        if (raw === undefined) game.storage.delete('playerCompanions');
+        else game.storage.set('playerCompanions', raw);
+        const before = [...game.storage];
+        await assert.rejects(game.initialize(), /companions could not be recovered/);
+        assert.deepEqual([...game.storage], before);
+        assert.equal(game.disk.size, 0);
+    }
+});
+
+test('a fresh unallocated character may still initialize without companion data', async () => {
+    const game = gameSession();
+    game.storage.set('playerData', JSON.stringify({ ...fixture().player, allocated: false }));
+    game.storage.delete('playerCompanions');
+    await game.initialize();
+    assert.equal(game.load('playerData').name, fixture().player.name);
+});
+
+test('saving before character creation leaves local and native storage empty', async () => {
+    const game = gameSession({ storage: new Map() });
+    await game.initialize();
+    game.run('player = null; saveData()');
+    await game.checkpoint();
+    assert.equal(game.storage.size, 0);
+    assert.equal(game.disk.size, 0);
+});
+
+test('a valid empty companion roster is distinct from missing companion data', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.run('saveData()');
+    await game.checkpoint();
+    game.run('playerCompanions = []; saveCompanions()');
+    const restarted = gameSession({ disk: game.disk, storage: game.storage });
+    await restarted.initialize();
+    assert.deepEqual(restarted.load('playerCompanions'), []);
+});
+
 test('web builds do not create native backups', async () => {
     const state = setup({ native: false });
     await state.backup.initialize();
@@ -84,6 +329,7 @@ test('web builds do not create native backups', async () => {
 test('a desktop Capacitor bridge without mobile APIs does not block startup', async () => {
     const context = vm.createContext({
         console: quiet,
+        safeLoad: () => null,
         window: { Capacitor: { getPlatform: () => 'electron' }, addEventListener() {} },
         document: { addEventListener() {} },
     });
@@ -102,7 +348,7 @@ test('a fresh installation does not manufacture an empty save', async () => {
 test('the first snapshot contains the player, run, enemy and companions together', async () => {
     const state = await seed();
     const snapshot = JSON.parse(state.disk.get(slot(0)));
-    assert.deepEqual(snapshot.data, fixture());
+    assert.deepEqual(snapshot.data, { ...fixture(), player: { ...fixture().player, _saveRevision: 1 } });
     assert.equal(snapshot.sequence, 1);
     assert.equal(snapshot.savedAt, 100000);
     assert.equal(snapshot.version, 1);
@@ -129,7 +375,7 @@ test('missing local storage recovers the newest complete snapshot', async () => 
     const restarted = setup({ disk: state.disk });
     await restarted.backup.initialize();
     assert.deepEqual(restarted.restored, [{
-        playerData: fixture(21).player, dungeonData: fixture().dungeon,
+        playerData: { ...fixture(21).player, _saveRevision: 2 }, dungeonData: fixture().dungeon,
         enemyData: fixture().enemy, playerCompanions: fixture().companions,
     }]);
     assert.equal(restarted.operations.length, 0, 'recovery never rewrites the native files');
@@ -150,6 +396,7 @@ test('a valid local save takes precedence, including an intentional new-run rese
     const state = await seed();
     const localPlayer = fixture(1).player;
     localPlayer.allocated = false;
+    localPlayer._saveRevision = state.backup.nextRevision();
     const local = new Map([['playerData', localPlayer]]);
     const restarted = setup({ disk: state.disk, local });
     await restarted.backup.initialize();

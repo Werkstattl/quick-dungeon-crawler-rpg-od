@@ -100,9 +100,15 @@ const recoveredSaveData = new Map();
 const readSaveStorage = key => recoveredSaveData.has(key)
     ? recoveredSaveData.get(key) : localStorage.getItem(key);
 
-const safeSave = (key, data, backupKey, tempKey) => {
+const safeSave = (key, data, backupKey, tempKey, { advanceRevision = true } = {}) => {
     try {
-        const json = JSON.stringify(data);
+        const revision = key === 'playerData' && data && advanceRevision
+            && typeof nativeSaveBackup !== 'undefined'
+            && typeof nativeSaveBackup.nextRevision === 'function'
+            ? nativeSaveBackup.nextRevision() : null;
+        const savedData = revision === null ? data : { ...data, _saveRevision: revision };
+        if (revision !== null) delete savedData._saveIncomplete;
+        const json = JSON.stringify(savedData);
         // Write to temp key first
         localStorage.setItem(tempKey, json);
         // Verify it can be read back
@@ -113,10 +119,20 @@ const safeSave = (key, data, backupKey, tempKey) => {
         }
         // Swap: copy current real key to backup, then move temp to real
         const currentData = localStorage.getItem(key);
-        if (currentData !== null) {
+        let keepBackup = false;
+        if (key === 'playerData' && currentData !== null) {
+            try { keepBackup = Boolean(JSON.parse(currentData)._saveIncomplete); }
+            catch (_) { keepBackup = true; }
+        }
+        if (currentData !== null && !keepBackup) {
             localStorage.setItem(backupKey, currentData);
         }
         localStorage.setItem(key, json);
+        // A failed local write must not claim the revision of a durable checkpoint.
+        if (revision !== null) {
+            data._saveRevision = revision;
+            delete data._saveIncomplete;
+        }
         recoveredSaveData.delete(key);
         return true;
     } catch (err) {

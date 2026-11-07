@@ -213,7 +213,7 @@ test('ordinary saves preserve the startup guard for an uninitialized dungeon', (
     vm.runInContext('saveData()', context);
 
     assert.equal(savedValues.has('playerData'), true);
-    assert.equal(savedValues.has('enemyData'), true);
+    assert.equal(savedValues.has('enemyData'), false);
     assert.equal(savedValues.has('dungeonData'), false);
 });
 
