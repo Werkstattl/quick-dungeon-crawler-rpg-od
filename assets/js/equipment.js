@@ -1838,15 +1838,18 @@ const normalizePlayerEquipmentSlots = () => {
     if (!player) {
         return { movedToInventory: 0, changed: false, migrated: false };
     }
+    let changed = false;
     if (!Array.isArray(player.equipped)) {
-        player.equipped = [];
+        // Keep every legacy keyed item so duplicate/unknown slots can move to inventory below.
+        player.equipped = player.equipped && typeof player.equipped === 'object'
+            ? Object.values(player.equipped) : [];
+        changed = true;
     }
     if (!player.inventory || !Array.isArray(player.inventory.equipment)) {
         ensureRefineInventory();
     }
 
     const migrated = player.equipmentSlotVersion !== EQUIPMENT_SLOT_VERSION;
-    let changed = false;
     let movedToInventory = 0;
     const equippedBySlot = new Map();
     const movedItems = [];

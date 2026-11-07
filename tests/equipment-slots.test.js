@@ -238,6 +238,19 @@ test('legacy migration is lossless and keeps a locked duplicate equipped', () =>
     assert.equal(context.saveCalls, 1);
 });
 
+test('an empty legacy equipped object is persisted as an array even without other slot changes', () => {
+    const context = createContext();
+    context.player = { equipped: {}, inventory: { equipment: [] } };
+
+    assert.deepEqual(plain(evaluate(context, 'normalizePlayerEquipmentSlots()')),
+        { movedToInventory: 0, changed: true, migrated: true });
+    assert.deepEqual(plain(context.player.equipped), []);
+    assert.equal(context.saveCalls, 1);
+    assert.deepEqual(plain(evaluate(context, 'normalizePlayerEquipmentSlots()')),
+        { movedToInventory: 0, changed: false, migrated: true });
+    assert.equal(context.saveCalls, 1);
+});
+
 test('Equip Best chooses one best item per slot and preserves locked equipped items', () => {
     const context = createContext();
     const lockedSword = item({ category: 'Sword', type: 'Weapon', attribute: 'Damage', value: 10, locked: true, slot: 'weapon' });

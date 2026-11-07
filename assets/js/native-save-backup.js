@@ -2,10 +2,13 @@
 const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLocal, now = () => Date.now() }) => {
     const paths = ['save-backups/slot-0.json', 'save-backups/slot-1.json'];
     const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+    // Legacy saves store equipped items by key; slot migration converts them after loading.
+    const validEquipped = value => Array.isArray(value) || (isObject(value)
+        && Object.values(value).every(item => item === null || isObject(item)));
     const validPlayer = value => isObject(value) && typeof value.name === 'string'
         && isObject(value.stats) && isObject(value.baseStats) && isObject(value.exp)
         && isObject(value.inventory) && Array.isArray(value.inventory.equipment)
-        && Array.isArray(value.inventory.consumables) && Array.isArray(value.equipped);
+        && Array.isArray(value.inventory.consumables) && validEquipped(value.equipped);
     const validDungeon = value => isObject(value) && isObject(value.progress)
         && Number.isFinite(value.progress.floor) && value.progress.floor >= 1
         && Number.isFinite(value.progress.room) && value.progress.room >= 1

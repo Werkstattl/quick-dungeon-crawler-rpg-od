@@ -135,7 +135,8 @@ async function startRecovery(game) {
         return elements.get(selector);
     };
     const panels = [];
-    Object.assign(game.context, { t: key => key, applyTranslations() {}, normalizeLoadedPlayer() {}, navigator: {} });
+    Object.assign(game.context, { t: key => key, applyTranslations() {}, navigator: {} });
+    game.context.normalizeLoadedPlayer ||= () => {};
     Object.assign(game.context.document, {
         createElement: () => ({ style: {}, setAttribute() {}, querySelector: element }),
         querySelector: () => ({ appendChild: panel => panels.push(panel) }),
@@ -144,6 +145,74 @@ async function startRecovery(game) {
     const allowed = await game.run('initializeNativeSaveRecovery()');
     return { allowed, panels, element };
 }
+
+for (const native of [true, false]) {
+    test(`legacy equipped objects load and migrate without losing items before any snapshot (${native ? 'native' : 'web'})`, async () => {
+        const sword = { id: 'sword', category: 'Sword', type: 'Weapon', value: 500,
+            stats: [{ atk: 15 }], refineLevel: 4, statRolls: { atk: 2 } };
+        const dagger = { id: 'dagger', category: 'Dagger', type: 'Weapon', value: 20,
+            locked: true, stats: [{ atk: 5 }] };
+        const boots = { id: 'boots', category: 'Boots', value: 10, stats: [{ dodge: 3 }] };
+        const charm = { id: 'charm', category: 'Charm', attribute: 'Companion', stats: [{ atk: 4 }] };
+        const unknown = { id: 'unknown', category: 'Legacy relic', stats: [{ luck: 7 }] };
+        const stored = { id: 'stored', slot: 'body', category: 'Plate', stats: [{ def: 8 }] };
+        const data = fixture();
+        data.player.equipped = { 0: sword, 2: dagger, feet: boots, charm, unknown, empty: null };
+        data.player.inventory.equipment = [JSON.stringify(stored)];
+        const storage = new Map(Object.entries({ playerData: data.player, dungeonData: data.dungeon,
+            enemyData: data.enemy, playerCompanions: data.companions })
+            .map(([key, value]) => [key, JSON.stringify(value)]));
+        const game = gameSession({ storage, native });
+        // Load the real player bootstrap too: its validation runs before recovery.
+        delete game.context.player;
+        game.run(read('progression.js'));
+        game.run(read('player.js').split('let inventoryOpen')[0]);
+        game.run(read('equipment.js'));
+        game.run('dungeon.initialized = false; companionsInitialized = false');
+        assert.equal(game.run('player && player.name'), data.player.name);
+        assert.equal(game.disk.size, 0, 'first launch has no native snapshot to recover');
+        const startup = await startRecovery(game);
+        assert.equal(startup.allowed, true);
+        assert.equal(startup.panels.length, 0);
+        const migration = clone(game.run('migratePlayerEquipmentSlots()'));
+        assert.deepEqual(migration, { movedToInventory: 2, changed: true, migrated: true });
+
+        const sortItems = items => items.sort((a, b) => a.id.localeCompare(b.id));
+        const expected = sortItems([stored, { ...sword, slot: 'weapon' },
+            { ...dagger, slot: 'weapon' }, { ...boots, slot: 'feet' }, charm, unknown]);
+        const allItems = player => sortItems([
+            ...player.equipped, ...player.inventory.equipment.map(JSON.parse), player.companionCharm,
+        ]);
+        const saved = game.load('playerData');
+        assert.deepEqual(allItems(saved), expected, 'every item and its metadata survives persistence');
+        assert.deepEqual(saved.equipped.map(item => item.id), ['dagger', 'boots']);
+        assert.deepEqual(game.load('dungeonData'), data.dungeon);
+        assert.deepEqual(game.load('playerCompanions'), data.companions);
+        const once = clone(game.run('player'));
+        game.run('migratePlayerEquipmentSlots()');
+        assert.deepEqual(clone(game.run('player')), once, 'migration is idempotent');
+
+        await game.checkpoint();
+        if (native) {
+            assert.deepEqual(allItems(JSON.parse(game.disk.get(slot(0))).data.player), expected,
+                'the first native snapshot contains every migrated item');
+        }
+        const restarted = gameSession({ storage, disk: game.disk, native });
+        assert.equal((await startRecovery(restarted)).allowed, true);
+        assert.deepEqual(allItems(restarted.load('playerData')), expected);
+    });
+}
+
+test('malformed equipped objects still block startup and preserve the original save', async () => {
+    for (const equipped of [null, 'broken', { weapon: 'broken' }, { weapon: [] }, { weapon: 1 }]) {
+        const game = gameSession();
+        game.storage.set('playerData', JSON.stringify({ ...fixture().player, equipped }));
+        const before = [...game.storage];
+        assert.equal((await startRecovery(game)).allowed, false);
+        assert.deepEqual([...game.storage], before);
+        assert.equal(game.disk.size, 0);
+    }
+});
 
 for (const native of [true, false]) {
     test(`unrecoverable player data opens recovery and preserves evidence (${native ? 'native' : 'web'})`, async () => {
