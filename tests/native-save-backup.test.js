@@ -56,6 +56,7 @@ function setup({ disk = new Map(), local = new Map(), native = true, failure = n
     const options = {
         loadFiles: async () => native ? files : null,
         readLocal: (key, validate) => validate(local.get(key)) ? local.get(key) : null,
+        hasLocalSave: () => local.size > 0,
         restoreLocal: entries => {
             restored.push(clone(entries));
             for (const [key, value] of Object.entries(entries)) local.set(key, clone(value));
@@ -76,17 +77,22 @@ async function seed() {
 
 // Run the shipped loading, saving and restoration paths together. Only the
 // platform's disk/localStorage APIs are replaced to inject write failures.
-function gameSession({ disk = new Map(), storage, failKeys = [], clock = 100000 } = {}) {
+function gameSession({ disk = new Map(), storage, failKeys = [], failReads = [], native = true, clock = 100000 } = {}) {
     const data = fixture();
     storage ||= new Map(Object.entries({ playerData: data.player, dungeonData: data.dungeon,
         enemyData: data.enemy, playerCompanions: data.companions }).map(([key, value]) => [key, JSON.stringify(value)]));
     const context = vm.createContext({
         console: quiet, failKeys: new Set(failKeys), failNativeWrites: false,
         Date: class extends Date { static now() { return clock; } },
-        window: { Capacitor: { isNativePlatform: () => true, getPlatform: () => 'android' }, addEventListener() {} },
+        window: { Capacitor: { isNativePlatform: () => native, getPlatform: () => 'android' }, addEventListener() {} },
         document: { addEventListener() {} },
         localStorage: {
-            getItem: key => storage.get(key) ?? null,
+            get length() { return storage.size; },
+            key: index => [...storage.keys()][index] ?? null,
+            getItem: key => {
+                if (failReads.includes(key)) throw new Error('Storage read denied');
+                return storage.get(key) ?? null;
+            },
             setItem: (key, value) => {
                 if (context.failKeys.has('*') || context.failKeys.has(key)
                     || (context.rejectWrite && context.rejectWrite(key, value))) throw new Error('Quota exceeded');
@@ -118,6 +124,126 @@ function gameSession({ disk = new Map(), storage, failKeys = [], clock = 100000 
         load: key => clone(run(`safeLoad('${key}', '${key}_backup')`)),
     };
 }
+
+// Exercise the real startup gate and recovery export, not just the backup factory.
+async function startRecovery(game) {
+    const elements = new Map();
+    const element = selector => {
+        if (!elements.has(selector)) elements.set(selector, {
+            style: {}, hidden: true, setAttribute() {}, focus() {}, select() {}, setSelectionRange() {},
+        });
+        return elements.get(selector);
+    };
+    const panels = [];
+    Object.assign(game.context, { t: key => key, applyTranslations() {}, normalizeLoadedPlayer() {}, navigator: {} });
+    Object.assign(game.context.document, {
+        createElement: () => ({ style: {}, setAttribute() {}, querySelector: element }),
+        querySelector: () => ({ appendChild: panel => panels.push(panel) }),
+    });
+    game.run(read('main.js').split('// Use DOMContentLoaded')[0]);
+    const allowed = await game.run('initializeNativeSaveRecovery()');
+    return { allowed, panels, element };
+}
+
+for (const native of [true, false]) {
+    test(`unrecoverable player data opens recovery and preserves evidence (${native ? 'native' : 'web'})`, async () => {
+        for (const raw of [undefined, '', 'null', '{broken', '{}']) {
+            const game = gameSession({ native });
+            if (raw === undefined) game.storage.delete('playerData');
+            else game.storage.set('playerData', raw);
+            const before = [...game.storage];
+            const startup = await startRecovery(game);
+            assert.equal(startup.allowed, false, `playerData: ${raw}`);
+            assert.equal(startup.panels.length, 1);
+            await game.checkpoint(); // Background events must not overwrite evidence either.
+            await startup.element('[data-recovery-export]').onclick();
+            const report = JSON.parse(startup.element('textarea').value);
+            assert.deepEqual(report.localStorage, Object.fromEntries(before));
+            assert.deepEqual([...game.storage], before);
+            assert.equal(game.disk.size, 0);
+        }
+    });
+
+    test(`unrecoverable active dungeon opens recovery before entry (${native ? 'native' : 'web'})`, async () => {
+        for (const raw of [undefined, '', 'null', '{broken', '{}', '{"progress":{"floor":0,"room":1}}']) {
+            const game = gameSession({ native });
+            if (raw === undefined) game.storage.delete('dungeonData');
+            else game.storage.set('dungeonData', raw);
+            const before = [...game.storage];
+            const startup = await startRecovery(game);
+            assert.equal(startup.allowed, false, `dungeonData: ${raw}`);
+            assert.equal(startup.panels.length, 1);
+            await game.checkpoint();
+            assert.deepEqual([...game.storage], before);
+            assert.equal(game.disk.size, 0);
+        }
+    });
+}
+
+test('orphaned local save components are not mistaken for a fresh installation', async () => {
+    for (const key of ['playerData', 'dungeonData', 'enemyData', 'playerCompanions']) {
+        for (const suffix of ['', '_backup', '_temp']) {
+            const storage = new Map([[key + suffix, '{broken']]);
+            const game = gameSession({ storage });
+            const before = [...storage];
+            await assert.rejects(game.initialize(), /player could not be recovered/);
+            assert.deepEqual([...storage], before);
+        }
+    }
+});
+
+test('unreadable local save keys block character creation when no native snapshot exists', async () => {
+    const game = gameSession({ storage: new Map(), failReads: ['playerData', 'playerData_backup'] });
+    const startup = await startRecovery(game);
+    assert.equal(startup.allowed, false);
+    assert.equal(startup.panels.length, 1);
+    assert.equal(game.disk.size, 0);
+});
+
+test('a fresh installation with preferences can still start character creation', async () => {
+    const storage = new Map([['lang', 'de'], ['volumeData', '{}']]);
+    const game = gameSession({ storage });
+    const startup = await startRecovery(game);
+    assert.equal(startup.allowed, true);
+    assert.equal(game.context.player, null);
+    assert.equal(startup.panels.length, 0);
+    assert.equal(game.disk.size, 0);
+    assert.equal(storage.size, 2);
+});
+
+test('an unallocated character may start without a dungeon or companions', async () => {
+    const player = { ...fixture().player, allocated: false };
+    const game = gameSession({ storage: new Map([['playerData', JSON.stringify(player)]]) });
+    const startup = await startRecovery(game);
+    assert.equal(startup.allowed, true);
+    assert.equal(game.context.player.name, player.name);
+    assert.equal(startup.panels.length, 0);
+});
+
+test('readable local backups recover legacy player and dungeon before blocking startup', async () => {
+    const game = gameSession();
+    for (const key of ['playerData', 'dungeonData']) {
+        game.storage.set(`${key}_backup`, game.storage.get(key));
+        game.storage.set(key, '{broken');
+    }
+    const startup = await startRecovery(game);
+    assert.equal(startup.allowed, true);
+    assert.equal(game.context.player.lvl, 20);
+    assert.equal(game.load('dungeonData').progress.floor, 7);
+    assert.equal(startup.panels.length, 0);
+});
+
+test('a native snapshot still recovers corrupt player and dungeon data before the new startup checks', async () => {
+    const seeded = await seed();
+    const game = gameSession({ disk: seeded.disk });
+    game.storage.set('playerData', '{broken');
+    game.storage.set('dungeonData', '{}');
+    const startup = await startRecovery(game);
+    assert.equal(startup.allowed, true);
+    assert.equal(game.context.player.lvl, 20);
+    assert.equal(game.load('dungeonData').progress.floor, 7);
+    assert.equal(startup.panels.length, 0);
+});
 
 for (const failedKey of ['*', 'playerData_temp', 'dungeonData_temp', 'enemyData_temp', 'playerCompanions']) {
     test(`a newer native checkpoint survives restart after failed ${failedKey} writes`, async () => {
@@ -330,6 +456,7 @@ test('a desktop Capacitor bridge without mobile APIs does not block startup', as
     const context = vm.createContext({
         console: quiet,
         safeLoad: () => null,
+        readSaveStorage: () => null,
         window: { Capacitor: { getPlatform: () => 'electron' }, addEventListener() {} },
         document: { addEventListener() {} },
     });

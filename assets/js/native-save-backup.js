@@ -1,5 +1,5 @@
 // Two alternating, validated snapshots keep the last good file intact during writes.
-const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () => Date.now() }) => {
+const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLocal, now = () => Date.now() }) => {
     const paths = ['save-backups/slot-0.json', 'save-backups/slot-1.json'];
     const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
     const validPlayer = value => isObject(value) && typeof value.name === 'string'
@@ -59,6 +59,20 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
             && readLocal('playerCompanions', validCompanions)));
     };
 
+    // Without a native snapshot (including the first launch after an update),
+    // only a genuinely new installation may proceed without a readable player.
+    const assertLocalSaveOrFreshInstall = localPlayer => {
+        if (!localPlayer) {
+            if (hasLocalSave()) throw new Error('Saved player could not be recovered');
+            return;
+        }
+        if (localPlayer._saveIncomplete) throw new Error('Incomplete local save could not be recovered');
+        if (localPlayer.allocated) {
+            if (!readLocal('dungeonData', validDungeon)) throw new Error('Saved dungeon could not be recovered');
+            if (!readLocal('playerCompanions', validCompanions)) throw new Error('Saved companions could not be recovered');
+        }
+    };
+
     const initialize = () => {
         if (initialization) return initialization;
         initialization = (async () => {
@@ -67,10 +81,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
                 revision = Math.max(revision, getRevision(localPlayer));
                 files = await loadFiles();
                 if (!files) {
-                    if (localPlayer && localPlayer._saveIncomplete) throw new Error('Incomplete local save could not be recovered');
-                    if (localPlayer && localPlayer.allocated && !readLocal('playerCompanions', validCompanions)) {
-                        throw new Error('Saved companions could not be recovered');
-                    }
+                    assertLocalSaveOrFreshInstall(localPlayer);
                     return; // Browser and desktop do not write native snapshots.
                 }
                 let readError = null;
@@ -108,11 +119,8 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, restoreLocal, now = () =
                         });
                     } else if (readError) {
                         throw readError; // Do not replace an inaccessible save with a new character.
-                    } else if (localPlayer && localPlayer._saveIncomplete) {
-                        throw new Error('Incomplete local save could not be recovered');
-                    } else if (localPlayer && localPlayer.allocated
-                        && !readLocal('playerCompanions', validCompanions)) {
-                        throw new Error('Saved companions could not be recovered');
+                    } else {
+                        assertLocalSaveOrFreshInstall(localPlayer);
                     }
                 }
                 // Preserve files we could not inspect; retry on the next app launch.
@@ -212,6 +220,10 @@ const nativeSaveBackup = createNativeSaveBackup({
         return import('./filesystem-plugin.js');
     },
     readLocal: (key, validate) => safeLoad(key, `${key}_backup`, validate),
+    // Inspect presence, not parsed validity: even empty, corrupt or temporary
+    // entries are evidence of a save. Read failures must also block a new game.
+    hasLocalSave: () => ['playerData', 'dungeonData', 'enemyData', 'playerCompanions'].some(key =>
+        ['', '_backup', '_temp'].some(suffix => readSaveStorage(key + suffix) !== null)),
     restoreLocal: entries => {
         // Keep an in-memory copy too, so recovery works even when localStorage is full.
         for (const [key, value] of Object.entries(entries)) {
