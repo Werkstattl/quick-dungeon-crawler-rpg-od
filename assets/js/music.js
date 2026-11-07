@@ -76,102 +76,83 @@ let sfxSell;
 let sfxItem;
 let sfxBuff;
 
+// Keep long tracks out of Web Audio's fully decoded PCM cache. Load each
+// HTML5 stream only when it is first played, including on mobile WebViews.
+const createBackgroundMusic = (file) => {
+    const music = new Howl({
+        src: [`./assets/bgm/${file}.webm`],
+        // These files contain Opus. Howler's generic WebM check tests Vorbis,
+        // which can reject playable Opus streams in Safari/WKWebView.
+        format: ['opus'],
+        volume: volume.bgm * volume.master,
+        loop: true,
+        html5: true,
+        preload: false,
+        pool: 1,
+        // HTML5 play() is asynchronous. Reapply changes made while its promise
+        // was pending, when Howler can update the playing element immediately.
+        onplay: () => music.volume(volume.bgm * volume.master)
+    });
+    const play = music.play;
+    let soundId;
+    music.play = function (...args) {
+        // Howler 2.2.4 queues play() on an unloaded Howl but does not load it.
+        if (music.state() === 'unloaded') {
+            soundId = undefined;
+            music.load();
+            music.volume(volume.bgm * volume.master);
+        }
+        // A background track has one voice. Howler's no-argument play() starts
+        // another voice if one is already playing or several were paused.
+        // Keep its ID so combat always resumes the same stream and position.
+        const id = play.apply(music, args.length || soundId === undefined ? args : [soundId]);
+        if (typeof id === 'number') soundId = id;
+        return id;
+    };
+    return music;
+};
+
 const setVolume = () => {
-    // ===== BGM =====
-    bgmDungeon = new Howl({
-        src: ['./assets/bgm/dungeon.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
+    // Startup, title clicks and settings all use the same audio objects.
+    // Howler retains every Howl until unload(), so recreating them leaks them.
+    if (!bgmDungeon) {
+        bgmDungeon = createBackgroundMusic('dungeon');
+        bgmBattleMain = createBackgroundMusic('battle_main');
+        bgmBattleBoss = createBackgroundMusic('battle_boss');
 
-    bgmBattleMain = new Howl({
-        src: ['./assets/bgm/battle_main.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
-    });
+        const effect = file => new Howl({
+            src: [`./assets/sfx/${file}.webm`],
+            format: ['opus'],
+            volume: volume.sfx * volume.master
+        });
+        sfxEncounter = effect('encounter');
+        sfxCombatEnd = effect('combat_end');
+        sfxAttack = effect('attack');
+        sfxLvlUp = effect('level_up');
+        sfxConfirm = effect('confirm');
+        sfxDecline = effect('decline');
+        sfxDeny = effect('denied');
+        sfxEquip = effect('equip');
+        sfxUnequip = effect('unequip');
+        sfxOpen = effect('hover');
+        sfxPause = effect('pause');
+        sfxUnpause = effect('unpause');
+        sfxSell = effect('sell');
+        sfxItem = effect('item_use');
+        sfxBuff = effect('buff');
+    }
 
-    bgmBattleBoss = new Howl({
-        src: ['./assets/bgm/battle_boss.webm'],
-        volume: volume.bgm * volume.master,
-        loop: true
+    [bgmDungeon, bgmBattleMain, bgmBattleBoss].forEach(sound => {
+        // Unused tracks pick up the latest volume on first play. Avoid queuing
+        // a volume command for every settings change before they are loaded.
+        if (sound.state() !== 'unloaded') sound.volume(volume.bgm * volume.master);
     });
-
-    // ===== SFX =====
-    sfxEncounter = new Howl({
-        src: ['./assets/sfx/encounter.webm'],
-        volume: volume.sfx * volume.master
+    [sfxEncounter, sfxCombatEnd, sfxAttack, sfxLvlUp, sfxConfirm,
+        sfxDecline, sfxDeny, sfxEquip, sfxUnequip, sfxOpen,
+        sfxPause, sfxUnpause, sfxSell, sfxItem, sfxBuff].forEach(sound => {
+        sound.volume(volume.sfx * volume.master);
     });
-
-    sfxCombatEnd = new Howl({
-        src: ['./assets/sfx/combat_end.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxAttack = new Howl({
-        src: ['./assets/sfx/attack.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxLvlUp = new Howl({
-        src: ['./assets/sfx/level_up.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxConfirm = new Howl({
-        src: ['./assets/sfx/confirm.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxDecline = new Howl({
-        src: ['./assets/sfx/decline.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxDeny = new Howl({
-        src: ['./assets/sfx/denied.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxEquip = new Howl({
-        src: ['./assets/sfx/equip.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxUnequip = new Howl({
-        src: ['./assets/sfx/unequip.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxOpen = new Howl({
-        src: ['./assets/sfx/hover.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxPause = new Howl({
-        src: ['./assets/sfx/pause.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxUnpause = new Howl({
-        src: ['./assets/sfx/unpause.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxSell = new Howl({
-        src: ['./assets/sfx/sell.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxItem = new Howl({
-        src: ['./assets/sfx/item_use.webm'],
-        volume: volume.sfx * volume.master
-    });
-
-    sfxBuff = new Howl({
-        src: ['./assets/sfx/buff.webm'],
-        volume: volume.sfx * volume.master
-    });
-}
+};
 
 document.querySelector("#title-screen").addEventListener("click", function () {
     setVolume();

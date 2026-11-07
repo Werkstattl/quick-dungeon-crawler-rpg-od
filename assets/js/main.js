@@ -983,15 +983,8 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     applyCombatHudLayout();
                 }
             }
-            let wasPlaying = bgmDungeon && bgmDungeon.playing();
-            if (wasPlaying) {
-                bgmDungeon.stop();
-            }
             setVolume();
             applyFontSize();
-            if (wasPlaying) {
-                bgmDungeon.play();
-            }
             localStorage.setItem("volumeData", JSON.stringify(volume));
             localStorage.setItem("fontSizeData", JSON.stringify(fontSize));
             // Apply log flow if allowed and valid
