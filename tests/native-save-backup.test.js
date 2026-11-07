@@ -384,6 +384,81 @@ test('interrupted local commits preserve the previous complete local backup', as
     assert.equal(restarted.load('playerData').lvl, 20, 'incomplete local revision cannot override a durable snapshot');
 });
 
+for (const failure of ['dungeonData_temp', 'enemyData_temp', 'playerCompanions', 'commit']) {
+    test(`an interrupted first local ${failure} write recovers a complete checkpoint when native writes fail`, async () => {
+        const game = gameSession(); // A legacy save on its first launch after upgrading.
+        await game.initialize();
+        game.context.failNativeWrites = true;
+        if (failure === 'commit') {
+            game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+        } else {
+            game.context.failKeys.add(failure);
+        }
+        game.run('player.lvl = 30; dungeon.progress.floor = 8; enemy.stats.hp = 2; playerCompanions[0].level = 9; saveData()');
+        await game.checkpoint();
+        assert.equal(game.disk.size, 0, 'no native snapshot was written');
+        assert.equal(JSON.parse(game.storage.get('playerData'))._saveIncomplete, true);
+
+        const restarted = gameSession({ disk: game.disk, storage: game.storage });
+        const startup = await startRecovery(restarted);
+        assert.equal(startup.allowed, true);
+        assert.equal(startup.panels.length, 0);
+        assert.deepEqual(restarted.load('playerData'), fixture().player);
+        assert.deepEqual(restarted.load('dungeonData'), fixture().dungeon);
+        assert.deepEqual(restarted.load('enemyData'), fixture().enemy);
+        assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+        await restarted.checkpoint();
+        assert.equal(game.disk.size, 1, 'native backups can start after recovery');
+    });
+}
+
+test('repeated failed saves retain the original complete checkpoint before the first native backup', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.context.failNativeWrites = true;
+    game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+    for (const level of [30, 40]) {
+        game.context.player.lvl = level;
+        game.run('dungeon.progress.floor++; playerCompanions[0].level++; saveData()');
+        await game.checkpoint();
+    }
+    const restarted = gameSession({ storage: game.storage });
+    await restarted.initialize();
+    assert.deepEqual(restarted.load('playerData'), fixture().player);
+    assert.deepEqual(restarted.load('dungeonData'), fixture().dungeon);
+    assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+});
+
+test('local checkpoint recovery survives another cold start after a partial repair', async () => {
+    const game = gameSession();
+    await game.initialize();
+    game.context.failNativeWrites = true;
+    game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+    game.run('player.lvl = 30; dungeon.progress.floor = 8; playerCompanions[0].level = 9; saveData()');
+    await game.checkpoint();
+    for (let attempt = 0; attempt < 2; attempt++) {
+        const restarted = gameSession({ storage: game.storage, failKeys: ['dungeonData'] });
+        assert.equal((await startRecovery(restarted)).allowed, true);
+        assert.deepEqual(restarted.load('playerData'), fixture().player);
+        assert.deepEqual(restarted.load('dungeonData'), fixture().dungeon);
+        assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+        assert.equal(JSON.parse(game.storage.get('playerData'))._saveIncomplete, true);
+    }
+});
+
+test('incomplete saves without a valid full checkpoint still preserve evidence and block startup', async () => {
+    for (const checkpoint of [undefined, {}, { ...fixture(), companions: null },
+        { ...fixture(), player: { ...fixture().player, _saveIncomplete: true } }]) {
+        const game = gameSession();
+        game.storage.set('playerData_backup', JSON.stringify(fixture().player));
+        game.storage.set('playerData', JSON.stringify({ ...fixture(30).player,
+            _saveIncomplete: true, _saveCheckpoint: checkpoint }));
+        const before = [...game.storage];
+        assert.equal((await startRecovery(game)).allowed, false);
+        assert.deepEqual([...game.storage], before);
+    }
+});
+
 test('a legacy local save and legacy snapshot remain readable without revision metadata', async () => {
     const data = fixture();
     const json = JSON.stringify(data);

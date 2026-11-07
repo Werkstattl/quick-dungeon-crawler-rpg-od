@@ -56,6 +56,38 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
     let pending = null;
     let writing = null;
 
+    const validCheckpoint = data => validData(data) && !data.player._saveIncomplete;
+    const restoreData = data => restoreLocal({
+        playerData: data.player,
+        dungeonData: data.dungeon,
+        enemyData: data.enemy,
+        playerCompanions: data.companions,
+    });
+    const restoreLocalCheckpoint = localPlayer => {
+        if (!localPlayer || !localPlayer._saveIncomplete || !validCheckpoint(localPlayer._saveCheckpoint)) {
+            return localPlayer;
+        }
+        restoreData(localPlayer._saveCheckpoint);
+        return localPlayer._saveCheckpoint.player;
+    };
+
+    const createLocalSaveMarker = player => {
+        const marker = { ...player, _saveIncomplete: true };
+        delete marker._saveCheckpoint;
+        if (latest) return marker;
+        // Until a native file exists, atomically retain the entire previous local
+        // checkpoint in the marker before any of its components can be replaced.
+        const previous = readLocal('playerData', validPlayer);
+        const checkpoint = previous && previous._saveIncomplete ? previous._saveCheckpoint : {
+            player: previous,
+            dungeon: readLocal('dungeonData', validDungeon),
+            enemy: readLocal('enemyData', isObject) || {},
+            companions: readLocal('playerCompanions', validCompanions),
+        };
+        if (validCheckpoint(checkpoint)) marker._saveCheckpoint = checkpoint;
+        return marker;
+    };
+
     const localSaveUsable = () => {
         const savedPlayer = readLocal('playerData', validPlayer);
         return savedPlayer && !savedPlayer._saveIncomplete && (!savedPlayer.allocated || (readLocal('dungeonData', validDungeon)
@@ -80,10 +112,11 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
         if (initialization) return initialization;
         initialization = (async () => {
             try {
-                const localPlayer = readLocal('playerData', validPlayer);
+                let localPlayer = readLocal('playerData', validPlayer);
                 revision = Math.max(revision, getRevision(localPlayer));
                 files = await loadFiles();
                 if (!files) {
+                    localPlayer = restoreLocalCheckpoint(localPlayer);
                     assertLocalSaveOrFreshInstall(localPlayer);
                     return; // Browser and desktop do not write native snapshots.
                 }
@@ -113,14 +146,10 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
                         console.warn('Native save backup could not be read:', error);
                     }
                 }
+                if (!latest) localPlayer = restoreLocalCheckpoint(localPlayer);
                 if (!localSaveUsable() || (latest && getRevision(latest.data.player) > getRevision(localPlayer))) {
                     if (latest) {
-                        restoreLocal({
-                            playerData: latest.data.player,
-                            dungeonData: latest.data.dungeon,
-                            enemyData: latest.data.enemy,
-                            playerCompanions: latest.data.companions,
-                        });
+                        restoreData(latest.data);
                     } else if (readError) {
                         throw readError; // Do not replace an inaccessible save with a new character.
                     } else {
@@ -131,6 +160,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
                 ready = !storageUnavailable;
             } catch (error) {
                 files = null;
+                if (!localSaveUsable()) restoreLocalCheckpoint(readLocal('playerData', validPlayer));
                 if (!localSaveUsable()) throw error;
                 // A usable local save can still be played if the native plugin is unavailable.
                 console.warn('Native save backups unavailable:', error);
@@ -212,7 +242,7 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
         latestSlot = -1;
     };
 
-    return { initialize, save, validPlayer, validDungeon, validCompanions, nextRevision, exportRaw, clear,
+    return { initialize, save, validPlayer, validDungeon, validCompanions, createLocalSaveMarker, nextRevision, exportRaw, clear,
         get hasNativeStorage() { return files !== null; } };
 };
 
@@ -235,7 +265,14 @@ const nativeSaveBackup = createNativeSaveBackup({
         }
         try {
             // A partial repair must never look like a complete, current local save.
-            localStorage.setItem('playerData', JSON.stringify({ ...entries.playerData, _saveIncomplete: true }));
+            localStorage.setItem('playerData', JSON.stringify({ ...entries.playerData, _saveIncomplete: true,
+                _saveCheckpoint: {
+                    player: entries.playerData,
+                    dungeon: entries.dungeonData,
+                    enemy: entries.enemyData,
+                    companions: entries.playerCompanions,
+                },
+            }));
             for (const [key, value] of Object.entries(entries)) {
                 if (key !== 'playerData') localStorage.setItem(key, JSON.stringify(value));
             }
