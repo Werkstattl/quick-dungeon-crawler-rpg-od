@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "無法還原你的遊戲存檔。請複製已儲存的資料，透過電子郵件或 Discord 傳送給我們，以便我們檢查。你也可以刪除已儲存的資料，重新開始遊戲。",
+  "save-recovery-export": "顯示 / 複製已儲存的資料",
+  "save-recovery-delete": "刪除已儲存的資料並重新啟動",
+  "save-recovery-report": "傳送給客服的已儲存資料",
+  "save-recovery-copied": "資料已複製。請貼到電子郵件、文字檔或 Discord 訊息中。無法讀取的資料會在報告中標記為錯誤。",
+  "save-recovery-copy-manually": "請複製選取的文字，透過電子郵件或 Discord 傳送給我們。如果報告較長，可以附加為文字檔。無法讀取的資料會在報告中標記為錯誤。",
+  "save-recovery-export-error": "無法收集資料，請再試一次。",
+  "save-recovery-delete-confirm": "確定要永久刪除所有本機儲存的資料、設定及應用程式原生儲存空間中的遊戲存檔備份，並重新啟動嗎？你的遊戲進度將會遺失。如果想將資料傳送給我們修復，請先複製資料。",
+  "save-recovery-delete-error": "未能完全刪除已儲存的資料。應用程式尚未重新啟動，請再試一次。",
   "titles": "稱號",
   "title-back": "返回個人資料",
   "titles-description": "選擇顯示在名字下方的稱號。",

@@ -653,6 +653,7 @@ const getNextCompanionEvolution = (companion) => {
 
 // Player's companions
 let playerCompanions = [];
+let companionsInitialized = false;
 let activeCompanion = null;
 
 const PERMANENT_COMPANION_UNLOCK_PROGRESS_KEY = 'permanentCompanionUnlockProgress';
@@ -790,7 +791,8 @@ function grantStartingCompanions() {
 
 // Initialize companions from localStorage or create default ones
 function initCompanions() {
-    const savedCompanions = localStorage.getItem('playerCompanions');
+    const savedCompanions = typeof readSaveStorage === 'function'
+        ? readSaveStorage('playerCompanions') : localStorage.getItem('playerCompanions');
     if (savedCompanions && savedCompanions !== "[]") {
         const parsedCompanions = JSON.parse(savedCompanions);
         playerCompanions = parsedCompanions.map(data => {
@@ -822,6 +824,7 @@ function initCompanions() {
         grantStartingCompanions();
     }
 
+    companionsInitialized = true;
     updateCompanionUI();
 }
 
@@ -1008,7 +1011,13 @@ function dismissCompanion() {
 
 // Save companions to localStorage
 function saveCompanions() {
-    localStorage.setItem('playerCompanions', JSON.stringify(playerCompanions));
+    companionsInitialized = true;
+    try {
+        localStorage.setItem('playerCompanions', JSON.stringify(playerCompanions));
+        if (typeof recoveredSaveData !== 'undefined') recoveredSaveData.delete('playerCompanions');
+    } catch (error) {
+        console.warn('Could not save companions to localStorage:', error);
+    }
 }
 
 // Find companion after combat

@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Je opgeslagen spel kon niet worden hersteld. Kopieer je opgeslagen gegevens en stuur ze ons via e-mail of Discord, zodat we ze kunnen bekijken. Je kunt de opgeslagen gegevens ook verwijderen en opnieuw beginnen.",
+  "save-recovery-export": "Opgeslagen gegevens tonen / kopiëren",
+  "save-recovery-delete": "Opgeslagen gegevens verwijderen en opnieuw starten",
+  "save-recovery-report": "Opgeslagen gegevens voor ondersteuning",
+  "save-recovery-copied": "Gegevens gekopieerd. Plak ze in een e-mail, tekstbestand of Discord-bericht. Onleesbare gegevens worden als fouten in het rapport vermeld.",
+  "save-recovery-copy-manually": "Kopieer de geselecteerde tekst en stuur deze ons via e-mail of Discord. Voeg lange rapporten als tekstbestand toe. Onleesbare gegevens worden als fouten in het rapport vermeld.",
+  "save-recovery-export-error": "De gegevens konden niet worden verzameld. Probeer het opnieuw.",
+  "save-recovery-delete-confirm": "Alle lokaal opgeslagen gegevens, instellingen en native spelback-ups definitief verwijderen en opnieuw starten? Je voortgang gaat verloren. Kopieer eerst de gegevens als je ze ons wilt sturen voor reparatie.",
+  "save-recovery-delete-error": "De opgeslagen gegevens konden niet volledig worden verwijderd. De app is niet opnieuw gestart. Probeer het opnieuw.",
   "titles": "Titels",
   "title-back": "Terug naar profiel",
   "titles-description": "Kies een titel om onder je naam te tonen.",

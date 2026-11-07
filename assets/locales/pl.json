@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Nie udało się odzyskać zapisu gry. Skopiuj zapisane dane i wyślij je do nas e-mailem lub przez Discord, abyśmy mogli je sprawdzić. Możesz też usunąć zapisane dane i zacząć od nowa.",
+  "save-recovery-export": "Pokaż / skopiuj zapisane dane",
+  "save-recovery-delete": "Usuń zapisane dane i uruchom ponownie",
+  "save-recovery-report": "Zapisane dane dla pomocy technicznej",
+  "save-recovery-copied": "Dane skopiowane. Wklej je do e-maila, pliku tekstowego lub wiadomości na Discordzie. Dane, których nie można odczytać, są oznaczone w raporcie jako błędy.",
+  "save-recovery-copy-manually": "Skopiuj zaznaczony tekst i wyślij go do nas e-mailem lub przez Discord. Jeśli raport jest długi, dołącz go jako plik tekstowy. Dane, których nie można odczytać, są oznaczone w raporcie jako błędy.",
+  "save-recovery-export-error": "Nie udało się zebrać danych. Spróbuj ponownie.",
+  "save-recovery-delete-confirm": "Trwale usunąć wszystkie lokalnie zapisane dane, ustawienia i natywne kopie zapasowe gry, a następnie uruchomić aplikację ponownie? Utracisz swoje postępy. Najpierw skopiuj dane, jeśli chcesz wysłać je do nas do naprawy.",
+  "save-recovery-delete-error": "Nie udało się usunąć wszystkich zapisanych danych. Aplikacja nie została uruchomiona ponownie. Spróbuj jeszcze raz.",
   "titles": "Tytuły",
   "title-back": "Powrót do profilu",
   "titles-description": "Wybierz tytuł wyświetlany pod imieniem.",

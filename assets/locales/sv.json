@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Ditt sparade spel kunde inte återställas. Kopiera dina sparade data och skicka dem till oss via e-post eller Discord så att vi kan undersöka dem. Du kan också radera sparade data och börja om.",
+  "save-recovery-export": "Visa / kopiera sparade data",
+  "save-recovery-delete": "Radera sparade data och starta om",
+  "save-recovery-report": "Sparade data för support",
+  "save-recovery-copied": "Data kopierade. Klistra in dem i ett e-postmeddelande, en textfil eller ett Discord-meddelande. Data som inte kan läsas visas som fel i rapporten.",
+  "save-recovery-copy-manually": "Kopiera den markerade texten och skicka den till oss via e-post eller Discord. Om rapporten är lång kan du bifoga den som en textfil. Data som inte kan läsas visas som fel i rapporten.",
+  "save-recovery-export-error": "Det gick inte att samla in data. Försök igen.",
+  "save-recovery-delete-confirm": "Vill du permanent radera alla lokalt sparade data, inställningar och appens inbyggda säkerhetskopior av spelet och starta om? Dina framsteg går förlorade. Kopiera först dina data om du vill skicka dem till oss för reparation.",
+  "save-recovery-delete-error": "Sparade data kunde inte raderas helt. Appen har inte startats om. Försök igen.",
   "titles": "Titlar",
   "title-back": "Tillbaka till profilen",
   "titles-description": "Välj en titel som visas under ditt namn.",

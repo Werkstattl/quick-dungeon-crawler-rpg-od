@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Dein Spielstand konnte nicht wiederhergestellt werden. Kopiere deine gespeicherten Daten und sende sie uns per E-Mail oder Discord, damit wir sie prüfen können. Alternativ kannst du die gespeicherten Daten löschen und neu anfangen.",
+  "save-recovery-export": "Gespeicherte Daten anzeigen / kopieren",
+  "save-recovery-delete": "Gespeicherte Daten löschen und neu starten",
+  "save-recovery-report": "Gespeicherte Daten für den Support",
+  "save-recovery-copied": "Daten kopiert. Du kannst sie jetzt in eine E-Mail, eine Textdatei oder eine Discord-Nachricht einfügen. Nicht lesbare Daten sind im Bericht als Fehler vermerkt.",
+  "save-recovery-copy-manually": "Bitte kopiere den markierten Text und sende ihn uns per E-Mail oder Discord. Bei langen Berichten kannst du ihn als Textdatei anhängen. Nicht lesbare Daten sind im Bericht als Fehler vermerkt.",
+  "save-recovery-export-error": "Die Daten konnten nicht zusammengestellt werden. Bitte versuche es erneut.",
+  "save-recovery-delete-confirm": "Alle lokal gespeicherten Daten, Einstellungen und nativen Spielstandsicherungen endgültig löschen und neu starten? Dein Fortschritt geht verloren. Kopiere vorher die Daten, wenn du sie uns zur Reparatur senden möchtest.",
+  "save-recovery-delete-error": "Die gespeicherten Daten konnten nicht vollständig gelöscht werden. Die App wurde nicht neu gestartet. Bitte versuche es erneut.",
   "titles": "Titel",
   "title-back": "Zurück zum Profil",
   "titles-description": "Wähle einen Titel unter deinem Namen.",

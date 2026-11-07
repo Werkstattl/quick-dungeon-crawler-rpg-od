@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Jocul salvat nu a putut fi recuperat. Copiază datele salvate și trimite-ni-le prin e-mail sau Discord, ca să le putem verifica. Poți și să ștergi datele salvate și să începi de la capăt.",
+  "save-recovery-export": "Afișează / copiază datele salvate",
+  "save-recovery-delete": "Șterge datele salvate și repornește",
+  "save-recovery-report": "Date salvate pentru asistență",
+  "save-recovery-copied": "Date copiate. Lipește-le într-un e-mail, într-un fișier text sau într-un mesaj pe Discord. Datele care nu pot fi citite sunt indicate ca erori în raport.",
+  "save-recovery-copy-manually": "Copiază textul selectat și trimite-ni-l prin e-mail sau Discord. Dacă raportul este lung, atașează-l ca fișier text. Datele care nu pot fi citite sunt indicate ca erori în raport.",
+  "save-recovery-export-error": "Datele nu au putut fi colectate. Încearcă din nou.",
+  "save-recovery-delete-confirm": "Ștergi definitiv toate datele salvate local, setările și copiile de siguranță native ale jocului și repornești? Vei pierde progresul. Copiază mai întâi datele dacă vrei să ni le trimiți pentru reparare.",
+  "save-recovery-delete-error": "Datele salvate nu au putut fi șterse complet. Aplicația nu a fost repornită. Încearcă din nou.",
   "titles": "Titluri",
   "title-back": "Înapoi la profil",
   "titles-description": "Alege un titlu de afișat sub numele tău.",

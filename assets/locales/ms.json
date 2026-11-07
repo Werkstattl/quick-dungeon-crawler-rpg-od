@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Permainan tersimpan anda tidak dapat dipulihkan. Salin data tersimpan dan hantarkannya kepada kami melalui e-mel atau Discord supaya kami boleh memeriksanya. Anda juga boleh memadam data tersimpan dan bermula semula.",
+  "save-recovery-export": "Papar / salin data tersimpan",
+  "save-recovery-delete": "Padam data tersimpan dan mulakan semula",
+  "save-recovery-report": "Data tersimpan untuk sokongan",
+  "save-recovery-copied": "Data telah disalin. Tampalkannya ke dalam e-mel, fail teks atau mesej Discord. Data yang tidak dapat dibaca direkodkan sebagai ralat dalam laporan.",
+  "save-recovery-copy-manually": "Salin teks yang dipilih dan hantarkannya kepada kami melalui e-mel atau Discord. Jika laporannya panjang, lampirkannya sebagai fail teks. Data yang tidak dapat dibaca direkodkan sebagai ralat dalam laporan.",
+  "save-recovery-export-error": "Data tidak dapat dikumpulkan. Sila cuba lagi.",
+  "save-recovery-delete-confirm": "Padam secara kekal semua data yang disimpan secara setempat, tetapan dan sandaran permainan dalam storan natif aplikasi, kemudian mulakan semula? Kemajuan anda akan hilang. Salin data dahulu jika anda mahu menghantarnya kepada kami untuk dibaiki.",
+  "save-recovery-delete-error": "Data tersimpan tidak dapat dipadam sepenuhnya. Aplikasi belum dimulakan semula. Sila cuba lagi.",
   "titles": "Gelaran",
   "title-back": "Kembali ke profil",
   "titles-description": "Pilih gelaran untuk dipaparkan di bawah nama anda.",

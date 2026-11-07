@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "无法恢复你的游戏存档。请复制已保存的数据，通过电子邮件或 Discord 发给我们，以便我们检查。你也可以删除已保存的数据，重新开始游戏。",
+  "save-recovery-export": "显示 / 复制已保存的数据",
+  "save-recovery-delete": "删除已保存的数据并重启",
+  "save-recovery-report": "发送给客服的已保存数据",
+  "save-recovery-copied": "数据已复制。请粘贴到电子邮件、文本文件或 Discord 消息中。无法读取的数据会在报告中标记为错误。",
+  "save-recovery-copy-manually": "请复制选中的文本，通过电子邮件或 Discord 发给我们。如果报告较长，可以作为文本文件附件发送。无法读取的数据会在报告中标记为错误。",
+  "save-recovery-export-error": "无法收集数据，请重试。",
+  "save-recovery-delete-confirm": "确定要永久删除所有本地保存的数据、设置及应用原生存储中的游戏存档备份，并重启吗？你的游戏进度将会丢失。如果想将数据发给我们修复，请先复制数据。",
+  "save-recovery-delete-error": "未能完全删除已保存的数据。应用尚未重启，请重试。",
   "titles": "称号",
   "title-back": "返回个人资料",
   "titles-description": "选择显示在名字下方的称号。",

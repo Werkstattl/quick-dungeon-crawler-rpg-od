@@ -95,6 +95,11 @@ function getPlayerDisplayName(name) {
     return `${baseName} [${getForgeMemberTitle()}]`;
 }
 
+// A native recovery remains readable if repairing localStorage fails.
+const recoveredSaveData = new Map();
+const readSaveStorage = key => recoveredSaveData.has(key)
+    ? recoveredSaveData.get(key) : localStorage.getItem(key);
+
 const safeSave = (key, data, backupKey, tempKey) => {
     try {
         const json = JSON.stringify(data);
@@ -112,6 +117,7 @@ const safeSave = (key, data, backupKey, tempKey) => {
             localStorage.setItem(backupKey, currentData);
         }
         localStorage.setItem(key, json);
+        recoveredSaveData.delete(key);
         return true;
     } catch (err) {
         console.error(`safeSave failed for ${key}:`, err);
@@ -119,12 +125,12 @@ const safeSave = (key, data, backupKey, tempKey) => {
     }
 };
 
-const safeLoad = (key, backupKey) => {
+const safeLoad = (key, backupKey, validate = value => value !== null) => {
     try {
-        const raw = localStorage.getItem(key);
+        const raw = readSaveStorage(key);
         if (raw) {
             const parsed = JSON.parse(raw);
-            if (parsed !== null) return parsed;
+            if (validate(parsed)) return parsed;
         }
     } catch (err) {
         console.warn(`safeLoad: primary key ${key} unreadable, trying backup.`, err);
@@ -135,11 +141,13 @@ const safeLoad = (key, backupKey) => {
         const backupRaw = localStorage.getItem(backupKey);
         if (!backupRaw) return null;
         const backupParsed = JSON.parse(backupRaw);
-        if (backupParsed === null) return null;
+        if (!validate(backupParsed)) return null;
 
         // A failed repair must not prevent loading a readable backup into memory.
+        recoveredSaveData.set(key, backupRaw);
         try {
             localStorage.setItem(key, backupRaw);
+            recoveredSaveData.delete(key);
             console.log(`safeLoad: restored ${key} from backup.`);
         } catch (restoreErr) {
             console.warn(`safeLoad: loaded backup for ${key}, but could not restore primary key.`, restoreErr);

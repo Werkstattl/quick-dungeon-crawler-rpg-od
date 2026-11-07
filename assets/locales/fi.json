@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Tallennettua peliäsi ei voitu palauttaa. Kopioi tallennetut tiedot ja lähetä ne meille sähköpostitse tai Discordissa, jotta voimme tutkia ne. Voit myös poistaa tallennetut tiedot ja aloittaa alusta.",
+  "save-recovery-export": "Näytä / kopioi tallennetut tiedot",
+  "save-recovery-delete": "Poista tallennetut tiedot ja käynnistä uudelleen",
+  "save-recovery-report": "Tallennetut tiedot tukea varten",
+  "save-recovery-copied": "Tiedot kopioitu. Liitä ne sähköpostiin, tekstitiedostoon tai Discord-viestiin. Tiedot, joita ei voida lukea, merkitään raporttiin virheinä.",
+  "save-recovery-copy-manually": "Kopioi valittu teksti ja lähetä se meille sähköpostitse tai Discordissa. Jos raportti on pitkä, liitä se tekstitiedostona. Tiedot, joita ei voida lukea, merkitään raporttiin virheinä.",
+  "save-recovery-export-error": "Tietoja ei voitu kerätä. Yritä uudelleen.",
+  "save-recovery-delete-confirm": "Poistetaanko kaikki paikallisesti tallennetut tiedot, asetukset ja sovelluksen omat pelin varmuuskopiot pysyvästi ja käynnistetäänkö sovellus uudelleen? Menetät edistymisesi. Kopioi tiedot ensin, jos haluat lähettää ne meille korjattaviksi.",
+  "save-recovery-delete-error": "Tallennettuja tietoja ei voitu poistaa kokonaan. Sovellusta ei käynnistetty uudelleen. Yritä uudelleen.",
   "titles": "Arvonimet",
   "title-back": "Takaisin profiiliin",
   "titles-description": "Valitse nimesi alla näytettävä arvonimi.",

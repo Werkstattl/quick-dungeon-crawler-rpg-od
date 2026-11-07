@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Não foi possível recuperar o teu jogo guardado. Copia os dados guardados e envia-nos por e-mail ou pelo Discord para os podermos analisar. Também podes eliminar os dados guardados e começar de novo.",
+  "save-recovery-export": "Mostrar / copiar dados guardados",
+  "save-recovery-delete": "Eliminar dados guardados e reiniciar",
+  "save-recovery-report": "Dados guardados para o apoio técnico",
+  "save-recovery-copied": "Dados copiados. Cola-os num e-mail, num ficheiro de texto ou numa mensagem do Discord. Os dados que não puderem ser lidos são assinalados como erros no relatório.",
+  "save-recovery-copy-manually": "Copia o texto selecionado e envia-nos por e-mail ou pelo Discord. Se o relatório for longo, anexa-o como ficheiro de texto. Os dados que não puderem ser lidos são assinalados como erros no relatório.",
+  "save-recovery-export-error": "Não foi possível recolher os dados. Tenta novamente.",
+  "save-recovery-delete-confirm": "Eliminar permanentemente todos os dados guardados localmente, as definições e as cópias de segurança nativas do jogo e reiniciar? Vais perder o teu progresso. Copia primeiro os dados se quiseres enviá-los para tentarmos repará-los.",
+  "save-recovery-delete-error": "Não foi possível eliminar todos os dados guardados. A aplicação não foi reiniciada. Tenta novamente.",
   "titles": "Títulos",
   "title-back": "Voltar ao perfil",
   "titles-description": "Escolhe um título para mostrar por baixo do teu nome.",

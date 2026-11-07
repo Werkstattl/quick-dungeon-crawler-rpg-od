@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Det lagrede spillet ditt kunne ikke gjenopprettes. Kopier de lagrede dataene og send dem til oss via e-post eller Discord, slik at vi kan undersøke dem. Du kan også slette de lagrede dataene og begynne på nytt.",
+  "save-recovery-export": "Vis / kopier lagrede data",
+  "save-recovery-delete": "Slett lagrede data og start på nytt",
+  "save-recovery-report": "Lagrede data til kundestøtte",
+  "save-recovery-copied": "Data kopiert. Lim dem inn i en e-post, tekstfil eller Discord-melding. Data som ikke kan leses, vises som feil i rapporten.",
+  "save-recovery-copy-manually": "Kopier den markerte teksten og send den til oss via e-post eller Discord. Hvis rapporten er lang, kan du legge den ved som en tekstfil. Data som ikke kan leses, vises som feil i rapporten.",
+  "save-recovery-export-error": "Dataene kunne ikke samles inn. Prøv igjen.",
+  "save-recovery-delete-confirm": "Vil du slette alle lokalt lagrede data, innstillinger og appens native sikkerhetskopier av spillet permanent og starte på nytt? Fremgangen din går tapt. Kopier dataene først hvis du vil sende dem til oss for reparasjon.",
+  "save-recovery-delete-error": "De lagrede dataene kunne ikke slettes fullstendig. Appen har ikke blitt startet på nytt. Prøv igjen.",
   "titles": "Titler",
   "title-back": "Tilbake til profilen",
   "titles-description": "Velg en tittel som vises under navnet ditt.",

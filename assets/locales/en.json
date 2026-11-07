@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Your save could not be recovered. Copy your saved data and send it to us by email or Discord so we can inspect it. You can also delete the saved data and start over.",
+  "save-recovery-export": "Show / copy saved data",
+  "save-recovery-delete": "Delete saved data and restart",
+  "save-recovery-report": "Saved data for support",
+  "save-recovery-copied": "Data copied. Paste it into an email, a text file or a Discord message. Any unreadable data is recorded as an error in the report.",
+  "save-recovery-copy-manually": "Please copy the selected text and send it to us by email or Discord. For long reports, attach it as a text file. Any unreadable data is recorded as an error in the report.",
+  "save-recovery-export-error": "The data could not be collected. Please try again.",
+  "save-recovery-delete-confirm": "Permanently delete all locally saved data, settings and native save backups and restart? Your progress will be lost. Copy the data first if you want to send it to us for repair.",
+  "save-recovery-delete-error": "The saved data could not be fully deleted. The app has not restarted. Please try again.",
   "titles": "Titles",
   "title-back": "Back to profile",
   "titles-description": "Choose a title to display beneath your name.",

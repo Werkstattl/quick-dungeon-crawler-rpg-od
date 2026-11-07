@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Hindi maibalik ang na-save mong laro. Kopyahin ang naka-save na data at ipadala ito sa amin sa pamamagitan ng email o Discord para masuri namin. Maaari mo ring burahin ang naka-save na data at magsimula muli.",
+  "save-recovery-export": "Ipakita / kopyahin ang naka-save na data",
+  "save-recovery-delete": "Burahin ang naka-save na data at i-restart",
+  "save-recovery-report": "Naka-save na data para sa suporta",
+  "save-recovery-copied": "Nakopya na ang data. I-paste ito sa email, text file, o mensahe sa Discord. Ang anumang data na hindi mabasa ay nakatala bilang error sa ulat.",
+  "save-recovery-copy-manually": "Kopyahin ang napiling teksto at ipadala ito sa amin sa pamamagitan ng email o Discord. Kung mahaba ang ulat, ilakip ito bilang text file. Ang anumang data na hindi mabasa ay nakatala bilang error sa ulat.",
+  "save-recovery-export-error": "Hindi makolekta ang data. Pakisubukang muli.",
+  "save-recovery-delete-confirm": "Permanenteng burahin ang lahat ng lokal na naka-save na data, mga setting, at mga backup ng laro sa native storage ng app, at i-restart? Mawawala ang iyong progreso. Kopyahin muna ang data kung gusto mong ipadala ito sa amin para maayos.",
+  "save-recovery-delete-error": "Hindi ganap na nabura ang naka-save na data. Hindi na-restart ang app. Pakisubukang muli.",
   "titles": "Mga titulo",
   "title-back": "Bumalik sa profile",
   "titles-description": "Pumili ng titulong ipapakita sa ilalim ng iyong pangalan.",

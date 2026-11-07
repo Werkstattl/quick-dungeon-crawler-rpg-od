@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Không thể khôi phục bản lưu trò chơi của bạn. Hãy sao chép dữ liệu đã lưu và gửi cho chúng tôi qua email hoặc Discord để chúng tôi kiểm tra. Bạn cũng có thể xóa dữ liệu đã lưu và bắt đầu lại từ đầu.",
+  "save-recovery-export": "Xem / sao chép dữ liệu đã lưu",
+  "save-recovery-delete": "Xóa dữ liệu đã lưu và khởi động lại",
+  "save-recovery-report": "Dữ liệu đã lưu dành cho bộ phận hỗ trợ",
+  "save-recovery-copied": "Đã sao chép dữ liệu. Hãy dán vào email, tệp văn bản hoặc tin nhắn Discord. Dữ liệu không thể đọc sẽ được ghi nhận là lỗi trong báo cáo.",
+  "save-recovery-copy-manually": "Hãy sao chép văn bản đã chọn và gửi cho chúng tôi qua email hoặc Discord. Nếu báo cáo dài, hãy đính kèm dưới dạng tệp văn bản. Dữ liệu không thể đọc sẽ được ghi nhận là lỗi trong báo cáo.",
+  "save-recovery-export-error": "Không thể thu thập dữ liệu. Vui lòng thử lại.",
+  "save-recovery-delete-confirm": "Xóa vĩnh viễn toàn bộ dữ liệu đã lưu cục bộ, cài đặt và các bản sao lưu trò chơi trong bộ nhớ gốc của ứng dụng, rồi khởi động lại? Tiến trình của bạn sẽ bị mất. Hãy sao chép dữ liệu trước nếu bạn muốn gửi cho chúng tôi để sửa chữa.",
+  "save-recovery-delete-error": "Không thể xóa hết dữ liệu đã lưu. Ứng dụng chưa được khởi động lại. Vui lòng thử lại.",
   "titles": "Danh hiệu",
   "title-back": "Quay lại hồ sơ",
   "titles-description": "Chọn danh hiệu để hiển thị dưới tên của bạn.",

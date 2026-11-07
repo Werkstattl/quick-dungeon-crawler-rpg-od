@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Votre sauvegarde n’a pas pu être récupérée. Copiez vos données enregistrées et envoyez-les-nous par e-mail ou sur Discord afin que nous puissions les examiner. Vous pouvez aussi supprimer les données enregistrées et recommencer.",
+  "save-recovery-export": "Afficher / copier les données enregistrées",
+  "save-recovery-delete": "Supprimer les données enregistrées et redémarrer",
+  "save-recovery-report": "Données enregistrées pour l’assistance",
+  "save-recovery-copied": "Données copiées. Collez-les dans un e-mail, un fichier texte ou un message Discord. Les données illisibles sont signalées comme des erreurs dans le rapport.",
+  "save-recovery-copy-manually": "Copiez le texte sélectionné et envoyez-le-nous par e-mail ou sur Discord. Si le rapport est long, joignez-le sous forme de fichier texte. Les données illisibles sont signalées comme des erreurs dans le rapport.",
+  "save-recovery-export-error": "Les données n’ont pas pu être recueillies. Veuillez réessayer.",
+  "save-recovery-delete-confirm": "Supprimer définitivement toutes les données enregistrées localement, les paramètres et les sauvegardes natives du jeu, puis redémarrer ? Votre progression sera perdue. Copiez d’abord les données si vous souhaitez nous les envoyer pour réparation.",
+  "save-recovery-delete-error": "Les données enregistrées n’ont pas pu être entièrement supprimées. L’application n’a pas redémarré. Veuillez réessayer.",
   "titles": "Titres",
   "title-back": "Retour au profil",
   "titles-description": "Choisissez un titre à afficher sous votre nom.",

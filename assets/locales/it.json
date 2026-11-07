@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Non è stato possibile recuperare il salvataggio. Copia i dati salvati e inviaceli via e-mail o su Discord, così potremo esaminarli. Puoi anche eliminare i dati salvati e ricominciare.",
+  "save-recovery-export": "Mostra / copia i dati salvati",
+  "save-recovery-delete": "Elimina i dati salvati e riavvia",
+  "save-recovery-report": "Dati salvati per l’assistenza",
+  "save-recovery-copied": "Dati copiati. Incollali in un’e-mail, un file di testo o un messaggio su Discord. I dati illeggibili sono segnalati come errori nel rapporto.",
+  "save-recovery-copy-manually": "Copia il testo selezionato e inviacelo via e-mail o su Discord. Se il rapporto è lungo, allegalo come file di testo. I dati illeggibili sono segnalati come errori nel rapporto.",
+  "save-recovery-export-error": "Non è stato possibile raccogliere i dati. Riprova.",
+  "save-recovery-delete-confirm": "Eliminare definitivamente tutti i dati salvati localmente, le impostazioni e i backup nativi del gioco e riavviare? I tuoi progressi andranno persi. Copia prima i dati se vuoi inviarceli per la riparazione.",
+  "save-recovery-delete-error": "Non è stato possibile eliminare tutti i dati salvati. L’app non è stata riavviata. Riprova.",
   "titles": "Titoli",
   "title-back": "Torna al profilo",
   "titles-description": "Scegli un titolo da mostrare sotto il tuo nome.",

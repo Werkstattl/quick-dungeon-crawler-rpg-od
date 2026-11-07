@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "No se pudo recuperar tu partida. Copia tus datos guardados y envíanoslos por correo electrónico o Discord para que podamos revisarlos. También puedes borrar los datos guardados y empezar de nuevo.",
+  "save-recovery-export": "Mostrar / copiar datos guardados",
+  "save-recovery-delete": "Borrar datos guardados y reiniciar",
+  "save-recovery-report": "Datos guardados para soporte",
+  "save-recovery-copied": "Datos copiados. Pégalos en un correo electrónico, un archivo de texto o un mensaje de Discord. Los datos que no se puedan leer se indican como errores en el informe.",
+  "save-recovery-copy-manually": "Copia el texto seleccionado y envíanoslo por correo electrónico o Discord. Si el informe es largo, adjúntalo como archivo de texto. Los datos que no se puedan leer se indican como errores en el informe.",
+  "save-recovery-export-error": "No se pudieron recopilar los datos. Inténtalo de nuevo.",
+  "save-recovery-delete-confirm": "¿Borrar permanentemente todos los datos guardados localmente, los ajustes y las copias de seguridad nativas de la partida y reiniciar? Perderás tu progreso. Copia primero los datos si quieres enviárnoslos para que intentemos repararlos.",
+  "save-recovery-delete-error": "No se pudieron borrar todos los datos guardados. La aplicación no se ha reiniciado. Inténtalo de nuevo.",
   "titles": "Títulos",
   "title-back": "Volver al perfil",
   "titles-description": "Elige un título para mostrar bajo tu nombre.",

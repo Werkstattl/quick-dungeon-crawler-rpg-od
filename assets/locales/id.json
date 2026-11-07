@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Simpanan permainanmu tidak dapat dipulihkan. Salin data yang tersimpan dan kirimkan kepada kami melalui email atau Discord agar kami dapat memeriksanya. Kamu juga dapat menghapus data yang tersimpan dan memulai dari awal.",
+  "save-recovery-export": "Tampilkan / salin data tersimpan",
+  "save-recovery-delete": "Hapus data tersimpan dan mulai ulang",
+  "save-recovery-report": "Data tersimpan untuk dukungan",
+  "save-recovery-copied": "Data telah disalin. Tempelkan ke email, berkas teks, atau pesan Discord. Data yang tidak dapat dibaca dicatat sebagai kesalahan dalam laporan.",
+  "save-recovery-copy-manually": "Salin teks yang dipilih dan kirimkan kepada kami melalui email atau Discord. Jika laporannya panjang, lampirkan sebagai berkas teks. Data yang tidak dapat dibaca dicatat sebagai kesalahan dalam laporan.",
+  "save-recovery-export-error": "Data tidak dapat dikumpulkan. Silakan coba lagi.",
+  "save-recovery-delete-confirm": "Hapus secara permanen semua data yang disimpan secara lokal, pengaturan, dan cadangan permainan di penyimpanan native aplikasi, lalu mulai ulang? Kemajuanmu akan hilang. Salin data terlebih dahulu jika kamu ingin mengirimkannya kepada kami untuk diperbaiki.",
+  "save-recovery-delete-error": "Data yang tersimpan tidak dapat dihapus sepenuhnya. Aplikasi belum dimulai ulang. Silakan coba lagi.",
   "titles": "Gelar",
   "title-back": "Kembali ke profil",
   "titles-description": "Pilih gelar untuk ditampilkan di bawah namamu.",

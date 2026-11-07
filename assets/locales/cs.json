@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Tvou uloženou hru se nepodařilo obnovit. Zkopíruj uložená data a pošli nám je e-mailem nebo přes Discord, abychom je mohli prozkoumat. Můžeš také uložená data smazat a začít znovu.",
+  "save-recovery-export": "Zobrazit / zkopírovat uložená data",
+  "save-recovery-delete": "Smazat uložená data a restartovat",
+  "save-recovery-report": "Uložená data pro podporu",
+  "save-recovery-copied": "Data zkopírována. Vlož je do e-mailu, textového souboru nebo zprávy na Discordu. Nečitelná data jsou v hlášení uvedena jako chyby.",
+  "save-recovery-copy-manually": "Zkopíruj označený text a pošli nám ho e-mailem nebo přes Discord. Dlouhé hlášení můžeš přiložit jako textový soubor. Nečitelná data jsou v hlášení uvedena jako chyby.",
+  "save-recovery-export-error": "Data se nepodařilo shromáždit. Zkus to znovu.",
+  "save-recovery-delete-confirm": "Trvale smazat všechna místně uložená data, nastavení a nativní zálohy hry a restartovat? Přijdeš o svůj postup. Pokud nám chceš data poslat k opravě, nejprve je zkopíruj.",
+  "save-recovery-delete-error": "Uložená data se nepodařilo úplně smazat. Aplikace nebyla restartována. Zkus to znovu.",
   "titles": "Tituly",
   "title-back": "Zpět na profil",
   "titles-description": "Vyber si titul, který se zobrazí pod tvým jménem.",

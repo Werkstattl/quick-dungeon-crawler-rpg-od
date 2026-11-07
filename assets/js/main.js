@@ -65,9 +65,103 @@ const refreshTitleRunProgress = () => {
     }
 };
 
+const initializeNativeSaveRecovery = async () => {
+    if (typeof nativeSaveBackup === 'undefined') return true;
+    try {
+        await nativeSaveBackup.initialize();
+        player = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup, nativeSaveBackup.validPlayer);
+        normalizeLoadedPlayer();
+        return true;
+    } catch (error) {
+        console.error('Save recovery could not be completed:', error);
+        const panel = document.createElement('section');
+        panel.className = 'game-container save-recovery';
+        panel.style.display = 'flex';
+        panel.setAttribute('role', 'alert');
+        panel.innerHTML = `<p data-i18n="save-backup-recovery-error">Your save could not be recovered. Copy your saved data and send it to us by email or Discord so we can inspect it. You can also delete the saved data and start over.</p>
+            <button type="button" data-recovery-export data-i18n="save-recovery-export">Show / copy saved data</button>
+            <button type="button" data-recovery-delete data-i18n="save-recovery-delete">Delete saved data and restart</button>
+            <p data-recovery-status role="status" aria-live="polite"></p>
+            <label data-recovery-report hidden><span data-i18n="save-recovery-report">Saved data for support</span>
+                <textarea readonly rows="10" spellcheck="false"></textarea>
+            </label>`;
+        const exportButton = panel.querySelector('[data-recovery-export]');
+        const deleteButton = panel.querySelector('[data-recovery-delete]');
+        const status = panel.querySelector('[data-recovery-status]');
+        const report = panel.querySelector('[data-recovery-report]');
+        const textarea = panel.querySelector('textarea');
+        const setStatus = key => {
+            status.setAttribute('data-i18n', key);
+            status.textContent = t(key);
+        };
+        const setBusy = busy => { exportButton.disabled = deleteButton.disabled = busy; };
+        exportButton.onclick = async () => {
+            setBusy(true);
+            try {
+                const data = {
+                    format: 'dungeon-save-diagnostics', version: 1,
+                    exportedAt: new Date().toISOString(),
+                    recoveryError: String(error.message || error),
+                    localStorage: Object.create(null), localStorageErrors: Object.create(null),
+                };
+                try {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key === null) continue;
+                        try { data.localStorage[key] = localStorage.getItem(key); }
+                        catch (readError) { data.localStorageErrors[key] = String(readError.message || readError); }
+                    }
+                } catch (readError) {
+                    data.localStorageErrors.storage = String(readError.message || readError);
+                }
+                data.nativeStorage = await nativeSaveBackup.exportRaw();
+                textarea.value = JSON.stringify(data, null, 2);
+                report.hidden = false;
+                textarea.focus();
+                textarea.select();
+                textarea.setSelectionRange(0, textarea.value.length);
+                let copied = false;
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(textarea.value);
+                        copied = true;
+                    }
+                } catch (_) { /* Manual copying remains available in native WebViews. */ }
+                if (!copied) {
+                    try { copied = document.execCommand('copy'); } catch (_) { /* Keep report visible. */ }
+                }
+                setStatus(copied ? 'save-recovery-copied' : 'save-recovery-copy-manually');
+            } catch (exportError) {
+                console.error('Save diagnostics export failed:', exportError);
+                setStatus('save-recovery-export-error');
+            } finally {
+                setBusy(false);
+            }
+        };
+        deleteButton.onclick = async () => {
+            if (!window.confirm(t('save-recovery-delete-confirm'))) return;
+            setBusy(true);
+            try {
+                await nativeSaveBackup.clear();
+                localStorage.clear();
+                recoveredSaveData.clear();
+                window.location.reload();
+            } catch (deleteError) {
+                console.error('Saved data could not be deleted:', deleteError);
+                setStatus('save-recovery-delete-error');
+                setBusy(false);
+            }
+        };
+        document.querySelector('main').appendChild(panel);
+        applyTranslations(panel);
+        return false;
+    }
+};
+
 // Use DOMContentLoaded so interactions are available as soon as the DOM is ready
 // rather than waiting for all assets to finish loading
 window.addEventListener("DOMContentLoaded", async function () {
+    if (!await initializeNativeSaveRecovery()) return;
     migratePlayerEquipmentSlots();
 
     // Apply saved font size on page load
@@ -454,6 +548,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     if (typeof syncPlayerTitleUnlocks === 'function') {
         syncPlayerTitleUnlocks({ dungeonData: safeLoad(STORAGE_KEYS.dungeon, STORAGE_KEYS.dungeonBackup) });
     }
+    if (typeof saveNativeBackup === 'function') saveNativeBackup();
 });
 
 function setForgeMembershipActive(active, source = 'subscription') {
@@ -1323,7 +1418,8 @@ const saveData = ({ forceDungeon = false } = {}) => {
         }
         // Only save if all data is valid JSON
         const playerSaved = safeSave(STORAGE_KEYS.player, player, STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp);
-        const existingDungeonData = localStorage.getItem("dungeonData");
+        const existingDungeonData = typeof readSaveStorage === 'function'
+            ? readSaveStorage("dungeonData") : localStorage.getItem("dungeonData");
         const canPersistDungeon = dungeon
             && (forceDungeon || dungeon.initialized || existingDungeonData === null);
         if (canPersistDungeon) {
@@ -1333,8 +1429,12 @@ const saveData = ({ forceDungeon = false } = {}) => {
         if (playerSaved) {
             lastSaveTime = Date.now();
         }
+    } catch (error) {
+        console.error('Could not save game to localStorage:', error);
     } finally {
         isSaving = false;
+        // Native snapshots must still be attempted when localStorage writes fail.
+        if (typeof saveNativeBackup === 'function') saveNativeBackup({ force: forceDungeon, forceDungeon });
     }
 }
 

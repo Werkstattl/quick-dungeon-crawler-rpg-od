@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Dit gemte spil kunne ikke gendannes. Kopiér dine gemte data, og send dem til os via e-mail eller Discord, så vi kan undersøge dem. Du kan også slette de gemte data og begynde forfra.",
+  "save-recovery-export": "Vis / kopiér gemte data",
+  "save-recovery-delete": "Slet gemte data, og genstart",
+  "save-recovery-report": "Gemte data til support",
+  "save-recovery-copied": "Data kopieret. Indsæt dem i en e-mail, en tekstfil eller en Discord-besked. Data, der ikke kan læses, angives som fejl i rapporten.",
+  "save-recovery-copy-manually": "Kopiér den markerede tekst, og send den til os via e-mail eller Discord. Hvis rapporten er lang, kan du vedhæfte den som en tekstfil. Data, der ikke kan læses, angives som fejl i rapporten.",
+  "save-recovery-export-error": "Dataene kunne ikke indsamles. Prøv igen.",
+  "save-recovery-delete-confirm": "Vil du slette alle lokalt gemte data, indstillinger og appens native sikkerhedskopier af spillet permanent og genstarte? Dine fremskridt går tabt. Kopiér først dataene, hvis du vil sende dem til os til reparation.",
+  "save-recovery-delete-error": "De gemte data kunne ikke slettes helt. Appen er ikke blevet genstartet. Prøv igen.",
   "titles": "Titler",
   "title-back": "Tilbage til profilen",
   "titles-description": "Vælg en titel, der vises under dit navn.",

@@ -1,9 +1,11 @@
-let savedPlayer = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup);
+let savedPlayer = safeLoad(STORAGE_KEYS.player, STORAGE_KEYS.playerBackup,
+    typeof nativeSaveBackup !== 'undefined' ? nativeSaveBackup.validPlayer : undefined);
 let player = savedPlayer ? savedPlayer : null;
 let luckAsLevelUpOption = localStorage.getItem("luckAsLevelUpOption") === "true";
 
 // Ensure newly added stats exist on old saves
-if (player) {
+function normalizeLoadedPlayer() {
+    if (!player) return;
     if (typeof player.preferences !== 'object' || player.preferences === null) {
         player.preferences = {};
     }
@@ -81,6 +83,7 @@ if (player) {
     normalizePlayerCurseProgress(player);
     if (typeof normalizePlayerTitles === 'function') normalizePlayerTitles(player);
 }
+normalizeLoadedPlayer();
 
 let inventoryOpen = false;
 let leveled = false;

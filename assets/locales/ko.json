@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "저장된 게임을 복구하지 못했습니다. 저장 데이터를 복사하여 이메일이나 Discord로 보내 주시면 확인하겠습니다. 저장 데이터를 삭제하고 처음부터 다시 시작할 수도 있습니다.",
+  "save-recovery-export": "저장 데이터 보기 / 복사",
+  "save-recovery-delete": "저장 데이터 삭제 후 다시 시작",
+  "save-recovery-report": "지원팀에 보낼 저장 데이터",
+  "save-recovery-copied": "데이터를 복사했습니다. 이메일, 텍스트 파일 또는 Discord 메시지에 붙여 넣어 주세요. 읽을 수 없는 데이터는 보고서에 오류로 기록됩니다.",
+  "save-recovery-copy-manually": "선택된 텍스트를 복사하여 이메일이나 Discord로 보내 주세요. 보고서가 길면 텍스트 파일로 첨부해 주세요. 읽을 수 없는 데이터는 보고서에 오류로 기록됩니다.",
+  "save-recovery-export-error": "데이터를 수집하지 못했습니다. 다시 시도해 주세요.",
+  "save-recovery-delete-confirm": "로컬에 저장된 모든 데이터, 설정 및 앱의 네이티브 저장소에 있는 게임 백업을 영구적으로 삭제하고 다시 시작할까요? 게임 진행 상황이 사라집니다. 복구를 위해 데이터를 보내려면 먼저 복사해 주세요.",
+  "save-recovery-delete-error": "저장 데이터를 완전히 삭제하지 못했습니다. 앱을 다시 시작하지 않았습니다. 다시 시도해 주세요.",
   "titles": "칭호",
   "title-back": "프로필로 돌아가기",
   "titles-description": "이름 아래에 표시할 칭호를 선택하세요.",

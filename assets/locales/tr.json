@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Oyun kaydın kurtarılamadı. Kayıtlı verilerini kopyalayıp inceleyebilmemiz için e-posta veya Discord üzerinden bize gönder. Kayıtlı verileri silip baştan başlamayı da seçebilirsin.",
+  "save-recovery-export": "Kayıtlı verileri göster / kopyala",
+  "save-recovery-delete": "Kayıtlı verileri sil ve yeniden başlat",
+  "save-recovery-report": "Destek için kayıtlı veriler",
+  "save-recovery-copied": "Veriler kopyalandı. Bir e-postaya, metin dosyasına veya Discord mesajına yapıştır. Okunamayan veriler raporda hata olarak belirtilir.",
+  "save-recovery-copy-manually": "Seçili metni kopyalayıp e-posta veya Discord üzerinden bize gönder. Rapor uzunsa metin dosyası olarak ekleyebilirsin. Okunamayan veriler raporda hata olarak belirtilir.",
+  "save-recovery-export-error": "Veriler toplanamadı. Lütfen tekrar dene.",
+  "save-recovery-delete-confirm": "Yerel olarak kaydedilmiş tüm veriler, ayarlar ve uygulamanın yerel depolamasındaki oyun yedekleri kalıcı olarak silinip uygulama yeniden başlatılsın mı? İlerlemen kaybolacak. Verileri onarmamız için bize göndermek istiyorsan önce kopyala.",
+  "save-recovery-delete-error": "Kayıtlı veriler tamamen silinemedi. Uygulama yeniden başlatılmadı. Lütfen tekrar dene.",
   "titles": "Unvanlar",
   "title-back": "Profile dön",
   "titles-description": "Adının altında gösterilecek bir unvan seç.",

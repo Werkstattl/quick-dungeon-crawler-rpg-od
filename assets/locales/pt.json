@@ -1,4 +1,13 @@
 {
+  "save-backup-recovery-error": "Não foi possível recuperar seu jogo salvo. Copie os dados salvos e envie para nós por e-mail ou Discord para que possamos analisá-los. Você também pode excluir os dados salvos e começar de novo.",
+  "save-recovery-export": "Mostrar / copiar dados salvos",
+  "save-recovery-delete": "Excluir dados salvos e reiniciar",
+  "save-recovery-report": "Dados salvos para o suporte",
+  "save-recovery-copied": "Dados copiados. Cole em um e-mail, arquivo de texto ou mensagem no Discord. Os dados que não puderem ser lidos serão indicados como erros no relatório.",
+  "save-recovery-copy-manually": "Copie o texto selecionado e envie para nós por e-mail ou Discord. Se o relatório for longo, anexe como arquivo de texto. Os dados que não puderem ser lidos serão indicados como erros no relatório.",
+  "save-recovery-export-error": "Não foi possível coletar os dados. Tente novamente.",
+  "save-recovery-delete-confirm": "Excluir permanentemente todos os dados salvos localmente, as configurações e os backups nativos do jogo e reiniciar? Você perderá seu progresso. Copie os dados primeiro se quiser enviar para nós tentarmos repará-los.",
+  "save-recovery-delete-error": "Não foi possível excluir todos os dados salvos. O aplicativo não foi reiniciado. Tente novamente.",
   "titles": "Títulos",
   "title-back": "Voltar ao perfil",
   "titles-description": "Escolha um título para exibir abaixo do seu nome.",

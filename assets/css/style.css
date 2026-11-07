@@ -741,6 +741,34 @@ button:focus-visible {
     flex-direction: column;
 }
 
+.save-recovery {
+    flex-direction: column;
+    gap: 1rem;
+    height: auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.save-recovery button {
+    white-space: normal;
+}
+
+.save-recovery textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: var(--text-main);
+    background: var(--bg-deep);
+    border: 1px solid var(--border-soft);
+    border-radius: 0.4rem;
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+}
+
 .game * {
     margin: 0.3rem;
 }
