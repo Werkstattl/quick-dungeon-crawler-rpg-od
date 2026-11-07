@@ -1415,8 +1415,9 @@ const saveData = ({ forceDungeon = false } = {}) => {
         const canPersistDungeon = dungeon
             && (forceDungeon || dungeon.initialized || existingDungeonData === null);
         // Mark the local set before changing its parts. A crash or failed write
-        // leaves this marker in place, so startup uses a complete checkpoint.
-        if (typeof nativeSaveBackup !== 'undefined' && nativeSaveBackup.hasNativeStorage
+        // leaves this marker in place, so startup uses a complete checkpoint
+        // on every platform, including web builds without native snapshots.
+        if (typeof nativeSaveBackup !== 'undefined'
             && !safeSave(STORAGE_KEYS.player, nativeSaveBackup.createLocalSaveMarker(player),
                 STORAGE_KEYS.playerBackup, STORAGE_KEYS.playerTemp, { advanceRevision: false })) return;
         const dungeonSaved = !canPersistDungeon

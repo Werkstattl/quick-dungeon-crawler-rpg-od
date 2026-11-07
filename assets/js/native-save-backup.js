@@ -75,8 +75,8 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
         const marker = { ...player, _saveIncomplete: true };
         delete marker._saveCheckpoint;
         if (latest) return marker;
-        // Until a native file exists, atomically retain the entire previous local
-        // checkpoint in the marker before any of its components can be replaced.
+        // Without a native snapshot (including web builds), atomically retain
+        // the entire previous local checkpoint before replacing its components.
         const previous = readLocal('playerData', validPlayer);
         const checkpoint = previous && previous._saveIncomplete ? previous._saveCheckpoint : {
             player: previous,

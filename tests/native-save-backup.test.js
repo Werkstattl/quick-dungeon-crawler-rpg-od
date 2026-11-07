@@ -446,6 +446,75 @@ test('local checkpoint recovery survives another cold start after a partial repa
     }
 });
 
+for (const failure of ['dungeonData_temp', 'enemyData_temp', 'playerCompanions', 'commit']) {
+    test(`an interrupted web ${failure} write automatically restores the complete local checkpoint`, async () => {
+        const game = gameSession({ native: false });
+        await game.initialize();
+        if (failure === 'commit') {
+            game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+        } else {
+            game.context.failKeys.add(failure);
+        }
+        game.run('player.lvl = 30; dungeon.progress.floor = 8; enemy.stats.hp = 2; playerCompanions[0].level = 9; saveData()');
+
+        const restarted = gameSession({ native: false, storage: game.storage });
+        const startup = await startRecovery(restarted);
+        assert.equal(startup.allowed, true);
+        assert.equal(startup.panels.length, 0);
+        assert.deepEqual(restarted.load('playerData'), fixture().player);
+        assert.deepEqual(restarted.load('dungeonData'), fixture().dungeon);
+        assert.deepEqual(restarted.load('enemyData'), fixture().enemy);
+        assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+        assert.equal(game.disk.size, 0);
+        assert.equal(restarted.disk.size, 0);
+    });
+}
+
+test('web retries and partial repairs retain the original complete checkpoint across cold starts', async () => {
+    const game = gameSession({ native: false });
+    await game.initialize();
+    game.context.rejectWrite = (key, value) => key === 'playerData' && !JSON.parse(value)._saveIncomplete;
+    for (const level of [30, 40]) {
+        game.context.player.lvl = level;
+        game.run('dungeon.progress.floor++; enemy.stats.hp--; playerCompanions[0].level++; saveData()');
+    }
+    for (const failKeys of [['dungeonData'], ['playerCompanions'], []]) {
+        const restarted = gameSession({ native: false, storage: game.storage, failKeys });
+        const startup = await startRecovery(restarted);
+        assert.equal(startup.allowed, true);
+        assert.equal(startup.panels.length, 0);
+        assert.deepEqual(restarted.load('playerData'), fixture().player);
+        assert.deepEqual(restarted.load('dungeonData'), fixture().dungeon);
+        assert.deepEqual(restarted.load('enemyData'), fixture().enemy);
+        assert.deepEqual(restarted.load('playerCompanions'), fixture().companions);
+    }
+});
+
+test('a failed web marker write leaves all save components unchanged', async () => {
+    const game = gameSession({ native: false, failKeys: ['playerData_temp'] });
+    await game.initialize();
+    const before = [...game.storage];
+    game.run('player.lvl = 30; dungeon.progress.floor = 8; playerCompanions[0].level = 9; saveData()');
+    assert.deepEqual([...game.storage], before);
+});
+
+test('a successful web save publishes the new complete set across restart', async () => {
+    const game = gameSession({ native: false });
+    await game.initialize();
+    game.run('player.lvl = 30; dungeon.progress.floor = 8; enemy.stats.hp = 2; playerCompanions[0].level = 9; saveData()');
+    const restarted = gameSession({ native: false, storage: game.storage });
+    const startup = await startRecovery(restarted);
+    assert.equal(startup.allowed, true);
+    assert.equal(startup.panels.length, 0);
+    assert.equal(restarted.load('playerData')._saveIncomplete, undefined);
+    assert.equal(restarted.load('playerData')._saveCheckpoint, undefined);
+    assert.equal(restarted.load('playerData').lvl, 30);
+    assert.equal(restarted.load('dungeonData').progress.floor, 8);
+    assert.equal(restarted.load('enemyData').stats.hp, 2);
+    assert.equal(restarted.load('playerCompanions')[0].level, 9);
+    assert.equal(game.disk.size, 0);
+});
+
 test('incomplete saves without a valid full checkpoint still preserve evidence and block startup', async () => {
     for (const checkpoint of [undefined, {}, { ...fixture(), companions: null },
         { ...fixture(), player: { ...fixture().player, _saveIncomplete: true } }]) {
