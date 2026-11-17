@@ -426,7 +426,7 @@ function getForgeMembershipMarkup(subscribeButtonId) {
   return `<section class="forge-unlock-option">
     <h4 data-i18n="forge-membership">The Forge Membership</h4>
     <ul class="forge-membership-benefits">
-      <li data-i18n="forge-membership-benefit-premium">Access to all premium features</li>
+      <li data-i18n="forge-membership-benefit-premium">Access to all premium features, including Auto Mode.</li>
       <li data-i18n="forge-membership-benefit-inventory">Expanded inventory (+50 slots)</li>
       <li data-i18n="forge-membership-benefit-resting">Enhanced resting recovery</li>
       <li data-i18n="forge-membership-benefit-gold">10% gold found</li>
