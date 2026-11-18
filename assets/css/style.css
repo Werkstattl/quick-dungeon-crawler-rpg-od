@@ -1872,35 +1872,94 @@ button:focus-visible {
 /* Character Creation */
 #character-creation {
     display: none;
-    justify-content: center;
     align-items: center;
     text-align: center;
     flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto;
 }
 
 #character-creation form {
-    padding: 2rem 1.25rem;
-    margin: 0 0.75rem;
-    border: 1px solid var(--border-soft);
+    flex: none;
+    width: 100%;
+    max-width: 25rem;
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
     border-radius: 0.8rem;
-    background: var(--surface);
+    background: linear-gradient(165deg, #242731, #171617 65%);
     box-shadow: var(--panel-shadow);
 }
 
+.creation-scene {
+    position: relative;
+    height: clamp(5.5rem, 18vh, 9rem);
+    background: #252b32 url("../scenes/torchlit-crypt.webp") center 42% / cover no-repeat;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.creation-scene i {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    border: 2px solid #bd9553;
+    border-radius: 50%;
+    background: linear-gradient(150deg, #444048, #17161c);
+    box-shadow: inset 0 0 0 3px #222026, 0 2px 7px #090809;
+    color: var(--accent-strong);
+    font-size: 1.5rem;
+}
+
+.creation-fields {
+    padding: 2.15rem clamp(1rem, 6vw, 2rem) 1.5rem;
+}
+
 #character-creation h1 {
-    color: var(--accent);
-    text-shadow: 0 0 14px rgba(227, 185, 100, 0.3);
+    color: var(--accent-strong);
+    font-size: calc(1.8rem * var(--font-scale));
+    overflow-wrap: anywhere;
+}
+
+#name-input {
+    width: 100%;
+    margin: 1rem 0 0;
+    text-align: center;
+    font-size: calc(1.2rem * var(--font-scale));
+}
+
+#character-creation #alert:not(:empty) {
+    margin-top: 0.5rem;
+    color: #ffb6a3;
+}
+
+.hardcore-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    margin: 0.25rem 0;
+    cursor: pointer;
+}
+
+.hardcore-option input {
+    margin: 0;
+}
+
+.hardcore-option input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 #character-creation button {
-    margin: 2rem 0 0 0;
-    padding: 0.55rem 2.2rem;
-}
-
-#character-creation input {
-    font-family: var(--font-family-base);
-    width: 20rem;
-    max-width: calc(100% - 2rem);
+    width: 100%;
+    min-height: 2.75rem;
 }
 
 /* Stat Allocation */

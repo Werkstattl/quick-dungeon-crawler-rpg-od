@@ -37,12 +37,14 @@
         </section>
         <section id="character-creation" class="game-container">
             <form id="name-submit">
-                <h1 data-i18n="what-is-your-name">What is your name?</h1>
-                <input type="text" id="name-input" autocomplete="off" value="Hero">
-                <p id="alert"></p>
-                <label><input type="checkbox" id="hardcore-checkbox" style="width:inherit;position:relative;top:1px"> <span data-i18n="hardcore">Hardcore</span></label>
-                <br>
-                <button type="submit" data-i18n="confirm">Confirm</button>
+                <div class="creation-scene" aria-hidden="true"><i class="ra ra-knight-helmet"></i></div>
+                <div class="creation-fields">
+                    <h1><label for="name-input" data-i18n="what-is-your-name">What is your name?</label></h1>
+                    <input type="text" id="name-input" autocomplete="off" value="Hero" aria-describedby="alert">
+                    <p id="alert" aria-live="polite"></p>
+                    <label class="hardcore-option"><input type="checkbox" id="hardcore-checkbox"> <span data-i18n="hardcore">Hardcore</span></label>
+                    <button type="submit" data-i18n="confirm">Confirm</button>
+                </div>
             </form>
         </section>
         <section id="dungeon-main" class="game-container scrollable">
