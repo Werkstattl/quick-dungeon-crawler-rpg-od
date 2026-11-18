@@ -4,7 +4,11 @@
 
 # Quick Dungeon Crawler on Demand
 
-Quick Dungeon Crawler on Demand is an open-source endless dungeon crawler with randomized floors, enemies and items. It's based on the [source code of Dungeon crawler on Demand](https://github.com/redpangilinan/dungeon-crawler-rpg-od), by [Redpangilinan](https://github.com/redpangilinan).
+Quick Dungeon Crawler on Demand is an open-source endless dungeon crawler with randomized floors, enemies and loot.
+
+[![Play in Browser](https://img.shields.io/badge/Play%20in-Browser-blue?logo=google-chrome&logoColor=white)](https://dungeon.werkstattl.com/)
+
+When the path splits, choose your route. In combat, you can heal yourself as a Paladin or dodge the next attack as a Scout. Along the way, you can unlock companions who join you on future runs.
 
 <div align="center">
   <img alt="In game screenshot" src="./assets/screenshots/combat.webp" width="350" />
@@ -20,11 +24,15 @@ The game is available for Android, iOS/iPadOS, macOS and Desktop platforms. You 
 
 [![Play on itch.io](https://img.shields.io/badge/Play%20on-itch.io-red?logo=itch-io)](https://werkstattl.itch.io/quick-dungeon-crawler-on-demand)
 
-[![Play in Browser](https://img.shields.io/badge/Play%20in-Browser-blue?logo=google-chrome&logoColor=white)](https://dungeon.werkstattl.com/)
-
 If you like this game, please consider [supporting me on GitHub Sponsors](https://github.com/sponsors/7underlines)!
 
 Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
+
+## Can I move my save to another device?
+
+On your old device, open **Menu → Export/Import Data** and select **Copy** under **Export Data**. On your new device, open the same menu, paste the full code under **Import Data**, select **Import** and confirm.
+
+Importing replaces the save on the new device and resets the current dungeon run. You keep the inventory, equipped items, gold and permanent unlocks from your exported save.
 
 ## Playing Locally
 
@@ -65,7 +73,7 @@ Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## Credits
 
-This game began as a fork after the original developer announced they would no longer continue development and were open to someone else taking over.
+This game began as a fork of [Dungeon crawler on Demand](https://github.com/redpangilinan/dungeon-crawler-rpg-od) after the original developer announced they would no longer continue development and were open to someone else taking over.
 
 - [Red Pangilinan](https://github.com/redpangilinan) - Original Creator
 - [Aekashics](https://aekashics.itch.io/) - Monster Sprites
