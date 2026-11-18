@@ -559,6 +559,48 @@
   "remaining": "Baki: {count}",
   "reroll-button": "Rawak semula {remaining}/{total}",
   "reroll-gold-button": "Rawak semula {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Hentakan Balas",
+      "description": "Apabila musuh mencederakan anda, ada peluang {value}% musuh itu tergamam dan terlepas giliran seterusnya."
+    },
+    "criticalDefense": {
+      "name": "Pertahanan Kritikal",
+      "description": "Kurangkan kerosakan tambahan daripada serangan kritikal musuh sebanyak {value}%."
+    },
+    "evasionHeal": {
+      "name": "Pulih Selepas Mengelak",
+      "description": "Apabila anda mengelak serangan, pulihkan HP bersamaan {value}% daripada HP maksimum."
+    },
+    "blockChance": {
+      "name": "Tangkisan Perisai",
+      "description": "Setiap serangan yang mengenai anda berpeluang {value}% untuk hanya menyebabkan separuh kerosakan."
+    },
+    "deflection": {
+      "name": "Pantulan",
+      "description": "Apabila serangan musuh mengenai anda, pantulkan {value}% daripada kerosakan yang diterima kepada penyerang."
+    },
+    "riposte": {
+      "name": "Serangan Balas",
+      "description": "Selepas mengelak, anda mempunyai peluang {value}% untuk membalas dengan kerosakan setara satu serangan biasa."
+    },
+    "lastStand": {
+      "name": "Benteng Terakhir",
+      "description": "Apabila HP di bawah 30%, kerosakan yang diterima daripada serangan musuh berkurang sebanyak {value}%."
+    },
+    "openingStrike": {
+      "name": "Serangan Pembuka",
+      "description": "Dalam setiap pertempuran, serangan pertama anda yang mengenai musuh menyebabkan {value}% lebih kerosakan."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Hentakan Balas membuatkan musuh tergamam dan terlepas serangan ini.",
+    "blockChance": "Perisai anda menyekat separuh kerosakan serangan ini.",
+    "evasionHeal": "Anda memulihkan {value} HP selepas mengelak.",
+    "deflection": "Anda memantulkan {value} kerosakan kepada penyerang.",
+    "riposte": "Serangan balas anda menyebabkan {value} kerosakan.",
+    "openingStrike": "Serangan Pembuka menyebabkan {value} kerosakan tambahan."
+  },
   "equipment-names": {
     "sword": "Pedang",
     "axe": "Kapak",

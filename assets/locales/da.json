@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Tilbageslag",
+      "description": "Når en fjende skader dig, er der {value}% chance for, at den springer sit næste angreb over."
+    },
+    "criticalDefense": {
+      "name": "Kritisk forsvar",
+      "description": "Fjendens kritiske træffere giver {value}% mindre bonusskade."
+    },
+    "evasionHeal": {
+      "name": "Nye kræfter",
+      "description": "Genvind {value}% af dine maksimale HP, når du undviger."
+    },
+    "blockChance": {
+      "name": "Skjoldblokering",
+      "description": "Hver træffer har {value}% chance for at gøre halv skade."
+    },
+    "deflection": {
+      "name": "Tilbagekastning",
+      "description": "Når en fjende rammer dig, kaster du {value}% af skaden tilbage."
+    },
+    "riposte": {
+      "name": "Ripost",
+      "description": "Når du undviger, har du {value}% chance for at slå igen med skade som ved et almindeligt angreb."
+    },
+    "lastStand": {
+      "name": "Sidste bastion",
+      "description": "Når du er under 30% HP, tager du {value}% mindre skade fra fjendens træffere."
+    },
+    "openingStrike": {
+      "name": "Åbningsslag",
+      "description": "Din første træffer i hver kamp gør {value}% mere skade."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Tilbageslaget lammer fjenden, så den springer dette angreb over.",
+    "blockChance": "Dit skjold halverer skaden.",
+    "evasionHeal": "Du genvinder {value} HP efter at have undveget angrebet.",
+    "deflection": "Du kaster {value} skade tilbage på angriberen.",
+    "riposte": "Din ripost gør {value} skade.",
+    "openingStrike": "Dit åbningsslag gør {value} ekstra skade."
+  },
   "save-backup-recovery-error": "Dit gemte spil kunne ikke gendannes. Kopiér dine gemte data, og send dem til os via e-mail eller Discord, så vi kan undersøge dem. Du kan også slette de gemte data og begynde forfra.",
   "save-recovery-export": "Vis / kopiér gemte data",
   "save-recovery-delete": "Slet gemte data, og genstart",

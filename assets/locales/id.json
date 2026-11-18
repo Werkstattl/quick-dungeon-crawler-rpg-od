@@ -559,6 +559,48 @@
   "remaining": "Tersisa: {count}",
   "reroll-button": "Acak ulang {remaining}/{total}",
   "reroll-gold-button": "Acak ulang {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Hentakan Balik",
+      "description": "Saat musuh melukaimu, ada peluang {value}% musuh itu terkena efek lumpuh dan kehilangan giliran berikutnya."
+    },
+    "criticalDefense": {
+      "name": "Pertahanan Kritis",
+      "description": "Mengurangi tambahan kerusakan dari serangan kritis musuh sebesar {value}%."
+    },
+    "evasionHeal": {
+      "name": "Pulih Saat Mengelak",
+      "description": "Saat menghindari serangan, pulihkan HP sebesar {value}% dari HP maksimum."
+    },
+    "blockChance": {
+      "name": "Tangkisan Perisai",
+      "description": "Setiap serangan yang mengenaimu berpeluang {value}% hanya menimbulkan separuh kerusakan."
+    },
+    "deflection": {
+      "name": "Pantulan",
+      "description": "Saat musuh mengenaimu, pantulkan {value}% kerusakan yang diterima kepada penyerang."
+    },
+    "riposte": {
+      "name": "Serangan Balasan",
+      "description": "Saat menghindari serangan, ada peluang {value}% untuk membalas dengan kerusakan setara satu serangan biasa."
+    },
+    "lastStand": {
+      "name": "Pertahanan Terakhir",
+      "description": "Saat HP di bawah 30%, kerusakan yang diterima dari serangan musuh berkurang {value}%."
+    },
+    "openingStrike": {
+      "name": "Serangan Pembuka",
+      "description": "Serangan pertamamu yang mengenai musuh di setiap pertempuran menimbulkan {value}% lebih banyak kerusakan."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Hentakan Balik melumpuhkan musuh sehingga serangan kali ini terlewat.",
+    "blockChance": "Perisaimu menahan separuh kerusakan serangan ini.",
+    "evasionHeal": "Kamu memulihkan {value} HP setelah menghindari serangan.",
+    "deflection": "Kamu memantulkan {value} kerusakan kepada penyerang.",
+    "riposte": "Serangan balasanmu menimbulkan {value} kerusakan.",
+    "openingStrike": "Serangan Pembuka menimbulkan {value} kerusakan tambahan."
+  },
   "equipment-names": {
     "sword": "Pedang",
     "axe": "Kapak",

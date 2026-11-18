@@ -559,6 +559,48 @@
   "remaining": "남음: {count}",
   "reroll-button": "다시 굴리기 {remaining}/{total}",
   "reroll-gold-button": "다시 굴리기 {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "충격 반동",
+      "description": "적이 내게 피해를 주면 {value}% 확률로 기절해 다음 차례를 건너뜁니다."
+    },
+    "criticalDefense": {
+      "name": "치명타 방어",
+      "description": "적의 치명타로 받는 추가 피해가 {value}% 감소합니다."
+    },
+    "evasionHeal": {
+      "name": "재정비",
+      "description": "공격을 회피하면 최대 HP의 {value}%를 회복합니다."
+    },
+    "blockChance": {
+      "name": "방패 막기",
+      "description": "적의 공격에 맞으면 {value}% 확률로 피해가 절반으로 줄어듭니다."
+    },
+    "deflection": {
+      "name": "피해 반사",
+      "description": "적의 공격으로 받은 피해의 {value}%를 공격자에게 되돌려줍니다."
+    },
+    "riposte": {
+      "name": "받아치기",
+      "description": "공격을 회피하면 {value}% 확률로 일반 공격 1회분의 피해를 줍니다."
+    },
+    "lastStand": {
+      "name": "최후의 저항",
+      "description": "HP가 30% 미만일 때 적의 공격으로 받는 피해가 {value}% 감소합니다."
+    },
+    "openingStrike": {
+      "name": "첫 일격",
+      "description": "전투마다 처음으로 적중한 내 공격의 피해가 {value}% 증가합니다."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "충격 반동으로 적이 기절해 이번 공격을 건너뜁니다.",
+    "blockChance": "방패로 막아 피해가 절반으로 줄었습니다.",
+    "evasionHeal": "공격을 회피하고 HP를 {value} 회복했습니다.",
+    "deflection": "피해 반사로 공격자에게 피해를 {value} 되돌려줬습니다.",
+    "riposte": "받아치기로 피해를 {value} 줬습니다.",
+    "openingStrike": "첫 일격으로 추가 피해를 {value} 줬습니다."
+  },
   "equipment-names": {
     "sword": "검",
     "axe": "도끼",

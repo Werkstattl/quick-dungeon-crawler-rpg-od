@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} dealt {value} {type} to {player}{lifesteal}.",
   "enemy-vamp-heal": ", and healed {value} HP from vampirism",
   "aegis-thorns-reflect": ", and took {value} reflected damage from Aegis Thorns",
+  "equipment-proc": {
+    "hitRecoil": "Hit Recoil stuns the enemy. It skips this attack.",
+    "blockChance": "Your shield blocks half the incoming damage.",
+    "evasionHeal": "You recover {value} HP after dodging.",
+    "deflection": "Deflection returns {value} damage to the attacker.",
+    "riposte": "Your riposte deals {value} damage.",
+    "openingStrike": "Opening Strike deals {value} extra damage."
+  },
   "special-ability-attack-hit": "{player} unleashed a special ability for {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} used a special ability and healed {hp} HP!",
   "special-ability-companion-boost": "{player} boosted {companion}! +50% ATK/APS for 5s.",
@@ -704,6 +712,40 @@
     "regenerating": "Recovers health every second from a limited reserve equal to 50% of maximum health, but is frailer.",
     "thorned": "Reflects part of the damage you deal back at you.",
     "volatile": "Explodes when slain, damaging you."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Hit Recoil",
+      "description": "When an enemy damages you, it has a {value}% chance to miss its next turn."
+    },
+    "criticalDefense": {
+      "name": "Critical Defense",
+      "description": "Enemy critical hits deal {value}% less bonus damage."
+    },
+    "evasionHeal": {
+      "name": "Second Wind",
+      "description": "When you dodge, recover {value}% of your maximum HP."
+    },
+    "blockChance": {
+      "name": "Shield Block",
+      "description": "Each incoming hit has a {value}% chance to deal half damage."
+    },
+    "deflection": {
+      "name": "Deflection",
+      "description": "When an enemy hits you, deal {value}% of the damage taken back to it."
+    },
+    "riposte": {
+      "name": "Riposte",
+      "description": "When you dodge, you have a {value}% chance to counter for one basic attack’s damage."
+    },
+    "lastStand": {
+      "name": "Last Stand",
+      "description": "While below 30% HP, take {value}% less damage from enemy hits."
+    },
+    "openingStrike": {
+      "name": "Opening Strike",
+      "description": "Your first hit each fight deals {value}% more damage."
+    }
   },
   "forge-token": "Forge Token",
   "forge-tokens": "Forge Tokens",

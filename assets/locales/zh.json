@@ -562,6 +562,48 @@
   "descend": "下楼",
   "descended-to-floor": "你下到了第 {floor} 层。",
   "found-stairs": "你发现了一段通往更深处的楼梯。",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "震慑",
+      "description": "敌人对你造成伤害时，有 {value}% 的几率被震晕，跳过下一回合。"
+    },
+    "criticalDefense": {
+      "name": "暴击防御",
+      "description": "敌人暴击造成的额外伤害降低 {value}%。"
+    },
+    "evasionHeal": {
+      "name": "回气",
+      "description": "闪避后，恢复相当于生命上限 {value}% 的生命。"
+    },
+    "blockChance": {
+      "name": "盾牌格挡",
+      "description": "受到攻击时，有 {value}% 的几率使该次伤害减半。"
+    },
+    "deflection": {
+      "name": "伤害反弹",
+      "description": "敌人击中你时，将实际所受伤害的 {value}% 返还给攻击者。"
+    },
+    "riposte": {
+      "name": "闪避反击",
+      "description": "闪避后，有 {value}% 的几率反击，造成一次普通攻击的伤害。"
+    },
+    "lastStand": {
+      "name": "背水一战",
+      "description": "生命低于 30% 时，受到的敌方攻击伤害降低 {value}%。"
+    },
+    "openingStrike": {
+      "name": "开场一击",
+      "description": "每场战斗中，你首次命中的攻击伤害提高 {value}%。"
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "敌人被震晕，跳过了本次攻击。",
+    "blockChance": "盾牌格挡成功，所受伤害减半。",
+    "evasionHeal": "闪避后恢复了 {value} 点生命。",
+    "deflection": "向攻击者反弹了 {value} 点伤害。",
+    "riposte": "闪避反击造成了 {value} 点伤害。",
+    "openingStrike": "开场一击额外造成了 {value} 点伤害。"
+  },
   "equipment-names": {
     "sword": "长剑",
     "axe": "战斧",

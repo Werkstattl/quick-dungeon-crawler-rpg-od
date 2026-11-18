@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Rekyl",
+      "description": "När en fiende skadar dig är det {value}% chans att den hoppar över sin nästa attack."
+    },
+    "criticalDefense": {
+      "name": "Kritiskt försvar",
+      "description": "Fiendens kritiska träffar ger {value}% mindre bonusskada."
+    },
+    "evasionHeal": {
+      "name": "Nya krafter",
+      "description": "När du undviker en attack återfår du {value}% av ditt maximala HP."
+    },
+    "blockChance": {
+      "name": "Sköldblockering",
+      "description": "Varje inkommande träff har {value}% chans att göra halv skada."
+    },
+    "deflection": {
+      "name": "Återkastning",
+      "description": "När en fiende träffar dig kastar du tillbaka {value}% av skadan du tar."
+    },
+    "riposte": {
+      "name": "Ripost",
+      "description": "När du undviker en attack har du {value}% chans att slå tillbaka med samma skada som en grundattack."
+    },
+    "lastStand": {
+      "name": "Sista motståndet",
+      "description": "När du har under 30% HP tar du {value}% mindre skada från fiendens träffar."
+    },
+    "openingStrike": {
+      "name": "Öppningsslag",
+      "description": "Din första träff i varje strid gör {value}% mer skada."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Rekylen bedövar fienden så att den hoppar över den här attacken.",
+    "blockChance": "Din sköld halverar skadan.",
+    "evasionHeal": "Du återfår {value} HP efter att ha undvikit attacken.",
+    "deflection": "Du kastar tillbaka {value} skada på angriparen.",
+    "riposte": "Din ripost gör {value} skada.",
+    "openingStrike": "Ditt öppningsslag gör {value} extra skada."
+  },
   "save-backup-recovery-error": "Ditt sparade spel kunde inte återställas. Kopiera dina sparade data och skicka dem till oss via e-post eller Discord så att vi kan undersöka dem. Du kan också radera sparade data och börja om.",
   "save-recovery-export": "Visa / kopiera sparade data",
   "save-recovery-delete": "Radera sparade data och starta om",

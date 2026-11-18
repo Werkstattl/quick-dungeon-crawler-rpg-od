@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} causou {value} {type} em {player}{lifesteal}.",
   "enemy-vamp-heal": ", e curou {value} HP com vampirismo",
   "aegis-thorns-reflect": ", e recebeu {value} de dano refletido de Espinhos da Égide",
+  "equipment-proc": {
+    "hitRecoil": "O recuo atordoa o inimigo e impede-o de atacar.",
+    "blockChance": "O teu escudo bloqueia metade do dano.",
+    "evasionHeal": "Recuperas {value} HP depois de te esquivares.",
+    "deflection": "Devolves {value} de dano ao atacante.",
+    "riposte": "A tua riposta causa {value} de dano.",
+    "openingStrike": "O teu golpe de abertura causa {value} de dano adicional."
+  },
   "special-ability-attack-hit": "{player} liberou uma habilidade especial e causou {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} usou uma habilidade especial e curou {hp} HP!",
   "special-ability-companion-boost": "{player} fortaleceu {companion}! +50% ATQ/APS por 5 s.",
@@ -725,6 +733,40 @@
     "regenerating": "Recupera vida a cada segundo de uma reserva limitada equivalente a 50% da vida máxima, mas é mais frágil.",
     "thorned": "Reflete parte do dano que causas.",
     "volatile": "Explode ao morrer e fere-te."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Recuo",
+      "description": "Quando um inimigo te causa dano, tem {value}% de probabilidade de perder o próximo turno."
+    },
+    "criticalDefense": {
+      "name": "Defesa crítica",
+      "description": "Os golpes críticos dos inimigos causam menos {value}% de dano adicional."
+    },
+    "evasionHeal": {
+      "name": "Segundo fôlego",
+      "description": "Quando te esquivas, recuperas {value}% do teu HP máximo."
+    },
+    "blockChance": {
+      "name": "Bloqueio com escudo",
+      "description": "Cada golpe recebido tem {value}% de probabilidade de causar apenas metade do dano."
+    },
+    "deflection": {
+      "name": "Reflexão",
+      "description": "Quando um inimigo te atinge, devolves-lhe {value}% do dano sofrido."
+    },
+    "riposte": {
+      "name": "Riposta",
+      "description": "Quando te esquivas, tens {value}% de probabilidade de contra-atacar com o dano de um ataque básico."
+    },
+    "lastStand": {
+      "name": "Última resistência",
+      "description": "Com menos de 30% do teu HP, sofres menos {value}% de dano dos golpes inimigos."
+    },
+    "openingStrike": {
+      "name": "Golpe de abertura",
+      "description": "O primeiro golpe que acertas em cada combate causa mais {value}% de dano."
+    }
   },
   "forge-token": "Ficha da forja",
   "forge-tokens": "Fichas da forja",

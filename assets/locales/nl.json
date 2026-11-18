@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Terugslag",
+      "description": "Als een vijand je schade toebrengt, heeft hij {value}% kans om zijn volgende aanval over te slaan."
+    },
+    "criticalDefense": {
+      "name": "Kritieke verdediging",
+      "description": "De extra schade van vijandelijke kritieke treffers daalt met {value}%."
+    },
+    "evasionHeal": {
+      "name": "Tweede adem",
+      "description": "Herstel na het ontwijken {value}% van je maximale HP."
+    },
+    "blockChance": {
+      "name": "Schildblok",
+      "description": "Bij elke treffer heb je {value}% kans om de schade te halveren."
+    },
+    "deflection": {
+      "name": "Terugkaatsing",
+      "description": "Kaats {value}% van de opgelopen schade terug naar de aanvaller."
+    },
+    "riposte": {
+      "name": "Riposte",
+      "description": "Na het ontwijken heb je {value}% kans op een tegenaanval die de schade van een basisaanval toebrengt."
+    },
+    "lastStand": {
+      "name": "Laatste verzet",
+      "description": "Onder 30% HP loop je {value}% minder schade op door vijandelijke treffers."
+    },
+    "openingStrike": {
+      "name": "Openingsslag",
+      "description": "Je eerste treffer van elk gevecht brengt {value}% extra schade toe."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "De vijand is verdoofd door de terugslag en slaat deze aanval over.",
+    "blockChance": "Je schild halveert de inkomende schade.",
+    "evasionHeal": "Je herstelt {value} HP na het ontwijken.",
+    "deflection": "Je kaatst {value} schade terug naar de aanvaller.",
+    "riposte": "Je riposte brengt {value} schade toe.",
+    "openingStrike": "Je openingsslag brengt {value} extra schade toe."
+  },
   "save-backup-recovery-error": "Je opgeslagen spel kon niet worden hersteld. Kopieer je opgeslagen gegevens en stuur ze ons via e-mail of Discord, zodat we ze kunnen bekijken. Je kunt de opgeslagen gegevens ook verwijderen en opnieuw beginnen.",
   "save-recovery-export": "Opgeslagen gegevens tonen / kopiëren",
   "save-recovery-delete": "Opgeslagen gegevens verwijderen en opnieuw starten",

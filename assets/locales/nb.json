@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Tilbakeslag",
+      "description": "Når en fiende skader deg, er det {value}% sjanse for at den hopper over sitt neste angrep."
+    },
+    "criticalDefense": {
+      "name": "Kritisk forsvar",
+      "description": "Fiendens kritiske treff gir {value}% mindre bonusskade."
+    },
+    "evasionHeal": {
+      "name": "Nye krefter",
+      "description": "Når du unnviker et angrep, får du tilbake {value}% av maksimal HP."
+    },
+    "blockChance": {
+      "name": "Skjoldblokkering",
+      "description": "Hvert treff har {value}% sjanse for å gjøre halv skade."
+    },
+    "deflection": {
+      "name": "Tilbakekasting",
+      "description": "Når en fiende treffer deg, kaster du {value}% av skaden tilbake."
+    },
+    "riposte": {
+      "name": "Ripost",
+      "description": "Når du unnviker, har du {value}% sjanse til å slå tilbake med skade som ved et vanlig angrep."
+    },
+    "lastStand": {
+      "name": "Siste skanse",
+      "description": "Når du er under 30% HP, tar du {value}% mindre skade fra fiendens treff."
+    },
+    "openingStrike": {
+      "name": "Åpningsslag",
+      "description": "Ditt første treff i hver kamp gjør {value}% mer skade."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Tilbakeslaget lammer fienden, som hopper over dette angrepet.",
+    "blockChance": "Skjoldet ditt halverer skaden.",
+    "evasionHeal": "Du får tilbake {value} HP etter å ha unngått angrepet.",
+    "deflection": "Du kaster {value} skade tilbake på angriperen.",
+    "riposte": "Riposten din gjør {value} skade.",
+    "openingStrike": "Åpningsslaget ditt gjør {value} ekstra skade."
+  },
   "save-backup-recovery-error": "Det lagrede spillet ditt kunne ikke gjenopprettes. Kopier de lagrede dataene og send dem til oss via e-post eller Discord, slik at vi kan undersøke dem. Du kan også slette de lagrede dataene og begynne på nytt.",
   "save-recovery-export": "Vis / kopier lagrede data",
   "save-recovery-delete": "Slett lagrede data og start på nytt",

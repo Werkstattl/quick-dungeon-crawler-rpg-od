@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} verursacht {value} {type} an {player}{lifesteal}.",
   "enemy-vamp-heal": " und heilt {value} HP durch Lebensraub",
   "aegis-thorns-reflect": " und erleidet {value} reflektierten Schaden durch Dornen der Ägis",
+  "equipment-proc": {
+    "hitRecoil": "Der Rückstoß betäubt den Gegner. Sein Angriff fällt aus.",
+    "blockChance": "Dein Schild blockt die Hälfte des Schadens.",
+    "evasionHeal": "Nach dem Ausweichen erhältst du {value} HP zurück.",
+    "deflection": "Du wirfst {value} Schaden auf den Angreifer zurück.",
+    "riposte": "Deine Riposte verursacht {value} Schaden.",
+    "openingStrike": "Dein Eröffnungsschlag verursacht {value} zusätzlichen Schaden."
+  },
   "special-ability-attack-hit": "{player} entfesselt eine Spezialfähigkeit für {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} nutzt eine Spezialfähigkeit und heilt {hp} HP!",
   "special-ability-companion-boost": "{player} stärkt {companion}! +50% ATK/APS (5 Sek.).",
@@ -725,6 +733,40 @@
     "regenerating": "Regeneriert jede Sekunde Leben aus einer begrenzten Reserve von 50 % der maximalen LP, ist aber zerbrechlicher.",
     "thorned": "Wirft einen Teil deines Schadens auf dich zurück.",
     "volatile": "Explodiert beim Tod und verletzt dich."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Rückstoß",
+      "description": "Wenn ein Gegner dir Schaden zufügt, setzt er mit einer Chance von {value} % in seiner nächsten Runde aus."
+    },
+    "criticalDefense": {
+      "name": "Kritische Abwehr",
+      "description": "Kritische Treffer von Gegnern verursachen {value} % weniger Bonusschaden."
+    },
+    "evasionHeal": {
+      "name": "Zweiter Atem",
+      "description": "Wenn du ausweichst, erhältst du {value} % deiner maximalen HP zurück."
+    },
+    "blockChance": {
+      "name": "Schildblock",
+      "description": "Jeder gegnerische Treffer verursacht mit einer Chance von {value} % nur halben Schaden."
+    },
+    "deflection": {
+      "name": "Schadensreflexion",
+      "description": "Bei einem Treffer wirfst du {value} % des erlittenen Schadens auf den Gegner zurück."
+    },
+    "riposte": {
+      "name": "Riposte",
+      "description": "Wenn du ausweichst, konterst du mit einer Chance von {value} % und verursachst den Schaden eines normalen Angriffs."
+    },
+    "lastStand": {
+      "name": "Letztes Aufgebot",
+      "description": "Solange du weniger als 30 % deiner HP hast, erleidest du durch gegnerische Treffer {value} % weniger Schaden."
+    },
+    "openingStrike": {
+      "name": "Eröffnungsschlag",
+      "description": "Dein erster Treffer in jedem Kampf verursacht {value} % mehr Schaden."
+    }
   },
   "forge-token": "Schmiede-Token",
   "forge-tokens": "Schmiede-Tokens",

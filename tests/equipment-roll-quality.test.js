@@ -80,3 +80,21 @@ test('minimum and maximum rolls map to 0% and 100% quality below the stat caps',
         });
     });
 });
+
+test('equipment inspection shows the rolled special effect with or without roll quality enabled', () => {
+    const context = createContext('min');
+    const locale = JSON.parse(fs.readFileSync(path.join(root, 'assets/locales/en.json'), 'utf8'));
+    context.t = (key, params) => {
+        const text = key.split('.').reduce((value, part) => value && value[part], locale);
+        return typeof text === 'string' ? text.replace('{value}', params?.value) : key;
+    };
+    context.item = { rarity: 'Common', category: 'Plate', lvl: 1, stats: [], specialBonus: 7 };
+    for (const showRollQuality of [false, true]) {
+        const card = vm.runInContext(`renderEquipmentCard({ item, icon: '', totals: {}, showRollQuality: ${showRollQuality} })`, context);
+        assert.match(card, /Hit Recoil/);
+        assert.match(card, /7% chance to miss its next turn/);
+        assert.doesNotMatch(card, /data-roll-stat="hitRecoil"/);
+    }
+    delete context.item.specialBonus;
+    assert.equal(vm.runInContext('renderEquipmentSpecialBonus(item)', context), '');
+});

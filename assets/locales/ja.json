@@ -559,6 +559,48 @@
   "remaining": "残り: {count}",
   "reroll-button": "リロール {remaining}/{total}",
   "reroll-gold-button": "リロール {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "ひるませ",
+      "description": "敵からダメージを受けると、{value}%の確率でその敵をひるませ、次の行動を封じる。"
+    },
+    "criticalDefense": {
+      "name": "クリティカル防御",
+      "description": "敵のクリティカルによる追加ダメージを{value}%軽減する。"
+    },
+    "evasionHeal": {
+      "name": "息継ぎ",
+      "description": "攻撃を回避すると、最大HPの{value}%を回復する。"
+    },
+    "blockChance": {
+      "name": "盾防御",
+      "description": "敵の攻撃が命中したとき、{value}%の確率でダメージを半減する。"
+    },
+    "deflection": {
+      "name": "反射",
+      "description": "敵の攻撃で受けたダメージの{value}%を相手に返す。"
+    },
+    "riposte": {
+      "name": "切り返し",
+      "description": "攻撃を回避すると、{value}%の確率で通常攻撃1回分のダメージを与える。"
+    },
+    "lastStand": {
+      "name": "背水の陣",
+      "description": "HPが30%未満の間、敵の攻撃で受けるダメージを{value}%軽減する。"
+    },
+    "openingStrike": {
+      "name": "先制の一撃",
+      "description": "戦闘ごとに、最初に命中した自分の攻撃のダメージが{value}%増加する。"
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "敵はひるんで攻撃できなかった。",
+    "blockChance": "盾で攻撃を受け止め、ダメージを半減した。",
+    "evasionHeal": "攻撃を回避し、HPを{value}回復した。",
+    "deflection": "反射で敵に{value}ダメージを返した。",
+    "riposte": "切り返しで{value}ダメージを与えた。",
+    "openingStrike": "先制の一撃で{value}の追加ダメージを与えた。"
+  },
   "equipment-names": {
     "sword": "剣",
     "axe": "斧",

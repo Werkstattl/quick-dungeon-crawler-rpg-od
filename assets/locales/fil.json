@@ -559,6 +559,48 @@
   "remaining": "Natitira: {count}",
   "reroll-button": "I-reroll {remaining}/{total}",
   "reroll-gold-button": "I-reroll {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Pagkayanig",
+      "description": "Kapag napinsala ka ng kalaban, may {value}% tsansang matulala ito at mawalan ng susunod na turno."
+    },
+    "criticalDefense": {
+      "name": "Depensa sa Kritikal",
+      "description": "Nababawasan ng {value}% ang dagdag na pinsala mula sa kritikal na atake ng kalaban."
+    },
+    "evasionHeal": {
+      "name": "Panibagong Lakas",
+      "description": "Kapag nakaiwas ka sa atake, manumbalik ang HP na katumbas ng {value}% ng iyong pinakamataas na HP."
+    },
+    "blockChance": {
+      "name": "Salag ng Kalasag",
+      "description": "Kapag tinamaan ka, may {value}% tsansang mabawasan nang kalahati ang pinsala ng atakeng iyon."
+    },
+    "deflection": {
+      "name": "Pagbalik ng Pinsala",
+      "description": "Kapag tinamaan ka ng kalaban, ibalik sa kanya ang {value}% ng pinsalang natanggap mo."
+    },
+    "riposte": {
+      "name": "Ganti sa Pag-iwas",
+      "description": "Kapag nakaiwas ka, may {value}% tsansang gumanti ng pinsalang katumbas ng isang karaniwang atake."
+    },
+    "lastStand": {
+      "name": "Huling Paninindigan",
+      "description": "Habang mas mababa sa 30% ang HP mo, nababawasan ng {value}% ang pinsalang natatanggap mula sa atake ng kalaban."
+    },
+    "openingStrike": {
+      "name": "Pambungad na Atake",
+      "description": "Sa bawat laban, ang una mong atake na tumama ay nagdudulot ng {value}% dagdag na pinsala."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Natulala ang kalaban sa pagkayanig at hindi ito makakaatake sa turnong ito.",
+    "blockChance": "Sinalag ng iyong kalasag ang kalahati ng pinsala.",
+    "evasionHeal": "Nanumbalik ang {value} HP mo matapos makaiwas.",
+    "deflection": "Naibalik mo sa umatake ang {value} pinsala.",
+    "riposte": "Nagdulot ng {value} pinsala ang iyong ganting atake.",
+    "openingStrike": "Nagdulot ng {value} dagdag na pinsala ang Pambungad na Atake."
+  },
   "equipment-names": {
     "sword": "Espada",
     "axe": "Palakol",

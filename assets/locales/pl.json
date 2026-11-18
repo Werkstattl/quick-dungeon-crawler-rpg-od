@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} zadał {value} {type} graczowi {player}{lifesteal}.",
   "enemy-vamp-heal": " i odzyskał {value} PW dzięki wampiryzmowi",
   "aegis-thorns-reflect": ", i otrzymał(-a) {value} obrażeń odbitych od Kolców Egidy",
+  "equipment-proc": {
+    "hitRecoil": "Odrzut ogłusza wroga i udaremnia jego atak.",
+    "blockChance": "Twoja tarcza blokuje połowę obrażeń.",
+    "evasionHeal": "Po uniku odzyskujesz {value} PW.",
+    "deflection": "Odbijasz w napastnika {value} pkt. obrażeń.",
+    "riposte": "Twoja riposta zadaje {value} pkt. obrażeń.",
+    "openingStrike": "Twój cios otwierający zadaje dodatkowo {value} pkt. obrażeń."
+  },
   "special-ability-attack-hit": "{player} uwolnił zdolność specjalną za {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} użył zdolności specjalnej i odzyskał {hp} PW!",
   "special-ability-companion-boost": "{player} wzmocnił {companion}! +50% ATK/APS przez 5 s.",
@@ -704,6 +712,40 @@
     "regenerating": "Odzyskuje zdrowie co sekundę z ograniczonej rezerwy równej 50% maksymalnego zdrowia, ale jest kruchszy.",
     "thorned": "Odbija część zadawanych przez ciebie obrażeń.",
     "volatile": "Eksploduje po śmierci, raniąc cię."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Odrzut",
+      "description": "Gdy wróg zada ci obrażenia, ma {value}% szans na utratę następnej tury."
+    },
+    "criticalDefense": {
+      "name": "Ochrona przed trafieniami krytycznymi",
+      "description": "Dodatkowe obrażenia z trafień krytycznych wrogów są mniejsze o {value}%."
+    },
+    "evasionHeal": {
+      "name": "Drugi oddech",
+      "description": "Po uniku odzyskujesz {value}% maksymalnych PW."
+    },
+    "blockChance": {
+      "name": "Blok tarczą",
+      "description": "Każde otrzymane trafienie ma {value}% szans na zadanie tylko połowy obrażeń."
+    },
+    "deflection": {
+      "name": "Odbicie",
+      "description": "Gdy wróg cię trafi, odbijasz w niego {value}% otrzymanych obrażeń."
+    },
+    "riposte": {
+      "name": "Riposta",
+      "description": "Po uniku masz {value}% szans na kontratak zadający obrażenia zwykłego ataku."
+    },
+    "lastStand": {
+      "name": "Ostatni bastion",
+      "description": "Gdy masz mniej niż 30% PW, trafienia wrogów zadają ci o {value}% mniej obrażeń."
+    },
+    "openingStrike": {
+      "name": "Cios otwierający",
+      "description": "Twoje pierwsze trafienie w każdej walce zadaje o {value}% więcej obrażeń."
+    }
   },
   "forge-token": "Żeton kuźni",
   "forge-tokens": "Żetony kuźni",

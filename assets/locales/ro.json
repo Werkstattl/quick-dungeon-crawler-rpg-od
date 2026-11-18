@@ -543,6 +543,14 @@
   "enemy-attack-hit": "{enemy} a provocat {value} {type} lui {player}{lifesteal}.",
   "enemy-vamp-heal": ", și a vindecat {value} HP prin vampirism",
   "aegis-thorns-reflect": ", și a suferit {value} daune reflectate de la Spinii Egidei",
+  "equipment-proc": {
+    "hitRecoil": "Reculul amețește inamicul și îl împiedică să atace.",
+    "blockChance": "Scutul tău blochează jumătate din daune.",
+    "evasionHeal": "Recuperezi {value} HP după eschivă.",
+    "deflection": "Îi întorci atacatorului {value} daune.",
+    "riposte": "Riposta ta provoacă {value} daune.",
+    "openingStrike": "Lovitura de deschidere provoacă {value} daune suplimentare."
+  },
   "special-ability-attack-hit": "{player} a dezlănțuit o abilitate specială pentru {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} a folosit o abilitate specială și a vindecat {hp} HP!",
   "special-ability-companion-boost": "{player} l-a stimulat pe {companion}! +50% ATK/APS timp de 5 s.",
@@ -702,6 +710,40 @@
     "regenerating": "Recuperează viață în fiecare secundă dintr-o rezervă limitată egală cu 50% din viața maximă, dar e mai fragil.",
     "thorned": "Reflectă o parte din daunele pe care le provoci.",
     "volatile": "Explodează când moare, rănindu-te."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Recul",
+      "description": "Când un inamic îți provoacă daune, există o șansă de {value}% ca acesta să piardă tura următoare."
+    },
+    "criticalDefense": {
+      "name": "Apărare critică",
+      "description": "Loviturile critice ale inamicilor provoacă daune suplimentare reduse cu {value}%."
+    },
+    "evasionHeal": {
+      "name": "Suflu nou",
+      "description": "Când te eschivezi, recuperezi {value}% din viața maximă."
+    },
+    "blockChance": {
+      "name": "Blocaj cu scutul",
+      "description": "Fiecare lovitură primită are o șansă de {value}% să provoace doar jumătate din daune."
+    },
+    "deflection": {
+      "name": "Reflectare",
+      "description": "Când un inamic te lovește, îi întorci {value}% din daunele suferite."
+    },
+    "riposte": {
+      "name": "Ripostă",
+      "description": "Când te eschivezi, ai o șansă de {value}% să ripostezi cu daunele unui atac de bază."
+    },
+    "lastStand": {
+      "name": "Ultima rezistență",
+      "description": "Când ai mai puțin de 30% din viață, loviturile inamicilor îți provoacă cu {value}% mai puține daune."
+    },
+    "openingStrike": {
+      "name": "Lovitură de deschidere",
+      "description": "Prima ta lovitură reușită din fiecare luptă provoacă cu {value}% mai multe daune."
+    }
   },
   "forge-token": "Jeton de forjă",
   "forge-tokens": "Jetoane de forjă",

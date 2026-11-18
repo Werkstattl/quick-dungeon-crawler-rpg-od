@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Takaisku",
+      "description": "Kun vihollinen vahingoittaa sinua, se menettää seuraavan hyökkäyksensä {value}%:n todennäköisyydellä."
+    },
+    "criticalDefense": {
+      "name": "Kriittinen puolustus",
+      "description": "Vihollisen kriittisten osumien lisävahinko pienenee {value}%."
+    },
+    "evasionHeal": {
+      "name": "Uusi puhti",
+      "description": "Väistö palauttaa {value}% enimmäisterveydestäsi."
+    },
+    "blockChance": {
+      "name": "Kilpitorjunta",
+      "description": "Kilpi puolittaa osuman vahingon {value}%:n todennäköisyydellä."
+    },
+    "deflection": {
+      "name": "Heijastus",
+      "description": "Heijasta {value}% saamastasi osumavahingosta takaisin hyökkääjään."
+    },
+    "riposte": {
+      "name": "Vastaisku",
+      "description": "Väistettyäsi teet {value}%:n todennäköisyydellä vastaiskun, joka aiheuttaa perushyökkäyksen verran vahinkoa."
+    },
+    "lastStand": {
+      "name": "Viimeinen puolustus",
+      "description": "Kun terveytesi on alle 30%, vihollisten osumat aiheuttavat {value}% vähemmän vahinkoa."
+    },
+    "openingStrike": {
+      "name": "Avausisku",
+      "description": "Jokaisen taistelun ensimmäinen osumasi aiheuttaa {value}% lisävahinkoa."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Takaisku tainnuttaa vihollisen. Sen hyökkäys jää väliin.",
+    "blockChance": "Kilpesi puolittaa iskun vahingon.",
+    "evasionHeal": "Väistö palauttaa {value} terveyspistettä.",
+    "deflection": "Heijastat {value} vahinkoa takaisin hyökkääjään.",
+    "riposte": "Vastaiskusi aiheuttaa {value} vahinkoa.",
+    "openingStrike": "Avausiskusi aiheuttaa {value} lisävahinkoa."
+  },
   "save-backup-recovery-error": "Tallennettua peliäsi ei voitu palauttaa. Kopioi tallennetut tiedot ja lähetä ne meille sähköpostitse tai Discordissa, jotta voimme tutkia ne. Voit myös poistaa tallennetut tiedot ja aloittaa alusta.",
   "save-recovery-export": "Näytä / kopioi tallennetut tiedot",
   "save-recovery-delete": "Poista tallennetut tiedot ja käynnistä uudelleen",

@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} způsobil hráči {player} {value} bodů {type}{lifesteal}.",
   "enemy-vamp-heal": " a díky vampirismu si vyléčil {value} HP",
   "aegis-thorns-reflect": " a utrpěl {value} bodů odraženého poškození od Trnů záštity",
+  "equipment-proc": {
+    "hitRecoil": "Zpětný ráz omráčí nepřítele a ten vynechá útok.",
+    "blockChance": "Tvůj štít zablokuje polovinu poškození.",
+    "evasionHeal": "Po úhybu si obnovíš {value} HP.",
+    "deflection": "Vracíš útočníkovi {value} bodů poškození.",
+    "riposte": "Tvá riposta způsobí {value} bodů poškození.",
+    "openingStrike": "Úvodní úder způsobí dalších {value} bodů poškození."
+  },
   "special-ability-attack-hit": "{player} rozpoutal speciální schopnost a způsobil {value} bodů {type}{lifesteal}!",
   "special-ability-heal": "{player} použil speciální schopnost a vyléčil si {hp} HP!",
   "special-ability-companion-boost": "{player} posílil společníka {companion}! +50 % ATK/APS na 5 s.",
@@ -704,6 +712,40 @@
     "regenerating": "Každou sekundu obnovuje zdraví z omezené zásoby odpovídající 50 % maximálního zdraví, ale je křehčí.",
     "thorned": "Odráží zpět část poškození, které mu způsobíte.",
     "volatile": "Po zabití vybuchne a způsobí vám poškození."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Zpětný ráz",
+      "description": "Když ti nepřítel způsobí zranění, s pravděpodobností {value} % vynechá příští tah."
+    },
+    "criticalDefense": {
+      "name": "Ochrana před kritickými zásahy",
+      "description": "Bonusové poškození z kritických zásahů nepřátel je o {value} % nižší."
+    },
+    "evasionHeal": {
+      "name": "Druhý dech",
+      "description": "Po úhybu si obnovíš {value} % maximálního zdraví."
+    },
+    "blockChance": {
+      "name": "Kryt štítem",
+      "description": "Každý zásah nepřítele má {value}% šanci způsobit jen poloviční poškození."
+    },
+    "deflection": {
+      "name": "Odraz",
+      "description": "Když tě nepřítel zasáhne, vrátíš mu {value} % utrpěného poškození."
+    },
+    "riposte": {
+      "name": "Riposta",
+      "description": "Po úhybu máš {value}% šanci na protiútok, který způsobí poškození běžného útoku."
+    },
+    "lastStand": {
+      "name": "Poslední vzdor",
+      "description": "Pokud máš méně než 30 % zdraví, zásahy nepřátel ti způsobí o {value} % menší poškození."
+    },
+    "openingStrike": {
+      "name": "Úvodní úder",
+      "description": "Tvůj první zásah v každém boji způsobí o {value} % větší poškození."
+    }
   },
   "forge-token": "Žeton Kovárny",
   "forge-tokens": "Žetony Kovárny",

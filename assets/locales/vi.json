@@ -559,6 +559,48 @@
   "remaining": "Còn lại: {count}",
   "reroll-button": "Làm mới {remaining}/{total}",
   "reroll-gold-button": "Làm mới {cost}",
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Chấn động",
+      "description": "Khi kẻ địch gây sát thương cho bạn, nó có {value}% khả năng bị choáng và mất lượt kế tiếp."
+    },
+    "criticalDefense": {
+      "name": "Kháng bạo kích",
+      "description": "Giảm {value}% phần sát thương cộng thêm từ đòn bạo kích của địch."
+    },
+    "evasionHeal": {
+      "name": "Hồi sức",
+      "description": "Sau khi né đòn, hồi lại lượng HP bằng {value}% HP tối đa."
+    },
+    "blockChance": {
+      "name": "Đỡ đòn",
+      "description": "Khi trúng đòn, bạn có {value}% khả năng giảm một nửa sát thương của đòn đó."
+    },
+    "deflection": {
+      "name": "Phản sát thương",
+      "description": "Khi địch đánh trúng bạn, phản lại {value}% sát thương đã nhận."
+    },
+    "riposte": {
+      "name": "Phản kích",
+      "description": "Sau khi né đòn, bạn có {value}% khả năng phản kích với sát thương bằng một đòn đánh thường."
+    },
+    "lastStand": {
+      "name": "Tử thủ",
+      "description": "Khi còn dưới 30% HP, giảm {value}% sát thương nhận từ đòn đánh của địch."
+    },
+    "openingStrike": {
+      "name": "Đòn mở màn",
+      "description": "Đòn đánh đầu tiên của bạn trúng đích trong mỗi trận gây thêm {value}% sát thương."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Chấn động làm kẻ địch choáng và mất lượt tấn công này.",
+    "blockChance": "Khiên chặn được một nửa sát thương của đòn đánh.",
+    "evasionHeal": "Bạn hồi {value} HP sau khi né đòn.",
+    "deflection": "Bạn phản lại {value} sát thương lên kẻ tấn công.",
+    "riposte": "Đòn phản kích gây {value} sát thương.",
+    "openingStrike": "Đòn mở màn gây thêm {value} sát thương."
+  },
   "equipment-names": {
     "sword": "Kiếm",
     "axe": "Rìu",

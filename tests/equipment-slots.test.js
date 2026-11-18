@@ -124,6 +124,73 @@ test('accessories are obtainable through normal equipment generation', () => {
     assert.ok(generated.stats.length > 0);
 });
 
+test('new armor rolls a separate permanent bonus and retains it through storage, rerolls and refinement', () => {
+    const context = createContext();
+    Object.assign(context, {
+        player: { equipped: [] },
+        dungeon: { progress: { floor: 1 }, settings: { enemyLvlGap: 1, enemyBaseLvl: 1 } },
+        randomizeNum: (min, max) => Math.floor(max),
+        randomizeDecimal: (min) => min,
+        clampEquipmentLevel: (level) => level,
+        clampEquipmentTier: (tier) => tier,
+        getEquipmentTierFromEnemyScaling: () => 1,
+        getEnemyScalingFromEquipmentTier: () => 1.1,
+    });
+    vm.runInContext(fs.readFileSync(path.join(root, 'assets/js/forge.js'), 'utf8'), context);
+    evaluate(context, `const makeArmor = () => createEquipment(false, { forcedSlot: 'body', allowCompanionCharm: false });
+        Math.random = () => 0.2499;
+        const withBonus = makeArmor();
+        Math.random = () => 0.25;
+        const withoutBonus = makeArmor();
+        const restored = JSON.parse(JSON.stringify(withBonus));`);
+    assert.equal(evaluate(context, 'withBonus.category'), 'Plate');
+    assert.equal(evaluate(context, 'withoutBonus.category'), 'Plate');
+    assert.deepEqual(plain(evaluate(context, 'restored.stats')), plain(evaluate(context, 'withoutBonus.stats')));
+    const expected = { key: 'hitRecoil', value: 12 };
+    assert.deepEqual(plain(evaluate(context, 'getEquipmentSpecialBonus(restored)')), expected);
+    evaluate(context, `Math.random = () => 0;
+        for (const item of [restored, withoutBonus]) {
+            const rerolled = cloneEquipment(item);
+            rerollEquipmentStats(rerolled);
+            applyRerolledEquipment(item, rerolled);
+            applyRefinedEquipment(item);
+        }`);
+    assert.equal(evaluate(context, 'restored.refineLevel'), 1);
+    assert.deepEqual(plain(evaluate(context, 'getEquipmentSpecialBonus(restored)')), expected);
+    assert.equal(evaluate(context, 'getEquipmentSpecialBonus(withoutBonus)'), null);
+});
+
+test('Leather rolls up to 3% healing and caps valid legacy rolls at 3%', () => {
+    const context = createContext();
+    context.randomizeNum = (min, max) => max;
+    evaluate(context, `Math.random = () => 0;
+        const leather = { category: 'Leather' };
+        rollEquipmentSpecialBonus(leather);`);
+    assert.equal(evaluate(context, 'leather.specialBonus'), 3);
+    const values = evaluate(context, `[1, 2, 3, 4, 5, 6, 7].map(specialBonus => {
+        const bonus = getEquipmentSpecialBonus({ category: 'Leather', specialBonus });
+        return bonus && bonus.value;
+    })`);
+    assert.deepEqual(plain(values), [1, 2, 3, 3, 3, 3, null]);
+});
+
+test('only worn gear contributes special bonuses and swapping armor removes its old effect', () => {
+    const context = createContext();
+    context.calculateStats = () => {};
+    const plate = { category: 'Plate', specialBonus: 12 };
+    const chain = { category: 'Chain', specialBonus: 40 };
+    const kite = { category: 'Kite', specialBonus: 10 };
+    context.player = { equipped: [plate, kite], inventory: { equipment: [JSON.stringify(chain)] } };
+    const bonuses = () => plain(evaluate(context, `applyEquipmentStats();
+        ['hitRecoil', 'criticalDefense', 'deflection'].map(getEquippedSpecialBonus)`));
+
+    assert.deepEqual(bonuses(), [12, 0, 10]);
+    context.player.equipped[0] = chain;
+    assert.deepEqual(bonuses(), [0, 40, 10]);
+    context.player.equipped[0] = { category: 'Chain' };
+    assert.deepEqual(bonuses(), [0, 0, 10]);
+});
+
 test('slot migration grants a Level 100 Heirloom Accessory at the highest unlocked Curse tier', () => {
     const context = createContext();
     context.player = {
@@ -446,6 +513,31 @@ test('equipment slot notice is pending only when the slot version requires migra
     context.normalizePlayerEquipmentSlots = () => ({ movedToInventory: 0, changed: true, migrated: true });
     evaluate(context, 'migratePlayerEquipmentSlots()');
     assert.equal(evaluate(context, 'equipmentSlotMigrationNoticePending'), true);
+});
+
+test('every locale translates the equipment bonuses and preserves their placeholders', () => {
+    const locales = path.join(root, 'assets/locales');
+    const english = JSON.parse(fs.readFileSync(path.join(locales, 'en.json'), 'utf8'));
+    const check = (translation, original, label) => {
+        if (typeof original === 'string') {
+            assert.equal(typeof translation, 'string', label);
+            assert.ok(translation.trim(), label);
+            const placeholders = (str) => (str.match(/\{\w+\}/g) || []).sort();
+            assert.deepEqual(placeholders(translation), placeholders(original), label);
+            return;
+        }
+        assert.ok(translation, label);
+        assert.deepEqual(Object.keys(translation).sort(), Object.keys(original).sort(), label);
+        for (const key of Object.keys(original)) {
+            check(translation[key], original[key], `${label}.${key}`);
+        }
+    };
+    for (const file of fs.readdirSync(locales).filter((name) => name.endsWith('.json'))) {
+        const locale = JSON.parse(fs.readFileSync(path.join(locales, file), 'utf8'));
+        for (const key of ['equipment-special', 'equipment-proc']) {
+            check(locale[key], english[key], `${file} ${key}`);
+        }
+    }
 });
 
 test('every locale includes slot labels and accessory item names', () => {

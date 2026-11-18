@@ -692,6 +692,7 @@ const loadForgeEquipment = () => {
                 <ul class="equipment-stats">
                     ${statsHtml}
                 </ul>
+                ${renderEquipmentSpecialBonus(equip)}
                 <p class="equipment-value">${t('value')}: ${nFormatter(typeof getEquipmentEffectiveValue === 'function' ? getEquipmentEffectiveValue(equip) : equip.value)}</p>
                 ${source !== 'inventory' ? `<p class="equipped-indicator">⚔️ ${t('equipped')}</p>` : ''}
             </div>
@@ -1379,18 +1380,13 @@ const calculateForgeResult = () => {
 
 // Create forged equipment
 const createForgedEquipment = (item1, item2, item3, targetCategory) => {
-    // Generate a fresh piece of equipment similar to a normal dungeon drop
-    const forgedEquipment = createEquipment(false, { allowCompanionCharm: false });
     const targetConfig = FORGE_CATEGORY_CONFIG.find(({ category }) => category === targetCategory);
     if (!targetConfig) {
         return null;
     }
 
     // Use the player's chosen gear piece and its matching stat pool.
-    forgedEquipment.category = targetConfig.category;
-    forgedEquipment.attribute = targetConfig.attribute;
-    forgedEquipment.type = targetConfig.type;
-    forgedEquipment.slot = null;
+    const forgedEquipment = { ...targetConfig };
     forgedEquipment.slot = getEquipmentSlot(forgedEquipment);
 
     // Set tier to the same as input items
@@ -1413,6 +1409,7 @@ const createForgedEquipment = (item1, item2, item3, targetCategory) => {
 
     // Re-roll stats so the item matches normal drops for its level
     rerollEquipmentStats(forgedEquipment);
+    rollEquipmentSpecialBonus(forgedEquipment);
 
     // Mark item as forged
     forgedEquipment.forged = true;

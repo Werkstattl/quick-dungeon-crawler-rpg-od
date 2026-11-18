@@ -1,4 +1,46 @@
 {
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Darbe Sarsıntısı",
+      "description": "Sana hasar veren düşman %{value} ihtimalle bir sonraki saldırısını kaybeder."
+    },
+    "criticalDefense": {
+      "name": "Kritik Savunma",
+      "description": "Düşmanın kritik vuruşlarının verdiği ilave hasar %{value} azalır."
+    },
+    "evasionHeal": {
+      "name": "İkinci Nefes",
+      "description": "Bir saldırıdan sıyrıldığında azami canının %{value} kadarını geri kazanırsın."
+    },
+    "blockChance": {
+      "name": "Kalkan Bloğu",
+      "description": "İsabet eden her saldırının hasarı %{value} ihtimalle yarıya iner."
+    },
+    "deflection": {
+      "name": "Hasar Yansıtma",
+      "description": "Bir düşman sana vurduğunda aldığın hasarın %{value} kadarını ona geri yansıtırsın."
+    },
+    "riposte": {
+      "name": "Karşı Vuruş",
+      "description": "Bir saldırıdan sıyrıldığında %{value} ihtimalle karşılık verip normal saldırı kadar hasar verirsin."
+    },
+    "lastStand": {
+      "name": "Son Direniş",
+      "description": "Canın %30'un altındayken düşman vuruşlarından %{value} daha az hasar alırsın."
+    },
+    "openingStrike": {
+      "name": "Açılış Vuruşu",
+      "description": "Her çatışmada isabet eden ilk vuruşun %{value} daha fazla hasar verir."
+    }
+  },
+  "equipment-proc": {
+    "hitRecoil": "Darbe Sarsıntısı düşmanı sersemletti. Düşman bu saldırısını kaybetti.",
+    "blockChance": "Kalkanın gelen hasarı yarıya indirdi.",
+    "evasionHeal": "Saldırıdan sıyrılıp {value} can geri kazandın.",
+    "deflection": "Saldırana {value} hasar yansıttın.",
+    "riposte": "Karşı vuruşun {value} hasar verdi.",
+    "openingStrike": "Açılış vuruşun {value} ilave hasar verdi."
+  },
   "save-backup-recovery-error": "Oyun kaydın kurtarılamadı. Kayıtlı verilerini kopyalayıp inceleyebilmemiz için e-posta veya Discord üzerinden bize gönder. Kayıtlı verileri silip baştan başlamayı da seçebilirsin.",
   "save-recovery-export": "Kayıtlı verileri göster / kopyala",
   "save-recovery-delete": "Kayıtlı verileri sil ve yeniden başlat",

@@ -390,6 +390,7 @@ const createForgeExecutionContext = ({ gold = 100000, stones = 50, tokens = 1 } 
         formatEquipmentStatLabel(stat) { return stat; },
         formatEquipmentValue(stat, value) { return String(value); },
         renderEquipmentCard() { return ''; },
+        renderEquipmentSpecialBonus() { return ''; },
         translateEquipText(key, fallback) { return fallback || key; },
         equipmentLabel(rarity, category) { return `${rarity} ${category}`; },
         equipmentName(category) { return category; },

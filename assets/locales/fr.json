@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} a infligé {value} {type} à {player}{lifesteal}.",
   "enemy-vamp-heal": " et a récupéré {value} PV grâce au vampirisme",
   "aegis-thorns-reflect": ", et a subi {value} dégâts réfléchis d’Épines d’Égide",
+  "equipment-proc": {
+    "hitRecoil": "Le contrecoup étourdit l’ennemi et l’empêche d’attaquer.",
+    "blockChance": "Votre bouclier bloque la moitié des dégâts.",
+    "evasionHeal": "Vous récupérez {value} PV après votre esquive.",
+    "deflection": "Vous renvoyez {value} points de dégâts à l’attaquant.",
+    "riposte": "Votre riposte inflige {value} points de dégâts.",
+    "openingStrike": "Votre frappe d’ouverture inflige {value} points de dégâts supplémentaires."
+  },
   "special-ability-attack-hit": "{player} a déchaîné une capacité spéciale pour {value} {type}{lifesteal} !",
   "special-ability-heal": "{player} a utilisé une capacité spéciale et récupéré {hp} PV !",
   "special-ability-companion-boost": "{player} a renforcé {companion} ! +50 % ATQ/APS pendant 5 s.",
@@ -704,6 +712,40 @@
     "regenerating": "Récupère de la vie chaque seconde depuis une réserve limitée égale à 50 % de sa vie maximale, mais est plus fragile.",
     "thorned": "Renvoie une partie des dégâts que vous infligez.",
     "volatile": "Explose à sa mort et vous blesse."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Contrecoup",
+      "description": "Quand un ennemi vous inflige des dégâts, il a {value} % de chances de perdre son prochain tour."
+    },
+    "criticalDefense": {
+      "name": "Défense critique",
+      "description": "Les coups critiques ennemis infligent {value} % de dégâts supplémentaires en moins."
+    },
+    "evasionHeal": {
+      "name": "Second souffle",
+      "description": "Après une esquive, vous récupérez {value} % de vos PV maximum."
+    },
+    "blockChance": {
+      "name": "Blocage au bouclier",
+      "description": "Chaque coup reçu a {value} % de chances de n’infliger que la moitié de ses dégâts."
+    },
+    "deflection": {
+      "name": "Renvoi",
+      "description": "À chaque coup reçu, vous renvoyez à l’ennemi {value} % des dégâts subis."
+    },
+    "riposte": {
+      "name": "Riposte",
+      "description": "Après une esquive, vous avez {value} % de chances de riposter en infligeant les dégâts d’une attaque de base."
+    },
+    "lastStand": {
+      "name": "Dernier rempart",
+      "description": "Sous 30 % de vos PV, les coups ennemis vous infligent {value} % de dégâts en moins."
+    },
+    "openingStrike": {
+      "name": "Frappe d’ouverture",
+      "description": "Votre premier coup au but de chaque combat inflige {value} % de dégâts en plus."
+    }
   },
   "forge-token": "Jeton de forge",
   "forge-tokens": "Jetons de forge",

@@ -545,6 +545,14 @@
   "enemy-attack-hit": "{enemy} ha inflitto {value} {type} a {player}{lifesteal}.",
   "enemy-vamp-heal": " e ha recuperato {value} PV dal vampirismo",
   "aegis-thorns-reflect": ", e ha subito {value} danni riflessi da Spine dell’Egida",
+  "equipment-proc": {
+    "hitRecoil": "Il contraccolpo stordisce il nemico, che salta questo attacco.",
+    "blockChance": "Il tuo scudo blocca metà dei danni.",
+    "evasionHeal": "Recuperi {value} PV dopo la schivata.",
+    "deflection": "Restituisci {value} danni all’attaccante.",
+    "riposte": "La tua risposta infligge {value} danni.",
+    "openingStrike": "Il colpo d’apertura infligge {value} danni aggiuntivi."
+  },
   "special-ability-attack-hit": "{player} ha scatenato un'abilità speciale per {value} {type}{lifesteal}!",
   "special-ability-heal": "{player} ha usato un'abilità speciale e ha recuperato {hp} PV!",
   "special-ability-companion-boost": "{player} ha potenziato {companion}! +50% ATT/APS per 5 s.",
@@ -704,6 +712,40 @@
     "regenerating": "Recupera salute ogni secondo da una riserva limitata pari al 50% della salute massima, ma è più fragile.",
     "thorned": "Riflette parte dei danni che infliggi.",
     "volatile": "Esplode quando muore, ferendoti."
+  },
+  "equipment-special": {
+    "hitRecoil": {
+      "name": "Contraccolpo",
+      "description": "Quando un nemico ti infligge danni, ha il {value}% di probabilità di saltare il turno successivo."
+    },
+    "criticalDefense": {
+      "name": "Difesa critica",
+      "description": "I colpi critici nemici infliggono il {value}% di danni bonus in meno."
+    },
+    "evasionHeal": {
+      "name": "Secondo fiato",
+      "description": "Quando schivi, recuperi il {value}% dei tuoi PV massimi."
+    },
+    "blockChance": {
+      "name": "Parata con scudo",
+      "description": "Ogni colpo subito ha il {value}% di probabilità di infliggere solo metà dei danni."
+    },
+    "deflection": {
+      "name": "Deviazione",
+      "description": "Quando un nemico ti colpisce, gli restituisci il {value}% dei danni subiti."
+    },
+    "riposte": {
+      "name": "Risposta",
+      "description": "Quando schivi, hai il {value}% di probabilità di contrattaccare infliggendo i danni di un attacco base."
+    },
+    "lastStand": {
+      "name": "Ultimo baluardo",
+      "description": "Quando hai meno del 30% dei PV, subisci il {value}% di danni in meno dai colpi nemici."
+    },
+    "openingStrike": {
+      "name": "Colpo d’apertura",
+      "description": "Il primo colpo a segno in ogni combattimento infligge il {value}% di danni in più."
+    }
   },
   "forge-token": "Gettone della forgia",
   "forge-tokens": "Gettoni della forgia",

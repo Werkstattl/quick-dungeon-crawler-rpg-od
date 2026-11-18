@@ -20,17 +20,6 @@ const createForgeContext = () => {
         },
     });
     vm.runInContext(equipmentSlotHelpersSource, context);
-    context.createEquipment = () => ({
-        category: 'Sword',
-        attribute: 'Damage',
-        type: 'Weapon',
-        rarity: 'Common',
-        lvl: 1,
-        tier: 1,
-        value: 1,
-        stats: [],
-        slot: 'weapon',
-    });
     vm.runInContext(forgeSource, context);
     return context;
 };
@@ -102,6 +91,26 @@ test('forging rejects an unknown target category', () => {
     `, context);
 
     assert.equal(result, null);
+});
+
+test('only the eight defensive forge targets can roll their own special bonus', () => {
+    const context = createForgeContext();
+    vm.runInContext('Math.random = () => 0; const material = { tier: 1, lvl: 1, rarity: "Rare" };', context);
+    const bonuses = vm.runInContext(`FORGE_CATEGORY_CONFIG.flatMap(({ category }) => {
+        const result = createForgedEquipment(material, material, material, category);
+        const bonus = getEquipmentSpecialBonus(result);
+        return bonus ? [[category, bonus.key, bonus.value]] : [];
+    })`, context);
+    assert.deepEqual(JSON.parse(JSON.stringify(bonuses)), [
+        ['Plate', 'hitRecoil', 4],
+        ['Chain', 'criticalDefense', 20],
+        ['Leather', 'evasionHeal', 1],
+        ['Tower', 'blockChance', 8],
+        ['Kite', 'deflection', 5],
+        ['Buckler', 'riposte', 10],
+        ['Great Helm', 'lastStand', 10],
+        ['Horned Helm', 'openingStrike', 15],
+    ]);
 });
 
 test('the forge UI requires a target gear-piece selection', () => {

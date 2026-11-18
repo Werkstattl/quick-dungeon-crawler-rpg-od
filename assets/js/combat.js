@@ -929,6 +929,44 @@ const hpValidation = () => {
 }
 
 // ========== Attack Functions ==========
+const applyOpeningStrike = (damage) => {
+    if (enemy.tookPlayerHit) return damage;
+    enemy.tookPlayerHit = true;
+    const percent = getEquippedSpecialBonus('openingStrike');
+    const extra = Math.round(damage * percent / 100);
+    if (extra > 0) {
+        addCombatLog(t('equipment-proc.openingStrike', { value: nFormatter(extra) }));
+    }
+    return damage + extra;
+};
+
+const rollEquipmentBonus = (key) => {
+    const chance = getEquippedSpecialBonus(key);
+    return chance > 0 && Math.random() < chance / 100;
+};
+
+const dealEquipmentCounterDamage = (damage, key) => {
+    if (damage <= 0) return;
+    enemy.stats.hp -= damage;
+    if (typeof recordRunDamageDealt === 'function') {
+        recordRunDamageDealt(damage);
+    }
+    addCombatLog(t(key, { value: nFormatter(damage) }));
+};
+
+const applyDodgeEquipmentBonuses = () => {
+    const heal = Math.min(player.stats.hpMax - player.stats.hp,
+        Math.round(player.stats.hpMax * getEquippedSpecialBonus('evasionHeal') / 100));
+    if (heal > 0) {
+        player.stats.hp += heal;
+        addCombatLog(t('equipment-proc.evasionHeal', { value: nFormatter(heal) }));
+    }
+    if (rollEquipmentBonus('riposte') && player.stats.atk > 0) {
+        const atk = player.stats.atk;
+        dealEquipmentCounterDamage(Math.round(atk * (atk / (atk + enemy.stats.def))), 'equipment-proc.riposte');
+    }
+};
+
 const playerAttack = () => {
     if (!player.inCombat || !playerAttackReady || combatPaused) {
         return;
@@ -978,21 +1016,17 @@ const playerAttack = () => {
         damage = applyEnemyDamageUnlock(enemy.id, damage);
     }
 
-    // Lifesteal formula
-    let lifesteal = Math.round(damage * (player.stats.vamp / 100));
-
     // Enemy dodge chance
     let dodged = false;
     if (Math.random() < enemy.stats.dodge / 100) {
         addCombatLog(t('dodged-attack-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
         damage = 0;
-        lifesteal = 0;
         dodged = true;
-    }
-
-    if (!dodged) {
+    } else {
+        damage = applyOpeningStrike(damage);
         applyOpenWoundsBleedOnHit();
     }
+    const lifesteal = Math.round(damage * (player.stats.vamp / 100));
 
     // Apply the calculations to combat
     enemy.stats.hp -= damage;
@@ -1139,9 +1173,13 @@ const enemyAttack = () => {
     if (!player.inCombat || combatPaused) {
         return;
     }
-    if (player.inCombat) {
-        sfxAttack.play();
+    if (enemy.skipAttackFromRecoil) {
+        enemy.skipAttackFromRecoil = false;
+        addCombatLog(t('equipment-proc.hitRecoil'));
+        scheduleEnemyAttack();
+        return;
     }
+    sfxAttack.play();
 
     // Calculates the damage and attacks the player
     let damage = enemy.stats.atk * (enemy.stats.atk / (enemy.stats.atk + player.stats.def));
@@ -1154,7 +1192,8 @@ const enemyAttack = () => {
     if (Math.floor(Math.random() * 100) < enemy.stats.critRate) {
         crit = true;
         dmgtype = t('crit-damage');
-        damage = Math.round(damage * (1 + (enemy.stats.critDmg / 100)));
+        const criticalBonus = enemy.stats.critDmg / 100 * (1 - getEquippedSpecialBonus('criticalDefense') / 100);
+        damage = Math.round(damage * (1 + criticalBonus));
     } else {
         crit = false;
         dmgtype = t('damage');
@@ -1171,9 +1210,18 @@ const enemyAttack = () => {
         dodged = true;
         scoutDodgeReady = false;
     }
-    if ( dodged ) {
+    if (dodged) {
         damage = 0;
         lifesteal = 0;
+        applyDodgeEquipmentBonuses();
+    } else {
+        if (rollEquipmentBonus('blockChance')) {
+            damage = Math.round(damage / 2);
+            addCombatLog(t('equipment-proc.blockChance'));
+        }
+        if (player.stats.hp < player.stats.hpMax * 0.3) {
+            damage = Math.round(damage * (1 - getEquippedSpecialBonus('lastStand') / 100));
+        }
     }
 
     // Skill effects
@@ -1183,6 +1231,7 @@ const enemyAttack = () => {
     }
 
     // Apply the calculations
+    const hpLost = Math.min(player.stats.hp, damage);
     player.stats.hp -= damage;
     if (typeof recordRunDamageTaken === 'function') {
         recordRunDamageTaken(damage);
@@ -1213,6 +1262,13 @@ const enemyAttack = () => {
             logMsg = `<span class="crit-enemy">${logMsg}</span>`;
         }
         addCombatLog(logMsg);
+    }
+    if (hpLost > 0) {
+        const returnedDamage = Math.round(hpLost * getEquippedSpecialBonus('deflection') / 100);
+        dealEquipmentCounterDamage(returnedDamage, 'equipment-proc.deflection');
+        if (enemy.stats.hp > 0 && player.stats.hp > 0 && rollEquipmentBonus('hitRecoil')) {
+            enemy.skipAttackFromRecoil = true;
+        }
     }
     hpValidation();
     playerLoadStats();
@@ -1737,21 +1793,17 @@ const useSpecialAbility = () => {
             damage = applyEnemyDamageUnlock(enemy.id, damage);
         }
 
-        // Lifesteal formula
-        let lifesteal = Math.round(damage * (player.stats.vamp / 100));
-
         // Enemy dodge chance
         let dodged = false;
         if (Math.random() < enemy.stats.dodge / 100) {
             addCombatLog(t('dodged-attack-enemy', { enemy: getDisplayEnemyName(enemy.id, enemy.name) }));
             damage = 0;
-            lifesteal = 0;
             dodged = true;
-        }
-
-        if (!dodged) {
+        } else {
+            damage = applyOpeningStrike(damage);
             applyOpenWoundsBleedOnHit();
         }
+        const lifesteal = Math.round(damage * (player.stats.vamp / 100));
 
         // Apply calculations
         enemy.stats.hp -= damage;
@@ -1898,8 +1950,10 @@ const showCombatInfo = () => {
                     &nbsp${nFormatter(enemy.stats.hp)}/${nFormatter(enemy.stats.hpMax)}(${enemy.stats.hpPercent}%)
                 </div>
             </div>
-            <div id="dmg-container"></div>
-            <img src="${enemySpriteSrc}" alt="${enemy.name}" width="${enemy.image.size}" id="enemy-sprite">
+            <div class="battle-scene">
+                <img src="${enemySpriteSrc}" alt="${enemy.name}" width="${enemy.image.size}" id="enemy-sprite">
+                <div id="dmg-container"></div>
+            </div>
         </div>
         <div class="battle-info-panel primary-panel" id="playerPanel">
             <p id="player-combat-info"></p>

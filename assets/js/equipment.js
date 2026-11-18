@@ -5,6 +5,39 @@ const COMPANION_CHARM_STAT_KEYS = ['atk', 'atkSpd', 'critRate', 'critDmg'];
 const COMPANION_CHARM_PLAYER_STAT_KEYS = ['vamp', 'luck', 'fasterRun'];
 const COMPANION_CHARM_STAT_POOL = ['atk', 'atk', 'atkSpd', 'critRate', 'critDmg', 'vamp', 'luck', 'fasterRun'];
 const EQUIPMENT_RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Heirloom"];
+const EQUIPMENT_SPECIAL_BONUS_CHANCE = 0.25;
+const EQUIPMENT_SPECIAL_BONUSES = Object.freeze({
+    Plate: { key: 'hitRecoil', min: 4, max: 12 },
+    Chain: { key: 'criticalDefense', min: 20, max: 50 },
+    Leather: { key: 'evasionHeal', min: 1, max: 3 },
+    Tower: { key: 'blockChance', min: 8, max: 20 },
+    Kite: { key: 'deflection', min: 5, max: 15 },
+    Buckler: { key: 'riposte', min: 10, max: 30 },
+    'Great Helm': { key: 'lastStand', min: 10, max: 25 },
+    'Horned Helm': { key: 'openingStrike', min: 15, max: 40 },
+});
+
+const getEquipmentSpecialBonus = (equipment) => {
+    if (!equipment || !Number.isInteger(equipment.specialBonus)) {
+        return null;
+    }
+    const bonus = EQUIPMENT_SPECIAL_BONUSES[equipment.baseCategory || equipment.category];
+    const value = equipment.specialBonus;
+    // Leather used to roll up to 6%. Older pieces use the new cap in combat and item details.
+    if (bonus === EQUIPMENT_SPECIAL_BONUSES.Leather && value > bonus.max && value <= 6) {
+        return { key: bonus.key, value: bonus.max };
+    }
+    return bonus && value >= bonus.min && value <= bonus.max ? { key: bonus.key, value } : null;
+};
+
+// Only new drops and newly forged pieces roll this permanent bonus.
+const rollEquipmentSpecialBonus = (equipment) => {
+    const bonus = EQUIPMENT_SPECIAL_BONUSES[equipment.category];
+    if (bonus && Math.random() < EQUIPMENT_SPECIAL_BONUS_CHANCE) {
+        equipment.specialBonus = randomizeNum(bonus.min, bonus.max);
+    }
+};
+
 const REFINE_MAX_LEVEL = 10;
 const REFINE_STAT_BONUS_PER_LEVEL = 0.08;
 const REFINE_STONE_COMBAT_DROP_CHANCE = 0.16;
@@ -661,6 +694,7 @@ const createEquipment = (addToInventory = true, options = {}) => {
         equipment.tier = clampEquipmentTier(forcedTier);
     }
     rerollEquipmentStats(equipment, forcedStat);
+    rollEquipmentSpecialBonus(equipment);
     if (addToInventory) {
         if (isCompanionCharm(equipment) && !player.companionCharm) {
             player.companionCharm = equipment;
@@ -1724,6 +1758,8 @@ const showEquipment = () => {
     });
 };
 
+const getEquippedSpecialBonus = (key) => (player.equippedStats && player.equippedStats[key]) || 0;
+
 // Apply the equipment stats to the player
 const applyEquipmentStats = () => {
     // Reset the equipment stats
@@ -1742,6 +1778,10 @@ const applyEquipmentStats = () => {
 
     for (let i = 0; i < player.equipped.length; i++) {
         const item = player.equipped[i];
+        const bonus = getEquipmentSpecialBonus(item);
+        if (bonus) {
+            player.equippedStats[bonus.key] = bonus.value;
+        }
 
         // Iterate through the stats array and update the player stats
         const totals = getEquipmentStatTotals(item);
@@ -1996,6 +2036,15 @@ const renderEquipmentRollQualityMeter = (item, stat) => {
     return `<span class="roll-quality-meter" title="${title}"><span class="roll-quality-bar" aria-hidden="true"><span class="roll-quality-fill roll-quality-${grade}" style="width: ${percent}%"></span></span><span class="roll-quality-percent roll-quality-text-${grade}">${percent}%</span></span>`;
 };
 
+const renderEquipmentSpecialBonus = (item) => {
+    const bonus = getEquipmentSpecialBonus(item);
+    if (!bonus) {
+        return '';
+    }
+    const key = `equipment-special.${bonus.key}`;
+    return `<p class="equipment-special-bonus"><strong>${t(`${key}.name`)}</strong> ${t(`${key}.description`, { value: bonus.value })}</p>`;
+};
+
 const renderEquipmentCard = ({
     item,
     icon,
@@ -2022,7 +2071,8 @@ const renderEquipmentCard = ({
     const headerMarkup = label ? `<p class="equipment-card-label">${label}</p>` : '';
     const titleMarkup = `
             <h3 class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</h3>
-            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>`;
+            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
+            ${renderEquipmentSpecialBonus(item)}`;
 
     if (showRollQuality) {
         const rowsMarkup = statKeys.map(stat => {
@@ -2734,6 +2784,7 @@ const createEquipmentPrint = (condition, options = {}) => {
         return `<li>${label}${formatEquipmentValue(statKey, value, { includeSign: true })}</li>`;
     }).join('')}
             </ul>
+            ${renderEquipmentSpecialBonus(item)}
         </div>`;
     const autoSellResult = shouldAutoSellEquipment(item)
         ? autoSellEquipmentDrop(item, placement, placementIndex, serializedItem)
