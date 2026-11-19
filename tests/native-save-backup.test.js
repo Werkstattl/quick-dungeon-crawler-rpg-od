@@ -1036,6 +1036,8 @@ test('the shipped filesystem bundle saves and recovers through the native bridge
                         },
                     });
                     context.window = context;
+                    // WebView 66 has no flatMap, including during the first script evaluation.
+                    if (platform === 'android') vm.runInContext('delete Array.prototype.flatMap', context);
                     vm.runInContext(utility, context);
                     let filesystemModule;
                     new vm.Script(source, { importModuleDynamically: async specifier => {
@@ -1061,6 +1063,10 @@ test('the shipped filesystem bundle saves and recovers through the native bridge
                 assert.equal(JSON.parse(vm.runInContext('readSaveStorage("playerCompanions")', restarted))[0].level, 5);
                 assert.equal(calls.filter(method => method === 'writeFile').length, 1);
                 const report = await vm.runInContext('nativeSaveBackup.exportRaw()', restarted);
+                assert.deepEqual(Object.keys(report.files), [
+                    'save-backups/slot-0.json', 'save-backups/slot-0.json.tmp',
+                    'save-backups/slot-1.json', 'save-backups/slot-1.json.tmp',
+                ]);
                 assert.equal(report.files['save-backups/slot-0.json'], disk.get('save-backups/slot-0.json'));
                 await vm.runInContext('nativeSaveBackup.clear()', restarted);
                 assert.equal(disk.size, 0);

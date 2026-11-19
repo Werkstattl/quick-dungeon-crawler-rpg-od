@@ -213,7 +213,10 @@ const createNativeSaveBackup = ({ loadFiles, readLocal, hasLocalSave, restoreLoc
     };
 
     // Include unfinished writes and invalid JSON verbatim for support diagnostics.
-    const recoveryPaths = paths.flatMap(path => [path, `${path}.tmp`]);
+    const recoveryPaths = [];
+    for (const path of paths) {
+        recoveryPaths.push(path, `${path}.tmp`);
+    }
     const exportRaw = async () => {
         const result = { files: {}, errors: {} };
         try {
