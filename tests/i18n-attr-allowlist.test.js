@@ -77,6 +77,33 @@ test('Norwegian macrolanguage code loads the Bokmål locale', async () => {
     assert.equal(await ctx._loadLanguage('no'), 'nb');
 });
 
+test('Spanish regional preferences select the appropriate dictionary', async () => {
+    const ctx = makeContext();
+    for (const tag of ['es-419', 'es-MX', 'es-AR', 'es-US', 'es_CO', 'es-Latn-PE']) {
+        assert.equal(await ctx._loadLanguage(tag), 'es-419', tag);
+    }
+    for (const tag of ['es', 'es-ES', 'es-GQ', 'es-ES-u-rg-mxzzzz']) {
+        assert.equal(await ctx._loadLanguage(tag), 'es', tag);
+    }
+});
+
+test('Greek, Bulgarian and Latin American Spanish can be selected after startup', async () => {
+    const ctx = makeContext();
+    // Let the initial English selection finish before simulating a change in Settings.
+    await new Promise(resolve => setImmediate(resolve));
+    const options = new Map(ctx.window.languageOptions.map(option => [option.code, option.label]));
+    for (const [tag, code, label] of [
+        ['el-GR', 'el', 'Ελληνικά'],
+        ['bg-BG', 'bg', 'Български'],
+        ['es-419', 'es-419', 'Español (Latinoamérica)'],
+    ]) {
+        assert.equal(options.get(code), label);
+        await ctx._setLanguage(tag);
+        assert.equal(ctx.document.documentElement.lang, code);
+        assert.equal(ctx.document.documentElement.dir, 'ltr');
+    }
+});
+
 test('Filipino is available and legacy Tagalog tags load the Filipino locale', async () => {
     const ctx = makeContext();
 

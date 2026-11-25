@@ -1128,6 +1128,9 @@ const rarityName = (rarity, category) => {
 const equipmentLabel = (rarity, category) => {
     const name = equipmentName(category);
     const rarityText = rarityName(rarity, category);
+    if (name && rarityText && typeof currentLanguage !== 'undefined' && ['el', 'bg', 'es-419'].includes(currentLanguage)) {
+        return `${name} (${rarityText})`;
+    }
     const requiresPostpositiveAdjective =
         typeof currentLanguage !== 'undefined' && ['pt'].includes(currentLanguage);
     const parts = requiresPostpositiveAdjective

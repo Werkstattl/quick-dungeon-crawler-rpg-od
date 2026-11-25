@@ -1,9 +1,10 @@
-const SUPPORTED = ['en','de','ja','es','pt','pt-PT','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs','hu'];
+const SUPPORTED = ['en','de','ja','es','es-419','pt','pt-PT','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs','hu','el','bg'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
   ja: '日本語',
-  es: 'Español',
+  es: 'Español (España)',
+  'es-419': 'Español (Latinoamérica)',
   pt: 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
   ro: 'Română',
@@ -31,7 +32,9 @@ const LANGUAGE_LABELS = {
   da: 'Dansk',
   nb: 'Norsk bokmål',
   cs: 'Čeština',
-  hu: 'Magyar'
+  hu: 'Magyar',
+  el: 'Ελληνικά',
+  bg: 'Български'
 };
 const LANGUAGE_OPTIONS = SUPPORTED.map(code => ({
   code,
@@ -43,11 +46,20 @@ window.languageOptions = LANGUAGE_OPTIONS.slice();
 const DEFAULT_LANG = 'en';
 const LANGUAGE_ALIASES = { no: 'nb', tl: 'fil' };
 const RTL_LANGUAGES = new Set(['ar', 'fa']);
+const LATIN_AMERICAN_SPANISH_REGIONS = new Set([
+  '419', 'ar', 'bo', 'br', 'bz', 'cl', 'co', 'cr', 'cu', 'do', 'ec', 'gt',
+  'hn', 'mx', 'ni', 'pa', 'pe', 'pr', 'py', 'sv', 'us', 'uy', 've'
+]);
 
 function normalizeLanguageTag(lang) {
   const tag = String(lang || '').trim().replace(/_/g, '-');
   const parts = tag.toLowerCase().split('-');
   const base = parts[0];
+
+  if (base === 'es') {
+    const region = /^[a-z]{4}$/.test(parts[1] || '') ? parts[2] : parts[1];
+    return LATIN_AMERICAN_SPANISH_REGIONS.has(region) ? 'es-419' : 'es';
+  }
 
   if (base === 'zh') {
     const traditionalRegions = ['tw', 'hk', 'mo'];
