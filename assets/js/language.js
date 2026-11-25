@@ -1,4 +1,4 @@
-const SUPPORTED = ['en','de','ja','es','es-419','pt','pt-PT','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs','hu','el','bg'];
+const SUPPORTED = ['en','de','ja','es','es-419','pt','pt-PT','ro','ru','uk','zh','zh-Hant','fr','it','ko','pl','tr','ar','fa','hi','mr','bn','id','fil','th','vi','nl','sv','fi','ms','da','nb','cs','hu','el','bg'];
 const LANGUAGE_LABELS = {
   en: 'English',
   de: 'Deutsch',
@@ -20,6 +20,7 @@ const LANGUAGE_LABELS = {
   ar: 'العربية',
   fa: 'فارسی',
   hi: 'हिन्दी',
+  mr: 'मराठी',
   bn: 'বাংলা',
   id: 'Bahasa Indonesia',
   fil: 'Filipino',

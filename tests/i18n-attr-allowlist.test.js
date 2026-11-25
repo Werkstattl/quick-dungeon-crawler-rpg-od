@@ -87,7 +87,7 @@ test('Spanish regional preferences select the appropriate dictionary', async () 
     }
 });
 
-test('Greek, Bulgarian and Latin American Spanish can be selected after startup', async () => {
+test('regional language tags select the matching language option after startup', async () => {
     const ctx = makeContext();
     // Let the initial English selection finish before simulating a change in Settings.
     await new Promise(resolve => setImmediate(resolve));
@@ -95,6 +95,7 @@ test('Greek, Bulgarian and Latin American Spanish can be selected after startup'
     for (const [tag, code, label] of [
         ['el-GR', 'el', 'Ελληνικά'],
         ['bg-BG', 'bg', 'Български'],
+        ['mr-IN', 'mr', 'मराठी'],
         ['es-419', 'es-419', 'Español (Latinoamérica)'],
     ]) {
         assert.equal(options.get(code), label);
