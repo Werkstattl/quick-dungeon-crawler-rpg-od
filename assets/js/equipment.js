@@ -1836,14 +1836,19 @@ const EQUIP_BEST_LABEL_FALLBACKS = {
     fasterRun: 'Faster Run'
 };
 
-const translateEquipText = (key, fallback) => {
+const translateEquipText = (key, fallback, params) => {
     if (typeof t === 'function') {
-        const translated = t(key);
+        const translated = t(key, params);
         if (translated !== key) {
             return translated;
         }
     }
     return fallback;
+};
+
+const formatEquipmentLevelTier = (level, tier) => {
+    const levelLabel = translateEquipText('level-value', `Lv.${level}`, { level });
+    return `${levelLabel} ${translateEquipText('tier', 'Tier')} ${tier}`;
 };
 
 const EQUIPMENT_PERCENT_STATS = new Set(['critRate', 'critDmg', 'atkSpd', 'vamp', 'dodge', 'luck', 'fasterRun']);
@@ -2071,7 +2076,7 @@ const renderEquipmentCard = ({
     const headerMarkup = label ? `<p class="equipment-card-label">${label}</p>` : '';
     const titleMarkup = `
             <h3 class="${item.rarity}">${icon}${equipmentDisplayLabel(item)}</h3>
-            <h5 class="lvltier ${item.rarity}"><b>Lv.${item.lvl} Tier ${tier}</b></h5>
+            <h5 class="lvltier ${item.rarity}"><b>${formatEquipmentLevelTier(item.lvl, tier)}</b></h5>
             ${renderEquipmentSpecialBonus(item)}`;
 
     if (showRollQuality) {
@@ -2345,7 +2350,7 @@ function openEquipBestSettings() {
                 </label>
                 <label>${tierLabel}
                     <select id="equip-priority-min-tier">
-                        ${Array.from({ length: EQUIP_BEST_MAX_TIER }, (_, index) => index + 1).map(tier => `<option value="${tier}"${tier === minimumTier ? ' selected' : ''}>Tier ${tier}+</option>`).join('')}
+                        ${Array.from({ length: EQUIP_BEST_MAX_TIER }, (_, index) => index + 1).map(tier => `<option value="${tier}"${tier === minimumTier ? ' selected' : ''}>${translateEquipText('tier', 'Tier')} ${tier}+</option>`).join('')}
                     </select>
                 </label>
             </div>
@@ -2659,7 +2664,7 @@ const EQUIPMENT_STAT_ABBREVIATION_KEYS = {
     vamp: 'vamp',
     dodge: 'dodge',
     luck: 'luck',
-    fasterRun: 'faster-run'
+    fasterRun: 'stat-display.faster-run'
 };
 
 const getEquipmentStatAbbreviation = (statKey) => {
@@ -2775,7 +2780,7 @@ const createEquipmentPrint = (condition, options = {}) => {
     let panel = `
         <div class="primary-panel" style="padding: 0.5rem; margin-top: 0.5rem;">
                 <h4 class="${item.rarity}"><b>${item.icon}${equipmentDisplayLabel(item)}</b></h4>
-                <h5 class="${item.rarity}"><b>Lv.${item.lvl} Tier ${item.tier}</b></h5>
+                <h5 class="${item.rarity}"><b>${formatEquipmentLevelTier(item.lvl, item.tier)}</b></h5>
                 <ul>
                 ${item.stats.map(stat => {
         const statKey = Object.keys(stat)[0];

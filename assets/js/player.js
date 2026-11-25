@@ -141,7 +141,7 @@ const checkInventoryLimit = (logMessage = false) => {
     if (inventoryItemCount() > getMaxInventoryItems()) {
         dungeon.status.exploring = false;
         if (logMessage && typeof addDungeonLog === 'function') {
-            addDungeonLog(`<span class='Common'><i class="fas fa-box-open"></i> Inventory limit reached. Sell equipment to continue exploring.</span>`);
+            addDungeonLog(`<span class='Common'><i class="fas fa-box-open"></i> ${t('inventory-full')}</span>`);
         }
         return false;
     }
@@ -247,13 +247,13 @@ const playerLoadStats = () => {
             playerCombatHpElement.style.width = `${player.stats.hpPercent}%`;
             playerHpDamageElement.style.width = `${player.stats.hpPercent}%`;
             playerExpElement.style.width = `${player.exp.expPercent}%`;
-            playerInfoElement.innerHTML = `${playerNameText} Lv.${player.lvl} (${player.exp.expPercent}%)${titleHTML}`;
+            playerInfoElement.innerHTML = `${playerNameText} ${t('level-value', { level: player.lvl })} (${player.exp.expPercent}%)${titleHTML}`;
         }
     }
 
     // Header
-    document.querySelector("#player-name").innerHTML = `<i class="fas fa-user"></i>${playerNameText} Lv.${player.lvl}${titleHTML}`;
-    document.querySelector("#player-exp").innerHTML = `<p>Exp</p> ${nFormatter(player.exp.expCurr)}/${nFormatter(player.exp.expMax)} (${player.exp.expPercent}%)`;
+    document.querySelector("#player-name").innerHTML = `<i class="fas fa-user"></i>${playerNameText} ${t('level-value', { level: player.lvl })}${titleHTML}`;
+    document.querySelector("#player-exp").innerHTML = `<p>${t('experience-short')}</p> ${nFormatter(player.exp.expCurr)}/${nFormatter(player.exp.expMax)} (${player.exp.expPercent}%)`;
     document.querySelector("#player-gold").innerHTML = `<i class="fas fa-coins" style="color: #FFD700;"></i>${nFormatter(player.gold)}`;
 
     // Player Stats

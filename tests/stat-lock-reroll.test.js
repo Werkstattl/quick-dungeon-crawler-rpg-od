@@ -387,6 +387,7 @@ const createForgeExecutionContext = ({ gold = 100000, stones = 50, tokens = 1 } 
         getEquipmentStatTotals() { return {}; },
         getEquipmentRerollStatPool() { return ['atk', 'critRate', 'critDmg', 'vamp']; },
         getOrderedEquipmentStats(totals) { return Object.keys(totals || {}); },
+        formatEquipmentLevelTier(level, tier) { return `Lv.${level} Tier ${tier}`; },
         formatEquipmentStatLabel(stat) { return stat; },
         formatEquipmentValue(stat, value) { return String(value); },
         renderEquipmentCard() { return ''; },

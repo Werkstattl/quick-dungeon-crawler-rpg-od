@@ -204,7 +204,7 @@ class Companion {
                 applyActiveCompanionBonuses(this);
             }
             if (typeof addCombatLog === 'function') {
-                addCombatLog(`${oldName} evolved into ${this.name}!`);
+                addCombatLog(t('companion-evolved', { oldName, name: this.name }));
             }
             current = next;
         }
@@ -279,7 +279,7 @@ class Companion {
     levelUp() {
         this.level += 1;
         this.refreshBaseStats();
-        addCombatLog(`${this.name} leveled up! (Lv.${this.level-1} > Lv.${this.level})`);
+        addCombatLog(t('companion-level-up', { name: this.name, old: this.level - 1, level: this.level }));
         this.checkEvolution();
         if (this.isActive) {
             applyActiveCompanionBonuses(this);
@@ -293,7 +293,7 @@ class Companion {
         const combatStats = getCompanionCombatStats(this);
         const damage = Math.max(1, Math.floor(combatStats.atk - (enemy.stats.def / 2)));
         enemy.hp -= damage;
-        addDungeonLog(`${this.name} attacks for ${damage} damage!`);
+        addDungeonLog(t('companion-attack', { name: this.name, damage }));
         return damage;
     }
 
@@ -875,9 +875,9 @@ function updateCompanionUI() {
         const combatStats = getCompanionCombatStats(activeCompanion);
         companionName.removeAttribute('data-i18n');
         companionName.removeAttribute('data-i18n-params');
-        companionName.textContent = `${activeCompanion.name} Lv.${activeCompanion.level}`;
+        companionName.textContent = `${activeCompanion.name} ${t('level-value', { level: activeCompanion.level })}`;
         companionName.className = activeCompanion.rarity;
-        companionExp.textContent = `EXP ${nFormatter(Math.floor(activeCompanion.experience))} / ${nFormatter(activeCompanion.getExperienceRequired())}`;
+        companionExp.textContent = `${t('experience-short')} ${nFormatter(Math.floor(activeCompanion.experience))} / ${nFormatter(activeCompanion.getExperienceRequired())}`;
         companionExp.classList.remove('hidden');
         companionAtk.textContent = combatStats.atk;
         companionAtkSpd.textContent = combatStats.atkSpd.toFixed(2);

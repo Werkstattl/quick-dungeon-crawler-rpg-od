@@ -240,10 +240,10 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
         if (format.test(playerName)) {
-            document.querySelector("#alert").innerHTML = "Your name cannot contain special characters!";
+            document.querySelector("#alert").textContent = t('name-special-characters');
         } else {
             if (playerName.length < 3 || playerName.length > 15) {
-                document.querySelector("#alert").innerHTML = "Name should be between 3-15 characters!";
+                document.querySelector("#alert").textContent = t('name-length');
             } else {
 			    if (player === null) {
                 player = {
@@ -753,7 +753,9 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
     if (runMenu) {
         runMenu.onclick = function () {
             sfxOpen.play();
-            let runTime = formatRunDuration(dungeon.statistics.runtime);
+            const runTime = formatRunDuration(dungeon.statistics.runtime);
+            const className = t((player.selectedClass || 'Knight').toLowerCase());
+            const passiveNames = [].concat(player.skills || []).map(translatePassiveValue).filter(Boolean).join(', ');
             menuModalElement.style.display = "none";
             defaultModalElement.style.display = "flex";
             defaultModalElement.innerHTML = `
@@ -762,9 +764,9 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                         <h3 data-i18n="current-run">Current Run</h3>
                         <button type="button" class="title-close" id="run-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                     </div>
-                    <p>${player.selectedClass} Lv.${player.lvl} (${player.skills})</p>
-                    <p>${t('blessings')}: Lvl.${player.blessing}</p>
-                    <p>${t('curse')}: Lvl.${getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling)}</p>
+                    <p>${className} ${t('level-value', { level: player.lvl })}${passiveNames ? ` (${passiveNames})` : ''}</p>
+                    <p>${t('blessings')}: ${t('level-value', { level: player.blessing })}</p>
+                    <p>${t('curse')}: ${t('level-value', { level: getCurseLevelFromEnemyScaling(dungeon.settings.enemyScaling) })}</p>
                     <p>${t('kills')}: ${nFormatter(dungeon.statistics.kills)}</p>
                     <p>${t('runtime')}: ${runTime}</p>
                 </div>`;
@@ -867,11 +869,11 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
                     <h3 data-i18n="settings">Settings</h3>
                     <button type="button" class="title-close" id="volume-close" data-i18n-attr="aria-label:close" aria-label="Close"><i class="fa fa-xmark" aria-hidden="true"></i></button>
                 </div>
-                <label id="master-label" for="master-volume">Master (${master}%)</label>
+                <label id="master-label" for="master-volume">${t('volume-master')} (${master}%)</label>
                 <input type="range" id="master-volume" min="0" max="100" value="${master}">
-                <label id="bgm-label" for="bgm-volume">BGM (${bgm}%)</label>
+                <label id="bgm-label" for="bgm-volume">${t('volume-music')} (${bgm}%)</label>
                 <input type="range" id="bgm-volume" min="0" max="100" value="${bgm}">
-                <label id="sfx-label" for="sfx-volume">SFX (${sfx}%)</label>
+                <label id="sfx-label" for="sfx-volume">${t('volume-effects')} (${sfx}%)</label>
                 <input type="range" id="sfx-volume" min="0" max="100" value="${sfx}">
                 <label id="font-label" for="font-size"><span data-i18n="font-size">Font Size</span> (${fontScale}%)</label>
                 <input type="range" id="font-size" min="75" max="150" value="${fontScale}">
@@ -940,22 +942,22 @@ function openMenu(isTitle = false, silentInventoryClose = false) {
         // Volume Control
         masterVol.oninput = function () {
             master = this.value;
-            document.querySelector('#master-label').innerHTML = `Master (${master}%)`;
+            document.querySelector('#master-label').innerHTML = `${t('volume-master')} (${master}%)`;
         };
 
         bgmVol.oninput = function () {
             bgm = this.value;
-            document.querySelector('#bgm-label').innerHTML = `BGM (${bgm}%)`;
+            document.querySelector('#bgm-label').innerHTML = `${t('volume-music')} (${bgm}%)`;
         };
 
         sfxVol.oninput = function () {
             sfx = this.value;
-            document.querySelector('#sfx-label').innerHTML = `SFX (${sfx}%)`;
+            document.querySelector('#sfx-label').innerHTML = `${t('volume-effects')} (${sfx}%)`;
         };
 
         fontSizeSlider.oninput = function () {
             let fontScale = this.value;
-            document.querySelector('#font-label').innerHTML = `Font Size (${fontScale}%)`;
+            document.querySelector('#font-label').innerHTML = `${t('font-size')} (${fontScale}%)`;
         };
 
         applyVol.onclick = function () {

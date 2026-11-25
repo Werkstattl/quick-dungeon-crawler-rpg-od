@@ -1943,7 +1943,7 @@ const showCombatInfo = () => {
     document.querySelector('#combatPanel').innerHTML = `
     <div class="content">
         <div class="battle-info-panel center" id="enemyPanel">
-            <p>${enemy.name} Lv.${enemy.lvl} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>${enemyAffixBadges}
+            <p>${enemy.name} ${t('level-value', { level: enemy.lvl })} <span class="enemy-type-badge enemy-type-${enemy.type.toLowerCase()}">${t('enemy-type-' + enemy.type.toLowerCase())}</span></p>${enemyAffixBadges}
             <div class="battle-bar empty-bar hp bb-hp">
                 <div class="battle-bar dmg bb-hp" id="enemy-hp-dmg"></div>
                 <div class="battle-bar current bb-hp" id="enemy-hp-battle">
@@ -1964,7 +1964,7 @@ const showCombatInfo = () => {
                 </div>
             </div>
             <div class="battle-bar empty-bar bb-xb">
-                <div class="battle-bar current bb-xb" id="player-exp-bar">exp</div>
+                <div class="battle-bar current bb-xb" id="player-exp-bar">${t('experience-short')}</div>
             </div>
             <div class="attack-controls">
                 <button id="player-attack-btn" data-i18n="attack">${t('attack')}</button>

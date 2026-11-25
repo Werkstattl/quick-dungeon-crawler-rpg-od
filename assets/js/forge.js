@@ -681,14 +681,14 @@ const loadForgeEquipment = () => {
         
         // Format stats display
         const statsHtml = Object.entries(getForgeDisplayStatTotals(equip)).map(([statName, statValue]) =>
-            `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}${formatEquipmentValue(statName, statValue, { includeSign: true })}</li>`
+            `<li>${getEquipmentStatAbbreviation(statName)}${formatEquipmentValue(statName, statValue, { includeSign: true })}</li>`
         ).join('');
         
         equipDiv.innerHTML = `
             <div class="equipment-icon">${equipmentIcon(equip.category)}</div>
             <div class="equipment-info">
                 <p class="${equip.rarity}">${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip) : equipmentName(equip.category)}</p>
-                <p>Lv.${equip.lvl} T${equip.tier}</p>
+                <p>${formatEquipmentLevelTier(equip.lvl, equip.tier)}</p>
                 <ul class="equipment-stats">
                     ${statsHtml}
                 </ul>
@@ -827,7 +827,7 @@ const renderPossibleRerollStats = (equipment, excludedStats = []) => {
     return `
         <div class="equipment-card reroll-possible-card">
             <h3 class="${equipment.rarity}">${equipmentIcon(equipment.baseCategory || equipment.category)}${typeof equipmentDisplayLabel === 'function' ? equipmentDisplayLabel(equipment) : equipmentLabel(equipment.rarity, equipment.category)}</h3>
-            <h5 class="lvltier ${equipment.rarity}"><b>Lv.${equipment.lvl} ${t('tier')} ${equipment.tier === undefined ? 1 : equipment.tier}</b></h5>
+            <h5 class="lvltier ${equipment.rarity}"><b>${formatEquipmentLevelTier(equipment.lvl, equipment.tier === undefined ? 1 : equipment.tier)}</b></h5>
             <p class="reroll-roll-budget">${remainingLabel}</p>
             <ul class="equipment-stat-list reroll-possible-list">
                 ${statsMarkup || `<li class="equipment-stat-row"><span class="stat-name">${translateEquipText('no-stats-available', 'No stats available')}</span></li>`}
@@ -1006,7 +1006,7 @@ const updateRerollDisplay = () => {
                 <div class="selected-equipment ${equip.rarity}">
                     ${equipmentIcon(equip.category)}
                     <p>${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip) : equipmentName(equip.category)}</p>
-                    <p>Lv.${equip.lvl} T${equip.tier}</p>
+                    <p>${formatEquipmentLevelTier(equip.lvl, equip.tier)}</p>
                 </div>
             `;
             slot.className = 'forge-slot reroll-slot selected';
@@ -1091,7 +1091,7 @@ const updateRefineDisplay = () => {
                 <div class="selected-equipment ${equip.rarity}">
                     ${equipmentIcon(equip.category)}
                     <p>${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip) : equipmentName(equip.category)}</p>
-                    <p>Lv.${equip.lvl} T${equip.tier}</p>
+                    <p>${formatEquipmentLevelTier(equip.lvl, equip.tier)}</p>
                 </div>
             `;
             slot.className = 'forge-slot reroll-slot selected';
@@ -1186,7 +1186,7 @@ const updateForgeDisplay = () => {
             <div class="selected-equipment ${equip.rarity}">
                 ${equipmentIcon(equip.category)}
                 <p>${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip) : equipmentName(equip.category)}</p>
-                <p>Lv.${equip.lvl} T${equip.tier}</p>
+                <p>${formatEquipmentLevelTier(equip.lvl, equip.tier)}</p>
             </div>
         `;
         slot1.className = 'forge-slot selected';
@@ -1214,7 +1214,7 @@ const updateForgeDisplay = () => {
             <div class="selected-equipment ${equip.rarity}">
                 ${equipmentIcon(equip.category)}
                 <p>${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip) : equipmentName(equip.category)}</p>
-                <p>Lv.${equip.lvl} T${equip.tier}</p>
+                <p>${formatEquipmentLevelTier(equip.lvl, equip.tier)}</p>
             </div>
         `;
         slot2.className = 'forge-slot selected';
@@ -1243,7 +1243,7 @@ const updateForgeDisplay = () => {
             <div class="selected-equipment ${equip3.rarity}">
                 ${equipmentIcon(equip3.category)}
                 <p>${typeof equipmentDisplayName === 'function' ? equipmentDisplayName(equip3) : equipmentName(equip3.category)}</p>
-                <p>Lv.${equip3.lvl} T${equip3.tier}</p>
+                <p>${formatEquipmentLevelTier(equip3.lvl, equip3.tier)}</p>
             </div>
             `;
             slot3.className = 'forge-slot selected';
@@ -1433,15 +1433,15 @@ const displayForgeResult = () => {
             <h4 class="${forgeResult.rarity}">
                 ${forgeResult.icon}${typeof equipmentDisplayLabel === 'function' ? equipmentDisplayLabel(forgeResult) : equipmentLabel(forgeResult.rarity, forgeResult.category)}
             </h4>
-            <h5 class="${forgeResult.rarity}">Lv.${forgeLevelRange.min}-${forgeLevelRange.max} ${t('tier')} ${forgeResult.tier}</h5>
+            <h5 class="${forgeResult.rarity}">${formatEquipmentLevelTier(`${forgeLevelRange.min}-${forgeLevelRange.max}`, forgeResult.tier)}</h5>
             <ul style="display:none">
                 ${forgeResult.stats.map(stat => {
                     const statName = Object.keys(stat)[0];
                     const statValue = stat[statName];
                     if (["critRate", "critDmg", "atkSpd", "vamp", "dodge", "luck", "fasterRun"].includes(statName)) {
-                        return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
+                        return `<li>${getEquipmentStatAbbreviation(statName)}+${statValue.toFixed(2).replace(rx, "$1")}%</li>`;
                     } else {
-                        return `<li>${statName.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase()}+${statValue}</li>`;
+                        return `<li>${getEquipmentStatAbbreviation(statName)}+${statValue}</li>`;
                     }
                 }).join('')}
             </ul>

@@ -557,8 +557,8 @@ const dungeonStartPause = () => {
         sfxUnpause.play();
 
         dungeonAction.innerHTML = t("exploring");
-        dungeonActivity.textContent = "Pause";
-        dungeonActivity.removeAttribute('data-i18n');
+        dungeonActivity.setAttribute('data-i18n', 'pause');
+        dungeonActivity.textContent = t('pause');
         dungeon.status.exploring = true;
         dungeon.status.paused = false;
         
@@ -1187,7 +1187,12 @@ const statBlessing = () => {
             player.bonusStats.luck += value;
             break;
     }
-    addDungeonLog(t('blessing-gain', { value: value, stat: buff.replace(/([A-Z])/g, ".$1").replace(/crit/g, "c").toUpperCase(), old: player.blessing, new: player.blessing + 1 }));
+    addDungeonLog(t('blessing-gain', {
+        value,
+        stat: formatEquipmentStatLabel(buff),
+        old: player.blessing,
+        new: player.blessing + 1,
+    }));
     blessingUp();
     playerLoadStats();
 }

@@ -279,13 +279,13 @@ function openBestiaryModal() {
       </div>
       <div class="bestiary-controls" id="bestiary-controls">
         <span class="label" data-i18n="sort">Sort</span>
-        <select id="bestiary-sort-by" aria-label="Sort by">
+        <select id="bestiary-sort-by" data-i18n-attr="aria-label:sort-by" aria-label="Sort by">
           <!--<option value="id" data-i18n="bestiary-sort.id">ID</option>-->
           <option value="name" data-i18n="bestiary-sort.name">Name</option>
           <option value="encounters" data-i18n="bestiary-sort.encounters">Encounters</option>
           <option value="kills" data-i18n="bestiary-sort.kills">Kills</option>
         </select>
-        <select id="bestiary-sort-dir" aria-label="Sort direction">
+        <select id="bestiary-sort-dir" data-i18n-attr="aria-label:sort-direction" aria-label="Sort direction">
           <option value="asc" data-i18n="bestiary-sort.asc">Ascending</option>
           <option value="desc" data-i18n="bestiary-sort.desc">Descending</option>
         </select>
@@ -501,7 +501,8 @@ function openBestiaryModal() {
       const statEl = document.createElement('span');
       statEl.className = 'stats';
       const damageBonus = getEnemyDamageUnlockPercent(id);
-      statEl.textContent = damageBonus > 0 ? `E:${stats.e} K:${stats.k} DMG:+${damageBonus}%` : `E:${stats.e} K:${stats.k}`;
+      statEl.textContent = t('bestiary-counts', { encounters: stats.e, kills: stats.k });
+      if (damageBonus > 0) statEl.textContent += ' ' + t('bestiary-damage-bonus', { value: damageBonus });
 
       // Image - lazy + async decode + explicit size (use thumbnails if possible)
       const spriteSrc = getBestiaryEnemySpriteSrc(id, sprite);

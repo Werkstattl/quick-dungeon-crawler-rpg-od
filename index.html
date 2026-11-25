@@ -26,14 +26,14 @@
     <main>
         <section id="title-screen" class="game-container">
             <div>
-                <img src="assets/icon/logo.webp" alt="Quick Dungeon Crawler logo">
+                <img src="assets/icon/logo.webp" data-i18n-attr="alt:game-logo" alt="Quick Dungeon Crawler logo">
                 <h1>Quick Dungeon Crawler on Demand!</h1>
             </div>
             <div>
                 <p id="title-play-prompt" data-i18n="tap-to-explore">Tap to explore the dungeon</p>
                 <div id="title-run-progress" hidden><span data-i18n="floor-count"></span> · <span data-i18n="room-count"></span></div>
             </div>
-            <button id="title-menu-btn" aria-label="Open menu"><i class="fas fa-cog"></i></button>
+            <button id="title-menu-btn" data-i18n-attr="aria-label:open-menu" aria-label="Open menu"><i class="fas fa-cog"></i></button>
         </section>
         <section id="character-creation" class="game-container">
             <form id="name-submit">
@@ -62,20 +62,20 @@
                             <i class="fa fa-circle-question stats-help-icon" aria-hidden="true"></i>
                         </a>
                     </h4>
-                    <p title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
-                    <div class="key-stats" aria-label="Core stats">
-                        <p title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
-                        <p title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="player-def"></span></p>
-                        <p title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="player-atkspd"></span></p>
+                    <p data-i18n-attr="title:stats-modal.health" title="Health points"><i class="fas fa-heart" id="player-hp-icon"></i><span data-i18n="hp">HP:</span> <span id="player-hp"></span></p>
+                    <div class="key-stats" data-i18n-attr="aria-label:core-stats" aria-label="Core stats">
+                        <p data-i18n-attr="title:stats-modal.attack" title="Attack power; increases damage dealt"><i class="ra ra-sword"></i><span data-i18n="atk">ATK:</span> <span id="player-atk"></span></p>
+                        <p data-i18n-attr="title:stats-modal.defense" title="Defense; reduces damage taken"><i class="ra ra-round-shield"></i><span data-i18n="def">DEF:</span> <span id="player-def"></span></p>
+                        <p data-i18n-attr="title:stats-modal.attack-speed" title="Attacks per second (attack speed)"><i class="ra ra-plain-dagger"></i><span data-i18n="aps">APS:</span> <span id="player-atkspd"></span></p>
                     </div>
                     <details class="advanced-stats" id="advanced-stats">
                         <summary><span data-i18n="more">More</span></summary>
                         <div>
-                            <p title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i><span data-i18n="vamp">VAMP:</span> <span id="player-vamp"></span></p>
-                            <p title="Critical hit chance"><i class="ra ra-lightning-bolt"></i><span data-i18n="c-rate">C.RATE:</span> <span id="player-crate"></span></p>
-                            <p title="Critical damage bonus"><i class="ra ra-focused-lightning"></i><span data-i18n="c-dmg">C.DMG:</span> <span id="player-cdmg"></span></p>
-                            <p title="Chance to evade attacks"><i class="ra ra-player-dodge"></i><span data-i18n="dodge">DODGE:</span> <span id="player-dodge"></span></p>
-                            <p title="Increases equipment drop chance"><i class="ra ra-perspective-dice-one"></i><span data-i18n="luck">LUCK:</span> <span id="player-luck"></span></p>
+                            <p data-i18n-attr="title:stats-modal.vampirism" title="Vampirism; percent of damage returned as health"><i class="ra ra-dripping-blade"></i><span data-i18n="vamp">VAMP:</span> <span id="player-vamp"></span></p>
+                            <p data-i18n-attr="title:stats-modal.crit-rate" title="Critical hit chance"><i class="ra ra-lightning-bolt"></i><span data-i18n="c-rate">C.RATE:</span> <span id="player-crate"></span></p>
+                            <p data-i18n-attr="title:stats-modal.crit-dmg" title="Critical damage bonus"><i class="ra ra-focused-lightning"></i><span data-i18n="c-dmg">C.DMG:</span> <span id="player-cdmg"></span></p>
+                            <p data-i18n-attr="title:stats-modal.dodge" title="Chance to evade attacks"><i class="ra ra-player-dodge"></i><span data-i18n="dodge">DODGE:</span> <span id="player-dodge"></span></p>
+                            <p data-i18n-attr="title:stats-modal.luck" title="Increases equipment drop chance"><i class="ra ra-perspective-dice-one"></i><span data-i18n="luck">LUCK:</span> <span id="player-luck"></span></p>
                         </div>
                     </details>
                 </div>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="dungeon-controls">
                     <button id="dungeonActivity"></button>
-                    <button id="auto-mode-btn" class="hidden" aria-label="Toggle auto mode"><i class="fas fa-play"></i></button>
+                    <button id="auto-mode-btn" class="hidden" data-i18n-attr="aria-label:toggle-auto-mode" aria-label="Toggle auto mode"><i class="fas fa-play"></i></button>
                     <button id="auto-mode-settings-btn" class="hidden"><i class="fas fa-sliders-h" aria-hidden="true"></i><span class="sr-only"><span data-i18n="auto-mode">Auto Mode</span> <span data-i18n="settings">Settings</span></span></button>
                 </div>
             </div>
@@ -118,8 +118,8 @@
                 <div class="content-head">
                       <h3><span data-i18n="inventory">Inventory</span> (<span id="inventory-item-count">0</span>/<span id="inventory-item-limit">100</span>)</h3>
                     <div>
-                        <p onclick="openForgeModal()" role="button" aria-label="Open forge"><i class="ra ra-anvil"></i></p>
-                        <p onclick="closeInventory()" role="button" aria-label="Close inventory"><i class="fa fa-xmark"></i></p>
+                        <p onclick="openForgeModal()" role="button" data-i18n-attr="aria-label:open-forge" aria-label="Open forge"><i class="ra ra-anvil"></i></p>
+                        <p onclick="closeInventory()" role="button" data-i18n-attr="aria-label:close-inventory" aria-label="Close inventory"><i class="fa fa-xmark"></i></p>
                     </div>
                 </div>
                 <div class="content-head">
@@ -149,7 +149,7 @@
                         <div class="box-head">
                               <h4 data-i18n="equipment">Equipment</h4>
                             <div>
-                                <p id="equip-best-settings" role="button" aria-label="Configure auto-equip priorities" title="Auto Equip Priorities"><i class="fa fa-sliders-h"></i></p>
+                                <p id="equip-best-settings" role="button" data-i18n-attr="aria-label:auto-equip-priorities,title:auto-equip-priorities" aria-label="Configure auto-equip priorities" title="Auto Equip Priorities"><i class="fa fa-sliders-h"></i></p>
                                 <p id="equip-best"><i class="fa fa-arrows-rotate"></i></p>
                                 <p id="unequip-all"><i class="fa fa-circle-xmark"></i></p>
                             </div>
@@ -197,7 +197,7 @@
             <div class="content">
                 <div class="content-head">
                     <h3 data-i18n="stats">Stats</h3>
-                    <p onclick="closeStatsModal()" aria-label="Close stats"><i class="fa fa-xmark"></i></p>
+                    <p onclick="closeStatsModal()" data-i18n-attr="aria-label:close-stats" aria-label="Close stats"><i class="fa fa-xmark"></i></p>
                 </div>
                 <div class="modal-body">
                     <p><i class="fas fa-heart"></i><strong data-i18n="stat-display.health">Health</strong>: <span data-i18n="stats-modal.health">Health points. When it reaches 0, you are defeated.</span></p>
@@ -228,7 +228,7 @@
                       <h3><i class="ra ra-anvil"></i> <span data-i18n="the-forge">The Forge</span></h3>
                     <p onclick="closeForgeModal()"><i class="fa fa-xmark"></i></p>
                 </div>
-                                <div class="forge-mode-toggle" role="tablist" aria-label="Forge mode">
+                                <div class="forge-mode-toggle" role="tablist" data-i18n-attr="aria-label:forge-mode" aria-label="Forge mode">
                                         <button id="forge-mode-merge" class="active" type="button" role="tab" aria-selected="true" data-forge-mode="merge" data-i18n="merge-items">Merge</button>
                                         <button id="forge-mode-reroll" type="button" role="tab" aria-selected="false" data-forge-mode="reroll" data-i18n="reroll-stats">Reroll Stats</button>
                                         <button id="forge-mode-refine" type="button" role="tab" aria-selected="false" data-forge-mode="refine"><i class="ra ra-crystal-ball" aria-hidden="true"></i><span data-i18n="refine">Refine</span></button>
