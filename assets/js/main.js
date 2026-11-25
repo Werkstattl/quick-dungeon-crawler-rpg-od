@@ -2180,9 +2180,13 @@ const allocationPopup = () => {
                 </div>
             </div>
             <div class="row">
-                <p id="alloPts"><span data-i18n="stat-points">Stat Points:</span> <span id="ptsLeft">${points}/20</span></p>
-                <button id="allocate-reset" data-i18n="reset">Reset</button>
-                <button id="allocate-auto" data-i18n="auto">Auto</button>
+                <p id="alloPts" data-i18n-attr="title:stat-points" title="Stat Points:">
+                    <span data-i18n="stat-points">Stat Points:</span><i class="fas fa-chart-simple" role="img" data-i18n-attr="aria-label:stat-points" aria-label="Stat Points:"></i> <span id="ptsLeft">${points}/20</span>
+                </p>
+                <div class="row allocation-actions">
+                    <button id="allocate-reset" data-i18n-attr="aria-label:reset,title:reset" aria-label="Reset" title="Reset"><i class="fas fa-rotate-left" aria-hidden="true"></i><span data-i18n="reset">Reset</span></button>
+                    <button id="allocate-auto" data-i18n-attr="aria-label:auto,title:auto" aria-label="Auto" title="Auto"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i><span data-i18n="auto">Auto</span></button>
+                </div>
             </div>
             <div class="row">
                 <p data-i18n="passive">Passive</p>

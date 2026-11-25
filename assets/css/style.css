@@ -1963,14 +1963,97 @@ button:focus-visible {
 }
 
 /* Stat Allocation */
-#allocate-stats {
-    max-width: 22rem;
-    max-height: 90vh;
-    overflow-y: auto;
+#defaultModal:has(> #allocate-stats) {
+    container: allocation-screen / inline-size;
 }
 
-#allocate-reset {
-    margin-left: auto;
+#allocate-stats {
+    width: max-content;
+    min-width: min(22rem, calc(100% - 1rem));
+    max-width: calc(100% - 1rem);
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+}
+
+#allocate-stats > .primary-panel,
+#allocate-stats > .curse-progression-info {
+    /* Let the controls determine the width and wrap descriptions within it. */
+    width: 0;
+    min-width: 100%;
+}
+
+#allocate-stats .row > span {
+    width: auto;
+    min-width: 1rem;
+}
+
+#allocate-stats select {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    flex-grow: 1;
+    text-overflow: ellipsis;
+}
+
+#allocate-stats .allocation-actions {
+    margin-inline-start: auto;
+}
+
+#alloPts,
+.allocation-actions button {
+    white-space: nowrap;
+}
+
+#alloPts i,
+#allocate-stats .allocation-actions i {
+    display: none;
+    margin: 0;
+}
+
+@media (max-width: 48rem) {
+    #alloPts [data-i18n],
+    .allocation-actions button span {
+        display: none;
+    }
+
+    #alloPts i,
+    #allocate-stats .allocation-actions i {
+        display: inline-block;
+    }
+
+    #alloPts i {
+        color: var(--accent);
+    }
+
+    .allocation-actions button {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0.35rem 0.5rem;
+    }
+}
+
+/* Measure against the player's chosen font size, including enlarged text. */
+@container allocation-screen (min-width: 16.5em) {
+    #allocate-auto span {
+        display: inline;
+    }
+
+    #allocate-stats #allocate-auto i {
+        display: none;
+    }
+}
+
+@container allocation-screen (min-width: 30em) {
+    #alloPts [data-i18n],
+    #allocate-reset span {
+        display: inline;
+    }
+
+    #alloPts i,
+    #allocate-stats #allocate-reset i {
+        display: none;
+    }
 }
 
 #curse-help-toggle {
