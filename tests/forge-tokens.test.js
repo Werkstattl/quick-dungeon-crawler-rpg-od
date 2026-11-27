@@ -92,20 +92,14 @@ test('the Wandering Merchant scales from gear only with all six equipment slots 
     assert.equal(evaluate(context, 'getWanderingShopCost(80)'), 416250);
 });
 
-test('Auto Mode buys from both wandering merchants', () => {
-    const wanderingShopBody = dungeonSource.slice(
-        dungeonSource.indexOf('const wanderingShopEvent ='),
-        dungeonSource.indexOf('const forgeTokenMerchantEvent =')
-    );
+test('Auto Mode still buys from the wandering Forge Token merchant', () => {
     const forgeTokenMerchantBody = dungeonSource.slice(
         dungeonSource.indexOf('const forgeTokenMerchantEvent ='),
         dungeonSource.indexOf('const nothingEvent =')
     );
 
-    for (const body of [wanderingShopBody, forgeTokenMerchantBody]) {
-        assert.match(body, /autoConfirm\(\)/);
-        assert.doesNotMatch(body, /autoDecline\(\)/);
-    }
+    assert.match(forgeTokenMerchantBody, /autoConfirm\(\)/);
+    assert.doesNotMatch(forgeTokenMerchantBody, /autoDecline\(\)/);
 });
 
 test('the Forge Token merchant is forced once on Floor 13 each run', () => {

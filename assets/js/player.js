@@ -230,6 +230,7 @@ const playerLoadStats = () => {
     if (player.stats.hp > player.stats.hpMax) {
         player.stats.hp = player.stats.hpMax;
     }
+    if (typeof refreshEmberbrookRestButton === 'function') refreshEmberbrookRestButton();
     player.stats.hpPercent = Number((player.stats.hp / player.stats.hpMax) * 100).toFixed(2).replace(rx, "$1");
     player.exp.expPercent = Number((player.exp.expCurrLvl / player.exp.expMaxLvl) * 100).toFixed(2).replace(rx, "$1");
 

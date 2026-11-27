@@ -35,7 +35,11 @@ const createDefaultDungeonStory = () => ({
 });
 
 const createDefaultSpecialEvents = () => ({
+    // Keep the old merchant flag so existing runs can't receive a second offer.
     floor6WanderingShopVisited: false,
+    emberbrookVisited: false,
+    emberbrookRested: false,
+    emberbrookOffer: null,
     floor13ForgeTokenMerchantVisited: false,
     // Floor on which the monarch chamber was declined (0 = never)
     monarchIgnoredFloor: 0,
@@ -61,7 +65,8 @@ let currentEvent = null;
 const BASE_DUNGEON_EVENT_INTERVAL_MS = 1000;
 const MIN_DUNGEON_EVENT_INTERVAL_MS = 100;
 const DUNGEON_TIMER_TICK_MS = 100;
-const WANDERING_SHOP_FLOOR = 6;
+const EMBERBROOK_FLOOR = 5;
+const EMBERBROOK_REST_PERCENT = 30;
 const WANDERING_SHOP_MIN_RARITY = 'Rare';
 const WANDERING_SHOP_COST_PER_LEVEL = 300;
 const WANDERING_SHOP_COST_MULTIPLIER = 1.5;
@@ -210,10 +215,13 @@ const applyRouteBias = (eventTypes) => {
     return eventTypes;
 };
 
-const shouldTriggerWanderingShop = () => {
+const shouldTriggerEmberbrook = () => {
     ensureSpecialEventsState();
-    return dungeon.progress.floor === WANDERING_SHOP_FLOOR
-        && !dungeon.specialEvents.floor6WanderingShopVisited;
+    return dungeon.progress.floor === EMBERBROOK_FLOOR
+        && dungeon.progress.room === 1
+        && dungeon.action === 0
+        && !dungeon.specialEvents.emberbrookVisited
+        && isRouteChoiceNeeded();
 };
 
 const shouldTriggerForgeTokenMerchant = () => {
@@ -443,6 +451,10 @@ const getDungeonEventInterval = () => {
 const dungeonEventTick = () => {
     const now = Date.now();
 
+    if (dungeon.status.exploring && isEmberbrookOpen()) {
+        autoVisitEmberbrook();
+        return;
+    }
     if (dungeon.status.exploring && !dungeon.status.event) {
         if (now - lastDungeonEventTimestamp >= getDungeonEventInterval()) {
             lastDungeonEventTimestamp = now;
@@ -650,6 +662,10 @@ const showRouteChoiceEvent = () => {
 
 const dungeonEvent = () => {
     if (dungeon.status.exploring && !dungeon.status.event) {
+        if (shouldTriggerEmberbrook()) {
+            emberbrookEvent();
+            return;
+        }
         ensureRouteChoiceState();
         if (isRouteChoiceNeeded()) {
             showRouteChoiceEvent();
@@ -684,9 +700,7 @@ const dungeonEvent = () => {
         }
         event = shouldTriggerForgeTokenMerchant()
             ? "forgeTokenMerchant"
-            : (shouldTriggerWanderingShop()
-                ? "wanderingShop"
-                : eventTypes[Math.floor(Math.random() * eventTypes.length)]);
+            : eventTypes[Math.floor(Math.random() * eventTypes.length)];
         if ( dungeon.progress.floor === 1 && dungeon.progress.room === 1 && dungeon.action === 1 && dungeon.nothingBias === 0) {
             if (!localStorage.getItem('introHintShown')) {
                 localStorage.setItem('introHintShown', true);
@@ -808,9 +822,6 @@ const dungeonEvent = () => {
                     ignoreEvent();
                 };
                 autoDecline();
-                break;
-            case "wanderingShop":
-                wanderingShopEvent();
                 break;
             case "forgeTokenMerchant":
                 forgeTokenMerchantEvent();
@@ -1043,44 +1054,143 @@ const goldDrop = () => {
     playerLoadStats();
 }
 
-const wanderingShopEvent = () => {
-    dungeon.status.event = true;
-    ensureSpecialEventsState();
-    dungeon.specialEvents.floor6WanderingShopVisited = true;
-    const itemLevel = getWanderingShopItemLevel();
-    const cost = getWanderingShopCost(itemLevel);
-    const choices = `
-        <div class="decision-panel">
-            <button id="choice1" data-i18n="buy">${t('buy')}</button>
-            <button id="choice2" data-i18n="ignore">${t('ignore')}</button>
-        </div>`;
-    addDungeonLog(t('wandering-shop-offer', { cost: nFormatter(cost), rarity: t(WANDERING_SHOP_MIN_RARITY.toLowerCase()) }), choices);
-    document.querySelector("#choice1").onclick = function () {
-        if (player.gold < cost) {
-            sfxDeny.play();
-            addDungeonLog(t('not-enough-gold'));
-            dungeon.status.event = false;
-            currentEvent = null;
-            return;
-        }
-        player.gold -= cost;
-        sfxSell.play();
-        addDungeonLog(t('wandering-shop-purchase', { gold: nFormatter(cost) }));
-        createEquipmentPrint("dungeon", {
-            allowCompanionCharm: false,
-            minRarity: WANDERING_SHOP_MIN_RARITY,
-            forcedLevel: itemLevel,
-            messageKey: 'wandering-shop-item-received',
-        });
-        playerLoadStats();
-        dungeon.status.event = false;
-        currentEvent = null;
+const isEmberbrookOpen = () => dungeon.status.event && currentEvent === 'emberbrook';
+
+const getEmberbrookOffer = () => {
+    const offer = dungeon.specialEvents.emberbrookOffer;
+    const item = offer && offer.item;
+    if (!item || !Number.isSafeInteger(offer.cost) || offer.cost <= 0
+        || !['Rare', 'Epic', 'Legendary', 'Heirloom'].includes(item.rarity)
+        || !equipmentIcon(item.category) || !Number.isFinite(item.lvl) || !Number.isFinite(item.tier)
+        || !Array.isArray(item.stats) || !item.stats.every(stat => stat && typeof stat === 'object'
+            && Object.entries(stat).every(([key, value]) => EQUIPMENT_STAT_DISPLAY_ORDER.includes(key) && Number.isFinite(value)))) {
+        return null;
     }
-    document.querySelector("#choice2").onclick = function () {
-        ignoreEvent();
+    return offer;
+};
+
+const getEmberbrookRestState = () => {
+    const rested = dungeon.specialEvents.emberbrookRested;
+    const fullHealth = player.stats.hp >= player.stats.hpMax;
+    return {
+        disabled: rested || fullHealth,
+        label: rested ? t('emberbrook-rest-used') : fullHealth ? t('emberbrook-full-health')
+            : t('emberbrook-rest', { percent: EMBERBROOK_REST_PERCENT }),
     };
-    autoConfirm();
-}
+};
+
+const refreshEmberbrookRestButton = () => {
+    if (!isEmberbrookOpen()) return;
+    const button = document.querySelector('#emberbrook-rest');
+    if (!button) return;
+    const { disabled, label } = getEmberbrookRestState();
+    button.disabled = disabled;
+    button.textContent = label;
+};
+
+const renderEmberbrook = () => {
+    const rest = getEmberbrookRestState();
+    const offer = getEmberbrookOffer();
+    const item = offer && offer.item;
+    const preview = item ? renderEquipmentCard({
+        item,
+        icon: equipmentIcon(item.category),
+        totals: getEquipmentStatTotals(item),
+    }) : '';
+    return `<section class="emberbrook-panel" aria-labelledby="emberbrook-title">
+        <header class="emberbrook-banner"><h2 id="emberbrook-title">Emberbrook</h2></header>
+        <div class="emberbrook-services">
+            <p>${t('emberbrook-arrival')}</p>
+            <div class="emberbrook-service">
+                <h3><i class="fas fa-bed" aria-hidden="true"></i> ${t('emberbrook-inn')}</h3>
+                <button id="emberbrook-rest" type="button" ${rest.disabled ? 'disabled' : ''}>${rest.label}</button>
+            </div>
+            <div class="emberbrook-service">
+                <h3><i class="fas fa-store" aria-hidden="true"></i> ${t('emberbrook-market')}</h3>
+                ${preview}
+                <button id="emberbrook-buy" type="button" ${offer ? `title="${offer.cost}"` : 'disabled'}>${offer
+                    ? t('emberbrook-buy', { gold: offer.cost.toLocaleString(typeof currentLanguage === 'string' ? currentLanguage : 'en') })
+                    : t('emberbrook-market-empty')}</button>
+            </div>
+            <button id="emberbrook-leave" type="button">${t('emberbrook-leave')} <span aria-hidden="true">&rarr;</span></button>
+        </div>
+    </section>`;
+};
+
+const restAtEmberbrook = () => {
+    if (!isEmberbrookOpen() || dungeon.specialEvents.emberbrookRested) return;
+    const healed = Math.min(player.stats.hpMax - player.stats.hp, Math.floor(player.stats.hpMax * EMBERBROOK_REST_PERCENT / 100));
+    if (healed <= 0) return;
+    player.stats.hp += healed;
+    dungeon.specialEvents.emberbrookRested = true;
+    playerLoadStats();
+    addDungeonLog(t('emberbrook-rested', { hp: nFormatter(healed) }));
+    saveData();
+};
+
+const buyAtEmberbrook = () => {
+    if (!isEmberbrookOpen()) return;
+    const offer = getEmberbrookOffer();
+    if (!offer) return;
+    const { item, cost } = offer;
+    if (player.gold < cost || (!hasEmptyEquipmentSlotFor(item) && inventoryItemCount() >= getMaxInventoryItems())) {
+        sfxDeny.play();
+        addDungeonLog(t(player.gold < cost ? 'not-enough-gold' : 'inventory-full'));
+        return;
+    }
+    player.gold -= cost;
+    dungeon.specialEvents.emberbrookOffer = null;
+    dungeon.specialEvents.floor6WanderingShopVisited = true;
+    sfxSell.play();
+    item.icon = equipmentIcon(item.category);
+    receiveEquipment(item);
+    const itemLabel = `<span class="${item.rarity}">${equipmentDisplayLabel(item)}</span>`;
+    addDungeonLog(t('emberbrook-bought', { item: itemLabel, gold: nFormatter(cost) }));
+};
+
+const leaveEmberbrook = () => {
+    if (!isEmberbrookOpen()) return;
+    dungeon.specialEvents.emberbrookVisited = true;
+    dungeon.specialEvents.emberbrookOffer = null;
+    dungeon.status.event = false;
+    currentEvent = null;
+    lastDungeonEventTimestamp = Date.now();
+    sfxConfirm.play();
+    if (dungeon.status.paused) {
+        updateRestingDisplay();
+    } else {
+        dungeonAction.textContent = t('exploring');
+    }
+    saveData();
+    updateDungeonLog();
+};
+
+const autoVisitEmberbrook = () => {
+    if (!autoMode || !autoEngage) return false;
+    restAtEmberbrook();
+    leaveEmberbrook();
+    return true;
+};
+
+const emberbrookEvent = () => {
+    const state = dungeon.specialEvents;
+    if (!state.floor6WanderingShopVisited && !getEmberbrookOffer()) {
+        const itemLevel = getWanderingShopItemLevel();
+        state.emberbrookOffer = {
+            cost: getWanderingShopCost(itemLevel),
+            item: createEquipment(false, {
+                allowCompanionCharm: false,
+                minRarity: WANDERING_SHOP_MIN_RARITY,
+                forcedLevel: itemLevel,
+            }),
+        };
+    }
+    dungeon.status.event = true;
+    currentEvent = 'emberbrook';
+    if (autoVisitEmberbrook()) return;
+    saveData();
+    updateDungeonLog();
+};
 
 const forgeTokenMerchantEvent = () => {
     dungeon.status.event = true;
@@ -1304,6 +1414,8 @@ const clearFloorBuffs = () => {
 // Displays every dungeon activity
 const updateDungeonLog = (choices) => {
     let dungeonLog = document.querySelector("#dungeonLog");
+    const showEmberbrook = isEmberbrookOpen();
+    if (showEmberbrook) choices = renderEmberbrook();
     dungeonLog.innerHTML = "";
 
     // Determine log flow direction (default: bottom)
@@ -1342,6 +1454,12 @@ const updateDungeonLog = (choices) => {
     }
 
     bindDungeonSellButtons();
+    if (showEmberbrook) {
+        dungeonAction.textContent = 'Emberbrook';
+        document.querySelector('#emberbrook-rest').onclick = restAtEmberbrook;
+        document.querySelector('#emberbrook-buy').onclick = buyAtEmberbrook;
+        document.querySelector('#emberbrook-leave').onclick = leaveEmberbrook;
+    }
 }
 
 // Add a log to the dungeon backlog
