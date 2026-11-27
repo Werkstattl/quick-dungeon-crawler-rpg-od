@@ -522,7 +522,7 @@
   "shrine-blessings-fade": "<span class='Common'>Floor buffs fade on the new floor.</span>",
   "emberbrook-arrival": "You arrive in Emberbrook, a quiet village on Floor 5.",
   "emberbrook-inn": "Inn",
-  "emberbrook-rest": "Rest for free · Restore up to {percent}% max HP",
+  "emberbrook-rest": "Rest for free · Restore HP to {percent}%",
   "emberbrook-rested": "You rested at the inn and recovered {hp} HP.",
   "emberbrook-rest-used": "You already rested here.",
   "emberbrook-full-health": "You are already at full health.",

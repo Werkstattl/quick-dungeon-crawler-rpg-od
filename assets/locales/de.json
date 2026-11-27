@@ -522,7 +522,7 @@
   "shrine-blessings-fade": "<span class='Common'>Etagen-Buffs verblassen auf der neuen Etage.</span>",
   "emberbrook-arrival": "Du erreichst Emberbrook, ein ruhiges Dorf auf Etage 5.",
   "emberbrook-inn": "Gasthaus",
-  "emberbrook-rest": "Kostenlos rasten · Stelle bis zu {percent} % deiner maximalen HP wieder her",
+  "emberbrook-rest": "Kostenlos rasten · Auf {percent} % HP heilen",
   "emberbrook-rested": "Du hast im Gasthaus gerastet und {hp} HP wiederhergestellt.",
   "emberbrook-rest-used": "Du hast hier bereits gerastet.",
   "emberbrook-full-health": "Du hast bereits volle Gesundheit.",
