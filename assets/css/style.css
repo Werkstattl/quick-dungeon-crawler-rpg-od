@@ -351,6 +351,92 @@ main {
     flex: 1;
 }
 
+.emberbrook-panel {
+    margin: .3rem .15rem;
+    overflow: hidden;
+    border: 1px solid rgba(221, 173, 97, .48);
+    border-radius: .6rem;
+    background: #1d1a20;
+    color: #f5e9d6;
+    text-align: start;
+}
+
+.emberbrook-banner {
+    display: flex;
+    align-items: flex-end;
+    min-height: 5.3rem;
+    padding: .55rem .75rem;
+    background: #312638 url('../scenes/emberbrook.svg') center / cover no-repeat;
+    border-bottom: 1px solid rgba(221, 173, 97, .28);
+}
+
+.emberbrook-banner h2 {
+    margin: 0;
+    color: #fff1d2;
+    font-family: 'Germania One', serif;
+    font-size: 1.65em;
+    text-shadow: 0 2px 4px #150e12;
+}
+
+.emberbrook-services {
+    display: grid;
+    gap: .42rem;
+    padding: .55rem;
+}
+
+.emberbrook-services p,
+.emberbrook-service h3 {
+    margin: 0;
+}
+
+.emberbrook-service {
+    display: grid;
+    gap: .28rem;
+    padding: .46rem;
+    border: 1px solid rgba(221, 173, 97, .22);
+    border-radius: .36rem;
+    background: rgba(241, 197, 125, .05);
+}
+
+.emberbrook-service > h3 {
+    font-size: .98em;
+    color: #ebc582;
+}
+
+.emberbrook-service .equipment-card {
+    margin: 0;
+    font-size: .86em;
+}
+
+.emberbrook-service .equipment-card h3,
+.emberbrook-service .equipment-card h5 {
+    margin: 0;
+}
+
+.emberbrook-service .equipment-card ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .12rem .65rem;
+    padding: 0;
+    margin: .22rem 0;
+    list-style: none;
+}
+
+.emberbrook-service .equipment-stat-row {
+    display: flex;
+    gap: .25rem;
+}
+
+.emberbrook-panel button {
+    width: 100%;
+    min-height: 2.35rem;
+    height: auto;
+    margin: 0;
+    padding: .34rem .52rem;
+    white-space: normal;
+    line-height: 1.2;
+}
+
 #combatLogBox {
     overflow: auto;
 }

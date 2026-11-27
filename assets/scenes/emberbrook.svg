@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="100" viewBox="0 0 380 100">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#343146"/>
+      <stop offset=".64" stop-color="#65474f"/>
+      <stop offset="1" stop-color="#86605a"/>
+    </linearGradient>
+    <linearGradient id="mountains" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#343c54"/>
+      <stop offset="1" stop-color="#22283a"/>
+    </linearGradient>
+    <linearGradient id="plaster" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#654a49"/>
+      <stop offset="1" stop-color="#362b32"/>
+    </linearGradient>
+    <radialGradient id="lamplight">
+      <stop stop-color="#ffc678" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#f6a650" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="title-shade">
+      <stop stop-color="#141522" stop-opacity=".52"/>
+      <stop offset=".43" stop-color="#141522" stop-opacity=".3"/>
+      <stop offset=".76" stop-color="#141522" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="base-shade" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset=".54" stop-color="#151620" stop-opacity="0"/>
+      <stop offset="1" stop-color="#151620"/>
+    </linearGradient>
+  </defs>
+
+  <g id="dusk">
+    <path fill="url(#sky)" d="M0 0h380v100H0z"/>
+    <circle cx="312" cy="24" r="18" fill="url(#lamplight)" opacity=".55"/>
+    <circle cx="312" cy="24" r="12.6" fill="#e9c99c"/>
+    <path fill="url(#mountains)" d="M0 56 48 21l29 22 42-25 58 42 56-26 32 24 46-19 44 19 25-9v51H0z"/>
+    <path fill="#252b3e" d="m0 66 57-15 42 8 40-13 45 16 43-13 29 16 64-15 60 14v36H0z"/>
+    <path fill="#1d2331" d="M0 76c37-6 76-7 123-2 44 6 69-5 109-3 49 3 102-9 148-2v31H0z"/>
+  </g>
+
+  <g id="cottages" fill="url(#plaster)" stroke-linejoin="round">
+    <g id="west-cottage">
+      <path fill="#382e39" d="M228 45v-9h5v15z"/>
+      <path d="M200 84V61l20-24 19 24v23z"/>
+      <path fill="#3c3039" d="m198 61 22-24 21 24z"/>
+      <path fill="none" stroke="#1a1a25" stroke-width="2.5" d="m197 62 23-26 22 26"/>
+      <path fill="none" stroke="#372932" d="M202 62h35m-17-21v20"/>
+      <circle cx="211" cy="69" r="9" fill="url(#lamplight)"/>
+      <path fill="#e4a865" d="M209 67h3.5v4.5H209zm17 0h3.5v4.5H226z"/>
+    </g>
+    <g id="lane-cottage">
+      <path d="M248 86V63l19-22 18 22v23z"/>
+      <path fill="#47353b" d="m246 64 21-23 20 23z"/>
+      <path fill="none" stroke="#1a1a25" stroke-width="2.5" d="m246 64 21-24 20 24"/>
+      <path stroke="#3d2e35" d="M249 65h35m-17-19v18"/>
+      <circle cx="275" cy="73" r="10" fill="url(#lamplight)"/>
+      <path fill="#efb16c" d="M255 71h3.5v4.5H255zm18-1h4v5h-4z"/>
+      <path fill="#332832" d="M263 85V75a3 3 0 0 1 6 0v10z"/>
+    </g>
+    <g id="inn">
+      <path fill="#423239" d="M324 37V24h6v20z"/>
+      <path fill="#322832" d="M323 24h8v2h-8z"/>
+      <path d="M295 85V52l22-28 22 28v33z"/>
+      <path fill="#493740" d="m292 52 25-29 25 29z"/>
+      <path fill="none" stroke="#1a1822" stroke-width="2.8" d="m292 53 25-31 25 31"/>
+      <path fill="none" stroke="#80565a" stroke-opacity=".63" d="m296 51 21-26 21 26"/>
+      <path fill="none" stroke="#3e2d36" stroke-width="1.5" d="M296 53h42m-21-25v25m-19 0 19-13 19 13m-39 17h40"/>
+      <circle cx="307" cy="60" r="11" fill="url(#lamplight)"/>
+      <circle cx="326" cy="60" r="11" fill="url(#lamplight)"/>
+      <path fill="#f2ba76" d="M305 58h4v5h-4zm19 0h4v5h-4z"/>
+      <path stroke="#a26948" stroke-width=".6" d="M307 58v5m19-5v5"/>
+      <path fill="#2c2430" d="M313 85v-9a4 4 0 0 1 8 0v9z"/>
+      <circle cx="324" cy="75" r="9" fill="url(#lamplight)"/>
+      <path stroke="#30242d" d="M321 71h3v2" fill="none"/>
+      <path fill="#ffc888" d="M322.5 73h3v4h-3z"/>
+    </g>
+    <g id="east-cottage">
+      <path d="M350 84V63l13-19 14 19v21z"/>
+      <path fill="#403039" d="m348 64 15-21 16 21z"/>
+      <path fill="none" stroke="#1a1924" stroke-width="2.4" d="m347 64 16-22 16 22"/>
+      <path stroke="#372b33" d="M350 64h26m-13-16v16"/>
+      <circle cx="358" cy="72" r="9" fill="url(#lamplight)"/>
+      <path fill="#eab173" d="M356 70h4v4.5h-4zm11 0h3.5v4.5H367z"/>
+    </g>
+  </g>
+
+  <g id="foreground">
+    <path fill="#1c1c27" d="M0 87c77-2 130 1 199-3 46-3 80 4 116 0 25-2 45 1 65-4v20H0z"/>
+    <path fill="#443037" opacity=".6" d="M313 84h10l13 5 28 11h-31l-14-12z"/>
+    <path fill="url(#title-shade)" d="M0 0h380v100H0z"/>
+    <path fill="url(#base-shade)" d="M0 0h380v100H0z"/>
+  </g>
+</svg>
